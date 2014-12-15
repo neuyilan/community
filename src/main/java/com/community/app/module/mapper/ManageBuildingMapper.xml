@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.ManageBuildingDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="ManageBuildingResult" type="ManageBuilding">
+			<result column="buildingId" property="buildingId" />
+			<result column="estateId" property="estateId" />
+			<result column="buildingName" property="buildingName" />
+			<result column="buildingDesc" property="buildingDesc" />
+			<result column="buildingFloor" property="buildingFloor" />
+			<result column="estateLongitude" property="estateLongitude" />
+			<result column="estateLatitude" property="estateLatitude" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="buildingMap" property="buildingMap" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			buildingId,
+			estateId,
+			buildingName,
+			buildingDesc,
+			buildingFloor,
+			estateLongitude,
+			estateLatitude,
+			createTime,
+			editTime,
+			editor,
+			buildingMap
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="buildingId != null and buildingId != ''" >
+				   		and buildingId = #{buildingId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="buildingName != null and buildingName != ''" >
+				   		and buildingName = #{buildingName}
+					</if>
+					<if test="buildingDesc != null and buildingDesc != ''" >
+				   		and buildingDesc = #{buildingDesc}
+					</if>
+					<if test="buildingFloor != null and buildingFloor != ''" >
+				   		and buildingFloor = #{buildingFloor}
+					</if>
+					<if test="estateLongitude != null and estateLongitude != ''" >
+				   		and estateLongitude = #{estateLongitude}
+					</if>
+					<if test="estateLatitude != null and estateLatitude != ''" >
+				   		and estateLatitude = #{estateLatitude}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="buildingMap != null and buildingMap != ''" >
+				   		and buildingMap = #{buildingMap}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 ManageBuilding -->
+	<select id="findById"  resultMap="ManageBuildingResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from manage_building where buildingId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有ManageBuilding -->
+	<select id="findAll" resultMap="ManageBuildingResult">
+		select <include refid="Base_Column_List" /> from manage_building 
+	</select>
+	
+	<!-- 按Map对象条件查询所有ManageBuilding -->
+	<select id="findByMap" resultMap="ManageBuildingResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from manage_building <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有ManageBuilding -->
+	<select id="findByExample" resultMap="ManageBuildingResult" parameterType="com.community.app.module.vo.ManageBuildingQuery">
+		select <include refid="Base_Column_List" /> from manage_building <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageBuilding根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="ManageBuildingResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from manage_building  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- ManageBuilding列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from manage_building 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageBuilding保存数据 -->
+	<insert id="save" parameterType="ManageBuilding">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="buildingId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into manage_building(
+		
+		estateId,
+		buildingName,
+		buildingDesc,
+		buildingFloor,
+		estateLongitude,
+		estateLatitude,
+		createTime,
+		editTime,
+		editor,
+		buildingMap
+		) values(
+				#{estateId},
+		#{buildingName},
+		#{buildingDesc},
+		#{buildingFloor},
+		#{estateLongitude},
+		#{estateLatitude},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{buildingMap}
+		)
+	</insert>
+	
+	<!-- ManageBuilding修改数据 -->
+	<update id="update" parameterType="ManageBuilding">
+		update manage_building 
+		<set>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="buildingName != null and buildingName != ''" >
+			buildingName=#{buildingName},
+			</if>
+			<if test="buildingDesc != null and buildingDesc != ''" >
+			buildingDesc=#{buildingDesc},
+			</if>
+			<if test="buildingFloor != null and buildingFloor != ''" >
+			buildingFloor=#{buildingFloor},
+			</if>
+			<if test="estateLongitude != null and estateLongitude != ''" >
+			estateLongitude=#{estateLongitude},
+			</if>
+			<if test="estateLatitude != null and estateLatitude != ''" >
+			estateLatitude=#{estateLatitude},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="buildingMap != null and buildingMap != ''" >
+			buildingMap=#{buildingMap}
+			</if>
+		</set> 
+		where 
+		buildingId=#{buildingId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- ManageBuilding删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from manage_building where 
+		buildingId=#{buildingId}
+																					</delete>
+	
+</mapper>
+	

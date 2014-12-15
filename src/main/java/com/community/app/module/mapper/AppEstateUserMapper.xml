@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppEstateUserDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppEstateUserResult" type="AppEstateUser">
+			<result column="estMemId" property="estMemId" />
+			<result column="estateId" property="estateId" />
+			<result column="userId" property="userId" />
+			<result column="buildingId" property="buildingId" />
+			<result column="unitId" property="unitId" />
+			<result column="houseId" property="houseId" />
+			<result column="estateName" property="estateName" />
+			<result column="buildingName" property="buildingName" />
+			<result column="unitName" property="unitName" />
+			<result column="houseNo" property="houseNo" />
+			<result column="memberType" property="memberType" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			estMemId,
+			estateId,
+			userId,
+			buildingId,
+			unitId,
+			houseId,
+			estateName,
+			buildingName,
+			unitName,
+			houseNo,
+			memberType,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="estMemId != null and estMemId != ''" >
+				   		and estMemId = #{estMemId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="buildingId != null and buildingId != ''" >
+				   		and buildingId = #{buildingId}
+					</if>
+					<if test="unitId != null and unitId != ''" >
+				   		and unitId = #{unitId}
+					</if>
+					<if test="houseId != null and houseId != ''" >
+				   		and houseId = #{houseId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and estateName = #{estateName}
+					</if>
+					<if test="buildingName != null and buildingName != ''" >
+				   		and buildingName = #{buildingName}
+					</if>
+					<if test="unitName != null and unitName != ''" >
+				   		and unitName = #{unitName}
+					</if>
+					<if test="houseNo != null and houseNo != ''" >
+				   		and houseNo = #{houseNo}
+					</if>
+					<if test="memberType != null and memberType != ''" >
+				   		and memberType = #{memberType}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据AppEstateUser查询楼栋、单元  -->
+	<select id="findById"  resultMap="AppEstateUserResult" parameterType="AppEstateUser">
+	<if test="unitId != null and unitId != ''" >
+		select e.estateId,e.estateName,u.userId,b.buildingId,b.buildingName,mu.unitId,mu.unitName,mu.unitMap as buildingMap from app_estate_user u,manage_estate e,manage_building b,manage_unit mu  where
+		u.estateId=e.estateId and u.buildingId=b.buildingId  and u.unitId=mu.unitId and u.userId=#{userId} and u.estateId=#{estateId}
+	</if>
+	<if test="unitId == null or unitId == ''" >
+		select e.estateId,e.estateName,u.userId,b.buildingId,b.buildingName,'0' as unitId,'' as unitName,b.buildingMap from app_estate_user u,manage_estate e,manage_building b where
+		u.estateId=e.estateId and u.buildingId=b.buildingId   and u.userId=#{userId} and u.estateId=#{estateId}
+	</if>
+	</select>
+	
+	<!-- 无条件查询所有AppEstateUser -->
+	<select id="findAll" resultMap="AppEstateUserResult">
+		select <include refid="Base_Column_List" /> from app_estate_user 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppEstateUser -->
+	<select id="findByMap" resultMap="AppEstateUserResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_estate_user <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppEstateUser -->
+	<select id="findByExample" resultMap="AppEstateUserResult" parameterType="com.community.app.module.vo.AppEstateUserQuery">
+		select <include refid="Base_Column_List" /> from app_estate_user <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppEstateUser -->
+	<select id="findByExample_app" resultMap="AppEstateUserResult" parameterType="com.community.app.module.vo.AppEstateUserQuery">
+		select a.estateName,a.unitName,a.buildingName from app_estate_user a,app_user u  where u.userId=a.userId and u.estateId=a.estateId
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppEstateUser -->
+	<select id="findByUserId" resultType="AppEstateUser" parameterType="com.community.app.module.vo.AppEstateUserQuery">
+		select a.estMemId,e.estateId,e.estateName,e.icon,u.estateId as defaultEstateId from app_estate_user a,app_user u,manage_estate e  where a.userId = u.userId and  a.estateId=e.estateId
+		and u.userId=#{userId}
+		<if test="estateId != null and estateId != ''" >
+	   		and a.estateId = #{estateId}
+		</if>
+	</select>
+	
+	<!-- AppEstateUser根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppEstateUserResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_estate_user  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppEstateUser列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_estate_user 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppEstateUser保存数据 -->
+	<insert id="save" parameterType="AppEstateUser">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="estMemId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_estate_user(
+		estateId,
+		estateName,
+		userId,
+		createTime,
+		editTime
+		) values(
+		#{estateId},
+		(select estateName from manage_estate where estateId=#{estateId}),
+		#{userId},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- AppEstateUser修改数据 -->
+	<update id="update" parameterType="AppEstateUser">
+		update app_estate_user 
+		<set>
+			<if test="buildingId != null and buildingId != ''" >
+			buildingId=#{buildingId},
+			</if>
+			<if test="unitId != null and unitId != ''" >
+			unitId=#{unitId},
+			</if>
+			<if test="unitId == null or unitId == ''" >
+			unitId='0',
+			</if>
+			<if test="houseId != null and houseId != ''" >
+			houseId=#{houseId},
+			</if>
+			<if test="estateName != null and estateName != ''" >
+			estateName=#{estateName},
+			</if>
+			<if test="buildingName != null and buildingName != ''" >
+			buildingName=#{buildingName},
+			</if>
+			<if test="unitName != null and unitName != ''" >
+			unitName=#{unitName},
+			</if>
+			<if test="unitName == null or unitName == ''" >
+			unitName='',
+			</if>
+			<if test="houseNo != null and houseNo != ''" >
+			houseNo=#{houseNo},
+			</if>
+			<if test="memberType != null and memberType != ''" >
+			memberType=#{memberType},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime}
+			</if>
+		</set> 
+		where 
+		estateId=#{estateId} and userId=#{userId}
+	</update>
+	
+	<!-- AppEstateUser删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_estate_user where 
+		estMemId=#{estMemId}
+	</delete>
+	
+</mapper>
+	

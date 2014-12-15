@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessHealthydietCommentDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessHealthydietCommentResult" type="BusinessHealthydietComment">
+			<result column="commentId" property="commentId" />
+			<result column="healId" property="healId" />
+			<result column="repliedId" property="repliedId" />
+			<result column="repliedName" property="repliedName" />
+			<result column="commentorId" property="commentorId" />
+			<result column="commentorName" property="commentorName" />
+			<result column="commentorAvatar" property="commentorAvatar" />
+			<result column="comment" property="comment" />
+			<result column="commentTime" property="commentTime" />
+			<result column="commentorState" property="commentorState" />
+			<result column="repliedState" property="repliedState" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			commentId,
+			healId,
+			repliedId,
+			repliedName,
+			commentorId,
+			commentorName,
+			commentorAvatar,
+			comment,
+			commentTime,
+			commentorState,
+			repliedState
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="healId != null and healId != ''" >
+				   		and healId = #{healId}
+					</if>
+					<if test="repliedId != null and repliedId != ''" >
+				   		and repliedId = #{repliedId}
+					</if>
+					<if test="repliedName != null and repliedName != ''" >
+				   		and repliedName = #{repliedName}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentorName != null and commentorName != ''" >
+				   		and commentorName = #{commentorName}
+					</if>
+					<if test="commentorAvatar != null and commentorAvatar != ''" >
+				   		and commentorAvatar = #{commentorAvatar}
+					</if>
+					<if test="comment != null and comment != ''" >
+				   		and comment = #{comment}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+					<if test="commentorState != null and commentorState != ''" >
+				   		and commentorState = #{commentorState}
+					</if>
+					<if test="repliedState != null and repliedState != ''" >
+				   		and repliedState = #{repliedState}
+					</if>
+					<if test="keyWord != null and keyWord != ''" >
+				   		and comment like '%${keyWord}%'
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			commentId,
+			healId,
+			repliedId,
+			repliedName,
+			commentorId,
+			commentorName,
+			commentorAvatar,
+			comment,
+			commentTime,
+			commentorState,
+			repliedState
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="healId != null and healId != ''" >
+				   		and healId = #{healId}
+					</if>
+					<if test="repliedId != null and repliedId != ''" >
+				   		and repliedId = #{repliedId}
+					</if>
+					<if test="repliedName != null and repliedName != ''" >
+				   		and repliedName = #{repliedName}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentorName != null and commentorName != ''" >
+				   		and commentorName = #{commentorName}
+					</if>
+					<if test="commentorAvatar != null and commentorAvatar != ''" >
+				   		and commentorAvatar = #{commentorAvatar}
+					</if>
+					<if test="comment != null and comment != ''" >
+				   		and comment = #{comment}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+					<if test="commentorState != null and commentorState != ''" >
+				   		and commentorState = #{commentorState}
+					</if>
+					<if test="repliedState != null and repliedState != ''" >
+				   		and repliedState = #{repliedState}
+					</if>
+					<if test="commentorState == 0 and repliedState == 0" >
+				   		and commentorState = '0' and repliedState = '0' and commentorId = #{userId} or healId = #{healId} and commentorState = '0' and repliedState = '0' and repliedId = #{userId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessHealthydietComment -->
+	<select id="findById"  resultMap="BusinessHealthydietCommentResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_healthydiet_comment where commentId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessHealthydietComment -->
+	<select id="findAll" resultMap="BusinessHealthydietCommentResult">
+		select <include refid="Base_Column_List" /> from business_healthydiet_comment 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessHealthydietComment -->
+	<select id="findByMap" resultMap="BusinessHealthydietCommentResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_healthydiet_comment <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessHealthydietComment -->
+	<select id="findByExample" resultMap="BusinessHealthydietCommentResult" parameterType="com.community.app.module.vo.BusinessHealthydietCommentQuery">
+		select <include refid="Base_Column_List" /> from business_healthydiet_comment <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHealthydietComment根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessHealthydietCommentResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_healthydiet_comment  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHealthydietComment列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_healthydiet_comment 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHealthydietComment根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultMap="BusinessHealthydietCommentResult" parameterType="Object">
+		select <include refid="Base_Column_List_app" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_healthydiet_comment c left join app_user u on u.userId=c.commentorId left join business_user bu on bu.userId=c.commentorId    
+		<include refid="Base_Where_Clause_app" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHealthydietComment列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_healthydiet_comment 
+		<include refid="Base_Where_Clause_app" />
+	</select>
+	
+	<!-- BusinessHealthydietComment保存数据 -->
+	<insert id="save" parameterType="BusinessHealthydietComment">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_healthydiet_comment(
+		
+		healId,
+		repliedId,
+		repliedName,
+		commentorId,
+		commentorName,
+		commentorAvatar,
+		comment,
+		commentTime,
+		commentorState,
+		repliedState
+		) values(
+				#{healId},
+		#{repliedId},
+		#{repliedName},
+		#{commentorId},
+		(select nickname from app_user where userId=#{commentorId}),
+		#{commentorAvatar},
+		#{comment},
+		#{commentTime},
+		#{commentorState},
+		#{repliedState}
+		)
+	</insert>
+	
+	<!-- BusinessHealthydietComment保存数据 -->
+	<insert id="replySave" parameterType="BusinessHealthydietComment">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_healthydiet_comment(
+		healId,
+		repliedId,
+		repliedName,
+		commentorId,
+		commentorName,
+		commentorAvatar,
+		comment,
+		commentTime,
+		commentorState,
+		repliedState
+		) values(
+		#{healId},
+		#{repliedId},
+		#{repliedName},
+		#{commentorId},
+		#{commentorName},
+		#{commentorAvatar},
+		#{comment},
+		#{commentTime},
+		#{commentorState},
+		#{repliedState}
+		)
+	</insert>
+	
+	<!-- BusinessHealthydietComment修改数据 -->
+	<update id="update" parameterType="BusinessHealthydietComment">
+		update business_healthydiet_comment 
+		<set>
+			<if test="healId != null and healId != ''" >
+			healId=#{healId},
+			</if>
+			<if test="repliedId != null and repliedId != ''" >
+			repliedId=#{repliedId},
+			</if>
+			<if test="repliedName != null and repliedName != ''" >
+			repliedName=#{repliedName},
+			</if>
+			<if test="commentorId != null and commentorId != ''" >
+			commentorId=#{commentorId},
+			</if>
+			<if test="commentorName != null and commentorName != ''" >
+			commentorName=#{commentorName},
+			</if>
+			<if test="commentorAvatar != null and commentorAvatar != ''" >
+			commentorAvatar=#{commentorAvatar},
+			</if>
+			<if test="comment != null and comment != ''" >
+			comment=#{comment},
+			</if>
+			<if test="commentTime != null and commentTime != ''" >
+			commentTime=#{commentTime},
+			</if>
+			<if test="commentorState != null and commentorState != ''" >
+			commentorState=#{commentorState},
+			</if>
+			<if test="repliedState != null and repliedState != ''" >
+			repliedState=#{repliedState}
+			</if>
+		</set> 
+		where 
+		commentId=#{commentId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessHealthydietComment删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_healthydiet_comment where 
+		commentId=#{commentId}
+																					</delete>
+	
+</mapper>
+	

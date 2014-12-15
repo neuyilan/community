@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessHelpReplayDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessHelpReplayResult" type="BusinessHelpReplay">
+			<result column="commentId" property="commentId" />
+			<result column="helpId" property="helpId" />
+			<result column="commentorId" property="commentorId" />
+			<result column="commentorName" property="commentorName" />
+			<result column="comment" property="comment" />
+			<result column="commentTime" property="commentTime" />
+			<result column="replyId" property="replyId" />
+			<result column="replyName" property="replyName" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			commentId,
+			helpId,
+			commentorId,
+			commentorName,
+			comment,
+			commentTime,
+			replyId,
+			replyName
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="helpId != null and helpId != ''" >
+				   		and helpId = #{helpId}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentorName != null and commentorName != ''" >
+				   		and commentorName = #{commentorName}
+					</if>
+					<if test="comment != null and comment != ''" >
+				   		and comment = #{comment}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+					<if test="replyId != null and replyId != ''" >
+				   		and replyId = #{replyId}
+					</if>
+					<if test="replyName != null and replyName != ''" >
+				   		and replyName = #{replyName}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessHelpReplay -->
+	<select id="findById"  resultMap="BusinessHelpReplayResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_help_replay where commentId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessHelpReplay -->
+	<select id="findAll" resultMap="BusinessHelpReplayResult">
+		select <include refid="Base_Column_List" /> from business_help_replay 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessHelpReplay -->
+	<select id="findByMap" resultMap="BusinessHelpReplayResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_help_replay <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessHelpReplay -->
+	<select id="findByExample" resultMap="BusinessHelpReplayResult" parameterType="com.community.app.module.vo.BusinessHelpReplayQuery">
+		select <include refid="Base_Column_List" /> from business_help_replay <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHelpReplay根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessHelpReplayResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_help_replay  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHelpReplay列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_help_replay 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHelpReplay保存数据 -->
+	<insert id="save" parameterType="BusinessHelpReplay">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_help_replay(
+		
+		helpId,
+		commentorId,
+		commentorName,
+		comment,
+		commentTime,
+		replyId,
+		replyName
+		) values(
+				#{helpId},
+		#{commentorId},
+		#{commentorName},
+		#{comment},
+		#{commentTime},
+		#{replyId},
+		#{replyName}
+		)
+	</insert>
+	
+	<!-- BusinessHelpReplay修改数据 -->
+	<update id="update" parameterType="BusinessHelpReplay">
+		update business_help_replay 
+		<set>
+			<if test="helpId != null and helpId != ''" >
+			helpId=#{helpId},
+			</if>
+			<if test="commentorId != null and commentorId != ''" >
+			commentorId=#{commentorId},
+			</if>
+			<if test="commentorName != null and commentorName != ''" >
+			commentorName=#{commentorName},
+			</if>
+			<if test="comment != null and comment != ''" >
+			comment=#{comment},
+			</if>
+			<if test="commentTime != null and commentTime != ''" >
+			commentTime=#{commentTime},
+			</if>
+			<if test="replyId != null and replyId != ''" >
+			replyId=#{replyId},
+			</if>
+			<if test="replyName != null and replyName != ''" >
+			replyName=#{replyName}
+			</if>
+		</set> 
+		where 
+		commentId=#{commentId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessHelpReplay删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_help_replay where 
+		commentId=#{commentId}
+															</delete>
+	
+</mapper>
+	

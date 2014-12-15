@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessFeedbackDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessFeedbackResult" type="BusinessFeedback">
+			<result column="feedbackId" property="feedbackId" />
+			<result column="fbTitle" property="fbTitle" />
+			<result column="fberId" property="fberId" />
+			<result column="fberName" property="fberName" />
+			<result column="fbTime" property="fbTime" />
+			<result column="fbContent" property="fbContent" />
+			<result column="fbType" property="fbType" />
+			<result column="fbState" property="fbState" />
+			<result column="fbReplies" property="fbReplies" />
+			<result column="lastCommentTime" property="lastCommentTime" />
+			<result column="fbScore" property="fbScore" />
+			<result column="newReplies" property="newReplies" />
+			<result column="receiverId" property="receiverId" />
+			<result column="receiverName" property="receiverName" />
+			<result column="receiveAvatar" property="receiveAvatar" />
+			<result column="receiveDate" property="receiveDate" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			
+			<result column="portrait" property="portrait" />
+			<result column="address" property="address" />
+			<result column="newsCount" property="newsCount" />
+			
+			<result column="nickname" property="nickname" />
+			<result column="realname" property="realname" />
+			<result column="tel" property="tel" />
+			
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			fb.feedbackId,
+			fb.fbTitle,
+			fb.fberId,
+			fb.fberName,
+			fb.fbTime,
+			fb.fbContent,
+			fb.fbType,
+			fb.fbState,
+			fb.fbReplies,
+			fb.lastCommentTime,
+			fb.fbScore,
+			fb.newReplies,
+			fb.receiverId,
+			fb.receiverName,
+			fb.receiveAvatar,
+			fb.receiveDate,
+			fb.createTime,
+			fb.editTime,
+			fb.editor,
+			fb.estateId,
+			fb.estateName,
+			
+			 u.portrait,
+			 u.address
+			
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="feedbackId != null and feedbackId != ''" >
+				   		and fb.feedbackId = #{feedbackId}
+					</if>
+					<if test="fbTitle != null and fbTitle != ''" >
+				   		and fb.fbTitle = #{fbTitle}
+					</if>
+					<if test="fberId != null and fberId != ''" >
+				   		and fb.fberId = #{fberId}
+					</if>
+					<if test="fberName != null and fberName != ''" >
+				   		and fb.fberName = #{fberName}
+					</if>
+					<if test="fbTime != null and fbTime != ''" >
+				   		and fb.fbTime = #{fbTime}
+					</if>
+					<if test="fbContent != null and fbContent != ''" >
+				   		and fb.fbContent = #{fbContent}
+					</if>
+					<if test="fbType != null" >
+				   		and fb.fbType = #{fbType}
+					</if>
+					<if test="fbState != null" >
+				   		and fb.fbState = #{fbState}
+					</if>
+					<if test="fbReplies != null and fbReplies != ''" >
+				   		and fb.fbReplies = #{fbReplies}
+					</if>
+					
+					<if test="estateId != null and estateId != ''" >
+				   		and fb.estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and fb.estateName = #{estateName}
+					</if>
+					
+					<if test="lastCommentTime != null and lastCommentTime != ''" >
+				   		and fb.lastCommentTime = #{lastCommentTime}
+					</if>
+					
+					<if test="fbScore != null" >
+				   		and fb.fbScore = #{fbScore}
+					</if>
+					<if test="newReplies != null and newReplies != ''" >
+				   		and fb.newReplies = #{newReplies}
+					</if>
+					<if test="receiverId != null and receiverId != ''" >
+				   		and fb.receiverId = #{receiverId}
+					</if>
+					<if test="receiverName != null and receiverName != ''" >
+				   		and fb.receiverName = #{receiverName}
+					</if>
+					<if test="receiveAvatar != null and receiveAvatar != ''" >
+				   		and fb.receiveAvatar = #{receiveAvatar}
+					</if>
+					<if test="receiveDate != null and receiveDate != ''" >
+				   		and fb.receiveDate = #{receiveDate}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and fb.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and fb.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and fb.editor = #{editor}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+      				and #{timeScope} >= DATEDIFF(now(), fb.fbTime)
+	      		</if>
+	      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+	      			and date(fb.fbTime) between '${startTime}' and '${endTime}'
+	      		</if>
+	      		<if test="keyWord != null and keyWord != ''" >
+			   		and (fb.fbContent like '%${keyWord}%' or u.tel like '%${keyWord}%' or u.nickname like '%${keyWord}%' or u.realname like '%${keyWord}%' or fb.receiverName like '%${keyWord}%' or fb.fberName like '%${keyWord}%')
+				</if>
+				<if test="curUserId != null and curUserId != 0" >
+			   		and res.userId = #{curUserId}
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+			   		and res.estateId = #{curEstateId}
+				</if>
+					<if test="fbTypes != null" >
+						and (
+						<foreach collection="fbTypes" item="ft" separator="OR">
+							fb.fbType = #{ft}
+						</foreach>
+						)
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List1" >
+			f.feedbackId,
+			f.fbTitle,
+			f.fberId,
+			f.fberName,
+			f.fbTime,
+			f.fbContent,
+			f.fbType,
+			f.fbState,
+			f.fbReplies,
+			f.fbScore,
+			f.newReplies,
+			f.receiverId,
+			f.receiverName,
+			f.receiveAvatar,
+			f.receiveDate,
+			f.createTime,
+			f.editTime,
+			f.editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause1">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="feedbackId != null and feedbackId != ''" >
+				   		and f.feedbackId = #{feedbackId}
+					</if>
+					<if test="fbTitle != null and fbTitle != ''" >
+				   		and f.fbTitle = #{fbTitle}
+					</if>
+					<if test="fberId != null and fberId != ''" >
+				   		and f.fberId = #{fberId}
+					</if>
+					<if test="fberName != null and fberName != ''" >
+				   		and f.fberName = #{fberName}
+					</if>
+					<if test="fbTime != null and fbTime != ''" >
+				   		and f.fbTime = #{fbTime}
+					</if>
+					<if test="fbContent != null and fbContent != ''" >
+				   		and f.fbContent = #{fbContent}
+					</if>
+					<if test="fbType != null" >
+				   		and f.fbType = #{fbType}
+					</if>
+					<if test="fbState != null and fbState != ''" >
+				   		and f.fbState = #{fbState}
+					</if>
+					<if test="fbReplies != null and fbReplies != ''" >
+				   		and f.fbReplies = #{fbReplies}
+					</if>
+					<if test="fbScore != null and fbScore != ''" >
+				   		and f.fbScore = #{fbScore}
+					</if>
+					<if test="newReplies != null and newReplies != ''" >
+				   		and f.newReplies = #{newReplies}
+					</if>
+					<if test="receiverId != null and receiverId != ''" >
+				   		and f.receiverId = #{receiverId}
+					</if>
+					<if test="receiverName != null and receiverName != ''" >
+				   		and f.receiverName = #{receiverName}
+					</if>
+					<if test="receiveAvatar != null and receiveAvatar != ''" >
+				   		and f.receiveAvatar = #{receiveAvatar}
+					</if>
+					<if test="receiveDate != null and receiveDate != ''" >
+				   		and f.receiveDate = #{receiveDate}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and f.createTime = #{createTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and f.editor = #{editor}
+					</if>
+					<if test="type == 2"  >
+				   		and #{editTime} > f.editTime
+					</if>
+					<if test="type == 1"  >
+				   		and f.editTime > #{editTime}
+					</if>
+					<if test="type == 3"  >
+				   		and f.fbState=0 or f.fbState=1 and f.fberId = #{fberId} and f.fbType = #{fbType}
+					</if>
+					<if test="type == 4"  >
+				   		and f.fbState=2 or f.fbState=3 and f.fberId = #{fberId} and f.fbType = #{fbType} or f.fbState=4 and f.fberId = #{fberId} and f.fbType = #{fbType}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessFeedback -->
+	<select id="findById"  resultMap="BusinessFeedbackResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,p.pics,a.audios,a.time from business_feedback f,(select GROUP_CONCAT(picUrl) pics from business_feedback_pic where feedbackId = #{id}) p,(select GROUP_CONCAT(picUrl) audios,GROUP_CONCAT(time) time from business_feedback_audio where feedbackId = #{id}) a   where f.feedbackId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessFeedback -->
+	<select id="findById_app"  resultMap="BusinessFeedbackResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,p.pics,a.audios,a.time from business_feedback f,(select GROUP_CONCAT(picUrl) pics from business_feedback_pic where feedbackId = #{id}) p,(select GROUP_CONCAT(picUrl) audios,GROUP_CONCAT(time) time from business_feedback_audio where feedbackId = #{id}) a   where f.feedbackId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessFeedback -->
+	<select id="findAll" resultMap="BusinessFeedbackResult">
+		select <include refid="Base_Column_List" /> from from business_feedback fb 
+			left join app_user u on fb.fberId = u.userId
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessFeedback -->
+	<select id="findByMap" resultMap="BusinessFeedbackResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_feedback fb 
+			left join app_user u on fb.fberId = u.userId
+			 <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessFeedback -->
+	<select id="findByExample" resultMap="BusinessFeedbackResult" parameterType="com.community.app.module.vo.BusinessFeedbackQuery">
+		select <include refid="Base_Column_List" /> from business_feedback fb 
+			left join app_user u on fb.fberId = u.userId
+			<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedback根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultType="BusinessFeedback" parameterType="Object">
+		select <include refid="Base_Column_List" />, u.tel, u.realname,u.nickname, e.expCode, count(news.newsId) as newsCount from business_feedback fb 
+			left join app_user u on fb.fberId = u.userId
+			left join business_exp e on fb.expId = e.expId
+			inner join business_user_resource res on res.estateId = fb.estateId
+			left join app_latest_news news on news.sourceId = fb.feedbackId and news.typeId=36 and news.to=1 
+		<include refid="Base_Where_Clause" />
+		group by fb.feedbackId
+		<if test="orderBy != 'fbReplies'">
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if></if>
+	    <if test="orderBy == 'fbReplies'">
+			order by (select count(c.feedbackId) from business_feedback_comment c where c.feedbackId = fb.feedbackId) desc
+		</if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFeedback根据搜索条件，搜索分页数据 - 只针对物业 -->
+	<select id="findAllPageByProperty" resultType="BusinessFeedback" parameterType="Object">
+		select <include refid="Base_Column_List" />,e.expCode, count(news.newsId) as newsCount from business_feedback fb 
+			left join app_user u on fb.fberId = u.userId
+			left join business_exp e on fb.expId = e.expId
+			inner join business_user_resource res on res.estateId = fb.estateId
+			left join app_latest_news news on news.sourceId = fb.feedbackId and news.typeId=36 and news.to=1 
+		<include refid="Base_Where_Clause" />
+		group by fb.feedbackId
+		<if test="orderBy != 'fbReplies'">
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if></if>
+	    <if test="orderBy == 'fbReplies'">
+			order by (select count(c.feedbackId) from business_feedback_comment c where c.feedbackId = fb.feedbackId) desc
+		</if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFeedback列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(fb.feedbackId)) from business_feedback  fb 
+ 			left join app_user u on fb.fberId = u.userId
+ 			inner join business_user_resource res on res.estateId = fb.estateId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedback列表总数 只针对物业 -->
+	<select id="selectCountByProperty" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(fb.feedbackId)) from business_feedback  fb 
+ 			left join app_user u on fb.fberId = u.userId
+ 			inner join business_user_resource res on res.estateId = fb.estateId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedback根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessFeedback" parameterType="Object">
+		select <include refid="Base_Column_List1" />,e.logo,e.expCompany,e.expType,e.expCode from business_feedback f left join business_exp e on f.expId=e.expId  
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFeedback列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_feedback f
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- BusinessFeedback保存数据 -->
+	<insert id="save" parameterType="BusinessFeedback">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="feedbackId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_feedback(
+		fberId,
+		fberName,
+		fbTime,
+		fbContent,
+		fbType,
+		fbState,
+		estateId,
+		estateName,
+		createTime,
+		editTime,
+		expId
+		) values(
+		#{fberId},
+		(select nickname from app_user where userId=#{fberId}),
+		#{fbTime},
+		#{fbContent},
+		#{fbType},
+		#{fbState},
+		#{estateId},
+		(select estateName from manage_estate where estateId=#{estateId}),
+		#{createTime},
+		#{editTime},
+		#{expId}
+		)
+	</insert>
+	
+	<!-- BusinessFeedback修改数据 -->
+	<update id="update" parameterType="BusinessFeedback">
+		update business_feedback 
+		<set>
+			<if test="fbTitle != null and fbTitle != ''" >
+			fbTitle=#{fbTitle},
+			</if>
+			<if test="fberId != null and fberId != ''" >
+			fberId=#{fberId},
+			</if>
+			<if test="fberName != null and fberName != ''" >
+			fberName=#{fberName},
+			</if>
+			<if test="fbTime != null and fbTime != ''" >
+			fbTime=#{fbTime},
+			</if>
+			<if test="fbContent != null and fbContent != ''" >
+			fbContent=#{fbContent},
+			</if>
+			<if test="fbType != null and fbType != ''" >
+			fbType=#{fbType},
+			</if>
+			
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="estateName != null and estateName != ''" >
+			estateName=#{estateName},
+			</if>
+			
+			<if test="fbState != null and fbState != ''" >
+			fbState=#{fbState},
+			</if>
+			<if test="fbReplies != null and fbReplies != ''" >
+			fbReplies=#{fbReplies},
+			</if>
+			<if test="fbScore != null and fbScore != ''" >
+			fbScore=#{fbScore},
+			</if>
+			<if test="newReplies != null and newReplies != ''" >
+			newReplies=#{newReplies},
+			</if>
+			<if test="receiverId != null and receiverId != ''" >
+			receiverId=#{receiverId},
+			</if>
+			<if test="receiverName != null and receiverName != ''" >
+			receiverName=#{receiverName},
+			</if>
+			<if test="receiveAvatar != null and receiveAvatar != ''" >
+			receiveAvatar=#{receiveAvatar},
+			</if>
+			<if test="receiveDate != null and receiveDate != ''" >
+			receiveDate=#{receiveDate},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		feedbackId=#{feedbackId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessFeedback删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_feedback where 
+		feedbackId=#{feedbackId}
+																																			</delete>
+	
+</mapper>
+	

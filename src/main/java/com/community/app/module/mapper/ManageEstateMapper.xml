@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.ManageEstateDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="ManageEstateResult" type="ManageEstate">
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="estateDesc" property="estateDesc" />
+			<result column="estateAddress" property="estateAddress" />
+			<result column="estateMap" property="estateMap" />
+			<result column="estateLongitude" property="estateLongitude" />
+			<result column="estateLatitude" property="estateLatitude" />
+			<result column="estateCarMap" property="estateCarMap" />
+			<result column="estateType" property="estateType" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="cityName" property="cityName" />
+			<result column="countyName" property="countyName" />
+			<result column="comName" property="comName" />
+			<result column="stationId" property="stationId" />
+			<result column="proId" property="proId" />
+			<result column="comId" property="comId" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			estateId,
+			estateName,
+			estateDesc,
+			estateAddress,
+			estateMap,
+			estateLongitude,
+			estateLatitude,
+			estateCarMap,
+			estateType,
+			createTime,
+			editTime,
+			editor,
+			stationId,
+			proId,
+			comId
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="estateId != null and estateId != ''" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and estateName = #{estateName}
+					</if>
+					<if test="estateDesc != null and estateDesc != ''" >
+				   		and estateDesc = #{estateDesc}
+					</if>
+					<if test="estateAddress != null and estateAddress != ''" >
+				   		and estateAddress = #{estateAddress}
+					</if>
+					<if test="estateMap != null and estateMap != ''" >
+				   		and estateMap = #{estateMap}
+					</if>
+					<if test="estateLongitude != null and estateLongitude != ''" >
+				   		and estateLongitude = #{estateLongitude}
+					</if>
+					<if test="estateLatitude != null and estateLatitude != ''" >
+				   		and estateLatitude = #{estateLatitude}
+					</if>
+					<if test="estateCarMap != null and estateCarMap != ''" >
+				   		and estateCarMap = #{estateCarMap}
+					</if>
+					<if test="estateType != null and estateType != ''" >
+				   		and estateType = #{estateType}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="stationId != null and stationId != ''" >
+				   		and stationId = #{stationId}
+					</if>
+					<if test="proId != null and proId != ''" >
+				   		and proId = #{proId}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and comId = #{comId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 联查所有字段查询条件 -->
+	<sql id="Base_Where_Clause_e">
+			<trim  suffixOverrides="," >
+					<if test="estateId != null and estateId != ''" >
+				   		and e.estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and e.estateName = #{estateName}
+					</if>
+					<if test="estateDesc != null and estateDesc != ''" >
+				   		and e.estateDesc = #{estateDesc}
+					</if>
+					<if test="estateAddress != null and estateAddress != ''" >
+				   		and e.estateAddress = #{estateAddress}
+					</if>
+					<if test="estateMap != null and estateMap != ''" >
+				   		and e.estateMap = #{estateMap}
+					</if>
+					<if test="estateLongitude != null" >
+				   		and e.estateLongitude BETWEEN #{estateLongitude}-0.023529412
+				   		AND #{estateLongitude}+0.023529412
+					</if>
+					<if test="estateLatitude != null and estateLatitude != ''" >
+				   		and e.estateLatitude BETWEEN #{estateLatitude}-0.023529412
+				   		and #{estateLatitude}+0.023529412
+					</if>
+					<if test="estateCarMap != null and estateCarMap != ''" >
+				   		and e.estateCarMap = #{estateCarMap}
+					</if>
+					<if test="estateType != null and estateType != ''" >
+				   		and e.estateType = #{estateType}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and e.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and e.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and e.editor = #{editor}
+					</if>
+					<if test="stationId != null and stationId != ''" >
+				   		and e.stationId = #{stationId}
+					</if>
+					<if test="proId != null and proId != ''" >
+				   		and e.proId = #{proId}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and e.comId = #{comId}
+					</if>
+			</trim>
+	</sql>
+	
+	<!-- 根据id查询 ManageEstate -->
+	<select id="findById"  resultMap="ManageEstateResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from manage_estate where estateId = #{id}
+	</select>
+	
+	<!-- 根据id查询小区周边公交 -->
+	<select id="findByEstateBus"  resultType="com.community.app.module.vo.ManageEstateQuery" parameterType="java.lang.Integer">
+		SELECT e.estateLongitude,e.estateLatitude,s.stationId,s.stationName,s.estateLongitude as busLongitude,s.estateLatitude as busLatitude FROM manage_estate e LEFT JOIN business_bus_station s ON   s.estateLatitude BETWEEN e.estateLatitude-0.05400005 AND e.estateLatitude+0.05400005 AND s.estateLongitude BETWEEN e.estateLongitude-0.05400005 AND e.estateLongitude+0.05400005 WHERE estateId = #{id}
+	</select>
+	
+	<!-- 根据id查询小区周边 -->
+	<select id="findByEstateAmbitus"  resultType="com.community.app.module.vo.ManageEstateQuery" parameterType="com.community.app.module.vo.ManageEstateQuery">
+		SELECT e.estateLongitude,e.estateLatitude,l.estateLongitude as busLongitude,l.estateLatitude as busLatitude,l.serviceId,l.serviceName,l.address,l.tel FROM manage_estate e LEFT JOIN business_life l ON   l.estateLatitude BETWEEN e.estateLatitude-0.05400005 AND e.estateLatitude+0.05400005 AND l.estateLongitude BETWEEN e.estateLongitude-0.05400005 AND e.estateLongitude+0.05400005
+		WHERE e.estateId = #{estateId}
+		<if test="serviceCode==40002" >
+			and l.typeId = 1
+		</if>
+		<if test="serviceCode==40003" >
+			and l.typeId = 2
+		</if>
+		<if test="serviceCode==40004" >
+			and l.typeId = 3
+		</if>
+		<if test="serviceCode==40006" >
+			and l.typeId = 4
+		</if>
+		<if test="serviceCode==40007" >
+			and l.typeId = 5
+		</if>
+		<if test="serviceCode==40008" >
+			and l.typeId = 6
+		</if>
+		<if test="serviceCode==40009" >
+			and l.typeId = 7
+		</if>
+		<if test="serviceCode==40010" >
+			and l.typeId = 8
+		</if>
+	</select>
+	
+	<!-- 无条件查询所有ManageEstate -->
+	<select id="findAll" resultMap="ManageEstateResult">
+		select <include refid="Base_Column_List" /> from manage_estate 
+	</select>
+	
+	<!-- 无条件查询所有ManageEstate -->
+	<select id="findByComId" resultMap="ManageEstateResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from manage_estate where 
+	</select>
+	
+	<!-- 按Map对象条件查询所有ManageEstate -->
+	<select id="findByMap" resultMap="ManageEstateResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from manage_estate <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按Map对象条件查询所有ManageEstate -->
+	<select id="search" resultType="ManageEstate" parameterType="com.community.app.module.vo.ManageEstateQuery">
+		select e.estateId,e.estateName,com.comName,cou.countyName,ci.cityName,com.comName,s.staName,s.stationId,com.comId from manage_estate e,business_community com,business_station s,manage_org o,manage_county cou,manage_city ci  where  e.comId=com.comId and e.stationId=s.stationId and com.orgId=o.orgId and o.countyId=cou.countyId and cou.cityId=ci.cityId and estateName like '%${keyword}%'
+	</select>
+	
+	<!-- 按VO对象条件查询所有ManageEstate -->
+	<select id="findByExample" resultType="ManageEstate" parameterType="com.community.app.module.vo.ManageEstateQuery">
+		select e.estateId,e.estateName,com.comName,cou.countyName,ci.cityName,com.comName,s.staName,s.stationId,com.comId from manage_estate e,business_community com,business_station s,manage_org o,manage_county cou,manage_city ci  where  e.comId=com.comId and e.stationId=s.stationId and com.orgId=o.orgId and o.countyId=cou.countyId and cou.cityId=ci.cityId <include refid="Base_Where_Clause_e" /> 
+	</select>
+	
+	<!-- ManageEstate根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="ManageEstateResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from manage_estate  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- ManageEstate列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from manage_estate 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageEstate保存数据 -->
+	<insert id="save" parameterType="ManageEstate">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="estateId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into manage_estate(
+		
+		countyId,
+		cityId,
+		provinceId,
+		estateName,
+		estateDesc,
+		estateAddress,
+		estateMap,
+		estateLongitude,
+		estateLatitude,
+		estateCarMap,
+		estateType,
+		createTime,
+		editTime,
+		editor,
+		stationId,
+		proId,
+		comId
+		) values(
+				#{countyId},
+		#{cityId},
+		#{provinceId},
+		#{estateName},
+		#{estateDesc},
+		#{estateAddress},
+		#{estateMap},
+		#{estateLongitude},
+		#{estateLatitude},
+		#{estateCarMap},
+		#{estateType},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{stationId},
+		#{proId},
+		#{comId}
+		)
+	</insert>
+	
+	<!-- ManageEstate修改数据 -->
+	<update id="update" parameterType="ManageEstate">
+		update manage_estate 
+		<set>
+			<if test="countyId != null and countyId != ''" >
+			countyId=#{countyId},
+			</if>
+			<if test="cityId != null and cityId != ''" >
+			cityId=#{cityId},
+			</if>
+			<if test="provinceId != null and provinceId != ''" >
+			provinceId=#{provinceId},
+			</if>
+			<if test="estateName != null and estateName != ''" >
+			estateName=#{estateName},
+			</if>
+			<if test="estateDesc != null and estateDesc != ''" >
+			estateDesc=#{estateDesc},
+			</if>
+			<if test="estateAddress != null and estateAddress != ''" >
+			estateAddress=#{estateAddress},
+			</if>
+			<if test="estateMap != null and estateMap != ''" >
+			estateMap=#{estateMap},
+			</if>
+			<if test="estateLongitude != null and estateLongitude != ''" >
+			estateLongitude=#{estateLongitude},
+			</if>
+			<if test="estateLatitude != null and estateLatitude != ''" >
+			estateLatitude=#{estateLatitude},
+			</if>
+			<if test="estateCarMap != null and estateCarMap != ''" >
+			estateCarMap=#{estateCarMap},
+			</if>
+			<if test="estateType != null and estateType != ''" >
+			estateType=#{estateType},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="stationId != null and stationId != ''" >
+			stationId=#{stationId},
+			</if>
+			<if test="proId != null and proId != ''" >
+			proId=#{proId},
+			</if>
+			<if test="comId != null and comId != ''" >
+			comId=#{comId}
+			</if>
+		</set> 
+		where 
+		estateId=#{estateId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- ManageEstate删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from manage_estate where 
+		estateId=#{estateId}
+																													</delete>
+	
+</mapper>
+	

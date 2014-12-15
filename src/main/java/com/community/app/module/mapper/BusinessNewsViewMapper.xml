@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessNewsViewDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessNewsViewResult" type="BusinessNewsView">
+			<result column="viewId" property="viewId" />
+			<result column="newsId" property="newsId" />
+			<result column="viewerId" property="viewerId" />
+			<result column="viewTime" property="viewTime" />
+			<result column="viewerCom" property="viewerCom" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			viewId,
+			newsId,
+			viewerId,
+			viewTime,
+			viewerCom
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="viewId != null and viewId != ''" >
+				   		and viewId = #{viewId}
+					</if>
+					<if test="newsId != null and newsId != ''" >
+				   		and newsId = #{newsId}
+					</if>
+					<if test="viewerId != null and viewerId != ''" >
+				   		and viewerId = #{viewerId}
+					</if>
+					<if test="viewTime != null and viewTime != ''" >
+				   		and viewTime = #{viewTime}
+					</if>
+					<if test="viewerCom != null and viewerCom != ''" >
+				   		and viewerCom = #{viewerCom}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessNewsView -->
+	<select id="findById"  resultMap="BusinessNewsViewResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_news_view where viewId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessNewsView -->
+	<select id="findAll" resultMap="BusinessNewsViewResult">
+		select <include refid="Base_Column_List" /> from business_news_view 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessNewsView -->
+	<select id="findByMap" resultMap="BusinessNewsViewResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_news_view <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessNewsView -->
+	<select id="findByExample" resultMap="BusinessNewsViewResult" parameterType="com.community.app.module.vo.BusinessNewsViewQuery">
+		select <include refid="Base_Column_List" /> from business_news_view <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewsView根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessNewsViewResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_news_view  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNewsView列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_news_view 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewsView保存数据 -->
+	<insert id="save" parameterType="BusinessNewsView">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="viewId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_news_view(
+		
+		newsId,
+		viewerId,
+		viewTime,
+		viewerCom
+		) values(
+				#{newsId},
+		#{viewerId},
+		#{viewTime},
+		#{viewerCom}
+		)
+	</insert>
+	
+	<!-- BusinessNewsView修改数据 -->
+	<update id="update" parameterType="BusinessNewsView">
+		update business_news_view 
+		<set>
+			<if test="newsId != null and newsId != ''" >
+			newsId=#{newsId},
+			</if>
+			<if test="viewerId != null and viewerId != ''" >
+			viewerId=#{viewerId},
+			</if>
+			<if test="viewTime != null and viewTime != ''" >
+			viewTime=#{viewTime},
+			</if>
+			<if test="viewerCom != null and viewerCom != ''" >
+			viewerCom=#{viewerCom}
+			</if>
+		</set> 
+		where 
+		viewId=#{viewId}
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessNewsView删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_news_view where 
+		viewId=#{viewId}
+									</delete>
+	
+</mapper>
+	

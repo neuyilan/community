@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessNewsScopeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessNewsScopeResult" type="BusinessNewsScope">
+			<result column="scopeId" property="scopeId" />
+			<result column="newsId" property="newsId" />
+			<result column="comId" property="comId" />
+			<result column="comName" property="comName" />
+			<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			scopeId,
+			newsId,
+			comId,
+			comName,
+			createTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="scopeId != null and scopeId != ''" >
+				   		and scopeId = #{scopeId}
+					</if>
+					<if test="newsId != null and newsId != ''" >
+				   		and newsId = #{newsId}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and comId = #{comId}
+					</if>
+					<if test="comName != null and comName != ''" >
+				   		and comName = #{comName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessNewsScope -->
+	<select id="findById"  resultMap="BusinessNewsScopeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_news_scope where scopeId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessNewsScope -->
+	<select id="findAll" resultMap="BusinessNewsScopeResult">
+		select <include refid="Base_Column_List" /> from business_news_scope 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessNewsScope -->
+	<select id="findByMap" resultMap="BusinessNewsScopeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_news_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessNewsScope -->
+	<select id="findByExample" resultMap="BusinessNewsScopeResult" parameterType="com.community.app.module.vo.BusinessNewsScopeQuery">
+		select <include refid="Base_Column_List" /> from business_news_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewsScope根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessNewsScopeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_news_scope  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNewsScope列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_news_scope 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewsScope保存数据 -->
+	<insert id="save" parameterType="BusinessNewsScope">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="scopeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_news_scope(
+		
+		newsId,
+		comId,
+		comName,
+		createTime
+		) values(
+				#{newsId},
+		#{comId},
+		#{comName},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- BusinessNewsScope修改数据 -->
+	<update id="update" parameterType="BusinessNewsScope">
+		update business_news_scope 
+		<set>
+			<if test="newsId != null and newsId != ''" >
+			newsId=#{newsId},
+			</if>
+			<if test="comId != null and comId != ''" >
+			comId=#{comId},
+			</if>
+			<if test="comName != null and comName != ''" >
+			comName=#{comName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime}
+			</if>
+		</set> 
+		where 
+		scopeId=#{scopeId}
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessNewsScope删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_news_scope where 
+		scopeId=#{scopeId}
+									</delete>
+									
+	<!-- BusinessNewsScope删除数据 -->
+	<delete id="deleteScopeByNews" parameterType="java.lang.Integer">
+		delete from business_news_scope where 
+		newsId=#{newsId}
+	</delete>								
+	
+	<!-- BusinessNewsScope根据搜索条件，搜索分页所需的数据 -->
+	<select id="findAllPageByField" resultMap="BusinessNewsScopeResult" parameterType="Object">
+		select 
+		<if test="fieldMap != null and fieldMap != ''" >
+			<foreach collection="fieldMap" item="field" separator=",">  
+	    	#{field}
+	    	</foreach>
+		</if>
+		<if test="fieldMap == null"> * </if>
+		from business_news_scope  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNewsScope根据条件查询所需字段，返回列表 -->
+	<select id="findListByField" resultMap="BusinessNewsScopeResult" parameterType="Object">
+		select 
+		<if test="fieldMap != null and fieldMap != ''" >
+			<foreach collection="fieldMap" item="field" separator=",">  
+	    	#{field}
+	    	</foreach>
+		</if>
+		<if test="fieldMap == null"> * </if>
+		from business_news_scope  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	</select>
+	
+	<!-- 根据id查询 BusinessNewsScope -->
+	<select id="findByField"  resultMap="BusinessNewsScopeResult" parameterType="Object">
+		select 
+		<if test="fieldMap != null and fieldMap != ''" >
+			<foreach collection="fieldMap" item="field" separator=",">  
+	    	#{field}
+	    	</foreach>
+		</if>
+		<if test="fieldMap == null"> * </if>
+		from business_news_scope where scopeId = #{id}
+	</select>
+	
+</mapper>
+	

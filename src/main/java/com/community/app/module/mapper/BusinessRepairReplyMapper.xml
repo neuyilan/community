@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessRepairReplyDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessRepairReplyResult" type="BusinessRepairReply">
+			<result column="commentId" property="commentId" />
+			<result column="repairId" property="repairId" />
+			<result column="replyId" property="replyId" />
+			<result column="commentorId" property="commentorId" />
+			<result column="commentorName" property="commentorName" />
+			<result column="commentorAvatar" property="commentorAvatar" />
+			<result column="comment" property="comment" />
+			<result column="commentTime" property="commentTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			commentId,
+			repairId,
+			replyId,
+			commentorId,
+			commentorName,
+			commentorAvatar,
+			comment,
+			commentTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="repairId != null and repairId != ''" >
+				   		and repairId = #{repairId}
+					</if>
+					<if test="replyId != null and replyId != ''" >
+				   		and replyId = #{replyId}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentorName != null and commentorName != ''" >
+				   		and commentorName = #{commentorName}
+					</if>
+					<if test="commentorAvatar != null and commentorAvatar != ''" >
+				   		and commentorAvatar = #{commentorAvatar}
+					</if>
+					<if test="comment != null and comment != ''" >
+				   		and comment = #{comment}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessRepairReply -->
+	<select id="findById"  resultMap="BusinessRepairReplyResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_repair_reply where commentId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessRepairReply -->
+	<select id="findAll" resultMap="BusinessRepairReplyResult">
+		select <include refid="Base_Column_List" /> from business_repair_reply 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessRepairReply -->
+	<select id="findByMap" resultMap="BusinessRepairReplyResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_repair_reply <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessRepairReply -->
+	<select id="findByExample" resultMap="BusinessRepairReplyResult" parameterType="com.community.app.module.vo.BusinessRepairReplyQuery">
+		select <include refid="Base_Column_List" /> from business_repair_reply <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepairReply根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessRepairReplyResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_repair_reply  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessRepairReply列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_repair_reply 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepairReply保存数据 -->
+	<insert id="save" parameterType="BusinessRepairReply">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_repair_reply(
+		
+		repairId,
+		replyId,
+		commentorId,
+		commentorName,
+		commentorAvatar,
+		comment,
+		commentTime
+		) values(
+				#{repairId},
+		#{replyId},
+		#{commentorId},
+		#{commentorName},
+		#{commentorAvatar},
+		#{comment},
+		#{commentTime}
+		)
+	</insert>
+	
+	<!-- BusinessRepairReply修改数据 -->
+	<update id="update" parameterType="BusinessRepairReply">
+		update business_repair_reply 
+		<set>
+			<if test="repairId != null and repairId != ''" >
+			repairId=#{repairId},
+			</if>
+			<if test="replyId != null and replyId != ''" >
+			replyId=#{replyId},
+			</if>
+			<if test="commentorId != null and commentorId != ''" >
+			commentorId=#{commentorId},
+			</if>
+			<if test="commentorName != null and commentorName != ''" >
+			commentorName=#{commentorName},
+			</if>
+			<if test="commentorAvatar != null and commentorAvatar != ''" >
+			commentorAvatar=#{commentorAvatar},
+			</if>
+			<if test="comment != null and comment != ''" >
+			comment=#{comment},
+			</if>
+			<if test="commentTime != null and commentTime != ''" >
+			commentTime=#{commentTime}
+			</if>
+		</set> 
+		where 
+		commentId=#{commentId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessRepairReply删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_repair_reply where 
+		commentId=#{commentId}
+															</delete>
+	
+</mapper>
+	

@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppLatestNewsDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppLatestNewsResult" type="AppLatestNews">
+			<result column="newsId" property="newsId" />
+			<result column="typeId" property="typeId" />
+			<result column="sourceId" property="sourceId" />
+			<result column="estateId" property="estateId" />
+			<result column="userId" property="userId" />
+			<result column="to" property="to" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			newsId,
+			typeId,
+			sourceId,
+			estateId,
+			userId,
+			to
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="newsId != null and newsId != ''" >
+				   		and newsId = #{newsId}
+					</if>
+					<if test="typeId != null" >
+				   		and typeId = #{typeId}
+					</if>
+					<if test="sourceId != null" >
+				   		and sourceId = #{sourceId}
+					</if>
+					<if test="estateId != null" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="userId != null" >
+				   		and userId = #{userId}
+					</if>
+					<if test="to != null" >
+				   		and `to` = #{to}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			n.newsId,
+			n.typeId,
+			n.sourceId,
+			n.estateId,
+			n.userId,
+			n.to
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="newsId != null and newsId != ''" >
+				   		and n.newsId = #{newsId}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and n.typeId = #{typeId}
+					</if>
+					<if test="sourceId != null and sourceId != ''" >
+				   		and n.sourceId = #{sourceId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and n.estateId = #{estateId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and n.userId = #{userId}
+					</if>
+					<if test="to != null" >
+				   		and n.to = #{to}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppLatestNews -->
+	<select id="findById"  resultMap="AppLatestNewsResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_latest_news where newsId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppLatestNews -->
+	<select id="findAll" resultMap="AppLatestNewsResult">
+		select <include refid="Base_Column_List" /> from app_latest_news 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppLatestNews -->
+	<select id="findByMap" resultMap="AppLatestNewsResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_latest_news <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppLatestNews -->
+	<select id="findByExample" resultMap="AppLatestNewsResult" parameterType="com.community.app.module.vo.AppLatestNewsQuery">
+		select <include refid="Base_Column_List_app" /> from app_latest_news n <include refid="Base_Where_Clause_app" />
+	</select>
+	
+	<!-- AppLatestNews根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppLatestNewsResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_latest_news  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppLatestNews列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_latest_news 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppLatestNews根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultMap="AppLatestNewsResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_latest_news  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppLatestNews列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_latest_news 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppLatestNews保存数据 -->
+	<insert id="save" parameterType="AppLatestNews">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="newsId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_latest_news(
+		typeId,
+		sourceId,
+		estateId,
+		userId,
+		app_latest_news.to
+		) values(
+		#{typeId},
+		#{sourceId},
+		#{estateId},
+		#{userId},
+		#{to}
+		)
+	</insert>
+	
+	<!-- AppLatestNews保存数据 -->
+	<insert id="save_app" parameterType="AppLatestNews">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="newsId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_latest_news(
+		typeId,
+		sourceId,
+		estateId,
+		userId,
+		app_latest_news.to
+		) values(
+		#{typeId},
+		#{sourceId},
+		#{estateId},
+		#{userId},
+		#{to}
+		)
+	</insert>
+	
+	<!-- AppLatestNews修改数据 -->
+	<update id="update" parameterType="AppLatestNews">
+		update app_latest_news 
+		<set>
+			<if test="typeId != null and typeId != ''" >
+			typeId=#{typeId},
+			</if>
+			<if test="sourceId != null and sourceId != ''" >
+			sourceId=#{sourceId},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="to != null and to != ''" >
+			to=#{to}
+			</if>
+		</set> 
+		where 
+		newsId=#{newsId}
+	</update>
+	
+	<!-- AppLatestNews删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_latest_news where 
+		newsId=#{newsId}
+	</delete>
+	
+	<!-- AppLatestNews按条件删除数据 -->
+	<delete id="deleteByCondition" parameterType="Object">
+		delete from app_latest_news 
+		<include refid="Base_Where_Clause" />
+	</delete>
+	
+	<!-- 删除用户新消息类型的数据 -->
+	<delete id="delete_app" parameterType="AppLatestNews">
+		delete from app_latest_news where 
+		userId=#{userId} and typeId=#{typeId} and app_latest_news.to=#{to}
+											</delete>
+	<!-- 删除用户新消息类型列表的数据 -->
+	<delete id="delete_app_id" parameterType="AppLatestNews">
+		delete from app_latest_news where 
+		userId=#{userId} and typeId=#{typeId} and app_latest_news.to=#{to} and sourceId = #{sourceId}
+											</delete>
+	
+</mapper>
+	

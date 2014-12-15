@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityVoteOptionsDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityVoteOptionsResult" type="BusinessActivityVoteOptions">
+			<result column="optionsId" property="optionsId" />
+			<result column="actId" property="actId" />
+			<result column="content" property="content" />
+			<result column="image" property="image" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			optionsId,
+			actId,
+			content,
+			image,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="optionsId != null and optionsId != ''" >
+				   		and optionsId = #{optionsId}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and content = #{content}
+					</if>
+					<if test="image != null and image != ''" >
+				   		and image = #{image}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivityVoteOptions -->
+	<select id="findById"  resultMap="BusinessActivityVoteOptionsResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity_vote_options where optionsId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivityVoteOptions -->
+	<select id="findAll" resultMap="BusinessActivityVoteOptionsResult">
+		select <include refid="Base_Column_List" /> from business_activity_vote_options 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivityVoteOptions -->
+	<select id="findByMap" resultMap="BusinessActivityVoteOptionsResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity_vote_options <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityVoteOptions -->
+	<select id="findByExample" resultMap="BusinessActivityVoteOptionsResult" parameterType="com.community.app.module.vo.BusinessActivityVoteOptionsQuery">
+		select <include refid="Base_Column_List" /> from business_activity_vote_options <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityVoteOptions根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityVoteOptionsResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_activity_vote_options  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivityVoteOptions列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_vote_options 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityVoteOptions保存数据 -->
+	<insert id="save" parameterType="BusinessActivityVoteOptions">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="optionsId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity_vote_options(
+		actId,
+		content,
+		image,
+		createTime,
+		editTime,
+		editor
+		) values(
+		#{actId},
+		#{content},
+		#{image},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessActivityVoteOptions修改数据 -->
+	<update id="update" parameterType="BusinessActivityVoteOptions">
+		update business_activity_vote_options 
+		<set>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="image != null and image != ''" >
+			image=#{image},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		optionsId=#{optionsId}
+	</update>
+	
+	<!-- BusinessActivityVoteOptions删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity_vote_options where 
+		actId=#{actId}
+	</delete>
+</mapper>

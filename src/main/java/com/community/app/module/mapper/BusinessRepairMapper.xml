@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessRepairDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessRepairResult" type="BusinessRepair">
+			<result column="repairId" property="repairId" />
+			<result column="reporterId" property="reporterId" />
+			<result column="repairTime" property="repairTime" />
+			<result column="repairContent" property="repairContent" />
+			<result column="repairType" property="repairType" />
+			<result column="repairState" property="repairState" />
+			<result column="repairScore" property="repairScore" />
+			<result column="repairReplies" property="repairReplies" />
+			<result column="newReplies" property="newReplies" />
+			<result column="receiverId" property="receiverId" />
+			<result column="receiverName" property="receiverName" />
+			<result column="receiveAvatar" property="receiveAvatar" />
+			<result column="receiveDate" property="receiveDate" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="reporterName" property="reporterName" />
+			<result column="lastCommentTime" property="lastCommentTime" />
+			
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="portrait" property="portrait" />
+			<result column="address" property="address" />
+			<result column="newsCount" property="newsCount" />
+			
+			<result column="nickname" property="nickname" />
+			<result column="realname" property="realname" />
+			<result column="tel" property="tel" />
+			
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			re.repairId,
+			re.reporterId,
+			re.repairTime,
+			re.repairContent,
+			re.repairType,
+			re.repairState,
+			re.repairScore,
+			re.repairReplies,
+			re.newReplies,
+			re.receiverId,
+			re.receiverName,
+			re.receiveAvatar,
+			re.receiveDate,
+			re.createTime,
+			re.editTime,
+			re.editor,
+			re.reporterName,
+			re.lastCommentTime,
+			re.typeId,
+			
+			re.estateId,
+			re.estateName,
+			u.portrait,
+			u.address
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="repairId != null and repairId != ''" >
+				   		and re.repairId = #{repairId}
+					</if>
+					<if test="reporterId != null and reporterId != ''" >
+				   		and re.reporterId = #{reporterId}
+					</if>
+					<if test="repairTime != null and repairTime != ''" >
+				   		and re.repairTime = #{repairTime}
+					</if>
+					<if test="repairContent != null and repairContent != ''" >
+				   		and re.repairContent = #{repairContent}
+					</if>
+					<if test="repairType != null" >
+				   		and re.repairType = #{repairType}
+					</if>
+					<if test="repairState != null" >
+				   		and re.repairState = #{repairState}
+					</if>
+					<if test="repairScore != null" >
+				   		and re.repairScore = cast(#{repairScore} as UNSIGNED INTEGER)
+					</if>
+					
+					<if test="estateId != null and estateId != ''" >
+				   		and re.estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and re.estateName = #{estateName}
+					</if>
+					
+					<if test="repairReplies != null and repairReplies != ''" >
+				   		and re.repairReplies = #{repairReplies}
+					</if>
+					<if test="newReplies != null and newReplies != ''" >
+				   		and re.newReplies = #{newReplies}
+					</if>
+					<if test="receiverId != null and receiverId != ''" >
+				   		and re.receiverId = #{receiverId}
+					</if>
+					<if test="receiverName != null and receiverName != ''" >
+				   		and re.receiverName = #{receiverName}
+					</if>
+					<if test="receiveAvatar != null and receiveAvatar != ''" >
+				   		and re.receiveAvatar = #{receiveAvatar}
+					</if>
+					<if test="receiveDate != null and receiveDate != ''" >
+				   		and re.receiveDate = #{receiveDate}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and re.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and re.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and re.editor = #{editor}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and re.typeId = #{typeId}
+					</if>
+					
+					<if test="reporterName != null and reporterName != ''" >
+				   		and re.reporterName = #{reporterName}
+					</if>
+					<if test="lastCommentTime != null and lastCommentTime != ''" >
+				   		and re.lastCommentTime = #{lastCommentTime}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), re.repairTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and re.repairTime between #{startTime} and #{endTime}
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (re.repairContent like '%${keyWord}%' or u.tel like '%${keyWord}%' or u.nickname like '%${keyWord}%' or u.realname like '%${keyWord}%' or re.receiverName like '%${keyWord}%')
+					</if>
+					<if test="curUserId != null and curUserId != 0" >
+			   			and res.userId = #{curUserId}
+					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+			   			and res.estateId = #{curEstateId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List1" >
+			r.repairId,
+			r.reporterId,
+			r.repairTime,
+			r.repairContent,
+			r.repairType,
+			r.repairState,
+			r.repairScore,
+			r.repairReplies,
+			r.newReplies,
+			r.receiverId,
+			r.typeId,
+			r.receiverName,
+			r.receiveAvatar,
+			r.receiveDate,
+			r.createTime,
+			r.editTime,
+			r.editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause1">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="repairId != null and repairId != ''" >
+				   		and r.repairId = #{repairId}
+					</if>
+					<if test="reporterId != null and reporterId != ''" >
+				   		and r.reporterId = #{reporterId}
+					</if>
+					<if test="repairTime != null and repairTime != ''" >
+				   		and r.repairTime = #{repairTime}
+					</if>
+					<if test="repairContent != null and repairContent != ''" >
+				   		and r.repairContent = #{repairContent}
+					</if>
+					<if test="repairType != null and repairType != ''" >
+				   		and r.repairType = #{repairType}
+					</if>
+					<if test="repairState != null" >
+				   		and r.repairState = #{repairState}
+					</if>
+					<if test="repairScore != null and repairScore != ''" >
+				   		and r.repairScore = #{repairScore}
+					</if>
+					<if test="repairReplies != null and repairReplies != ''" >
+				   		and r.repairReplies = #{repairReplies}
+					</if>
+					<if test="newReplies != null and newReplies != ''" >
+				   		and r.newReplies = #{newReplies}
+					</if>
+					<if test="receiverId != null and receiverId != ''" >
+				   		and r.receiverId = #{receiverId}
+					</if>
+					<if test="receiverName != null and receiverName != ''" >
+				   		and r.receiverName = #{receiverName}
+					</if>
+					<if test="receiveAvatar != null and receiveAvatar != ''" >
+				   		and r.receiveAvatar = #{receiveAvatar}
+					</if>
+					<if test="receiveDate != null and receiveDate != ''" >
+				   		and r.receiveDate = #{receiveDate}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and r.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and r.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and r.editor = #{editor}
+					</if>
+					<if test="timeScope != null and timeScope != ''" >
+	      				and r.#{timeScope} >= DATEDIFF(now(), repairTime)
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and r.repairContent like '%${keyWord}%'
+					</if>
+					<if test="type == 3"  >
+				   		and r.repairState=0 or r.repairState=1 and r.reporterId = #{reporterId}
+					</if>
+					<if test="type == 4"  >
+				   		and r.repairState=2 or r.repairState=3 and r.reporterId = #{reporterId} or r.repairState = 4 and r.reporterId = #{reporterId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessRepair -->
+	<select id="findById"  resultMap="BusinessRepairResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,p.pics,a.audios,a.time from business_repair r,(select GROUP_CONCAT(picUrl) pics from business_repair_pic where repairId = #{id}) p,(select GROUP_CONCAT(picUrl) audios,GROUP_CONCAT(time) time from business_repair_audio where repairId = #{id}) a where repairId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessRepair -->
+	<select id="findById_app"  resultMap="BusinessRepairResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,p.pics,a.audios,a.time from business_repair r,(select GROUP_CONCAT(picUrl) pics from business_repair_pic where repairId = #{id}) p,(select GROUP_CONCAT(picUrl) audios,GROUP_CONCAT(time) time from business_repair_audio where repairId = #{id}) a where repairId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessRepair -->
+	<select id="findAll" resultMap="BusinessRepairResult">
+		select <include refid="Base_Column_List" /> from business_repair re
+		left join app_user u on re.reporterId = u.userId 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessRepair -->
+	<select id="findByMap" resultMap="BusinessRepairResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_repair re
+		left join app_user u on re.reporterId = u.userId 
+		 <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessRepair -->
+	<select id="findByExample" resultMap="BusinessRepairResult" parameterType="com.community.app.module.vo.BusinessRepairQuery">
+		select <include refid="Base_Column_List" /> from business_repair re
+		left join app_user u on re.reporterId = u.userId 
+		 <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepair根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessRepairResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> , u.tel, u.realname,u.nickname, count(news.newsId) as newsCount from business_repair re
+		left join app_user u on re.reporterId = u.userId 
+		inner join business_user_resource res on res.estateId = re.estateId
+		left join app_latest_news news on news.sourceId = re.repairId and news.typeId=37 and news.to=1 
+		<include refid="Base_Where_Clause" />
+		group by re.repairId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessRepair根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessRepair" parameterType="Object">
+		select <include refid="Base_Column_List1" />,t.typeId,t.typeName from business_repair r left join business_repair_type t on r.typeId = t.typeId 
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessRepair列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(re.repairId)) from business_repair re
+		left join app_user u on re.reporterId = u.userId 
+		inner join business_user_resource res on res.estateId = re.estateId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepair列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_repair  r
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- BusinessRepair保存数据 -->
+	<insert id="save" parameterType="BusinessRepair">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="repairId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_repair(
+		reporterId,
+		reporterName,
+		repairTime,
+		repairContent,
+		repairState,
+		createTime,
+		editTime,
+		estateId,
+		estateName,
+		typeId
+		) values(
+		#{reporterId},
+		(select nickname from app_user where userId=#{reporterId}),
+		#{repairTime},
+		#{repairContent},
+		#{repairState},
+		#{createTime},
+		#{editTime},
+		#{estateId},
+		(select estateName from manage_estate where estateId=#{estateId}),
+		#{typeId}
+		)
+	</insert>
+	
+	<!-- BusinessRepair修改数据 -->
+	<update id="update" parameterType="BusinessRepair">
+		update business_repair 
+		<set>
+			<if test="reporterId != null and reporterId != ''" >
+			reporterId=#{reporterId},
+			</if>
+			<if test="repairTime != null and repairTime != ''" >
+			repairTime=#{repairTime},
+			</if>
+			<if test="repairContent != null and repairContent != ''" >
+			repairContent=#{repairContent},
+			</if>
+			<if test="repairType != null and repairType != ''" >
+			repairType=#{repairType},
+			</if>
+			<if test="repairState != null and repairState != ''" >
+			repairState=#{repairState},
+			</if>
+			<if test="repairScore != null and repairScore != ''" >
+			repairScore=#{repairScore},
+			</if>
+			<if test="repairReplies != null and repairReplies != ''" >
+			repairReplies=#{repairReplies},
+			</if>
+			
+			<if test="reporterName != null and reporterName != ''" >
+			repairReplies=#{reporterName},
+			</if>
+			<if test="lastCommentTime != null and lastCommentTime != ''" >
+			repairReplies=#{lastCommentTime},
+			</if>
+			
+			<if test="newReplies != null and newReplies != ''" >
+			newReplies=#{newReplies},
+			</if>
+			<if test="receiverId != null and receiverId != ''" >
+			receiverId=#{receiverId},
+			</if>
+			<if test="receiverName != null and receiverName != ''" >
+			receiverName=#{receiverName},
+			</if>
+			<if test="receiveAvatar != null and receiveAvatar != ''" >
+			receiveAvatar=#{receiveAvatar},
+			</if>
+			<if test="receiveDate != null and receiveDate != ''" >
+			receiveDate=#{receiveDate},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		repairId=#{repairId}
+
+	</update>
+	
+	<!-- BusinessRepair删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_repair where 
+		repairId=#{repairId}
+	</delete>
+	
+    <!--查询手机端用户信息-->
+    <select id="findAppUserById" resultType="MemberVO">
+        SELECT registTime,verifyTime,b.userId,realName,tel, estateName,buildingName,unitName,houseNo
+        FROM app_estate_user a, app_user b,
+        WHERE a.estMemId = b.userId and estMemId = #{id}
+    </select>
+	
+</mapper>
+	

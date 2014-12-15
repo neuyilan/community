@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessNewspaperDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessNewspaperResult" type="BusinessNewspaper">
+			<result column="newspaperId" property="newspaperId" />
+			<result column="title" property="title" />
+			<result column="pic" property="pic" />
+			<result column="url" property="url" />
+			<result column="comId" property="comId" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			bn.newspaperId,
+			bn.title,
+			bn.pic,
+			bn.url,
+			bn.comId,
+			bn.createTime,
+			bn.editTime,
+			bn.editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="newspaperId != null and newspaperId != ''" >
+				   		and newspaperId = #{newspaperId}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and title = #{title}
+					</if>
+					<if test="pic != null and pic != ''" >
+				   		and pic = #{pic}
+					</if>
+					<if test="url != null and url != ''" >
+				   		and url = #{url}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and bn.comId = #{comId}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), bn.createTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(bn.createTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and title like '%${keyWord}%'
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessNewspaper -->
+	<select id="findById"  resultMap="BusinessNewspaperResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_newspaper bn where bn.newspaperId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessNewspaper -->
+	<select id="findAll" resultMap="BusinessNewspaperResult">
+		select <include refid="Base_Column_List" /> from business_newspaper 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessNewspaper -->
+	<select id="findByMap" resultMap="BusinessNewspaperResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_newspaper <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessNewspaper -->
+	<select id="findByExample" resultMap="BusinessNewspaperResult" parameterType="com.community.app.module.vo.BusinessNewspaperQuery">
+		select <include refid="Base_Column_List" /> from business_newspaper bn <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewspaper根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessNewspaperResult" parameterType="Object">
+		select <include refid="Base_Column_List" />, bc.comName from business_newspaper bn left join business_community bc on bn.comId = bc.comId    
+		<include refid="Base_Where_Clause" /> 
+	    <if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNewspaper列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_newspaper bn
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewspaper根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultMap="BusinessNewspaperResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_newspaper bn
+		<include refid="Base_Where_Clause" /> 
+	    <if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNewspaper列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_newspaper bn
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewspaper保存数据 -->
+	<insert id="save" parameterType="BusinessNewspaper">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="newspaperId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_newspaper(
+		title,
+		pic,
+		url,
+		comId,
+		createTime,
+		editTime,
+		editor
+		) values(
+		#{title},
+		#{pic},
+		#{url},
+		#{comId},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessNewspaper修改数据 -->
+	<update id="update" parameterType="BusinessNewspaper">
+		update business_newspaper 
+		<set>
+			<if test="title != null and title != ''" >
+			title=#{title},
+			</if>
+			<if test="pic != null and pic != ''" >
+			pic=#{pic},
+			</if>
+			<if test="url != null and url != ''" >
+			url=#{url},
+			</if>
+			<if test="comId != null and comId != ''" >
+			comId=#{comId},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		newspaperId=#{newspaperId}
+	</update>
+	
+	<!-- BusinessNewspaper删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_newspaper where 
+		newspaperId=#{newspaperId}
+	</delete>
+</mapper>

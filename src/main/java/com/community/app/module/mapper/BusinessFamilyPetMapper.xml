@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessFamilyPetDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessFamilyPetResult" type="BusinessFamilyPet">
+			<result column="petId" property="petId" />
+			<result column="typeId" property="typeId" />
+			<result column="familyId" property="familyId" />
+			<result column="typeName" property="typeName" />
+			<result column="petName" property="petName" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			petId,
+			typeId,
+			familyId,
+			typeName,
+			petName,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="petId != null and petId != ''" >
+				   		and petId = #{petId}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and typeId = #{typeId}
+					</if>
+					<if test="familyId != null and familyId != ''" >
+				   		and familyId = #{familyId}
+					</if>
+					<if test="typeName != null and typeName != ''" >
+				   		and typeName = #{typeName}
+					</if>
+					<if test="petName != null and petName != ''" >
+				   		and petName = #{petName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessFamilyPet -->
+	<select id="findById"  resultMap="BusinessFamilyPetResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_family_pet where petId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessFamilyPet -->
+	<select id="findAll" resultMap="BusinessFamilyPetResult">
+		select <include refid="Base_Column_List" /> from business_family_pet 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessFamilyPet -->
+	<select id="findByMap" resultMap="BusinessFamilyPetResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_family_pet <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessFamilyPet -->
+	<select id="findByExample" resultMap="BusinessFamilyPetResult" parameterType="com.community.app.module.vo.BusinessFamilyPetQuery">
+		select <include refid="Base_Column_List" /> from business_family_pet <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFamilyPet根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessFamilyPetResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_family_pet  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFamilyPet列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_family_pet 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFamilyPet保存数据 -->
+	<insert id="save" parameterType="BusinessFamilyPet">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="petId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_family_pet(
+		typeId,
+		familyId,
+		createTime,
+		editTime
+		) values(
+		#{typeId},
+		#{familyId},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- BusinessFamilyPet修改数据 -->
+	<update id="update" parameterType="BusinessFamilyPet">
+		update business_family_pet 
+		<set>
+			<if test="typeId != null and typeId != ''" >
+			typeId=#{typeId},
+			</if>
+			<if test="familyId != null and familyId != ''" >
+			familyId=#{familyId},
+			</if>
+			<if test="typeName != null and typeName != ''" >
+			typeName=#{typeName},
+			</if>
+			<if test="petName != null and petName != ''" >
+			petName=#{petName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		petId=#{petId}
+	</update>
+	
+	<!-- BusinessFamilyPet删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_family_pet where 
+		petId=#{petId}
+	</delete>
+	<!-- 删除 -->
+	<delete id="deleteFamilyPet" parameterType="java.lang.Integer">
+		delete from business_family_pet where 
+		familyId=#{familyId}
+															</delete>
+	
+</mapper>
+	

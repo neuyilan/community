@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityScopeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityScopeResult" type="BusinessActivityScope">
+			<result column="scopeId" property="scopeId" />
+			<result column="actId" property="actId" />
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			scopeId,
+			actId,
+			estateId,
+			estateName,
+			createTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="scopeId != null and scopeId != ''" >
+				   		and scopeId = #{scopeId}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and estateName = #{estateName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivityScope -->
+	<select id="findById"  resultMap="BusinessActivityScopeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity_scope where scopeId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivityScope -->
+	<select id="findAll" resultMap="BusinessActivityScopeResult">
+		select <include refid="Base_Column_List" /> from business_activity_scope 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivityScope -->
+	<select id="findByMap" resultMap="BusinessActivityScopeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityScope -->
+	<select id="findByExample" resultMap="BusinessActivityScopeResult" parameterType="com.community.app.module.vo.BusinessActivityScopeQuery">
+		select <include refid="Base_Column_List" /> from business_activity_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityScope根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityScopeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_activity_scope  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivityScope列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_scope 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityScope保存数据 -->
+	<insert id="save" parameterType="BusinessActivityScope">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="scopeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity_scope(
+		
+		actId,
+		estateId,
+		estateName,
+		createTime
+		) values(
+				#{actId},
+		#{estateId},
+		#{estateName},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- BusinessActivityScope修改数据 -->
+	<update id="update" parameterType="BusinessActivityScope">
+		update business_activity_scope 
+		<set>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="estateName != null and estateName != ''" >
+			estateName=#{estateName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime}
+			</if>
+		</set> 
+		where 
+		scopeId=#{scopeId}
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessActivityScope删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity_scope where 
+		actId=#{actId}
+									</delete>
+	
+</mapper>
+	

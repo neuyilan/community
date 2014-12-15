@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppStatisticsClickDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppStatisticsClickResult" type="AppStatisticsClick">
+			<result column="statiId" property="statiId" />
+			<result column="userId" property="userId" />
+			<result column="type" property="type" />
+			<result column="typeName" property="typeName" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			statiId,
+			userId,
+			type,
+			typeName,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="statiId != null and statiId != ''" >
+				   		and statiId = #{statiId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="type != null and type != ''" >
+				   		and type = #{type}
+					</if>
+					<if test="typeName != null and typeName != ''" >
+				   		and typeName = #{typeName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppStatisticsClick -->
+	<select id="findById"  resultMap="AppStatisticsClickResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_statistics_click where statiId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppStatisticsClick -->
+	<select id="findAll" resultMap="AppStatisticsClickResult">
+		select <include refid="Base_Column_List" /> from app_statistics_click 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppStatisticsClick -->
+	<select id="findByMap" resultMap="AppStatisticsClickResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_statistics_click <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppStatisticsClick -->
+	<select id="findByExample" resultMap="AppStatisticsClickResult" parameterType="com.community.app.module.vo.AppStatisticsClickQuery">
+		select <include refid="Base_Column_List" /> from app_statistics_click <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppStatisticsClick根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppStatisticsClickResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_statistics_click  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppStatisticsClick列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_statistics_click 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppStatisticsClick保存数据 -->
+	<insert id="save" parameterType="AppStatisticsClick">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="statiId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_statistics_click(
+		
+		userId,
+		type,
+		typeName,
+		createTime,
+		editTime,
+		editor,
+		id
+		) values(
+				#{userId},
+		#{type},
+		#{typeName},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{id}
+		)
+	</insert>
+	
+	<!-- AppStatisticsClick修改数据 -->
+	<update id="update" parameterType="AppStatisticsClick">
+		update app_statistics_click 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="type != null and type != ''" >
+			type=#{type},
+			</if>
+			<if test="typeName != null and typeName != ''" >
+			typeName=#{typeName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		statiId=#{statiId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- AppStatisticsClick删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_statistics_click where 
+		statiId=#{statiId}
+													</delete>
+	
+</mapper>
+	

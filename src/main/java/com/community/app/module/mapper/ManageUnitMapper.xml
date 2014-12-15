@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.ManageUnitDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="ManageUnitResult" type="ManageUnit">
+			<result column="unitId" property="unitId" />
+			<result column="buildingId" property="buildingId" />
+			<result column="unitName" property="unitName" />
+			<result column="estateLongitude" property="estateLongitude" />
+			<result column="estateLatitude" property="estateLatitude" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="unitMap" property="unitMap" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			unitId,
+			buildingId,
+			unitName,
+			estateLongitude,
+			estateLatitude,
+			createTime,
+			editTime,
+			editor,
+			unitMap
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="unitId != null and unitId != ''" >
+				   		and unitId = #{unitId}
+					</if>
+					<if test="buildingId != null and buildingId != ''" >
+				   		and buildingId = #{buildingId}
+					</if>
+					<if test="unitName != null and unitName != ''" >
+				   		and unitName = #{unitName}
+					</if>
+					<if test="estateLongitude != null and estateLongitude != ''" >
+				   		and estateLongitude = #{estateLongitude}
+					</if>
+					<if test="estateLatitude != null and estateLatitude != ''" >
+				   		and estateLatitude = #{estateLatitude}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="unitMap != null and unitMap != ''" >
+				   		and unitMap = #{unitMap}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 ManageUnit -->
+	<select id="findById"  resultMap="ManageUnitResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from manage_unit where unitId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有ManageUnit -->
+	<select id="findAll" resultMap="ManageUnitResult">
+		select <include refid="Base_Column_List" /> from manage_unit 
+	</select>
+	
+	<!-- 按Map对象条件查询所有ManageUnit -->
+	<select id="findByMap" resultMap="ManageUnitResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from manage_unit <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有ManageUnit -->
+	<select id="findByExample" resultMap="ManageUnitResult" parameterType="com.community.app.module.vo.ManageUnitQuery">
+		select <include refid="Base_Column_List" /> from manage_unit <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageUnit根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="ManageUnitResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from manage_unit  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- ManageUnit列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from manage_unit 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 根据id查询 ManageUnit -->
+	<select id="getUnitByEstateId"  resultMap="ManageUnitResult" parameterType="java.lang.Integer">
+		SELECT u.unitId,u.buildingId,unitName FROM manage_unit u,manage_building b WHERE b.buildingId=u.buildingId AND  b.estateId =#{id}
+	</select>
+	
+	<!-- ManageUnit保存数据 -->
+	<insert id="save" parameterType="ManageUnit">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="unitId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into manage_unit(
+		
+		buildingId,
+		unitName,
+		estateLongitude,
+		estateLatitude,
+		createTime,
+		editTime,
+		editor,
+		unitMap
+		) values(
+				#{buildingId},
+		#{unitName},
+		#{estateLongitude},
+		#{estateLatitude},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{unitMap}
+		)
+	</insert>
+	
+	<!-- ManageUnit修改数据 -->
+	<update id="update" parameterType="ManageUnit">
+		update manage_unit 
+		<set>
+			<if test="buildingId != null and buildingId != ''" >
+			buildingId=#{buildingId},
+			</if>
+			<if test="unitName != null and unitName != ''" >
+			unitName=#{unitName},
+			</if>
+			<if test="estateLongitude != null and estateLongitude != ''" >
+			estateLongitude=#{estateLongitude},
+			</if>
+			<if test="estateLatitude != null and estateLatitude != ''" >
+			estateLatitude=#{estateLatitude},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="unitMap != null and unitMap != ''" >
+			unitMap=#{unitMap}
+			</if>
+		</set> 
+		where 
+		unitId=#{unitId}
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- ManageUnit删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from manage_unit where 
+		unitId=#{unitId}
+																	</delete>
+	
+</mapper>
+	

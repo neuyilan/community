@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppVerifyDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppVerifyResult" type="AppVerify">
+			<result column="verifyId" property="verifyId" />
+			<result column="cellphone" property="cellphone" />
+			<result column="verificationCode" property="verificationCode" />
+			<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			verifyId,
+			cellphone,
+			verificationCode,
+			createTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="verifyId != null and verifyId != ''" >
+				   		and verifyId = #{verifyId}
+					</if>
+					<if test="cellphone != null and cellphone != ''" >
+				   		and cellphone = #{cellphone}
+					</if>
+					<if test="verificationCode != null and verificationCode != ''" >
+				   		and verificationCode = #{verificationCode}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppVerify -->
+	<select id="findById"  resultMap="AppVerifyResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_verify where verifyId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppVerify -->
+	<select id="findAll" resultMap="AppVerifyResult">
+		select <include refid="Base_Column_List" /> from app_verify 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppVerify -->
+	<select id="findByMap" resultMap="AppVerifyResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_verify <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppVerify -->
+	<select id="findByExample" resultMap="AppVerifyResult" parameterType="com.community.app.module.vo.AppVerifyQuery">
+		select <include refid="Base_Column_List" /> from app_verify <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppVerify根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppVerifyResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_verify  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppVerify列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_verify 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppVerify保存数据 -->
+	<insert id="save" parameterType="AppVerify">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="verifyId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_verify(
+		
+		cellphone,
+		verificationCode,
+		createTime
+		) values(
+				#{cellphone},
+		#{verificationCode},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- AppVerify修改数据 -->
+	<update id="update" parameterType="AppVerify">
+		update app_verify 
+		<set>
+			<if test="cellphone != null and cellphone != ''" >
+			cellphone=#{cellphone},
+			</if>
+			<if test="verificationCode != null and verificationCode != ''" >
+			verificationCode=#{verificationCode},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime}
+			</if>
+		</set> 
+		where 
+		verifyId=#{verifyId}
+		
+		
+		
+	</update>
+	
+	<!-- AppVerify删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_verify where 
+		cellphone=#{cellphone}
+							</delete>
+	
+</mapper>
+	

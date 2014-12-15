@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessExpFavDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessExpFavResult" type="BusinessExpFav">
+			<result column="favorableId" property="favorableId" />
+			<result column="startDate" property="startDate" />
+			<result column="endDate" property="endDate" />
+			<result column="info" property="info" />
+			<result column="createTime" property="createTime" />
+			<result column="editor" property="editor" />
+			<result column="editTime" property="editTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			favorableId,
+			startDate,
+			endDate,
+			info,
+			createTime,
+			editor,
+			editTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="favorableId != null and favorableId != ''" >
+				   		and favorableId = #{favorableId}
+					</if>
+					<if test="startDate != null and startDate != ''" >
+				   		and startDate = #{startDate}
+					</if>
+					<if test="endDate != null and endDate != ''" >
+				   		and endDate = #{endDate}
+					</if>
+					<if test="info != null and info != ''" >
+				   		and info = #{info}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			f.favorableId,
+			f.startDate,
+			f.endDate,
+			f.info,
+			f.createTime,
+			f.editor,
+			f.editTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="favorableId != null and favorableId != ''" >
+				   		and f.favorableId = #{favorableId}
+					</if>
+					<if test="startDate != null and startDate != ''" >
+				   		and f.startDate = #{startDate}
+					</if>
+					<if test="endDate != null and endDate != ''" >
+				   		and f.endDate = #{endDate}
+					</if>
+					<if test="info != null and info != ''" >
+				   		and f.info = #{info}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and f.createTime = #{createTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and f.editor = #{editor}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and f.editTime = #{editTime}
+					</if>
+					<if test="stationId != null and stationId != ''" >
+				   		and s.stationId = #{stationId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessExpFav -->
+	<select id="findById"  resultMap="BusinessExpFavResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_exp_fav where favorableId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessExpFav -->
+	<select id="findAll" resultMap="BusinessExpFavResult">
+		select <include refid="Base_Column_List" /> from business_exp_fav 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessExpFav -->
+	<select id="findByMap" resultMap="BusinessExpFavResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_exp_fav <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessExpFav -->
+	<select id="findByExample" resultType="BusinessExpFav" parameterType="com.community.app.module.vo.BusinessExpFavQuery">
+		select <include refid="Base_Column_List_app" />,s.addrName,s.addrUrl,s.staTel from business_station s left join business_exp_fav f on f.stationId=s.stationId <include refid="Base_Where_Clause_app" /> order by createTime desc limit 0,1
+	</select>
+	
+	<!-- BusinessExpFav根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessExpFavResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_exp_fav  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessExpFav列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_exp_fav 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessExpFav保存数据 -->
+	<insert id="save" parameterType="BusinessExpFav">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="favorableId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_exp_fav(
+		
+		startDate,
+		endDate,
+		info,
+		createTime,
+		editor,
+		editTime
+		) values(
+				#{startDate},
+		#{endDate},
+		#{info},
+		#{createTime},
+		#{editor},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- BusinessExpFav修改数据 -->
+	<update id="update" parameterType="BusinessExpFav">
+		update business_exp_fav 
+		<set>
+			<if test="startDate != null and startDate != ''" >
+			startDate=#{startDate},
+			</if>
+			<if test="endDate != null and endDate != ''" >
+			endDate=#{endDate},
+			</if>
+			<if test="info != null and info != ''" >
+			info=#{info},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime}
+			</if>
+		</set> 
+		where 
+		favorableId=#{favorableId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessExpFav删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_exp_fav where 
+		favorableId=#{favorableId}
+													</delete>
+	
+</mapper>
+	

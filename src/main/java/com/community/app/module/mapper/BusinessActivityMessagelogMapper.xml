@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityMessagelogDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityMessagelogResult" type="BusinessActivityMessagelog">
+			<result column="recordId" property="recordId" />
+			<result column="messageId" property="messageId" />
+			<result column="userId" property="userId" />
+			<result column="pushTime" property="pushTime" />
+			<result column="userName" property="userName" />
+			<result column="pushState" property="pushState" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			recordId,
+			messageId,
+			userId,
+			pushTime,
+			userName,
+			pushState
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="recordId != null and recordId != ''" >
+				   		and recordId = #{recordId}
+					</if>
+					<if test="messageId != null and messageId != ''" >
+				   		and messageId = #{messageId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="pushTime != null and pushTime != ''" >
+				   		and pushTime = #{pushTime}
+					</if>
+					<if test="userName != null and userName != ''" >
+				   		and userName = #{userName}
+					</if>
+					<if test="pushState != null and pushState != ''" >
+				   		and pushState = #{pushState}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivityMessagelog -->
+	<select id="findById"  resultMap="BusinessActivityMessagelogResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity_messagelog where recordId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivityMessagelog -->
+	<select id="findAll" resultMap="BusinessActivityMessagelogResult">
+		select <include refid="Base_Column_List" /> from business_activity_messagelog 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivityMessagelog -->
+	<select id="findByMap" resultMap="BusinessActivityMessagelogResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity_messagelog <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityMessagelog -->
+	<select id="findByExample" resultMap="BusinessActivityMessagelogResult" parameterType="com.community.app.module.vo.BusinessActivityMessagelogQuery">
+		select <include refid="Base_Column_List" /> from business_activity_messagelog <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityMessagelog根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityMessagelogResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_activity_messagelog  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivityMessagelog列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_messagelog 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityMessagelog保存数据 -->
+	<insert id="save" parameterType="BusinessActivityMessagelog">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="recordId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity_messagelog(
+		
+		messageId,
+		userId,
+		pushTime,
+		userName,
+		pushState
+		) values(
+				#{messageId},
+		#{userId},
+		#{pushTime},
+		#{userName},
+		#{pushState}
+		)
+	</insert>
+	
+	<!-- BusinessActivityMessagelog修改数据 -->
+	<update id="update" parameterType="BusinessActivityMessagelog">
+		update business_activity_messagelog 
+		<set>
+			<if test="messageId != null and messageId != ''" >
+			messageId=#{messageId},
+			</if>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="pushTime != null and pushTime != ''" >
+			pushTime=#{pushTime},
+			</if>
+			<if test="userName != null and userName != ''" >
+			userName=#{userName},
+			</if>
+			<if test="pushState != null and pushState != ''" >
+			pushState=#{pushState}
+			</if>
+		</set> 
+		where 
+		recordId=#{recordId}
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessActivityMessagelog删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity_messagelog where 
+		recordId=#{recordId}
+											</delete>
+	
+</mapper>
+	

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessAnnoVisitDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessAnnoVisitResult" type="BusinessAnnoVisit">
+			<result column="visitId" property="visitId" />
+			<result column="annoId" property="annoId" />
+			<result column="userId" property="userId" />
+			<result column="userName" property="userName" />
+			<result column="viewTime" property="viewTime" />
+			<result column="userAddress" property="userAddress" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			visitId,
+			annoId,
+			userId,
+			userName,
+			viewTime,
+			userAddress
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="visitId != null and visitId != ''" >
+				   		and visitId = #{visitId}
+					</if>
+					<if test="annoId != null and annoId != ''" >
+				   		and annoId = #{annoId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="userName != null and userName != ''" >
+				   		and userName = #{userName}
+					</if>
+					<if test="viewTime != null and viewTime != ''" >
+				   		and viewTime = #{viewTime}
+					</if>
+					<if test="userAddress != null and userAddress != ''" >
+				   		and userAddress = #{userAddress}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessAnnoVisit -->
+	<select id="findById"  resultMap="BusinessAnnoVisitResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_anno_visit where visitId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessAnnoVisit -->
+	<select id="findAll" resultMap="BusinessAnnoVisitResult">
+		select <include refid="Base_Column_List" /> from business_anno_visit 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessAnnoVisit -->
+	<select id="findByMap" resultMap="BusinessAnnoVisitResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_anno_visit <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessAnnoVisit -->
+	<select id="findByExample" resultMap="BusinessAnnoVisitResult" parameterType="com.community.app.module.vo.BusinessAnnoVisitQuery">
+		select <include refid="Base_Column_List" /> from business_anno_visit <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAnnoVisit根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessAnnoVisitResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_anno_visit  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessAnnoVisit列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_anno_visit 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAnnoVisit保存数据 -->
+	<insert id="save" parameterType="BusinessAnnoVisit">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="visitId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_anno_visit(
+		
+		annoId,
+		userId,
+		userName,
+		viewTime,
+		userAddress
+		) values(
+				#{annoId},
+		#{userId},
+		#{userName},
+		#{viewTime},
+		#{userAddress}
+		)
+	</insert>
+	
+	<!-- BusinessAnnoVisit修改数据 -->
+	<update id="update" parameterType="BusinessAnnoVisit">
+		update business_anno_visit 
+		<set>
+			<if test="annoId != null and annoId != ''" >
+			annoId=#{annoId},
+			</if>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="userName != null and userName != ''" >
+			userName=#{userName},
+			</if>
+			<if test="viewTime != null and viewTime != ''" >
+			viewTime=#{viewTime},
+			</if>
+			<if test="userAddress != null and userAddress != ''" >
+			userAddress=#{userAddress}
+			</if>
+		</set> 
+		where 
+		visitId=#{visitId}
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessAnnoVisit删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_anno_visit where 
+		visitId=#{visitId}
+											</delete>
+	
+</mapper>
+	

@@ -1,0 +1,1116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessExpDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessExpResult" type="BusinessExp">
+			<result column="expId" property="expId" />
+			<result column="senderId" property="senderId" />
+			<result column="senderName" property="senderName" />
+			<result column="expCode" property="expCode" />
+			<result column="senderTel" property="senderTel" />
+			<result column="receiverName" property="receiverName" />
+			<result column="receiverTel" property="receiverTel" />
+			<result column="receiveTime" property="receiveTime" />
+			<result column="receiverAddr" property="receiverAddr" />
+			<result column="sendTime" property="sendTime" />
+			<result column="expContent" property="expContent" />
+			<result column="expState" property="expState" />
+			<result column="checkInTime" property="checkInTime" />
+			<result column="senderAddr" property="senderAddr" />
+			<result column="expType" property="expType" />
+			<result column="station" property="station" />
+			<result column="expCompanyID" property="expCompanyID" />
+			<result column="expCompany" property="expCompany" />
+			<result column="isPay" property="isPay" />
+			<result column="payMount" property="payMount" />
+			<result column="isAgent" property="isAgent" />
+			<result column="agentMount" property="agentMount" />
+			<result column="memo" property="memo" />
+			<result column="getDate" property="getDate" />
+			<result column="isAnytime" property="isAnytime" />
+			<result column="getTime" property="getTime" />
+			<result column="appointType" property="appointType" />
+			<result column="appointContent" property="appointContent" />
+			<result column="signname" property="signname" />
+			<result column="signTime" property="signTime" />
+			<result column="isSelf" property="isSelf" />
+			<result column="createTime" property="createTime" />
+			<result column="modifyTime" property="modifyTime" />
+			<result column="editor" property="editor" />
+			<result column="code" property="code" />
+			<result column="isSigned" property="isSigned" />
+			<result column="returnMemo" property="returnMemo" />
+			<result column="receiverId" property="receiverId" />
+			<result column="lastMessage" property="lastMessage" />
+			<result column="stationId" property="stationId" />
+			<result column="isDistributed" property="isDistributed" />
+			<result column="briefMessage" property="briefMessage" />
+			<result column="newsCount" property="newsCount" />
+			<result column="isVideo" property="isVideo" />
+			<result column="isProblem" property="isProblem" />
+			<result column="estateId" property="estateId" />
+			
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			e.expId,
+			e.senderId,
+			e.senderName,
+			e.expCode,
+			e.senderTel,
+			e.phoneType,
+			e.receiverName,
+			e.receiverTel,
+			e.receiveTime,
+			e.receiverAddr,
+			e.sendTime,
+			e.expContent,
+			e.expState,
+			e.checkInTime,
+			e.senderAddr,
+			e.expType,
+			e.station,
+			e.expCompanyID,
+			e.expCompany,
+			e.isPay,
+			e.payMount,
+			e.isAgent,
+			e.agentMount,
+			e.memo,
+			e.getDate,
+			e.isAnytime,
+			e.getTime,
+			e.appointType,
+			e.appointContent,
+			e.signname,
+			e.signTime,
+			e.isSelf,
+			e.createTime,
+			e.modifyTime,
+			e.editor,
+			e.isSigned,
+			e.returnMemo,
+			e.receiverId,
+			e.code,
+			e.lastMessage,
+			e.stationId,
+			e.isDistributed,
+			e.briefMessage,
+			e.isVideo,
+			e.isProblem,
+			e.estateId
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="expId != null and expId != ''" >
+				   		and e.expId = #{expId}
+					</if>
+					<if test="senderId != null and senderId != ''" >
+				   		and e.senderId = #{senderId}
+					</if>
+					<if test="senderName != null and senderName != ''" >
+				   		and e.senderName = #{senderName}
+					</if>
+					<if test="expCode != null and expCode != ''" >
+				   		and e.expCode = #{expCode}
+					</if>
+					<if test="senderTel != null and senderTel != ''" >
+				   		and e.senderTel = #{senderTel}
+					</if>
+					<if test="receiverName != null and receiverName != ''" >
+				   		and e.receiverName = #{receiverName}
+					</if>
+					<if test="receiverTel != null and receiverTel != ''" >
+				   		and e.receiverTel = #{receiverTel}
+					</if>
+					<if test="receiveTime != null and receiveTime != ''" >
+				   		and e.receiveTime = #{receiveTime}
+					</if>
+					<if test="receiverAddr != null and receiverAddr != ''" >
+				   		and e.receiverAddr = #{receiverAddr}
+					</if>
+					<if test="sendTime != null and sendTime != ''" >
+				   		and e.sendTime = #{sendTime}
+					</if>
+					<if test="expContent != null and expContent != ''" >
+				   		and e.expContent = #{expContent}
+					</if>
+					<if test="code != null and code != ''" >
+				   		and e.code = #{code}
+					</if>
+					<if test="briefMessage != null and briefMessage != ''" >
+				   		and e.briefMessage = #{briefMessage}
+					</if>
+					<if test="expState != null and expState != 10" >
+							<if test="expState == 9" >
+						   		and e.isProblem = 1
+							</if>
+							<if test="expState != 9" >
+						   		and e.expState = #{expState}
+							</if>				   		
+					</if>
+					<if test="checkInTime != null and checkInTime != ''" >
+				   		and e.checkInTime = #{checkInTime}
+					</if>
+					<if test="senderAddr != null and senderAddr != ''" >
+				   		and e.senderAddr = #{senderAddr}
+					</if>
+					<if test="expType != null and expType != ''" >
+				   		and e.expType = #{expType}
+					</if>
+					<if test="station != null and station != ''" >
+				   		and e.station = #{station}
+					</if>
+					<if test="isDistributed != null" >
+				   		and e.isDistributed = #{isDistributed}
+					</if>
+					<if test="isVideo != null" >
+				   		and e.isVideo = #{isVideo}
+					</if>
+					
+					<if test="expCompanyID != null and expCompanyID != ''" >
+				   		and e.expCompanyID = #{expCompanyID}
+					</if>
+					<if test="expCompany != null and expCompany != ''" >
+				   		and e.expCompany = #{expCompany}
+					</if>
+					<if test="isPay != null and isPay != ''" >
+				   		and e.isPay = #{isPay}
+					</if>
+					<if test="payMount != null and payMount != ''" >
+				   		and e.payMount = #{payMount}
+					</if>
+					<if test="isAgent != null and isAgent != ''" >
+				   		and e.isAgent = #{isAgent}
+					</if>
+					<if test="agentMount != null and agentMount != ''" >
+				   		and e.agentMount = #{agentMount}
+					</if>
+					<if test="memo != null and memo != ''" >
+				   		and e.memo = #{memo}
+					</if>
+					<if test="getDate != null and getDate != ''" >
+				   		and e.getDate = #{getDate}
+					</if>
+					<if test="isAnytime != null and isAnytime != ''" >
+				   		and e.isAnytime = #{isAnytime}
+					</if>
+					<if test="getTime != null and getTime != ''" >
+				   		and e.getTime = #{getTime}
+					</if>
+					<if test="appointType != null and appointType != ''" >
+				   		and e.appointType = #{appointType}
+					</if>
+					<if test="appointContent != null and appointContent != ''" >
+				   		and e.appointContent = #{appointContent}
+					</if>
+					<if test="signname != null and signname != ''" >
+				   		and e.signname = #{signname}
+					</if>
+					<if test="signTime != null and signTime != ''" >
+				   		and e.signTime = #{signTime}
+					</if>
+					<if test="isSelf != null and isSelf != ''" >
+				   		and e.isSelf = #{isSelf}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and e.createTime = #{createTime}
+					</if>
+					
+					<if test="lastMessage != null and lastMessage != ''" >
+				   		and e.lastMessage = #{lastMessage}
+					</if>
+					<if test="stationId != null" >
+				   		and e.stationId = #{stationId}
+					</if>
+					
+					<if test="modifyTime != null and modifyTime != ''" >
+				   		and e.modifyTime = #{modifyTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and e.editor = #{editor}
+					</if>
+					<if test="returnMemo != null and returnMemo != ''" >
+				   		and e.returnMemo = #{returnMemo}
+					</if>
+					<if test="receiverId != null and receiverId != ''" >
+				   		and e.receiverId = #{receiverId}
+					</if>
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), e.createTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(e.createTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (e.expCode like '%${keyWord}%' or e.senderTel like '%${keyWord}%' or e.receiverTel like '%${keyWord}%')
+					</if>
+					<if test="isSigned != null and isSigned != ''" >
+				   		and e.isSigned = #{isSigned}
+					</if>
+					<if test="taskUpdateState==1" >
+				   		and e.expType='0' and e.expState='1' or e.expType='0' and e.expState='3' or e.expType='0' and e.expState='4' or e.expType='0' and e.expState='5' or e.expType='0' and e.expState='8'
+					</if>
+					<if test="curUserId != null and curUserId != 0" >
+			   			and res.userId = #{curUserId}
+					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+			   			and e.estateId = #{curEstateId}
+					</if>
+					<if test="expStates != null and expStates != ''" >
+						and (
+						<foreach collection="expStates" item="eState" separator="OR">
+							e.expState = #{eState}
+						</foreach>
+						)
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			expId,
+			senderId,
+			senderName,
+			expCode,
+			senderTel,
+			receiverName,
+			receiverTel,
+			receiveTime,
+			receiverAddr,
+			sendTime,
+			expContent,
+			expState,
+			checkInTime,
+			senderAddr,
+			expType,
+			station,
+			expCompanyID,
+			expCompany,
+			isPay,
+			payMount,
+			isAgent,
+			agentMount,
+			memo,
+			getDate,
+			isAnytime,
+			getTime,
+			appointType,
+			appointContent,
+			signname,
+			signTime,
+			isSelf,
+			createTime,
+			modifyTime,
+			editor,
+			logo,
+			lastMessage,
+			code,
+			isVideo,
+			returnMemo
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="expId != null and expId != ''" >
+				   		and expId = #{expId}
+					</if>
+					<if test="senderId != null and senderId != ''" >
+				   		and senderId = #{senderId}
+					</if>
+					<if test="senderName != null and senderName != ''" >
+				   		and senderName = #{senderName}
+					</if>
+					<if test="expCode != null and expCode != ''" >
+				   		and expCode = #{expCode}
+					</if>
+					<if test="senderTel != null and senderTel != ''" >
+				   		and senderTel = #{senderTel}
+					</if>
+					<if test="receiverName != null and receiverName != ''" >
+				   		and receiverName = #{receiverName}
+					</if>
+					<if test="receiverTel != null and receiverTel != ''" >
+				   		and receiverTel = #{receiverTel}
+					</if>
+					<if test="receiveTime != null and receiveTime != ''" >
+				   		and receiveTime = #{receiveTime}
+					</if>
+					<if test="receiverAddr != null and receiverAddr != ''" >
+				   		and receiverAddr = #{receiverAddr}
+					</if>
+					<if test="sendTime != null and sendTime != ''" >
+				   		and sendTime = #{sendTime}
+					</if>
+					<if test="expContent != null and expContent != ''" >
+				   		and expContent = #{expContent}
+					</if>
+					<if test="expState != null and expState != ''" >
+				   		and expState = #{expState}
+					</if>
+					<if test="checkInTime != null and checkInTime != ''" >
+				   		and checkInTime = #{checkInTime}
+					</if>
+					<if test="senderAddr != null and senderAddr != ''" >
+				   		and senderAddr = #{senderAddr}
+					</if>
+					<if test="expType != null and expType != ''" >
+				   		and expType = #{expType}
+					</if>
+					<if test="station != null and station != ''" >
+				   		and station = #{station}
+					</if>
+					<if test="expCompanyID != null and expCompanyID != ''" >
+				   		and expCompanyID = #{expCompanyID}
+					</if>
+					<if test="expCompany != null and expCompany != ''" >
+				   		and expCompany = #{expCompany}
+					</if>
+					<if test="isPay != null and isPay != ''" >
+				   		and isPay = #{isPay}
+					</if>
+					<if test="payMount != null and payMount != ''" >
+				   		and payMount = #{payMount}
+					</if>
+					<if test="isAgent != null and isAgent != ''" >
+				   		and isAgent = #{isAgent}
+					</if>
+					<if test="agentMount != null and agentMount != ''" >
+				   		and agentMount = #{agentMount}
+					</if>
+					<if test="memo != null and memo != ''" >
+				   		and memo = #{memo}
+					</if>
+					<if test="getDate != null and getDate != ''" >
+				   		and getDate = #{getDate}
+					</if>
+					<if test="isAnytime != null and isAnytime != ''" >
+				   		and isAnytime = #{isAnytime}
+					</if>
+					<if test="getTime != null and getTime != ''" >
+				   		and getTime = #{getTime}
+					</if>
+					<if test="appointType != null and appointType != ''" >
+				   		and appointType = #{appointType}
+					</if>
+					<if test="appointContent != null and appointContent != ''" >
+				   		and appointContent = #{appointContent}
+					</if>
+					<if test="signname != null and signname != ''" >
+				   		and signname = #{signname}
+					</if>
+					<if test="signTime != null and signTime != ''" >
+				   		and signTime = #{signTime}
+					</if>
+					<if test="isSelf != null and isSelf != ''" >
+				   		and isSelf = #{isSelf}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="modifyTime != null and modifyTime != ''" >
+				   		and modifyTime = #{modifyTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), createTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and createTime between #{startTime} and #{endTime}
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and senderName like '%${keyWord}%'
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and senderId=#{userId} 
+				   		<if test="type ==1" >
+							and expState = 0   and expType=1 or expState=1  and expType=1
+						</if>
+						<if test="type ==2" >
+							and senderId=#{userId}  and expState = 2 and expType=1
+						</if>
+						<if test="type ==3" >
+							and expState = 3 and expType=0 or  senderId=#{userId} and expState = 4 and expType=0 or senderId=#{userId} and expState = 5 and expType=0 or senderId=#{userId} and expState = 7 and expType=0 or senderId=#{userId} and expState=1 and expType=0
+						</if>
+						<if test="type ==4" >
+							and expState = 6 and expType=0 
+						</if>
+						<if test="type ==6" >
+							and expState = 0   and expType=1 or expState=1  and expType=1 and senderId=#{userId} or   senderId=#{userId} and expState = 3 and expType=0 or  senderId=#{userId} and expState = 4 and expType=0 or senderId=#{userId} and expState = 5 and expType=0 or senderId=#{userId} and expState = 7 and expType=0 or senderId=#{userId} and expState=1 and expType=0
+						</if>
+						<if test="type ==10" >
+							and expState = 2 and expType=1  or expState=6 and expType=0 and senderId=#{userId}
+						</if>
+						and senderId=#{userId} 
+						or receiverId=#{userId} 
+						<if test="type ==1" >
+							and expState = 0   and expType=1 or expState=1  and expType=1 and  receiverId=#{userId} 
+						</if>
+						<if test="type ==2" >
+							and expState = 2 and expType=1
+						</if>
+						<if test="type ==3" >
+							and expState = 3 and expType=0 or receiverId=#{userId}  and  expState = 4 and expType=0 or receiverId=#{userId} and expState = 5 and expType=0 or receiverId=#{userId}  and expState = 7 and expType=0 or receiverId=#{userId}  and expState=1 and expType=0
+						</if>
+						<if test="type ==4" >
+							and expState = 6 and expType=0
+						</if>
+						<if test="type ==6" >
+							and expState = 0   and expType=1 or expState=1  and expType=1 and receiverId=#{userId} or   receiverId=#{userId} and expState = 3 and expType=0 or  receiverId=#{userId} and expState = 4 and expType=0 or receiverId=#{userId} and expState = 5 and expType=0 or receiverId=#{userId} and expState = 7 and expType=0 or receiverId=#{userId} and expState=1 and expType=0
+						</if>
+					</if>
+					
+					<if test="type ==10" >
+						and expState = 2 and expType=1  or receiverId=#{userId} and expState=6 and expType=0 
+					</if>
+					<if test="userId != null and userId != ''" >
+					and receiverId=#{userId} 
+					</if>
+					
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessExp -->
+	<select id="findById"  resultType="BusinessExp" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" />,realname,nickname,tel from business_exp e left join app_user u on u.userId=e.senderId where e.expId = #{id} 
+	</select>
+	
+	<!-- 根据id查询 BusinessExp -->
+	<select id="findById_app"  resultType="BusinessExp" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List_app" />,w.addrUrl from business_exp,(select s.addrUrl from business_exp e,business_station s where s.stationId=e.stationId and e.expId = #{id}) w where expId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessExp -->
+	<select id="findAll" resultMap="BusinessExpResult">
+		select <include refid="Base_Column_List" /> from business_exp e
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessExp -->
+	<select id="findByMap" resultMap="BusinessExpResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_exp e <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessExp -->
+	<select id="findByExample" resultMap="BusinessExpResult" parameterType="com.community.app.module.vo.BusinessExpQuery">
+		select <include refid="Base_Column_List" /> from business_exp e <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 无条件查询所有BusinessExp -->
+	<select id="findExcelAllExp" resultMap="BusinessExpResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_exp e
+		inner join business_station s on s.stationId = e.stationId
+		inner join manage_estate es on es.stationId = s.stationId
+		<if test="curUserId != null and curUserId != 0" >
+		inner join business_user_resource res on res.estateId = es.estateId
+		</if>
+		<include refid="Base_Where_Clause" /> 
+		group by e.expId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	</select>
+	
+    <!-- 按条件查询所有 有快递单的公司  BusinessExp -->
+	<select id="findHasExpCom" resultType="hashmap" parameterType="Object">
+		SELECT DISTINCT expcompanyId,expCompany FROM business_exp ORDER BY expcompanyId
+	</select>
+	
+	
+	<!-- BusinessExp根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessExpResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> , count(news.newsId) as newsCount from business_exp e
+		inner join business_station s on s.stationId = e.stationId
+		inner join manage_estate es on es.stationId = s.stationId
+		<if test="curUserId != null and curUserId != 0" >
+		inner join business_user_resource res on res.estateId = es.estateId
+		</if>
+		left join app_latest_news news on news.sourceId = e.expId and news.typeId=38 and news.to=1 
+		<if test="expState == 10">
+		inner join business_feedback f on f.fbType = 4 and f.expId = e.expId
+		</if>
+		<include refid="Base_Where_Clause" />
+		group by e.expId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessExp列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from (select count(e.expId) from business_exp e
+		inner join business_station s on s.stationId = e.stationId
+		inner join manage_estate es on es.stationId = s.stationId
+		<if test="curUserId != null and curUserId != 0" >
+		inner join business_user_resource res on res.estateId = es.estateId
+		</if>
+		<if test="expState == 10">
+		inner join business_feedback f on f.fbType = 4 and f.expId = e.expId
+		</if>
+		<include refid="Base_Where_Clause" />
+		group by e.expId
+		) as cc
+	</select>
+	
+	<!-- BusinessExp根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessExp" parameterType="Object">
+		select <include refid="Base_Column_List_app" /> from business_exp  
+		<include refid="Base_Where_Clause_app" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessExp列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_exp 
+		<include refid="Base_Where_Clause_app" />
+	</select>
+	
+	<!-- BusinessExp保存数据 -->
+	<insert id="save" parameterType="BusinessExp">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="expId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_exp(
+		senderId,
+		senderName,
+		expCode,
+		senderTel,
+		phoneType,
+		receiverName,
+		receiverTel,
+		receiveTime,
+		receiverAddr,
+		sendTime,
+		expContent,
+		expState,
+		checkInTime,
+		senderAddr,
+		expType,
+		station,
+		expCompanyID,
+		expCompany,
+		isPay,
+		payMount,
+		isAgent,
+		agentMount,
+		memo,
+		getDate,
+		isAnytime,
+		getTime,
+		appointType,
+		appointContent,
+		signname,
+		signTime,
+		isSelf,
+		createTime,
+		modifyTime,
+		editor,
+		returnMemo,
+		receiverId,
+		lastMessage,
+		stationId,
+		isDistributed,
+		code,
+		logo,
+		briefMessage,
+		isProblem,
+		estateId
+		) values(
+		#{senderId},
+		#{senderName},
+		#{expCode},
+		#{senderTel},
+		#{phoneType},
+		#{receiverName},
+		#{receiverTel},
+		#{receiveTime},
+		#{receiverAddr},
+		#{sendTime},
+		#{expContent},
+		#{expState},
+		#{checkInTime},
+		#{senderAddr},
+		#{expType},
+		#{station},
+		#{expCompanyID},
+		#{expCompany},
+		#{isPay},
+		#{payMount},
+		#{isAgent},
+		#{agentMount},
+		#{memo},
+		#{getDate},
+		#{isAnytime},
+		#{getTime},
+		#{appointType},
+		#{appointContent},
+		#{signname},
+		#{signTime},
+		#{isSelf},
+		#{createTime},
+		#{modifyTime},
+		#{editor},
+		#{returnMemo},
+		#{receiverId},
+		#{lastMessage},
+		#{stationId},
+		#{isDistributed},
+		#{code},
+		(select expressIcon from manage_express where expressId = #{expCompanyID}),
+		#{briefMessage},
+		#{isProblem},
+		#{estateId}
+		)
+	</insert>
+	
+	<!-- BusinessExp保存数据 -->
+	<insert id="sendExpress" parameterType="BusinessExp">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="expId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_exp(
+		senderId,
+		senderName,
+		senderTel,
+		expState,
+		senderAddr,
+		expType,
+		stationId,
+		station,
+		expCompanyID,
+		expCompany,
+		logo,
+		getDate,
+		isAnytime,
+		getTime,
+		createTime,
+		modifyTime,
+		lastMessage,
+		briefMessage,
+		isVideo,
+		receiverId
+		) values(
+		#{senderId},
+		#{senderName},
+		#{senderTel},
+		#{expState},
+		#{senderAddr},
+		#{expType},
+		#{station},
+		(SELECT staName FROM  business_station  WHERE stationId=#{station}),
+		#{expCompanyID},
+		(select expressComppay from manage_express where expressId = #{expCompanyID}),
+		(select expressIcon from manage_express where expressId = #{expCompanyID}),
+		#{getDate},
+		#{isAnytime},
+		#{getTime},
+		#{createTime},
+		#{modifyTime},
+		#{lastMessage},
+		#{briefMessage},
+		#{isVideo},
+		#{receiverId}
+		)
+	</insert>
+	
+	<!-- BusinessExp修改数据 -->
+	<update id="update" parameterType="BusinessExp">
+		update business_exp 
+		<set>
+			<if test="senderId != null and senderId != ''" >
+			senderId=#{senderId},
+			</if>
+			<if test="senderName != null and senderName != ''" >
+			senderName=#{senderName},
+			</if>
+			<if test="expCode != null and expCode != ''" >
+			expCode=#{expCode},
+			</if>
+			<if test="senderTel != null and senderTel != ''" >
+			senderTel=#{senderTel},
+			</if>
+			<if test="phoneType != null and phoneType != ''" >
+			phoneType=#{phoneType},
+			</if>
+			<if test="receiverName != null and receiverName != ''" >
+			receiverName=#{receiverName},
+			</if>
+			<if test="receiverTel != null and receiverTel != ''" >
+			receiverTel=#{receiverTel},
+			</if>
+			<if test="receiveTime != null and receiveTime != ''" >
+			receiveTime=#{receiveTime},
+			</if>
+			<if test="receiverId != null and receiverId != ''" >
+			receiverId=#{receiverId},
+			</if>
+			<if test="receiverAddr != null and receiverAddr != ''" >
+			receiverAddr=#{receiverAddr},
+			</if>
+			<if test="sendTime != null and sendTime != ''" >
+			sendTime=#{sendTime},
+			</if>
+			<if test="expContent != null and expContent != ''" >
+			expContent=#{expContent},
+			</if>
+			<if test="expState != null and expState != ''" >
+			expState=#{expState},
+			</if>
+			<if test="checkInTime != null and checkInTime != ''" >
+			checkInTime=#{checkInTime},
+			</if>
+			<if test="senderAddr != null and senderAddr != ''" >
+			senderAddr=#{senderAddr},
+			</if>
+			<if test="expType != null and expType != ''" >
+			expType=#{expType},
+			</if>
+			<if test="station != null and station != ''" >
+			station=#{station},
+			</if>
+			<if test="expCompanyID != null and expCompanyID != ''" >
+			expCompanyID=#{expCompanyID},
+			</if>
+			<if test="expCompany != null and expCompany != ''" >
+			expCompany=#{expCompany},
+			</if>
+			<if test="isPay != null" >
+			isPay=#{isPay},
+			</if>
+			<if test="payMount != null" >
+			payMount=#{payMount},
+			</if>
+			<if test="isAgent != null and isAgent != ''" >
+			isAgent=#{isAgent},
+			</if>
+			<if test="agentMount != null and agentMount != ''" >
+			agentMount=#{agentMount},
+			</if>
+			<if test="memo != null and memo != ''" >
+			memo=#{memo},
+			</if>
+			<if test="getDate != null and getDate != ''" >
+			getDate=#{getDate},
+			</if>
+			<if test="isAnytime != null and isAnytime != ''" >
+			isAnytime=#{isAnytime},
+			</if>
+			<if test="getTime != null and getTime != ''" >
+			getTime=#{getTime},
+			</if>
+			<if test="appointType != null and appointType != ''" >
+			appointType=#{appointType},
+			</if>
+			<if test="appointContent != null and appointContent != ''" >
+			appointContent=#{appointContent},
+			</if>
+			<if test="signname != null and signname != ''" >
+			signname=#{signname},
+			</if>
+			<if test="signTime != null and signTime != ''" >
+			signTime=#{signTime},
+			</if>
+			<if test="isSelf != null and isSelf != ''" >
+			isSelf=#{isSelf},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="modifyTime != null and modifyTime != ''" >
+			modifyTime=#{modifyTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="returnMemo != null and returnMemo != ''" >
+			returnMemo=#{returnMemo},
+			</if>
+			
+			<if test="lastMessage != null and lastMessage != ''" >
+			lastMessage=#{lastMessage},
+			</if>
+			<if test="logo != null and logo != ''" >
+			logo=#{logo},
+			</if>
+			<if test="stationId != null" >
+			stationId=#{stationId},
+			</if>
+			<if test="isDistributed != null" >
+			isDistributed=#{isDistributed},
+			</if>
+			<if test="code != null" >
+			code=#{code},
+			</if>
+			<if test="briefMessage != null" >
+			briefMessage=#{briefMessage},
+			</if>		
+			<if test="isProblem != null" >
+			isProblem=#{isProblem},
+			</if>
+			<if test="estateId != null" >
+			estateId=#{estateId}
+			</if>		
+			
+		</set> 
+		where 
+		expId=#{expId}
+	</update>
+	
+	<!-- BusinessExp修改数据 -->
+	<update id="update_app" parameterType="BusinessExp">
+		update business_exp 
+		<set>
+			<if test="senderId != null and senderId != ''" >
+			senderId=#{senderId},
+			</if>
+			<if test="senderName != null and senderName != ''" >
+			senderName=#{senderName},
+			</if>
+			<if test="expCode != null and expCode != ''" >
+			expCode=#{expCode},
+			</if>
+			<if test="senderTel != null and senderTel != ''" >
+			senderTel=#{senderTel},
+			</if>
+			<if test="receiverName != null and receiverName != ''" >
+			receiverName=#{receiverName},
+			</if>
+			<if test="receiverTel != null and receiverTel != ''" >
+			receiverTel=#{receiverTel},
+			</if>
+			<if test="receiveTime != null and receiveTime != ''" >
+			receiveTime=#{receiveTime},
+			</if>
+			<if test="receiverAddr != null and receiverAddr != ''" >
+			receiverAddr=#{receiverAddr},
+			</if>
+			<if test="sendTime != null and sendTime != ''" >
+			sendTime=#{sendTime},
+			</if>
+			<if test="expContent != null and expContent != ''" >
+			expContent=#{expContent},
+			</if>
+			<if test="expState != null and expState != ''" >
+			expState=#{expState},
+			</if>
+			<if test="checkInTime != null and checkInTime != ''" >
+			checkInTime=#{checkInTime},
+			</if>
+			<if test="senderAddr != null and senderAddr != ''" >
+			senderAddr=#{senderAddr},
+			</if>
+			<if test="expType != null and expType != ''" >
+			expType=#{expType},
+			</if>
+			<if test="station != null and station != ''" >
+			station=#{station},
+			</if>
+			<if test="expCompanyID != null and expCompanyID != ''" >
+			expCompanyID=#{expCompanyID},
+			</if>
+			<if test="expCompany != null and expCompany != ''" >
+			expCompany=#{expCompany},
+			</if>
+			<if test="isPay != null and isPay != ''" >
+			isPay=#{isPay},
+			</if>
+			<if test="payMount != null and payMount != ''" >
+			payMount=#{payMount},
+			</if>
+			<if test="isAgent != null and isAgent != ''" >
+			isAgent=#{isAgent},
+			</if>
+			<if test="agentMount != null and agentMount != ''" >
+			agentMount=#{agentMount},
+			</if>
+			<if test="memo != null and memo != ''" >
+			memo=#{memo},
+			</if>
+			<if test="getDate != null and getDate != ''" >
+			getDate=#{getDate},
+			</if>
+			<if test="isAnytime != null and isAnytime != ''" >
+			isAnytime=#{isAnytime},
+			</if>
+			<if test="getTime != null and getTime != ''" >
+			getTime=#{getTime},
+			</if>
+			<if test="appointType != null and appointType != ''" >
+			appointType=#{appointType},
+			</if>
+			<if test="appointContent != null and appointContent != ''" >
+			appointContent=#{appointContent},
+			</if>
+			<if test="signname != null and signname != ''" >
+			signname=#{signname},
+			</if>
+			<if test="signTime != null and signTime != ''" >
+			signTime=#{signTime},
+			</if>
+			<if test="isSelf != null and isSelf != ''" >
+			isSelf=#{isSelf},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="modifyTime != null and modifyTime != ''" >
+			modifyTime=#{modifyTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="isVideo != null" >
+			isVideo=#{isVideo},
+			</if>
+			<if test="isVideo != null" >
+			lastMessage=#{lastMessage},
+			</if>
+			<if test="lastMessage != null and lastMessage != ''" >
+			briefMessage=#{briefMessage}
+			</if>
+		</set> 
+		where 
+		expId=#{expId}
+	</update>
+	
+	<!-- BusinessExp修改数据 -->
+	<update id="update_Schedule" parameterType="BusinessExp">
+		update business_exp 
+		<set>
+			<if test="senderId != null and senderId != ''" >
+			senderId=#{senderId},
+			</if>
+			<if test="senderName != null and senderName != ''" >
+			senderName=#{senderName},
+			</if>
+			<if test="expCode != null and expCode != ''" >
+			expCode=#{expCode},
+			</if>
+			<if test="senderTel != null and senderTel != ''" >
+			senderTel=#{senderTel},
+			</if>
+			<if test="receiverName != null and receiverName != ''" >
+			receiverName=#{receiverName},
+			</if>
+			<if test="receiverTel != null and receiverTel != ''" >
+			receiverTel=#{receiverTel},
+			</if>
+			<if test="receiveTime != null and receiveTime != ''" >
+			receiveTime=#{receiveTime},
+			</if>
+			<if test="receiverAddr != null and receiverAddr != ''" >
+			receiverAddr=#{receiverAddr},
+			</if>
+			<if test="sendTime != null and sendTime != ''" >
+			sendTime=#{sendTime},
+			</if>
+			<if test="expContent != null and expContent != ''" >
+			expContent=#{expContent},
+			</if>
+			<if test="expState != null and expState != ''" >
+			expState=#{expState},
+			</if>
+			<if test="checkInTime != null and checkInTime != ''" >
+			checkInTime=#{checkInTime},
+			</if>
+			<if test="senderAddr != null and senderAddr != ''" >
+			senderAddr=#{senderAddr},
+			</if>
+			<if test="expType != null and expType != ''" >
+			expType=#{expType},
+			</if>
+			<if test="station != null and station != ''" >
+			station=#{station},
+			</if>
+			<if test="expCompanyID != null and expCompanyID != ''" >
+			expCompanyID=#{expCompanyID},
+			</if>
+			<if test="expCompany != null and expCompany != ''" >
+			expCompany=#{expCompany},
+			</if>
+			<if test="isPay != null and isPay != ''" >
+			isPay=#{isPay},
+			</if>
+			<if test="payMount != null and payMount != ''" >
+			payMount=#{payMount},
+			</if>
+			<if test="isAgent != null and isAgent != ''" >
+			isAgent=#{isAgent},
+			</if>
+			<if test="agentMount != null and agentMount != ''" >
+			agentMount=#{agentMount},
+			</if>
+			<if test="memo != null and memo != ''" >
+			memo=#{memo},
+			</if>
+			<if test="getDate != null and getDate != ''" >
+			getDate=#{getDate},
+			</if>
+			<if test="isAnytime != null and isAnytime != ''" >
+			isAnytime=#{isAnytime},
+			</if>
+			<if test="getTime != null and getTime != ''" >
+			getTime=#{getTime},
+			</if>
+			<if test="appointType != null and appointType != ''" >
+			appointType=#{appointType},
+			</if>
+			<if test="appointContent != null and appointContent != ''" >
+			appointContent=#{appointContent},
+			</if>
+			<if test="signname != null and signname != ''" >
+			signname=#{signname},
+			</if>
+			<if test="signTime != null and signTime != ''" >
+			signTime=#{signTime},
+			</if>
+			<if test="isSelf != null and isSelf != ''" >
+			isSelf=#{isSelf},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="modifyTime != null and modifyTime != ''" >
+			modifyTime=#{modifyTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="lastMessage != null and lastMessage != ''" >
+			lastMessage=#{lastMessage},
+			</if>
+			<if test="lastMessage != null and lastMessage != ''" >
+			briefMessage=#{briefMessage}
+			</if>
+		</set> 
+		where 
+		expId=#{expId}
+	</update>
+	
+	<!-- BusinessExp删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_exp where 
+		expId=#{expId}
+																																																																			</delete>
+	
+</mapper>
+	

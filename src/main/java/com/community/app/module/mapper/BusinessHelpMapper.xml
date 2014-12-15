@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessHelpDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessHelpResult" type="BusinessHelp">
+			<result column="helpId" property="helpId" />
+			<result column="helpTitle" property="helpTitle" />
+			<result column="helperId" property="helperId" />
+			<result column="helperName" property="helperName" />
+			<result column="helpTime" property="helpTime" />
+			<result column="helpContent" property="helpContent" />
+			<result column="helpType" property="helpType" />
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="state" property="state" />
+			<result column="visits" property="visits" />
+			<result column="comments" property="comments" />
+			<result column="lastCommentTime" property="lastCommentTime" />
+			<result column="supports" property="supports" />
+			<result column="isExpend" property="isExpend" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="userId" property="userId" />
+			<result column="nickname" property="nickname" />
+			
+			<result column="nickname" property="nickname" />
+			<result column="realname" property="realname" />
+			<result column="tel" property="tel" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			h.helpId,
+			h.helpTitle,
+			h.helperId,
+			h.helperName,
+			h.helpTime,
+			h.helpContent,
+			h.helpType,
+			h.estateId,
+			h.estateName,
+			h.state,
+			h.visits,
+			h.supports,
+			h.comments,
+			h.lastCommentTime,
+			h.isExpend,
+			h.createTime,
+			h.editTime,
+			h.editor,
+			isNickname
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="helpId != null and helpId != ''" >
+				   		and h.helpId = #{helpId}
+					</if>
+					<if test="helpTitle != null and helpTitle != ''" >
+				   		and h.helpTitle = #{helpTitle}
+					</if>
+					<if test="helperId != null and helperId != ''" >
+				   		and h.helperId = #{helperId}
+					</if>
+					<if test="helperName != null and helperName != ''" >
+				   		and h.helperName = #{helperName}
+					</if>
+					<if test="helpTime != null and helpTime != ''" >
+				   		and h.helpTime = #{helpTime}
+					</if>
+					<if test="helpContent != null and helpContent != ''" >
+				   		and h.helpContent = #{helpContent}
+					</if>
+					<if test="helpType != null" >
+				   		and h.helpType = #{helpType}
+					</if>
+					<if test="estateId != null" >
+				   		and h.estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and h.estateName = #{estateName}
+					</if>
+					<if test="state != null" >
+				   		and h.state = #{state}
+					</if>
+					<if test="visits != null" >
+				   		and h.visits = #{visits}
+					</if>
+					<if test="supports != null" >
+				   		and h.supports = #{supports}
+					</if>
+					
+					<if test="comments != null" >
+				   		and h.comments = #{comments}
+					</if>
+					<if test="lastCommentTime != null and lastCommentTime != ''" >
+				   		and h.lastCommentTime = #{lastCommentTime}
+					</if>
+					
+					<if test="isExpend != null" >
+				   		and h.isExpend = #{isExpend}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and h.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and h.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and h.editor = #{editor}
+					</if>
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), h.helpTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(h.helpTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (h.helpContent like '%${keyWord}%' or h.helpTitle like '%${keyWord}%' or u.tel like '%${keyWord}%' or u.nickname like '%${keyWord}%' or u.realname like '%${keyWord}%')
+					</if>
+					<if test="curUserId != null and curUserId != 0" >
+			   			and res.userId = #{curUserId}
+					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+						and res.estateId=#{curEstateId} 
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List1" >
+			h.helpId,
+			h.helpTitle,
+			h.helperId,
+			h.helperName,
+			h.helpTime,
+			h.helpContent,
+			h.helpType,
+			h.estateId,
+			h.estateName,
+			h.state,
+			h.visits,
+			h.supports,
+			h.comments,
+			h.lastCommentTime,
+			h.isExpend,
+			h.createTime,
+			h.editTime,
+			h.editor,
+			h.isNickname
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause1">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="helpId != null and helpId != ''" >
+				   		and h.helpId = #{helpId}
+					</if>
+					<if test="helpTitle != null and helpTitle != ''" >
+				   		and h.helpTitle = #{helpTitle}
+					</if>
+					<if test="helperId != null and helperId != ''" >
+				   		and h.helperId = #{helperId}
+					</if>
+					<if test="helperName != null and helperName != ''" >
+				   		and h.helperName = #{helperName}
+					</if>
+					<if test="helpTime != null and helpTime != ''" >
+				   		and h.helpTime = #{helpTime}
+					</if>
+					<if test="helpContent != null and helpContent != ''" >
+				   		and h.helpContent = #{helpContent}
+					</if>
+					<if test="helpType != null and helpType != ''" >
+				   		and h.helpType = #{helpType}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and h.estateName = #{estateName}
+					</if>
+					<if test="state != null and state != ''" >
+				   		and h.state = #{state}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and h.visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and h.supports = #{supports}
+					</if>
+					
+					<if test="comments != null and comments != ''" >
+				   		and h.comments = #{comments}
+					</if>
+					<if test="lastCommentTime != null and lastCommentTime != ''" >
+				   		and h.lastCommentTime = #{lastCommentTime}
+					</if>
+					
+					<if test="isExpend != null and isExpend != ''" >
+				   		and h.isExpend = #{isExpend}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and h.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and h.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and h.editor = #{editor}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), helpTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and h.helpTime between #{startTime} and #{endTime}
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and h.helpContent like '%${keyWord}%'
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and e.estateId = #{estateId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessHelp -->
+	<select id="findById"  resultMap="BusinessHelpResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" />,u.nickname ,u.realname,u.tel from business_help h inner join app_user u on h.helperId=u.userId where h.helpId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessHelp -->
+	<select id="findById_app"  resultMap="BusinessHelpResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,p.pics,a.audios,a.time,u.portrait from business_help h,(select GROUP_CONCAT(picUrl) pics from business_help_pic where helpId = #{id}) p,(select GROUP_CONCAT(picUrl) audios,GROUP_CONCAT(time) time from business_help_audio where helpId = #{id}) a,(select u.portrait from app_user u,business_help h where u.userId=h.helperId and h.helpId = #{id}) u where h.helpId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessHelp -->
+	<select id="findAll" resultMap="BusinessHelpResult">
+		select <include refid="Base_Column_List" /> from business_help 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessHelp -->
+	<select id="findByMap" resultMap="BusinessHelpResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_help <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessHelp -->
+	<select id="findByExample" resultMap="BusinessHelpResult" parameterType="com.community.app.module.vo.BusinessHelpQuery">
+		select <include refid="Base_Column_List" /> from business_help <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHelp根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessHelpResult" parameterType="Object">
+		select <include refid="Base_Column_List" />  , u.tel, u.realname,u.nickname ,u.address, u.portrait from business_help h 
+		left join app_user u on u.userId=h.helperId 
+		inner join business_user_resource res on res.estateId = h.estateId
+		<include refid="Base_Where_Clause" />
+		group by h.helpId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHelp列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(h.helpId)) from business_help h 
+		left join app_user u on u.userId=h.helperId 
+		inner join business_user_resource res on res.estateId = h.estateId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHelp根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage1" resultType="BusinessHelp" parameterType="Object">
+		select <include refid="Base_Column_List1" />,u.portrait,u.nickname from  business_help h   inner join app_user u on u.userId=h.helperId 
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHelp根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessHelp" parameterType="Object">
+		select <include refid="Base_Column_List1" />,u.portrait,u.nickname from  business_help_expendEstates e join business_help h on e.helpId=h.helpId   left join app_user u on u.userId=h.helperId 
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHelp列表总数-->
+	<select id="selectCount1" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from  business_help h
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- BusinessHelp列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from  business_help_expendEstates e join business_help h  on e.helpId=h.helpId
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- BusinessHelp保存数据 -->
+	<insert id="save" parameterType="BusinessHelp">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="helpId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_help(
+		
+		helperId,
+		helperName,
+		helpTime,
+		helpContent,
+		estateId,
+		estateName,
+		isExpend,
+		createTime,
+		editTime,
+		isNickname
+		) values(
+		#{helperId},
+		(select nickname from app_user where userId=#{helperId}),
+		#{helpTime},
+		#{helpContent},
+		#{estateId},
+		(select estateName from manage_estate where estateId=#{estateId}),
+		
+		#{isExpend},
+		#{createTime},
+		#{editTime},
+		#{isNickname}
+		)
+	</insert>
+	
+	<!-- BusinessHelp保存数据 -->
+	<insert id="saveBusinessHelpExpendestates" parameterType="BusinessHelp">
+		insert into business_help_expendestates(
+		helpId,
+		estateId,
+		createTime
+		) values(
+		#{helpId},
+		#{estateId},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- 修改comments, lastCommentTime -->
+	<update id="updateCommentsTime" parameterType="BusinessHelpComment">
+	UPDATE business_help SET comments=comments+1, lastCommentTime=now() where helpId=#{help}
+	</update>
+	
+	<!-- 修改comments -->
+	<update id="updateComments" parameterType="BusinessHelpComment">
+	UPDATE business_help SET comments=comments+1 where helpId=#{help}
+	</update>
+	<!--修改supports -->
+	<update id="updateSupports" parameterType="BusinessHelpSupport">
+	UPDATE business_help SET supports=supports+1 where helpId=#{helpId}
+	</update>
+	
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_help SET visits=visits+1 where helpId=#{id}
+	</update>
+	
+	
+	<!-- BusinessHelp修改数据 -->
+	<update id="update" parameterType="BusinessHelp">
+		update business_help 
+		<set>
+			<if test="helpTitle != null and helpTitle != ''" >
+			helpTitle=#{helpTitle},
+			</if>
+			<if test="helperId != null and helperId != ''" >
+			helperId=#{helperId},
+			</if>
+			<if test="helperName != null and helperName != ''" >
+			helperName=#{helperName},
+			</if>
+			<if test="helpTime != null and helpTime != ''" >
+			helpTime=#{helpTime},
+			</if>
+			<if test="helpContent != null and helpContent != ''" >
+			helpContent=#{helpContent},
+			</if>
+			<if test="helpType != null and helpType != ''" >
+			helpType=#{helpType},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="estateName != null and estateName != ''" >
+			estateName=#{estateName},
+			</if>
+			<if test="state != null and state != ''" >
+			state=#{state},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="lastCommentTime != null and lastCommentTime != ''" >
+			lastCommentTime=#{lastCommentTime},
+			</if>
+			
+			<if test="isExpend != null and isExpend != ''" >
+			isExpend=#{isExpend},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		helpId=#{helpId}
+	</update>
+	
+	<!-- BusinessHelp删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_help where 
+		helpId=#{helpId}
+	</delete>
+</mapper>

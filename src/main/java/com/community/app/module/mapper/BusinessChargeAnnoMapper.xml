@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessChargeAnnoDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessChargeAnnoResult" type="BusinessChargeAnno">
+			<result column="reportId" property="reportId" />
+			<result column="reportName" property="reportName" />
+			<result column="reportDesc" property="reportDesc" />
+			<result column="reportExcel" property="reportExcel" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publisherName" property="publisherName" />
+			<result column="publisherState" property="publisherState" />
+			<result column="publishTime" property="publishTime" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditTime" property="auditTime" />
+			<result column="users" property="users" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="auditInfo" property="auditInfo" />
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			a.reportId,
+			a.reportName,
+			a.reportDesc,
+			a.reportExcel,
+			a.publisherId,
+			a.publisherName,
+			a.publisherState,
+			a.publishTime,
+			a.auditorId,
+			a.auditorName,
+			a.auditTime,
+			a.users,
+			a.createTime,
+			a.editTime,
+			a.editor,
+			
+			a.estateId,
+			a.estateName,
+			a.auditInfo
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="reportId != null and reportId != ''" >
+				   		and a.reportId = #{reportId}
+					</if>
+					<if test="reportName != null and reportName != ''" >
+				   		and a.reportName = #{reportName}
+					</if>
+					<if test="reportDesc != null and reportDesc != ''" >
+				   		and a.reportDesc = #{reportDesc}
+					</if>
+					<if test="reportExcel != null and reportExcel != ''" >
+				   		and a.reportExcel = #{reportExcel}
+					</if>
+					
+					<if test="estateId != null and estateId != ''" >
+				   		and a.estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and a.estateName = #{estateName}
+					</if>
+					
+					<if test="publisherId != null and publisherId != ''" >
+				   		and a.publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and a.publisherName = #{publisherName}
+					</if>
+					<if test="publisherState != null" >
+				   		and a.publisherState = #{publisherState}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and a.publishTime = #{publishTime}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and a.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and a.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and a.auditTime = #{auditTime}
+					</if>
+					<if test="users != null and users != ''" >
+				   		and a.users = #{users}
+					</if>
+					<if test="auditInfo != null and auditInfo != ''" >
+				   		and a.auditInfo = #{auditInfo}
+					</if>
+					
+					<if test="createTime != null and createTime != ''" >
+				   		and a.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and a.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and a.editor = #{editor}
+					</if>
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), a.publishTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and a.publishTime between #{startTime} and #{endTime}
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (a.reportName like '%${keyWord}%' or a.publisherName like '%${keyWord}%')
+					</if><!-- 
+					<if test="curUserId != null and curUserId != 0" >
+			   			and res.userId = #{curUserId}
+					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+						and res.estateId=#{curEstateId} 
+					</if> -->
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessChargeAnno -->
+	<select id="findById"  resultMap="BusinessChargeAnnoResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_charge_anno a where a.reportId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessChargeAnno -->
+	<select id="findAll" resultMap="BusinessChargeAnnoResult">
+		select <include refid="Base_Column_List" /> from business_charge_anno a
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessChargeAnno -->
+	<select id="findByMap" resultMap="BusinessChargeAnnoResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_charge_anno a <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessChargeAnno -->
+	<select id="findByExample" resultMap="BusinessChargeAnnoResult" parameterType="com.community.app.module.vo.BusinessChargeAnnoQuery">
+		select <include refid="Base_Column_List" /> from business_charge_anno a <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessChargeAnno根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessChargeAnnoResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_charge_anno a 
+		left join app_user u on u.userId=a.publisherId 
+		inner join business_user_resource res on res.estateId = a.estateId
+		<include refid="Base_Where_Clause" />
+		group by a.reportId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessChargeAnno列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(a.reportId)) from business_charge_anno a
+		left join app_user u on u.userId=a.publisherId 
+		inner join business_user_resource res on res.estateId = a.estateId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessChargeAnno保存数据 -->
+	<insert id="save" parameterType="BusinessChargeAnno">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="reportId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_charge_anno(
+		
+		reportName,
+		reportDesc,
+		reportExcel,
+		publisherId,
+		publisherName,
+		publisherState,
+		publishTime,
+		auditorId,
+		auditorName,
+		auditTime,
+		users,
+		createTime,
+		editTime,
+		editor,
+		estateId,
+		estateName,
+		auditInfo
+		) values(
+				#{reportName},
+		#{reportDesc},
+		#{reportExcel},
+		#{publisherId},
+		#{publisherName},
+		#{publisherState},
+		#{publishTime},
+		#{auditorId},
+		#{auditorName},
+		#{auditTime},
+		#{users},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{estateId},
+		#{estateName},
+		#{auditInfo}
+		)
+	</insert>
+	
+	<!-- BusinessChargeAnno修改数据 -->
+	<update id="update" parameterType="BusinessChargeAnno">
+		update business_charge_anno 
+		<set>
+			<if test="reportName != null and reportName != ''" >
+			reportName=#{reportName},
+			</if>
+			<if test="reportDesc != null and reportDesc != ''" >
+			reportDesc=#{reportDesc},
+			</if>
+			<if test="reportExcel != null and reportExcel != ''" >
+			reportExcel=#{reportExcel},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="publisherState != null" >
+			publisherState=#{publisherState},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="auditorId != null and auditorId != ''" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="users != null and users != ''" >
+			users=#{users},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="auditInfo != null and auditInfo != ''" >
+			auditInfo=#{auditInfo}
+			</if>
+		</set> 
+		where 
+		reportId=#{reportId}
+	</update>
+	
+	<!-- BusinessChargeAnno删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_charge_anno where 
+		reportId=#{reportId}
+	</delete>
+</mapper>

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessChinmedichenacareDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessChinmedichenacareResult" type="BusinessChinmedichenacare">
+			<result column="cmhcId" property="cmhcId" />
+			<result column="cmhcTitle" property="cmhcTitle" />
+			<result column="cmhcContent" property="cmhcContent" />
+			<result column="cmhcPic" property="cmhcPic" />
+			<result column="appPic" property="appPic" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publisherName" property="publisherName" />
+			<result column="publishTime" property="publishTime" />
+			<result column="publishState" property="publishState" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditTime" property="auditTime" />
+			<result column="visits" property="visits" />
+			<result column="supports" property="supports" />
+			<result column="comments" property="comments" />
+			<result column="delMemo" property="delMemo" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="brief" property="brief" />
+			<result column="isRecommend" property="isRecommend" />
+			<result column="label" property="label" />
+			<result column="auditInfo" property="auditInfo" />
+			<result column="avatar" property="avatar" />
+			<result column="doctorName" property="doctorName" />
+			<result column="doctorBrief" property="doctorBrief" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			cmhcId,
+			cmhcTitle,
+			cmhcContent,
+			cmhcPic,
+			appPic,
+			publisherId,
+			publisherName,
+			publishTime,
+			publishState,
+			auditorId,
+			auditorName,
+			auditTime,
+			visits,
+			supports,
+			comments,
+			delMemo,
+			createTime,
+			editTime,
+			editor,
+			brief,
+			isRecommend,
+			label,
+			avatar,
+			doctorName,
+			doctorBrief,
+			auditInfo
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="cmhcId != null and cmhcId != ''" >
+				   		and cmhcId = #{cmhcId}
+					</if>
+					<if test="cmhcTitle != null and cmhcTitle != ''" >
+				   		and cmhcTitle = #{cmhcTitle}
+					</if>
+					<if test="cmhcContent != null and cmhcContent != ''" >
+				   		and cmhcContent = #{cmhcContent}
+					</if>
+					<if test="cmhcPic != null and cmhcPic != ''" >
+				   		and cmhcPic = #{cmhcPic}
+					</if>
+					<if test="appPic != null and appPic != ''" >
+				   		and appPic = #{appPic}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and publisherName = #{publisherName}
+					</if>
+					<if test="auditInfo != null and auditInfo != ''" >
+				   		and auditInfo = #{auditInfo}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and publishTime = #{publishTime}
+					</if>
+					<if test="publishState != null" >
+				   		and publishState = #{publishState}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and auditTime = #{auditTime}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and supports = #{supports}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and comments = #{comments}
+					</if>
+					<if test="delMemo != null and delMemo != ''" >
+				   		and delMemo = #{delMemo}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and brief = #{brief}
+					</if>
+					<if test="isRecommend != null and isRecommend != ''" >
+				   		and isRecommend = #{isRecommend}
+					</if>
+					<if test="label != null and label != ''" >
+				   		and label = #{label}
+					</if>
+					
+					<if test="timeScope != null and timeScope != '' " >
+	      				and #{timeScope} >= DATEDIFF(now(), publishTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(publishTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (cmhcTitle like '%${keyWord}%' or publisherName like '%${keyWord}%' or cmhcContent like '%${keyWord}%')
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessChinmedichenacare -->
+	<select id="findById"  resultMap="BusinessChinmedichenacareResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_chinmedichenacare where cmhcId = #{id}
+	</select>
+	<!-- 根据id查询 BusinessChinmedichenacare -->
+	<select id="findById_app"  resultMap="BusinessChinmedichenacareResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_chinmedichenacare where cmhcId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessChinmedichenacare -->
+	<select id="findAll" resultMap="BusinessChinmedichenacareResult">
+		select <include refid="Base_Column_List" /> from business_chinmedichenacare 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessChinmedichenacare -->
+	<select id="findByMap" resultMap="BusinessChinmedichenacareResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_chinmedichenacare <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessChinmedichenacare -->
+	<select id="findByExample" resultMap="BusinessChinmedichenacareResult" parameterType="com.community.app.module.vo.BusinessChinmedichenacareQuery">
+		select <include refid="Base_Column_List" /> from business_chinmedichenacare <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessChinmedichenacare根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessChinmedichenacareResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_chinmedichenacare  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessChinmedichenacare列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_chinmedichenacare 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessChinmedichenacare根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultMap="BusinessChinmedichenacareResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_chinmedichenacare  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessChinmedichenacare列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_chinmedichenacare 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessChinmedichenacare保存数据 -->
+	<insert id="save" parameterType="BusinessChinmedichenacare">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="cmhcId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_chinmedichenacare(
+		
+		cmhcTitle,
+		cmhcContent,
+		cmhcPic,
+		appPic,
+		publisherId,
+		publisherName,
+		publishTime,
+		publishState,
+		auditorId,
+		auditorName,
+		auditTime,
+		visits,
+		supports,
+		comments,
+		delMemo,
+		createTime,
+		editTime,
+		editor,
+		brief,
+		isRecommend,
+		label,
+		auditInfo,
+		avatar, 
+		doctorName,
+		doctorBrief
+		) values(
+				#{cmhcTitle},
+		#{cmhcContent},
+		#{cmhcPic},
+		#{appPic},
+		#{publisherId},
+		#{publisherName},
+		#{publishTime},
+		#{publishState},
+		#{auditorId},
+		#{auditorName},
+		#{auditTime},
+		#{visits},
+		#{supports},
+		#{comments},
+		#{delMemo},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{brief},
+		#{isRecommend},
+		#{label},
+		#{auditInfo},
+		#{avatar},
+		#{doctorName},
+		#{doctorBrief}
+		)
+	</insert>
+	
+	<!-- BusinessChinmedichenacare修改数据 -->
+	<update id="update" parameterType="BusinessChinmedichenacare">
+		update business_chinmedichenacare 
+		<set>
+			<if test="cmhcTitle != null and cmhcTitle != ''" >
+			cmhcTitle=#{cmhcTitle},
+			</if>
+			<if test="cmhcContent != null and cmhcContent != ''" >
+			cmhcContent=#{cmhcContent},
+			</if>
+			<if test="cmhcPic != null and cmhcPic != ''" >
+			cmhcPic=#{cmhcPic},
+			</if>
+			<if test="appPic != null and appPic != ''" >
+			appPic=#{appPic},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="publishState != null" >
+			publishState=#{publishState},
+			</if>
+			<if test="auditorId != null and auditorId != ''" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="delMemo != null and delMemo != ''" >
+			delMemo=#{delMemo},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="brief != null and brief != ''" >
+			brief=#{brief},
+			</if>
+			<if test="isRecommend != null and isRecommend != ''" >
+			isRecommend=#{isRecommend},
+			</if>
+			<if test="label != null and label != ''" >
+			label=#{label},
+			</if>
+			<if test="auditInfo != null and auditInfo != ''" >
+			auditInfo=#{auditInfo},
+			</if>
+			
+			<if test="avatar != null and avatar != ''" >
+			avatar=#{avatar},
+			</if>
+			<if test="doctorName != null and doctorName != ''" >
+			doctorName=#{doctorName},
+			</if>
+			<if test="doctorBrief != null and doctorBrief != ''" >
+			doctorBrief=#{doctorBrief}
+			</if>
+			
+		</set> 
+		where 
+		cmhcId=#{cmhcId}
+	</update>
+	
+	<!-- 修改comments -->
+	<update id="updateComments" parameterType="BusinessChinmedichenacareComment">
+	UPDATE business_chinmedichenacare SET comments=comments+1 where cmhcId=#{cmhcId}
+	</update>
+	<!--修改supports -->
+	<update id="updateSupports" parameterType="BusinessChinmedichenacareSupport">
+	UPDATE business_chinmedichenacare SET supports=supports+1 where cmhcId=#{cmchId}
+	</update>
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_chinmedichenacare SET visits=visits+1 where cmhcId=#{id}
+	</update>
+	
+	<!-- BusinessChinmedichenacare删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_chinmedichenacare where 
+		cmhcId=#{cmhcId}
+																																											</delete>
+	
+</mapper>
+	

@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityResult" type="BusinessActivity">
+			<result column="actId" property="actId" />
+			<result column="typeId" property="typeId" />
+			<result column="actName" property="actName" />
+			<result column="actContent" property="actContent" />
+			<result column="typeName" property="typeName" />
+			<result column="actScope" property="actScope" />
+			<result column="brief" property="brief" />
+			<result column="actPic" property="actPic" />
+			<result column="actLink" property="actLink" />
+			<result column="actManage" property="actManage" />
+			<result column="userType" property="userType" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publishDate" property="publishDate" />
+			<result column="publishTime" property="publishTime" />
+			<result column="startTime" property="startTime" />
+			<result column="endTime" property="endTime" />
+			<result column="rank" property="rank" />
+			<result column="state" property="state" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditTime" property="auditTime" />
+			<result column="visits" property="visits" />
+			<result column="comments" property="comments" />
+			<result column="supports" property="supports" />
+			<result column="particpates" property="particpates" />
+			<result column="isComment" property="isComment" />
+			<result column="recommend" property="recommend" />
+			<result column="isPush" property="isPush" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			
+			<result column="appPic" property="appPic" />
+			
+			<result column="isImportant" property="isImportant" />
+			<result column="refuseMemo" property="refuseMemo" />
+			<result column="importantTime" property="importantTime" />
+			<result column="isTimingPush" property="isTimingPush" />
+			<result column="timingPushTime" property="timingPushTime" />
+			<result column="timingPushconTent" property="timingPushconTent" />
+			
+			<result column="voteType" property="voteType" />
+			<result column="votes" property="votes" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			a.actId,
+			a.typeId,
+			a.actName,
+			a.actContent,
+			a.typeName,
+			a.actScope,
+			a.brief,
+			a.actPic,
+			a.actLink,
+			a.actManage,
+			a.userType,
+			a.publisherId,
+			a.publishDate,
+			a.publishTime,
+			a.startTime,
+			a.endTime,
+			a.rank,
+			a.state,
+			a.auditorId,
+			a.auditorName,
+			a.auditTime,
+			a.visits,
+			a.comments,
+			a.supports,
+			a.particpates,
+			a.isComment,
+			a.recommend,
+			a.isPush,
+			a.createTime,
+			a.editTime,
+			a.editor,
+			a.isTimingPush,
+			a.timingPushTime,
+			a.timingPushconTent,
+			a.appPic,
+			a.isImportant,
+			a.times,
+			a.attributeValues,
+			a.timingPublicTime,
+			a.refuseMemo,
+			voteType,
+			votes
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="actId != null and actId != ''" >
+				   		and a.actId = #{actId}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and a.typeId = #{typeId}
+					</if>
+					<if test="actName != null and actName != ''" >
+				   		and a.actName = #{actName}
+					</if>
+					<if test="actContent != null and actContent != ''" >
+				   		and a.actContent = #{actContent}
+					</if>
+					<if test="typeName != null and typeName != ''" >
+				   		and a.typeName = #{typeName}
+					</if>
+					<if test="actScope != null and actScope != ''" >
+				   		and a.actScope = #{actScope}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and a.brief = #{brief}
+					</if>
+					<if test="actPic != null and actPic != ''" >
+				   		and a.actPic = #{actPic}
+					</if>
+					<if test="actLink != null and actLink != ''" >
+				   		and a.actLink = #{actLink}
+					</if>
+					<if test="actManage != null and actManage != ''" >
+				   		and a.actManage = #{actManage}
+					</if>
+					<if test="userType != null and userType != ''" >
+				   		and a.userType = #{userType}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and a.publisherId = #{publisherId}
+					</if>
+					<if test="publishDate != null and publishDate != ''" >
+				   		and a.publishDate = #{publishDate}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and a.publishTime = #{publishTime}
+					</if>
+					<if test="startTime != null and startTime != ''" >
+				   		and a.startTime = #{startTime}
+					</if>
+					<if test="endTime != null and endTime != ''" >
+				   		and a.endTime = #{endTime}
+					</if>
+					<if test="rank != null and rank != ''" >
+				   		and a.rank = #{rank}
+					</if>
+					<if test="state != null" >
+				   		and a.state = #{state}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and a.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and a.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and a.auditTime = #{auditTime}
+					</if>
+					<if test="visits != null" >
+				   		and a.visits = #{visits}
+					</if>
+					<if test="comments != null" >
+				   		and a.comments = #{comments}
+					</if>
+					<if test="supports != null" >
+				   		and a.supports = #{supports}
+					</if>
+					<if test="particpates != null" >
+				   		and a.particpates = #{particpates}
+					</if>
+					<if test="isComment != null and isComment != ''" >
+				   		and a.isComment = #{isComment}
+					</if>
+					<if test="recommend != null and recommend != ''" >
+				   		and a.recommend = #{recommend}
+					</if>
+					<if test="isPush != null and isPush != ''" >
+				   		and a.isPush = #{isPush}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and a.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and a.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and a.editor = #{editor}
+					</if>
+					
+					<if test="appPic != null and appPic != ''" >
+				   		and a.appPic = #{appPic}
+					</if>
+					
+					<if test="isImportant != null" >
+				   		and a.isImportant = #{isImportant}
+					</if>
+					<if test="refuseMemo != null and refuseMemo != ''" >
+				   		and a.refuseMemo = #{refuseMemo}
+					</if>
+					
+					<if test="isTimingPush != null and isTimingPush != ''" >
+				   		and a.isTimingPush = #{isTimingPush} 
+					</if>
+					
+					<if test="isTimingPushType == 1" >
+				   		and a.state = 0 and a.timingPushTime = #{timingPushTime} or a.state = 1 and  a.isTimingPush = #{isTimingPush} 
+					</if>
+					
+					<if test="timingPushTime != null and timingPushTime != ''" >
+				   		and a.timingPushTime = #{timingPushTime}
+					</if>
+					
+					<if test="timingPushconTent != null and timingPushconTent != ''" >
+				   		and a.timingPushconTent = #{timingPushconTent}
+					</if>
+					<if test="timingPublicTime != null and timingPublicTime != ''" >
+				   		and a.timingPublicTime = #{timingPublicTime}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), a.createTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(a.createTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (a.actName like '%${keyWord}%' or a.actContent like '%${keyWord}%')
+					</if>
+					<if test="type == 1" >
+				   		and a.state = '0' or a.state = '1'
+					</if>
+					<if test="curUserId != null and curUserId != ''" >
+						and res.userId=#{curUserId} 
+					</if>
+					<if test="curComId != null and curComId != ''" >
+						and res.comId=#{curComId} 
+					</if>
+					<if test="states != null and states != ''" >
+						and (
+						<foreach collection="states" item="aState" separator="OR">
+							a.state = #{aState}
+						</foreach>
+						)
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			a.actId,
+			a.typeId,
+			a.actName,
+			a.actContent,
+			a.typeName,
+			a.actScope,
+			a.brief,
+			a.actPic,
+			a.actLink,
+			a.actManage,
+			a.userType,
+			a.publisherId,
+			a.publishDate,
+			a.publishTime,
+			a.startTime,
+			a.endTime,
+			a.rank,
+			a.state,
+			a.auditorId,
+			a.auditorName,
+			a.auditTime,
+			a.visits,
+			a.comments,
+			a.supports,
+			a.particpates,
+			a.isComment,
+			a.recommend,
+			a.isPush,
+			a.createTime,
+			a.editTime,
+			a.editor,
+			a.attributeValues,
+			a.voteType,
+			a.votes
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="actId != null and actId != ''" >
+				   		and a.actId = #{actId}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and a.typeId = #{typeId}
+					</if>
+					<if test="actName != null and actName != ''" >
+				   		and a.actName = #{actName}
+					</if>
+					<if test="actContent != null and actContent != ''" >
+				   		and a.actContent = #{actContent}
+					</if>
+					<if test="typeName != null and typeName != ''" >
+				   		and a.typeName = #{typeName}
+					</if>
+					<if test="actScope != null and actScope != ''" >
+				   		and s.estateId = #{actScope}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and a.brief = #{brief}
+					</if>
+					<if test="actPic != null and actPic != ''" >
+				   		and a.actPic = #{actPic}
+					</if>
+					<if test="actLink != null and actLink != ''" >
+				   		and a.actLink = #{actLink}
+					</if>
+					<if test="actManage != null and actManage != ''" >
+				   		and a.actManage = #{actManage}
+					</if>
+					<if test="userType != null and userType != ''" >
+				   		and a.userType = #{userType}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and a.publisherId = #{publisherId}
+					</if>
+					<if test="publishDate != null and publishDate != ''" >
+				   		and a.publishDate = #{publishDate}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and a.publishTime = #{publishTime}
+					</if>
+					<if test="startTime != null and startTime != ''" >
+				   		and a.startTime = #{startTime}
+					</if>
+					<if test="endTime != null and endTime != ''" >
+				   		and a.endTime = #{endTime}
+					</if>
+					<if test="rank != null and rank != ''" >
+				   		and a.rank = #{rank}
+					</if>
+					<if test="state == 1" >
+				   		and a.state = '0' or a.state = '1' or a.state = '2'
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and a.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and a.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and a.auditTime = #{auditTime}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and a.visits = #{visits}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and a.comments = #{comments}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and a.supports = #{supports}
+					</if>
+					<if test="particpates != null and particpates != ''" >
+				   		and a.particpates = #{particpates}
+					</if>
+					<if test="isComment != null and isComment != ''" >
+				   		and a.isComment = #{isComment}
+					</if>
+					<if test="recommend != null and recommend != ''" >
+				   		and a.recommend = #{recommend}
+					</if>
+					<if test="isPush != null and isPush != ''" >
+				   		and a.isPush = #{isPush}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and a.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and a.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and a.editor = #{editor}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), a.createTime)
+		      		</if>
+		      		<if test="startActTime !=null and startActTime != '' and endActTime !=null and endActTime != '' " >
+		      			and a.createTime between #{startActTime} and #{endActTime}
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and a.actName like '%${keyWord}%'
+					</if>
+					<if test="isImportant != null" >
+				   		and a.isImportant = #{isImportant}
+					</if>
+					<if test="statetype==1" >
+				   		and a.state=0 and  a.isImportant = #{isImportant} or a.state=1 and  a.isImportant = #{isImportant} or a.state=2 and  a.isImportant = #{isImportant}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivity -->
+	<select id="findById"  resultMap="BusinessActivityResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity a where a.actId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessActivity -->
+	<select id="findById_app"  resultType="BusinessActivity" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List_app" /> from business_activity a where a.actId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivity -->
+	<select id="findAll" resultMap="BusinessActivityResult">
+		select <include refid="Base_Column_List" /> from business_activity a
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivity -->
+	<select id="findByMap" resultMap="BusinessActivityResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity a <include refid="Base_Where_Clause" />  order by a.importantTime asc
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivity -->
+	<select id="findByExample" resultType="BusinessActivity" parameterType="com.community.app.module.vo.BusinessActivityQuery">
+		select <include refid="Base_Column_List" /> from business_activity a <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivity根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_activity a
+		inner join business_activity_scope s on s.actId = a.actId
+		inner join business_user_resource res on res.estateId = s.estateId 
+		<include refid="Base_Where_Clause" />
+		group by a.actId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivity列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(a.actId)) from business_activity a
+		inner join business_activity_scope s on s.actId = a.actId
+		inner join business_user_resource res on res.estateId = s.estateId 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivity根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessActivity" parameterType="Object">
+		select <include refid="Base_Column_List_app" />,u.avatar AS portrait 
+		from business_activity_scope s 
+		inner join  business_activity a on s.actId=a.actId  and  s.estateId=#{actScope} 
+		left join business_user u on u.userId = a.publisherId    
+		<include refid="Base_Where_Clause_app" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivity列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_scope s inner join  business_activity a on s.actId=a.actId and  s.estateId=#{actScope} 
+		<include refid="Base_Where_Clause_app" />
+	</select>
+	
+	<!-- BusinessActivity保存数据 -->
+	<insert id="save" parameterType="BusinessActivity">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="actId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity(
+		typeId,
+		actName,
+		actContent,
+		typeName,
+		actScope,
+		brief,
+		actPic,
+		actLink,
+		actManage,
+		userType,
+		publisherId,
+		publishDate,
+		publishTime,
+		startTime,
+		endTime,
+		rank,
+		state,
+		auditorId,
+		auditorName,
+		auditTime,
+		visits,
+		comments,
+		supports,
+		particpates,
+		isComment,
+		recommend,
+		isPush,
+		createTime,
+		editTime,
+		editor,
+		appPic,
+		isImportant,
+		isTimingPush,
+		timingPushTime,
+		timingPushconTent,
+		timingPublicTime,
+		attributeValues,
+		times,
+		voteType,
+		votes,
+		refuseMemo
+		) values(
+		#{typeId},
+		#{actName},
+		#{actContent},
+		#{typeName},
+		#{actScope},
+		#{brief},
+		#{actPic},
+		#{actLink},
+		#{actManage},
+		#{userType},
+		#{publisherId},
+		#{publishDate},
+		#{publishTime},
+		#{startTime},
+		#{endTime},
+		#{rank},
+		#{state},
+		#{auditorId},
+		#{auditorName},
+		#{auditTime},
+		#{visits},
+		#{comments},
+		#{supports},
+		#{particpates},
+		#{isComment},
+		#{recommend},
+		#{isPush},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{appPic},
+		#{isImportant},
+		#{isTimingPush},
+		#{timingPushTime},
+		#{timingPushconTent},
+		#{timingPublicTime},
+		#{attributeValues},
+		#{times},
+		#{voteType},
+		#{votes},
+		#{refuseMemo}			
+		)
+	</insert>
+	
+	<!-- BusinessActivity修改数据 -->
+	<update id="update" parameterType="BusinessActivity">
+		update business_activity 
+		<set>
+			<if test="typeId != null and typeId != ''" >
+			typeId=#{typeId},
+			</if>
+			<if test="actName != null and actName != ''" >
+			actName=#{actName},
+			</if>
+			<if test="actContent != null and actContent != ''" >
+			actContent=#{actContent},
+			</if>
+			<if test="typeName != null and typeName != ''" >
+			typeName=#{typeName},
+			</if>
+			<if test="actScope != null and actScope != ''" >
+			actScope=#{actScope},
+			</if>
+			<if test="brief != null and brief != ''" >
+			brief=#{brief},
+			</if>
+			<if test="actPic != null and actPic != ''" >
+			actPic=#{actPic},
+			</if>
+			<if test="actLink != null and actLink != ''" >
+			actLink=#{actLink},
+			</if>
+			<if test="actManage != null and actManage != ''" >
+			actManage=#{actManage},
+			</if>
+			<if test="userType != null and userType != ''" >
+			userType=#{userType},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publishDate != null and publishDate != ''" >
+			publishDate=#{publishDate},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="startTime != null and startTime != ''" >
+			startTime=#{startTime},
+			</if>
+			<if test="endTime != null and endTime != ''" >
+			endTime=#{endTime},
+			</if>
+			<if test="rank != null and rank != ''" >
+			rank=#{rank},
+			</if>
+			<if test="state != null" >
+			state=#{state},
+			</if>
+			<if test="appPic != null and appPic != ''" >
+			appPic=#{appPic},
+			</if>
+			<if test="auditorId != null and auditorId != ''" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			<if test="particpates != null and particpates != ''" >
+			particpates=#{particpates},
+			</if>
+			<if test="isComment != null and isComment != ''" >
+			isComment=#{isComment},
+			</if>
+			<if test="recommend != null and recommend != ''" >
+			recommend=#{recommend},
+			</if>
+			<if test="isPush != null and isPush != ''" >
+			isPush=#{isPush},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="isImportant != null" >
+			isImportant=#{isImportant},
+			</if>
+			<if test="importantTime != null" >
+			importantTime=#{importantTime},
+			</if>
+			<if test="isTimingPush != null" >
+			isTimingPush=#{isTimingPush},
+			</if>	
+			<if test="timingPushTime != null and timingPushTime != ''" >
+			timingPushTime=#{timingPushTime},
+			</if>	
+			<if test="timingPushconTent != null and timingPushconTent != ''" >
+			timingPushconTent=#{timingPushconTent},
+			</if>
+			<if test="times != null" >
+			times=#{times},
+			</if>
+			<if test="timingPublicTime != null and timingPublicTime != ''" >
+			timingPublicTime=#{timingPublicTime},
+			</if>
+			<if test="attributeValues != null and attributeValues != ''" >
+			attributeValues=#{attributeValues},
+			</if>
+			<if test="voteType != null and voteType != ''" >
+			voteType=#{voteType},
+			</if>
+			<if test="votes != null and votes != ''" >
+			votes=#{votes},
+			</if>
+			<if test="refuseMemo != null and refuseMemo != ''" >
+			refuseMemo=#{refuseMemo}
+			</if>	
+		</set> 
+		where 
+		actId=#{actId}
+	</update>
+	
+	<!-- 修改comments -->
+	<update id="updateComments" parameterType="BusinessActivityComment">
+	UPDATE business_activity SET comments=comments+1 where actId=#{actId}
+	</update>
+	<!-- 修改comments -->
+	<update id="updateParticpates" parameterType="BusinessActivityParticipate">
+	UPDATE business_activity SET particpates=particpates+1 where actId=#{actId}
+	</update>
+	<update id="updateParticpates2" parameterType="BusinessActivityRegistrationInformation">
+	UPDATE business_activity SET particpates=particpates+1 where actId=#{actId}
+	</update>
+	<!--修改supports -->
+	<update id="updateSupports" parameterType="BusinessActivitySupport">
+	UPDATE business_activity SET supports=supports+1 where actId=#{actId}
+	</update>
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_activity SET visits=visits+1 where actId=#{id}
+	</update>
+	
+	
+	<!-- BusinessActivity删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity where 
+		actId=#{actId}
+																																																													</delete>
+	
+</mapper>
+	

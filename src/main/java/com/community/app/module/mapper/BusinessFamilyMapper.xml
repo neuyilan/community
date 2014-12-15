@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessFamilyDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessFamilyResult" type="BusinessFamily">
+			<result column="familyId" property="familyId" />
+			<result column="familyName" property="familyName" />
+			<result column="avatar" property="avatar" />
+			<result column="familyDesc" property="familyDesc" />
+			<result column="dimensionCode" property="dimensionCode" />
+			<result column="verifyCode" property="verifyCode" />
+			<result column="mount" property="mount" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="founderId" property="founderId" />
+			<result column="familyState" property="familyState" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			familyId,
+			familyName,
+			avatar,
+			familyDesc,
+			dimensionCode,
+			verifyCode,
+			mount,
+			createTime,
+			editTime,
+			editor,
+			founderId
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="familyId != null and familyId != ''" >
+				   		and familyId = #{familyId}
+					</if>
+					<if test="familyName != null and familyName != ''" >
+				   		and familyName = #{familyName}
+					</if>
+					<if test="avatar != null and avatar != ''" >
+				   		and avatar = #{avatar}
+					</if>
+					<if test="familyDesc != null and familyDesc != ''" >
+				   		and familyDesc = #{familyDesc}
+					</if>
+					<if test="dimensionCode != null and dimensionCode != ''" >
+				   		and dimensionCode = #{dimensionCode}
+					</if>
+					<if test="verifyCode != null and verifyCode != ''" >
+				   		and verifyCode = #{verifyCode}
+					</if>
+					<if test="mount != null and mount != ''" >
+				   		and mount = #{mount}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					
+					<if test="familyState != null and familyState" >
+				   		and familyState = #{familyState}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessFamily -->
+	<select id="findById"  resultMap="BusinessFamilyResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_family where familyId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessFamily -->
+	<select id="findAll" resultMap="BusinessFamilyResult">
+		select <include refid="Base_Column_List" /> from business_family 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessFamily -->
+	<select id="findByMap" resultMap="BusinessFamilyResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_family <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessFamily -->
+	<select id="findByExample" resultMap="BusinessFamilyResult" parameterType="com.community.app.module.vo.BusinessFamilyQuery">
+		select <include refid="Base_Column_List" /> from business_family <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFamily根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessFamilyResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_family  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- 查看用户是否是家庭创始人-->
+	<select id="whetherFounderId" resultType="java.lang.Integer"  parameterType="java.lang.String">
+		select familyId from business_family  where founderId=#{id} and familyState =0 
+	</select>
+	
+	<!-- BusinessFamily列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_family 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 根据id查询 家庭信息和成员信息 -->
+	<select id="getFamilyInfo"  resultType="BusinessFamilyQuery" parameterType="java.lang.Integer">
+		SELECT f.familyId,f.familyName,f.familyDesc,f.attr,f.avatar,f.dimensionCode,f.verifyCode,u.userId,u.realname,u.portrait AS userAvatar,u.tel FROM business_family f,business_family_member m,app_user u WHERE f.familyId=m.familyId AND m.userId=u.userId and m.state='0' AND f.familyId = #{id}
+	</select>
+	
+	<!-- 根据id查询 家庭信息 -->
+	<select id="getFamilyInfoById"  resultType="BusinessFamilyQuery" parameterType="java.lang.Integer">
+		SELECT f.familyId,f.familyName,f.familyDesc,f.avatar,f.dimensionCode,f.verifyCode,f.attr FROM business_family f where f.familyId=#{id}
+	</select>
+	
+	<!-- BusinessFamily保存数据 -->
+	<insert id="save" parameterType="BusinessFamily">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="familyId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_family(
+		familyName,
+		founderId,
+		mount,
+		dimensionCode,
+		createTime,
+		verifyCode,
+		editTime,
+		attr
+		) values(
+		#{familyName},
+		#{founderId},
+		'1',
+		#{dimensionCode},
+		#{createTime},
+		#{verifyCode},
+		#{editTime},
+		#{attr}
+		)
+	</insert>
+	
+	<!-- BusinessFamily修改数据 -->
+	<update id="update" parameterType="BusinessFamily">
+		update business_family 
+		<set>
+			<if test="familyName != null and familyName != ''" >
+			familyName=#{familyName},
+			</if>
+			<if test="avatar != null and avatar != ''" >
+			avatar=#{avatar},
+			</if>
+			<if test="familyDesc != null and familyDesc != ''" >
+			familyDesc=#{familyDesc},
+			</if>
+			<if test="dimensionCode != null and dimensionCode != ''" >
+			dimensionCode=#{dimensionCode},
+			</if>
+			<if test="verifyCode != null and verifyCode != ''" >
+			verifyCode=#{verifyCode},
+			</if>
+			<if test="mount != null and mount != ''" >
+			mount=#{mount},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		familyId=#{familyId}
+	</update>
+	
+	<!-- BusinessFamily修改mount -->
+	<update id="updateMount" parameterType="BusinessFamily">
+	UPDATE business_family SET mount=mount+1 where familyId=#{familyId}
+	</update>
+	
+	<!-- BusinessFamily修改mount -->
+	<update id="updateMount--" parameterType="java.lang.Integer">
+	UPDATE business_family SET mount=mount-1 where familyId=#{id}
+	</update>
+	
+	<!-- BusinessFamily删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_family where 
+		familyId=#{familyId}
+	</delete>
+	<!-- BusinessFamilyMember删除家庭 -->
+	<delete id="deleteFamily" parameterType="java.lang.Integer">
+		update business_family set familyState='1' where 
+		founderId=#{id}
+	</delete>
+	
+</mapper>
+	

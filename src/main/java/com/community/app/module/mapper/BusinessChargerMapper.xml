@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessChargerDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessChargerResult" type="BusinessCharger">
+			<result column="payerId" property="payerId" />
+			<result column="reportId" property="reportId" />
+			<result column="name" property="name" />
+			<result column="cellphone" property="cellphone" />
+			<result column="building" property="building" />
+			<result column="unit" property="unit" />
+			<result column="floor" property="floor" />
+			<result column="house" property="house" />
+			<result column="publishTime" property="publishTime" />
+			<result column="isReported" property="isReported" />
+			<result column="isRead" property="isRead" />
+			<result column="estateName" property="estateName" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			payerId,
+			reportId,
+			name,
+			cellphone,
+			building,
+			unit,
+			floor,
+			house,
+			publishTime,
+			isReported,
+			isRead,
+			content,
+			estateName
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="payerId != null and payerId != ''" >
+				   		and payerId = #{payerId}
+					</if>
+					<if test="reportId != null" >
+				   		and reportId = #{reportId}
+					</if>
+					<if test="name != null and name != ''" >
+				   		and name = #{name}
+					</if>
+					<if test="cellphone != null and cellphone != ''" >
+				   		and cellphone = #{cellphone}
+					</if>
+					<if test="building != null and building != ''" >
+				   		and building = #{building}
+					</if>
+					<if test="unit != null and unit != ''" >
+				   		and unit = #{unit}
+					</if>
+					<if test="floor != null and floor != ''" >
+				   		and floor = #{floor}
+					</if>
+					<if test="house != null and house != ''" >
+				   		and house = #{house}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and publishTime = #{publishTime}
+					</if>
+					<if test="isReported != null" >
+				   		and isReported = #{isReported}
+					</if>
+					<if test="isRead != null and isRead != ''" >
+				   		and isRead = #{isRead}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessCharger -->
+	<select id="findById"  resultMap="BusinessChargerResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_charger where payerId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessCharger -->
+	<select id="findAll" resultMap="BusinessChargerResult">
+		select <include refid="Base_Column_List" /> from business_charger 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessCharger -->
+	<select id="findByMap" resultMap="BusinessChargerResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_charger <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessCharger -->
+	<select id="findByExample" resultMap="BusinessChargerResult" parameterType="com.community.app.module.vo.BusinessChargerQuery">
+		select <include refid="Base_Column_List" /> from business_charger <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessCharger根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessChargerResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_charger  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessCharger列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_charger 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessCharger保存数据 -->
+	<insert id="save" parameterType="BusinessCharger">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="payerId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_charger(
+		reportId,
+		name,
+		cellphone,
+		building,
+		unit,
+		floor,
+		house,
+		publishTime,
+		isReported,
+		isRead,
+        content,
+        estateName
+		) values(
+		#{reportId},
+		#{name},
+		#{cellphone},
+		#{building},
+		#{unit},
+		#{floor},
+		#{house},
+		#{publishTime},
+		#{isReported},
+		#{isRead},
+		#{content},
+		#{estateName}
+		)
+	</insert>
+	
+	<!-- BusinessCharger修改数据 -->
+	<update id="update" parameterType="BusinessCharger">
+		update business_charger 
+		<set>
+			<if test="reportId != null and reportId != ''" >
+			reportId=#{reportId},
+			</if>
+			<if test="name != null and name != ''" >
+			name=#{name},
+			</if>
+			<if test="cellphone != null and cellphone != ''" >
+			cellphone=#{cellphone},
+			</if>
+			<if test="building != null and building != ''" >
+			building=#{building},
+			</if>
+			<if test="unit != null and unit != ''" >
+			unit=#{unit},
+			</if>
+			<if test="floor != null and floor != ''" >
+			floor=#{floor},
+			</if>
+			<if test="house != null and house != ''" >
+			house=#{house},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="isReported != null and isReported != ''" >
+			isReported=#{isReported},
+			</if>
+			<if test="isRead != null and isRead != ''" >
+			isRead=#{isRead}
+			</if>
+			<if test="content != null and content != ''" >
+                content=#{content}
+			</if>
+		</set> 
+		where 
+		payerId=#{payerId}
+	</update>
+	
+	<!-- BusinessCharger删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_charger where reportId=#{reportId}
+	</delete>
+
+    <insert id="savelargeData" parameterType="java.util.List">
+        insert into business_charger(
+        reportId,
+        name,
+        cellphone,
+        building,
+        unit,
+        floor,
+        house,
+        publishTime,
+        isReported,
+        isRead,
+        content
+        ) values
+        <foreach collection="list" item="item" index="index"
+                 separator=",">
+        (
+        #{item.reportId},
+        #{item.name},
+        #{item.cellphone},
+        #{item.building},
+        #{item.unit},
+        #{item.floor},
+        #{item.house},
+        #{item.publishTime},
+        #{item.isReported},
+        #{item.isRead},
+        #{item.content}
+        )
+        </foreach>
+    </insert>
+</mapper>

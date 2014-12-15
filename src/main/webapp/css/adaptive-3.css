@@ -1,0 +1,12 @@
+@charset "utf-8";
+/* CSS Document */
+@media screen and (min-width: 768px) and (max-width:980px) {
+.buess-mag .header .loginbar .status .dpm{ color:#cc2510; margin:0 3px;}
+.buess-mag .header .loginbar .status{width:55.752121222%; padding-left:20px;}
+.buess-mag .header .loginbar .submenu{width:24.752121222%;}
+.buess-mag .header .loginbar .submenu a{ width:73px; }
+.buess-mag .magpar .magpar-box .magpar_tit{font-size:22px; line-height:22px;}
+.buess-mag .magpar .magpar-box .par_pic{width:46%; margin:21px auto 13px;} 
+.buess-mag{ width:100%; min-height:1208px;}
+
+}

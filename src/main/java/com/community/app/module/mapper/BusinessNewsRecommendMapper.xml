@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessNewsRecommendDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessNewsRecommendResult" type="BusinessNewsRecommend">
+			<result column="recId" property="recId" />
+			<result column="newsId" property="newsId" />
+			<result column="recerId" property="recerId" />
+			<result column="recTime" property="recTime" />
+			<result column="recCom" property="recCom" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			recId,
+			newsId,
+			recerId,
+			recTime,
+			recCom
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="recId != null and recId != ''" >
+				   		and recId = #{recId}
+					</if>
+					<if test="newsId != null and newsId != ''" >
+				   		and newsId = #{newsId}
+					</if>
+					<if test="recerId != null and recerId != ''" >
+				   		and recerId = #{recerId}
+					</if>
+					<if test="recTime != null and recTime != ''" >
+				   		and recTime = #{recTime}
+					</if>
+					<if test="recCom != null and recCom != ''" >
+				   		and recCom = #{recCom}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessNewsRecommend -->
+	<select id="findById"  resultMap="BusinessNewsRecommendResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_news_recommend where recId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessNewsRecommend -->
+	<select id="findAll" resultMap="BusinessNewsRecommendResult">
+		select <include refid="Base_Column_List" /> from business_news_recommend 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessNewsRecommend -->
+	<select id="findByMap" resultMap="BusinessNewsRecommendResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_news_recommend <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessNewsRecommend -->
+	<select id="findByExample" resultMap="BusinessNewsRecommendResult" parameterType="com.community.app.module.vo.BusinessNewsRecommendQuery">
+		select <include refid="Base_Column_List" /> from business_news_recommend <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewsRecommend根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessNewsRecommendResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_news_recommend  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNewsRecommend列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_news_recommend 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewsRecommend保存数据 -->
+	<insert id="save" parameterType="BusinessNewsRecommend">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="recId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_news_recommend(
+		
+		newsId,
+		recerId,
+		recTime,
+		recCom
+		) values(
+				#{newsId},
+		#{recerId},
+		#{recTime},
+		#{recCom}
+		)
+	</insert>
+	
+	<!-- BusinessNewsRecommend修改数据 -->
+	<update id="update" parameterType="BusinessNewsRecommend">
+		update business_news_recommend 
+		<set>
+			<if test="newsId != null and newsId != ''" >
+			newsId=#{newsId},
+			</if>
+			<if test="recerId != null and recerId != ''" >
+			recerId=#{recerId},
+			</if>
+			<if test="recTime != null and recTime != ''" >
+			recTime=#{recTime},
+			</if>
+			<if test="recCom != null and recCom != ''" >
+			recCom=#{recCom}
+			</if>
+		</set> 
+		where 
+		recId=#{recId}
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessNewsRecommend删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_news_recommend where 
+		recId=#{recId}
+									</delete>
+	
+</mapper>
+	

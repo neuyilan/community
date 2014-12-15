@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessFeedbackReplyDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessFeedbackReplyResult" type="BusinessFeedbackReply">
+			<result column="commentId" property="commentId" />
+			<result column="feedbackId" property="feedbackId" />
+			<result column="replyId" property="replyId" />
+			<result column="commentorId" property="commentorId" />
+			<result column="commentorName" property="commentorName" />
+			<result column="commentorAvatar" property="commentorAvatar" />
+			<result column="comment" property="comment" />
+			<result column="commentTime" property="commentTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			commentId,
+			feedbackId,
+			replyId,
+			commentorId,
+			commentorName,
+			commentorAvatar,
+			comment,
+			commentTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="feedbackId != null and feedbackId != ''" >
+				   		and feedbackId = #{feedbackId}
+					</if>
+					<if test="replyId != null and replyId != ''" >
+				   		and replyId = #{replyId}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentorName != null and commentorName != ''" >
+				   		and commentorName = #{commentorName}
+					</if>
+					<if test="commentorAvatar != null and commentorAvatar != ''" >
+				   		and commentorAvatar = #{commentorAvatar}
+					</if>
+					<if test="comment != null and comment != ''" >
+				   		and comment = #{comment}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessFeedbackReply -->
+	<select id="findById"  resultMap="BusinessFeedbackReplyResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_feedback_reply where commentId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessFeedbackReply -->
+	<select id="findAll" resultMap="BusinessFeedbackReplyResult">
+		select <include refid="Base_Column_List" /> from business_feedback_reply 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessFeedbackReply -->
+	<select id="findByMap" resultMap="BusinessFeedbackReplyResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_feedback_reply <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessFeedbackReply -->
+	<select id="findByExample" resultMap="BusinessFeedbackReplyResult" parameterType="com.community.app.module.vo.BusinessFeedbackReplyQuery">
+		select <include refid="Base_Column_List" /> from business_feedback_reply <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedbackReply根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessFeedbackReplyResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_feedback_reply  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFeedbackReply列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_feedback_reply 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedbackReply保存数据 -->
+	<insert id="save" parameterType="BusinessFeedbackReply">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_feedback_reply(
+		
+		feedbackId,
+		replyId,
+		commentorId,
+		commentorName,
+		commentorAvatar,
+		comment,
+		commentTime
+		) values(
+				#{feedbackId},
+		#{replyId},
+		#{commentorId},
+		#{commentorName},
+		#{commentorAvatar},
+		#{comment},
+		#{commentTime}
+		)
+	</insert>
+	
+	<!-- BusinessFeedbackReply修改数据 -->
+	<update id="update" parameterType="BusinessFeedbackReply">
+		update business_feedback_reply 
+		<set>
+			<if test="feedbackId != null and feedbackId != ''" >
+			feedbackId=#{feedbackId},
+			</if>
+			<if test="replyId != null and replyId != ''" >
+			replyId=#{replyId},
+			</if>
+			<if test="commentorId != null and commentorId != ''" >
+			commentorId=#{commentorId},
+			</if>
+			<if test="commentorName != null and commentorName != ''" >
+			commentorName=#{commentorName},
+			</if>
+			<if test="commentorAvatar != null and commentorAvatar != ''" >
+			commentorAvatar=#{commentorAvatar},
+			</if>
+			<if test="comment != null and comment != ''" >
+			comment=#{comment},
+			</if>
+			<if test="commentTime != null and commentTime != ''" >
+			commentTime=#{commentTime}
+			</if>
+		</set> 
+		where 
+		commentId=#{commentId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessFeedbackReply删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_feedback_reply where 
+		commentId=#{commentId}
+															</delete>
+	
+</mapper>
+	

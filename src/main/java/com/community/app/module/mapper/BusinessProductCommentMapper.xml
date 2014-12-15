@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessProductCommentDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessProductCommentResult" type="BusinessProductComment">
+			<result column="commentId" property="commentId" />
+			<result column="productId" property="productId" />
+			<result column="commentorId" property="commentorId" />
+			<result column="commentor" property="commentor" />
+			<result column="content" property="content" />
+			<result column="commentTime" property="commentTime" />
+			<result column="replyId" property="replyId" />
+			<result column="replyName" property="replyName" />
+			<result column="commentorState" property="commentorState" />
+			<result column="replyState" property="replyState" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			commentId,
+			productId,
+			commentorId,
+			commentor,
+			content,
+			commentTime,
+			replyId,
+			replyName,
+			commentorState,
+			replyState
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="productId != null and productId != ''" >
+				   		and productId = #{productId}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentor != null and commentor != ''" >
+				   		and commentor = #{commentor}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and content = #{content}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+					<if test="replyId != null and replyId != ''" >
+				   		and replyId = #{replyId}
+					</if>
+					<if test="replyName != null and replyName != ''" >
+				   		and replyName = #{replyName}
+					</if>
+					<if test="commentorState != null and commentorState != ''" >
+				   		and commentorState = #{commentorState}
+					</if>
+					<if test="replyState != null and replyState != ''" >
+				   		and replyState = #{replyState}
+					</if>
+					<if test="keyWord != null and keyWord != ''" >
+				   		and content like '%${keyWord}%'
+					</if>
+					<if test="commentorState == 0 and replyState == 0" >
+				   		and commentorState = '0' and replyState = '0' and commentorId = #{userId} or productId = #{productId} and commentorState = '0' and replyState = '0' and replyId = #{userId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessProductComment -->
+	<select id="findById"  resultMap="BusinessProductCommentResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_product_comment where commentId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessProductComment -->
+	<select id="findAll" resultMap="BusinessProductCommentResult">
+		select <include refid="Base_Column_List" /> from business_product_comment 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessProductComment -->
+	<select id="findByMap" resultMap="BusinessProductCommentResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_product_comment <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessProductComment -->
+	<select id="findByExample" resultMap="BusinessProductCommentResult" parameterType="com.community.app.module.vo.BusinessProductCommentQuery">
+		select <include refid="Base_Column_List" /> from business_product_comment <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessProductComment根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultType="BusinessProductComment" parameterType="Object">
+		select <include refid="Base_Column_List" />,u.portrait,u.nickname from business_product_comment c left join app_user u on u.userId=c.commentorId  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessProductComment根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessProductComment" parameterType="Object">
+		select <include refid="Base_Column_List" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_product_comment c left join app_user u on u.userId=c.commentorId  left join business_user bu on bu.userId=c.commentorId  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessProductComment列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_product_comment 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessProductComment列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_product_comment 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessProductComment保存数据 -->
+	<insert id="save" parameterType="BusinessProductComment">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_product_comment(
+		productId,
+		commentorId,
+		commentor,
+		content,
+		commentTime,
+		replyId,
+		replyName,
+		commentorState,
+		replyState
+		) values(
+		#{productId},
+		#{commentorId},
+		(select nickname from app_user where userId=#{commentorId}),
+		#{content},
+		#{commentTime},
+		#{replyId},
+		#{replyName},
+		#{commentorState},
+		#{replyState}
+		)
+	</insert>
+	
+	<!-- BusinessNewsComment保存数据 -->
+	<insert id="replySave" parameterType="BusinessProductComment">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_product_comment(
+			productId,
+		commentorId,
+		commentor,
+		content,
+		commentTime,
+		replyId,
+		replyName,
+		commentorState,
+		replyState
+		) values(
+		#{productId},
+		#{commentorId},
+		#{commentor},
+		#{content},
+		#{commentTime},
+		#{replyId},
+		#{replyName},
+		#{commentorState},
+		#{replyState}
+		)
+	</insert>
+	
+	<!-- BusinessProductComment修改数据 -->
+	<update id="update" parameterType="BusinessProductComment">
+		update business_product_comment 
+		<set>
+			<if test="productId != null and productId != ''" >
+			productId=#{productId},
+			</if>
+			<if test="commentorId != null and commentorId != ''" >
+			commentorId=#{commentorId},
+			</if>
+			<if test="commentor != null and commentor != ''" >
+			commentor=#{commentor},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="commentTime != null and commentTime != ''" >
+			commentTime=#{commentTime},
+			</if>
+			<if test="replyId != null and replyId != ''" >
+			replyId=#{replyId},
+			</if>
+			<if test="replyName != null and replyName != ''" >
+			replyName=#{replyName}
+			</if>
+		</set> 
+		where 
+		commentId=#{commentId}
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessProductComment删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_product_comment where 
+		commentId=#{commentId}
+																	</delete>
+	
+</mapper>
+	

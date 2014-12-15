@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessLifePropDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessLifePropResult" type="BusinessLifeProp">
+			<result column="lipoId" property="lipoId" />
+			<result column="propId" property="propId" />
+			<result column="serviceId" property="serviceId" />
+			<result column="propName" property="propName" />
+			<result column="propValue" property="propValue" />
+			<result column="propType" property="propType" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			lipoId,
+			propId,
+			serviceId,
+			propName,
+			propValue,
+			propType,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="lipoId != null and lipoId != ''" >
+				   		and lipoId = #{lipoId}
+					</if>
+					<if test="propId != null and propId != ''" >
+				   		and propId = #{propId}
+					</if>
+					<if test="serviceId != null and serviceId != ''" >
+				   		and serviceId = #{serviceId}
+					</if>
+					<if test="propName != null and propName != ''" >
+				   		and propName = #{propName}
+					</if>
+					<if test="propValue != null and propValue != ''" >
+				   		and propValue = #{propValue}
+					</if>
+					<if test="propType != null and propType != ''" >
+				   		and propType = #{propType}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessLifeProp -->
+	<select id="findById"  resultMap="BusinessLifePropResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_life_prop where lipoId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessLifeProp -->
+	<select id="findAll" resultMap="BusinessLifePropResult">
+		select <include refid="Base_Column_List" /> from business_life_prop 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessLifeProp -->
+	<select id="findByMap" resultMap="BusinessLifePropResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_life_prop <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessLifeProp -->
+	<select id="findByExample" resultMap="BusinessLifePropResult" parameterType="com.community.app.module.vo.BusinessLifePropQuery">
+		select <include refid="Base_Column_List" /> from business_life_prop <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessLifeProp根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessLifePropResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_life_prop  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessLifeProp列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_life_prop 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessLifeProp保存数据 -->
+	<insert id="save" parameterType="BusinessLifeProp">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="lipoId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_life_prop(
+		
+		propId,
+		serviceId,
+		propName,
+		propValue,
+		propType,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{propId},
+		#{serviceId},
+		#{propName},
+		#{propValue},
+		#{propType},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessLifeProp修改数据 -->
+	<update id="update" parameterType="BusinessLifeProp">
+		update business_life_prop 
+		<set>
+			<if test="propId != null and propId != ''" >
+			propId=#{propId},
+			</if>
+			<if test="serviceId != null and serviceId != ''" >
+			serviceId=#{serviceId},
+			</if>
+			<if test="propName != null and propName != ''" >
+			propName=#{propName},
+			</if>
+			<if test="propValue != null and propValue != ''" >
+			propValue=#{propValue},
+			</if>
+			<if test="propType != null and propType != ''" >
+			propType=#{propType},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		lipoId=#{lipoId}
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessLifeProp删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_life_prop where 
+		lipoId=#{lipoId}
+																	</delete>
+
+	<!-- BusinessLifeProp删除数据 -->
+	<delete id="deleteLifeProp" parameterType="java.lang.Integer">
+		delete from business_life_prop where
+		serviceId=#{serviceId}
+																	</delete>
+	
+</mapper>
+	

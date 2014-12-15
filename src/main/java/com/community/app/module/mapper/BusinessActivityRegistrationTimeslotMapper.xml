@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.community.app.module.dao.BusinessActivityRegistrationTimeslotDao">
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityRegistrationTimeslotResult"
+		type="BusinessActivityRegistrationTimeslot">
+		<result column="timeSlotId" property="timeSlotId" />
+		<result column="actId" property="actId" />
+		<result column="timeSlotName" property="timeSlotName" />
+		<result column="number" property="number" />
+		<result column="createTime" property="createTime" />
+		<result column="editTime" property="editTime" />
+		<result column="editor" property="editor" />
+	</resultMap>
+
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List">
+		timeSlotId,
+		actId,
+		timeSlotName,
+		number,
+		createTime,
+		editTime,
+		editor
+	</sql>
+
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim suffixOverrides=",">
+				<if test="timeSlotId != null and timeSlotId != ''">
+					and timeSlotId = #{timeSlotId}
+				</if>
+				<if test="actId != null and actId != ''">
+					and actId = #{actId}
+				</if>
+				<if test="timeSlotName != null and timeSlotName != ''">
+					and timeSlotName = #{timeSlotName}
+				</if>
+				<if test="number != null and number != ''">
+					and number = #{number}
+				</if>
+				<if test="createTime != null and createTime != ''">
+					and createTime = #{createTime}
+				</if>
+				<if test="editTime != null and editTime != ''">
+					and editTime = #{editTime}
+				</if>
+				<if test="editor != null and editor != ''">
+					and editor = #{editor}
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 根据id查询 BusinessActivityRegistrationTimeslot -->
+	<select id="findById" resultMap="BusinessActivityRegistrationTimeslotResult"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from business_activity_registration_timeslot where timeSlotId = #{id}
+	</select>
+
+	<!-- 无条件查询所有BusinessActivityRegistrationTimeslot -->
+	<select id="findAll" resultMap="BusinessActivityRegistrationTimeslotResult">
+		select
+		<include refid="Base_Column_List" />
+		from business_activity_registration_timeslot
+	</select>
+
+	<!-- 按Map对象条件查询所有BusinessActivityRegistrationTimeslot -->
+	<select id="findByMap" resultMap="BusinessActivityRegistrationTimeslotResult"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from business_activity_registration_timeslot
+		<include refid="Base_Where_Clause" />
+	</select>
+
+	<!-- 按VO对象条件查询所有BusinessActivityRegistrationTimeslot -->
+	<select id="findByExample" resultMap="BusinessActivityRegistrationTimeslotResult"
+		parameterType="com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery">
+		select
+		<include refid="Base_Column_List" />
+		from business_activity_registration_timeslot
+		<include refid="Base_Where_Clause" />
+	</select>
+
+	<!-- BusinessActivityRegistrationTimeslot根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityRegistrationTimeslotResult"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from business_activity_registration_timeslot
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<!-- BusinessActivityRegistrationTimeslot列表总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from business_activity_registration_timeslot
+		<include refid="Base_Where_Clause" />
+	</select>
+
+	<!-- BusinessActivityRegistrationTimeslot保存数据 -->
+	<insert id="save" parameterType="BusinessActivityRegistrationTimeslot">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="timeSlotId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into business_activity_registration_timeslot(
+
+		actId,
+		timeSlotName,
+		number,
+		createTime,
+		editTime,
+		editor
+		) values(
+		#{actId},
+		#{timeSlotName},
+		#{number},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+
+	<!-- BusinessActivityRegistrationTimeslot修改数据 -->
+	<update id="update" parameterType="BusinessActivityRegistrationTimeslot">
+		update business_activity_registration_timeslot
+		<set>
+			<if test="actId != null and actId != ''">
+				actId=#{actId},
+			</if>
+			<if test="timeSlotName != null and timeSlotName != ''">
+				timeSlotName=#{timeSlotName},
+			</if>
+			<if test="number != null and number != ''">
+				number=#{number},
+			</if>
+			<if test="createTime != null and createTime != ''">
+				createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''">
+				editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''">
+				editor=#{editor}
+			</if>
+		</set>
+		where
+		timeSlotId=#{timeSlotId}
+	</update>
+	
+	<!-- BusinessActivityRegistrationTimeslot删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from
+		business_activity_registration_timeslot where
+		actId=#{actId}
+	</delete>
+</mapper>

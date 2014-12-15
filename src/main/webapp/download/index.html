@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>OK家-手机应用下载</title>
+<meta name="viewport" content="width=device-width,user-scalable=no"/>
+<link href="style.css" type="text/css" rel="stylesheet"/>
+<script src="jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	gt_ios4()
+})
+function gt_ios4() {
+    // 判断是否 iPhone 或者 iPod
+    if((navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i))) {
+        // 判断系统版本号是否大于 4
+       if(!navigator.userAgent.match(/(OS 7_[1-9][_\d]* like Mac OS X)|(OS [89]_\d[_\d]* like Mac OS X)/i)){
+    	   //str="itms-services://?action=download-manifest&amp;url=https://182.92.72.147:8443/community/download/ios/BQCommunity.plist";
+    	   str="itms-services://?action=download-manifest&amp;url=http://182.92.72.147:8080/community/download/ios/BQCommunity1.8.plist"
+    	   $("#iosPlist").attr("href",str)
+       }
+        return Boolean(navigator.userAgent.match(/(OS 7_[1-9][_\d]* like Mac OS X)|(OS [89]_\d[_\d]* like Mac OS X)/i));
+    } else {
+        return false;
+    }
+}
+//alert(gt_ios4())
+window.onload = function(){
+	if (/android/i.test(navigator.userAgent)){
+        $(".h-android").css("display","block");
+	}	
+	else if (/ipad|iphone/i.test(navigator.userAgent)){
+		$(".h-iphone").css("display","block");
+	}
+	else{
+	    $(".h-android").css("display","block");
+		$(".h-iphone").css("display","block");
+	}
+	
+    if(isWeiXin()){
+        $(".wrapper").css("display","none");
+		$(".pd").css("display","block");
+    }
+	else{
+	    $(".wrapper").css("display","block");
+		$(".pd").css("display","none");
+	}
+}
+function isWeiXin(){
+    var ua = window.navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+        return true;
+    }else{
+        return false;
+    }
+}
+function tishi(){
+	alert("OK家APP正在下载中，请您返回桌面查看。")
+}
+$(function(){
+	$("#iosPlist").click(function(){
+		setTimeout("tishi()",500);
+	})
+	$("[name=statistics]").click(function(){
+		type=null;
+       	typeName=null;
+		switch(id)
+		{
+			case '1':
+			    type=1;
+			    typeName="1号二维码";
+			    break;
+			case '2':
+				type=2;
+				typeName="2号二维码";
+				break;
+			case '3':
+				type=3;
+				typeName="3号二维码";
+				break;
+			case '4':
+				type=4;
+				typeName="4号二维码";
+				break;
+			case '5':
+				type=5;
+				typeName="5号二维码";
+				break;
+			case '6':
+				type=6;
+				typeName="6号二维码";
+				break;
+			case '7':
+				type=7;
+				typeName="展架二维码";
+				break;
+			case '8':
+				type=8;
+				typeName="海报二维码";
+				break;
+			case '9':
+				type=9;
+				typeName="宣传单页二维码";
+				break;
+			case '10':
+				type=10;
+				typeName="微信二维码";
+				break;
+			case '11':
+				type=11;
+				typeName="快递通知";
+				break;
+			case '12':
+				type=12;
+				typeName="新闻分享";
+				break;
+			case '13':
+				type=13;
+				typeName="活动分享";
+				break;
+			case '14':
+				type=14;
+				typeName="公告分享";
+				break;
+			case '15':
+				type=15;
+				typeName="中医养生分享";
+				break;
+			case '16':
+				type=16;
+				typeName="健康饮食分享";
+				break;
+			case '17':
+				type=17;
+				typeName="袋子二维码";
+				break;
+			default:
+		}
+		if(type!=null){
+			$.ajax({
+	 		    url: "../app/appStatistics/save.json",
+	 		    cache: false,
+	 		   type: 'post',
+	           dataType: 'json',
+	 		    data: {
+		           	type:type,
+		           	typeName:typeName
+	 		    },
+	 		    success: function (data) {
+	 		    },
+	 		    error: function () {
+	 		    }
+	 		});
+		}
+		
+	})
+})
+url = document.location.href; 
+get = url.split("?")[1]; 
+//得到当前网页的URL 
+para = null; 
+//为了防止当页面没有外部变量时程序出错，因此将para的值设为空 
+if(get!=null && get.length>0){ 
+para = get.split("&");} 
+//以“&”为分割符获得变量字符串 
+for(i=0; para!=null && i<para.length;i++){ 
+vars = para[i].split("="); 
+eval("var "+vars[0] +"='"+vars[1]+"'");} 
+//将值代入对应的变量名中 
+</script>
+</head>
+
+<body>
+<body>
+<div class="wrapper">
+     <div class="des">
+         <img src="images/logo.png" class="logo"/>
+         <img src="images/bg.jpg" class="bg"/>
+         <p>有新闻和驿站的社区服务手机平台</p>
+     </div>
+     <section class="h-down">
+        <div class="h-apad h-iphone">
+            <a href="itms-services://?action=download-manifest&amp;url=https://www.bqsqcm.com:8443/community/download/ios/BQCommunity1.8.plist" name="statistics" id="iosPlist">苹果手机下载</a>
+        </div>
+        <div class="h-apad h-android">
+            <a href="android/BQCommunity_Android1.8.apk" name="statistics">安卓手机下载</a>
+        </div>
+    </section>
+     <p class="detail"><span>OK家</span>小区生活手机服务平台不但提供小区物业通知、社区周边新闻、快递到达通知、社区问题爆料、在线物业报修、投诉等等沟通渠道，还有跳蚤市场、居民互助等实用功能，更提供小区地图、社区黄页、周边公共服务等生活信息的查询，未来我们还将不断提供更丰富更便利的居家生活服务，OK家在手，居家生活服务OK到家！</p>
+    
+</div>
+<div class="pd">
+    <div class="jt">
+        <img src="images/jt.jpg"/>
+    </div>
+    <div class="tsk">
+        <img src="images/ok.jpg"/>
+        <p>下载应用请点击右上角按钮选择<span style="color:#ff3000;">【浏览器中打开】</span></p>
+    </div>
+</div>
+</body>
+</html>

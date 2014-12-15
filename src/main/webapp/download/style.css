@@ -1,0 +1,46 @@
+body,ul,ol,p,h1,h2,h3,dl,dt,dd,li,i,textarea{margin:0;padding:0;}
+body{text-align:left;font-family:Arial,"Î¢ÈíÑÅºÚ",STHeiti; background-color:#fff; font-size:12px; line-height:16px; color:#ffffff;}
+ul,ol,li,dl,dt,dd{list-style:none;}
+a,a:visited{text-decoration:none; color:#666; cursor:pointer;}
+em,i{ font-style:normal; }
+img{ vertical-align: middle;}
+
+.wrapper{ margin-top:12px; border-top:1px solid #c6c6c6;}
+.des{ margin-top:6px; position:relative;}
+.detail{ color:#121212; line-height:20px; padding:0 18px 20px; /*margin:0 auto;width:90%;*/ text-indent:24px;  text-align:justify; border-bottom:1px solid #dddddd;}
+.detail span{ font-size:24px;}
+.bg{ width:100%; height:auto;}
+.logo{ position:absolute; top:0; left:10px; width:66px; height:32px;}
+.des p{ position:absolute; left:10px; top:61%; width:59%;}
+.h-apad{display:none; margin:40px 44px 30px;}
+.h-apad a{ display:block; height:42px; text-align:center; font-size:18px; line-height:42px; color:#fff; border-radius:4px; background:#92c631;/* width:80%; margin:0 auto;*/}
+.h-bot{ text-align:center;}
+.h-bot div{ margin:12px 0;}
+.h-bot div span{ display:inline-block; font-size:10px; height:16px; line-height:16px; padding:0 6px;}
+.h-bot .h-mob{ color:#fff; background:#707180;}
+.h-bot .h-com{ margin-left:10px;}
+.h-bot .h-com a{ color:#000;}
+.h-bot p{ color:#6b6b6b; font-size:10px; padding:0px 0 20px; border-bottom:1px solid #c6c6c6;}
+
+.pd{ margin:0 10px;}
+.pd .jt{ text-align:right; margin-top:6px;}
+.jt img{ width:31px;}
+.tsk{ border:2px solid #fd8b07; padding:16px 10px; border-radius:4px;background:#ffecd6;}
+.tsk img{ width:48px; float:left; margin-right:6px;}
+.tsk p{ font-size:16px; color:#000; line-height:24px; font-weight:bold;}
+@media screen and (min-width: 540px) {
+  .logo{ width:112px; height:54px;}
+  .des p,.detail{ font-size:20px; line-height:26px;}
+  .detail span{ font-size:30px;}
+  .h-apad a{ height:60px; line-height:60px;font-size:26px;}
+  .h-bot div span{ font-size:14px; height:20px; line-height:20px;}
+  .h-bot p{ font-size:14px;}
+  
+  .pd{ margin:0 16px;}
+  .tsk img{ width:82px; margin-right:10px;}
+  .tsk p{ font-size:27px; line-height:41px;}
+  .tsk{ padding:30px 20px;}
+  .jt img{ width:52px;}
+}
+
+

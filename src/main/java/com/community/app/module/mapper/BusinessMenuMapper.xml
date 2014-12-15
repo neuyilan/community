@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessMenuDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessMenuResult" type="BusinessMenu">
+			<result column="menuId" property="menuId" />
+			<result column="name" property="name" />
+			<result column="url" property="url" />
+			<result column="createTime" property="createTime" />
+			<result column="modifyTime" property="modifyTime" />
+			<result column="editor" property="editor" />
+			<result column="parentId" property="parentId" />
+			<result column="ord" property="ord" />
+			<result column="leaf" property="leaf" />
+			<result column="code" property="code" />
+			<result column="selectedIcon" property="selectedIcon" />
+			<result column="unSelectedIcon" property="unSelectedIcon" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			menuId,
+			name,
+			url,
+			createTime,
+			modifyTime,
+			editor,
+			parentId,
+			ord,
+			leaf,
+			code,
+			selectedIcon,
+			unSelectedIcon
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="menuId != null and menuId != ''" >
+				   		and menuId = #{menuId}
+					</if>
+					<if test="name != null and name != ''" >
+				   		and name = #{name}
+					</if>
+					<if test="url != null and url != ''" >
+				   		and url = #{url}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="modifyTime != null and modifyTime != ''" >
+				   		and modifyTime = #{modifyTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="parentId != null and parentId != ''" >
+				   		and parentId = #{parentId}
+					</if>
+					<if test="ord != null and ord != ''" >
+				   		and ord = #{ord}
+					</if>
+					<if test="leaf != null and leaf != ''" >
+				   		and leaf = #{leaf}
+					</if>
+					<if test="code != null and code != ''" >
+				   		and code = #{code}
+					</if>
+					<if test="selectedIcon != null and selectedIcon != ''" >
+				   		and selectedIcon = #{selectedIcon}
+					</if>
+					<if test="unSelectedIcon != null and unSelectedIcon != ''" >
+				   		and unSelectedIcon = #{unSelectedIcon}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessMenu -->
+	<select id="findById"  resultMap="BusinessMenuResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_menu where menuId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessMenu -->
+	<select id="findAll" resultMap="BusinessMenuResult">
+		select <include refid="Base_Column_List" /> from business_menu 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessMenu -->
+	<select id="findByMap" resultMap="BusinessMenuResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_menu <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessMenu -->
+	<select id="findByExample" resultMap="BusinessMenuResult" parameterType="com.community.app.module.vo.BusinessMenuQuery">
+		select <include refid="Base_Column_List" /> from business_menu <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessMenu根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessMenuResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_menu  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessMenu列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_menu 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessMenu保存数据 -->
+	<insert id="save" parameterType="BusinessMenu">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="menuId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_menu(
+		
+		name,
+		url,
+		createTime,
+		modifyTime,
+		editor,
+		parentId,
+		ord,
+		leaf,
+		code,
+		selectedIcon,
+		unSelectedIcon
+		) values(
+		#{name},
+		#{url},
+		#{createTime},
+		#{modifyTime},
+		#{editor},
+		#{parentId},
+		#{ord},
+		#{leaf},
+		#{code},
+		#{selectedIcon},
+		#{unSelectedIcon}
+		)
+	</insert>
+	
+	<!-- BusinessMenu修改数据 -->
+	<update id="update" parameterType="BusinessMenu">
+		update business_menu 
+		<set>
+			<if test="name != null and name != ''" >
+			name=#{name},
+			</if>
+			<if test="url != null and url != ''" >
+			url=#{url},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="modifyTime != null and modifyTime != ''" >
+			modifyTime=#{modifyTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="parentId != null and parentId != ''" >
+			parentId=#{parentId},
+			</if>
+			<if test="ord != null and ord != ''" >
+			ord=#{ord},
+			</if>
+			<if test="leaf != null and leaf != ''" >
+			leaf=#{leaf},
+			</if>
+			<if test="code != null and code != ''" >
+			code=#{code},
+			</if>
+			<if test="selectedIcon != null and selectedIcon != ''" >
+			selectedIcon=#{selectedIcon},
+			</if>
+			<if test="unSelectedIcon != null and unSelectedIcon != ''" >
+			unSelectedIcon=#{unSelectedIcon}
+			</if>
+		</set> 
+		where 
+		menuId=#{menuId}
+		
+	</update>
+	
+	<!-- BusinessMenu删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_menu where 
+		menuId=#{menuId}
+	</delete>
+	
+	<!--查找模块下的所有菜单 -->
+	<select id="findMenuByModuleId" resultMap="BusinessMenuResult" parameterType="java.lang.Integer">
+		select menu.menuId, menu.name, menu.url, menu.selectedIcon, menu.unSelectedIcon from business_menu menu
+		left join manage_modulemenu modulemenu
+		on menu.menuId = modulemenu.menuId and modulemenu.moduleId = #{moduleId} order by menu.ord asc
+	</select>
+	
+</mapper>
+	

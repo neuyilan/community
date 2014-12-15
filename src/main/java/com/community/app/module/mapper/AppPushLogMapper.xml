@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppPushLogDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppPushLogResult" type="AppPushLog">
+			<result column="LogId" property="LogId" />
+			<result column="userId" property="userId" />
+			<result column="userName" property="userName" />
+			<result column="baiduId" property="baiduId" />
+			<result column="channelId" property="channelId" />
+			<result column="title" property="title" />
+			<result column="description" property="description" />
+			<result column="sendTime" property="sendTime" />
+			<result column="sendState" property="sendState" />
+			<result column="senderId" property="senderId" />
+			<result column="senderName" property="senderName" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			LogId,
+			userId,
+			userName,
+			baiduId,
+			channelId,
+			title,
+			description,
+			sendTime,
+			sendState,
+			senderId,
+			senderName
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="LogId != null and LogId != ''" >
+				   		and LogId = #{LogId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="userName != null and userName != ''" >
+				   		and userName = #{userName}
+					</if>
+					<if test="baiduId != null and baiduId != ''" >
+				   		and baiduId = #{baiduId}
+					</if>
+					<if test="channelId != null and channelId != ''" >
+				   		and channelId = #{channelId}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and title = #{title}
+					</if>
+					<if test="description != null and description != ''" >
+				   		and description = #{description}
+					</if>
+					<if test="sendTime != null and sendTime != ''" >
+				   		and sendTime = #{sendTime}
+					</if>
+					<if test="sendState != null and sendState != ''" >
+				   		and sendState = #{sendState}
+					</if>
+					<if test="senderId != null and senderId != ''" >
+				   		and senderId = #{senderId}
+					</if>
+					<if test="senderName != null and senderName != ''" >
+				   		and senderName = #{senderName}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppPushLog -->
+	<select id="findById"  resultMap="AppPushLogResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_push_log where LogId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppPushLog -->
+	<select id="findAll" resultMap="AppPushLogResult">
+		select <include refid="Base_Column_List" /> from app_push_log 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppPushLog -->
+	<select id="findByMap" resultMap="AppPushLogResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_push_log <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppPushLog -->
+	<select id="findByExample" resultMap="AppPushLogResult" parameterType="com.community.app.module.vo.AppPushLogQuery">
+		select <include refid="Base_Column_List" /> from app_push_log <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppPushLog根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppPushLogResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_push_log  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppPushLog列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_push_log 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppPushLog保存数据 -->
+	<insert id="save" parameterType="AppPushLog">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="LogId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_push_log(
+		
+		userId,
+		userName,
+		baiduId,
+		channelId,
+		title,
+		description,
+		sendTime,
+		sendState,
+		senderId,
+		senderName
+		) values(
+				#{userId},
+		#{userName},
+		#{baiduId},
+		#{channelId},
+		#{title},
+		#{description},
+		#{sendTime},
+		#{sendState},
+		#{senderId},
+		#{senderName}
+		)
+	</insert>
+	
+	<!-- AppPushLog修改数据 -->
+	<update id="update" parameterType="AppPushLog">
+		update app_push_log 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="userName != null and userName != ''" >
+			userName=#{userName},
+			</if>
+			<if test="baiduId != null and baiduId != ''" >
+			baiduId=#{baiduId},
+			</if>
+			<if test="channelId != null and channelId != ''" >
+			channelId=#{channelId},
+			</if>
+			<if test="title != null and title != ''" >
+			title=#{title},
+			</if>
+			<if test="description != null and description != ''" >
+			description=#{description},
+			</if>
+			<if test="sendTime != null and sendTime != ''" >
+			sendTime=#{sendTime},
+			</if>
+			<if test="sendState != null and sendState != ''" >
+			sendState=#{sendState},
+			</if>
+			<if test="senderId != null and senderId != ''" >
+			senderId=#{senderId},
+			</if>
+			<if test="senderName != null and senderName != ''" >
+			senderName=#{senderName}
+			</if>
+		</set> 
+		where 
+		LogId=#{LogId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- AppPushLog删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_push_log where 
+		LogId=#{LogId}
+																					</delete>
+	
+</mapper>
+	

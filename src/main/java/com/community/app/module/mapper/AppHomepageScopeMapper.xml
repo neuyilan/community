@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppHomepageScopeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppHomepageResult" type="AppHomepageScope">
+			<result column="scopeId" property="scopeId" />
+			<result column="homePageId" property="homePageId" />
+			<result column="id" property="id" />
+			<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- AppHomepageScope保存数据 -->
+	<insert id="save" parameterType="AppHomepageScope">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="scopeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_homepage_scope(
+		homePageId,
+		id,
+		createTime
+		) values(
+		#{homePageId},
+		#{id},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- AppHomepageScope删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_homepage_scope where homePageId=#{homePageId}
+	</delete>
+</mapper>

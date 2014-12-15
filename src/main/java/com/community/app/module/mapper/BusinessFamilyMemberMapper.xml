@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessFamilyMemberDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessFamilyMemberResult" type="BusinessFamilyMember">
+			<result column="memberId" property="memberId" />
+			<result column="familyId" property="familyId" />
+			<result column="userId" property="userId" />
+			<result column="identityTag" property="identityTag" />
+			<result column="state" property="state" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			memberId,
+			familyId,
+			identityTag,
+			state,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="memberId != null and memberId != ''" >
+				   		and memberId = #{memberId}
+					</if>
+					<if test="familyId != null and familyId != ''" >
+				   		and familyId = #{familyId}
+					</if>
+					<if test="identityTag != null and identityTag != ''" >
+				   		and identityTag = #{identityTag}
+					</if>
+					<if test="state != null and state != ''" >
+				   		and state = #{state}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessFamilyMember -->
+	<select id="findById"  resultMap="BusinessFamilyMemberResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_family_member where memberId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessFamilyMember -->
+	<select id="findAll" resultMap="BusinessFamilyMemberResult">
+		select <include refid="Base_Column_List" /> from business_family_member 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessFamilyMember -->
+	<select id="findByMap" resultMap="BusinessFamilyMemberResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_family_member <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessFamilyMember -->
+	<select id="findByExample" resultMap="BusinessFamilyMemberResult" parameterType="com.community.app.module.vo.BusinessFamilyMemberQuery">
+		select <include refid="Base_Column_List" /> from business_family_member <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFamilyMember根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessFamilyMemberResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_family_member  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFamilyMember列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_family_member 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 查看用户家庭是否重复-->
+	<select id="whetherRepeat" resultType="java.lang.Integer"  parameterType="java.lang.String">
+		select count(1) from business_family_member where userId=#{userId} and state='0' or userId=#{userId} and state='2'
+	</select>
+	
+	<!-- BusinessFamilyMember保存数据 -->
+	<insert id="save" parameterType="BusinessFamilyMember">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="memberId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_family_member(
+		userId,
+		familyId,
+		state,
+		createTime,
+		editTime
+		) values(
+		#{userId},
+		#{familyId},
+		#{state},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- BusinessFamilyMember修改数据 -->
+	<update id="update" parameterType="BusinessFamilyMember">
+		update business_family_member 
+		<set>
+			<if test="familyId != null and familyId != ''" >
+			familyId=#{familyId},
+			</if>
+			<if test="identityTag != null and identityTag != ''" >
+			identityTag=#{identityTag},
+			</if>
+			<if test="state != null" >
+			state=#{state},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		memberId=#{memberId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessFamilyMember删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		update business_family_member set state='1' where 
+		userId=#{id}
+	</delete>
+	
+	<!-- BusinessFamilyMember删除数据 -->
+	<delete id="delete_app" parameterType="java.lang.Integer">
+		delete from business_family_member  where 
+		memberId=#{id}
+	</delete>
+	
+	<!-- BusinessFamilyMember删除所有家庭成员 -->
+	<delete id="deleteAll" parameterType="java.lang.Integer">
+		update business_family_member set state='1' where 
+		familyId=#{id}
+	</delete>
+	
+</mapper>
+	

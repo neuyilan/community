@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessBusStationDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessBusStationResult" type="BusinessBusStation">
+			<result column="stationId" property="stationId" />
+			<result column="stationName" property="stationName" />
+			<result column="estateLongitude" property="estateLongitude" />
+			<result column="estateLatitude" property="estateLatitude" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			stationId,
+			stationName,
+			estateLongitude,
+			estateLatitude,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="stationId != null and stationId != ''" >
+				   		and stationId = #{stationId}
+					</if>
+					<if test="stationName != null and stationName != ''" >
+				   		and stationName = #{stationName}
+					</if>
+					<if test="estateLongitude != null and estateLongitude != ''" >
+				   		and estateLongitude = #{estateLongitude}
+					</if>
+					<if test="estateLatitude != null and estateLatitude != ''" >
+				   		and estateLatitude = #{estateLatitude}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessBusStation -->
+	<select id="findById"  resultMap="BusinessBusStationResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_bus_station where stationId = #{id}
+	</select>
+	
+	<!-- 根据id查询该站点下的线路 -->
+	<select id="findStaBus"  resultType="com.community.app.module.vo.BusinessBusStationQuery" parameterType="java.lang.Integer">
+		select b.busId,b.busName from business_bus_station bs,business_station_bus sb,business_bus b  where bs.stationId=sb.stationId and sb.busId=b.busId and bs.stationId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessBusStation -->
+	<select id="findAll" resultMap="BusinessBusStationResult">
+		select <include refid="Base_Column_List" /> from business_bus_station 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessBusStation -->
+	<select id="findByMap" resultMap="BusinessBusStationResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_bus_station <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessBusStation -->
+	<select id="findByExample" resultMap="BusinessBusStationResult" parameterType="com.community.app.module.vo.BusinessBusStationQuery">
+		select <include refid="Base_Column_List" /> from business_bus_station <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBusStation根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessBusStationResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_bus_station  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessBusStation列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_bus_station 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBusStation保存数据 -->
+	<insert id="save" parameterType="BusinessBusStation">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="stationId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_bus_station(
+		
+		stationName,
+		estateLongitude,
+		estateLatitude,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{stationName},
+		#{estateLongitude},
+		#{estateLatitude},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessBusStation修改数据 -->
+	<update id="update" parameterType="BusinessBusStation">
+		update business_bus_station 
+		<set>
+			<if test="stationName != null and stationName != ''" >
+			stationName=#{stationName},
+			</if>
+			<if test="estateLongitude != null and estateLongitude != ''" >
+			estateLongitude=#{estateLongitude},
+			</if>
+			<if test="estateLatitude != null and estateLatitude != ''" >
+			estateLatitude=#{estateLatitude},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		stationId=#{stationId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessBusStation删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_bus_station where 
+		stationId=#{stationId}
+													</delete>
+	
+</mapper>
+	

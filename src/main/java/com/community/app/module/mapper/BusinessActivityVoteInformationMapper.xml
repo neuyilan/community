@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityVoteInformationDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityVoteInformationResult" type="BusinessActivityVoteInformation">
+			<result column="informationId" property="informationId" />
+			<result column="userId" property="userId" />
+			<result column="actId" property="actId" />
+			<result column="optionsId" property="optionsId" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			
+			<result column="realname" property="realname" />
+			<result column="portrait" property="portrait" />
+			<result column="estateName" property="estateName" />
+			<result column="buildingName" property="buildingName" />
+			<result column="unitName" property="unitName" />
+			<result column="houseNo" property="houseNo" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			informationId,
+			userId,
+			actId,
+			optionsId,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="informationId != null and informationId != ''" >
+				   		and informationId = #{informationId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="optionsId != null and optionsId != ''" >
+				   		and optionsId = #{optionsId}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivityVoteInformation -->
+	<select id="findById"  resultMap="BusinessActivityVoteInformationResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity_vote_information where informationId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivityVoteInformation -->
+	<select id="findAll" resultMap="BusinessActivityVoteInformationResult">
+		select <include refid="Base_Column_List" /> from business_activity_vote_information 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivityVoteInformation -->
+	<select id="findByMap" resultMap="BusinessActivityVoteInformationResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity_vote_information <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityVoteInformation -->
+	<select id="findByExample" resultMap="BusinessActivityVoteInformationResult" parameterType="com.community.app.module.vo.BusinessActivityVoteInformationQuery">
+		select <include refid="Base_Column_List" /> from business_activity_vote_information <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityVoteInformation根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityVoteInformationResult" parameterType="Object">
+		<!-- select <include refid="Base_Column_List" /> from business_activity_vote_information  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if> -->
+	    
+	    select p.informationId,
+			p.userId,
+			p.actId,
+			p.optionsId,
+			p.createTime,
+			p.editTime,
+			p.editor,
+			u.userId,
+			u.realname,
+			u.nickname,
+			u.tel,
+			u.portrait,
+			aeu.estateId, u.estateName, aeu.buildingName, aeu.unitName, aeu.houseNo 
+			from  business_activity_vote_information p 
+			left join app_user u on p.userId = u.userId
+			left join app_estate_user aeu on aeu.userId = u.userId
+			<if test="keyWord != null and keyWord != ''" >
+		   		inner join app_user_cellphone phone on phone.userId = p.userId and phone.cellphone like '%${keyWord}%'
+			</if>
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivityVoteInformation列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_vote_information 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityVoteInformation列表总数-->
+	<select id="selectCount_userId" resultType="java.lang.Integer"  parameterType="Object">
+		select count(DISTINCT userId) from business_activity_vote_information 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityVoteInformation保存数据 -->
+	<insert id="save" parameterType="BusinessActivityVoteInformation">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="informationId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity_vote_information(
+		
+		userId,
+		actId,
+		optionsId,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{userId},
+		#{actId},
+		#{optionsId},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessActivityVoteInformation修改数据 -->
+	<update id="update" parameterType="BusinessActivityVoteInformation">
+		update business_activity_vote_information 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="optionsId != null and optionsId != ''" >
+			optionsId=#{optionsId},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		informationId=#{informationId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessActivityVoteInformation删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity_vote_information where 
+		informationId=#{informationId}
+													</delete>
+	
+</mapper>
+	

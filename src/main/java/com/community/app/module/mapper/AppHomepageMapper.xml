@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppHomepageDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppHomepageResult" type="AppHomepage">
+			<result column="homePageId" property="homePageId" />
+			<result column="id" property="id" />
+			<result column="title" property="title" />
+			<result column="brief" property="brief" />
+			<result column="pic" property="pic" />
+			<result column="type" property="type" />
+			<result column="publishTime" property="publishTime" />
+			<result column="top" property="top" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			homePageId,
+			id,
+			title,
+			brief,
+			pic,
+			type,
+			publishTime,
+			top
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="homePageId != null and homePageId != ''" >
+				   		and homePageId = #{homePageId}
+					</if>
+					<if test="id != null and id != ''" >
+				   		and id = #{id}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and title = #{title}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and brief = #{brief}
+					</if>
+					<if test="pic != null and pic != ''" >
+				   		and pic = #{pic}
+					</if>
+					<if test="type != null" >
+				   		and type = #{type}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and publishTime = #{publishTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			h.homePageId,
+			h.id,
+			h.title,
+			h.brief,
+			h.pic,
+			h.type,
+			h.publishTime,
+			h.top
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="homePageId != null and homePageId != ''" >
+				   		and h.homePageId = #{homePageId}
+					</if>
+					<if test="id != null and id != ''" >
+				   		and h.id = #{id}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and h.title = #{title}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and h.brief = #{brief}
+					</if>
+					<if test="pic != null and pic != ''" >
+				   		and h.pic = #{pic}
+					</if>
+					<if test="type != null and type != ''" >
+				   		and h.type = #{type}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and h.publishTime = #{publishTime}
+					</if>
+				   		
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppHomepage -->
+	<select id="findById"  resultMap="AppHomepageResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_homepage where homePageId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppHomepage -->
+	<select id="findAll" resultMap="AppHomepageResult">
+		select <include refid="Base_Column_List" /> from app_homepage 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppHomepage -->
+	<select id="findByMap" resultMap="AppHomepageResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_homepage <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppHomepage -->
+	<select id="findByExample" resultMap="AppHomepageResult" parameterType="com.community.app.module.vo.AppHomepageQuery">
+		select <include refid="Base_Column_List" /> from app_homepage <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppHomepage根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppHomepageResult" parameterType="Object">
+		select <include refid="Base_Column_List_app" /> from app_homePage_scope s right join  app_homepage h on h.homePageId=s.homePageId where  h.type=0 and s.id =#{comId}  and h.top = #{top} or h.type=5 and s.id =#{comId}  and h.top = #{top}  or  h.type=1 and s.id =#{estateId} and h.top = #{top} or   h.type=2 and s.id =#{estateId}   and h.top = #{top} or h.type=3 and s.id =#{estateId} and h.top = #{top} or  h.type=4 and s.id =#{estateId} and h.top = #{top}  or h.type=6 or h.type=7
+		<include refid="Base_Where_Clause_app" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppHomepage列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from  app_homePage_scope s right join  app_homepage h on h.homePageId=s.homePageId where h.type=0 and s.id =#{comId}  and h.top = #{top} or h.type=5 and s.id =#{comId}  and h.top = #{top} or  h.type=1 and s.id =#{estateId} and h.top = #{top} or   h.type=2 and s.id =#{estateId}   and h.top = #{top} or h.type=3 and s.id =#{estateId} and h.top = #{top}  or h.type=4 and s.id =#{estateId} and h.top = #{top}  or h.type=6 or h.type=7
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppHomepage根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultMap="AppHomepageResult" parameterType="Object">
+		select <include refid="Base_Column_List_app" /> from app_homePage_scope s right join  app_homepage h on h.homePageId=s.homePageId where  h.type=0 and s.id =#{comId} or h.type=5 and s.id =#{comId}  or  h.type=1 and s.id =#{estateId}  or   h.type=2 and s.id =#{estateId}      or h.type=3 and s.id =#{estateId}   or  h.type=4 and s.id =#{estateId}  or h.type=6 or h.type=7
+		<include refid="Base_Where_Clause_app" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppHomepage列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from  app_homePage_scope s right join  app_homepage h on h.homePageId=s.homePageId where h.type=0 and s.id =#{comId} or h.type=5 and s.id =#{comId}    or  h.type=1 and s.id =#{estateId}   or   h.type=2 and s.id =#{estateId}     or h.type=3 and s.id =#{estateId}    or h.type=4 and s.id =#{estateId}   or h.type=6 or h.type=7
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppHomepage保存数据 -->
+	<insert id="save" parameterType="AppHomepage">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="homePageId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_homepage(
+		
+		id,
+		title,
+		brief,
+		pic,
+		type,
+		publishTime,
+		top
+		) values(
+		#{id},
+		#{title},
+		#{brief},
+		#{pic},
+		#{type},
+		#{publishTime},
+		#{top}
+		)
+	</insert>
+	
+	<!-- AppHomepage修改数据 -->
+	<update id="update" parameterType="AppHomepage">
+		update app_homepage 
+		<set>
+			<if test="id != null and id != ''" >
+			id=#{id},
+			</if>
+			<if test="title != null and title != ''" >
+			title=#{title},
+			</if>
+			<if test="brief != null and brief != ''" >
+			brief=#{brief},
+			</if>
+			<if test="pic != null and pic != ''" >
+			pic=#{pic},
+			</if>
+			<if test="type != null and type != ''" >
+			type=#{type},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="top != null and top != ''" >
+			top=#{top}
+			</if>
+		</set> 
+		where 
+		homePageId=#{homePageId}
+	</update>
+	
+	<!-- AppHomepage删除数据 -->
+	<delete id="delete" parameterType="AppHomepage">
+		delete from app_homepage where id=#{id} and type=#{type}
+	</delete>
+</mapper>

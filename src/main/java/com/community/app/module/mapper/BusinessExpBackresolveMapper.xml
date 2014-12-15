@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessExpBackresolveDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessExpBackresolveResult" type="BusinessExpBackresolve">
+			<result column="resolveId" property="resolveId" />
+			<result column="expId" property="expId" />
+			<result column="resolverId" property="resolverId" />
+			<result column="resolverName" property="resolverName" />
+			<result column="resolveTime" property="resolveTime" />
+			<result column="stateId" property="stateId" />
+			<result column="state" property="state" />
+			<result column="resolveMemo" property="resolveMemo" />
+			<result column="type" property="type" />
+			<result column="videoTime" property="videoTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			resolveId,
+			expId,
+			resolverId,
+			resolverName,
+			resolveTime,
+			stateId,
+			state,
+			resolveMemo,
+			type,
+			videoTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="resolveId != null and resolveId != ''" >
+				   		and resolveId = #{resolveId}
+					</if>
+					<if test="expId != null and expId != ''" >
+				   		and expId = #{expId}
+					</if>
+					<if test="resolverId != null and resolverId != ''" >
+				   		and resolverId = #{resolverId}
+					</if>
+					<if test="resolverName != null and resolverName != ''" >
+				   		and resolverName = #{resolverName}
+					</if>
+					<if test="resolveTime != null and resolveTime != ''" >
+				   		and resolveTime = #{resolveTime}
+					</if>
+					<if test="stateId != null and stateId != ''" >
+				   		and stateId = #{stateId}
+					</if>
+					<if test="state != null and state != ''" >
+				   		and state = #{state}
+					</if>
+					<if test="resolveMemo != null and resolveMemo != ''" >
+				   		and resolveMemo = #{resolveMemo}
+					</if>
+					<if test="type != null and type != ''" >
+				   		and type = #{type}
+					</if>
+					<if test="videoTime != null and videoTime != ''" >
+				   		and videoTime = #{videoTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessExpBackresolve -->
+	<select id="findById"  resultMap="BusinessExpBackresolveResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_exp_backresolve where resolveId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessExpBackresolve -->
+	<select id="findAll" resultMap="BusinessExpBackresolveResult">
+		select <include refid="Base_Column_List" /> from business_exp_backresolve 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessExpBackresolve -->
+	<select id="findByMap" resultMap="BusinessExpBackresolveResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_exp_backresolve <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessExpBackresolve -->
+	<select id="findByExample" resultMap="BusinessExpBackresolveResult" parameterType="com.community.app.module.vo.BusinessExpBackresolveQuery">
+		select <include refid="Base_Column_List" /> from business_exp_backresolve <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessExpBackresolve根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessExpBackresolveResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_exp_backresolve  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessExpBackresolve列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_exp_backresolve 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessExpBackresolve保存数据 -->
+	<insert id="save" parameterType="BusinessExpBackresolve">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="resolveId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_exp_backresolve(
+		
+		expId,
+		resolverId,
+		resolverName,
+		resolveTime,
+		stateId,
+		state,
+		resolveMemo,
+		type,
+		videoTime
+		) values(
+				#{expId},
+		#{resolverId},
+		#{resolverName},
+		#{resolveTime},
+		#{stateId},
+		#{state},
+		#{resolveMemo},
+		#{type},
+		#{videoTime}
+		)
+	</insert>
+	
+	
+	<!-- BusinessExpBackresolve保存数据 -->
+	<insert id="save_app" parameterType="BusinessExpResolve">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="resolveId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_exp_backresolve(
+		
+		expId,
+		resolverId,
+		resolverName,
+		resolveTime,
+		stateId,
+		state,
+		resolveMemo,
+		type,
+		videoTime
+		) values(
+				#{expId},
+		#{resolverId},
+		#{resolverName},
+		#{resolveTime},
+		#{stateId},
+		#{state},
+		#{resolveMemo},
+		#{type},
+		#{videoTime}
+		)
+	</insert>
+	
+	<!-- BusinessExpBackresolve修改数据 -->
+	<update id="update" parameterType="BusinessExpBackresolve">
+		update business_exp_backresolve 
+		<set>
+			<if test="expId != null and expId != ''" >
+			expId=#{expId},
+			</if>
+			<if test="resolverId != null and resolverId != ''" >
+			resolverId=#{resolverId},
+			</if>
+			<if test="resolverName != null and resolverName != ''" >
+			resolverName=#{resolverName},
+			</if>
+			<if test="resolveTime != null and resolveTime != ''" >
+			resolveTime=#{resolveTime},
+			</if>
+			<if test="stateId != null and stateId != ''" >
+			stateId=#{stateId},
+			</if>
+			<if test="state != null and state != ''" >
+			state=#{state},
+			</if>
+			<if test="resolveMemo != null and resolveMemo != ''" >
+			resolveMemo=#{resolveMemo},
+			</if>
+			<if test="type != null and type != ''" >
+			type=#{type},
+			</if>
+			<if test="videoTime != null and videoTime != ''" >
+			videoTime=#{videoTime}
+			</if>
+		</set> 
+		where 
+		resolveId=#{resolveId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessExpBackresolve删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_exp_backresolve where 
+		resolveId=#{resolveId}
+	</delete>
+	<!-- BusinessExpResolve删除数据 -->
+	<delete id="delete_app_state" parameterType="java.lang.Integer">
+		delete from business_exp_backresolve where 
+		 expId = #{id} and state!='3'
+	</delete>
+	
+	
+</mapper>
+	

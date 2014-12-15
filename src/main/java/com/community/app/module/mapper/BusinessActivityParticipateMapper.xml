@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityParticipateDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityParticipateResult" type="BusinessActivityParticipate">
+			<result column="memberId" property="memberId" />
+			<result column="actId" property="actId" />
+			<result column="userId" property="userId" />
+			<result column="joinTime" property="joinTime" />
+			<result column="isAward" property="isAward" />
+			<result column="rank" property="rank" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="isnotice" property="isnotice" />
+			
+			<result column="userId" property="userId" />
+			<result column="realname" property="realname" />
+			<result column="portrait" property="portrait" />
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="buildingName" property="buildingName" />
+			<result column="unitName" property="unitName" />
+			<result column="houseNo" property="houseNo" />
+			
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			p.memberId,
+			p.actId,
+			p.userId,
+			p.joinTime,
+			p.isAward,
+			p.rank,
+			p.createTime,
+			p.editTime,
+			p.editor,
+			p.isnotice,
+			p.estateId
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="memberId != null and memberId != ''" >
+				   		and p.memberId = #{memberId}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and p.actId = #{actId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and p.userId = #{userId}
+					</if>
+					<if test="joinTime != null and joinTime != ''" >
+				   		and p.joinTime = #{joinTime}
+					</if>
+					<if test="isAward != null and isAward != ''" >
+				   		and p.isAward = #{isAward}
+					</if>
+					<if test="rank != null and rank != ''" >
+				   		and p.rank = #{rank}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and p.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and p.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and p.editor = #{editor}
+					</if>
+					
+					<if test="estateId != null and estateId != ''" >
+				   		and aeu.estateId = #{estateId}
+					</if>
+					
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			p.memberId,
+			p.actId,
+			p.userId,
+			p.joinTime,
+			p.isAward,
+			p.rank,
+			p.createTime,
+			p.editTime,
+			p.editor
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivityParticipate -->
+	<select id="findById"  resultMap="BusinessActivityParticipateResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity_participate p where p.memberId = #{id}
+	</select>
+	
+	<!-- 根据用户id公告查询 BusinessActivityParticipate -->
+	<select id="findById_app"  resultMap="BusinessActivityParticipateResult" parameterType="com.community.app.module.vo.BusinessActivityParticipateQuery">
+		select rank from business_activity_participate where actId = #{actId} and userId = #{userId}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivityParticipate -->
+	<select id="findAll" resultMap="BusinessActivityParticipateResult">
+		select <include refid="Base_Column_List" /> from business_activity_participate p
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivityParticipate -->
+	<select id="findByMap" resultMap="BusinessActivityParticipateResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity_participate p <include refid="Base_Where_Clause" /> order by p.joinTime asc
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityParticipate -->
+	<select id="findByExample" resultMap="BusinessActivityParticipateResult" parameterType="com.community.app.module.vo.BusinessActivityParticipateQuery">
+		select <include refid="Base_Column_List" /> from business_activity_participate p <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityParticipate -->
+	<select id="ranking" resultType="com.community.app.module.vo.BusinessActivityParticipateQuery" parameterType="com.community.app.module.vo.BusinessActivityParticipateQuery">
+		select <include refid="Base_Column_List_app" />,u.nickname as userName from business_activity_participate p left join app_user u on u.userId=p.userId  where actId=#{actId} and rank in (#{NO0},#{NO1},#{NO2},#{NO3},#{NO4},#{NO5},#{NO6},#{NO7},#{NO8},#{NO9})
+	</select>
+	
+	<select id="rankingBySql" parameterType="java.lang.String" resultType="com.community.app.module.vo.BusinessActivityParticipateQuery">
+        ${_parameter}
+    </select>
+	
+	<!-- BusinessActivityParticipate根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityParticipateResult" parameterType="Object">
+		select p.memberId,
+			p.actId,
+			p.userId,
+			p.joinTime,
+			p.isAward,
+			p.rank,
+			p.createTime,
+			p.editTime,
+			p.isnotice,
+			p.editor,
+			u.userId,
+			u.realname,
+			u.nickname,
+			u.tel,
+			u.portrait,
+			aeu.estateId, u.estateName, aeu.buildingName, aeu.unitName, aeu.houseNo 
+			from  business_activity_participate p 
+			left join app_user u on p.userId = u.userId
+			left join app_estate_user aeu on aeu.userId = u.userId and aeu.estateId = p.estateId
+			<if test="keyWord != null and keyWord != ''" >
+		   		inner join app_user_cellphone phone on phone.userId = p.userId and phone.cellphone like '%${keyWord}%'
+			</if>
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivityParticipate列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from  business_activity_participate p 
+			left join app_user u on p.userId = u.userId
+			left join app_estate_user aeu on aeu.userId = u.userId 
+			<if test="keyWord != null and keyWord != ''" >
+		   		inner join app_user_cellphone phone on phone.userId = p.userId and phone.cellphone like '%${keyWord}%'
+			</if>
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityParticipate保存数据 -->
+	<insert id="save" parameterType="BusinessActivityParticipate">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="memberId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity_participate(
+		memberId,
+		actId,
+		userId,
+		joinTime,
+		isAward,
+		rank,
+		createTime,
+		editTime,
+		editor,
+		estateId
+		) values(
+		#{memberId},
+		#{actId},
+		#{userId},
+		#{joinTime},
+		#{isAward},
+		#{rank},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{estateId}
+		)
+	</insert>
+	
+	<!-- BusinessActivityParticipate修改数据 -->
+	<update id="update" parameterType="BusinessActivityParticipate">
+		update business_activity_participate 
+		<set>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="joinTime != null and joinTime != ''" >
+			joinTime=#{joinTime},
+			</if>
+			<if test="isAward != null and isAward != ''" >
+			isAward=#{isAward},
+			</if>
+			<if test="rank != null and rank != ''" >
+			rank=#{rank},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="isnotice != null" >
+			isnotice=#{isnotice},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+			<if test="estateId != null" >
+			estateId=#{estateId}
+			</if>
+		</set> 
+		where 
+		memberId=#{memberId}
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessActivityParticipate删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity_participate where 
+		memberId=#{memberId}
+																	</delete>
+	
+</mapper>
+	

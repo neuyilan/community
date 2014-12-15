@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppPartyAddressDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppPartyAddressResult" type="AppPartyAddress">
+			<result column="partyaddress" property="partyaddress" />
+			<result column="estMemId" property="estMemId" />
+			<result column="name" property="name" />
+			<result column="tel" property="tel" />
+			<result column="address" property="address" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="type" property="type" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			partyaddress,
+			estMemId,
+			name,
+			tel,
+			address,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="partyaddress != null and partyaddress != ''" >
+				   		and partyaddress = #{partyaddress}
+					</if>
+					<if test="estMemId != null and estMemId != ''" >
+				   		and estMemId = #{estMemId}
+					</if>
+					<if test="name != null and name != ''" >
+				   		and name = #{name}
+					</if>
+					<if test="tel != null and tel != ''" >
+				   		and tel = #{tel}
+					</if>
+					<if test="address != null and address != ''" >
+				   		and address = #{address}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppPartyAddress -->
+	<select id="findById"  resultMap="AppPartyAddressResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_party_address where partyaddress = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppPartyAddress -->
+	<select id="findAll" resultMap="AppPartyAddressResult">
+		select <include refid="Base_Column_List" /> from app_party_address 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppPartyAddress -->
+	<select id="findByMap" resultMap="AppPartyAddressResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_party_address <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppPartyAddress -->
+	<select id="findByExample" resultMap="AppPartyAddressResult" parameterType="com.community.app.module.vo.AppPartyAddressQuery">
+		select a.partyAddressId,a.name,a.tel,a.address,a.type from app_party_address a,app_estate_user u where u.estMemId=a.estMemId and u.userId=#{userId} and u.estateId=#{estateId}
+	</select>
+	
+	<!-- AppPartyAddress根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppPartyAddressResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_party_address  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppPartyAddress列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_party_address 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件获取收货地址address -->
+	<select id="getAddress" resultMap="AppPartyAddressResult" parameterType="com.community.app.module.vo.AppPartyAddressQuery">
+		<if test="unitId!=null" >
+<!-- 			SELECT CONCAT(ci.cityName,cou.countyName,e.estateName,b.buildingName,"号楼",u.unitName,"单元") AS address  FROM manage_estate e,manage_unit u,manage_building b,business_community c,manage_org o,manage_county cou,manage_city ci  WHERE e.estateId=b.estateId AND b.buildingId=u.buildingId AND e.comId = c.comId AND c.orgId=o.orgId AND o.countyId=cou.countyId AND cou.cityId=ci.cityId AND b.buildingId=#{buildtingId} AND u.unitId=#{unitId}
+ -->			SELECT CONCAT(e.estateName,b.buildingName,"号楼",u.unitName,"单元") AS address  FROM manage_estate e,manage_unit u,manage_building b,business_community c,manage_org o,manage_county cou,manage_city ci  WHERE e.estateId=b.estateId AND b.buildingId=u.buildingId AND e.comId = c.comId AND c.orgId=o.orgId AND o.countyId=cou.countyId AND cou.cityId=ci.cityId AND b.buildingId=#{buildtingId} AND u.unitId=#{unitId}
+		</if>
+		<if test="unitId==null" >
+<!-- 			SELECT CONCAT(ci.cityName,cou.countyName,e.estateName,b.buildingName,"号楼") AS address  FROM manage_estate e,manage_building b,business_community c,manage_org o,manage_county cou,manage_city ci  WHERE e.estateId=b.estateId  AND e.comId = c.comId AND c.orgId=o.orgId AND o.countyId=cou.countyId AND cou.cityId=ci.cityId AND b.buildingId=#{buildtingId}
+ -->			SELECT CONCAT(e.estateName,b.buildingName,"号楼") AS address  FROM manage_estate e,manage_building b,business_community c,manage_org o,manage_county cou,manage_city ci  WHERE e.estateId=b.estateId  AND e.comId = c.comId AND c.orgId=o.orgId AND o.countyId=cou.countyId AND cou.cityId=ci.cityId AND b.buildingId=#{buildtingId}
+		</if>
+	</select>
+	
+	<!-- AppPartyAddress保存数据 -->
+	<insert id="save" parameterType="com.community.app.module.vo.AppPartyAddressQuery">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="partyaddress">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_party_address(
+		
+		estMemId,
+		name,
+		tel,
+		address,
+		createTime,
+		editTime
+		) values(
+		(select estMemId from  app_estate_user aeu where aeu.userId=#{userId} and aeu.estateId=#{estateId}),
+		#{name},
+		#{tel},
+		#{address},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	<!-- 设置默认收货地址 -->
+	<update id="setDefault" parameterType="com.community.app.module.vo.AppPartyAddressQuery">
+		update app_party_address set type='1' where partyAddressId=#{addrId}
+	</update>
+	<!-- 取消小区用户所以默认 -->
+	<update id="cancelDefault" parameterType="com.community.app.module.vo.AppPartyAddressQuery">
+		update app_party_address set type='0' where estMemId = (SELECT u.estMemId FROM app_estate_user u WHERE u.userId=#{userId} and u.estateId=#{estateId});
+	</update>
+	<!-- AppPartyAddress修改数据 -->
+	<update id="update" parameterType="AppPartyAddress">
+		update app_party_address 
+		<set>
+			<if test="estMemId != null and estMemId != ''" >
+			estMemId=#{estMemId},
+			</if>
+			<if test="name != null and name != ''" >
+			name=#{name},
+			</if>
+			<if test="tel != null and tel != ''" >
+			tel=#{tel},
+			</if>
+			<if test="address != null and address != ''" >
+			address=#{address},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		partyAddressId=#{partyAddressId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- AppPartyAddress删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_party_address where 
+		partyAddressId=#{partyAddressId}
+	</delete>
+	
+</mapper>
+	

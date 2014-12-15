@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessRepairAudioDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessRepairAudioResult" type="BusinessRepairAudio">
+			<result column="audioId" property="audioId" />
+			<result column="repairId" property="repairId" />
+			<result column="picUrl" property="picUrl" />
+			<result column="size" property="size" />
+			<result column="time" property="time" />
+			<result column="format" property="format" />
+			<result column="createTime2" property="createTime2" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			audioId,
+			repairId,
+			picUrl,
+			size,
+			time,
+			format,
+			createTime2,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="audioId != null and audioId != ''" >
+				   		and audioId = #{audioId}
+					</if>
+					<if test="repairId != null and repairId != ''" >
+				   		and repairId = #{repairId}
+					</if>
+					<if test="picUrl != null and picUrl != ''" >
+				   		and picUrl = #{picUrl}
+					</if>
+					<if test="size != null and size != ''" >
+				   		and size = #{size}
+					</if>
+					<if test="time != null and time != ''" >
+				   		and time = #{time}
+					</if>
+					<if test="format != null and format != ''" >
+				   		and format = #{format}
+					</if>
+					<if test="createTime2 != null and createTime2 != ''" >
+				   		and createTime2 = #{createTime2}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessRepairAudio -->
+	<select id="findById"  resultMap="BusinessRepairAudioResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_repair_audio where audioId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessRepairAudio -->
+	<select id="findAll" resultMap="BusinessRepairAudioResult">
+		select <include refid="Base_Column_List" /> from business_repair_audio 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessRepairAudio -->
+	<select id="findByMap" resultMap="BusinessRepairAudioResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_repair_audio <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessRepairAudio -->
+	<select id="findByExample" resultMap="BusinessRepairAudioResult" parameterType="com.community.app.module.vo.BusinessRepairAudioQuery">
+		select <include refid="Base_Column_List" /> from business_repair_audio <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepairAudio根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessRepairAudioResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_repair_audio  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessRepairAudio列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_repair_audio 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepairAudio保存数据 -->
+	<insert id="save" parameterType="BusinessRepairAudio">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="audioId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_repair_audio(
+		repairId,
+		picUrl,
+		time,
+		createTime2,
+		editTime,
+		editor
+		) values(
+				#{repairId},
+		#{picUrl},
+		#{time},
+		#{createTime2},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessRepairAudio修改数据 -->
+	<update id="update" parameterType="BusinessRepairAudio">
+		update business_repair_audio 
+		<set>
+			<if test="repairId != null and repairId != ''" >
+			repairId=#{repairId},
+			</if>
+			<if test="picUrl != null and picUrl != ''" >
+			picUrl=#{picUrl},
+			</if>
+			<if test="size != null and size != ''" >
+			size=#{size},
+			</if>
+			<if test="time != null and time != ''" >
+			time=#{time},
+			</if>
+			<if test="format != null and format != ''" >
+			format=#{format},
+			</if>
+			<if test="createTime2 != null and createTime2 != ''" >
+			createTime2=#{createTime2},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		audioId=#{audioId}
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessRepairAudio删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_repair_audio where 
+		audioId=#{audioId}
+																	</delete>
+	
+</mapper>
+	

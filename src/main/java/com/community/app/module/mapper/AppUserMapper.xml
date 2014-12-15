@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppUserDao" >
+    <!-- 返回结构集 -->
+    <resultMap id="AppUserResult" type="AppUser">
+        <result column="userId" property="userId" />
+        <result column="realname" property="realname" />
+        <result column="nickname" property="nickname" />
+        <result column="password" property="password" />
+        <result column="tel" property="tel" />
+        <result column="sex" property="sex" />
+        <result column="birthday" property="birthday" />
+        <result column="type" property="type" />
+        <result column="isWorker" property="isWorker" />
+        <result column="state" property="state" />
+        <result column="random" property="random" />
+        <result column="registTime" property="registTime" />
+        <result column="verifyTime" property="verifyTime" />
+        <result column="verifier" property="verifier" />
+        <result column="signature" property="signature" />
+        <result column="portrait" property="portrait" />
+        <result column="idCard" property="idCard" />
+        <result column="estateId" property="estateId" />
+        <result column="isNameSecret" property="isNameSecret" />
+        <result column="isTelSecret" property="isTelSecret" />
+        <result column="workerMemo" property="workerMemo" />
+        <result column="weixin" property="weixin" />
+        <result column="createTime" property="createTime" />
+        <result column="editTime" property="editTime" />
+        <result column="editor" property="editor" />
+        
+        <result column="dimensionCode" property="dimensionCode" />
+        <result column="homeAttr" property="homeAttr" />
+        <result column="familyId" property="familyId" />
+        <result column="lastLoginTime" property="lastLoginTime" />
+        
+        <result column="address" property="address" />
+        <result column="estateName" property="estateName" />
+        <result column="baiduId" property="baiduId" />
+        <result column="channelId" property="channelId" />
+        <result column="deviceType" property="deviceType" />
+    </resultMap>
+
+    <!-- 所有字段 -->
+    <sql id="Base_Column_List" >
+        u.userId,
+        u.realname,
+        u.nickname,
+        u.password,
+        u.tel,
+        u.sex,
+        u.birthday,
+        u.type,
+        u.isWorker,
+        u.state,
+        u.random,
+        u.registTime,
+        u.verifyTime,
+        u.verifier,
+        u.signature,
+        u.portrait,
+        u.idCard,
+        u.estateId,
+        u.isNameSecret,
+        u.isTelSecret,
+        u.workerMemo,
+        u.weixin,
+        u.createTime,
+        u.editTime,
+        u.editor,
+        u.dimensionCode,
+        u.homeAttr,
+        u.familyId,
+        u.lastLoginTime,
+        u.address,
+        u.estateName,
+        u.baiduId,
+        u.channelId,
+        u.deviceType
+    </sql>
+
+    <!-- 所有字段查询条件 -->
+    <sql id="Base_Where_Clause">
+        <where>
+            <trim  suffixOverrides="," >
+                <if test="userId != null and userId != ''" >
+                    and u.userId = #{userId}
+                </if>
+                <if test="realname != null and realname != ''" >
+                    and u.realname = #{realname}
+                </if>
+                <if test="nickname != null and nickname != ''" >
+                    and u.nickname = #{nickname}
+                </if>
+                <if test="password != null and password != ''" >
+                    and u.password = #{password}
+                </if>
+                <if test="tel != null and tel != ''" >
+                    and u.tel = #{tel}
+                </if>
+                <if test="sex != null and sex != ''" >
+                    and u.sex = #{sex}
+                </if>
+                <if test="birthday != null and birthday != ''" >
+                    and u.birthday = #{birthday}
+                </if>
+                <if test="type != null" >
+                    and u.type = #{type}
+                </if>
+                <if test="isWorker != null and isWorker != ''" >
+                    and u.isWorker = #{isWorker}
+                </if>
+                <if test="state != null and state != ''" >
+                    and u.state = #{state}
+                </if>
+                <if test="random != null and random != ''" >
+                    and u.random = #{random}
+                </if>
+                <if test="registTime != null and registTime != ''" >
+                    and u.registTime = #{registTime}
+                </if>
+                <if test="verifyTime != null and verifyTime != ''" >
+                    and u.verifyTime = #{verifyTime}
+                </if>
+                <if test="verifier != null and verifier != ''" >
+                    and u.verifier = #{verifier}
+                </if>
+                <if test="signature != null and signature != ''" >
+                    and u.signature = #{signature}
+                </if>
+                <if test="portrait != null and portrait != ''" >
+                    and u.portrait = #{portrait}
+                </if>
+                <if test="idCard != null and idCard != ''" >
+                    and u.idCard = #{idCard}
+                </if>
+                <if test="estateId != null and estateId != ''" >
+                    and estateId = #{estateId}
+                </if>
+                <if test="isNameSecret != null and isNameSecret != ''" >
+                    and u.isNameSecret = #{isNameSecret}
+                </if>
+                <if test="isTelSecret != null and isTelSecret != ''" >
+                    and u.isTelSecret = #{isTelSecret}
+                </if>
+                <if test="workerMemo != null and workerMemo != ''" >
+                    and u.workerMemo = #{workerMemo}
+                </if>
+                <if test="weixin != null and weixin != ''" >
+                    and u.weixin = #{weixin}
+                </if>
+                <if test="createTime != null and createTime != ''" >
+                    and u.createTime = #{createTime}
+                </if>
+                <if test="editTime != null and editTime != ''" >
+                    and u.editTime = #{editTime}
+                </if>
+                <if test="editor != null and editor != ''" >
+                    and u.editor = #{editor}
+                </if>
+                
+                <if test="dimensionCode != null and dimensionCode != ''" >
+                    and u.dimensionCode = #{dimensionCode}
+                </if>
+                <if test="homeAttr != null and homeAttr != ''" >
+                    and u.homeAttr = #{homeAttr}
+                </if>
+                <if test="familyId != null and familyId != ''" >
+                    and u.familyId = #{familyId}
+                </if>
+                <if test="lastLoginTime != null and lastLoginTime != ''" >
+                    and u.lastLoginTime = #{lastLoginTime}
+                </if>
+                
+                <if test="timeScope != null and timeScope != '' and dateField != null" >
+      				and #{timeScope} >= DATEDIFF(now(), u.${dateField})
+	      		</if>
+	      		<!-- <if test="timeScope != null and timeScope != '' and dateField != null and dateField != ''" >
+	      				and u.${dateField} between date_format(date_sub(now(),interval ${timeScope} day), '%Y-%m-%d 17:00:00') and date_format(now(), '%Y-%m-%d 17:00:00') 
+	      		</if> -->
+	      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+	      			and date(u.registTime) between '${startTime}' and '${endTime}'
+	      		</if>
+	      		<!-- <if test="dateField != null and dateField != ''" >
+      				and date(u.${dateField}) = date(now())
+	      		</if> -->
+	      		<if test="keyWord != null and keyWord != ''" >
+			   		and (u.realname like '%${keyWord}%' or u.tel like '%${keyWord}%' or u.nickname like '%${keyWord}%' or u.estateName like '%${keyWord}%') 
+				</if>
+				
+				<if test="address != null and address != ''" >
+                    and u.address = #{address}
+                </if>
+                <if test="estateName != null and estateName != ''" >
+                    and u.estateName = #{estateName}
+                </if>
+                
+                <if test="curEstateId != null and curEstateId != 0" >
+			   		and res.estateId = #{curEstateId}
+				</if>
+				<if test="curUserId != null and curUserId != 0" >
+			   		and res.userId = #{curUserId}
+				</if>
+                
+            </trim>
+        </where>
+    </sql>
+	
+	<!-- 根据id查询 AppUser -->
+	<select id="findById"  resultMap="AppUserResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_user u where u.userId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppUser -->
+	<select id="findAll" resultMap="AppUserResult">
+		select <include refid="Base_Column_List" /> from app_user u
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppUser -->
+	<select id="findByMap" resultMap="AppUserResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_user u <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppUser -->
+	<select id="findByExample" resultMap="AppUserResult" parameterType="com.community.app.module.vo.AppUserQuery">
+		select <include refid="Base_Column_List" /> from app_user u <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppUser根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppUserResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_user u 
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppUser根据搜索条件，搜索分页数据  针对物业  -->
+	<select id="findAllPageByProperty" resultMap="AppUserResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_user u
+		inner join app_estate_user aeu on aeu.userId = u.userId
+		inner join business_user_resource res on res.estateId = aeu.estateId 
+		<include refid="Base_Where_Clause" />
+		group by u.userId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- 查看tel是否重复-->
+	<select id="whetherRepeat" resultType="java.lang.Integer"  parameterType="java.lang.String">
+		select count(1) from app_user_cellphone where cellphone=#{tel}
+	</select>
+	
+	<!-- 验证用户tel、password是否正确-->
+	<select id="whetherCorrect" resultType="java.lang.Integer"  parameterType="AppUser">
+		select count(1) from app_user_cellphone c,app_user u where c.userId=u.userId and cellphone=#{tel} and password=#{password}
+	</select>
+	
+	<!-- AppUser列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_user u
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppUser列表总数 针对物业 -->
+	<select id="selectCountByProperty" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from (select count(distinct(u.userId)) from app_user u
+		inner join app_estate_user aeu on aeu.userId = u.userId
+		inner join business_user_resource res on res.estateId = aeu.estateId
+		<include refid="Base_Where_Clause" />
+		group by u.userId
+		) as cc
+	</select>
+
+    <!-- AppUser保存数据 -->
+    <insert id="save" parameterType="AppUser">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="userId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into app_user(
+
+        realname,
+        nickname,
+        password,
+        tel,
+        sex,
+        birthday,
+        type,
+        isWorker,
+        state,
+        random,
+        registTime,
+        verifyTime,
+        verifier,
+        signature,
+        portrait,
+        idCard,
+        estateId,
+        isNameSecret,
+        isTelSecret,
+        workerMemo,
+        weixin,
+        createTime,
+        editTime,
+        editor,
+        dimensionCode,
+        homeAttr,
+        familyId,
+        lastLoginTime
+        ) values(
+        #{realname},
+        #{nickname},
+        #{password},
+        #{tel},
+        #{sex},
+        #{birthday},
+        #{type},
+        #{isWorker},
+        #{state},
+        #{random},
+        #{registTime},
+        #{verifyTime},
+        #{verifier},
+        #{signature},
+        #{portrait},
+        #{idCard},
+        #{estateId},
+        #{isNameSecret},
+        #{isTelSecret},
+        #{workerMemo},
+        #{weixin},
+        #{createTime},
+        #{editTime},
+        #{editor},
+        #{dimensionCode},
+        #{homeAttr},
+        #{familyId},
+        #{lastLoginTime}
+        )
+    </insert>
+	
+	<!-- AppUser保存数据 -->
+    <insert id="saveRegist" parameterType="AppUser">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="userId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into app_user(
+		password,
+		tel,
+		estateId,
+		estateName,
+		type,
+		state,
+		createTime,
+		dimensionCode,
+		lastLoginTime,
+		editTime,
+		portrait
+		) values(
+		#{password},
+		#{tel},
+		#{estateId},
+		(SELECT estateName FROM manage_estate WHERE estateId=#{estateId}),
+		#{type},
+		#{state},
+		#{createTime},
+		#{dimensionCode},
+		#{lastLoginTime},
+		#{editTime},
+		#{portrait}
+		)
+		
+    </insert>
+    
+    <insert id="saveCellphone" parameterType="AppUser">
+    	insert into app_user_cellphone(
+		userId,
+		cellphone,
+		createTime,
+		editTime
+		) values(
+		#{userId},
+		#{tel},
+		#{createTime},
+		#{editTime}
+		)
+    </insert>
+	
+    <!-- AppUser修改数据 -->
+    <update id="update" parameterType="AppUser">
+        update app_user
+        <set>
+            <if test="realname != null" >
+                realname=#{realname},
+            </if>
+            <if test="nickname != null" >
+                nickname=#{nickname},
+            </if>
+            <if test="password != null and password != ''" >
+                password=#{password},
+            </if>
+            <if test="tel != null and tel != ''" >
+                tel=#{tel},
+            </if>
+            <if test="sex != null" >
+                sex=#{sex},
+            </if>
+            <if test="birthday != null and birthday != ''" >
+                birthday=#{birthday},
+            </if>
+            <if test="strBirthday != null and strBirthday != ''" >
+                birthday=#{strBirthday},
+            </if>
+            <if test="type != null and type != ''" >
+                type=#{type},
+            </if>
+            <if test="isWorker != null " >
+                isWorker=#{isWorker},
+            </if>
+            <if test="state != null and state != ''" >
+                state=#{state},
+            </if>
+            <if test="random != null and random != ''" >
+                random=#{random},
+            </if>
+            <if test="registTime != null and registTime != ''" >
+                registTime=#{registTime},
+            </if>
+            <if test="verifyTime != null and verifyTime != ''" >
+                verifyTime=#{verifyTime},
+            </if>
+            <if test="verifier != null and verifier != ''" >
+                verifier=#{verifier},
+            </if>
+            <if test="signature != null" >
+                signature=#{signature},
+            </if>
+            <if test="portrait != null and portrait != ''" >
+                portrait=#{portrait},
+            </if>
+            <if test="idCard != null and idCard != ''" >
+                idCard=#{idCard},
+            </if>
+            <if test="estateId != null and estateId != ''" >
+                estateId=#{estateId},
+            </if>
+            <if test="estateName != null and estateName != ''" >
+                estateName=#{estateName},
+            </if>
+            <if test="isNameSecret != null" >
+                isNameSecret=#{isNameSecret},
+            </if>
+            <if test="isTelSecret != null" >
+                isTelSecret=#{isTelSecret},
+            </if>
+            <if test="workerMemo != null and workerMemo != ''" >
+                workerMemo=#{workerMemo},
+            </if>
+            <if test="weixin != null and weixin != ''" >
+                weixin=#{weixin},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                createTime=#{createTime},
+            </if>
+            <if test="editTime != null and editTime != ''" >
+                editTime=#{editTime},
+            </if>
+            <if test="editor != null and editor != ''" >
+                editor=#{editor},
+            </if>
+            <if test="dimensionCode != null and dimensionCode != ''" >
+                dimensionCode = #{dimensionCode},
+            </if>
+            <if test="homeAttr != null and homeAttr != ''" >
+                homeAttr = #{homeAttr},
+            </if>
+            <if test="familyId != null and familyId != ''" >
+                amilyId = #{familyId},
+            </if>
+            <if test="lastLoginTime != null and lastLoginTime != ''" >
+                lastLoginTime = #{lastLoginTime},
+            </if>
+            <if test="address != null and address != ''" >
+                address = #{address},
+            </if>
+            <if test="baiduId != null" >
+                baiduId = #{baiduId},
+            </if>
+            <if test="channelId != null" >
+                channelId = #{channelId},
+            </if>
+             <if test="deviceType != null" >
+                deviceType = #{deviceType}
+            </if>
+        </set>
+        where
+        userId=#{userId}
+	</update>
+	
+	  <!-- AppUser修改数据 -->
+    <update id="updatePassword" parameterType="AppUser">
+        update app_user set 
+         password=#{password},editTime=#{editTime} where userId = (select userId from app_user_cellphone c where cellphone=#{tel})
+	</update>
+	
+	  <!-- 清除关于该设备的百度id和设备号-->
+    <update id="updateBaiduId" parameterType="AppUser">
+        update app_user set 
+         deviceType=0,channelId='',baiduId='' where baiduId=#{baiduId} and channelId=#{channelId} and deviceType=#{deviceType}
+	</update>
+	
+	<!-- AppUser删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_user where 
+		userId=#{userId}
+	</delete>
+
+    <select id="getAppUserInfo" resultType="MemberVO" parameterType="java.lang.Integer">
+       SELECT
+        a.userId,
+        realname,
+        nickname,
+        tel,
+        sex,
+        birthday,
+        TYPE,
+        isWorker,
+        state,
+        registTime,
+        verifyTime,
+        verifier,
+        signature,
+        portrait,
+        a.estateId,
+        c.estateName oftenestate,
+        isNameSecret,
+        isTelSecret,
+        workerMemo,
+        weixin,
+        b.estateName,
+        buildingName,
+        unitName,
+        houseNo,
+        memberType,
+        d.cellphone boundphone,
+        e.staName,
+        a.address,
+        a.estateName 
+        FROM app_user a LEFT JOIN  app_estate_user b ON  a.userId = b.userId LEFT JOIN manage_estate c ON a.estateId = c.estateId LEFT JOIN business_station e ON c.stationId = e.stationId LEFT JOIN
+        (SELECT GROUP_CONCAT(cellphone) cellphone FROM app_user_cellphone WHERE userId = #{userId} ) d ON a.userId = #{userId}
+        WHERE  a.userId = #{userId}
+    </select>
+    
+    <select id="getAppUserInfoByTel" resultType="MemberVO" parameterType="java.lang.String">
+   		SELECT me.comId, u.userId, u.estateId, u.realname, u.nickname, u.portrait, (SELECT GROUP_CONCAT(cellphone) FROM app_user_cellphone acp where acp.userId=u.userId) boundphone, 
+   				u.estateName, aeu.buildingName, aeu.unitName, aeu.houseNo
+		FROM app_user u LEFT JOIN app_user_cellphone cp on u.userId=cp.userId 
+		LEFT JOIN app_estate_user aeu on u.userId=aeu.userId and u.estateId=aeu.estateId
+		LEFT JOIN manage_estate me ON u.estateId = me.estateId
+		WHERE cp.cellphone=#{tel}
+    </select>
+    
+    <select id="getAppUserInfoById" resultType="MemberVO" parameterType="java.lang.String">
+       SELECT f.familyId,f.mount,state FROM  business_family_member m,business_family f WHERE m.familyId=f.familyId AND state = 0  AND  m.userId=#{id} or m.familyId=f.familyId and state = 2  AND  m.userId=#{id}
+    </select>
+    
+    
+    <select id="getAppUserLoginInfo" resultType="MemberVO" parameterType="AppUser">
+       SELECT
+        a.userId,
+        a.realname,
+        a.nickname,
+        a.tel,
+        a.sex,
+        a.birthday,
+        a.TYPE,
+        a.isWorker,
+        a.state,
+        a.registTime,
+        a.verifyTime,
+        a.verifier,
+        a.signature,
+        portrait,
+        a.estateId,
+        c.estateMap,
+        c.estateName,
+        a.dimensionCode,
+        a.isNameSecret,
+        a.isTelSecret,
+        a.workerMemo,
+        a.weixin,
+        a.baiduId,
+        a.channelId,
+        a.deviceType,
+        b.estateName,
+        b.buildingName,
+        b.buildingId,
+        b.unitId,
+        b.unitName,
+        b.houseId,
+        b.houseNo,
+        b.memberType,
+        d.cellphone boundphone,
+        e.staName,
+        e.stationId staId,
+        bc.comId,
+        bc.comName,
+        bp.proId,
+        bp.proName,
+        mb.buildingMap as homeAttr,
+        mu.unitMap as unitHomeAttr,
+        bf.familyId,
+        bf.mount,
+        auc.helpSwitch,
+        auc.marketSwitch,
+        auc.serviceSwitch,
+        auc.expressSwitch,
+        auc.brokeSwitch,
+        auc.weatherSwitch,
+        auc.limitSwitch
+        FROM app_user a LEFT JOIN  app_estate_user b ON  a.userId = b.userId and a.estateId = b.estateId LEFT JOIN manage_estate c ON a.estateId = c.estateId LEFT JOIN business_station e ON c.stationId = e.stationId LEFT JOIN
+        (SELECT GROUP_CONCAT(cellphone) cellphone FROM app_user_cellphone c,app_user u WHERE c.userId = u.userId and  c.cellphone=#{tel} and u.password=#{password} ) d ON 1=1 left join app_user_cellphone uc on uc.userId = a.userId left join business_community bc
+        on c.comId=bc.comId left join business_property bp on c.proId=bp.proId LEFT JOIN business_family_member fm ON 
+ 		fm.userId=a.userId and fm.state=0  LEFT JOIN business_family bf ON bf.familyId=fm.familyId  and bf.familyState = 0     LEFT JOIN manage_building mb ON b.buildingId=mb.buildingId LEFT JOIN manage_unit mu ON b.unitId=mu.unitId left join app_user_config auc on auc.userId=a.userId
+        WHERE uc.cellphone=#{tel} and a.password=#{password} 
+    </select>
+	
+	<select id="getAppUserByTel" resultType="AppUser" parameterType="java.lang.String">
+       SELECT 
+		u.userId,
+        u.realname,
+        u.nickname,
+        u.password,
+        u.tel,
+        u.sex,
+        u.birthday,
+        u.type,
+        u.isWorker,
+        u.state,
+        u.random,
+        u.registTime,
+        u.verifyTime,
+        u.verifier,
+        u.signature,
+        u.portrait,
+        u.idCard,
+        u.estateId,
+        u.isNameSecret,
+        u.isTelSecret,
+        u.workerMemo,
+        u.weixin,
+        u.createTime,
+        u.editTime,
+        u.editor,
+        u.dimensionCode,
+        u.homeAttr,
+        u.familyId,
+        u.lastLoginTime,
+        u.address,
+        u.estateName,
+        u.baiduId,
+        u.channelId,
+        u.deviceType
+        from app_user u inner join app_user_cellphone c on u.userId = c.userId and c.cellphone = #{cellphone} 
+
+    </select>
+    
+    <!-- 查询该小区下的userId, baiduId, channelId 给推送用 -->
+	<select id="findUserPushIds" resultType="AppUser"  parameterType="java.lang.Integer">
+		select u.userId, u.realname, u.baiduId, u.channelId, u.deviceType from app_user u
+		inner join app_estate_user aeu on aeu.userId = u.userId
+		and aeu.estateId = #{estateId}
+	</select>
+	
+	<!-- 查询该社区报下的userId, baiduId, channelId 给推送用 -->
+	<select id="findUserPushIdsByCom" resultType="AppUser"  parameterType="java.lang.Integer">
+		select distinct(u.userId), u.realname, u.baiduId, u.channelId, u.deviceType from app_user u
+		inner join app_estate_user aeu on aeu.userId = u.userId
+		inner join manage_estate e on e.estateId = aeu.estateId
+		where e.comId = #{comId}
+	</select>
+	
+</mapper>
+	

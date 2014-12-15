@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppAutomobileNumberDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppAutomobileNumberResult" type="AppAutomobileNumber">
+			<result column="numberId" property="numberId" />
+			<result column="numberName" property="numberName" />
+			<result column="userId" property="userId" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			numberId,
+			numberName,
+			userId,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="numberId != null and numberId != ''" >
+				   		and numberId = #{numberId}
+					</if>
+					<if test="numberName != null and numberName != ''" >
+				   		and numberName = #{numberName}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			n.numberId,
+			n.numberName,
+			n.userId,
+			n.createTime,
+			n.editTime,
+			n.editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="numberId != null and numberId != ''" >
+				   		and n.numberId = #{numberId}
+					</if>
+					<if test="numberName != null and numberName != ''" >
+				   		and n.numberName = #{numberName}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and n.userId = #{userId}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and n.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and n.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and n.editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppAutomobileNumber -->
+	<select id="findById"  resultMap="AppAutomobileNumberResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_automobile_number where numberId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppAutomobileNumber -->
+	<select id="findAll" resultMap="AppAutomobileNumberResult">
+		select <include refid="Base_Column_List" /> from app_automobile_number 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppAutomobileNumber -->
+	<select id="findByMap" resultMap="AppAutomobileNumberResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_automobile_number <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppAutomobileNumber -->
+	<select id="findByExample" resultMap="AppAutomobileNumberResult" parameterType="com.community.app.module.vo.AppAutomobileNumberQuery">
+		select <include refid="Base_Column_List" /> from app_automobile_number <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppAutomobileNumber -->
+	<select id="findByExample_app" resultType="AppAutomobileNumber" parameterType="com.community.app.module.vo.AppAutomobileNumberQuery">
+		select n.numberId,GROUP_CONCAT(n.numberName) AS numberName,n.userId,baiduId,channelId,deviceType from app_automobile_number n inner join app_user u on n.userId=u.userId inner join app_user_config c on c.userId=u.userId and limitSwitch=0  where n.numberName in (${numberName})  group by u.userId 
+	</select>
+	
+	<!-- AppAutomobileNumber根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppAutomobileNumberResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_automobile_number  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppAutomobileNumber列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_automobile_number 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppAutomobileNumber保存数据 -->
+	<insert id="save" parameterType="AppAutomobileNumber">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="numberId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_automobile_number(
+		
+		numberName,
+		userId,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{numberName},
+		#{userId},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- AppAutomobileNumber修改数据 -->
+	<update id="update" parameterType="AppAutomobileNumber">
+		update app_automobile_number 
+		<set>
+			<if test="numberName != null and numberName != ''" >
+			numberName=#{numberName},
+			</if>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		numberId=#{numberId}
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- AppAutomobileNumber删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_automobile_number where 
+		numberId=#{numberId}
+	</delete>
+	
+	<!-- AppAutomobileNumber删除数据 -->
+	<delete id="deleteAppAutomobileNumber" parameterType="AppAutomobileNumber">
+		delete from app_automobile_number where 
+		userId=#{userId} and numberName=#{numberName}
+	</delete>
+	
+</mapper>
+	

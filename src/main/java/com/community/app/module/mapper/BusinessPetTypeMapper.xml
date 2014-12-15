@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessPetTypeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessPetTypeResult" type="BusinessPetType">
+			<result column="typeId" property="typeId" />
+			<result column="typeName" property="typeName" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			typeId,
+			typeName,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="typeId != null and typeId != ''" >
+				   		and typeId = #{typeId}
+					</if>
+					<if test="typeName != null and typeName != ''" >
+				   		and typeName = #{typeName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessPetType -->
+	<select id="findById"  resultMap="BusinessPetTypeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_pet_type where typeId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessPetType -->
+	<select id="findAll" resultMap="BusinessPetTypeResult">
+		select <include refid="Base_Column_List" /> from business_pet_type 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessPetType -->
+	<select id="findByMap" resultMap="BusinessPetTypeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_pet_type <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessPetType -->
+	<select id="findByExample" resultMap="BusinessPetTypeResult" parameterType="com.community.app.module.vo.BusinessPetTypeQuery">
+		select <include refid="Base_Column_List" /> from business_pet_type <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessPetType根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessPetTypeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_pet_type  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessPetType列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_pet_type 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessPetType保存数据 -->
+	<insert id="save" parameterType="BusinessPetType">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="typeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_pet_type(
+		
+		typeName,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{typeName},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessPetType修改数据 -->
+	<update id="update" parameterType="BusinessPetType">
+		update business_pet_type 
+		<set>
+			<if test="typeName != null and typeName != ''" >
+			typeName=#{typeName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		typeId=#{typeId}
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessPetType删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_pet_type where 
+		typeId=#{typeId}
+									</delete>
+	
+</mapper>
+	

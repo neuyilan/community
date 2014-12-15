@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessDepartmentDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessDepartmentResult" type="BusinessDepartment">
+			<result column="depId" property="depId" />
+			<result column="depName" property="depName" />
+			<result column="depDesc" property="depDesc" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="orgType" property="orgType" />
+			<result column="orgId" property="orgId" />
+			<result column="orgName" property="orgName" />
+			<result column="userId" property="userId" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			depId,
+			depName,
+			depDesc,
+			createTime,
+			editTime,
+			editor,
+			orgType,
+			orgId,
+			orgName,
+			userId
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="depId != null and depId != ''" >
+				   		and depId = #{depId}
+					</if>
+					<if test="depName != null and depName != ''" >
+				   		and depName = #{depName}
+					</if>
+					<if test="depDesc != null and depDesc != ''" >
+				   		and depDesc = #{depDesc}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="orgType != null and orgType != ''" >
+				   		and orgType = #{orgType}
+					</if>
+					<if test="orgId != null and orgId != ''" >
+				   		and orgId = #{orgId}
+					</if>
+					<if test="orgName != null and orgName != ''" >
+				   		and orgName = #{orgName}
+					</if>
+					<if test="userId != null" >
+				   		and userId = #{userId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessDepartment -->
+	<select id="findById"  resultMap="BusinessDepartmentResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_department where depId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessDepartment -->
+	<select id="findAll" resultMap="BusinessDepartmentResult">
+		select <include refid="Base_Column_List" /> from business_department 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessDepartment -->
+	<select id="findByMap" resultMap="BusinessDepartmentResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_department <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessDepartment -->
+	<select id="findByExample" resultMap="BusinessDepartmentResult" parameterType="com.community.app.module.vo.BusinessDepartmentQuery">
+		select <include refid="Base_Column_List" /> from business_department <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessDepartment根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessDepartmentResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_department  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessDepartment列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_department 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessDepartment保存数据 -->
+	<insert id="save" parameterType="BusinessDepartment">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="depId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_department(
+		
+		depName,
+		depDesc,
+		createTime,
+		editTime,
+		editor,
+		orgType,
+		orgId,
+		orgName,
+		userId
+		) values(
+				#{depName},
+		#{depDesc},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{orgType},
+		#{orgId},
+		#{orgName},
+		#{userId}
+		)
+	</insert>
+	
+	<!-- BusinessDepartment修改数据 -->
+	<update id="update" parameterType="BusinessDepartment">
+		update business_department 
+		<set>
+			<if test="depName != null and depName != ''" >
+			depName=#{depName},
+			</if>
+			<if test="depDesc != null and depDesc != ''" >
+			depDesc=#{depDesc},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="orgType != null and orgType != ''" >
+			orgType=#{orgType},
+			</if>
+			<if test="orgId != null and orgId != ''" >
+			orgId=#{orgId},
+			</if>
+			<if test="orgName != null and orgName != ''" >
+			orgName=#{orgName}
+			</if>
+			<if test="userId != null" >
+			userId=#{userId}
+			</if>
+			
+		</set> 
+		where 
+		depId=#{depId}
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessDepartment删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_department where 
+		depId=#{depId}
+																	</delete>
+	
+</mapper>
+	

@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.ManageOrgDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="ManageOrgResult" type="ManageOrg">
+			<result column="orgId" property="orgId" />
+			<result column="orgName" property="orgName" />
+			<result column="orgDesc" property="orgDesc" />
+			<result column="parentId" property="parentId" />
+			<result column="orgCode" property="orgCode" />
+			<result column="orgState" property="orgState" />
+			<result column="orgTypeCode" property="orgTypeCode" />
+			<result column="orgLongitude" property="orgLongitude" />
+			<result column="orgLatitude" property="orgLatitude" />
+			<result column="orgIcon" property="orgIcon" />
+			<result column="orgTel" property="orgTel" />
+			<result column="orgEmail" property="orgEmail" />
+			<result column="orgWeixin" property="orgWeixin" />
+			<result column="orgSubType" property="orgSubType" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="leaf" property="leaf" />
+			<result column="ord" property="ord" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			orgId,
+			orgName,
+			orgDesc,
+			parentId,
+			orgCode,
+			orgState,
+			orgTypeCode,
+			orgLongitude,
+			orgLatitude,
+			orgIcon,
+			orgTel,
+			orgEmail,
+			orgWeixin,
+			orgSubType,
+			createTime,
+			editTime,
+			editor,
+			leaf,
+			ord
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="orgId != null and orgId != ''" >
+				   		and orgId = #{orgId}
+					</if>
+					<if test="orgName != null and orgName != ''" >
+				   		and orgName = #{orgName}
+					</if>
+					<if test="orgDesc != null and orgDesc != ''" >
+				   		and orgDesc = #{orgDesc}
+					</if>
+					<if test="parentId != null and parentId != ''" >
+				   		and parentId = #{parentId}
+					</if>
+					<if test="orgCode != null and orgCode != ''" >
+				   		and orgCode = #{orgCode}
+					</if>
+					<if test="orgState != null and orgState != ''" >
+				   		and orgState = #{orgState}
+					</if>
+					<if test="orgTypeCode != null and orgTypeCode != ''" >
+				   		and orgTypeCode = #{orgTypeCode}
+					</if>
+					<if test="orgLongitude != null and orgLongitude != ''" >
+				   		and orgLongitude = #{orgLongitude}
+					</if>
+					<if test="orgLatitude != null and orgLatitude != ''" >
+				   		and orgLatitude = #{orgLatitude}
+					</if>
+					<if test="orgIcon != null and orgIcon != ''" >
+				   		and orgIcon = #{orgIcon}
+					</if>
+					<if test="orgTel != null and orgTel != ''" >
+				   		and orgTel = #{orgTel}
+					</if>
+					<if test="orgEmail != null and orgEmail != ''" >
+				   		and orgEmail = #{orgEmail}
+					</if>
+					<if test="orgWeixin != null and orgWeixin != ''" >
+				   		and orgWeixin = #{orgWeixin}
+					</if>
+					<if test="orgSubType != null and orgSubType != ''" >
+				   		and orgSubType = #{orgSubType}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="leaf != null and leaf != ''" >
+				   		and leaf = #{leaf}
+					</if>
+					<if test="ord != null and ord != ''" >
+				   		and ord = #{ord}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 ManageOrg -->
+	<select id="findById"  resultMap="ManageOrgResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from manage_org where orgId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有ManageOrg -->
+	<select id="findAll" resultMap="ManageOrgResult">
+		select <include refid="Base_Column_List" /> from manage_org 
+	</select>
+	
+	<!-- 按Map对象条件查询所有ManageOrg -->
+	<select id="findByMap" resultMap="ManageOrgResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from manage_org <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有ManageOrg -->
+	<select id="findByExample" resultMap="ManageOrgResult" parameterType="com.community.app.module.vo.ManageOrgQuery">
+		select <include refid="Base_Column_List" /> from manage_org <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageOrg根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="ManageOrgResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from manage_org  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- ManageOrg列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from manage_org 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageOrg保存数据 -->
+	<insert id="save" parameterType="ManageOrg">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="orgId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into manage_org(
+		
+		orgName,
+		orgDesc,
+		parentId,
+		orgCode,
+		orgState,
+		orgTypeCode,
+		orgLongitude,
+		orgLatitude,
+		orgIcon,
+		orgTel,
+		orgEmail,
+		orgWeixin,
+		orgSubType,
+		createTime,
+		editTime,
+		editor,
+		leaf,
+		ord
+		) values(
+				#{orgName},
+		#{orgDesc},
+		#{parentId},
+		#{orgCode},
+		#{orgState},
+		#{orgTypeCode},
+		#{orgLongitude},
+		#{orgLatitude},
+		#{orgIcon},
+		#{orgTel},
+		#{orgEmail},
+		#{orgWeixin},
+		#{orgSubType},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{leaf},
+		#{ord}
+		)
+	</insert>
+	
+	<!-- ManageOrg修改数据 -->
+	<update id="update" parameterType="ManageOrg">
+		update manage_org 
+		<set>
+			<if test="orgName != null and orgName != ''" >
+			orgName=#{orgName},
+			</if>
+			<if test="orgDesc != null and orgDesc != ''" >
+			orgDesc=#{orgDesc},
+			</if>
+			<if test="parentId != null and parentId != ''" >
+			parentId=#{parentId},
+			</if>
+			<if test="orgCode != null and orgCode != ''" >
+			orgCode=#{orgCode},
+			</if>
+			<if test="orgState != null and orgState != ''" >
+			orgState=#{orgState},
+			</if>
+			<if test="orgTypeCode != null and orgTypeCode != ''" >
+			orgTypeCode=#{orgTypeCode},
+			</if>
+			<if test="orgLongitude != null and orgLongitude != ''" >
+			orgLongitude=#{orgLongitude},
+			</if>
+			<if test="orgLatitude != null and orgLatitude != ''" >
+			orgLatitude=#{orgLatitude},
+			</if>
+			<if test="orgIcon != null and orgIcon != ''" >
+			orgIcon=#{orgIcon},
+			</if>
+			<if test="orgTel != null and orgTel != ''" >
+			orgTel=#{orgTel},
+			</if>
+			<if test="orgEmail != null and orgEmail != ''" >
+			orgEmail=#{orgEmail},
+			</if>
+			<if test="orgWeixin != null and orgWeixin != ''" >
+			orgWeixin=#{orgWeixin},
+			</if>
+			<if test="orgSubType != null and orgSubType != ''" >
+			orgSubType=#{orgSubType},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="leaf != null and leaf != ''" >
+			leaf=#{leaf},
+			</if>
+			<if test="ord != null and ord != ''" >
+			ord=#{ord}
+			</if>
+		</set> 
+		where 
+		orgId=#{orgId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- ManageOrg删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from manage_org where 
+		orgId=#{orgId}
+																																					</delete>
+	
+</mapper>
+	

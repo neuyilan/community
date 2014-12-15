@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessFeedbackCommentDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessFeedbackCommentResult" type="BusinessFeedbackComment">
+			<result column="commentId" property="commentId" />
+			<result column="feedbackId" property="feedbackId" />
+			<result column="replyId" property="replyId" />
+			<result column="commentorId" property="commentorId" />
+			<result column="commentorName" property="commentorName" />
+			<result column="commentorAvatar" property="commentorAvatar" />
+			<result column="comment" property="comment" />
+			<result column="commentTime" property="commentTime" />
+			<result column="contentType" property="contentType" />
+			<result column="videoSize" property="videoSize" />
+			<result column="videoTime" property="videoTime" />
+			<result column="videoFormat" property="videoFormat" />
+			<result column="to" property="to" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			commentId,
+			feedbackId,
+			replyId,
+			commentorId,
+			commentorName,
+			commentorAvatar,
+			comment,
+			commentTime,
+			contentType,
+			videoSize,
+			videoTime,
+			videoFormat
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="feedbackId != null and feedbackId != ''" >
+				   		and feedbackId = #{feedbackId}
+					</if>
+					<if test="replyId != null and replyId != ''" >
+				   		and replyId = #{replyId}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentorName != null and commentorName != ''" >
+				   		and commentorName = #{commentorName}
+					</if>
+					<if test="commentorAvatar != null and commentorAvatar != ''" >
+				   		and commentorAvatar = #{commentorAvatar}
+					</if>
+					<if test="comment != null and comment != ''" >
+				   		and comment = #{comment}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+					<if test="contentType != null and contentType != ''" >
+				   		and contentType = #{contentType}
+					</if>
+					<if test="videoSize != null and videoSize != ''" >
+				   		and videoSize = #{videoSize}
+					</if>
+					<if test="videoTime != null and videoTime != ''" >
+				   		and videoTime = #{videoTime}
+					</if>
+					<if test="videoFormat != null and videoFormat != ''" >
+				   		and videoFormat = #{videoFormat}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessFeedbackComment -->
+	<select id="findById"  resultMap="BusinessFeedbackCommentResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_feedback_comment where commentId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessFeedbackComment -->
+	<select id="findAll" resultMap="BusinessFeedbackCommentResult">
+		select <include refid="Base_Column_List" /> from business_feedback_comment 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessFeedbackComment -->
+	<select id="findByMap" resultMap="BusinessFeedbackCommentResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" />,c.to,u.portrait,u.nickname,b.avatar as b_portrait,b.avatar as b_portrait,b.nickname b_nickname  from business_feedback_comment c left join app_user u on u.userId=c.commentorId left join business_user b on b.userId = c.commentorId 
+		<include refid="Base_Where_Clause" /> group by  commentId desc 
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessFeedbackComment -->
+	<select id="findByExample" resultMap="BusinessFeedbackCommentResult" parameterType="com.community.app.module.vo.BusinessFeedbackCommentQuery">
+		select <include refid="Base_Column_List" /> from business_feedback_comment <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedbackComment根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultType="BusinessFeedbackComment" parameterType="Object">
+		select <include refid="Base_Column_List" />,c.to,u.portrait,u.nickname,b.avatar as b_portrait,b.avatar as b_portrait,b.nickname b_nickname  from business_feedback_comment c left join app_user u on u.userId=c.commentorId left join business_user b on b.userId = c.commentorId 
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFeedbackComment列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_feedback_comment 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedbackComment根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessFeedbackComment" parameterType="Object">
+		select <include refid="Base_Column_List" />,c.to,u.portrait,u.nickname,b.avatar as b_portrait,b.avatar as b_portrait,b.nickname b_nickname  from business_feedback_comment c left join app_user u on u.userId=c.commentorId left join business_user b on b.userId = c.commentorId 
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFeedbackComment列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_feedback_comment 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFeedbackComment保存数据 -->
+	<insert id="save" parameterType="BusinessFeedbackComment">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_feedback_comment(
+		feedbackId,
+		commentorId,
+		commentorName,
+		comment,
+		commentTime,
+		contentType,
+		videoTime
+		) values(
+		#{feedbackId},
+		#{commentorId},
+		(select nickname from app_user where userId=#{commentorId}),
+		#{comment},
+		#{commentTime},
+		#{contentType},
+		#{videoTime}
+		)
+	</insert>
+	
+	<!-- BusinessFeedbackComment保存数据 -->
+	<insert id="save_manage" parameterType="BusinessFeedbackComment">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_feedback_comment(
+		feedbackId,
+		commentorId,
+		commentorName,
+		comment,
+		commentTime,
+		contentType,
+		videoTime,
+		business_feedback_comment.to
+		) values(
+		#{feedbackId},
+		#{commentorId},
+		#{commentorName},
+		#{comment},
+		#{commentTime},
+		#{contentType},
+		#{videoTime},
+		#{to}
+		)
+	</insert>
+	
+	<!-- BusinessFeedbackComment修改数据 -->
+	<update id="update" parameterType="BusinessFeedbackComment">
+		update business_feedback_comment 
+		<set>
+			<if test="feedbackId != null and feedbackId != ''" >
+			feedbackId=#{feedbackId},
+			</if>
+			<if test="replyId != null and replyId != ''" >
+			replyId=#{replyId},
+			</if>
+			<if test="commentorId != null and commentorId != ''" >
+			commentorId=#{commentorId},
+			</if>
+			<if test="commentorName != null and commentorName != ''" >
+			commentorName=#{commentorName},
+			</if>
+			<if test="commentorAvatar != null and commentorAvatar != ''" >
+			commentorAvatar=#{commentorAvatar},
+			</if>
+			<if test="comment != null and comment != ''" >
+			comment=#{comment},
+			</if>
+			<if test="commentTime != null and commentTime != ''" >
+			commentTime=#{commentTime},
+			</if>
+			<if test="contentType != null and contentType != ''" >
+			contentType=#{contentType},
+			</if>
+			<if test="videoSize != null and videoSize != ''" >
+			videoSize=#{videoSize},
+			</if>
+			<if test="videoTime != null and videoTime != ''" >
+			videoTime=#{videoTime},
+			</if>
+			<if test="videoFormat != null and videoFormat != ''" >
+			videoFormat=#{videoFormat}
+			</if>
+		</set> 
+		where 
+		commentId=#{commentId}
+	</update>
+	
+	<!-- BusinessFeedbackComment修改数据 -->
+	<update id="update_app" parameterType="BusinessFeedbackComment">
+		update business_feedback_comment set 
+		contentType=#{contentType}
+		where 
+		feedbackId=#{feedbackId} and contentType=0 and business_feedback_comment.to=1
+	</update>
+	
+	<!-- BusinessFeedbackComment删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_feedback_comment where 
+		commentId=#{commentId}
+																							</delete>
+	
+</mapper>
+	

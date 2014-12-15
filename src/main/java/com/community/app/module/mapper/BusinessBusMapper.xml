@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessBusDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessBusResult" type="BusinessBus">
+			<result column="busId" property="busId" />
+			<result column="busName" property="busName" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="starTime" property="starTime" />
+			<result column="endTime" property="endTime" />
+			<result column="starName" property="starName" />
+			<result column="endName" property="endName" />
+			<result column="count" property="count" />
+			<result column="type" property="type" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			busId,
+			busName,
+			createTime,
+			editTime,
+			editor,
+			starTime,
+			endTime,
+			starName,
+			endName,
+			count,
+			type
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="busId != null and busId != ''" >
+				   		and busId = #{busId}
+					</if>
+					<if test="busName != null and busName != ''" >
+				   		and busName = #{busName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="starTime != null and starTime != ''" >
+				   		and starTime = #{starTime}
+					</if>
+					<if test="endTime != null and endTime != ''" >
+				   		and endTime = #{endTime}
+					</if>
+					<if test="starName != null and starName != ''" >
+				   		and starName = #{starName}
+					</if>
+					<if test="endName != null and endName != ''" >
+				   		and endName = #{endName}
+					</if>
+					<if test="count != null and count != ''" >
+				   		and count = #{count}
+					</if>
+					<if test="type != null and type != ''" >
+				   		and type = #{type}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessBus -->
+	<select id="findById"  resultMap="BusinessBusResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_bus where busId = #{id}
+	</select>
+	
+	<!-- 查询线路的所有站点 -->
+	<select id="busLineDetails"  resultType="com.community.app.module.vo.BusinessBusQuery" parameterType="java.lang.Integer">
+		SELECT b.busId,b.busName,b.starTime,b.endTime,b.starName,b.endName,b.count,b.type,s.busStopName FROM business_bus b,business_bus_stop s WHERE b.busId=s.busId AND b.busName = (SELECT busName FROM business_bus WHERE busId= #{id})  ORDER BY ord
+	</select>
+	
+	<!-- 无条件查询所有BusinessBus -->
+	<select id="findAll" resultMap="BusinessBusResult">
+		select <include refid="Base_Column_List" /> from business_bus 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessBus -->
+	<select id="findByMap" resultMap="BusinessBusResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_bus <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessBus -->
+	<select id="findByExample" resultMap="BusinessBusResult" parameterType="com.community.app.module.vo.BusinessBusQuery">
+		select <include refid="Base_Column_List" /> from business_bus <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBus根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessBusResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_bus  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessBus列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_bus 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBus保存数据 -->
+	<insert id="save" parameterType="BusinessBus">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="busId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_bus(
+		
+		busName,
+		createTime,
+		editTime,
+		editor,
+		starTime,
+		endTime,
+		starName,
+		endName,
+		count,
+		type
+		) values(
+				#{busName},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{starTime},
+		#{endTime},
+		#{starName},
+		#{endName},
+		#{count},
+		#{type}
+		)
+	</insert>
+	
+	<!-- BusinessBus修改数据 -->
+	<update id="update" parameterType="BusinessBus">
+		update business_bus 
+		<set>
+			<if test="busName != null and busName != ''" >
+			busName=#{busName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="starTime != null and starTime != ''" >
+			starTime=#{starTime},
+			</if>
+			<if test="endTime != null and endTime != ''" >
+			endTime=#{endTime},
+			</if>
+			<if test="starName != null and starName != ''" >
+			starName=#{starName},
+			</if>
+			<if test="endName != null and endName != ''" >
+			endName=#{endName},
+			</if>
+			<if test="count != null and count != ''" >
+			count=#{count},
+			</if>
+			<if test="type != null and type != ''" >
+			type=#{type}
+			</if>
+		</set> 
+		where 
+		busId=#{busId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessBus删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_bus where 
+		busId=#{busId}
+																					</delete>
+	
+</mapper>
+	

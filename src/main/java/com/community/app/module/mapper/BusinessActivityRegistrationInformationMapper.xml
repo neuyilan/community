@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityRegistrationInformationDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityRegistrationInformationResult" type="BusinessActivityRegistrationInformation">
+			<result column="informationId" property="informationId" />
+			<result column="userId" property="userId" />
+			<result column="actId" property="actId" />
+			<result column="timeSlotId" property="timeSlotId" />
+			<result column="nickname" property="nickname" />
+			<result column="realname" property="realname" />
+			<result column="tel" property="tel" />
+			<result column="birthday" property="birthday" />
+			<result column="age" property="age" />
+			<result column="job" property="job" />
+			<result column="ID" property="ID" />
+			<result column="email" property="email" />
+			<result column="addr" property="addr" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			informationId,
+			userId,
+			actId,
+			timeSlotId,
+			nickname,
+			realname,
+			tel,
+			birthday,
+			age,
+			job,
+			ID,
+			email,
+			addr,
+			createTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="informationId != null and informationId != ''" >
+				   		and informationId = #{informationId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="timeSlotId != null and timeSlotId != ''" >
+				   		and timeSlotId = #{timeSlotId}
+					</if>
+					<if test="nickname != null and nickname != ''" >
+				   		and nickname = #{nickname}
+					</if>
+					<if test="realname != null and realname != ''" >
+				   		and realname = #{realname}
+					</if>
+					<if test="tel != null and tel != ''" >
+				   		and tel = #{tel}
+					</if>
+					<if test="birthday != null and birthday != ''" >
+				   		and birthday = #{birthday}
+					</if>
+					<if test="age != null and age != ''" >
+				   		and age = #{age}
+					</if>
+					<if test="job != null and job != ''" >
+				   		and job = #{job}
+					</if>
+					<if test="ID != null and ID != ''" >
+				   		and ID = #{ID}
+					</if>
+					<if test="email != null and email != ''" >
+				   		and email = #{email}
+					</if>
+					<if test="addr != null and addr != ''" >
+				   		and addr = #{addr}
+					</if>
+					<if test="keyWord != null and keyWord != ''" >
+				   		and (nickname like '%${keyWord}%' or realname like '%${keyWord}%' or tel like '%${keyWord}%')
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivityRegistrationInformation -->
+	<select id="findById"  resultMap="BusinessActivityRegistrationInformationResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity_registration_information where informationId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivityRegistrationInformation -->
+	<select id="findAll" resultMap="BusinessActivityRegistrationInformationResult">
+		select <include refid="Base_Column_List" /> from business_activity_registration_information 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivityRegistrationInformation -->
+	<select id="findByMap" resultMap="BusinessActivityRegistrationInformationResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity_registration_information <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityRegistrationInformation -->
+	<select id="findByExample" resultMap="BusinessActivityRegistrationInformationResult" parameterType="com.community.app.module.vo.BusinessActivityRegistrationInformationQuery">
+		select <include refid="Base_Column_List" /> from business_activity_registration_information <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityRegistrationInformation根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityRegistrationInformationResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_activity_registration_information  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivityRegistrationInformation列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_registration_information 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityRegistrationInformation保存数据 -->
+	<insert id="save" parameterType="BusinessActivityRegistrationInformation">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="informationId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity_registration_information(
+		
+		userId,
+		actId,
+		timeSlotId,
+		nickname,
+		realname,
+		tel,
+		birthday,
+		age,
+		job,
+		ID,
+		email,
+		addr,
+		createTime,
+		editTime
+		) values(
+				#{userId},
+		#{actId},
+		#{timeSlotId},
+		#{nickname},
+		#{realname},
+		#{tel},
+		#{birthday},
+		#{age},
+		#{job},
+		#{ID},
+		#{email},
+		#{addr},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- BusinessActivityRegistrationInformation修改数据 -->
+	<update id="update" parameterType="BusinessActivityRegistrationInformation">
+		update business_activity_registration_information 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="timeSlotId != null and timeSlotId != ''" >
+			timeSlotId=#{timeSlotId},
+			</if>
+			<if test="nickname != null and nickname != ''" >
+			nickname=#{nickname},
+			</if>
+			<if test="realname != null and realname != ''" >
+			realname=#{realname},
+			</if>
+			<if test="tel != null and tel != ''" >
+			tel=#{tel},
+			</if>
+			<if test="birthday != null and birthday != ''" >
+			birthday=#{birthday},
+			</if>
+			<if test="age != null and age != ''" >
+			age=#{age},
+			</if>
+			<if test="job != null and job != ''" >
+			job=#{job},
+			</if>
+			<if test="ID != null and ID != ''" >
+			ID=#{ID},
+			</if>
+			<if test="email != null and email != ''" >
+			email=#{email},
+			</if>
+			<if test="addr != null and addr != ''" >
+			addr=#{addr}
+			</if>
+		</set> 
+		where 
+		informationId=#{informationId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessActivityRegistrationInformation删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity_registration_information where 
+		informationId=#{informationId}
+																									</delete>
+	
+</mapper>
+	

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessBreakSelectDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessBreakSelectResult" type="BusinessBreakSelect">
+			<result column="selectId" property="selectId" />
+			<result column="breakId" property="breakId" />
+			<result column="selectorId" property="selectorId" />
+			<result column="selectTime" property="selectTime" />
+			<result column="selectorName" property="selectorName" />
+			<result column="comId" property="comId" />
+			<result column="comName" property="comName" />
+			<result column="isSelected" property="isSelected" />
+			<result column="title" property="title" />
+			<result column="state" property="newsState" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			selectId,
+			breakId,
+			selectorId,
+			selectTime,
+			selectorName,
+			comId,
+			comName,
+			isSelected
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List1" >
+			bs.selectTime,
+			bs.selectorName,
+			bn.state,
+			bn.title
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="selectId != null and selectId != ''" >
+				   		and selectId = #{selectId}
+					</if>
+					<if test="breakId != null and breakId != ''" >
+				   		and breakId = #{breakId}
+					</if>
+					<if test="selectorId != null and selectorId != ''" >
+				   		and selectorId = #{selectorId}
+					</if>
+					<if test="selectTime != null and selectTime != ''" >
+				   		and selectTime = #{selectTime}
+					</if>
+					<if test="selectorName != null and selectorName != ''" >
+				   		and selectorName = #{selectorName}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and comId = #{comId}
+					</if>
+					<if test="comName != null and comName != ''" >
+				   		and comName = #{comName}
+					</if>
+					<if test="isSelected != null and isSelected != ''" >
+				   		and isSelected = #{isSelected}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessBreakSelect -->
+	<select id="findById"  resultMap="BusinessBreakSelectResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_break_select where selectId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessBreakSelect -->
+	<select id="findAll" resultMap="BusinessBreakSelectResult">
+		select <include refid="Base_Column_List" /> from business_break_select 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessBreakSelect -->
+	<select id="findByMap" resultMap="BusinessBreakSelectResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_break_select <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessBreakSelect -->
+	<select id="findByExample" resultMap="BusinessBreakSelectResult" parameterType="com.community.app.module.vo.BusinessBreakSelectQuery">
+		select <include refid="Base_Column_List" /> from business_break_select <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBreakSelect根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessBreakSelectResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_break_select  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- 根据爆料ID查询所有选用的爆料 BusinessBreakSelect -->
+	<select id="findListByBreakId" resultMap="BusinessBreakSelectResult" parameterType="Object">
+		select<include refid="Base_Column_List1" /> from business_break_select bs left join business_news bn on bs.selectId=bn.selectId 
+		WHERE bs.breakId = #{breakId} and bs.isSelected=#{isSelected} order by bs.selectId desc
+	</select>
+	
+	<!-- BusinessBreakSelect列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_break_select 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBreakSelect保存数据 -->
+	<insert id="save" parameterType="BusinessBreakSelect">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="selectId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_break_select(
+		
+		breakId,
+		selectorId,
+		selectTime,
+		selectorName,
+		comId,
+		comName,
+		isSelected
+		) values(
+				#{breakId},
+		#{selectorId},
+		#{selectTime},
+		#{selectorName},
+		#{comId},
+		#{comName},
+		#{isSelected}
+		)
+	</insert>
+	
+	<!-- BusinessBreakSelect修改数据 -->
+	<update id="update" parameterType="BusinessBreakSelect">
+		update business_break_select 
+		<set>
+			<if test="breakId != null and breakId != ''" >
+			breakId=#{breakId},
+			</if>
+			<if test="selectorId != null and selectorId != ''" >
+			selectorId=#{selectorId},
+			</if>
+			<if test="selectTime != null and selectTime != ''" >
+			selectTime=#{selectTime},
+			</if>
+			<if test="selectorName != null and selectorName != ''" >
+			selectorName=#{selectorName},
+			</if>
+			<if test="comId != null and comId != ''" >
+			comId=#{comId},
+			</if>
+			<if test="comName != null and comName != ''" >
+			comName=#{comName},
+			</if>
+			<if test="isSelected != null and isSelected != ''" >
+			isSelected=#{isSelected}
+			</if>
+		</set> 
+		where 
+		selectId=#{selectId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessBreakSelect删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_break_select where 
+		selectId=#{selectId}
+															</delete>
+	
+</mapper>
+	

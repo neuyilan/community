@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessTypePropertyDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessTypePropertyResult" type="BusinessTypeProperty">
+			<result column="propId" property="propId" />
+			<result column="typeId" property="typeId" />
+			<result column="propName" property="propName" />
+			<result column="propDesc" property="propDesc" />
+			<result column="propType" property="propType" />
+			<result column="parentId" property="parentId" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			propId,
+			typeId,
+			propName,
+			propDesc,
+			propType,
+			parentId,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="propId != null and propId != ''" >
+				   		and propId = #{propId}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and typeId = #{typeId}
+					</if>
+					<if test="propName != null and propName != ''" >
+				   		and propName = #{propName}
+					</if>
+					<if test="propDesc != null and propDesc != ''" >
+				   		and propDesc = #{propDesc}
+					</if>
+					<if test="propType != null and propType != ''" >
+				   		and propType = #{propType}
+					</if>
+					<if test="parentId != null and parentId != ''" >
+				   		and parentId = #{parentId}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessTypeProperty -->
+	<select id="findById"  resultMap="BusinessTypePropertyResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_type_property where propId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessTypeProperty -->
+	<select id="findAll" resultMap="BusinessTypePropertyResult">
+		select <include refid="Base_Column_List" /> from business_type_property 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessTypeProperty -->
+	<select id="findByMap" resultMap="BusinessTypePropertyResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_type_property <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessTypeProperty -->
+	<select id="findByExample" resultMap="BusinessTypePropertyResult" parameterType="com.community.app.module.vo.BusinessTypePropertyQuery">
+		select <include refid="Base_Column_List" /> from business_type_property <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessTypeProperty根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessTypePropertyResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_type_property  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessTypeProperty列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_type_property 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessTypeProperty保存数据 -->
+	<insert id="save" parameterType="BusinessTypeProperty">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="propId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_type_property(
+		
+		typeId,
+		propName,
+		propDesc,
+		propType,
+		parentId,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{typeId},
+		#{propName},
+		#{propDesc},
+		#{propType},
+		#{parentId},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessTypeProperty修改数据 -->
+	<update id="update" parameterType="BusinessTypeProperty">
+		update business_type_property 
+		<set>
+			<if test="typeId != null and typeId != ''" >
+			typeId=#{typeId},
+			</if>
+			<if test="propName != null and propName != ''" >
+			propName=#{propName},
+			</if>
+			<if test="propDesc != null and propDesc != ''" >
+			propDesc=#{propDesc},
+			</if>
+			<if test="propType != null and propType != ''" >
+			propType=#{propType},
+			</if>
+			<if test="parentId != null and parentId != ''" >
+			parentId=#{parentId},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		propId=#{propId}
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessTypeProperty删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_type_property where 
+		propId=#{propId}
+																	</delete>
+	
+</mapper>
+	

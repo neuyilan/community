@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessUserDao" >
+    <!-- 返回结构集 -->
+    <resultMap id="BusinessUserResult" type="BusinessUser">
+        <result column="userId" property="userId" />
+        <result column="userName" property="userName" />
+        <result column="userTel" property="userTel" />
+        <result column="userPassword" property="userPassword" />
+        <result column="userCode" property="userCode" />
+        <result column="lastLoginTime" property="lastLoginTime" />
+        <result column="userEmail" property="userEmail" />
+        <result column="userPhoto" property="userPhoto" />
+        <result column="userBrief" property="userBrief" />
+        <result column="userService" property="userService" />
+        <result column="createTime" property="createTime" />
+        <result column="editTime" property="editTime" />
+        <result column="editor" property="editor" />
+        <result column="positionId" property="positionId" />
+        <result column="posName" property="posName" />
+        <result column="modules" property="modules" />
+        <result column="isCharge" property="isCharge" />
+        <result column="orgType" property="orgType" />
+        <result column="fromAddress" property="fromAddress" />
+        <result column="homeAddress" property="homeAddress" />
+        <result column="sex" property="sex" />
+        <result column="age" property="age" />
+        <result column="isMarriage" property="isMarriage" />
+        <result column="hometown" property="hometown" />
+        <result column="nation" property="nation" />
+        <result column="nickname" property="nickname" />
+        <result column="avatar" property="avatar" />
+        <result column="isManager" property="isManager" />
+        <result column="state" property="state" />
+        <result column="count" property="count" />
+        <result column="sql" property="sql" />
+        
+        <result column="rightsInfo" property="rightsInfo" />
+        <result column="isManager" property="isManager" />
+        <result column="isGirl" property="isGirl" />
+        <result column="orgId" property="orgId" />
+        <result column="comWord" property="comWord" />
+        <result column="depId" property="depId" />
+        <result column="depName" property="depName" />
+    </resultMap>
+
+    <!-- 所有字段 -->
+    <sql id="Base_Column_List" >
+        u.userId,
+        u.userName,
+        u.userTel,
+        u.userPassword,
+        u.userCode,
+        u.lastLoginTime,
+        u.userEmail,
+        u.userPhoto,
+        u.userBrief,
+        u.userService,
+        u.createTime,
+        u.editTime,
+        u.editor,
+        u.positionId,
+        u.posName,
+        u.modules,
+        u.isCharge,
+        u.orgType,
+        u.fromAddress,
+        u.homeAddress,
+        u.sex,
+        u.age,
+        u.isMarriage,
+        u.hometown,
+        u.nation,
+        u.nickname,
+        u.avatar,
+        u.isManager,
+        u.isGirl,
+        u.state,
+        u.rightsInfo,
+        u.orgId,
+        u.comWord,
+        u.depId
+    </sql>
+
+    <!-- 所有字段查询条件 -->
+    <sql id="Base_Where_Clause">
+        <where>
+            <trim  suffixOverrides="," >
+                <if test="userId != null and userId != ''" >
+                    and u.userId = #{userId}
+                </if>
+                <if test="userName != null and userName != ''" >
+                    and u.userName = #{userName}
+                </if>
+                <if test="userTel != null and userTel != ''" >
+                    and u.userTel = #{userTel}
+                </if>
+                <if test="userPassword != null and userPassword != ''" >
+                    and u.userPassword = #{userPassword}
+                </if>
+                <if test="userCode != null and userCode != ''" >
+                    and u.userCode = #{userCode}
+                </if>
+                <if test="lastLoginTime != null and lastLoginTime != ''" >
+                    and u.lastLoginTime = #{lastLoginTime}
+                </if>
+                <if test="userEmail != null and userEmail != ''" >
+                    and u.userEmail = #{userEmail}
+                </if>
+                <if test="userPhoto != null and userPhoto != ''" >
+                    and u.userPhoto = #{userPhoto}
+                </if>
+                <if test="userBrief != null and userBrief != ''" >
+                    and u.userBrief = #{userBrief}
+                </if>
+                <if test="userService != null and userService != ''" >
+                    and u.userService = #{userService}
+                </if>
+                <if test="createTime != null and createTime != ''" >
+                    and u.createTime = #{createTime}
+                </if>
+                <if test="editTime != null and editTime != ''" >
+                    and u.editTime = #{editTime}
+                </if>
+                <if test="editor != null and editor != ''" >
+                    and u.editor = #{editor}
+                </if>
+                <if test="positionId != null and positionId != ''" >
+                    and u.positionId = #{positionId}
+                </if>
+                <if test="posName != null and posName != ''" >
+                    and u.posName = #{posName}
+                </if>
+                <if test="modules != null and modules != ''" >
+                    and u.modules = #{modules}
+                </if>
+                <if test="isCharge != null and isCharge != ''" >
+                    and u.isCharge = #{isCharge}
+                </if>
+                <if test="orgType != null and orgType != ''" >
+                    and u.orgType = #{orgType}
+                </if>
+                <if test="fromAddress != null and fromAddress != ''" >
+                    and u.fromAddress = #{fromAddress}
+                </if>
+                <if test="homeAddress != null and homeAddress != ''" >
+                    and u.homeAddress = #{homeAddress}
+                </if>
+                <if test="sex != null and sex != ''" >
+                    and u.sex = #{sex}
+                </if>
+                <if test="depId != null and depId != ''" >
+                    and u.depId = #{depId}
+                </if>
+                <if test="age != null and age != ''" >
+                    and u.age = #{age}
+                </if>
+                <if test="isMarriage != null and isMarriage != ''" >
+                    and u.isMarriage = #{isMarriage}
+                </if>
+                <if test="hometown != null and hometown != ''" >
+                    and u.hometown = #{hometown}
+                </if>
+                <if test="nation != null and nation != ''" >
+                    and u.nation = #{nation}
+                </if>
+                <if test="nickname != null and nickname != ''" >
+                    and u.nickname = #{nickname}
+                </if>
+                <if test="avatar != null and avatar != ''" >
+                    and u.avatar = #{avatar}
+                </if>
+                <if test="isManager != null and isManager != ''" >
+                    and u.isManager = #{isManager}
+                </if>
+                 <if test="isGirl != null" >
+                    and u.isGirl = #{isGirl}
+                </if>
+                <if test="state != null and state != ''" >
+                    and u.state = #{state}
+                </if>
+                <if test="rightsInfo != null and rightsInfo != ''" >
+                    and u.rightsInfo = #{rightsInfo}
+                </if>
+                <if test="orgId != null" >
+                    and u.orgId = #{orgId}
+                </if>
+                <if test="comWord != null and comWord != ''" >
+                    and u.comWord = #{comWord}
+                </if>
+                <if test="curUserId != null and curUserId != 0" >
+                    and are.userId = #{curUserId}
+                </if>
+                <if test="curEstateId != null and curEstateId != 0" >
+                    and are.estateId = #{curEstateId}
+                </if>
+                <if test="curComId != null and curComId != ''" >
+					and are.comId=#{curComId} 
+				</if>
+				<if test="keyWord != null and keyWord != ''" >
+			   		and (u.userEmail like '%${keyWord}%' or u.userName like '%${keyWord}%' or u.userTel like '%${keyWord}%') 
+				</if>
+				
+            </trim>
+        </where>
+    </sql>
+
+    <!-- 根据id查询 BusinessUser -->
+    <select id="findById"  resultMap="BusinessUserResult" parameterType="java.lang.Integer">
+        select <include refid="Base_Column_List" /> from business_user u where u.userId = #{id}
+    </select>
+    
+     <!-- 根据id查询 BusinessUser -->
+    <select id="findByStationGril"  resultType="BusinessUser" parameterType="java.lang.Integer">
+    SELECT u.userId,u.comWord,u.age,u.nickname,u.avatar,u.userTel,u.userBrief,s.staTel AS stationtel,s.staName AS stationName
+ FROM business_user u LEFT JOIN  business_user_resource r ON u.`userId`=r.`userId` LEFT JOIN `manage_estate` e ON e.`estateId` = r.`estateId` LEFT JOIN `business_station` s ON s.`stationId` =e.`stationId`  WHERE s.`stationId`=#{id} and u.orgType='station' AND isGirl=1  GROUP BY u.userId  
+    </select>
+    
+     <!-- 根据id查询 BusinessUser -->
+    <select id="findByStationAll"  resultType="BusinessUser" parameterType="java.lang.Integer">
+      SELECT u.userId,u.age,u.nickname,u.avatar,u.userTel,u.userBrief,s.staTel AS stationtel,s.staName AS stationName
+ FROM business_user u LEFT JOIN  business_user_resource r ON u.`userId`=r.`userId` LEFT JOIN `manage_estate` e ON e.`estateId` = r.`estateId` LEFT JOIN `business_station` s ON s.`stationId` =e.`stationId`  WHERE s.`stationId`=#{id} and  u.orgType='station' GROUP BY u.userId
+    </select>
+    
+      <!-- 根据id查询 BusinessUser -->
+    <select id="findByPropertyBuildingAll"  resultType="BusinessUser" parameterType="java.lang.Integer">
+        SELECT u.userId,u.nickname,u.avatar,u.userTel,u.userBrief FROM business_user_resource r,business_user u WHERE u.userId=r.userId AND r.buildingId=#{id} and u.orgType='property' and u.isManager='1'  GROUP BY u.userId
+    </select>
+
+    <!-- 无条件查询所有BusinessUser -->
+    <select id="findAll" resultMap="BusinessUserResult">
+        select <include refid="Base_Column_List" /> from business_user u
+    </select>
+
+    <!-- 按Map对象条件查询所有BusinessUser -->
+    <select id="findByMap" resultMap="BusinessUserResult" parameterType="java.util.Map">
+        select <include refid="Base_Column_List" /> from business_user u <include refid="Base_Where_Clause" />
+    </select>
+
+    <!-- 按VO对象条件查询所有BusinessUser -->
+    <select id="findByExample" resultMap="BusinessUserResult" parameterType="com.community.app.module.vo.BusinessUserQuery">
+        select <include refid="Base_Column_List" /> from business_user u <include refid="Base_Where_Clause" />
+    </select>
+
+    <!-- BusinessUser根据搜索条件，搜索分页数据 -->
+    <select id="findAllPage" resultMap="BusinessUserResult" parameterType="Object">
+        select <include refid="Base_Column_List" />, p.depName from business_user u
+        inner join business_position p on p.positionId = u.positionId
+        <!-- inner join business_department d on d.depId = u.depId -->
+        inner join business_user_resource ure on ure.userId = u.userId
+		inner join business_user_resource are on are.estateId = ure.estateId
+        <include refid="Base_Where_Clause" />
+        group by u.userId
+        <if test="pager.orderCondition != null and pager.orderCondition != ''" >
+            ${pager.orderCondition}
+        </if>
+        <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+            ${pager.mysqlQueryCondition}
+        </if>
+    </select>
+
+    <!-- BusinessUser列表总数-->
+    <select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+        select count(distinct(u.userId)) from business_user u
+        <!-- inner join business_department d on d.depId = u.depId -->
+        inner join business_user_resource ure on ure.userId = u.userId
+		inner join business_user_resource are on are.estateId = ure.estateId
+        <include refid="Base_Where_Clause" />
+    </select>
+    
+    <!-- BusinessUser根据搜索条件，搜索分页数据 -->
+    <select id="findAllPageByOperation" resultMap="BusinessUserResult" parameterType="Object">
+        select <include refid="Base_Column_List" />, p.depName from business_user u
+        inner join business_position p on p.positionId = u.positionId
+        <!-- inner join business_department d on d.depId = u.depId -->
+        <include refid="Base_Where_Clause" />
+        <if test="pager.orderCondition != null and pager.orderCondition != ''" >
+            ${pager.orderCondition}
+        </if>
+        <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+            ${pager.mysqlQueryCondition}
+        </if>
+    </select>
+
+    <!-- BusinessUser列表总数-->
+    <select id="selectCountByOperation" resultType="java.lang.Integer"  parameterType="Object">
+        select count(1) from business_user u
+        <!-- inner join business_department d on d.depId = u.depId -->
+        <include refid="Base_Where_Clause" />
+    </select>
+    
+    <!-- BusinessUser根据搜索条件，搜索分页数据 -->
+    <select id="findAllPageByCommunity" resultMap="BusinessUserResult" parameterType="Object">
+        select <include refid="Base_Column_List" />, p.depName from business_user u
+        inner join business_position p on p.positionId = u.positionId
+        <!-- inner join business_department d on d.depId = u.depId -->
+        inner join business_user_resource ure on ure.userId = u.userId
+		inner join business_user_resource are on are.comId = ure.comId
+        <include refid="Base_Where_Clause" />
+        group by u.userId
+        <if test="pager.orderCondition != null and pager.orderCondition != ''" >
+            ${pager.orderCondition}
+        </if>
+        <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+            ${pager.mysqlQueryCondition}
+        </if>
+    </select>
+	
+	<!-- BusinessUser 昵称nickname是否存在-->
+    <select id="checkExistNickName" resultType="java.lang.Integer"  parameterType="java.lang.String">
+        select count(1) from business_user u where nickname = #{nickname}
+    </select>
+    
+    <!-- BusinessUser列表总数-->
+    <select id="selectCountByCommunity" resultType="java.lang.Integer"  parameterType="Object">
+        select count(distinct(u.userId)) from business_user u
+        <!-- inner join business_department d on d.depId = u.depId -->
+        inner join business_user_resource ure on ure.userId = u.userId
+		inner join business_user_resource are on are.comId = ure.comId
+        <include refid="Base_Where_Clause" />
+    </select>
+
+    <!-- BusinessUser保存数据 -->
+    <insert id="save" parameterType="BusinessUser">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="userId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into business_user(
+
+        userName,
+        userTel,
+        userPassword,
+        userCode,
+        lastLoginTime,
+        userEmail,
+        userPhoto,
+        userBrief,
+        userService,
+        createTime,
+        editTime,
+        editor,
+        positionId,
+        posName,
+        modules,
+        isCharge,
+        orgType,
+        fromAddress,
+        homeAddress,
+        sex,
+        age,
+        isMarriage,
+        hometown,
+        nation,
+        nickname,
+        avatar,
+        isManager,
+        state,
+        rightsInfo,
+        isGirl,
+        orgId,
+        comWord,
+        depId
+        ) values(
+        #{userName},
+        #{userTel},
+        #{userPassword},
+        #{userCode},
+        #{lastLoginTime},
+        #{userEmail},
+        #{userPhoto},
+        #{userBrief},
+        #{userService},
+        #{createTime},
+        #{editTime},
+        #{editor},
+        #{positionId},
+        #{posName},
+        #{modules},
+        #{isCharge},
+        #{orgType},
+        #{fromAddress},
+        #{homeAddress},
+        #{sex},
+        #{age},
+        #{isMarriage},
+        #{hometown},
+        #{nation},
+        #{nickname},
+        #{avatar},
+        #{isManager},
+        #{state},
+        #{rightsInfo},
+        #{isGirl},
+        #{orgId},
+        #{comWord},
+        #{depId}
+        )
+    </insert>
+
+    <!-- BusinessUser修改数据 -->
+    <update id="update" parameterType="BusinessUser">
+        update business_user
+        <set>
+            <if test="userName != null and userName != ''" >
+                userName=#{userName},
+            </if>
+            <if test="userTel != null and userTel != ''" >
+                userTel=#{userTel},
+            </if>
+            <if test="userPassword != null and userPassword != ''" >
+                userPassword=#{userPassword},
+            </if>
+            <if test="userCode != null and userCode != ''" >
+                userCode=#{userCode},
+            </if>
+            <if test="lastLoginTime != null and lastLoginTime != ''" >
+                lastLoginTime=#{lastLoginTime},
+            </if>
+            <if test="userEmail != null and userEmail != ''" >
+                userEmail=#{userEmail},
+            </if>
+            <if test="userPhoto != null and userPhoto != ''" >
+                userPhoto=#{userPhoto},
+            </if>
+            <if test="userBrief != null and userBrief != ''" >
+                userBrief=#{userBrief},
+            </if>
+            <if test="userService != null and userService != ''" >
+                userService=#{userService},
+            </if>
+            <if test="createTime != null and createTime != ''" >
+                createTime=#{createTime},
+            </if>
+            <if test="editTime != null and editTime != ''" >
+                editTime=#{editTime},
+            </if>
+            <if test="editor != null and editor != ''" >
+                editor=#{editor},
+            </if>
+            <if test="positionId != null and positionId != ''" >
+                positionId=#{positionId},
+            </if>
+            <if test="posName != null and posName != ''" >
+                posName=#{posName},
+            </if>
+            <if test="modules != null and modules != ''" >
+                modules=#{modules},
+            </if>
+            <if test="isCharge != null and isCharge != ''" >
+                isCharge=#{isCharge},
+            </if>
+            <if test="orgType != null and orgType != ''" >
+                orgType=#{orgType},
+            </if>
+            <if test="fromAddress != null and fromAddress != ''" >
+                fromAddress=#{fromAddress},
+            </if>
+            <if test="homeAddress != null and homeAddress != ''" >
+                homeAddress=#{homeAddress},
+            </if>
+            <if test="sex != null and sex != ''" >
+                sex=#{sex},
+            </if>
+            <if test="age != null and age != ''" >
+                age=#{age},
+            </if>
+            <if test="isMarriage != null and isMarriage != ''" >
+                isMarriage=#{isMarriage},
+            </if>
+            <if test="hometown != null and hometown != ''" >
+                hometown=#{hometown},
+            </if>
+            <if test="nation != null and nation != ''" >
+                nation=#{nation},
+            </if>
+            <if test="nickname != null and nickname != ''" >
+                nickname=#{nickname},
+            </if>
+            <if test="avatar != null and avatar != ''" >
+                avatar=#{avatar},
+            </if>
+            <if test="isManager != null and isManager != ''" >
+                isManager=#{isManager},
+            </if>
+            <if test="state != null and state != ''" >
+                state=#{state},
+            </if>
+            <if test="rightsInfo != null and rightsInfo != ''" >
+                rightsInfo=#{rightsInfo},
+            </if>
+            <if test="isGirl != null" >
+                isGirl=#{isGirl},
+            </if>
+            <if test="orgId != null" >
+                orgId=#{orgId},
+            </if>
+            <if test="comWord != null and comWord != ''" >
+                comWord=#{comWord},
+            </if>
+            <if test="depId != null" >
+                depId=#{depId}
+            </if>
+            
+        </set>
+        where
+        userId=#{userId}
+    </update>
+
+    <!-- BusinessUser删除数据 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from business_user where
+        userId=#{userId}
+    </delete>
+    <!--查询员工基础信息-->
+    <select id="getWorkerInfo" parameterType="java.lang.Integer" resultType="MemberVO">
+        SELECT a.userId,b.orgId, userName, userEmail,userTel,userPhoto,userBrief,avatar,isManager,nickname,a.orgType,modules,posName,lastLoginTime,b.depName,a.state
+        FROM business_user a, business_position b 
+        WHERE a.positionId = b.positionId AND a.userId = #{id}
+    </select>
+    <!--查询用户所服务的用户数量-->
+    <select id="getManageUserCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM business_user_resource a, app_estate_user b
+        WHERE a.buildingId = b.buildingId AND a.userId = #{id}
+    </select>
+    
+    <!--按sql统计数量-->
+    <select id="countBySql" parameterType="java.lang.String" resultType="java.lang.Integer">
+        ${_parameter}
+    </select>
+    
+    <!--按sql统计数量-->
+    <select id="countUserByParam" parameterType="Object" resultType="java.lang.Integer">
+        select count(1) from business_user u, 
+			business_position p where u.positionId = p.positionId
+			and p.orgId = #{orgId} and p.orgType = #{orgType}
+    </select>
+  
+    
+</mapper>
+

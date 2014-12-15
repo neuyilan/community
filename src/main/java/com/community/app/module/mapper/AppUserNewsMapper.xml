@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppUserNewsDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppUserNewsResult" type="AppUserNews">
+			<result column="newsId" property="newsId" />
+			<result column="newTitle" property="newTitle" />
+			<result column="userId" property="userId" />
+			<result column="type" property="type" />
+			<result column="content" property="content" />
+			<result column="id" property="id" />
+			<result column="createTime" property="createTime" />
+			<result column="lastMessage" property="lastMessage" />
+			<result column="lastMessageName" property="lastMessageName" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			newsId,
+			newTitle,
+			userId,
+			type,
+			content,
+			id,
+			createTime,
+			lastMessage,
+			lastMessageName
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="newsId != null and newsId != ''" >
+				   		and newsId = #{newsId}
+					</if>
+					<if test="newTitle != null and newTitle != ''" >
+				   		and newTitle = #{newTitle}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="type == 1" >
+				   		and type = 0  and userId = #{userId} or   type = 1  and userId = #{userId} or  type = 3  and userId = #{userId}
+				   		or  type = 4  and userId = #{userId}  or   type = 7  and userId = #{userId} or  type = 8  and userId = #{userId} 
+				   		or  type = 9  and userId = #{userId}  or  type = 10  and userId = #{userId} 
+					</if>
+					<if test="type == 2" >
+				   		and type = 5  and userId = #{userId} or   type = 6 and userId = #{userId}
+					</if>
+					<if test="type == 6" >
+				   		and type = #{type} 
+					</if>
+					<if test="content != null and content != ''" >
+				   		and content = #{content}
+					</if>
+					<if test="id != null and id != ''" >
+				   		and id = #{id}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="lastMessage != null and lastMessage != ''" >
+				   		and lastMessage = #{lastMessage}
+					</if>
+					<if test="lastMessageName != null and lastMessageName != ''" >
+				   		and lastMessageName = #{lastMessageName}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppUserNews -->
+	<select id="findById"  resultMap="AppUserNewsResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_user_news where newsId = #{id}
+	</select>
+	
+	<!-- 根据id查询 AppUserNews -->
+	<select id="findById_family_id"  resultMap="AppUserNewsResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_user_news where id = #{id} and type = 5
+	</select>
+	
+	<!-- 无条件查询所有AppUserNews -->
+	<select id="findAll" resultMap="AppUserNewsResult">
+		select <include refid="Base_Column_List" /> from app_user_news 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppUserNews -->
+	<select id="findByMap" resultMap="AppUserNewsResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_user_news <include refid="Base_Where_Clause" /> order by newsId desc
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppUserNews -->
+	<select id="findByExample" resultMap="AppUserNewsResult" parameterType="com.community.app.module.vo.AppUserNewsQuery">
+		select <include refid="Base_Column_List" /> from app_user_news <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppUserNews根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppUserNewsResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_user_news  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppUserNews列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_user_news 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppUserNews保存数据 -->
+	<insert id="save" parameterType="AppUserNews">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="newsId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_user_news(
+		newTitle,
+		userId,
+		type,
+		content,
+		id,
+		createTime,
+		lastMessage,
+		lastMessageName
+		) values(
+		#{newTitle},
+		#{userId},
+		#{type},
+		#{content},
+		#{id},
+		#{createTime},
+		#{lastMessage},
+		#{lastMessageName}
+		)
+	</insert>
+	
+	<insert id="saveReply" parameterType="AppUserNews">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="newsId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_user_news(
+		newTitle,
+		userId,
+		type,
+		content,
+		id,
+		createTime,
+		lastMessage,
+		lastMessageName
+		) values(
+				#{newTitle},
+		#{userId},
+		#{type},
+		#{content},
+		#{id},
+		#{createTime},
+		#{lastMessage},
+		(select nickname from app_user where userId=#{lastMessageName})
+		)
+	</insert>
+	
+	<!-- AppUserNews修改数据 -->
+	<update id="update" parameterType="AppUserNews">
+		update app_user_news 
+		<set>
+			<if test="newTitle != null and newTitle != ''" >
+			newTitle=#{newTitle},
+			</if>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="type != null and type != ''" >
+			type=#{type},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="id != null and id != ''" >
+			id=#{id},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="lastMessage != null and lastMessage != ''" >
+			lastMessage=#{lastMessage},
+			</if>
+			<if test="lastMessageName != null and lastMessageName != ''" >
+			lastMessageName=#{lastMessageName}
+			</if>
+		</set> 
+		where 
+		newsId=#{newsId}
+		
+		
+	</update>
+	
+	<!-- AppUserNews删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_user_news where 
+		newsId=#{newsId}
+	</delete>
+	
+	<!-- AppUserNews删除数据 -->
+	<delete id="deleteType" parameterType="AppUserNews">
+		delete from app_user_news where 
+		type = #{type} and userId = #{userId} and id = #{id}
+	</delete>
+	
+</mapper>
+	

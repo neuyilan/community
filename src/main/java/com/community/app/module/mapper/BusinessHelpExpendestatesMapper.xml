@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessHelpExpendestatesDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessHelpExpendestatesResult" type="BusinessHelpExpendestates">
+			<result column="expendEstatesId" property="expendEstatesId" />
+			<result column="helpId" property="helpId" />
+			<result column="estateId" property="estateId" />
+			<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			e.expendEstatesId,
+			e.helpId,
+			e.estateId,
+			e.createTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="expendEstatesId != null and expendEstatesId != ''" >
+				   		and e.expendEstatesId = #{expendEstatesId}
+					</if>
+					<if test="helpId != null and helpId != ''" >
+				   		and e.helpId = #{helpId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and e.estateId = #{estateId}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and e.createTime = #{createTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessHelpExpendestates -->
+	<select id="findById"  resultMap="BusinessHelpExpendestatesResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_help_expendestates where expendEstatesId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessHelpExpendestates -->
+	<select id="findAll" resultMap="BusinessHelpExpendestatesResult">
+		select <include refid="Base_Column_List" /> from business_help_expendestates 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessHelpExpendestates -->
+	<select id="findByMap" resultMap="BusinessHelpExpendestatesResult" parameterType="java.util.Map">
+		<!-- select <include refid="Base_Column_List" /> from business_help_expendestates <include refid="Base_Where_Clause" /> -->
+		select <include refid="Base_Column_List" />, m.estateName from business_help_expendestates e inner join manage_estate m on e.estateId=m.estateId <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessHelpExpendestates -->
+	<select id="findByExample" resultMap="BusinessHelpExpendestatesResult" parameterType="com.community.app.module.vo.BusinessHelpExpendestatesQuery">
+		select <include refid="Base_Column_List" /> from business_help_expendestates <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHelpExpendestates根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessHelpExpendestatesResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_help_expendestates  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHelpExpendestates列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_help_expendestates 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHelpExpendestates保存数据 -->
+	<insert id="save" parameterType="BusinessHelpExpendestates">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="expendEstatesId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_help_expendestates(
+		helpId,
+		estateId,
+		createTime
+		) values(
+		#{helpId},
+		#{estateId},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- BusinessHelpExpendestates修改数据 -->
+	<update id="update" parameterType="BusinessHelpExpendestates">
+		update business_help_expendestates 
+		<set>
+			<if test="helpId != null and helpId != ''" >
+			helpId=#{helpId},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime}
+			</if>
+		</set> 
+		where 
+		expendEstatesId=#{expendEstatesId}
+	</update>
+	
+	<!-- BusinessHelpExpendestates删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_help_expendestates where 
+		expendEstatesId=#{expendEstatesId}
+	</delete>
+</mapper>

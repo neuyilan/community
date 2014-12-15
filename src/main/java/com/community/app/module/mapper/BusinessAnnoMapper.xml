@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessAnnoDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessAnnoResult" type="BusinessAnno">
+			<result column="annoId" property="annoId" />
+			<result column="annoTitle" property="annoTitle" />
+			<result column="annoContent" property="annoContent" />
+			<result column="annoType" property="annoType" />
+			<result column="annoScope" property="annoScope" />
+			<result column="annoBuilding" property="annoBuilding" />
+			<result column="annoScopeInfo" property="annoScopeInfo" />
+			<result column="annoPic" property="annoPic" />
+			<result column="userLevel" property="userLevel" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publisherName" property="publisherName" />
+			<result column="publishTime" property="publishTime" />
+			<result column="publishState" property="publishState" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditTime" property="auditTime" />
+			<result column="setTime" property="setTime" />
+			<result column="isPush" property="isPush" />
+			<result column="isRecommend" property="isRecommend" />
+			<result column="isImportant" property="isImportant" />
+			<result column="isRemind" property="isRemind" />
+			<result column="visits" property="visits" />
+			<result column="supports" property="supports" />
+			<result column="comments" property="comments" />
+			<result column="annoState" property="annoState" />
+			<result column="delMemo" property="delMemo" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="brief" property="brief" />
+			<result column="appPic" property="appPic" />
+			<result column="importantTime" property="importantTime" />
+			<result column="proId" property="proId" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			distinct(anno.annoId),
+			anno.annoTitle,
+			anno.annoContent,
+			anno.annoType,
+			anno.annoScope,
+			anno.annoBuilding,
+			anno.annoScopeInfo,
+			anno.annoPic,
+			anno.userLevel,
+			anno.publisherId,
+			anno.publisherName,
+			anno.publishTime,
+			anno.publishState,
+			anno.auditorId,
+			anno.auditorName,
+			anno.auditTime,
+			anno.setTime,
+			anno.isPush,
+			anno.isImportant,
+			anno.isRemind,
+			anno.isRecommend,
+			anno.visits,
+			anno.supports,
+			anno.comments,
+			anno.annoState,
+			anno.delMemo,
+			anno.createTime,
+			anno.editTime,
+			anno.editor,
+			anno.brief,
+			anno.appPic
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="annoId != null and annoId != ''" >
+				   		and anno.annoId = #{annoId}
+					</if>
+					<if test="annoTitle != null and annoTitle != ''" >
+				   		and anno.annoTitle = #{annoTitle}
+					</if>
+					<if test="annoContent != null and annoContent != ''" >
+				   		and anno.annoContent = #{annoContent}
+					</if>
+					<if test="annoType != null" >
+				   		and anno.annoType = #{annoType}
+					</if>
+					<if test="annoScope != null and annoScope != ''" >
+				   		and #{annoScope} in anno.annoScope 
+					</if>
+					
+					<if test="annoBuilding != null and annoBuilding != ''" >
+				   		and anno.annoBuilding = #{annoBuilding}
+					</if>
+					<if test="annoScopeInfo != null and annoScopeInfo != ''" >
+				   		and anno.annoScopeInfo = #{annoScopeInfo}
+					</if>
+					
+					<if test="annoPic != null and annoPic != ''" >
+				   		and anno.annoPic = #{annoPic}
+					</if>
+					<if test="userLevel != null and userLevel != ''" >
+				   		and anno.userLevel = #{userLevel}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and anno.publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and anno.publisherName = #{publisherName}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and anno.publishTime = #{publishTime}
+					</if>
+					<if test="publishState != null" >
+				   		and anno.publishState = #{publishState}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and anno.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and anno.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and anno.auditTime = #{auditTime}
+					</if>
+					<if test="setTime != null and setTime != ''" >
+				   		and anno.setTime = #{setTime}
+					</if>
+					<if test="isPush != null and isPush != ''" >
+				   		and anno.isPush = #{isPush}
+					</if>
+					<if test="isRecommend != null and isRecommend != ''" >
+				   		and anno.isRecommend = #{isRecommend}
+					</if>
+					<if test="isImportant != null " >
+				   		and anno.isImportant = #{isImportant}
+					</if>
+					<if test="isRemind != null and isRemind != ''" >
+				   		and anno.isRemind = #{isRemind}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and anno.visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and anno.supports = #{supports}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and anno.comments = #{comments}
+					</if>
+					<if test="annoState != null" >
+				   		and anno.annoState = #{annoState}
+					</if>
+					<if test="delMemo != null and delMemo != ''" >
+				   		and anno.delMemo = #{delMemo}
+					</if>
+					
+					<if test="brief != null and brief != ''" >
+				   		and anno.brief = #{brief}
+					</if>
+					<if test="appPic != null and appPic != ''" >
+				   		and anno.appPic = #{appPic}
+					</if>
+					
+					
+					<if test="createTime != null and createTime != ''" >
+				   		and anno.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and anno.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and anno.editor = #{editor}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+			      		and scope.estateId = #{estateId}
+				    </if>
+					<!-- <if test="timeScope != null and timeScope != ''" >
+      					and #{timeScope} >= DATEDIFF(now(), anno.publishTime)
+	      			</if> -->
+	      			<if test="timeScope != null and timeScope != '' and dateField != 'comments'" >
+      					and #{timeScope} >= DATEDIFF(now(), anno.publishTime)
+	      			</if>
+	      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+	      			and date(anno.publishTime) between '${startTime}' and '${endTime}'
+	      		</if>
+	      		<if test="keyWord != null and keyWord != ''" >
+			   		and (anno.annoTitle like '%${keyWord}%' or anno.annoContent like '%${keyWord}%' or anno.publisherName like '%${keyWord}%')
+				</if>
+				<if test="annoTypes != null and annoTypes != ''" >
+						and (
+						<foreach collection="annoTypes" item="aType" separator="OR">
+							anno.annoType = #{aType}
+						</foreach>
+						)
+				</if>
+				<if test="proId != null" >
+			   		and scope.proId = #{proId}
+				</if>
+				
+				<if test="curUserId != null and curUserId != 0" >
+			   		and res.userId = #{curUserId}
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+			   		and res.estateId = #{curEstateId}
+				</if>
+				<if test="scopeType != null and scopeType != 0" >
+			   		and scope.scopeType = #{scopeType}
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<sql id="Base_Column_List1" >
+			a.annoId,
+			a.annoTitle,
+			a.annoContent,
+			a.annoType,
+			a.annoScope,
+			a.annoPic,
+			a.userLevel,
+			a.publisherId,
+			a.publisherName,
+			a.publishTime,
+			a.publishState,
+			a.auditorId,
+			a.auditorName,
+			a.auditTime,
+			a.setTime,
+			a.isPush,
+			a.isImportant,
+			a.isRemind,
+			a.visits,
+			a.supports,
+			a.comments,
+			a.annoState,
+			a.delMemo,
+			a.createTime,
+			a.editTime,
+			a.editor,
+			a.pageUrl,
+			a.brief
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause1">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="annoId != null and annoId != ''" >
+				   		and a.annoId = #{annoId}
+					</if>
+					<if test="annoTitle != null and annoTitle != ''" >
+				   		and a.annoTitle = #{annoTitle}
+					</if>
+					<if test="annoContent != null and annoContent != ''" >
+				   		and a.annoContent = #{annoContent}
+					</if>
+					<if test="annoType==0" >
+				   		and a.annoType = '4'
+					</if>
+					<if test="annoType==1" >
+				   		and a.annoType = '0' and a.isImportant = #{isImportant} or a.annoType = '1'
+					</if>
+					<if test="annoScope != null and annoScope != ''" >
+				   		and s.estateId = #{annoScope}
+					</if>
+					<if test="annoPic != null and annoPic != ''" >
+				   		and a.annoPic = #{annoPic}
+					</if>
+					<if test="userLevel != null and userLevel != ''" >
+				   		and a.userLevel = #{userLevel}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and a.publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and a.publisherName = #{publisherName}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and a.publishTime = #{publishTime}
+					</if>
+					<if test="publishState != null" >
+				   		and a.publishState = #{publishState}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and a.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and a.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and a.auditTime = #{auditTime}
+					</if>
+					<if test="setTime != null and setTime != ''" >
+				   		and a.setTime = #{setTime}
+					</if>
+					<if test="isPush != null and isPush != ''" >
+				   		and a.isPush = #{isPush}
+					</if>
+					<if test="isImportant != null" >
+				   		and a.isImportant = #{isImportant}
+					</if>
+					<if test="isRemind != null and isRemind != ''" >
+				   		and a.isRemind = #{isRemind}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and a.visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and a.supports = #{supports}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and a.comments = #{comments}
+					</if>
+					<if test="annoState != null" >
+				   		and a.annoState = #{annoState}
+					</if>
+					<if test="delMemo != null and delMemo != ''" >
+				   		and a.delMemo = #{delMemo}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and a.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and a.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and a.editor = #{editor}
+					</if>
+					
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessAnno -->
+	<select id="findById"  resultMap="BusinessAnnoResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_anno anno where anno.annoId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessAnno -->
+	<select id="findById_app"  resultType="BusinessAnno" parameterType="java.lang.Integer">
+				select <include refid="Base_Column_List1" />,u.avatar AS portrait,u.nickname from business_anno a left join business_user u on u.userId=a.publisherId  where a.annoId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessAnno -->
+	<select id="findAll" resultMap="BusinessAnnoResult">
+		select <include refid="Base_Column_List" /> from business_anno anno
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessAnno -->
+	<select id="findByMap" resultMap="BusinessAnnoResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_anno anno <include refid="Base_Where_Clause" /> order by importantTime asc
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessAnno -->
+	<select id="findByExample" resultMap="BusinessAnnoResult" parameterType="com.community.app.module.vo.BusinessAnnoQuery">
+		select <include refid="Base_Column_List" /> from business_anno anno <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAnno根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultType="BusinessAnno" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_anno anno 
+		inner join business_anno_scope scope on anno.annoId = scope.annoId
+		inner join business_user_resource res on res.estateId = scope.estateId
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessAnno根据物业角色搜索分页数据 -->
+	<select id="findAllPageByProperty" resultType="BusinessAnno" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_anno anno 
+		inner join business_anno_scope scope on anno.annoId = scope.annoId
+		inner join business_user_resource res on res.estateId = scope.estateId
+		<if test="timeScope != null and dateField == 'comments'" >
+			<!-- inner join business_anno_comment c on c.annoId = anno.annoId and c.commentTime between date_format(date_sub(now(),interval 1 day), '%Y-%m-%d 17:00:00') and date_format(now(), '%Y-%m-%d 17:00:00') -->
+			inner join business_anno_comment c on c.annoId = anno.annoId and 0 = DATEDIFF(now(), c.commentTime)
+		</if>
+		
+		<include refid="Base_Where_Clause" />
+		group by anno.annoId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessAnno根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessAnno" parameterType="Object">
+		select <include refid="Base_Column_List1" />,u.avatar AS portrait,u.nickname from business_anno_scope s left join business_anno  a on s.estateId=#{annoScope} and s.annoId=a.annoId   left join business_user u on u.userId=a.publisherId 
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessAnno列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">	
+		select count(distinct(anno.annoId)) as annoCount from business_anno anno 
+		inner join business_anno_scope scope on anno.annoId = scope.annoId
+		inner join business_user_resource res on res.estateId = scope.estateId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAnno列表总数 只针对物业-->
+	<select id="selectCountByProperty" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from ( select count(distinct(anno.annoId)) as annoCount from business_anno anno 
+		inner join business_anno_scope scope on anno.annoId = scope.annoId
+		inner join business_user_resource res on res.estateId = scope.estateId
+		<if test="timeScope != null and dateField == 'comments'" >
+			inner join business_anno_comment c on c.annoId = anno.annoId and 0 = DATEDIFF(now(), c.commentTime)
+		</if>
+		<include refid="Base_Where_Clause" />
+		group by anno.annoId
+		) as ac
+	</select>
+	
+	<!-- BusinessAnno列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_anno a right join business_anno_scope s
+		on a.annoId = s.annoId 
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- BusinessAnno根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_index_app" resultType="index" parameterType="Object">
+		select <include refid="Base_Column_List1" />,u.avatar AS portrait,u.nickname,'2' as type from business_anno_scope s left join business_anno  a on s.estateId=#{annoScope} and s.annoId=a.annoId   left join business_user u on u.userId=a.publisherId 
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessAnno列表总数-->
+	<select id="selectCount_index_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_anno a right join business_anno_scope s
+		on a.annoId = s.annoId 
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- 后台首页分页记录查询 -->
+	<select id="findAllPageForIndex" resultType="BusinessAnno" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_anno anno 
+		inner join business_anno_scope scope on anno.annoId = scope.annoId
+		<include refid="Base_Where_Clause" />
+		group by anno.annoId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+	    	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- 后台首页记录总数 -->
+	<!-- BusinessAnno列表总数-->
+	<select id="selectCountForIndex" resultType="java.lang.Integer"  parameterType="Object">	
+		select count(distinct(anno.annoId)) as annoCount from business_anno anno 
+		inner join business_anno_scope scope on anno.annoId = scope.annoId
+		<include refid="Base_Where_Clause" />
+	</select>	
+	
+	<!-- BusinessAnno保存数据 -->
+	<insert id="save" parameterType="BusinessAnno">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="annoId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_anno(
+		annoTitle,
+		annoContent,
+		annoType,
+		annoScope,
+		annoBuilding,
+		annoScopeInfo,
+		annoPic,
+		userLevel,
+		publisherId,
+		publisherName,
+		publishTime,
+		publishState,
+		auditorId,
+		auditorName,
+		auditTime,
+		setTime,
+		isPush,
+		isRecommend,
+		isImportant,
+		isRemind,
+		visits,
+		supports,
+		comments,
+		annoState,
+		delMemo,
+		createTime,
+		editTime,
+		editor,
+		brief, 
+		appPic
+		) values(
+		#{annoTitle,jdbcType=VARCHAR},
+		#{annoContent,jdbcType=VARCHAR},
+		#{annoType,jdbcType=NUMERIC},
+		#{annoScope,jdbcType=VARCHAR},
+		#{annoBuilding,jdbcType=VARCHAR},
+		#{annoScopeInfo,jdbcType=VARCHAR},
+		#{annoPic,jdbcType=VARCHAR},
+		#{userLevel,jdbcType=NUMERIC},
+		#{publisherId,jdbcType=NUMERIC},
+		#{publisherName,jdbcType=VARCHAR},
+		#{publishTime,jdbcType=VARCHAR},
+		#{publishState,jdbcType=NUMERIC},
+		#{auditorId,jdbcType=NUMERIC},
+		#{auditorName,jdbcType=NUMERIC},
+		#{auditTime},
+		#{setTime},
+		#{isPush,jdbcType=NUMERIC},
+		#{isRecommend,jdbcType=NUMERIC},
+		#{isImportant,jdbcType=NUMERIC},
+		#{isRemind,jdbcType=NUMERIC},
+		#{visits,jdbcType=NUMERIC},
+		#{supports,jdbcType=NUMERIC},
+		#{comments,jdbcType=NUMERIC},
+		#{annoState,jdbcType=NUMERIC},
+		#{delMemo,jdbcType=VARCHAR},
+		#{createTime},
+		#{editTime},
+		#{editor,jdbcType=VARCHAR},
+		#{brief},
+		#{appPic}
+		)
+	</insert>
+	
+	<!-- BusinessAnno修改数据 -->
+	<update id="update" parameterType="BusinessAnno">
+		update business_anno 
+		<set>
+			<if test="annoTitle != null and annoTitle != ''" >
+			annoTitle=#{annoTitle},
+			</if>
+			<if test="annoContent != null and annoContent != ''" >
+			annoContent=#{annoContent},
+			</if>
+			<if test="annoType != null" >
+			annoType=#{annoType},
+			</if>
+			<if test="annoScope != null" >
+			annoScope=#{annoScope},
+			</if>
+			<if test="annoBuilding != null and annoBuilding != ''" >
+			annoBuilding=#{annoBuilding},
+			</if>
+			<if test="annoScopeInfo != null and annoScopeInfo != ''" >
+			annoScopeInfo=#{annoScopeInfo},
+			</if>
+			<if test="annoPic != null and annoPic != ''" >
+			annoPic=#{annoPic},
+			</if>
+			<if test="userLevel != null" >
+			userLevel=#{userLevel},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="publishState != null" >
+			publishState=#{publishState},
+			</if>
+			<if test="auditorId != null" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="setTime != null and setTime != ''" >
+			setTime=#{setTime},
+			</if>
+			<if test="isPush != null" >
+			isPush=#{isPush},
+			</if>
+			<if test="isRecommend != null" >
+			isRecommend=#{isRecommend},
+			</if>
+			<if test="isImportant != null" >
+			isImportant=#{isImportant},
+			</if>
+			<if test="isRemind != null" >
+			isRemind=#{isRemind},
+			</if>
+			<if test="visits != null" >
+			visits=#{visits},
+			</if>
+			<if test="supports != null" >
+			supports=#{supports},
+			</if>
+			<if test="comments != null" >
+			comments=#{comments},
+			</if>
+			<if test="annoState != null" >
+			annoState=#{annoState},
+			</if>
+			<if test="delMemo != null and delMemo != ''" >
+			delMemo=#{delMemo},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			
+			<if test="brief != null and brief != ''" >
+			brief=#{brief},
+			</if>
+			<if test="appPic != null and appPic != ''" >
+			appPic=#{appPic},
+			</if>
+			<if test="importantTime != null and importantTime != ''" >
+			importantTime=#{importantTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		annoId=#{annoId}
+	</update>
+	<!-- 修改comments -->
+	<update id="updateComments" parameterType="BusinessAnnoComment">
+	UPDATE business_anno SET comments=comments+1 where annoId=#{annoId}
+	</update>
+	<!--修改supports -->
+	<update id="updateSupports" parameterType="BusinessAnnoSupport">
+	UPDATE business_anno SET supports=supports+1 where annoId=#{annoId}
+	</update>
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_anno SET visits=visits+1 where annoId=#{id}
+	</update>
+	
+	<!-- BusinessAnno删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_anno where 
+		annoId=#{annoId}
+																																																			</delete>
+	
+</mapper>
+	

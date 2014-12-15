@@ -1,0 +1,40 @@
+@charset "utf-8";
+/* CSS Document */
+.wrapper .footer .footer-nav{ width:100%; margin:0 auto; width:530px;}
+.wrapper .footer .footer-nav ul li{ float:left;}
+.page ul li{ float:left;}
+
+.mainr .scroll .scroll-box ul > li .donbut{ display:none;}
+.mainr .scroll .scroll-box ul > li a { padding-right:18px; background: url("../images/icon/sj.jpg") no-repeat scroll right center;}
+.wrapper .mainr .scroll{ z-index:50;}
+.wrapper .mainr .column{ z-index:1;}
+#oneul > li > ul{ background-color:#232323;}
+
+.mainr .scrolldown .scroll-box ul > li .donbut{ display:none;}
+.mainr .scrolldown .scroll-box ul > li a{padding-right:18px; background: url("../images/icon/sj.jpg") no-repeat scroll right center;}
+#oneuldown > li > ul{ background-color:#232323;}
+.wrapper .mainr .scrolldown{ border:1px solid #CCCCCC;}
+.wrapper .mainr .header .loginbar .submenu{ margin-top:14px;}
+
+.wrapper .navl ul .divider-vertical{ display:none;}
+.wrapper .navl ul .selected{ border-bottom: 1px solid #202020;border-top: 1px solid #343434;}
+
+.mainr .column .manbox .link{ margin:0 auto;}
+.mainr .column .manbox .text{ margin-bottom:0;}
+
+.sidebar5 .link5{margin-left:0px;}
+.accordion5 .sub-menu5 li{ padding-left:0px;}
+.sidebar5 .green{ margin-left:30px;}
+
+/*新闻管理*/
+.accordion5 .s-xw-xx{ padding:0;}
+.accordion5 .s-xw-xx li{ width:91%;}
+.s-xw-xx span{ width:49.555555%; display:block; float:left;}
+.s-xw-ic{ padding-top:22px;}
+
+/*管理页面分页*/
+#arrow-l{background:url(../images/icon/arrow-l.png) no-repeat center center;}
+#arrow-r{background:url(../images/icon/arrow-r.png) no-repeat center center;}
+
+/*登录*/
+#searbox2{ margin-left:-32px;}

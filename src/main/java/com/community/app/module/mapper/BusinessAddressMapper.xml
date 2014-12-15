@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessAddressDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessAddressResult" type="BusinessAddress">
+			<result column="addrId" property="addrId" />
+			<result column="contacts" property="contacts" />
+			<result column="mobile" property="mobile" />
+			<result column="address" property="address" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			addrId,
+			contacts,
+			mobile,
+			address,
+			createTime,
+			editTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="addrId != null and addrId != ''" >
+				   		and addrId = #{addrId}
+					</if>
+					<if test="contacts != null and contacts != ''" >
+				   		and contacts = #{contacts}
+					</if>
+					<if test="mobile != null and mobile != ''" >
+				   		and mobile = #{mobile}
+					</if>
+					<if test="address != null and address != ''" >
+				   		and address = #{address}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessAddress -->
+	<select id="findById"  resultMap="BusinessAddressResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_address where addrId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessAddress -->
+	<select id="findAll" resultMap="BusinessAddressResult">
+		select <include refid="Base_Column_List" /> from business_address 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessAddress -->
+	<select id="findByMap" resultMap="BusinessAddressResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_address <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessAddress -->
+	<select id="findByExample" resultMap="BusinessAddressResult" parameterType="com.community.app.module.vo.BusinessAddressQuery">
+		select <include refid="Base_Column_List" /> from business_address <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAddress根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessAddressResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_address  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessAddress列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_address 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAddress保存数据 -->
+	<insert id="save" parameterType="BusinessAddress">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="addrId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_address(
+		
+		contacts,
+		mobile,
+		address,
+		createTime,
+		editTime
+		) values(
+				#{contacts},
+		#{mobile},
+		#{address},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- BusinessAddress修改数据 -->
+	<update id="update" parameterType="BusinessAddress">
+		update business_address 
+		<set>
+			<if test="contacts != null and contacts != ''" >
+			contacts=#{contacts},
+			</if>
+			<if test="mobile != null and mobile != ''" >
+			mobile=#{mobile},
+			</if>
+			<if test="address != null and address != ''" >
+			address=#{address},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime}
+			</if>
+		</set> 
+		where 
+		addrId=#{addrId}
+	</update>
+	
+	<!-- BusinessAddress删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_address where 
+		addrId=#{addrId}
+	</delete>
+	
+</mapper>

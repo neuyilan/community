@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessUserPropertyComDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessUserPropertyComResult" type="BusinessUserPropertyCom">
+			<result column="comId" property="comId" />
+			<result column="userId" property="userId" />
+			<result column="userName" property="userName" />
+			<result column="managerId" property="managerId" />
+			<result column="managerName" property="managerName" />
+			<result column="content" property="content" />
+			<result column="pubTime" property="pubTime" />
+			<result column="direction" property="direction" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			comId,
+			userId,
+			userName,
+			managerId,
+			managerName,
+			content,
+			pubTime,
+			direction
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="comId != null and comId != ''" >
+				   		and comId = #{comId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="userName != null and userName != ''" >
+				   		and userName = #{userName}
+					</if>
+					<if test="managerId != null and managerId != ''" >
+				   		and managerId = #{managerId}
+					</if>
+					<if test="managerName != null and managerName != ''" >
+				   		and managerName = #{managerName}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and content = #{content}
+					</if>
+					<if test="pubTime != null and pubTime != ''" >
+				   		and pubTime = #{pubTime}
+					</if>
+					<if test="direction != null and direction != ''" >
+				   		and direction = #{direction}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessUserPropertyCom -->
+	<select id="findById"  resultMap="BusinessUserPropertyComResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_user_property_com where comId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessUserPropertyCom -->
+	<select id="findAll" resultMap="BusinessUserPropertyComResult">
+		select <include refid="Base_Column_List" /> from business_user_property_com 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessUserPropertyCom -->
+	<select id="findByMap" resultMap="BusinessUserPropertyComResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_user_property_com <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessUserPropertyCom -->
+	<select id="findByExample" resultMap="BusinessUserPropertyComResult" parameterType="com.community.app.module.vo.BusinessUserPropertyComQuery">
+		select <include refid="Base_Column_List" /> from business_user_property_com <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessUserPropertyCom根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessUserPropertyComResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_user_property_com  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessUserPropertyCom列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_user_property_com 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessUserPropertyCom保存数据 -->
+	<insert id="save" parameterType="BusinessUserPropertyCom">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="comId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_user_property_com(
+		
+		userId,
+		userName,
+		managerId,
+		managerName,
+		content,
+		pubTime,
+		direction
+		) values(
+				#{userId},
+		#{userName},
+		#{managerId},
+		#{managerName},
+		#{content},
+		#{pubTime},
+		#{direction}
+		)
+	</insert>
+	
+	<!-- BusinessUserPropertyCom修改数据 -->
+	<update id="update" parameterType="BusinessUserPropertyCom">
+		update business_user_property_com 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="userName != null and userName != ''" >
+			userName=#{userName},
+			</if>
+			<if test="managerId != null and managerId != ''" >
+			managerId=#{managerId},
+			</if>
+			<if test="managerName != null and managerName != ''" >
+			managerName=#{managerName},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="pubTime != null and pubTime != ''" >
+			pubTime=#{pubTime},
+			</if>
+			<if test="direction != null and direction != ''" >
+			direction=#{direction}
+			</if>
+		</set> 
+		where 
+		comId=#{comId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessUserPropertyCom删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_user_property_com where 
+		comId=#{comId}
+															</delete>
+
+    <select id="getChatInfo" resultMap="BusinessUserPropertyComResult">
+        select <include refid="Base_Column_List" /> from business_user_property_com
+        where userId = #{userId} or managerId = #{managerId}
+        order by pubTime
+    </select>
+	
+</mapper>
+	

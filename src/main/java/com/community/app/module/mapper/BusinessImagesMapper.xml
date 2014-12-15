@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessImagesDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessImagesResult" type="BusinessImages">
+			<result column="imgId" property="imgId" />
+			<result column="imgName" property="imgName" />
+			<result column="imgPath" property="imgPath" />
+			<result column="imgType" property="imgType" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			imgId,
+			imgName,
+			imgPath,
+			imgType
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="imgId != null and imgId != ''" >
+				   		and imgId = #{imgId}
+					</if>
+					<if test="imgName != null and imgName != ''" >
+				   		and imgName = #{imgName}
+					</if>
+					<if test="imgPath != null and imgPath != ''" >
+				   		and imgPath = #{imgPath}
+					</if>
+					<if test="imgType != null " >
+				   		and imgType = #{imgType}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessImages -->
+	<select id="findById"  resultMap="BusinessImagesResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_images where imgId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessImages -->
+	<select id="findAll" resultMap="BusinessImagesResult">
+		select <include refid="Base_Column_List" /> from business_images 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessImages -->
+	<select id="findByMap" resultMap="BusinessImagesResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_images <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessImages -->
+	<select id="findByExample" resultMap="BusinessImagesResult" parameterType="com.community.app.module.vo.BusinessImagesQuery">
+		select <include refid="Base_Column_List" /> from business_images <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessImages根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessImagesResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_images  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <!-- <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if> -->
+	</select>
+	
+	<!-- BusinessImages列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_images 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessImages保存数据 -->
+	<insert id="save" parameterType="BusinessImages">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="imgId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_images(
+		
+		imgName,
+		imgPath,
+		imgType
+		) values(
+				#{imgName},
+		#{imgPath},
+		#{imgType}
+		)
+	</insert>
+	
+	<!-- BusinessImages修改数据 -->
+	<update id="update" parameterType="BusinessImages">
+		update business_images 
+		<set>
+			<if test="imgName != null and imgName != ''" >
+			imgName=#{imgName},
+			</if>
+			<if test="imgPath != null and imgPath != ''" >
+			imgPath=#{imgPath},
+			</if>
+			<if test="imgType != null and imgType != ''" >
+			imgType=#{imgType}
+			</if>
+		</set> 
+		where 
+		imgId=#{imgId}
+	</update>
+	
+	<!-- BusinessImages删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_images where 
+		imgId=#{imgId}
+	</delete>
+</mapper>

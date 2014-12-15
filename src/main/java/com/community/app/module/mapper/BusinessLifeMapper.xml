@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessLifeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessLifeResult" type="BusinessLife">
+			<result column="serviceId" property="serviceId" />
+			<result column="typeId" property="typeId" />
+			<result column="serviceName" property="serviceName" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publisherName" property="publisherName" />
+			<result column="content" property="content" />
+			<result column="estateLongitude" property="estateLongitude" />
+			<result column="estateLatitude" property="estateLatitude" />
+			<result column="typeName" property="typeName" />
+			<result column="estateScope" property="estateScope" />
+			<result column="publishTime" property="publishTime" />
+			<result column="link" property="link" />
+			<result column="pulishState" property="pulishState" />
+			<result column="visits" property="visits" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="tel" property="tel" />
+			<result column="address" property="address" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			serviceId,
+			typeId,
+			serviceName,
+			publisherId,
+			publisherName,
+			content,
+			estateLongitude,
+			estateLatitude,
+			typeName,
+			estateScope,
+			publishTime,
+			link,
+			pulishState,
+			visits,
+			createTime,
+			editTime,
+			editor,
+			tel,
+			address
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="serviceId != null and serviceId != ''" >
+				   		and serviceId = #{serviceId}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and typeId = #{typeId}
+					</if>
+					<if test="serviceName != null and serviceName != ''" >
+				   		and serviceName = #{serviceName}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and publisherName = #{publisherName}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and content = #{content}
+					</if>
+					<if test="estateLongitude != null and estateLongitude != ''" >
+				   		and estateLongitude = #{estateLongitude}
+					</if>
+					<if test="estateLatitude != null and estateLatitude != ''" >
+				   		and estateLatitude = #{estateLatitude}
+					</if>
+					<if test="typeName != null and typeName != ''" >
+				   		and typeName = #{typeName}
+					</if>
+					<if test="estateScope != null and estateScope != ''" >
+				   		and estateScope = #{estateScope}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and publishTime = #{publishTime}
+					</if>
+					<if test="link != null and link != ''" >
+				   		and link = #{link}
+					</if>
+					<if test="pulishState != null" >
+				   		and pulishState = #{pulishState}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and visits = #{visits}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					
+					<if test="tel != null and tel != ''" >
+				   		and tel = #{tel}
+					</if>
+					<if test="address != null and address != ''" >
+				   		and address = #{address}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), publishTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and publishTime between #{startTime} and #{endTime}
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and serviceName like '%${keyWord}%'
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessLife -->
+	<select id="findById"  resultMap="BusinessLifeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_life where serviceId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessLife -->
+	<select id="findAll" resultMap="BusinessLifeResult">
+		select <include refid="Base_Column_List" /> from business_life 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessLife -->
+	<select id="findByMap" resultMap="BusinessLifeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_life <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessLife -->
+	<select id="findByExample" resultMap="BusinessLifeResult" parameterType="com.community.app.module.vo.BusinessLifeQuery">
+		select <include refid="Base_Column_List" /> from business_life <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessLife根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessLifeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_life  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessLife列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_life 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessLife保存数据 -->
+	<insert id="save" parameterType="BusinessLife">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="serviceId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_life(
+		
+		typeId,
+		serviceName,
+		publisherId,
+		publisherName,
+		content,
+		estateLongitude,
+		estateLatitude,
+		typeName,
+		estateScope,
+		publishTime,
+		link,
+		pulishState,
+		visits,
+		createTime,
+		editTime,
+		editor,
+		tel,
+		address
+		) values(
+				#{typeId},
+		#{serviceName},
+		#{publisherId},
+		#{publisherName},
+		#{content},
+		#{estateLongitude},
+		#{estateLatitude},
+		#{typeName},
+		#{estateScope},
+		#{publishTime},
+		#{link},
+		#{pulishState},
+		#{visits},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{tel},
+		#{address}
+		)
+	</insert>
+	
+	<!-- BusinessLife修改数据 -->
+	<update id="update" parameterType="BusinessLife">
+		update business_life 
+		<set>
+			<if test="typeId != null and typeId != ''" >
+			typeId=#{typeId},
+			</if>
+			<if test="serviceName != null and serviceName != ''" >
+			serviceName=#{serviceName},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="estateLongitude != null and estateLongitude != ''" >
+			estateLongitude=#{estateLongitude},
+			</if>
+			<if test="estateLatitude != null and estateLatitude != ''" >
+			estateLatitude=#{estateLatitude},
+			</if>
+			<if test="typeName != null and typeName != ''" >
+			typeName=#{typeName},
+			</if>
+			<if test="estateScope != null and estateScope != ''" >
+			estateScope=#{estateScope},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="link != null and link != ''" >
+			link=#{link},
+			</if>
+			<if test="pulishState != null and pulishState != ''" >
+			pulishState=#{pulishState},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="tel != null and tel != ''" >
+			tel=#{tel},
+			</if>
+			<if test="address != null and address != ''" >
+			address=#{address}
+			</if>
+		</set> 
+		where 
+		serviceId=#{serviceId}
+		
+	</update>
+	
+	<!-- BusinessLife删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_life where 
+		serviceId=#{serviceId}
+																																	</delete>
+	
+</mapper>
+	

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppFocusScopeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppFocusScopeResult" type="AppFocusScope">
+			<result column="scopeId" property="scopeId" />
+			<result column="focusId" property="focusId" />
+			<result column="estateId" property="estateId" />
+			<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			s.scopeId,
+			s.focusId,
+			s.estateId,
+			s.createTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="scopeId != null and scopeId != ''" >
+				   		and s.scopeId = #{scopeId}
+					</if>
+					<if test="focusId != null and focusId != ''" >
+				   		and s.focusId = #{focusId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and s.estateId = #{estateId}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and s.createTime = #{createTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppFocusScope -->
+	<select id="findById"  resultMap="AppFocusScopeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_focus_scope s where s.scopeId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppFocusScope -->
+	<select id="findAll" resultMap="AppFocusScopeResult">
+		select <include refid="Base_Column_List" /> from app_focus_scope s
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppFocusScope -->
+	<select id="findByMap" resultMap="AppFocusScopeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" />, e.estateName from app_focus_scope s inner join manage_estate e on s.estateId=e.estateId <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppFocusScope -->
+	<select id="findByExample" resultMap="AppFocusScopeResult" parameterType="com.community.app.module.vo.AppFocusScopeQuery">
+		select <include refid="Base_Column_List" /> from app_focus_scope s <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppFocusScope根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppFocusScopeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_focus_scope s 
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppFocusScope列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_focus_scope 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppFocusScope保存数据 -->
+	<insert id="save" parameterType="AppFocusScope">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="scopeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_focus_scope(
+		focusId,
+		estateId,
+		createTime
+		) values(
+		#{focusId},
+		#{estateId},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- AppFocusScope修改数据 -->
+	<update id="update" parameterType="AppFocusScope">
+		update app_focus_scope 
+		<set>
+			<if test="focusId != null and focusId != ''" >
+			focusId=#{focusId},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime}
+			</if>
+		</set> 
+		where 
+		scopeId=#{scopeId}
+	</update>
+	
+	<!-- AppFocusScope删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_focus_scope where 
+		scopeId=#{scopeId}
+	</delete>
+</mapper>

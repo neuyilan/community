@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessProductPicDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessProductPicResult" type="BusinessProductPic">
+			<result column="productId" property="productId" />
+			<result column="picId" property="picId" />
+			<result column="picPath" property="picPath" />
+			<result column="createTime" property="createTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			productId,
+			picId,
+			picPath,
+			createTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="productId != null and productId != ''" >
+				   		and productId = #{productId}
+					</if>
+					<if test="picId != null and picId != ''" >
+				   		and picId = #{picId}
+					</if>
+					<if test="picPath != null and picPath != ''" >
+				   		and picPath = #{picPath}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessProductPic -->
+	<select id="findById"  resultMap="BusinessProductPicResult" parameterType="java.lang.Integer">
+	</select>
+	
+	<!-- 无条件查询所有BusinessProductPic -->
+	<select id="findAll" resultMap="BusinessProductPicResult">
+		select <include refid="Base_Column_List" /> from business_product_pic 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessProductPic -->
+	<select id="findByMap" resultMap="BusinessProductPicResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_product_pic <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessProductPic -->
+	<select id="findByExample" resultMap="BusinessProductPicResult" parameterType="com.community.app.module.vo.BusinessProductPicQuery">
+		select <include refid="Base_Column_List" /> from business_product_pic <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 根据跳蚤市场ID查询所有BusinessProductPic -->
+	<select id="findAllPicbyId" resultMap="BusinessProductPicResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_product_pic where productId = #{id}
+	</select>
+		
+	<!-- BusinessProductPic列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_product_pic 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessProductPic保存数据 -->
+	<insert id="save" parameterType="BusinessProductPic">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_product_pic(
+		productId,
+		picId,
+		picPath,
+		createTime,
+		editor
+		) values(
+		#{productId},
+		#{picId},
+		#{picPath},
+		#{createTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessProductPic保存数据 -->
+	<insert id="save_app" parameterType="BusinessProductPic">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_product_pic(
+		productId,
+		picPath,
+		createTime
+		) values(
+		#{productId},
+		#{picPath},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- BusinessProductPic修改数据 -->
+	<update id="update" parameterType="BusinessProductPic">
+		update business_product_pic 
+		<set>
+			<if test="productId != null and productId != ''" >
+			productId=#{productId},
+			</if>
+			<if test="picId != null and picId != ''" >
+			picId=#{picId},
+			</if>
+			<if test="picPath != null and picPath != ''" >
+			picPath=#{picPath},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessProductPic删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_product_pic where 
+	</delete>
+	
+	<!-- BusinessProductPic删除数据 -->
+	<delete id="delete_app" parameterType="java.lang.Integer">
+		delete from business_product_pic where productId=#{id}
+	</delete>
+	
+</mapper>
+	

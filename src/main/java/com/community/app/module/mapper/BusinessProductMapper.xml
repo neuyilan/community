@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessProductDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessProductResult" type="BusinessProduct">
+			<result column="productId" property="productId" />
+			<result column="productName" property="productName" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publisherName" property="publisherName" />
+			<result column="content" property="content" />
+			<result column="title" property="title" />
+			<result column="contactName" property="contactName" />
+			<result column="contactTel" property="contactTel" />
+			<result column="contactQq" property="contactQq" />
+			<result column="typeId" property="typeId" />
+			<result column="typeName" property="typeName" />
+			<result column="estateId" property="estateId" />
+			<result column="estateScope" property="estateScope" />
+			<result column="price" property="price" />
+			<result column="isEstateAgent" property="isEstateAgent" />
+			<result column="publishTime" property="publishTime" />
+			<result column="dealState" property="dealState" />
+			<result column="visits" property="visits" />
+			<result column="supports" property="supports" />
+			<result column="comments" property="comments" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditTime" property="auditTime" />
+			<result column="dealType" property="dealType" />
+			<result column="portrait" property="portrait" />
+			<result column="picUrl" property="picUrl" />
+			<result column="newsCount" property="newsCount" />
+			<result column="nickname" property="nickname" />
+			<result column="realname" property="realname" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			productId,
+			productName,
+			publisherId,
+			publisherName,
+			content,
+			title,
+			contactName,
+			contactTel,
+			contactQq,
+			typeId,
+			typeName,
+			estateId,
+			estateScope,
+			price,
+			isEstateAgent,
+			publishTime,
+			dealState,
+			visits,
+			supports,
+			comments,
+			createTime,
+			editTime,
+			editor,
+			auditorId,
+			auditorName,
+			auditTime,
+			dealType
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List2" >
+			p.productId,
+			p.productName,
+			p.publisherId,
+			p.publisherName,
+			p.content,
+			p.title,
+			p.contactName,
+			p.contactTel,
+			p.contactQq,
+			p.typeId,
+			p.typeName,
+			p.estateId,
+			p.estateScope,
+			p.price,
+			p.isEstateAgent,
+			p.publishTime,
+			p.dealState,
+			p.visits,
+			p.supports,
+			p.comments,
+			p.createTime,
+			p.editTime,
+			p.editor,
+			p.auditorId,
+			p.auditorName,
+			p.auditTime,
+			p.dealType,
+			p.remarks
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="productId != null and productId != ''" >
+				   		and p.productId = #{productId}
+					</if>
+					<if test="productName != null and productName != ''" >
+				   		and p.productName = #{productName}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and p.publisherName = #{publisherName}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and p.content = #{content}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and p.title = #{title}
+					</if>
+					<if test="contactName != null and contactName != ''" >
+				   		and p.contactName = #{contactName}
+					</if>
+					<if test="contactTel != null and contactTel != ''" >
+				   		and p.contactTel = #{contactTel}
+					</if>
+					<if test="contactQq != null and contactQq != ''" >
+				   		and p.contactQq = #{contactQq}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and p.typeId = #{typeId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and p.estateId = #{estateId}
+					</if>
+					<if test="estateScope != null and estateScope != ''" >
+				   		and p.estateScope = #{estateScope}
+					</if>
+					<if test="price != null and price != ''" >
+				   		and p.price = #{price}
+					</if>
+					<if test="isEstateAgent != null and isEstateAgent != ''" >
+				   		and p.isEstateAgent = #{isEstateAgent}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and p.publishTime = #{publishTime}
+					</if>
+					<if test="dealState != null" >
+				   		and p.dealState = #{dealState}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and p.visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and p.supports = #{supports}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and p.comments = #{comments}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and p.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and p.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and p.editor = #{editor}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and p.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and p.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and p.auditTime = #{auditTime}
+					</if>
+					<if test="dealType != null" >
+				   		and p.dealType = #{dealType}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and p.publisherId = #{publisherId}  
+					</if>
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), p.publishTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(p.publishTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (p.title like '%${keyWord}%' or p.content like '%${keyWord}%' or p.publisherName like '%${keyWord}%')
+					</if>
+					
+					<if test="curUserId != null and curUserId != ''" >
+						and res.userId=#{curUserId} 
+					</if>
+					<if test="curEstateId != null and curEstateId != ''" >
+						and res.estateId=#{curEstateId} 
+					</if>
+					<if test="curComId != null and curComId != ''" >
+						and res.comId=#{curComId} 
+					</if>
+					
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List1" >
+			p.productId,
+			p.productName,
+			p.publisherId,
+			p.publisherName,
+			p.content,
+			p.title,
+			p.contactName,
+			p.contactTel,
+			p.contactQq,
+			p.typeId,
+			p.typeName,
+			p.estateId,
+			p.estateScope,
+			p.price,
+			p.isEstateAgent,
+			p.publishTime,
+			p.dealState,
+			p.visits,
+			p.supports,
+			p.comments,
+			p.createTime,
+			p.editTime,
+			p.editor,
+			p.auditorId,
+			p.auditorName,
+			p.auditTime,
+			p.dealType,
+			p.remarks
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause1">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="productId != null and productId != ''" >
+				   		and p.productId = #{productId}
+					</if>
+					<if test="productName != null and productName != ''" >
+				   		and p.productName = #{productName}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and p.publisherName = #{publisherName}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and p.content = #{content}
+					</if>
+					<if test="like != null and like != ''" >
+				   		and p.content like '%${like}%'
+					</if>
+					<if test="title != null and title != ''" >
+				   		and p.title = #{title}
+					</if>
+					<if test="contactName != null and contactName != ''" >
+				   		and p.contactName = #{contactName}
+					</if>
+					<if test="contactTel != null and contactTel != ''" >
+				   		and p.contactTel = #{contactTel}
+					</if>
+					<if test="contactQq != null and contactQq != ''" >
+				   		and p.contactQq = #{contactQq}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and p.typeId = #{typeId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and p.estateId = #{estateId}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and p.estateId IN (SELECT estateId FROM `manage_estate` WHERE comId=#{comId})
+					</if>
+					<if test="estateScope != null and estateScope != ''" >
+				   		and p.estateScope = #{estateScope}
+					</if>
+					<if test="price != null and price != ''" >
+				   		and p.price = #{price}
+					</if>
+					<if test="isEstateAgent != null and isEstateAgent != ''" >
+				   		and p.isEstateAgent = #{isEstateAgent}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and p.publishTime = #{publishTime}
+					</if>
+					<if test="dealState != null" >
+				   		and p.dealState = #{dealState}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and p.visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and p.supports = #{supports}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and p.comments = #{comments}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and p.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and p.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and p.editor = #{editor}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and p.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and p.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and p.auditTime = #{auditTime}
+					</if>
+					<if test="dealType != null" >
+				   		and p.dealType = #{dealType}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and p.publisherId = #{publisherId}  
+					</if>
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), publishTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(publishTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and title like '%${keyWord}%'
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessProduct -->
+	<select id="findById"  resultType="BusinessProduct" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,pp.picUrl,s.addrName,s.addrUrl,u.portrait from business_product p,(select portrait from app_user u,business_product p where p.publisherId=u.userId and productId=#{id}) u,(select GROUP_CONCAT(picPath) picUrl from business_product_pic where productId = #{id}) pp,manage_estate e,business_station s where p.estateId=e.estateId and e.stationId=s.stationId and productId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessProduct -->
+	<select id="findProductById"  resultType="BusinessProduct" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" /> from business_product p where p.productId=#{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessProduct -->
+	<select id="findById_app"  resultType="BusinessProduct" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,pp.picUrl,s.addrName,s.addrUrl,u.portrait,u.nickname from business_product p,(select portrait,nickname from app_user u,business_product p where p.publisherId=u.userId and productId=#{id}) u,(select GROUP_CONCAT(picPath) picUrl from business_product_pic where productId = #{id}) pp,manage_estate e,business_station s where p.estateId=e.estateId and e.stationId=s.stationId and productId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessProduct -->
+	<select id="findAll" resultMap="BusinessProductResult">
+		select <include refid="Base_Column_List" /> from business_product 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessProduct -->
+	<select id="findByMap" resultMap="BusinessProductResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_product <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessProduct -->
+	<select id="findByExample" resultMap="BusinessProductResult" parameterType="com.community.app.module.vo.BusinessProductQuery">
+		select <include refid="Base_Column_List" /> from business_product <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessProduct根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessProductResult" parameterType="Object">
+		select <include refid="Base_Column_List2" />,u.realname,u.nickname,u.portrait,GROUP_CONCAT(pp.picPath) picUrl, count(news.newsId) as newsCount from business_product p left 
+		join app_user u on userId=p.publisherId left join business_product_pic pp on p.productId = pp.productId 
+		inner join business_user_resource res on res.estateId = p.estateId
+		left join app_latest_news news on news.sourceId = p.productId and news.typeId=39 and news.to=1
+		<include refid="Base_Where_Clause" />
+		GROUP BY p.productId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    ,pp.picId ASC
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessProduct根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_manage" resultMap="BusinessProductResult" parameterType="Object">
+		select <include refid="Base_Column_List" />,u.portrait,GROUP_CONCAT(pp.picPath) picUrl from business_product p left join app_user u on userId=p.publisherId left join business_product_pic pp on p.productId = pp.productId 
+		<include refid="Base_Where_Clause" />
+		GROUP BY   p.productId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessProduct列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(p.productId)) from business_product  p
+		inner join business_user_resource res on res.estateId = p.estateId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessProduct根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessProduct" parameterType="Object">
+		select <include refid="Base_Column_List1" />,u.portrait,GROUP_CONCAT(pp.picPath) picUrl from business_product p left join app_user u on userId=p.publisherId left join business_product_pic pp on p.productId = pp.productId 
+		<include refid="Base_Where_Clause1" />
+		GROUP BY   p.productId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    ,pp.picId ASC
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessProduct列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_product p
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- 修改comments -->
+	<update id="updateComments" parameterType="BusinessProductComment">
+	UPDATE business_product SET comments=comments+1 where productId=#{productId}
+	</update>
+	
+	<!--修改supports -->
+	<update id="updateSupports" parameterType="BusinessProductSupport">
+	UPDATE business_product SET supports=supports+1 where productId=#{productId}
+	</update>
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_product SET visits=visits+1 where productId=#{id}
+	</update>
+	
+	<!-- BusinessProduct保存数据 -->
+	<insert id="save" parameterType="BusinessProduct">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="productId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_product(
+		
+		productName,
+		publisherId,
+		publisherName,
+		content,
+		title,
+		contactName,
+		contactTel,
+		contactQq,
+		typeId,
+		typeName,
+		estateId,
+		estateScope,
+		price,
+		isEstateAgent,
+		publishTime,
+		dealState,
+		visits,
+		supports,
+		comments,
+		createTime,
+		editTime,
+		editor,
+		auditorId,
+		auditorName,
+		auditTime,
+		dealType
+		) values(
+				#{productName},
+		#{publisherId},
+		#{publisherName},
+		#{content},
+		#{title},
+		#{contactName},
+		#{contactTel},
+		#{contactQq},
+		#{typeId},
+		#{typeName},
+		#{estateId},
+		#{estateScope},
+		#{price},
+		#{isEstateAgent},
+		#{publishTime},
+		#{dealState},
+		#{visits},
+		#{supports},
+		#{comments},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{auditorId},
+		#{auditorName},
+		#{auditTime},
+		#{dealType}
+		)
+	</insert>
+	
+	<!-- BusinessProduct修改数据 -->
+	<update id="update" parameterType="BusinessProduct">
+		update business_product 
+		<set>
+			<if test="productName != null and productName != ''" >
+			productName=#{productName},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="title != null and title != ''" >
+			title=#{title},
+			</if>
+			<if test="contactName != null and contactName != ''" >
+			contactName=#{contactName},
+			</if>
+			<if test="contactTel != null and contactTel != ''" >
+			contactTel=#{contactTel},
+			</if>
+			<if test="contactQq != null and contactQq != ''" >
+			contactQq=#{contactQq},
+			</if>
+			<if test="typeId != null and typeId != ''" >
+			typeId=#{typeId},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="estateScope != null and estateScope != ''" >
+			estateScope=#{estateScope},
+			</if>
+			<if test="price != null and price != ''" >
+			price=#{price},
+			</if>
+			<if test="isEstateAgent != null" >
+			isEstateAgent=#{isEstateAgent},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="dealState != null " >
+			dealState=#{dealState},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="auditorId != null " >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="remarks != null and remarks != ''" >
+			remarks=#{remarks},
+			</if>
+			<if test="closeId != null and closeId != ''" >
+			closeId=#{closeId},
+			</if>
+			<if test="closeName != null and closeName != ''" >
+			closeName=#{closeName},
+			</if>
+			<if test="closeTime != null and closeTime != ''" >
+			closeTime=#{closeTime},
+			</if>
+			<if test="dealType != null and dealType != ''" >
+			dealType=#{dealType}
+			</if>
+		</set> 
+		where 
+		productId=#{productId}
+	</update>
+	
+	<!-- BusinessProduct保存数据 -->
+	<insert id="save_app" parameterType="BusinessProduct">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="productId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_product(
+		publisherId,
+		publisherName,
+		content,
+		title,
+		contactName,
+		contactTel,
+		contactQq,
+		typeId,
+		typeName,
+		estateId,
+		estateScope,
+		price,
+		isEstateAgent,
+		dealState,
+		createTime,
+		editTime,
+		dealType
+		) values(
+		#{publisherId},
+		(select nickname from app_user where userId=#{publisherId}),
+		#{content},
+		#{title},
+		#{contactName},
+		#{contactTel},
+		#{contactQq},
+		#{typeId},
+		#{typeName},
+		#{estateId},
+		(select estateName from manage_estate where estateId=#{estateId}),
+		#{price},
+		#{isEstateAgent},
+		#{dealState},
+		#{createTime},
+		#{editTime},
+		#{dealType}
+		)
+	</insert>
+	
+	<!-- BusinessProduct修改数据 -->
+	<update id="update_app" parameterType="BusinessProduct">
+		update business_product 
+		<set>
+			<if test="productName != null and productName != ''" >
+			productName=#{productName},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="title != null and title != ''" >
+			title=#{title},
+			</if>
+			<if test="contactName != null and contactName != ''" >
+			contactName=#{contactName},
+			</if>
+			<if test="contactTel != null and contactTel != ''" >
+			contactTel=#{contactTel},
+			</if>
+			<if test="contactQq != null and contactQq != ''" >
+			contactQq=#{contactQq},
+			</if>
+			<if test="typeId != null and typeId != ''" >
+			typeId=#{typeId},
+			</if>
+			<if test="typeName != null and typeName != ''" >
+			typeName=#{typeName},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="estateScope != null and estateScope != ''" >
+			estateScope=#{estateScope},
+			</if>
+			<if test="price != null and price != ''" >
+			price=#{price},
+			</if>
+			<if test="isEstateAgent != null and isEstateAgent != ''" >
+			isEstateAgent=#{isEstateAgent},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="dealState != null" >
+			dealState=#{dealState},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="auditorId != null and auditorId != ''" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="dealType != null and dealType != ''" >
+			dealType=#{dealType}
+			</if>
+		</set> 
+		where 
+		productId=#{productId}
+	</update>
+	
+	<!-- BusinessProduct删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_product where 
+		productId=#{productId}
+	</delete>
+</mapper>

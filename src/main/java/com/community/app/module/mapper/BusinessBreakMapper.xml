@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessBreakDao" >
+    
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessBreakResult" type="BusinessBreak">
+			<result column="breakId" property="breakId" />
+			<result column="breakerId" property="breakerId" />
+			<result column="breakerName" property="breakerName" />
+			<result column="breakContent" property="breakContent" />
+			<result column="breakTime" property="breakTime" />
+			<result column="breakType" property="breakType" />
+			<result column="comId" property="comId" />
+			<result column="state" property="state" />
+			<result column="isUsed" property="isUsed" />
+			<result column="selectedNum" property="selectedNum" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="pics" property="pics" />
+			<result column="audios" property="audios" />
+			<result column="time" property="time" />
+			<result column="comments" property="comments" />
+			<result column="lastCommentTime" property="lastCommentTime" />
+			<result column="address" property="address" />
+			<result column="picCount" property="picCount" />
+			<result column="tel" property="tel" />
+			<result column="newsCount" property="newsCount" />
+			<result column="isNickname" property="isNickname" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			b.breakId,
+			b.breakerId,
+			b.breakerName,
+			b.breakContent,
+			b.breakTime,
+			b.breakType,
+			b.comId,
+			b.state,
+			b.isUsed,
+			b.comments,
+			b.lastCommentTime,
+			b.selectedNum,
+			b.createTime,
+			b.editTime,
+			b.editor,
+			isNickname
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="breakId != null and breakId != ''" >
+				   		and b.breakId = #{breakId}
+					</if>
+					<if test="breakerId != null and breakerId != ''" >
+				   		and b.breakerId = #{breakerId}
+					</if>
+					<if test="breakerName != null and breakerName != ''" >
+				   		and b.breakerName = #{breakerName}
+					</if>
+					<if test="breakContent != null and breakContent != ''" >
+				   		and b.breakContent = #{breakContent}
+					</if>
+					<if test="breakTime != null and breakTime != ''" >
+				   		and b.breakTime = #{breakTime}
+					</if>
+					<if test="breakType != null and breakType != ''" >
+				   		and b.breakType = #{breakType}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and b.comId = #{comId}
+					</if>
+					<if test="state != null " >
+				   		and b.state = #{state}
+					</if>
+					<if test="isUsed != null " >
+				   		and b.isUsed = #{isUsed}
+					</if>
+					<if test="selectedNum != null " >
+				   		and b.selectedNum = #{selectedNum} +1
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and b.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and b.editTime = #{editTime}
+					</if>
+					<if test="comments != null " >
+				   		and b.comments = #{comments}
+					</if>
+					<if test="lastCommentTime != null and lastCommentTime != ''" >
+				   		and b.lastCommentTime = #{lastCommentTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and b.editor = #{editor}
+					</if>
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), b.breakTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(b.breakTime) between '${startTime}' and '${endTime}'
+		      		</if>
+					<if test="keyWord != null and keyWord != ''" >
+				   		and (b.breakContent like '%${keyWord}%' or b.breakerName like '%${keyWord}%' or u.tel like '%${keyWord}%')
+					</if>
+					<if test="curUserId != null and curUserId != 0" >
+						and res.userId=#{curUserId} 
+					</if>
+					<if test="curComId != null and curComId != 0" >
+						and res.comId=#{curComId} 
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessBreak -->
+	<select id="findById"  resultMap="BusinessBreakResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" />,p.pics,a.audios,a.time from business_break b,(select GROUP_CONCAT(picUrl) pics from business_break_pic where breakId = #{id}) p,(select GROUP_CONCAT(picUrl) audios,GROUP_CONCAT(time) time from business_break_audio where breakId = #{id}) a  where breakId = #{id}
+	</select>
+	
+	<!-- 根据爆料ID获取爆料人基本信息及爆料内容 -->
+	<select id="checkBreakDetail"  resultMap="BusinessBreakResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" />,u.address,u.tel, u.realname from business_break  b left join app_user u on b.breakerId=u.userId  where b.breakId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessBreak -->
+	<select id="findById_app"  resultMap="BusinessBreakResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" />,p.pics,a.audios,a.time from business_break b,(select GROUP_CONCAT(picUrl) pics from business_break_pic where breakId = #{id}) p,(select GROUP_CONCAT(picUrl) audios,GROUP_CONCAT(time) time from business_break_audio where breakId = #{id}) a  where breakId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessBreak -->
+	<select id="findAll" resultMap="BusinessBreakResult">
+		select <include refid="Base_Column_List" /> from business_break b
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessBreak -->
+	<select id="findByMap" resultMap="BusinessBreakResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_break b <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessBreak -->
+	<select id="findByExample" resultMap="BusinessBreakResult" parameterType="com.community.app.module.vo.BusinessBreakQuery">
+		select <include refid="Base_Column_List" /> from business_break b <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBreak根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessBreakResult" parameterType="Object">
+		select <include refid="Base_Column_List" />, u.tel, u.address, u.portrait, count(p.picId) as picCount, count(news.newsId) as newsCount 
+		from business_break b 
+		left join app_user u on b.breakerId=u.userId left 
+		join business_break_pic p on b.breakId=p.breakId
+		inner join business_user_resource res on res.comId = b.comId
+		left join app_latest_news news on news.sourceId = b.breakId and news.typeId=40 and news.to=1 
+		<include refid="Base_Where_Clause" /> 
+		GROUP BY b.breakId 
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessBreak列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">		
+		select count(distinct(b.breakId)) from business_break b
+		left join app_user u on b.breakerId = u.userId 
+		inner join business_user_resource res on res.comId = b.comId
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessBreak列表总数-->
+	<select id="getByUserId_Count" resultType="java.lang.Integer"  parameterType="Object">		
+		SELECT count(*) FROM business_break b  WHERE   b.breakerId=#{userId} and b.isUsed='0'
+	</select>
+	
+	<!-- 根据用户id查询用户未选中爆料  -->
+	<select id="getByUserId"  resultType="com.community.app.module.vo.BusinessBreakQuery" parameterType="java.lang.Integer">
+		SELECT b.breakId,b.breakContent,b.editTime,GROUP_CONCAT(p.picUrl) picUrl,b.createTime FROM business_break b LEFT JOIN business_break_pic p ON b.breakId=p.breakId  WHERE   b.breakerId=#{userId} and b.isUsed='0' GROUP BY   b.breakId
+		  order by b.editTime desc
+		<if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if> 
+	</select>
+	
+	<!-- BusinessBreak保存数据 -->
+	<insert id="save" parameterType="BusinessBreak">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="breakId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_break(
+		breakerId,
+		breakerName,
+		breakContent,
+		breakTime,
+		comId,
+		lastCommentTime,
+		createTime,
+		editTime,
+		estateId,
+		estateName,
+		isNickname
+		) values(
+		#{breakerId},
+		(select nickname from app_user where userId=#{breakerId}),
+		#{breakContent},
+		#{breakTime},
+		#{comId},
+		#{lastCommentTime},
+		#{createTime},
+		#{editTime},
+		#{estateId},
+		(SELECT estateName FROM manage_estate WHERE estateId=#{estateId}),
+		#{isNickname}
+		)
+	</insert>
+	
+	<!-- BusinessBreak修改数据 -->
+	<update id="update" parameterType="BusinessBreak">
+		update business_break 
+		<set>
+			<if test="breakerId != null and breakerId != ''" >
+			breakerId=#{breakerId},
+			</if>
+			<if test="breakerName != null and breakerName != ''" >
+			breakerName=#{breakerName},
+			</if>
+			<if test="breakContent != null and breakContent != ''" >
+			breakContent=#{breakContent},
+			</if>
+			<if test="breakTime != null and breakTime != ''" >
+			breakTime=#{breakTime},
+			</if>
+			<if test="breakType != null and breakType != ''" >
+			breakType=#{breakType},
+			</if>
+			<if test="comId != null and comId != ''" >
+			comId=#{comId},
+			</if>
+			<if test="state != null and state != ''" >
+			state=#{state},
+			</if>
+			<if test="isUsed != null and isUsed != ''" >
+			isUsed=#{isUsed},
+			</if>
+			<if test="selectedNum != null and selectedNum != ''" >
+			selectedNum=#{selectedNum},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		breakId=#{breakId}
+	</update>
+	
+	<!-- BusinessBreak修改数据 -->
+	<update id="updateComments" parameterType="BusinessBreak">
+		update business_break 
+		<set>
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="lastCommentTime != null and lastCommentTime != ''" >
+			lastCommentTime=#{lastCommentTime},
+			</if>
+			<if test="state != null and state != ''" >
+			state=#{state}
+			</if>
+		</set> 
+		where breakId=#{breakId}
+	</update>
+	
+	<!-- BusinessBreak删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_break where  breakId=#{breakId}
+	</delete>
+</mapper>

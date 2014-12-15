@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.ManageFunctionDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="ManageFunctionResult" type="ManageFunction">
+			<result column="functionId" property="functionId" />
+			<result column="menuId" property="menuId" />
+			<result column="functionName" property="functionName" />
+			<result column="functionDesc" property="functionDesc" />
+			<result column="functionCode" property="functionCode" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			functionId,
+			menuId,
+			functionName,
+			functionDesc,
+			functionCode,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="functionId != null and functionId != ''" >
+				   		and functionId = #{functionId}
+					</if>
+					<if test="menuId != null and menuId != ''" >
+				   		and menuId = #{menuId}
+					</if>
+					<if test="functionName != null and functionName != ''" >
+				   		and functionName = #{functionName}
+					</if>
+					<if test="functionDesc != null and functionDesc != ''" >
+				   		and functionDesc = #{functionDesc}
+					</if>
+					<if test="functionCode != null and functionCode != ''" >
+				   		and functionCode = #{functionCode}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 ManageFunction -->
+	<select id="findById"  resultMap="ManageFunctionResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from manage_function where functionId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有ManageFunction -->
+	<select id="findAll" resultMap="ManageFunctionResult">
+		select <include refid="Base_Column_List" /> from manage_function 
+	</select>
+	
+	<!-- 按Map对象条件查询所有ManageFunction -->
+	<select id="findByMap" resultMap="ManageFunctionResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from manage_function <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有ManageFunction -->
+	<select id="findByExample" resultMap="ManageFunctionResult" parameterType="com.community.app.module.vo.ManageFunctionQuery">
+		select <include refid="Base_Column_List" /> from manage_function <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageFunction根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="ManageFunctionResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from manage_function  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- ManageFunction列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from manage_function 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- ManageFunction保存数据 -->
+	<insert id="save" parameterType="ManageFunction">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="functionId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into manage_function(
+		
+		menuId,
+		functionName,
+		functionDesc,
+		functionCode,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{menuId},
+		#{functionName},
+		#{functionDesc},
+		#{functionCode},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- ManageFunction修改数据 -->
+	<update id="update" parameterType="ManageFunction">
+		update manage_function 
+		<set>
+			<if test="menuId != null and menuId != ''" >
+			menuId=#{menuId},
+			</if>
+			<if test="functionName != null and functionName != ''" >
+			functionName=#{functionName},
+			</if>
+			<if test="functionDesc != null and functionDesc != ''" >
+			functionDesc=#{functionDesc},
+			</if>
+			<if test="functionCode != null and functionCode != ''" >
+			functionCode=#{functionCode},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		functionId=#{functionId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- ManageFunction删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from manage_function where 
+		functionId=#{functionId}
+															</delete>
+	
+</mapper>
+	

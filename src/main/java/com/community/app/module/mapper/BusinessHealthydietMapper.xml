@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessHealthydietDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessHealthydietResult" type="BusinessHealthydiet">
+			<result column="healId" property="healId" />
+			<result column="healTitle" property="healTitle" />
+			<result column="healContent" property="healContent" />
+			<result column="cmhcPic" property="cmhcPic" />
+			<result column="appPic" property="appPic" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publisherName" property="publisherName" />
+			<result column="publishTime" property="publishTime" />
+			<result column="publishState" property="publishState" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditTime" property="auditTime" />
+			<result column="visits" property="visits" />
+			<result column="supports" property="supports" />
+			<result column="comments" property="comments" />
+			<result column="delMemo" property="delMemo" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="brief" property="brief" />
+			<result column="isRecommend" property="isRecommend" />
+			<result column="label" property="label" />
+			<result column="auditInfo" property="auditInfo" />
+			<result column="avatar" property="avatar" />
+			<result column="doctorName" property="doctorName" />
+			<result column="doctorBrief" property="doctorBrief" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			healId,
+			healTitle,
+			healContent,
+			cmhcPic,
+			appPic,
+			publisherId,
+			publisherName,
+			publishTime,
+			publishState,
+			auditorId,
+			auditorName,
+			auditTime,
+			visits,
+			supports,
+			comments,
+			delMemo,
+			createTime,
+			editTime,
+			editor,
+			brief,
+			isRecommend,
+			label,
+			avatar,
+			doctorName,
+			doctorBrief,
+			auditInfo
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="healId != null and healId != ''" >
+				   		and healId = #{healId}
+					</if>
+					<if test="healTitle != null and healTitle != ''" >
+				   		and healTitle = #{healTitle}
+					</if>
+					<if test="healContent != null and healContent != ''" >
+				   		and healContent = #{healContent}
+					</if>
+					<if test="cmhcPic != null and cmhcPic != ''" >
+				   		and cmhcPic = #{cmhcPic}
+					</if>
+					<if test="appPic != null and appPic != ''" >
+				   		and appPic = #{appPic}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and publisherName = #{publisherName}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and publishTime = #{publishTime}
+					</if>
+					<if test="publishState != null" >
+				   		and publishState = #{publishState}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and auditTime = #{auditTime}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and supports = #{supports}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and comments = #{comments}
+					</if>
+					<if test="delMemo != null and delMemo != ''" >
+				   		and delMemo = #{delMemo}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and brief = #{brief}
+					</if>
+					<if test="isRecommend != null and isRecommend != ''" >
+				   		and isRecommend = #{isRecommend}
+					</if>
+					<if test="auditInfo != null and auditInfo != ''" >
+				   		and auditInfo = #{auditInfo}
+					</if>
+					
+					<if test="timeScope != null and timeScope != '' " >
+	      				and #{timeScope} >= DATEDIFF(now(), publishTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(publishTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (healTitle like '%${keyWord}%' or publisherName like '%${keyWord}%' or healContent like '%${keyWord}%')
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessHealthydiet -->
+	<select id="findById"  resultMap="BusinessHealthydietResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_healthydiet where healId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessHealthydiet for app -->
+	<select id="findById_app"  resultMap="BusinessHealthydietResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_healthydiet where healId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessHealthydiet -->
+	<select id="findAll" resultMap="BusinessHealthydietResult">
+		select <include refid="Base_Column_List" /> from business_healthydiet 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessHealthydiet -->
+	<select id="findByMap" resultMap="BusinessHealthydietResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_healthydiet <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessHealthydiet -->
+	<select id="findByExample" resultMap="BusinessHealthydietResult" parameterType="com.community.app.module.vo.BusinessHealthydietQuery">
+		select <include refid="Base_Column_List" /> from business_healthydiet <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHealthydiet根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessHealthydietResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_healthydiet  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHealthydiet列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_healthydiet 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHealthydiet根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultMap="BusinessHealthydietResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_healthydiet  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessHealthydiet列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_healthydiet 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessHealthydiet保存数据 -->
+	<insert id="save" parameterType="BusinessHealthydiet">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="healId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_healthydiet(
+		healTitle,
+		healContent,
+		cmhcPic,
+		appPic,
+		publisherId,
+		publisherName,
+		publishTime,
+		publishState,
+		auditorId,
+		auditorName,
+		auditTime,
+		visits,
+		supports,
+		comments,
+		delMemo,
+		createTime,
+		editTime,
+		editor,
+		brief,
+		isRecommend,
+		label,
+		auditInfo,
+		avatar, 
+		doctorName,
+		doctorBrief
+		) values(
+				#{healTitle},
+		#{healContent},
+		#{cmhcPic},
+		#{appPic},
+		#{publisherId},
+		#{publisherName},
+		#{publishTime},
+		#{publishState},
+		#{auditorId},
+		#{auditorName},
+		#{auditTime},
+		#{visits},
+		#{supports},
+		#{comments},
+		#{delMemo},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{brief},
+		#{isRecommend},
+		#{label},
+		#{auditInfo},
+		#{avatar},
+		#{doctorName},
+		#{doctorBrief}
+		)
+	</insert>
+	
+	<!-- BusinessHealthydiet修改数据 -->
+	<update id="update" parameterType="BusinessHealthydiet">
+		update business_healthydiet 
+		<set>
+			<if test="healTitle != null and healTitle != ''" >
+			healTitle=#{healTitle},
+			</if>
+			<if test="healContent != null and healContent != ''" >
+			healContent=#{healContent},
+			</if>
+			<if test="cmhcPic != null and cmhcPic != ''" >
+			cmhcPic=#{cmhcPic},
+			</if>
+			<if test="appPic != null and appPic != ''" >
+			appPic=#{appPic},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="publishState != null" >
+			publishState=#{publishState},
+			</if>
+			<if test="auditorId != null and auditorId != ''" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="delMemo != null and delMemo != ''" >
+			delMemo=#{delMemo},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="brief != null and brief != ''" >
+			brief=#{brief},
+			</if>
+			<if test="isRecommend != null and isRecommend != ''" >
+			isRecommend=#{isRecommend},
+			</if>
+			<if test="auditInfo != null and auditInfo != ''" >
+			auditInfo=#{auditInfo},
+			</if>
+			<if test="label != null and label != ''" >
+			label=#{label},
+			</if>
+			<if test="avatar != null and avatar != ''" >
+			avatar=#{avatar},
+			</if>
+			<if test="doctorName != null and doctorName != ''" >
+			doctorName=#{doctorName},
+			</if>
+			<if test="doctorBrief != null and doctorBrief != ''" >
+			doctorBrief=#{doctorBrief}
+			</if>
+		</set> 
+		where 
+		healId=#{healId}
+	</update>
+	
+	<!-- 修改comments -->
+	<update id="updateComments" parameterType="BusinessHealthydietComment">
+	UPDATE business_healthydiet SET comments=comments+1 where healId=#{healId}
+	</update>
+	<!--修改supports -->
+	<update id="updateSupports" parameterType="BusinessHealthydietSupport">
+	UPDATE business_healthydiet SET supports=supports+1 where healId=#{healId}
+	</update>
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_healthydiet SET visits=visits+1 where healId=#{id}
+	</update>
+	
+	<!-- BusinessHealthydiet删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_healthydiet where 
+		healId=#{healId}
+	</delete>
+</mapper>

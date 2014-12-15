@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessPositionDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessPositionResult" type="BusinessPosition">
+			<result column="positionId" property="positionId" />
+			<result column="orgId" property="orgId" />
+			<result column="orgName" property="orgName" />
+			<result column="parentId" property="parentId" />
+			<result column="parentName" property="parentName" />
+			<result column="positionCode" property="positionCode" />
+			<result column="positionState" property="positionState" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="ord" property="ord" />
+			<result column="leaf" property="leaf" />
+			<result column="positionName" property="positionName" />
+			<result column="depId" property="depId" />
+			<result column="depName" property="depName" />
+			<result column="orgType" property="orgType" />
+			<result column="level" property="level" />
+			<result column="positionDesc" property="positionDesc" />
+			<result column="lowerPosition" property="lowerPosition" />
+			
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			positionId,
+			orgId,
+			orgName,
+			parentId,
+			parentName,
+			positionCode,
+			positionState,
+			createTime,
+			editTime,
+			editor,
+			ord,
+			leaf,
+			positionName,
+			depId,
+			depName,
+			orgType,
+			level,
+			positionDesc
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="positionId != null" >
+				   		and positionId = #{positionId}
+					</if>
+					<if test="orgId != null" >
+				   		and orgId = #{orgId}
+					</if>
+					<if test="orgName != null and orgName != ''" >
+				   		and orgName = #{orgName}
+					</if>
+					<if test="parentId != null" >
+				   		and parentId = #{parentId}
+					</if>
+					<if test="parentName != null and parentName != ''" >
+				   		and parentName = #{parentName}
+					</if>
+					<if test="positionCode != null and positionCode != ''" >
+				   		and positionCode = #{positionCode}
+					</if>
+					<if test="positionState != null" >
+				   		and positionState = #{positionState}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+					<if test="ord != null" >
+				   		and ord = #{ord}
+					</if>
+					<if test="leaf != null" >
+				   		and leaf = #{leaf}
+					</if>
+					<if test="level != null" >
+				   		and level = #{level}
+					</if>
+					<if test="positionName != null and positionName != ''" >
+				   		and positionName = #{positionName}
+					</if>
+					<if test="depId != null" >
+				   		and depId = #{depId}
+					</if>
+					<if test="depName != null and depName != ''" >
+				   		and depName = #{depName}
+					</if>
+					<if test="orgType != null and orgType != ''" >
+				   		and orgType = #{orgType}
+					</if>
+					<if test="positionDesc != null and positionDesc != ''" >
+				   		and positionDesc = #{positionDesc}
+					</if>
+					
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessPosition -->
+	<select id="findById"  resultMap="BusinessPositionResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_position where positionId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessPosition -->
+	<select id="findAll" resultMap="BusinessPositionResult">
+		select <include refid="Base_Column_List" /> from business_position 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessPosition -->
+	<select id="findByMap" resultMap="BusinessPositionResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_position <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessPosition -->
+	<select id="findByExample" resultMap="BusinessPositionResult" parameterType="com.community.app.module.vo.BusinessPositionQuery">
+		select <include refid="Base_Column_List" /> from business_position <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessPosition根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessPositionResult" parameterType="Object">
+		select 
+        a.positionId,
+		a.orgId,
+		a.orgName,
+		a.parentId,
+		a.parentName,
+		a.positionCode,
+		a.positionState,
+		a.createTime,
+		a.editTime,
+		a.editor,
+		a.ord,
+		a.leaf,
+		a.positionName,
+		a.depId,
+		a.depName,
+		a.orgType,
+		a.level,
+		a.positionDesc,
+		(select group_concat(b.positionName) from business_position b where b.parentId = a.positionId group by b.parentId) as lowerPosition
+        from business_position a 
+        <where>
+		<trim  suffixOverrides="," >
+					<if test="positionId != null" >
+				   		and a.positionId = #{positionId}
+					</if>
+					<if test="orgId != null" >
+				   		and a.orgId = #{orgId}
+					</if>
+					<if test="parentId != null" >
+				   		and a.parentId = #{parentId}
+					</if>
+					<if test="level != null" >
+				   		and a.level = #{level}
+					</if>
+					<if test="depId != null" >
+				   		and a.depId = #{depId}
+					</if>
+					<if test="orgType != null and orgType != ''" >
+				   		and a.orgType = #{orgType}
+					</if>
+			</trim>	
+			</where>	 
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessPosition列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_position 
+		<where>
+		<trim  suffixOverrides="," >
+					<if test="positionId != null" >
+				   		and positionId = #{positionId}
+					</if>
+					<if test="orgId != null" >
+				   		and orgId = #{orgId}
+					</if>
+					<if test="parentId != null" >
+				   		and parentId = #{parentId}
+					</if>
+					<if test="level != null" >
+				   		and level = #{level}
+					</if>
+					<if test="depId != null" >
+				   		and depId = #{depId}
+					</if>
+					<if test="orgType != null and orgType != ''" >
+				   		and orgType = #{orgType}
+					</if>
+			</trim>	
+			</where>
+	</select>
+	
+	<!-- BusinessPosition保存数据 -->
+	<insert id="save" parameterType="BusinessPosition">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="positionId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_position(
+		
+		orgId,
+		orgName,
+		parentId,
+		parentName,
+		positionCode,
+		positionState,
+		createTime,
+		editTime,
+		editor,
+		ord,
+		leaf,
+		positionName,
+		depId,
+		depName,
+		orgType,
+		level,
+		positionDesc
+		) values(
+				#{orgId},
+		#{orgName},
+		#{parentId},
+		#{parentName},
+		#{positionCode},
+		#{positionState},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{ord},
+		#{leaf},
+		#{positionName},
+		#{depId},
+		#{depName},
+		#{orgType},
+		#{level},
+		#{positionDesc}
+		)
+	</insert>
+	
+	<!-- BusinessPosition修改数据 -->
+	<update id="update" parameterType="BusinessPosition">
+		update business_position 
+		<set>
+			<if test="orgId != null and orgId != ''" >
+			orgId=#{orgId},
+			</if>
+			<if test="orgName != null and orgName != ''" >
+			orgName=#{orgName},
+			</if>
+			<if test="parentId != null and parentId != ''" >
+			parentId=#{parentId},
+			</if>
+			<if test="parentName != null and parentName != ''" >
+			parentName=#{parentName},
+			</if>
+			<if test="positionCode != null and positionCode != ''" >
+			positionCode=#{positionCode},
+			</if>
+			<if test="positionState != null and positionState != ''" >
+			positionState=#{positionState},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="ord != null and ord != ''" >
+			ord=#{ord},
+			</if>
+			<if test="leaf != null and leaf != ''" >
+			leaf=#{leaf},
+			</if>
+			<if test="positionName != null and positionName != ''" >
+			positionName=#{positionName},
+			</if>
+			<if test="depId != null and depId != ''" >
+			depId=#{depId},
+			</if>
+			<if test="depName != null and depName != ''" >
+			depName=#{depName},
+			</if>
+			<if test="orgType != null and orgType != ''" >
+			orgType=#{orgType},
+			</if>
+			<if test="level != null" >
+			level=#{level},
+			</if>
+			<if test="positionDesc != null and positionDesc != ''" >
+			positionDesc=#{positionDesc}
+			</if>
+			
+		</set> 
+		where 
+		positionId=#{positionId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessPosition删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_position where 
+		positionId=#{positionId}
+																															</delete>
+	
+</mapper>
+	

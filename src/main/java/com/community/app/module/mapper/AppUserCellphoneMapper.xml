@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.AppUserCellphoneDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="AppUserCellphoneResult" type="AppUserCellphone">
+			<result column="cellphoneId" property="cellphoneId" />
+			<result column="userId" property="userId" />
+			<result column="isDefault" property="isDefault" />
+			<result column="cellphone" property="cellphone" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			cellphoneId,
+			userId,
+			isDefault,
+			cellphone,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="cellphoneId != null and cellphoneId != ''" >
+				   		and cellphoneId = #{cellphoneId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="isDefault != null and isDefault != ''" >
+				   		and isDefault = #{isDefault}
+					</if>
+					<if test="cellphone != null and cellphone != ''" >
+				   		and cellphone = #{cellphone}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			c.cellphoneId,
+			c.userId,
+			c.isDefault,
+			c.cellphone,
+			c.createTime,
+			c.editTime,
+			c.editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="cellphoneId != null and cellphoneId != ''" >
+				   		and c.cellphoneId = #{cellphoneId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and c.userId = #{userId}
+					</if>
+					<if test="isDefault != null and isDefault != ''" >
+				   		and c.isDefault = #{isDefault}
+					</if>
+					<if test="cellphone != null and cellphone != ''" >
+				   		and c.cellphone = #{cellphone}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and c.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and c.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and c.editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 AppUserCellphone -->
+	<select id="findById"  resultMap="AppUserCellphoneResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from app_user_cellphone where cellphoneId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有AppUserCellphone -->
+	<select id="findAll" resultMap="AppUserCellphoneResult">
+		select <include refid="Base_Column_List" /> from app_user_cellphone 
+	</select>
+	
+	<!-- 按Map对象条件查询所有AppUserCellphone -->
+	<select id="findByMap" resultMap="AppUserCellphoneResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from app_user_cellphone <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有AppUserCellphone -->
+	<select id="findByExample" resultType="AppUserCellphone" parameterType="com.community.app.module.vo.AppUserCellphoneQuery">
+		select <include refid="Base_Column_List_app" /> from app_user_cellphone c left join app_user u on c.userId=u.userId  <include refid="Base_Where_Clause_app" />
+	</select>
+	
+	<!-- AppUserCellphone根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="AppUserCellphoneResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from app_user_cellphone  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	#{pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    #{pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- AppUserCellphone列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from app_user_cellphone 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- AppUserCellphone保存数据 -->
+	<insert id="save" parameterType="AppUserCellphone">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="cellphoneId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into app_user_cellphone(
+		
+		userId,
+		cellphone,
+		createTime,
+		editTime
+		) values(
+				#{userId},
+		#{cellphone},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- AppUserCellphone修改数据 -->
+	<update id="update" parameterType="AppUserCellphone">
+		update app_user_cellphone 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="isDefault != null and isDefault != ''" >
+			isDefault=#{isDefault},
+			</if>
+			<if test="cellphone != null and cellphone != ''" >
+			cellphone=#{cellphone},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		cellphoneId=#{cellphoneId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- AppUserCellphone删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from app_user_cellphone where 
+		cellphoneId=#{cellphoneId}
+													</delete>
+	
+</mapper>
+	

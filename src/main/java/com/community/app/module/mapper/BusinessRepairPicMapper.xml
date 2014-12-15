@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessRepairPicDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessRepairPicResult" type="BusinessRepairPic">
+			<result column="picId" property="picId" />
+			<result column="repairId" property="repairId" />
+			<result column="picUrl" property="picUrl" />
+			<result column="size" property="size" />
+			<result column="widthHeight" property="widthHeight" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			picId,
+			repairId,
+			picUrl,
+			size,
+			widthHeight,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="picId != null and picId != ''" >
+				   		and picId = #{picId}
+					</if>
+					<if test="repairId != null and repairId != ''" >
+				   		and repairId = #{repairId}
+					</if>
+					<if test="picUrl != null and picUrl != ''" >
+				   		and picUrl = #{picUrl}
+					</if>
+					<if test="size != null and size != ''" >
+				   		and size = #{size}
+					</if>
+					<if test="widthHeight != null and widthHeight != ''" >
+				   		and widthHeight = #{widthHeight}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessRepairPic -->
+	<select id="findById"  resultMap="BusinessRepairPicResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_repair_pic where picId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessRepairPic -->
+	<select id="findAll" resultMap="BusinessRepairPicResult">
+		select <include refid="Base_Column_List" /> from business_repair_pic 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessRepairPic -->
+	<select id="findByMap" resultMap="BusinessRepairPicResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_repair_pic <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessRepairPic -->
+	<select id="findByExample" resultMap="BusinessRepairPicResult" parameterType="com.community.app.module.vo.BusinessRepairPicQuery">
+		select <include refid="Base_Column_List" /> from business_repair_pic <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepairPic根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessRepairPicResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_repair_pic  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessRepairPic列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_repair_pic 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRepairPic保存数据 -->
+	<insert id="save" parameterType="BusinessRepairPic">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="picId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_repair_pic(
+		repairId,
+		picUrl,
+		createTime,
+		editTime
+		) values(
+				#{repairId},
+		#{picUrl},
+		#{createTime},
+		#{editTime}
+		)
+	</insert>
+	
+	<!-- BusinessRepairPic修改数据 -->
+	<update id="update" parameterType="BusinessRepairPic">
+		update business_repair_pic 
+		<set>
+			<if test="repairId != null and repairId != ''" >
+			repairId=#{repairId},
+			</if>
+			<if test="picUrl != null and picUrl != ''" >
+			picUrl=#{picUrl},
+			</if>
+			<if test="size != null and size != ''" >
+			size=#{size},
+			</if>
+			<if test="widthHeight != null and widthHeight != ''" >
+			widthHeight=#{widthHeight},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		picId=#{picId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessRepairPic删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_repair_pic where 
+		picId=#{picId}
+															</delete>
+	
+</mapper>
+	

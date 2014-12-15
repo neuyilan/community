@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessAnnoScopeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessAnnoScopeResult" type="BusinessAnnoScope">
+			<result column="scopeId" property="scopeId" />
+			<result column="annoId" property="annoId" />
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="createTime" property="createTime" />
+			<result column="proId" property="proId" />
+			<result column="scopeType" property="scopeType" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			scopeId,
+			annoId,
+			estateId,
+			estateName,
+			createTime,
+			proId,
+			scopeType
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="scopeId != null and scopeId != ''" >
+				   		and scopeId = #{scopeId}
+					</if>
+					<if test="annoId != null and annoId != ''" >
+				   		and annoId = #{annoId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and estateName = #{estateName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="proId != null" >
+				   		and proId = #{proId}
+					</if>
+					<if test="scopeType != null" >
+				   		and scopeType = #{scopeType}
+					</if>
+					
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessAnnoScope -->
+	<select id="findById"  resultMap="BusinessAnnoScopeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_anno_scope where scopeId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessAnnoScope -->
+	<select id="findAll" resultMap="BusinessAnnoScopeResult">
+		select <include refid="Base_Column_List" /> from business_anno_scope 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessAnnoScope -->
+	<select id="findByMap" resultMap="BusinessAnnoScopeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_anno_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessAnnoScope -->
+	<select id="findByExample" resultMap="BusinessAnnoScopeResult" parameterType="com.community.app.module.vo.BusinessAnnoScopeQuery">
+		select <include refid="Base_Column_List" /> from business_anno_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAnnoScope根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessAnnoScopeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_anno_scope  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessAnnoScope列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_anno_scope 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessAnnoScope保存数据 -->
+	<insert id="save" parameterType="BusinessAnnoScope">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="scopeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_anno_scope(
+		
+		annoId,
+		estateId,
+		estateName,
+		createTime,
+		proId,
+		scopeType
+		) values(
+				#{annoId},
+		#{estateId},
+		#{estateName},
+		#{createTime},
+		#{proId},
+		#{scopeType}
+		)
+	</insert>
+	
+	<!-- BusinessAnnoScope修改数据 -->
+	<update id="update" parameterType="BusinessAnnoScope">
+		update business_anno_scope 
+		<set>
+			<if test="annoId != null and annoId != ''" >
+			annoId=#{annoId},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="estateName != null and estateName != ''" >
+			estateName=#{estateName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime}
+			</if>
+			<if test="proId != null" >
+			proId=#{proId}
+			</if>
+			<if test="scopeType != null" >
+			scopeType=#{scopeType}
+			</if>
+			
+		</set> 
+		where 
+		scopeId=#{scopeId}
+	</update>
+	
+	<!-- BusinessAnnoScope删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_anno_scope where annoId=#{annoId}
+	</delete>
+</mapper>

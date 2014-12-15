@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+	default-lazy-init="true">
+
+	<description>Shiro安全配置</description>
+
+	<!-- 自定义的Realm -->
+	<bean id="shiroDbRealm" class="com.community.app.module.service.shiro.ShiroDbRealm" />
+	<!-- shiro 的缓存管理,使用spring的ehCacheManagerFactory,
+		  操作spring缓存工厂来及时更新shiro的缓存管理
+		 ehCacheManagerFactory对象在applicationContext-core.xml中配置 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"> 
+        <property name="cacheManagerConfigFile" value="classpath:cache/ehcache-shiro.xml" />
+    </bean>
+	
+    <!-- 使用默认的WebSecurityManager -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- realm认证和授权,从数据库读取资源 -->
+		<property name="realm" ref="shiroDbRealm" />
+		<!-- cacheManager,集合spring缓存工厂 -->
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="sessionManager" ref="sessionManager" />
+	</bean>
+	
+	<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+		<property name="sessionDAO" ref="sessionDAO" />
+	</bean>
+	
+	<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.MemorySessionDAO" >
+	</bean>
+	
+	<!-- 将shiro与spring集合 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		
+		<!-- shiro的核心安全接口 -->
+    	<property name="securityManager" ref="securityManager" />
+    	<!-- 要求登录时的链接 该连接是login()方法-->
+	    <property name="loginUrl" value="/index/login" />
+	    <!-- 登陆成功后要跳转的连接，该连接是com.github.dactiv.showcase.web.SystemCommonController.index()方法 -->
+	    <property name="successUrl" value="/index/main" />
+	    <!-- 没有权限要跳转的链接 该连接是com.github.dactiv.showcase.web.SystemCommonController.unauthorized()方法 -->
+	    <property name="unauthorizedUrl" value="/index/unauthorized" />
+	    <!-- shiro连接约束配置,在这里使用自定义的动态获取资源类 -->
+		<property name="filterChainDefinitions">
+			<value>
+				/index/login.do = anon
+				/index/unauthorized.do = anon
+				/index/logout.do = logout
+				/css/** = anon
+				/images/** = anon
+				/js/** = anon
+				<!-- /*.do/** = authc -->
+				<!-- /admin/** = roles[admin]
+				/** = user -->
+			</value>
+		</property>
+	</bean>
+	
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	 
+	<!-- <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+	    <property name="securityManager" ref="securityManager"/>
+	</bean> -->
+</beans>

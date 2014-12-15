@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessNewsDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessNewsResult" type="BusinessNews">
+			<result column="newsId" property="newsId" />
+			<result column="title" property="title" />
+			<result column="content" property="content" />
+			<result column="pageUrl" property="pageUrl" />
+			<result column="brief" property="brief" />
+			<result column="subjectPic" property="subjectPic" />
+			<result column="appPic" property="appPic" />
+			<result column="newsType" property="newsType" />
+			<result column="publisherId" property="publisherId" />
+			<result column="publisherName" property="publisherName" />
+			<result column="publishTime" property="publishTime" />
+			<result column="comName" property="comName" />
+			<result column="state" property="state" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditTime" property="auditTime" />
+			<result column="auditInfo" property="auditInfo" />
+			<result column="visits" property="visits" />
+			<result column="comments" property="comments" />
+			<result column="supports" property="supports" />
+			<result column="publishScope" property="publishScope" />
+			<result column="setTime" property="setTime" />
+			<result column="breakId" property="breakId" />
+			<result column="selectId" property="selectId" />
+			<result column="isHot" property="isHot" />
+			<result column="isAd" property="isAd" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+			<result column="isPush" property="isPush" />
+			<result column="isRecommend" property="isRecommend" />
+			<result column="portrait" property="portrait" />
+			<result column="hotTime" property="hotTime" />
+			<result column="isNickname" property="isNickname" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			n.newsId,
+			n.title,
+			n.content,
+			n.pageUrl,
+			n.brief,
+			n.subjectPic,
+			n.appPic,
+			n.newsType,
+			n.publisherId,
+			n.publisherName,
+			n.publishTime,
+			n.comName,
+			n.state,
+			n.auditorId,
+			n.auditorName,
+			n.auditTime,
+			n.auditInfo,
+			n.visits,
+			n.comments,
+			n.supports,
+			n.publishScope,
+			n.setTime,
+			n.breakId,
+			n.isHot,
+			n.isAd,
+			n.createTime,
+			n.editTime,
+			n.editor,
+			n.isPush,
+			n.isRecommend,
+			n.hotTime,
+			n.isNickname
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="newsId != null and newsId != ''" >
+				   		and n.newsId = #{newsId}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and n.title = #{title}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and n.content = #{content}
+					</if>
+					<if test="pageUrl != null and pageUrl != ''" >
+				   		and n.pageUrl = #{pageUrl}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and n.brief = #{brief}
+					</if>
+					<if test="subjectPic != null and subjectPic != ''" >
+				   		and n.subjectPic = #{subjectPic}
+					</if>
+					<if test="appPic != null and appPic != ''" >
+				   		and n.appPic = #{appPic}
+					</if>
+					<if test="newsType != null " >
+				   		and n.newsType = #{newsType}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and n.publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and n.publisherName = #{publisherName}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and n.publishTime = #{publishTime}
+					</if>
+					<if test="comName != null and comName != ''" >
+				   		and n.comName = #{comName}
+					</if>
+					<if test="state != null" >
+				   		and n.state = #{state}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and n.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and n.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and n.auditTime = #{auditTime}
+					</if>
+					<if test="auditInfo != null and auditInfo != ''" >
+				   		and n.auditInfo = #{auditInfo}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and n.visits = #{visits}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and n.comments = #{comments}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and n.supports = #{supports}
+					</if>
+					<if test="publishScope != null and publishScope != ''" >
+				   		and n.publishScope = #{publishScope}
+					</if>
+					<if test="setTime != null and setTime != ''" >
+				   		and n.setTime = #{setTime}
+					</if>
+					<if test="isHot != null and isHot != ''" >
+				   		and n.isHot = #{isHot}
+					</if>
+					<if test="isAd != null and isAd != ''" >
+				   		and n.isAd = #{isAd}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and n.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and n.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and n.editor = #{editor}
+					</if>
+					<if test="isPush != null and isPush != ''" >
+				   		and n.isPush = #{isPush}
+					</if>
+					<if test="isRecommend != null and isRecommend != ''" >
+				   		and n.isRecommend = #{isRecommend}
+					</if>
+					
+					<if test="timeScope != null and timeScope != '' and dateField != 'comments'" >
+	      				and #{timeScope} >= DATEDIFF(now(), n.publishTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(n.publishTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (n.title like '%${keyWord}%' or n.publisherName like '%${keyWord}%' or n.content like '%${keyWord}%')
+					</if>
+					<if test="hotTime != null and hotTime != ''" >
+				   		and n.hotTime = #{hotTime}
+					</if>
+					<if test="curUserId != null and curUserId != ''" >
+						and res.userId=#{curUserId} 
+					</if>
+					<if test="curComId != null and curComId != ''" >
+						and res.comId=#{curComId} 
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List1" >
+			n.newsId,
+			n.title,
+			n.content,
+			n.pageUrl,
+			n.brief,
+			n.subjectPic,
+			n.newsType,
+			n.publisherId,
+			n.publisherName,
+			n.publishTime,
+			n.state,
+			n.auditorId,
+			n.auditorName,
+			n.auditTime,
+			n.auditInfo,
+			n.visits,
+			n.comments,
+			n.supports,
+			n.publishScope,
+			n.setTime,
+			n.isHot,
+			n.isAd,
+			n.createTime,
+			n.editTime,
+			n.editor,
+			n.isPush,
+			n.isRecommend,
+			n.isNickname
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause1">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="newsId != null and newsId != ''" >
+				   		and n.newsId = #{newsId}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and n.title = #{title}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and n.content = #{content}
+					</if>
+					<if test="pageUrl != null and pageUrl != ''" >
+				   		and n.pageUrl = #{pageUrl}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and n.brief = #{brief}
+					</if>
+					<if test="subjectPic != null and subjectPic != ''" >
+				   		and n.subjectPic = #{subjectPic}
+					</if>
+					<if test="newsType != null and newsType != ''" >
+				   		and n.newsType = #{newsType}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and n.publisherId = #{publisherId}
+					</if>
+					<if test="publisherName != null and publisherName != ''" >
+				   		and n.publisherName = #{publisherName}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and n.publishTime = #{publishTime}
+					</if>
+					<if test="state != null" >
+				   		and n.state = #{state}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and n.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and n.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and n.auditTime = #{auditTime}
+					</if>
+					<if test="auditInfo != null and auditInfo != ''" >
+				   		and n.auditInfo = #{auditInfo}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and n.visits = #{visits}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and n.comments = #{comments}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and n.supports = #{supports}
+					</if>
+					<if test="publishScope != null and publishScope != ''" >
+				   		and n.publishScope = #{publishScope}
+					</if>
+					<if test="setTime != null and setTime != ''" >
+				   		and n.setTime = #{setTime}
+					</if>
+					<if test="isHot != null" >
+				   		and n.isHot = #{isHot}
+					</if>
+					<if test="isAd != null and isAd != ''" >
+				   		and n.isAd = #{isAd}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and n.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and n.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and n.editor = #{editor}
+					</if>
+					<if test="isPush != null and isPush != ''" >
+				   		and n.isPush = #{isPush}
+					</if>
+					<if test="isRecommend != null and isRecommend != ''" >
+				   		and n.isRecommend = #{isRecommend}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessNews -->
+	<select id="findById"  resultMap="BusinessNewsResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_news n where n.newsId = #{id}
+	</select>
+	
+		<!-- 根据id查询 BusinessNews -->
+	<select id="findById_app"  resultType="BusinessNews" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List1" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId where n.newsId = #{id}
+	</select>
+	
+	<!-- 根据newsId查询当前置顶的新闻 BusinessNews -->
+	<select id="findAllHotById"  resultMap="BusinessNewsResult">
+		select <include refid="Base_Column_List" /> from business_news n where n.isHot=1 order by n.hotTime asc
+	</select>
+	
+	<!-- 无条件查询所有BusinessNews -->
+	<select id="findAll" resultMap="BusinessNewsResult">
+		select <include refid="Base_Column_List" /> from business_news n
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessNews -->
+	<select id="findByMap" resultMap="BusinessNewsResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_news n <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessNews -->
+	<select id="findByExample" resultMap="BusinessNewsResult" parameterType="com.community.app.module.vo.BusinessNewsQuery">
+		select <include refid="Base_Column_List" /> from business_news n <include refid="Base_Where_Clause" />
+	</select>
+	
+		<!-- BusinessNews根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessNewsResult" parameterType="Object">
+		select <include refid="Base_Column_List" />  from business_news n
+		<!-- inner join business_user_resource res on res.comId = n.publishScope  -->
+		inner join business_news_scope scope on n.newsId = scope.newsId
+		inner join business_user_resource res on res.comId = scope.comId
+		<if test="timeScope != null and dateField == 'comments'" >
+			inner join business_news_comment c on c.newsId = n.newsId and 0 = DATEDIFF(now(), c.commentTime)
+		</if>
+		<include refid="Base_Where_Clause" />
+		group by n.newsId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNews列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(n.newsId)) from business_news n
+		inner join business_news_scope scope on n.newsId = scope.newsId
+		inner join business_user_resource res on res.comId = scope.comId
+		<if test="timeScope != null and dateField == 'comments'" >
+			inner join business_news_comment c on c.newsId = n.newsId and 0 = DATEDIFF(now(), c.commentTime)
+		</if>
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNews根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app" resultType="BusinessNews" parameterType="Object">
+		select <include refid="Base_Column_List1" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId 
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNews列表总数-->
+	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_news n
+		<include refid="Base_Where_Clause1" />
+	</select>
+	
+	<!-- BusinessNews根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_index_app" resultType="index" parameterType="Object">
+		select <include refid="Base_Column_List1" />,u.portrait from,'1' as type business_news n left join app_user u on u.userId=n.publisherId 
+		<include refid="Base_Where_Clause1" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNews列表总数-->
+	<select id="selectCount_index_app" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_news n
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNews保存数据 -->
+	<insert id="save" parameterType="BusinessNews">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="newsId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_news(
+		
+		title,
+		content,
+		pageUrl,
+		brief,
+		subjectPic,
+		appPic,
+		newsType,
+		publisherId,
+		publisherName,
+		publishTime,
+		comName,
+		state,
+		auditorId,
+		auditorName,
+		auditTime,
+		auditInfo,
+		visits,
+		comments,
+		supports,
+		publishScope,
+		setTime,
+		breakId,
+		isHot,
+		isAd,
+		createTime,
+		editTime,
+		editor,
+		isPush,
+		isRecommend,
+		isNickname
+		) values(
+				#{title},
+		#{content},
+		#{pageUrl},
+		#{brief},
+		#{subjectPic},
+		#{appPic},
+		#{newsType},
+		#{publisherId},
+		#{publisherName},
+		#{publishTime},
+		#{comName},
+		#{state},
+		#{auditorId},
+		#{auditorName},
+		#{auditTime},
+		#{auditInfo},
+		#{visits},
+		#{comments},
+		#{supports},
+		#{publishScope},
+		#{setTime},
+		#{breakId},
+		#{isHot},
+		#{isAd},
+		#{createTime},
+		#{editTime},
+		#{editor},
+		#{isPush},
+		#{isRecommend},
+		#{isNickname}
+		)
+	</insert>
+	
+	<!-- 修改comments -->
+	<update id="updateComments" parameterType="BusinessNewsComment">
+	UPDATE business_news SET comments=comments+1 where newsId=#{newsId}
+	</update>
+	<!--修改supports -->
+	<update id="updateSupports" parameterType="BusinessNewsSupport">
+	UPDATE business_news SET supports=supports+1 where newsId=#{newsId}
+	</update>
+	
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_news SET visits=visits+1 where newsId=#{id}
+	</update>
+	
+	<!-- BusinessNews修改数据 -->
+	<update id="update" parameterType="BusinessNews">
+		update business_news 
+		<set>
+			<if test="title != null and title != ''" >
+			title=#{title},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="pageUrl != null and pageUrl != ''" >
+			pageUrl=#{pageUrl},
+			</if>
+			<if test="brief != null and brief != ''" >
+			brief=#{brief},
+			</if>
+			<if test="subjectPic != null and subjectPic != ''" >
+			subjectPic=#{subjectPic},
+			</if>
+			<if test="appPic != null and appPic != ''" >
+			appPic=#{appPic},
+			</if>
+			<if test="newsType != null " >
+			newsType=#{newsType},
+			</if>
+			<if test="publisherId != null and publisherId != ''" >
+			publisherId=#{publisherId},
+			</if>
+			<if test="publisherName != null and publisherName != ''" >
+			publisherName=#{publisherName},
+			</if>
+			<if test="publishTime != null and publishTime != ''" >
+			publishTime=#{publishTime},
+			</if>
+			<if test="comName != null and comName != ''" >
+			comName=#{comName},
+			</if>
+			<if test="state != null ">
+			state=#{state},
+			</if>
+			<if test="auditorId != null and auditorId != ''" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditorName != null and auditorName != ''">
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="auditInfo != null and auditInfo != ''" >
+			auditInfo=#{auditInfo},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="comments != null and comments != ''" >
+			comments=#{comments},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			<if test="publishScope != null and publishScope != ''" >
+			publishScope=#{publishScope},
+			</if>
+			<if test="setTime != null and setTime != ''" >
+			setTime=#{setTime},
+			</if>
+			<if test="isHot != null " >
+			isHot=#{isHot},
+			</if>
+			<if test="hotTime != null and hotTime != ''" >
+		   	hotTime = #{hotTime},
+			</if>
+			<if test="isAd != null and isAd != ''" >
+			isAd=#{isAd},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor},
+			</if>
+			<if test="isPush != null " >
+			isPush=#{isPush},
+			</if>
+			<if test="selectId != null " >
+			selectId=#{selectId},
+			</if>
+			<if test="isRecommend != null " >
+			isRecommend=#{isRecommend}
+			</if>
+		</set> 
+		where 
+		newsId=#{newsId}
+	</update>
+	
+	<!-- BusinessNews删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_news where 
+		newsId=#{newsId}
+	</delete>
+</mapper>
