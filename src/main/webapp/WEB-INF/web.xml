@@ -22,7 +22,7 @@
   		<!-- Check auth filter -->
 	<filter>
 		<filter-name>loginFilter</filter-name>
-		<filter-class>x
+		<filter-class>
 			com.community.app.module.filter.LoginFilter
 		</filter-class>
 		<init-param>
