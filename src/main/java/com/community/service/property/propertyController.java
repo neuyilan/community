@@ -1016,6 +1016,8 @@ public class propertyController {
 		mav.addObject("userId", userId);
 		mav.addObject("nickname", appUser.getNickname());
 		mav.addObject("download", request.getParameter("download"));
+		mav.addObject("appPic", businessAnno.getAppPic());
+
 		Map propMap = new HashMap();
 		propMap.put("newsId", businessAnno.getAnnoId());
 		

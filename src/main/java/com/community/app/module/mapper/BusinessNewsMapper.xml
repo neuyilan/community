@@ -198,6 +198,7 @@
 			n.pageUrl,
 			n.brief,
 			n.subjectPic,
+			n.appPic,
 			n.newsType,
 			n.publisherId,
 			n.publisherName,

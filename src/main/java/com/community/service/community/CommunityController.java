@@ -42,10 +42,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.community.app.module.vo.BaseBean;
 
 
+import com.community.app.module.vo.BusinessImagesQuery;
 import com.community.app.module.vo.BusinessNewsCommentQuery;
 import com.community.app.module.vo.BusinessNewsQuery;
 import com.community.app.module.vo.BusinessNewsSupportQuery;
 import com.community.app.module.vo.BusinessNewspaperQuery;
+import com.community.app.module.vo.BusinessProductQuery;
 import com.community.app.module.vo.BusinessProductSupportQuery;
 import com.community.app.module.vo.ManageEstateQuery;
 import com.community.app.module.bean.AppLatestNews;
@@ -55,6 +57,7 @@ import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFeedbackComment;
+import com.community.app.module.bean.BusinessImages;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsComment;
 import com.community.app.module.bean.BusinessNewsSupport;
@@ -69,6 +72,7 @@ import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessCommunityService;
+import com.community.app.module.service.BusinessImagesService;
 import com.community.app.module.service.BusinessNewsCommentService;
 import com.community.app.module.service.BusinessNewsService;
 import com.community.app.module.service.BusinessNewsSupportService;
@@ -104,6 +108,9 @@ public class CommunityController {
 	private BusinessNewspaperService businessNewspaperService;
 	@Autowired
 	private AppStatisticsClickService appStatisticsClickService;
+	@Autowired
+	private BusinessImagesService businessImagesService;
+	
 	
 	
 	
@@ -170,6 +177,8 @@ public class CommunityController {
 			list=businessCommunityService.findAll();
 			mav.addObject("ctx", ctx);
 			mav.addObject("list", list);
+			mav.addObject("ID", request.getParameter("ID"));
+			mav.addObject("type", request.getParameter("type"));
 		}catch(Exception e){
 			GSLogger.error("选择社区发生错误", e);
 			e.printStackTrace();
@@ -245,6 +254,8 @@ public class CommunityController {
 			list=manageEstateService.findByExample(query);			
 			mav.addObject("ctx", ctx);
 			mav.addObject("list", list);
+			mav.addObject("ID", request.getParameter("ID"));
+			mav.addObject("type", request.getParameter("type"));
 		}catch(Exception e){
 			GSLogger.error("获取社区下的小区页面出错", e);
 			e.printStackTrace();
@@ -525,11 +536,15 @@ public class CommunityController {
 				mav.addObject("publisherName",businessNews.getNickname());
 			}
 			mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
+		}else if (businessNews.getNewsType()==2){
+			mav.addObject("publisherName",businessNews.getNickname());
+			mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
 		}else {
 			mav.addObject("publisherName",businessNews.getBuNickname());
 			mav.addObject("publisherProtrait",ip+businessNews.getAvatar());
 		}
 		mav.addObject("newsId", businessNews.getNewsId());
+		mav.addObject("appPic", businessNews.getAppPic());
 		mav.addObject("publishTime", businessNews.getPublishTime());
 		mav.addObject("title", businessNews.getTitle());
 		mav.addObject("newsContent", businessNews.getContent().replace("?tp=webp",""));
@@ -1097,6 +1112,104 @@ public class CommunityController {
 			for (BusinessNewspaper businessNewspaper : list) {
 				json += "{\"ID\":\""+businessNewspaper.getNewspaperId()+"\",\"title\":\""+businessNewspaper.getTitle()+"\",";
 				json += "\"pic\":\""+ip+businessNewspaper.getPic()+"\",\"url\":\""+businessNewspaper.getUrl()+"\"},";
+			}
+			if(list.size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 社区报记者使用发布新闻
+	 * @param
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="releaseNews")
+	public void releaseNews(HttpServletRequest request, HttpServletResponse response,BusinessNewsQuery query) {
+		String json = "";
+		Map map = (Map) request.getAttribute("resultMap");
+		Map<String,String> param=(Map) map.get("param");
+		Map<String,String> image=(Map) map.get("image");
+		try{
+			query.setParam(param);
+			query.setImage(image);
+			businessNewsService.releaseNews(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"发布成功\"";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"发布失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			appStatisticsClick.setUserId(new Integer(param.get("userId")));
+			appStatisticsClick.setType(102);
+			appStatisticsClick.setTypeName("记者爆料");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户查看电子报列表
+	 * @param areacode
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getAppPicAll")
+	public void getAppPicAll(HttpServletRequest request, HttpServletResponse response,BusinessImagesQuery query) {
+		String json = "";
+		List<BusinessImages> list;
+		Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
+		try{
+			query.setImgType(0);
+			list=businessImagesService.findByExample(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"list\":[";
+			for (BusinessImages businessImages : list) {
+				json += "{\"url\":\""+ip+businessImages.getImgPath()+"\",\"appPic\":\""+businessImages.getImgPath()+"\"},";
 			}
 			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);

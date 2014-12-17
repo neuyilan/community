@@ -600,6 +600,7 @@
         a.baiduId,
         a.channelId,
         a.deviceType,
+        a.isWorker,
         b.estateName,
         b.buildingName,
         b.buildingId,

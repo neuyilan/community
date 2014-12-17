@@ -17,12 +17,16 @@
 		<input type="hidden" name="estateId" id="estateId">
 		<input type="hidden" name="estateName" id="estateName">
 		<input type="hidden" name="comName" id="comName">
+		<input type="hidden"  name="type" value="${type }"/>
+	    <input type="hidden"  name="ID" value="${ID }"/>
     </form> 
     <div class="commsel">
         <div class="commfin">
             <form method="post" action="${ctx}/service/estate/searchIndex.json" id="f">
 	            <p class="selq">
 	                <a id="search"></a>
+	                <input type="hidden"  name="type" value="${type }"/>
+	                <input type="hidden"  name="ID" value="${ID }"/>
 	                <span><input type="text" placeholder="输入社区关键字进行查找" name="keyword"/></span>
 	            </p>  
             </form> 

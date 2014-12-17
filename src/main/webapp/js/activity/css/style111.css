@@ -132,7 +132,6 @@ img{ vertical-align:middle;}
 .tbtn{ background:#ccc; color:#000; padding:5px 0; height:30px;}
 .tbtn p{ width:100px; margin:0px auto; background:#fff; text-align:center; height:30px; line-height:30px;}
 
-.fxdown{ margin:20px 0; }
-.fxdown a{ display:block; background-color:#ff9600; border-radius:6px; text-align:center; color:#ffffff; height:42px; line-height:42px; font-size:15px;}
-.fxdown i{ display:inline-block; height:28px; width:28px; background:url(/community/js/activity/images/click.jpg) no-repeat; background-size:28px 28px; vertical-align:middle;}
+.fxdown{ text-align:center;}
+.fxdown img{ max-width:100%; height:auto;}
 

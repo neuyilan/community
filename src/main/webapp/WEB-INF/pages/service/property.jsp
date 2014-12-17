@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/>
-<title>信息详情</title>
+<title>${title}</title>
 <link href="${ctx }/js/activity/css/style111.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
 </head>
@@ -30,14 +30,13 @@
                 ${newsContent}
             </div>
         </div>
-         <c:if test="${download==1 }">
-			<div class="fxdown">
+          <c:if test="${download==1 }">
+         	<div class="fxdown">
 	            <a href="${ctx }/download/index.html?id=14">
-	                <i></i>
-	                <span>下载OK家APP,了解更多精彩信息</span>
+	                <img src="${ctx }/images/click.png"/>
 	            </a>    
 	        </div>
-		</c:if>
+	      </c:if>
     </div>
     </div>
 </div>
@@ -56,6 +55,63 @@ function msgbox(title,content){
 		    $(".tk").remove();
 	});
 }
+var imgUrl = '${ctx }${appPic}';  
+var lineLink = window.location.href;  
+var descContent = "${title}";  
+var shareTitle = '【OK家】小区生活OK到家';  
+var appid = '';  
+  
+function shareFriend() {  
+    WeixinJSBridge.invoke('sendAppMessage',{  
+                            "appid": appid,  
+                            "img_url": imgUrl,  
+                            "img_width": "640",  
+                            "img_height": "640",  
+                            "link": lineLink,  
+                            "desc": descContent,  
+                            "title": shareTitle  
+                            }, function(res) {  
+                            _report('send_msg', res.err_msg);  
+                            })  
+}  
+function shareTimeline() {  
+    WeixinJSBridge.invoke('shareTimeline',{  
+                            "img_url": imgUrl,  
+                            "img_width": "640",  
+                            "img_height": "640",  
+                            "link": lineLink,  
+                            "desc": descContent,  
+                            "title": shareTitle  
+                            }, function(res) {  
+                            _report('timeline', res.err_msg);  
+                            });  
+}  
+function shareWeibo() {  
+    WeixinJSBridge.invoke('shareWeibo',{  
+                            "content": descContent,  
+                            "url": lineLink,  
+                            }, function(res) {  
+                            _report('weibo', res.err_msg);  
+                            });  
+}  
+// 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。  
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {  
+  
+        // 发送给好友  
+        WeixinJSBridge.on('menu:share:appmessage', function(argv){  
+            shareFriend();  
+            });  
+  
+        // 分享到朋友圈  
+        WeixinJSBridge.on('menu:share:timeline', function(argv){  
+            shareTimeline();  
+            });  
+  
+        // 分享到微博  
+        WeixinJSBridge.on('menu:share:weibo', function(argv){  
+            shareWeibo();  
+            });  
+        }, false);  
 </script>
 </body>
 </html>

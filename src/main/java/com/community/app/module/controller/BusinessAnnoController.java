@@ -411,6 +411,7 @@ public class BusinessAnnoController {
 						paramMap.put("messageType", 1);
 						paramMap.put("ID", businessAnno.getAnnoId());
 						paramMap.put("title", businessAnno.getAnnoTitle());
+						paramMap.put("pic", businessAnno.getAppPic());
 						
 						for(int j=0;j<appUserList.size();j++) {
 							AppUser appUser = (AppUser) appUserList.get(j);
@@ -589,6 +590,7 @@ public class BusinessAnnoController {
 						paramMap.put("messageType", 1);
 						paramMap.put("ID", businessAnno.getAnnoId());
 						paramMap.put("title", businessAnno.getAnnoTitle());
+						paramMap.put("pic", businessAnno.getAppPic());
 						
 						for(int j=0;j<appUserList.size();j++) {
 							AppUser appUser = (AppUser) appUserList.get(j);
@@ -750,6 +752,7 @@ public class BusinessAnnoController {
 						paramMap.put("messageType", 2);
 						paramMap.put("ID", businessAnno.getAnnoId());
 						paramMap.put("title", businessAnno.getAnnoTitle());
+						paramMap.put("pic", businessAnno.getAppPic());
 						
 						for(int j=0;j<appUserList.size();j++) {
 							AppUser appUser = (AppUser) appUserList.get(j);
@@ -989,6 +992,7 @@ public class BusinessAnnoController {
 						paramMap.put("messageType", 2);
 						paramMap.put("ID", businessAnno.getAnnoId());
 						paramMap.put("title", businessAnno.getAnnoTitle());
+						paramMap.put("pic", businessAnno.getAppPic());
 						
 						for(int j=0;j<appUserList.size();j++) {
 							AppUser appUser = (AppUser) appUserList.get(j);
@@ -1135,6 +1139,7 @@ public class BusinessAnnoController {
 					paramMap.put("messageType", 14);
 					paramMap.put("ID", businessAnno.getAnnoId());
 					paramMap.put("title", businessAnno.getAnnoTitle());
+					paramMap.put("pic", businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1340,6 +1345,7 @@ public class BusinessAnnoController {
 					paramMap.put("messageType", 14);
 					paramMap.put("ID", businessAnno.getAnnoId());
 					paramMap.put("title", businessAnno.getAnnoTitle());
+					paramMap.put("pic", businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -2018,6 +2024,7 @@ public class BusinessAnnoController {
 					paramMap.put("messageType", 14);
 					paramMap.put("ID", businessAnno.getAnnoId());
 					paramMap.put("title", businessAnno.getAnnoTitle());
+					paramMap.put("pic", businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);

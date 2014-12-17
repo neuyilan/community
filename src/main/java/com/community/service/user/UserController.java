@@ -125,6 +125,9 @@ public class UserController {
 	@Autowired
 	private AppStatisticsClickService appStatisticsClickService;
 	
+	@Autowired
+	private BusinessNewsService businessNewsService;
+	
 	
 	
 	
@@ -337,6 +340,7 @@ public class UserController {
 				json += "\"content\":{";
 				json += "\"sessionid\":\"42823AFB33\",";
 				json += "\"userType\":\""+MemberVO.getType()+"\",";
+				json += "\"isWorker\":\""+MemberVO.getIsWorker()+"\",";
 				json += "\"userId\":\""+MemberVO.getUserId()+"\",";
 				json += "\"portrait\":\""+ip+MemberVO.getPortrait()+"\",";
 				json += "\"realname\":{\"realname\":\""+MemberVO.getRealname()+"\",\"state\":\"1\"},";
@@ -1871,6 +1875,7 @@ public class UserController {
 				json += "\"list\":[";
 				for(int i=0;i<baseBean.getList().size();i++) {
 					AppUserNews appUserNews = (AppUserNews) baseBean.getList().get(i);
+					BusinessNews businessNews = businessNewsService.findById_app(appUserNews.getId());
 					json += "{";
 					json += "\"type\":\""+appUserNews.getType()+"\",";
 					json += "\"title\":\""+appUserNews.getNewTitle()+"\",";
@@ -1878,6 +1883,7 @@ public class UserController {
 					json += "\"ID\":\""+appUserNews.getId()+"\",";
 					json += "\"replieName\":\""+appUserNews.getLastMessageName()+"\",";
 					json += "\"content\":\""+appUserNews.getLastMessage()+"\",";
+					json += "\"pic\":\""+businessNews.getAppPic()+"\",";
 					json += "\"url\":\"\"";
 					boolean  flag = false ; //我的消息列表状态
 					for (AppLatestNews appLatestNews2 : list) {
@@ -3591,6 +3597,7 @@ public class UserController {
 				mav.addObject("url","service/activities/getActivitiesDetailsById.json");
 			}
 			mav.addObject("ID", request.getParameter("ID"));
+			mav.addObject("type", request.getParameter("type"));
 		}catch(Exception e){
 			GSLogger.error("进入h5登录野发生错误：/service/login", e);
 			e.printStackTrace();
@@ -3613,8 +3620,10 @@ public class UserController {
 			mav.addObject("estateId", request.getParameter("estateId"));
 			mav.addObject("estateName", request.getParameter("estateName"));
 			mav.addObject("comName", request.getParameter("comName"));
+			mav.addObject("ID", request.getParameter("ID"));
+			mav.addObject("type", request.getParameter("type"));
 		}catch(Exception e){
-			GSLogger.error("进入h5登录发生错误：/service/login", e);
+			GSLogger.error("进入手机验证页", e);
 			e.printStackTrace();
 		}
 		
@@ -3632,10 +3641,38 @@ public class UserController {
 			String path = request.getContextPath();
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
 			mav.addObject("ctx", ctx);
+			String type = request.getParameter("type");
+			if ("4".equals(type)) {
+				mav.addObject("url","service/activities/getActivitiesDetailsById.json");
+			}
 			mav.addObject("estateId", request.getParameter("estateId"));
 			mav.addObject("cellphone", request.getParameter("cellphone"));
+			mav.addObject("isRegist", request.getParameter("isRegist"));
+			mav.addObject("ID", request.getParameter("ID"));
+			mav.addObject("type", request.getParameter("type"));
 		}catch(Exception e){
 			GSLogger.error("进入密码填写页面发生错误：/service/passwordIndex", e);
+			e.printStackTrace();
+		}
+		
+		return mav;
+	}
+	
+	/**
+	 * 重置密码验证页
+	 * @return
+	 */
+	@RequestMapping(value="resetIndex")
+	public ModelAndView ResetIndex(HttpServletRequest request, HttpServletResponse response) {	
+		ModelAndView mav = new ModelAndView("/service/resetIndex");
+		try{
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+			mav.addObject("ctx", ctx);
+			mav.addObject("ID", request.getParameter("ID"));
+			mav.addObject("type", request.getParameter("type"));
+		}catch(Exception e){
+			GSLogger.error("进入重置密码验证页", e);
 			e.printStackTrace();
 		}
 		

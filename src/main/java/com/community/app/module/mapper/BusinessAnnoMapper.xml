@@ -243,7 +243,8 @@
 			a.editTime,
 			a.editor,
 			a.pageUrl,
-			a.brief
+			a.brief,
+			a.appPic
 	</sql>
 	
 	<!-- 所有字段查询条件 -->

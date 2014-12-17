@@ -136,6 +136,8 @@ public class EstateController {
 			list=manageEstateService.search(query);		
 			mav.addObject("ctx", ctx);
 			mav.addObject("list", list);
+			mav.addObject("ID", request.getParameter("ID"));
+			mav.addObject("type", request.getParameter("type"));
 		}catch(Exception e){
 			GSLogger.error("搜索小区发送错误", e);
 			e.printStackTrace();

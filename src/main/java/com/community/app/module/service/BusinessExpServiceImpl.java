@@ -581,8 +581,7 @@ public class BusinessExpServiceImpl implements BusinessExpService {
 					stateName="已取消";
 				else if (stat == 9)
 					stateName="问题件";
-				else if (stat == 10)
-					stateName="被投诉快递";				
+				
 				cell.setCellValue(stateName);
 				
 				cell = bodyRow.createCell(6);
@@ -600,11 +599,10 @@ public class BusinessExpServiceImpl implements BusinessExpService {
 				cell = bodyRow.createCell(7);
 				cell.setCellStyle(bodyStyle);
 				if(exp.getSignTime() != null)
-					cell.setCellValue(exp.getSignTime());
+					cell.setCellValue(exp.getSignTime() == null ? "" : format.format( new Date(exp.getSignTime().getTime())));
 				else 
 					cell.setCellValue("");
 				
-//				System.out.println(exp.getSignTime());
 				if(exp.getExpState() != null)
 				{
 					if(exp.getExpState() == 0  || exp.getExpState() == 1  || exp.getExpState() == 2)

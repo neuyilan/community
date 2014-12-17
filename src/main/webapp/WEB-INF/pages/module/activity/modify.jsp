@@ -395,7 +395,7 @@
 	 			+'<label><input id="attributeValues6" type="checkbox" name="attributeValues" value="6" <c:if test="${fn:contains(iscontain, \'6\')}">checked</c:if> /> 职业</label><br><br>'
 	 			+'<label><input id="attributeValues7" type="checkbox" name="attributeValues" value="7" <c:if test="${fn:contains(iscontain, \'7\')}">checked</c:if> /> 身份证号</label>　　　　'
 	 			+'<label><input id="attributeValues8" type="checkbox" name="attributeValues" value="8" <c:if test="${fn:contains(iscontain, \'8\')}">checked</c:if> /> Email</label>　　　　		　　　'
-	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9" <c:if test="${fn:contains(iscontain, \'9\')}">checked</c:if> /> 地址</label>'
+	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9" <c:if test="${fn:contains(iscontain, \'9\')}">checked</c:if> /> 小区</label>'
 	            
 	 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" value="${businessActivity.endTime}"/>';
@@ -443,7 +443,7 @@
 	    		+'<h2 class="relran">可投票数<label for="votes" class="error success"></label></h2>'
 	    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" value="${businessActivity.votes}"/>个 投票项目</label>'
 	    		+'<div class="line2"></div>'
-	    		+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
+	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" value="${businessActivity.endTime}"/>';
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();
@@ -601,6 +601,7 @@
 		    		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
 		    		+'<input class="iptnewtit" type="text" id="rank" name="rank"/>名以前，可获奖';
 		    		$("#bmhdId").empty();
+		    		$("#tphdId").empty("");
 		    		$("#rankId").append(htmlDom);
 					$("#typeName").val("定时抢");
 					$("input[name='state']:eq(0)").val("1");
@@ -632,12 +633,13 @@
 		 			+'<label><input id="attributeValues6" type="checkbox" name="attributeValues" value="6"/> 职业</label><br><br>'
 		 			+'<label><input id="attributeValues7" type="checkbox" name="attributeValues" value="7"/> 身份证号</label>　　　　'
 		 			+'<label><input id="attributeValues8" type="checkbox" name="attributeValues" value="8"/> Email</label>　　　　		　　　'
-		 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 地址</label>'
+		 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 小区</label>'
 		            
 		 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
 		 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
 		 			$("#bmhdId").append(htmlDom);
 		 			$("#rankId").empty("");
+		    		$("#tphdId").empty("");
 					$("#typeName").val("报名活动");
 					$("input[name='state']:eq(0)").val("0");
 					
@@ -678,7 +680,10 @@
 		    		+'<div id="voteTypeDiv"></div>'
 		    		+'<div class="line2"></div>'
 		    		+'<h2 class="relran">可投票数<label for="votes" class="error success"></label></h2>'
-		    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" />个 投票项目</label>';
+		    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" />个 投票项目</label>'
+		    		+'<div class="line2"></div>'
+		    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
+		 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
 		    		$("#bmhdId").empty();
 		    		$("#rankId").empty();
 		    		$("#tphdId").append(htmlDom);

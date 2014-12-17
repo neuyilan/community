@@ -40,32 +40,86 @@ $(function(){
 			msgbox('提示','俩次密码不一致');
 			return;
 		}
-		$.ajax({
-	           url: '${ctx }/service/user/regist.json',
-	           cache: false,
-	           type: 'post',
-	           dataType: 'json',
-	           data: {
-	        	   cellphone: '${cellphone}',
-		        	password: $("#password1").val(),
-		        	estateId: '${estateId}'
-	           },
-	           success: function (data) {
-	        	   //eval('data=' + data);
-	        	   if(data.errorCode == 200) {
-	        		   console.log(data);
-	        	   }else{
-	        		   msgbox('提示',data.message);
-	        	   }
-	           },
-	           error: function() {
-	               msgbox('提示','获取验证失败');
-	           }
-	       });		
+		var isRegist="${isRegist}";
+		if(isRegist==1){
+			$.ajax({
+		           url: '${ctx }/service/user/regist.json',
+		           cache: false,
+		           type: 'post',
+		           dataType: 'json',
+		           data: {
+		        	   cellphone: '${cellphone}',
+			        	password: $("#password1").val(),
+			        	estateId: '${estateId}'
+		           },
+		           success: function (data) {
+		        	   //eval('data=' + data);
+		        	   if(data.errorCode == 200) {
+		        		   window.location.href='${ctx}/${url}?ID=${ID}&userId='+data.content.userId+'&sessionid='+data.content.sessionid+'tel='+data.content.tel+'&download=0';
+		        	   }else{
+		        		   msgbox('提示',data.message);
+		        	   }
+		           },
+		           error: function() {
+		               msgbox('提示','获取验证失败');
+		           }
+		     });	
+			return null;
+		}
 		
-	})
-	   
-})
+		if(isRegist==2){
+			$.ajax({
+		           url: '${ctx }/service/user/changePassword.json',
+		           cache: false,
+		           type: 'post',
+		           dataType: 'json',
+		           data: {
+		        	   cellphone: '${cellphone}',
+			        	password: $("#password1").val()
+		           },
+		           success: function (data) {
+		        	   //eval('data=' + data);
+		        	   if(data.errorCode == 200) {
+		        		   login();
+		        	   }else{
+		        		   msgbox('提示',data.message);
+		        	   }
+		           },
+		           error: function() {
+		               msgbox('提示','获取验证失败');
+		           }
+		     });	
+			return null;
+		}
+		
+		
+		
+	});
+});
+function login(){
+	$.ajax({
+        url: '${ctx }/service/user/login.json',
+        cache: false,
+        type: 'post',
+        dataType: 'json',
+        data: {
+     	cellphone: '${cellphone}',
+     	password: $("#password1").val()
+        },
+        success: function (data) {
+     	   console.log(data)
+     	   //eval('data=' + data);
+     	   if(data.errorCode == 200) {
+     		   window.location.href='${ctx}/${url}?ID=${ID}&userId='+data.content.userId+'&sessionid='+data.content.sessionid+'tel='+data.content.tel+'&download=0';
+     	   }else{
+     		   msgbox('提示',data.message);
+     	   }
+        },
+        error: function() {
+            msgbox('提示','登录失败');
+        }
+    });		
+}
 function msgbox(title,content){
 	 var shtml="<div class='tk'><div class='tcontent'><div class='thead'>";
 	 shtml+="<p>"+content+"</p>";

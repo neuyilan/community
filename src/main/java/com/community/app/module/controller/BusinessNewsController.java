@@ -458,6 +458,7 @@ public class BusinessNewsController {
 					paramMap.put("messageType", 7);
 					paramMap.put("ID", businessNews.getNewsId());
 					paramMap.put("title", businessNews.getTitle());
+					paramMap.put("pic", businessNews.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -521,6 +522,7 @@ public class BusinessNewsController {
 						paramMap.put("messageType", 8);
 						paramMap.put("ID", businessBreak.getBreakerId());
 						paramMap.put("title", businessNews.getTitle());
+						paramMap.put("pic", businessNews.getAppPic());
 						
 						Integer success = AppPushNotificationUtil.pushNotification(
 								title, 
@@ -834,6 +836,7 @@ public class BusinessNewsController {
 				paramMap.put("messageType", 7);
 				paramMap.put("ID", businessNews.getNewsId());
 				paramMap.put("title", businessNews.getTitle());
+				paramMap.put("pic", businessNews.getAppPic());
 				
 				for(int j=0;j<appUserList.size();j++) {
 					AppUser appUser = (AppUser) appUserList.get(j);
@@ -1057,6 +1060,7 @@ public class BusinessNewsController {
 					paramMap.put("messageType", 7);
 					paramMap.put("ID", businessNews.getNewsId());
 					paramMap.put("title", businessNews.getTitle());
+					paramMap.put("pic", businessNews.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1120,6 +1124,7 @@ public class BusinessNewsController {
 						paramMap.put("messageType", 8);
 						paramMap.put("ID", businessNews.getNewsId());
 						paramMap.put("title", businessNews.getTitle());
+						paramMap.put("pic", businessNews.getAppPic());
 						
 						Integer success = AppPushNotificationUtil.pushNotification(
 								title, 

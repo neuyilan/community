@@ -78,7 +78,7 @@ public class MemberVO {
     private Integer limitSwitch;            //限行通知
     private String baiduId;			  
     private String channelId;		  
-    private Integer deviceType;        
+    private Integer deviceType;      
     
     public String getUnitHomeAttr() {
 		return unitHomeAttr;

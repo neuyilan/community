@@ -87,7 +87,25 @@ public class BusinessExpQuery extends BaseBean {
 	private Integer isProblem;
 	private Integer estateId;
 	private Integer phoneType;
+	private String expIds;
+	private String[] expIdArray;
 	
+	public String[] getExpIdArray() {
+		return expIdArray;
+	}
+
+	public void setExpIdArray(String[] expIdArray) {
+		this.expIdArray = expIdArray;
+	}
+
+	public String getExpIds() {
+		return expIds;
+	}
+
+	public void setExpIds(String expIds) {
+		this.expIds = expIds;
+	}
+
 	public Integer getPhoneType() {
 		return phoneType;
 	}

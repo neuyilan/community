@@ -87,7 +87,7 @@
                         		+(row.job !='null'?"职　　业："+row.job+"<br />":"")
                         		+(row.ID !='null' && row.ID !=undefined?"身  份  证："+row.ID+"<br />":"")
                         		+(row.email !='null'?"邮　　箱："+row.email+"<br />":"")
-                        		+(row.addr !='null'?"地　　址："+row.addr+"<br />":"")
+                        		+(row.addr !='null'?"小　　区："+row.addr+"<br />":"")
                         		+'创建时间：<time>'+(row.createTime != null ? row.createTime.substring(0, 19) : "")+'</time>'
                         		+'</p>'
                         		+'</div>'
@@ -155,6 +155,11 @@
         	}
         	jump(nextNo, pageSize);
         }
+        
+        function exportExcelList() {
+            window.location.href = '${ctx}/business/businessActivity/exportPublicParticipates.do?actId='+$('#actId').val();
+        }
+        
     </script>
 </head>
 
@@ -178,6 +183,7 @@
 		                    </li>
 		                </ul>
 		            </div>
+		            <a onclick="exportExcelList()" href="javascript:;" style="border: 1px solid rgb(207, 207, 207); color: rgb(51, 51, 51); display: inline-block; font-size: 14px; height: 30px; line-height: 30px; margin: 5px 5px 0px 20px; text-align: center; width: 100px; border-radius: 15px;">导出报名名单</a>
 					<div class="bodrbox">
 						<input id="serach" type="text" name="keyWord" placeholder="输入用户绑定的手机号查找" value="" /> 
 						<input id="submt" type="button" name="" onclick="search()" value="" />
@@ -202,7 +208,7 @@
 										<c:if test="${bean.job != null}">职　　业：${bean.job}<br /></c:if>
 										<c:if test="${bean.ID != null}">身  份  证：${bean.ID}<br /></c:if>
 										<c:if test="${bean.email != null}">邮　　箱：${bean.email}<br /></c:if>
-										<c:if test="${bean.addr != null}">地　　址：${bean.addr}<br /></c:if>
+										<c:if test="${bean.addr != null}">小　　区：${bean.addr}<br /></c:if>
 										创建时间：<time><fmt:formatDate value="${bean.createTime}" pattern="yyyy-MM-dd HH:mm:ss" /></time>
 									</p>
 								</div>

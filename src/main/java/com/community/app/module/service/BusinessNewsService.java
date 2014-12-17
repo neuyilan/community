@@ -134,5 +134,13 @@ public interface BusinessNewsService {
 	 * @throws ServiceException
 	 */
 	public boolean delete(final Integer id) throws ServiceException;
+	
+	/**
+	 * service
+	 * 社区报记者使用发布新闻
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void releaseNews(final BusinessNewsQuery query) throws ServiceException;
 
 }

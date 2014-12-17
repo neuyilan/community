@@ -18,6 +18,8 @@
         	<form method="post" action="${ctx}/service/estate/searchIndex.json" id="f">
 	            <p class="selq">
 	                <a id="search"></a>
+	                <input type="hidden"  name="type" value="${type }"/>
+	                <input type="hidden"  name="ID" value="${ID }"/>
 	                <span><input type="text" placeholder="输入社区关键字进行查找" name="keyword"/></span>
 	            </p>  
             </form>
@@ -43,7 +45,7 @@ $(function(){
 		window.history.go(-1);
 	});
 	$("ul li").click(function(){
-		window.location.href='${ctx}/service/commiunity/findByComIndex.json?comId='+$(this).attr("comId");
+		window.location.href='${ctx}/service/commiunity/findByComIndex.json?comId='+$(this).attr("comId")+'&type=${type}&ID=${ID}';
 	})
 	$("#search").click(function(){
 		$("#f").submit();

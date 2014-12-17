@@ -23,7 +23,7 @@
                 <span><a><input class="btn radius6 btgreen" type="button" value="快速注册" id="regist"/></a></span>
                 <span><a><input class="btn radius6 btred" type="button" value="登 录" id="login"/></a></span>
             </p>
-            <p class="logfp">
+            <p class="logfp" id="forget">
                 <a>忘记密码？</a>
             </p>
         </form>
@@ -75,8 +75,11 @@ $(function(){
 		window.history.go(-1);
 	});
 	$("#regist").click(function(){
-		window.location.href='${ctx}/service/commiunity/index.json'
-	})
+		window.location.href='${ctx}/service/commiunity/index.json?type=${type}&ID=${ID}';
+	});
+	$("#forget").click(function(){
+		window.location.href='${ctx}/service/user/resetIndex.json?type=${type}&ID=${ID}';
+	});
 	
 })
 function msgbox(title,content){

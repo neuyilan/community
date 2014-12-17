@@ -309,7 +309,7 @@ public class AppAutomobileNumberServiceImpl implements AppAutomobileNumberServic
 			for (AppAutomobileNumber appAutomobileNumber : list) {
 				if(appAutomobileNumber.getBaiduId() != null && !"".equals(appAutomobileNumber.getBaiduId()) && appAutomobileNumber.getChannelId() != null && !"".equals(appAutomobileNumber.getChannelId())) {
 					String description = "【限行提醒】明天您尾号为"+appAutomobileNumber.getNumberName().replace(",", "、")+"的爱车将会限行，请您合理选择您的出行方式。";	
-					Timestamp  ts=new Timestamp(new Date().getTime());
+					Timestamp  ts=new Timestamp(new Date().getTime()+86400000);
 					paramMap.put("week", weather.dayForWeek(ts.toString()));
 					paramMap.put("number", appAutomobileNumber.getNumberName());
 					Integer success = AppPushNotificationUtil.pushNotification(

@@ -25,7 +25,6 @@ import com.community.app.module.service.BusinessActivityRegistrationInformationS
 import com.community.app.module.service.BusinessActivityRegistrationTimeslotService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityRegistrationInformationQuery;
-import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 
 @Controller
 @RequestMapping("/business/businessActivityRegistrationInformation")

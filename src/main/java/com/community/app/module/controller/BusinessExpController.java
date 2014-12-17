@@ -227,20 +227,138 @@ public class BusinessExpController {
 	@RequestMapping(value="exportExcel")  
     public String exportExcel(HttpServletRequest reqeust, BusinessExpQuery query,HttpServletResponse response)  
     {  
-        response.setContentType("application/binary;charset=ISO8859_1");  
-        try  
-        {  
+		String[] expArr = null;
+        response.setContentType("application/binary;charset=UTF-8");  
+        try {  
             ServletOutputStream outputStream = response.getOutputStream();  
-            String fileName = new String(("快递导出订单").getBytes(), "ISO8859_1");  
+            String fileName = "快递导出订单";
+            fileName = URLEncoder.encode(fileName, "UTF-8"); 
             response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式  
+            
+            if(query.getExpIds().contains(",")) {
+            	expArr = query.getExpIds().split(",");
+            } else {
+            	expArr = new String[]{query.getExpIds()};
+            }
+            query.setExpId(Integer.parseInt(expArr[0]));
+            query.setExpIdArray(expArr);
             businessExpService.exportExcel(query, outputStream);
-        }  
-        catch (IOException e)  
-        {  
+        } catch (IOException e) {  
             e.printStackTrace();  
         }  
         return null;  
     }
+	
+	/**
+	 * 列示或者查询所有数据
+	 * @return
+	 */
+	@RequestMapping(value="findExcelAllExp")
+	public ModelAndView findExcelAllExp(HttpServletRequest reqeust, BusinessExpQuery query, HttpServletResponse response) {
+        List expressList = null;
+        List estateList = null;
+        List<BusinessExp> list = new ArrayList<BusinessExp>() ;
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
+			}			
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			estateList = CommonUtils.getUser().getEstateBeanList();
+			expressList =manageExpressAllService.findAll();
+			list = businessExpService.findExcelAllExp(query);
+		}catch(Exception e){
+			GSLogger.error("显示businessExp导出excel列表时发生错误：/business/businessExp/expExcellist", e);
+			e.printStackTrace();
+		}
+        ModelAndView mav = new ModelAndView("/module/express/expExcellist");
+        mav.addObject("list", list);
+        mav.addObject("size", list.size());
+        mav.addObject("expressList", expressList);
+        mav.addObject("estateList", estateList);
+        return mav;
+	}
+	
+	/**
+	 * 列示或者查询所有数据
+	 * @return
+	 */
+	@RequestMapping(value="getExcelPageList")
+	public void getExcelPageList(BusinessExpQuery query, HttpServletResponse response) {
+		String json = "";
+		StringBuilder result = new StringBuilder();
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
+			}				
+			List<BusinessExp> expBean = businessExpService.findExcelAllExp(query);
+			
+			result.append("{\"total\":").append(expBean.size()).append(",")
+			.append("\"rows\":[");
+			for(int i=0;i<expBean.size();i++) {
+				BusinessExp businessExp = (BusinessExp) expBean.get(i);
+				result.append("{")
+			    .append("\"expId\":\"").append(businessExp.getExpId()).append("\"").append(",")
+			    .append("\"senderId\":\"").append(businessExp.getSenderId()).append("\"").append(",")
+			    .append("\"senderName\":\"").append(businessExp.getSenderName()).append("\"").append(",")
+			    .append("\"expCode\":\"").append(businessExp.getExpCode()).append("\"").append(",")
+			    .append("\"senderTel\":\"").append(businessExp.getSenderTel()).append("\"").append(",")
+			    .append("\"receiverName\":\"").append(businessExp.getReceiverName()).append("\"").append(",")
+			    .append("\"receiverTel\":\"").append(businessExp.getReceiverTel()).append("\"").append(",")
+			    .append("\"receiveTime\":\"").append(businessExp.getReceiveTime()).append("\"").append(",")
+			    .append("\"receiverAddr\":\"").append(businessExp.getReceiverAddr()).append("\"").append(",")
+			    .append("\"sendTime\":\"").append(businessExp.getSendTime()).append("\"").append(",")
+			    .append("\"expContent\":\"").append(businessExp.getExpContent()).append("\"").append(",")
+			    .append("\"expState\":\"").append(businessExp.getExpState()).append("\"").append(",")
+			    .append("\"lastMessage\":\"").append(businessExp.getLastMessage() != null ?businessExp.getLastMessage().replace("\"", "\\\""):"").append("\"").append(",")
+			    .append("\"checkInTime\":\"").append(businessExp.getCheckInTime()).append("\"").append(",")
+			    .append("\"senderAddr\":\"").append(businessExp.getSenderAddr()).append("\"").append(",")
+			    .append("\"expType\":\"").append(businessExp.getExpType()).append("\"").append(",")
+			    .append("\"station\":\"").append(businessExp.getStation()).append("\"").append(",")
+			    .append("\"expCompanyId\":\"").append(businessExp.getExpCompanyID()).append("\"").append(",")
+			    .append("\"expCompany\":\"").append(businessExp.getExpCompany()).append("\"").append(",")
+			    .append("\"isPay\":\"").append(businessExp.getIsPay()).append("\"").append(",")
+			    .append("\"payMount\":\"").append(businessExp.getPayMount()).append("\"").append(",")
+			    .append("\"isAgent\":\"").append(businessExp.getIsAgent()).append("\"").append(",")
+			    .append("\"agentMount\":\"").append(businessExp.getAgentMount()).append("\"").append(",")
+			    .append("\"memo\":\"").append(businessExp.getMemo()).append("\"").append(",")
+			    .append("\"getDate\":\"").append(businessExp.getGetDate()).append("\"").append(",")
+			    .append("\"isAnytime\":\"").append(businessExp.getIsAnytime()).append("\"").append(",")
+			    .append("\"getTime\":\"").append(businessExp.getGetTime()).append("\"").append(",")
+			    .append("\"appointType\":\"").append(businessExp.getAppointType()).append("\"").append(",")
+			    .append("\"appointContent\":\"").append(businessExp.getAppointContent()).append("\"").append(",")
+			    .append("\"signname\":\"").append(businessExp.getSignname()).append("\"").append(",")
+			    .append("\"signTime\":\"").append(businessExp.getSignTime()).append("\"").append(",")
+			    .append("\"isSelf\":\"").append(businessExp.getIsSelf()).append("\"").append(",")
+			    .append("\"createTime\":\"").append(businessExp.getCreateTime()).append("\"").append(",")
+			    .append("\"newsCount\":\"").append(businessExp.getNewsCount()).append("\"").append(",")
+			    .append("\"modifyTime\":\"").append(businessExp.getModifyTime()).append("\"").append(",")
+			    .append("\"lastMessage\":\"").append(businessExp.getLastMessage()).append("\"").append(",")
+			    .append("\"briefMessage\":\"").append(businessExp.getBriefMessage()).append("\"").append(",")
+			    .append("\"editor\":\"").append(businessExp.getEditor()).append("\"")
+				.append("}").append(",");
+			}
+			json = result.toString();
+			if(expBean.size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]}";
+			
+			response.setHeader("Cache-Control", "no-cache");
+			response.setCharacterEncoding("utf-8");
+			try {
+				response.getWriter().write(json);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			GSLogger.error("显示businessExp列表时发生错误：/business/businessExp/list", e);
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * 列示或者查询所有数据
@@ -472,7 +590,7 @@ public class BusinessExpController {
 		    businessExp.setPayMount(query.getPayMount()==null?0:query.getPayMount());
 		    businessExp.setIsAgent(query.getIsAgent());
 		    businessExp.setAgentMount(query.getAgentMount()==null?0:query.getAgentMount());
-		    businessExp.setMemo(query.getMemo());
+		    businessExp.setMemo(query.getMemo()==null?"":query.getMemo());
 		    //businessExp.setGetDate(query.getGetDate());
 		    //businessExp.setIsAnytime(query.getIsAnytime());
 		    //businessExp.setGetTime(query.getGetTime());
@@ -698,9 +816,9 @@ public class BusinessExpController {
 		    businessExp.setLogo(manageExpressAll.getExpressIcon());
 		    businessExp.setIsPay(query.getIsPay());
 		    businessExp.setPayMount(query.getPayMount()==null?0:query.getPayMount());
-		    businessExp.setIsAgent(query.getIsAgent());
+		    businessExp.setIsAgent(query.getIsAgent()==null?0:query.getIsAgent());
 		    businessExp.setAgentMount(query.getAgentMount()==null?0:query.getAgentMount());
-		    businessExp.setMemo(query.getMemo());
+		    businessExp.setMemo(query.getMemo()==null?"":query.getMemo());
 		    businessExp.setIsProblem(0);
 		    businessExp.setIsDistributed(0);
 		    //businessExp.setGetDate(query.getGetDate());
@@ -1154,10 +1272,12 @@ public class BusinessExpController {
 		    businessExp.setExpCompanyID(manageExpressAll.getExpressId());
 		    businessExp.setExpCompany(manageExpressAll.getExpressComppay());
 		    businessExp.setLogo(manageExpressAll.getExpressIcon());
-		    //businessExp.setIsPay(query.getIsPay());
-		    //businessExp.setPayMount(query.getPayMount());
-		    //businessExp.setIsAgent(query.getIsAgent());
-		    //businessExp.setAgentMount(query.getAgentMount());
+		    businessExp.setIsPay(0);
+		    businessExp.setPayMount(Float.parseFloat("0"));
+		    businessExp.setIsAgent(0);
+		    businessExp.setAgentMount(Float.parseFloat("0"));
+		    businessExp.setIsDistributed(0);
+		    businessExp.setIsProblem(0);
 		    //businessExp.setMemo(query.getMemo());
 		    businessExp.setGetDate(query.getGetDate());
 		    if(query.getAnyTime() != null) {
@@ -1180,14 +1300,14 @@ public class BusinessExpController {
             Map map = new HashMap();
             map.put("tel", query.getReceiverTel());
             List list = appUserService.findByMap(map);
-            if(list != null && list.size() > 0) {
+            //if(list != null && list.size() > 0) {
                 //APP用户
                // System.out.println("向APP用户推送通知！");
                 //向用户快件表中插入数据
-            } else {
+            //} else {
                 //非APP用户
                 //System.out.println("向非APP用户发送短信通知！");
-            }
+            //}
             businessExpService.save(businessExp);
             
             if(businessExp.getExpId() > 0 && businessExp.getSenderTel().length() == 11) {
@@ -2204,35 +2324,5 @@ public class BusinessExpController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-    /**
-	 * 列示或者查询所有数据
-	 * @return
-	 */
-	@RequestMapping(value="findExcelAllExp")
-	public ModelAndView findExcelAllExp(HttpServletRequest reqeust, BusinessExpQuery query, HttpServletResponse response) {
-        List expressList = null;
-        List<BusinessExp> list = new ArrayList<BusinessExp>() ;
-		try{
-			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
-				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}			
-			if(shiroUser.getCurEstateId() != null) {
-				query.setCurEstateId(shiroUser.getCurEstateId());
-			}
-			expressList =manageExpressAllService.findAll();
-			list = businessExpService.findExcelAllExp(query);
-		}catch(Exception e){
-			GSLogger.error("显示businessExp导出excel列表时发生错误：/business/businessExp/expExcellist", e);
-			e.printStackTrace();
-		}
-        ModelAndView mav = new ModelAndView("/module/express/expExcellist");
-        mav.addObject("list", list);
-        mav.addObject("size", list.size());
-        mav.addObject("expressList", expressList);
-        mav.addObject("curEstateId", CommonUtils.getUser().getCurEstateId());
-        return mav;
 	}
 }

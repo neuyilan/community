@@ -14,7 +14,6 @@
 
 <body>
     <div class="inpform">
-        <p class="commresult">您已选择小区： <span class="resultxq">${estateName }</span> <span>（${comName }）</span></p>
         <form>
             <div class="inptxt radius6">
                 <div><p><input type="text" id="cellphone" name="cellphone" placeholder="请输入手机号"/></p></div>
@@ -25,12 +24,8 @@
                     </p>
                 </div>
             </div>
-            <div class="agree">
-                <label><input type="checkbox" id="checkbox"/>我已阅读并同意</label>
-                <a>《注册服务协议》</a>
-            </div>
-            <p class="nextbtn">
-                <input class="btn radius6 btred" type="button" value="下一步" id="btn"/>
+            <p class="subbtn">
+                <input class="btn radius6 btred" type="button" value="重置密码" id="btn"/>
             </p>
         </form>
     </div>
@@ -40,12 +35,6 @@ $(function(){
 	$("#return").click(function(){
 		window.history.go(-1);
 	});
-	$("#ul li").click(function(){
-		window.location.href='${ctx}/service/commiunity/index.json'
-	})
-	$("#search").click(function(){
-		$("#f").submit();
-	})
 	$("#getCode").click(function(){
 		var ze=/^[0-9]{11}$/
 		if(!ze.test($("#cellphone").val())){
@@ -63,7 +52,7 @@ $(function(){
 	           dataType: 'json',
 	           data: {
 	        	cellphone: $("#cellphone").val(),
-	        	type: 0
+	        	type: 1
 	           },
 	           success: function (data) {
 	        	   //eval('data=' + data);
@@ -87,10 +76,6 @@ $(function(){
 			msgbox('提示','请输入验证码');
 			return;
 		}
-		if(!$("#checkbox").attr("checked")==true){
-			msgbox('提示','请确认阅读');
-			return;
-		}
 		$.ajax({
 	           url: '${ctx }/service/verify/verifyCode.json',
 	           cache: false,
@@ -103,7 +88,7 @@ $(function(){
 	           success: function (data) {
 	        	   //eval('data=' + data);
 	        	   if(data.errorCode == 200) {
-	        		   window.location.href='${ctx}/service/user/passwordIndex.json?cellphone='+$("#cellphone").val()+'&estateId=${estateId }&type=${type}&ID=${ID}&isRegist=2';
+	        		   window.location.href='${ctx}/service/user/passwordIndex.json?cellphone='+$("#cellphone").val()+'&type=${type}&ID=${ID}&isRegist=2';
 	        	   }else{
 	        		   msgbox('提示',data.message);
 	        	   }

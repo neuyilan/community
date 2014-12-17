@@ -4,6 +4,7 @@ import static com.community.framework.utils.CommonUtils.getUser;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,12 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -33,6 +42,7 @@ import com.community.app.module.bean.AppHomepageScope;
 import com.community.app.module.bean.AppPushLog;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.BusinessActivity;
+import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivityScope;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
@@ -40,6 +50,7 @@ import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.ExportUtil;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.push.AppPushNotificationUtil;
 import com.community.app.module.service.AppFocusScopeService;
@@ -493,6 +504,7 @@ public class BusinessActivityController {
 					paramMap.put("messageType", 9);
 					paramMap.put("ID", businessActivity.getActId());
 					paramMap.put("title", businessActivity.getActName());
+					paramMap.put("pic", businessActivity.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -852,6 +864,7 @@ public class BusinessActivityController {
 					paramMap.put("messageType", 9);
 					paramMap.put("ID", businessActivity.getActId());
 					paramMap.put("title", businessActivity.getActName());
+					paramMap.put("pic", businessActivity.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1404,6 +1417,151 @@ public class BusinessActivityController {
 		mav.addObject("baseBean1", baseBean1);
 		mav.addObject("pager", baseBean1.getPager());
 		return mav;
+	}
+	
+	/**
+	 * 导出报名活动参与人员名单
+	 * @return
+	 */
+	@RequestMapping(value="exportPublicParticipates")
+	public String exportPublicParticipates(HttpServletRequest reqeust,BusinessActivityQuery query,HttpServletResponse response) {
+      try  
+      {
+    	  response.setContentType("application/binary;charset=UTF-8");  
+          ServletOutputStream outputStream = response.getOutputStream();  
+  		  BusinessActivity businessActivity = businessActivityService.findById(query.getActId());
+  		  
+  		  	String fileName; 
+  		  	if(businessActivity != null  && StringUtils.isNotBlank(businessActivity.getActName()))
+  			  fileName = businessActivity.getActName().replaceAll("[(\\\\):(\\?)*(\\[)(\\])\"\\|]", "") ;//Excel名称根据 活动名称 命名    命名不含 \ / : * ? " < > |
+  		  	else
+  			  fileName = "活动报名名单";
+			fileName = URLEncoder.encode(fileName, "UTF-8"); 
+			response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式  
+//			businessActivityRegistrationInformationService.exportPublicParticipates(query, outputStream);
+  		  	/** 查询活动场次 */
+			BusinessActivityRegistrationTimeslotQuery participateQuery = new BusinessActivityRegistrationTimeslotQuery();
+			participateQuery.setActId(query.getActId());
+			participateQuery.setSort("timeSlotId");
+			participateQuery.setOrder("asc");
+//			participateQuery.setRows(20);
+			BaseBean TimeslotBean = businessActivityRegistrationTimeslotService.findAllPage(participateQuery);
+  		  	if (TimeslotBean == null || TimeslotBean.getList().size() <= 0)
+  		  		return null;
+			/** 查询报名活动参与人列表 */
+			BusinessActivityRegistrationInformationQuery inforQuery = new BusinessActivityRegistrationInformationQuery();
+			inforQuery.setActId(query.getActId());
+			inforQuery.setSort("informationId");
+			inforQuery.setOrder("desc");
+//			inforQuery.setRows(20);
+			BaseBean RegistrationInfoBean = businessActivityRegistrationInformationService.findAllPage(inforQuery);
+  		  	if (RegistrationInfoBean == null || RegistrationInfoBean.getList().size() <= 0)
+  		  		return null;
+			
+  		  	String[] title = {"昵称","真实姓名","联系电话","生日","年龄","职业","身份证号","Email","地址"} ;
+			// 创建一个workbook 对应一个excel应用文件
+			XSSFWorkbook workBook = new XSSFWorkbook();
+			// 在workbook中添加一个sheet,对应Excel文件中的sheet
+			XSSFCell cell = null;
+			XSSFSheet sheet = null;
+			XSSFCellStyle headStyle = null;
+			XSSFCellStyle bodyStyle = null;
+			//不同场次 循环创建sheet页
+			Map<Integer,String> timeslotMap = new HashMap<Integer,String>();
+			for(int x=0;x<TimeslotBean.getList().size();x++)
+			{
+				BusinessActivityRegistrationTimeslot timeSlot = (BusinessActivityRegistrationTimeslot) TimeslotBean.getList().get(x);
+				sheet = workBook.createSheet(timeSlot.getTimeSlotName().replaceAll("[(\\\\):(\\?)*(\\[)(\\])]", ""));   //sheet name 不能包含 \:/?*[]
+				System.out.println("===> " + timeSlot.getTimeSlotName().replaceAll("[(\\\\):(\\?)*(\\[)(\\])]", ""));
+				ExportUtil exportUtil = new ExportUtil(workBook, sheet);
+			    headStyle = exportUtil.getHeadStyle();
+			    bodyStyle = exportUtil.getBodyStyle();
+				// 构建表头
+				XSSFRow headRow = sheet.createRow(0);
+				for (int i = 0; i < title.length; i++) {
+					cell = headRow.createCell(i);
+					cell.setCellStyle(headStyle);
+					cell.setCellValue(title[i]);
+				}
+				timeslotMap.put(timeSlot.getTimeSlotId(), timeSlot.getTimeSlotName().replaceAll("[(\\\\):(\\?)*(\\[)(\\])]", ""));
+			}
+			// 构建表体数据
+			if (CollectionUtils.isNotEmpty(RegistrationInfoBean.getList())) {
+				for(int i=0; i<RegistrationInfoBean.getList().size(); i++)
+				{
+					BusinessActivityRegistrationInformation actRegInfoBean = (BusinessActivityRegistrationInformation) RegistrationInfoBean.getList().get(i);
+					int timeSlotId = actRegInfoBean.getTimeSlotId();
+
+					if (StringUtils.isNotBlank(timeslotMap.get(timeSlotId)))
+					{
+						sheet = workBook.getSheet(timeslotMap.get(timeSlotId));
+						if (sheet == null)
+							continue;
+					}
+					else
+						continue;
+					XSSFRow bodyRow = sheet.createRow(sheet.getLastRowNum()+1);
+
+					cell = bodyRow.createCell(0);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getNickname());
+
+					cell = bodyRow.createCell(1);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getRealname());
+
+					cell = bodyRow.createCell(2);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getTel());
+					
+					cell = bodyRow.createCell(3);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getBirthday());
+					
+					cell = bodyRow.createCell(4);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getAge());
+					
+					cell = bodyRow.createCell(5);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getJob());
+					
+					cell = bodyRow.createCell(6);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getID());
+					
+					cell = bodyRow.createCell(7);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getEmail());
+					
+					cell = bodyRow.createCell(8);
+					cell.setCellStyle(bodyStyle);
+					cell.setCellValue(actRegInfoBean.getAddr());
+					
+				}
+			}
+			try {
+				workBook.write(outputStream);
+				outputStream.flush();
+				outputStream.close();
+			} catch (IOException e) {
+				GSLogger.debug("BusinessActivityController exportPublicParticipates()：导出Excel功能发生错误！",e);
+				e.printStackTrace();
+			} finally {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					GSLogger.debug("BusinessActivityController exportPublicParticipates()：关闭输出流发生错误！",e);
+					e.printStackTrace();
+				}
+			}
+
+      }  
+      catch (IOException e)  
+      {  
+          e.printStackTrace();  
+      }  
+      return null;  
 	}
 	
 	/**

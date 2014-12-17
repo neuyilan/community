@@ -370,7 +370,7 @@
 	 			+'<label><input id="attributeValues6" type="checkbox" name="attributeValues" value="6"/> 职业</label><br><br>'
 	 			+'<label><input id="attributeValues7" type="checkbox" name="attributeValues" value="7"/> 身份证号</label>　　　　'
 	 			+'<label><input id="attributeValues8" type="checkbox" name="attributeValues" value="8"/> Email</label>　　　　		　　　'
-	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 地址</label>'
+	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 小区</label>'
 	            
 	 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
@@ -443,7 +443,7 @@
 	    		+'<h2 class="relran">可投票数<label for="votes" class="error success"></label></h2>'
 	    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" />个 投票项目</label>'
 	    		+'<div class="line2"></div>'
-	    		+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
+	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();

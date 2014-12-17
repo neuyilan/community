@@ -262,6 +262,7 @@
 			a.actScope,
 			a.brief,
 			a.actPic,
+			a.appPic,
 			a.actLink,
 			a.actManage,
 			a.userType,

@@ -1,5 +1,7 @@
 package com.community.app.module.vo;
 
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -60,7 +62,26 @@ public class BusinessNewsQuery extends BaseBean {
 	private Integer userId;
 	
 	private String newsScope;
+	private Map<String,String> param;
+	private Map<String,String> image;
 	
+	
+	public Map<String, String> getParam() {
+		return param;
+	}
+
+	public void setParam(Map<String, String> param) {
+		this.param = param;
+	}
+
+	public Map<String, String> getImage() {
+		return image;
+	}
+
+	public void setImage(Map<String, String> image) {
+		this.image = image;
+	}
+
 	public String getNewsScope() {
 		return newsScope;
 	}

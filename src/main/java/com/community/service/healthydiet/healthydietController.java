@@ -617,6 +617,8 @@ public class healthydietController {
 		mav.addObject("userId", userId);
 		mav.addObject("nickname", appUser.getNickname());
 		mav.addObject("download", request.getParameter("download"));
+		mav.addObject("appPic", businessHealthydiet.getAppPic());
+
 
 		Map propMap = new HashMap();
 		propMap.put("newsId",businessHealthydiet.getHealId());

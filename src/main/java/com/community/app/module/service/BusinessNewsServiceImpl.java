@@ -1,12 +1,20 @@
 package com.community.app.module.service;
 
+import static com.community.framework.utils.CommonUtils.getUser;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessProductQuery;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
+import com.community.framework.utils.CommonUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +23,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.community.app.module.vo.BusinessNewsQuery;
+import com.community.app.module.bean.AppHomepage;
+import com.community.app.module.bean.AppHomepageScope;
+import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessNews;
+import com.community.app.module.bean.BusinessNewsScope;
+import com.community.app.module.bean.BusinessProduct;
+import com.community.app.module.bean.BusinessProductPic;
+import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.bean.index;
+import com.community.app.module.dao.AppHomepageDao;
+import com.community.app.module.dao.AppHomepageScopeDao;
 import com.community.app.module.dao.BusinessNewsDao;
+import com.community.app.module.dao.BusinessNewsScopeDao;
 
 @Service("BusinessNewsService")
 @Transactional
@@ -26,6 +44,13 @@ public class BusinessNewsServiceImpl implements BusinessNewsService {
 	private static Logger logger = LoggerFactory.getLogger(BusinessNewsServiceImpl.class);
 	@Autowired
 	private BusinessNewsDao businessNewsDao;
+	@Autowired
+	private BusinessNewsScopeDao businessNewsScopeDao;
+	@Autowired
+	private AppHomepageDao appHomepageDao;
+	@Autowired
+	private AppHomepageScopeDao appHomepageScopeDao;
+
 
 	/**
 	 * 查询单个BusinessNews
@@ -311,6 +336,89 @@ public class BusinessNewsServiceImpl implements BusinessNewsService {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/**
+	 * service
+	 * 社区报记者使用发布新闻
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void releaseNews(final BusinessNewsQuery query) throws ServiceException {
+		try {
+			
+			Map<String,String> param=query.getParam();
+			Map<String,String> image=query.getImage();
+			int imagecount = 0;
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			String content = "";
+			content += "<p>"+param.get("content")+"</p>";
+			Collection<String> c = image.keySet();
+			Iterator it = c.iterator();
+	        for (; it.hasNext();) {
+	        	it.next();
+	        	imagecount++;
+				content += "<img src=\"/community"+image.get(imagecount+"")+"\"/>";
+	        }
+			
+			BusinessNews businessNews = new BusinessNews();
+			businessNews.setTitle(param.get("title"));//标题
+		    businessNews.setContent(content);//内容
+		    businessNews.setPageUrl("");//页面静态地址
+		    businessNews.setBrief("");//简介
+		    businessNews.setSubjectPic("");//大图
+		    businessNews.setAppPic(param.get("appPic"));//小图
+		    businessNews.setNewsType(2);//类型
+		    businessNews.setPublisherId(new Integer(param.get("content")));//发布人id
+		    businessNews.setPublisherName(param.get("nickname"));//发布人名称
+		    businessNews.setState(0);//状态
+		    businessNews.setPublishTime(ts);//发布时间
+		    businessNews.setAuditorId(0);//审批id
+		    businessNews.setAuditorName("");//审批名称
+		    businessNews.setPublishTime(ts);//审批时间
+		    businessNews.setVisits(0);//浏览数
+		    businessNews.setComments(0);//评论数
+		    businessNews.setSupports(0);//点赞数
+		    businessNews.setIsHot(0);//是否热点
+		    businessNews.setIsAd(0);//是否广告
+		    businessNews.setBreakId(0);//爆料id
+		    businessNews.setPublishScope(new Integer(param.get("comId")));//社区id
+		    businessNews.setComName(param.get("comName"));  //社区名称
+		    businessNews.setEditor("");//编辑人
+		    businessNews.setIsPush(0);//是否推送
+		    businessNews.setCreateTime(ts);//创建时间
+	        businessNews.setEditTime(ts);//编辑时间
+	        businessNewsDao.save(businessNews);
+	        
+	        //保存新闻范围
+	        BusinessNewsScope scope = new BusinessNewsScope();
+			scope.setNewsId(businessNews.getNewsId());//新闻id
+			scope.setCreateTime(ts);//创建时间
+			scope.setComId(new Integer(param.get("comId")));//社区id
+			scope.setComName(param.get("comName"));//社区名称
+			businessNewsScopeDao.save(scope);
+			
+			//保存到首页
+			AppHomepage appHomepage = new AppHomepage();
+			appHomepage.setId(businessNews.getNewsId());//新闻id
+			appHomepage.setTitle(businessNews.getTitle());//新闻标题
+			appHomepage.setBrief(businessNews.getBrief());//新闻简介
+			appHomepage.setPic(businessNews.getAppPic());//首页小图
+			appHomepage.setType(0);//新闻
+			appHomepage.setPublishTime(ts);//发布时间
+			appHomepage.setTop(0);//不置顶
+			appHomepageDao.save(appHomepage);
+			//保存首页范围
+			AppHomepageScope appHomepageScope = new AppHomepageScope();
+			appHomepageScope.setId(new Integer(param.get("comId")));//社区id
+			appHomepageScope.setHomePageId(appHomepage.getHomePageId());//首页列表id
+			appHomepageScope.setCreateTime(ts);//创建时间
+			appHomepageScopeDao.save(appHomepageScope);
+		    
+		} catch (DaoException e) {
+			logger.debug("BusinessProductServiceImpl addProduct()：新增商品发生错误！", e);
+			e.printStackTrace();
+		}
 	}
 	
 }

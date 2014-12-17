@@ -613,7 +613,7 @@ public class chinmedichenacareController {
 		mav.addObject("userId", userId);
 		mav.addObject("nickname", appUser.getNickname());
 		mav.addObject("download", request.getParameter("download"));
-
+		mav.addObject("appPic", businessChinmedichenacare.getAppPic());
 		Map propMap = new HashMap();
 		propMap.put("newsId",businessChinmedichenacare.getCmhcId());
 		
