@@ -644,7 +644,7 @@ padding-left:16px;
                     $('#addForm').form('submit', {
                         success:function(data){
                             var data = eval('(' + data + ')');  // 改变json对象为javascript对象
-                            //alert(data.message);
+                            alert(data.message);
                             if(data.success == 'true') {
                             	window.location.href = '<%=ctx%>/business/businessUser/list.do';
                             }                            

@@ -184,7 +184,13 @@ public class BusinessFocusController {
 			ShiroUser shiroUser = CommonUtils.getUser();
 			// if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {//驿站
 			// List comList = businessCommunityService.findAll();
-			List comList = businessCommunityService.findComsByUser(shiroUser.getUserId());
+			Map map = new HashMap();
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			map.put("comId", shiroUser.getCurComId());
+			
+			List comList = businessCommunityService.findComsByUser(map);
+			
 			JSONObject comObj = null;
 			Map paramMap = null;
 			for(int i=0;i<comList.size();i++) {

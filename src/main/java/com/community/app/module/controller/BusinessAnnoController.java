@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ShiroUser;
 import com.community.framework.utils.CommonUtils;
 import com.community.framework.utils.Uploader;
+import com.community.framework.utils.propertiesUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -398,48 +400,55 @@ public class BusinessAnnoController {
 				
 				//重要通知向小区内的所有居民发送公告
 				if(businessAnno.getIsImportant() == 1 && annoScopes.length > 0) {
+					String ids = "";
 					for(int i=0;i<annoScopes.length;i++) {
 						String[] scope = annoScopes[i].split(":");
 						Integer estateId = new Integer(scope[0]);
-						//查询该小区下的userId, baiduId, channelId
-						List appUserList = appUserService.findUserPushIds(estateId);
-						AppPushLog appPushLog = new AppPushLog();
-						String title = "OK家";
-						String description = "【物业】"+businessAnno.getAnnoTitle();
-						
-						Map paramMap = new HashMap();
-						paramMap.put("messageType", 1);
-						paramMap.put("ID", businessAnno.getAnnoId());
-						paramMap.put("title", businessAnno.getAnnoTitle());
-						paramMap.put("pic", businessAnno.getAppPic());
-						
-						for(int j=0;j<appUserList.size();j++) {
-							AppUser appUser = (AppUser) appUserList.get(j);
-							//System.out.println("name  "+appUser.getRealname() + "baiudId   "+appUser.getBaiduId());
-							if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-								//物业通知(通过PC后台，"重要通知")
-								Integer success = AppPushNotificationUtil.pushNotification(
-										title, 
-										description, 
-										appUser.getDeviceType(),
-										Long.valueOf(appUser.getChannelId()).longValue(), 
-										appUser.getBaiduId(),
-										paramMap
-										);
-								//记录推送日志
-								appPushLog.setUserId(appUser.getUserId());
-							    appPushLog.setUserName(appUser.getRealname());
-							    appPushLog.setBaiduId(appUser.getBaiduId());
-							    appPushLog.setChannelId(appUser.getChannelId());
-							    appPushLog.setTitle(title);
-							    appPushLog.setDescription(description);
-							    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-							    appPushLog.setSendState(success);
-							    appPushLog.setSenderId(shiroUser.getUserId());
-							    appPushLog.setSenderName(shiroUser.getUserName());
-								appPushLogService.save(appPushLog);
-							}							
-						}
+						ids +="'"+estateId+"',"; 
+					}
+					if(annoScopes.length!=0){
+						ids = ids.substring(0, ids.length()-1);
+					}
+					
+					//查询该小区下的userId, baiduId, channelId
+					List appUserList = appUserService.findUserPushIds(ids);
+					AppPushLog appPushLog = new AppPushLog();
+					String title = "OK家";
+					String description = "【物业】"+businessAnno.getAnnoTitle();
+					
+					Map paramMap = new HashMap();
+					paramMap.put("messageType", 1);
+					paramMap.put("ID", businessAnno.getAnnoId());
+					paramMap.put("title", businessAnno.getAnnoTitle());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessAnno.getAppPic());
+					for(int j=0;j<appUserList.size();j++) {
+						AppUser appUser = (AppUser) appUserList.get(j);
+						//System.out.println("name  "+appUser.getRealname() + "baiudId   "+appUser.getBaiduId());
+						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+							//物业通知(通过PC后台，"重要通知")
+							Integer success = AppPushNotificationUtil.pushNotification(
+									title, 
+									description, 
+									appUser.getDeviceType(),
+									Long.valueOf(appUser.getChannelId()).longValue(), 
+									appUser.getBaiduId(),
+									paramMap
+									);
+							//记录推送日志
+							appPushLog.setUserId(appUser.getUserId());
+						    appPushLog.setUserName(appUser.getRealname());
+						    appPushLog.setBaiduId(appUser.getBaiduId());
+						    appPushLog.setChannelId(appUser.getChannelId());
+						    appPushLog.setTitle(title);
+						    appPushLog.setDescription(description);
+						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+						    appPushLog.setSendState(success);
+						    appPushLog.setSenderId(shiroUser.getUserId());
+						    appPushLog.setSenderName(shiroUser.getUserName());
+							appPushLogService.save(appPushLog);
+						}							
 					}
 				}
 			}
@@ -577,45 +586,53 @@ public class BusinessAnnoController {
 				
 				//重要通知向小区内的所有居民发送公告
 				if(businessAnno.getIsImportant() == 1 && annoScopes.length > 0) {
+					String ids = "";
 					for(int i=0;i<annoScopes.length;i++) {
 						String[] scope = annoScopes[i].split(":");
 						Integer estateId = new Integer(scope[0]);
-						//查询该小区下的userId, baiduId, channelId
-						List appUserList = appUserService.findUserPushIds(estateId);
-						AppPushLog appPushLog = new AppPushLog();
-						String title = "OK家";
-						String description = "【物业】"+businessAnno.getAnnoTitle();
-						
-						paramMap = new HashMap();
-						paramMap.put("messageType", 1);
-						paramMap.put("ID", businessAnno.getAnnoId());
-						paramMap.put("title", businessAnno.getAnnoTitle());
-						paramMap.put("pic", businessAnno.getAppPic());
-						
-						for(int j=0;j<appUserList.size();j++) {
-							AppUser appUser = (AppUser) appUserList.get(j);
-							if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-								Integer success = AppPushNotificationUtil.pushNotification(
-										title, 
-										description, 
-										appUser.getDeviceType(),
-										Long.valueOf(appUser.getChannelId()).longValue(), 
-										appUser.getBaiduId(),
-										paramMap
-										);
-								//记录推送日志
-								appPushLog.setUserId(appUser.getUserId());
-							    appPushLog.setUserName(appUser.getRealname());
-							    appPushLog.setBaiduId(appUser.getBaiduId());
-							    appPushLog.setChannelId(appUser.getChannelId());
-							    appPushLog.setTitle(title);
-							    appPushLog.setDescription(description);
-							    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-							    appPushLog.setSendState(success);
-							    appPushLog.setSenderId(shiroUser.getUserId());
-							    appPushLog.setSenderName(shiroUser.getUserName());
-								appPushLogService.save(appPushLog);
-							}
+						ids +="'"+estateId+"',"; 
+					}
+					if(annoScopes.length!=0){
+						ids = ids.substring(0, ids.length()-1);
+					}
+					
+					//查询该小区下的userId, baiduId, channelId
+					List appUserList = appUserService.findUserPushIds(ids);
+					AppPushLog appPushLog = new AppPushLog();
+					String title = "OK家";
+					String description = "【物业】"+businessAnno.getAnnoTitle();
+					
+					paramMap = new HashMap();
+					paramMap.put("messageType", 1);
+					paramMap.put("ID", businessAnno.getAnnoId());
+					paramMap.put("title", businessAnno.getAnnoTitle());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessAnno.getAppPic());
+					
+					for(int j=0;j<appUserList.size();j++) {
+						AppUser appUser = (AppUser) appUserList.get(j);
+						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+							Integer success = AppPushNotificationUtil.pushNotification(
+									title, 
+									description, 
+									appUser.getDeviceType(),
+									Long.valueOf(appUser.getChannelId()).longValue(), 
+									appUser.getBaiduId(),
+									paramMap
+									);
+							//记录推送日志
+							appPushLog.setUserId(appUser.getUserId());
+						    appPushLog.setUserName(appUser.getRealname());
+						    appPushLog.setBaiduId(appUser.getBaiduId());
+						    appPushLog.setChannelId(appUser.getChannelId());
+						    appPushLog.setTitle(title);
+						    appPushLog.setDescription(description);
+						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+						    appPushLog.setSendState(success);
+						    appPushLog.setSenderId(shiroUser.getUserId());
+						    appPushLog.setSenderName(shiroUser.getUserName());
+							appPushLogService.save(appPushLog);
 						}
 					}
 				}
@@ -737,48 +754,54 @@ public class BusinessAnnoController {
 				//执行推送接口
 				//重要通知向小区内的所有居民发送公告
 				if(businessAnno.getIsPush() != null && businessAnno.getIsPush() == 1) {//可推送
+					String ids = "";
 					for(int i=0;i<annoScopes.length;i++) {
 						String[] scope = annoScopes[i].split(":");
 						Integer estateId = new Integer(scope[0]);
-						ManageEstate manageEstate1 = manageEstateService.findById(estateId);
-						BusinessStation businessStation = businessStationService.findById(manageEstate1.getStationId());
-						//查询该小区下的userId, baiduId, channelId
-						List appUserList = appUserService.findUserPushIds(estateId);
-						AppPushLog appPushLog = new AppPushLog();
-						String title = "OK家";
-						String description = "【"+businessStation.getStaName()+"】"+businessAnno.getAnnoTitle();						
-						
-						Map paramMap = new HashMap();
-						paramMap.put("messageType", 2);
-						paramMap.put("ID", businessAnno.getAnnoId());
-						paramMap.put("title", businessAnno.getAnnoTitle());
-						paramMap.put("pic", businessAnno.getAppPic());
-						
-						for(int j=0;j<appUserList.size();j++) {
-							AppUser appUser = (AppUser) appUserList.get(j);
-							if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-								System.out.println("name  "+appUser.getRealname()+"  baiudId "+appUser.getBaiduId()+"   channelId   "+appUser.getChannelId());
-								Integer success = AppPushNotificationUtil.pushNotification(
-										title, 
-										description, 
-										appUser.getDeviceType(),
-										Long.valueOf(appUser.getChannelId()).longValue(), 
-										appUser.getBaiduId(),
-										paramMap
-										);
-								//记录推送日志
-								appPushLog.setUserId(appUser.getUserId());
-							    appPushLog.setUserName(appUser.getRealname());
-							    appPushLog.setBaiduId(appUser.getBaiduId());
-							    appPushLog.setChannelId(appUser.getChannelId());
-							    appPushLog.setTitle(title);
-							    appPushLog.setDescription(description);
-							    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-							    appPushLog.setSendState(success);
-							    appPushLog.setSenderId(shiroUser.getUserId());
-							    appPushLog.setSenderName(shiroUser.getUserName());
-								appPushLogService.save(appPushLog);
-							}
+						ids +="'"+estateId+"',"; 
+					}
+					if(annoScopes.length!=0){
+						ids = ids.substring(0, ids.length()-1);
+					}
+					
+					//查询该小区下的userId, baiduId, channelId
+					List appUserList = appUserService.findUserPushIds(ids);
+					AppPushLog appPushLog = new AppPushLog();
+					String title = "OK家";
+					String description = "【公告】"+businessAnno.getAnnoTitle();						
+					
+					Map paramMap = new HashMap();
+					paramMap.put("messageType", 2);
+					paramMap.put("ID", businessAnno.getAnnoId());
+					paramMap.put("title", businessAnno.getAnnoTitle());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessAnno.getAppPic());
+					
+					for(int j=0;j<appUserList.size();j++) {
+						AppUser appUser = (AppUser) appUserList.get(j);
+						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+							System.out.println("name  "+appUser.getRealname()+"  baiudId "+appUser.getBaiduId()+"   channelId   "+appUser.getChannelId());
+							Integer success = AppPushNotificationUtil.pushNotification(
+									title, 
+									description, 
+									appUser.getDeviceType(),
+									Long.valueOf(appUser.getChannelId()).longValue(), 
+									appUser.getBaiduId(),
+									paramMap
+									);
+							//记录推送日志
+							appPushLog.setUserId(appUser.getUserId());
+						    appPushLog.setUserName(appUser.getRealname());
+						    appPushLog.setBaiduId(appUser.getBaiduId());
+						    appPushLog.setChannelId(appUser.getChannelId());
+						    appPushLog.setTitle(title);
+						    appPushLog.setDescription(description);
+						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+						    appPushLog.setSendState(success);
+						    appPushLog.setSenderId(shiroUser.getUserId());
+						    appPushLog.setSenderName(shiroUser.getUserName());
+							appPushLogService.save(appPushLog);
 						}
 					}
 				}
@@ -976,48 +999,53 @@ public class BusinessAnnoController {
 				//执行推送接口
 				//重要通知向小区内的所有居民发送公告
 				if(businessAnno.getIsPush() != null && businessAnno.getIsPush() == 1) {//可推送
+					String ids = "";
 					for(int i=0;i<annoScopes.length;i++) {
 						String[] scope = annoScopes[i].split(":");
 						Integer estateId = new Integer(scope[0]);
-						ManageEstate manageEstate1 = manageEstateService.findById(estateId);
-						BusinessStation businessStation = businessStationService.findById(manageEstate1.getStationId());
-						//BusinessStation businessStation = businessStationService.findById(manageEstate.getStationId());
-						//查询该小区下的userId, baiduId, channelId
-						List appUserList = appUserService.findUserPushIds(estateId);
-						AppPushLog appPushLog = new AppPushLog();
-						String title = "OK家";
-						String description = "【"+businessStation.getStaName()+"】"+businessAnno.getAnnoTitle();	
-						
-						paramMap = new HashMap();
-						paramMap.put("messageType", 2);
-						paramMap.put("ID", businessAnno.getAnnoId());
-						paramMap.put("title", businessAnno.getAnnoTitle());
-						paramMap.put("pic", businessAnno.getAppPic());
-						
-						for(int j=0;j<appUserList.size();j++) {
-							AppUser appUser = (AppUser) appUserList.get(j);
-							if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-								Integer success = AppPushNotificationUtil.pushNotification(
-										title, 
-										description, 
-										appUser.getDeviceType(),
-										Long.valueOf(appUser.getChannelId()).longValue(), 
-										appUser.getBaiduId(),
-										paramMap
-										);
-								//记录推送日志
-								appPushLog.setUserId(appUser.getUserId());
-							    appPushLog.setUserName(appUser.getRealname());
-							    appPushLog.setBaiduId(appUser.getBaiduId());
-							    appPushLog.setChannelId(appUser.getChannelId());
-							    appPushLog.setTitle(title);
-							    appPushLog.setDescription(description);
-							    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-							    appPushLog.setSendState(success);
-							    appPushLog.setSenderId(shiroUser.getUserId());
-							    appPushLog.setSenderName(shiroUser.getUserName());
-								appPushLogService.save(appPushLog);
-							}
+						ids +="'"+estateId+"',"; 
+					}
+					if(annoScopes.length!=0){
+						ids = ids.substring(0, ids.length()-1);
+					}
+					
+					//查询该小区下的userId, baiduId, channelId
+					List appUserList = appUserService.findUserPushIds(ids);
+					AppPushLog appPushLog = new AppPushLog();
+					String title = "OK家";
+					String description = "【公告】"+businessAnno.getAnnoTitle();	
+					
+					paramMap = new HashMap();
+					paramMap.put("messageType", 2);
+					paramMap.put("ID", businessAnno.getAnnoId());
+					paramMap.put("title", businessAnno.getAnnoTitle());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessAnno.getAppPic());
+					
+					for(int j=0;j<appUserList.size();j++) {
+						AppUser appUser = (AppUser) appUserList.get(j);
+						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+							Integer success = AppPushNotificationUtil.pushNotification(
+									title, 
+									description, 
+									appUser.getDeviceType(),
+									Long.valueOf(appUser.getChannelId()).longValue(), 
+									appUser.getBaiduId(),
+									paramMap
+									);
+							//记录推送日志
+							appPushLog.setUserId(appUser.getUserId());
+						    appPushLog.setUserName(appUser.getRealname());
+						    appPushLog.setBaiduId(appUser.getBaiduId());
+						    appPushLog.setChannelId(appUser.getChannelId());
+						    appPushLog.setTitle(title);
+						    appPushLog.setDescription(description);
+						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+						    appPushLog.setSendState(success);
+						    appPushLog.setSenderId(shiroUser.getUserId());
+						    appPushLog.setSenderName(shiroUser.getUserName());
+							appPushLogService.save(appPushLog);
 						}
 					}
 				}
@@ -1126,60 +1154,68 @@ public class BusinessAnnoController {
 			//重要通知向小区内的所有居民发送公告
 			if(businessAnno.getPublishState() == 0 && businessAnno.getIsPush() == 1) {//可推送
 				estates = scope.split(","); 
+				String ids = "";
 				for(int i=0;i<estates.length;i++) {
 					String[] estate = estates[i].split(":");
 					Integer estateId = new Integer(estate[0]);
-					//查询该小区下的userId, baiduId, channelId
-					List appUserList = appUserService.findUserPushIds(estateId);
-					AppPushLog appPushLog = new AppPushLog();
-					String title = "OK家";
-					String description = "【系统消息】有一条来自OK家的最新通知，看看发生了什么？";
+					ids +="'"+estateId+"',"; 
+				}
+				if(estates.length!=0){
+					ids = ids.substring(0, ids.length()-1);
+				}
 					
-					Map paramMap = new HashMap();
-					paramMap.put("messageType", 14);
-					paramMap.put("ID", businessAnno.getAnnoId());
-					paramMap.put("title", businessAnno.getAnnoTitle());
-					paramMap.put("pic", businessAnno.getAppPic());
-					
-					for(int j=0;j<appUserList.size();j++) {
-						AppUser appUser = (AppUser) appUserList.get(j);
-						Map paramMapTemp = new HashMap();
-						paramMapTemp.put("userId", appUser.getUserId());
-						List configList = appUserConfigService.findByMap(paramMapTemp);
-						AppUserConfig appUserConfig = null;
-						if(configList != null) {
-							appUserConfig = (AppUserConfig) configList.get(0);
-						}	
-						if(appUserConfig != null 
-								&& appUserConfig.getServiceSwitch() == 0 
-								&& appUser.getBaiduId() != null 
-								&& !"".equals(appUser.getBaiduId()) 
-								&& appUser.getChannelId() != null 
-								&& !"".equals(appUser.getChannelId())) {
-							System.out.println(appUser.getRealname() + "    " +appUserConfig.getServiceSwitch());
-							//物业通知(通过PC后台，"重要通知")
-							Integer success = AppPushNotificationUtil.pushNotification(
-									title, 
-									description, 
-									appUser.getDeviceType(),
-									Long.valueOf(appUser.getChannelId()).longValue(), 
-									appUser.getBaiduId(),
-									paramMap
-									);
-							//记录推送日志
-							appPushLog.setUserId(appUser.getUserId());
-						    appPushLog.setUserName(appUser.getRealname());
-						    appPushLog.setBaiduId(appUser.getBaiduId());
-						    appPushLog.setChannelId(appUser.getChannelId());
-						    appPushLog.setTitle(title);
-						    appPushLog.setDescription(description);
-						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-						    appPushLog.setSendState(success);
-						    appPushLog.setSenderId(shiroUser.getUserId());
-						    appPushLog.setSenderName(shiroUser.getUserName());
-							appPushLogService.save(appPushLog);
-						}							
-					}
+				//查询该小区下的userId, baiduId, channelId
+				List appUserList = appUserService.findUserPushIds(ids);
+				AppPushLog appPushLog = new AppPushLog();
+				String title = "OK家";
+				String description = "【系统消息】有一条来自OK家的最新通知，看看发生了什么？";
+				
+				Map paramMap = new HashMap();
+				paramMap.put("messageType", 14);
+				paramMap.put("ID", businessAnno.getAnnoId());
+				paramMap.put("title", businessAnno.getAnnoTitle());
+				Properties p = propertiesUtil.getProperties("config.properties");
+				String ip = p.getProperty("imageIp");   
+				paramMap.put("pic", ip+businessAnno.getAppPic());
+				
+				for(int j=0;j<appUserList.size();j++) {
+					AppUser appUser = (AppUser) appUserList.get(j);
+					Map paramMapTemp = new HashMap();
+					paramMapTemp.put("userId", appUser.getUserId());
+					List configList = appUserConfigService.findByMap(paramMapTemp);
+					AppUserConfig appUserConfig = null;
+					if(configList != null) {
+						appUserConfig = (AppUserConfig) configList.get(0);
+					}	
+					if(appUserConfig != null 
+							&& appUserConfig.getServiceSwitch() == 0 
+							&& appUser.getBaiduId() != null 
+							&& !"".equals(appUser.getBaiduId()) 
+							&& appUser.getChannelId() != null 
+							&& !"".equals(appUser.getChannelId())) {
+						System.out.println(appUser.getRealname() + "    " +appUserConfig.getServiceSwitch());
+						//物业通知(通过PC后台，"重要通知")
+						Integer success = AppPushNotificationUtil.pushNotification(
+								title, 
+								description, 
+								appUser.getDeviceType(),
+								Long.valueOf(appUser.getChannelId()).longValue(), 
+								appUser.getBaiduId(),
+								paramMap
+								);
+						//记录推送日志
+						appPushLog.setUserId(appUser.getUserId());
+					    appPushLog.setUserName(appUser.getRealname());
+					    appPushLog.setBaiduId(appUser.getBaiduId());
+					    appPushLog.setChannelId(appUser.getChannelId());
+					    appPushLog.setTitle(title);
+					    appPushLog.setDescription(description);
+					    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+					    appPushLog.setSendState(success);
+					    appPushLog.setSenderId(shiroUser.getUserId());
+					    appPushLog.setSenderName(shiroUser.getUserName());
+						appPushLogService.save(appPushLog);
+					}							
 				}
 			}
 			
@@ -1187,12 +1223,19 @@ public class BusinessAnnoController {
 			if(businessAnno.getPublishState() == 0) {
 				//重要通知向小区内的所有居民发送公告
 				if(businessAnno.getAnnoType() == 3) {
-					estates = scope.split(",");
+					estates = scope.split(","); 
+					String ids = "";
 					for(int i=0;i<estates.length;i++) {
 						String[] estate = estates[i].split(":");
 						Integer estateId = new Integer(estate[0]);
-						//查询该小区下的userId
-						List appUserList = appUserService.findUserPushIds(estateId);
+						ids +="'"+estateId+"',"; 
+					}
+					if(estates.length!=0){
+						ids = ids.substring(0, ids.length()-1);
+					}
+						
+					//查询该小区下的userId, baiduId, channelId
+					List appUserList = appUserService.findUserPushIds(ids);
 						AppUserNews appUserNews = null;
 						for(int j=0;j<appUserList.size();j++) {
 							AppUser appUser = (AppUser) appUserList.get(j);
@@ -1218,7 +1261,6 @@ public class BusinessAnnoController {
 							appLatestNews.setTypeId(10);
 							appLatestNewsService.save_app(appLatestNews);
 						}
-					}
 				}
 			}
 
@@ -1332,11 +1374,18 @@ public class BusinessAnnoController {
 			
 			//重要通知向小区内的所有居民发送公告
 			if(businessAnno.getPublishState() == 0 && businessAnno.getIsPush() == 1) {//可推送
+				String ids = "";
 				for(int i=0;i<estates.length;i++) {
 					String[] estate = estates[i].split(":");
 					Integer estateId = new Integer(estate[0]);
-					//查询该小区下的userId, baiduId, channelId
-					List appUserList = appUserService.findUserPushIds(estateId);
+					ids +="'"+estateId+"',"; 
+				}
+				if(estates.length!=0){
+					ids = ids.substring(0, ids.length()-1);
+				}
+					
+				//查询该小区下的userId, baiduId, channelId
+				List appUserList = appUserService.findUserPushIds(ids);
 					AppPushLog appPushLog = new AppPushLog();
 					String title = "OK家";
 					String description = "【系统消息】有一条来自OK家的最新通知，看看发生了什么？";
@@ -1345,7 +1394,9 @@ public class BusinessAnnoController {
 					paramMap.put("messageType", 14);
 					paramMap.put("ID", businessAnno.getAnnoId());
 					paramMap.put("title", businessAnno.getAnnoTitle());
-					paramMap.put("pic", businessAnno.getAppPic());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1384,7 +1435,6 @@ public class BusinessAnnoController {
 						    appPushLog.setSenderName(shiroUser.getUserName());
 							appPushLogService.save(appPushLog);
 						}							
-					}
 				}
 			}
 			
@@ -1392,12 +1442,19 @@ public class BusinessAnnoController {
 			if(businessAnno.getPublishState() == 0) {
 				//重要通知向小区内的所有居民发送公告
 				if(businessAnno.getAnnoType() == 3) {
-					estates = scope.split(",");
+					estates = scope.split(","); 
+					String ids = "";
 					for(int i=0;i<estates.length;i++) {
 						String[] estate = estates[i].split(":");
 						Integer estateId = new Integer(estate[0]);
-						//查询该小区下的userId
-						List appUserList = appUserService.findUserPushIds(estateId);
+						ids +="'"+estateId+"',"; 
+					}
+					if(estates.length!=0){
+						ids = ids.substring(0, ids.length()-1);
+					}
+						
+					//查询该小区下的userId, baiduId, channelId
+					List appUserList = appUserService.findUserPushIds(ids);
 						AppUserNews appUserNews = null;
 						for(int j=0;j<appUserList.size();j++) {
 							AppUser appUser = (AppUser) appUserList.get(j);
@@ -1423,7 +1480,6 @@ public class BusinessAnnoController {
 							appLatestNews.setTypeId(10);
 							appLatestNewsService.save_app(appLatestNews);
 						}
-					}
 				}
 			}
 			
@@ -1972,11 +2028,17 @@ public class BusinessAnnoController {
 					Map map = new HashMap();
 					map.put("annoId", businessAnno.getAnnoId());
 					List annoScopeList = businessAnnoScopeService.findByMap(map);
+					String ids = "";
 					for(int i=0;i<annoScopeList.size();i++) {
 						BusinessAnnoScope businessAnnoScope = (BusinessAnnoScope) annoScopeList.get(i);
 						Integer estateId = businessAnnoScope.getEstateId();
+						ids +="'"+estateId+"',"; 
+					}
+					if(annoScopeList.size()!=0){
+						ids = ids.substring(0, ids.length()-1);
+					}
 						//查询该小区下的userId
-						List appUserList = appUserService.findUserPushIds(estateId);
+						List appUserList = appUserService.findUserPushIds(ids);
 						AppUserNews appUserNews = null;
 						for(int j=0;j<appUserList.size();j++) {
 							AppUser appUser = (AppUser) appUserList.get(j);
@@ -2002,7 +2064,6 @@ public class BusinessAnnoController {
 							appLatestNews.setTypeId(10);
 							appLatestNewsService.save_app(appLatestNews);
 						}
-					}
 				}
 			}
 			
@@ -2011,11 +2072,15 @@ public class BusinessAnnoController {
 				Map paramMap = new HashMap();
 				paramMap.put("annoId", businessAnno.getAnnoId());
 				List annoScopeList = businessAnnoScopeService.findByMap(paramMap);
+				String ids = "";
 				for(int i=0;i<annoScopeList.size();i++) {
 					BusinessAnnoScope businessAnnoScope = (BusinessAnnoScope) annoScopeList.get(i);
 					Integer estateId = businessAnnoScope.getEstateId();
+					ids +="'"+estateId+"',"; 
+				}
+				
 					//查询该小区下的userId, baiduId, channelId
-					List appUserList = appUserService.findUserPushIds(estateId);
+					List appUserList = appUserService.findUserPushIds(ids);
 					AppPushLog appPushLog = new AppPushLog();
 					String title = "OK家";
 					String description = "【系统消息】有一条来自OK家的最新通知，看看发生了什么？";
@@ -2024,7 +2089,9 @@ public class BusinessAnnoController {
 					paramMap.put("messageType", 14);
 					paramMap.put("ID", businessAnno.getAnnoId());
 					paramMap.put("title", businessAnno.getAnnoTitle());
-					paramMap.put("pic", businessAnno.getAppPic());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -2051,7 +2118,6 @@ public class BusinessAnnoController {
 						    appPushLog.setSenderName(getUser().getUserName());
 							appPushLogService.save(appPushLog);
 						}							
-					}
 				}
 			}
 			

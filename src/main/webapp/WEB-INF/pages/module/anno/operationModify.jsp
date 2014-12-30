@@ -6,12 +6,14 @@
     <%@include file="/common/meta.jsp"%>
     <%@include file="/common/editorJs.jsp"%>
     <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="<%=ctx%>/js/jquery.confirm/jquery.confirm.css" />
     <script src="<%=ctx%>/js/jquery-ui/jquery-ui-1.10.4.custom.min.js" type="text/javascript" ></script>
     <script src="<%=ctx%>/js/jquery-ui/jquery.ui.datepicker-zh-CN.js" type="text/javascript" ></script>
     <script src="<%=ctx %>/js/jquery.validate.min.js" type="text/javascript" ></script>
-	<link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
 	<script type="text/javascript" src="${ctx}/js/jquery-easyui/jquery.easyui.min.js"></script>
+	<script src="<%=ctx%>/js/jquery.confirm/jquery.confirm.js"></script>
 
     <style type="text/css">
         label.error
@@ -77,7 +79,7 @@
             <div class="options">
                 <p>
                     <label>
-                        <input class="radiostyle" type="radio" name="isPush" value="1" id="isPush_1"  onclick="IsPash()">
+                         <input class="radiostyle" type="radio" name="isPush" value="1" id="isPush_1" >
                         	是</label>　　
                     <em style="color:#e7402f;">选择推送后，将通过系统推送至手机用户，非重要信息请勿选择</em><br><br>
                     <label>
@@ -220,7 +222,7 @@
    	    	]]
    	    });
     
-    function IsPash() {
+    /* function IsPash() {
 		var isPush = document.getElementsByName("isPush");
     	if(confirm("是否选择推送，如果点击'确定'将通过系统推送至手机用户，'取消'则不发送系统推送！")){
     		isPush[0].checked = true;
@@ -230,7 +232,32 @@
     		isPush[1].checked = true;
     		return false;
     	} 
-    }
+    } */
+    
+    $(document).ready(function(){
+		var isPush = document.getElementsByName("isPush");
+    	$('#isPush_1').change(function(){
+    		$.confirm({
+    			'title'		: '选择推送重要提示',
+    			'message'	: '<font color="red"><b>请慎重选择推送！</b></font><br/>选择推送，会将此条公告推送至<font color="red"><b>所有注册用户</b></font>手机桌面。<br/>如本篇公告已进行过推送操作，<font color="red"><b>切勿再次推送！</b></font>否则会造成频繁推送！<br/>如确认推送，请选择【确定】，否则，请点击【取消】',
+    			'buttons'	: {
+    				'确定'	: {
+    					'class'	: 'blue',
+    					'action': function(){
+    						isPush[0].checked = true;
+    					}
+    				},
+    				'取消'	: {
+    					'class'	: 'gray',
+    					'action': function(){
+    						isPush[0].checked = false;
+    			    		isPush[1].checked = true;
+    					}	
+    				}
+    			}
+    		});
+    	});
+    });
     
     $(function() {
     	$(document).keyup(function(event){

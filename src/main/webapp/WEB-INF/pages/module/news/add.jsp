@@ -1,26 +1,27 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 <head>
-    <title>发布新闻</title>
-    <%@include file="/common/meta.jsp"%>
-    <%@include file="/common/editorJs.jsp"%>
-    <link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
-    <script language="javascript" type="text/javascript" src="${ctx}/js/time/WdatePicker.js"></script>
-    <script type="text/javascript" src="<%=ctx %>/js/jquery-easyui/jquery.easyui.min.js"></script>
-   	<script src="<%=ctx %>/js/jquery.validate.min.js" type="text/javascript" ></script>
-    <script src="<%=ctx %>/js/messages_zh.js" type="text/javascript" ></script>
+<title>发布新闻</title>
+<%@include file="/common/meta.jsp"%>
+<%@include file="/common/editorJs.jsp"%>
+<link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="<%=ctx%>/css/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="<%=ctx%>/js/jquery.confirm/jquery.confirm.css" />
+<script language="javascript" type="text/javascript" src="${ctx}/js/time/WdatePicker.js"></script>
+<script type="text/javascript" src="<%=ctx%>/js/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="<%=ctx%>/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="<%=ctx%>/js/messages_zh.js" type="text/javascript"></script>
+<script src="<%=ctx%>/js/jquery.confirm/jquery.confirm.js"></script>
 
-    <style type="text/css">
-        label.error
-        {
-            color:Red;
-            font-size:13px;
-            margin-left:5px;
-            padding-left:16px;
-        }
-    </style>
-    <script type="text/javascript">
+<style type="text/css">
+label.error {
+	color: Red;
+	font-size: 13px;
+	margin-left: 5px;
+	padding-left: 16px;
+}
+</style>
+<script type="text/javascript">
 	    $(document).keyup(function(event){
 			  if(event.keyCode ==13){
 					  submitForm();			
@@ -81,6 +82,9 @@
                     newsScope: {
                     	required: true
                     },
+                    tag: {
+                    	required: true
+                    },
                     /* subjectPic: {
                        required: true
                     }, */
@@ -112,6 +116,9 @@
                     newsScope: {
                     	required: '请选择新闻范围'
                     },
+                    tag: {
+                    	required:  '请选择新闻标签'
+                    },
                     appPic: {
                         required: '请选择APP首页小图！'
                     },
@@ -136,112 +143,177 @@
     </script>
 </head>
 <body class="bagcolr">
-<form id="ff" action="save.do" method="post">
-    <div class="wrapper wranews">
-        <div class="newsrel">
-            <div class="header-public"><span class="return" onclick="history.go(-1);"></span>新闻发布</div>
-            <div class="cont-l">
-                <input type="hidden" name="newsType" id="newsType" value="0">
-                <input type="hidden" name="isHot" id="isHot" value="0">
-                <input type="hidden" name="isAd" id="isAd" value="0">
-                <input type="hidden" name="visits" id="visits" value="0">
-                <input type="hidden" name="comments" id="comments" value="0">
-                <input type="hidden" name="supports" id="supports" value="0">
-                
-                <h2 class="relran">新闻标题<label for="title" class="error success"></label></h2>
-                <input class="iptnewtit" type="text" name="title" placeholder='请输入新闻标题28字以内' />
-                
-                <h2 class="relran">新闻简介<label for="brief" class="error success"></label></h2>
-                <input class="iptnewtit" type="text" name="brief" id="brief" placeholder='请输入新闻简介28字以内' />
-                
-                <h2 class="relran">新闻内容<label for="content" class="error success"></label></h2>
-                <%--文本编辑器--%>
-                <!--style给定宽度可以影响编辑器的最终宽度-->
-                <textarea id="content" name="content" type="text/plain" style="width:1024px;height:500px;"></textarea>
-                
-                <%-- <h2 class="relran">列表页大图<label for="subjectPic" class="error success"></label></h2>
+	<form id="ff" action="save.do" method="post">
+		<div class="wrapper wranews">
+			<div class="newsrel">
+				<div class="header-public">
+					<span class="return" onclick="history.go(-1);"></span>新闻发布
+				</div>
+				<div class="cont-l">
+					<input type="hidden" name="newsType" id="newsType" value="0">
+					<input type="hidden" name="isHot" id="isHot" value="0"> <input
+						type="hidden" name="isAd" id="isAd" value="0"> <input
+						type="hidden" name="visits" id="visits" value="0"> <input
+						type="hidden" name="comments" id="comments" value="0"> <input
+						type="hidden" name="supports" id="supports" value="0">
+
+					<h2 class="relran">
+						新闻标题<label for="title" class="error success"></label>
+					</h2>
+					<input class="iptnewtit" type="text" name="title"
+						placeholder='请输入新闻标题28字以内' />
+
+					<h2 class="relran">
+						新闻简介<label for="brief" class="error success"></label>
+					</h2>
+					<input class="iptnewtit" type="text" name="brief" id="brief"
+						placeholder='请输入新闻简介28字以内' />
+
+					<h2 class="relran">
+						新闻内容<label for="content" class="error success"></label>
+					</h2>
+					<%--文本编辑器--%>
+					<!--style给定宽度可以影响编辑器的最终宽度-->
+					<textarea id="content" name="content" type="text/plain"
+						style="width: 1024px; height: 500px;"></textarea>
+
+					<%-- <h2 class="relran">列表页大图<label for="subjectPic" class="error success"></label></h2>
                 <div style=" overflow:hidden;"><img id="subjectPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
-                <input type="hidden" name="subjectPic" id="subjectPic" value="" > --%> <%--头像--%>
-                
-                <h2 class="relran" >展示范围<label for="newsScope" class="error success"></label></h2>
-	            <div style="position:relative;">
-		            <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span>
-		            <input type="hidden" id="newsScope" name="newsScope" value="" />
-		            <input type="hidden" id="newsScopeInfo" name="newsScopeInfo" value="" />
-		            <lable style="position: absolute; top: 10px; left: 160px;"  id="scopeShow"></lable>
-	            </div>
-                
-                <!-- <div class="line2"></div> -->
-                <h2 class="relran">APP首页小图<label for="appPic" class="error success"></label></h2>
-                <div style=" overflow:hidden;"><img id="appPicBtn" src="${ctx}/images/icon/add.jpg" width="100" height="100"  style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
-                <input type="hidden" name="appPic" id="appPic" > <%--头像--%>
-                <input type="hidden" name="uploadField" id="uploadField" value="" >
-                
-                <div class="line2"></div>
-                <h2 class="relstatus">是否推送<label for="isPush" class="error success"></label></h2>
-                <div class="options">
-                    <p>
-                        <label><input class="radiostyle" type="radio" name="isPush" value="1"  onclick="IsPash()">&nbsp;是</label>　　<em style="color:#e7402f;">选择推送后，将通过系统推送至手机用户，非重要信息请勿选择</em><br><br>
-                        <label><input class="radiostyle" type="radio" name="isPush" value="0" checked >&nbsp;否<br></label>
-                    </p>
-                </div>
-                
-				<div class="line2"></div>
-                <h2 class="relstatus">推荐到焦点图<label for="isRecommend" class="error success"></label></h2>
-                <div class="options">
-                    <p>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="0">&nbsp;首页焦点图</label>　　<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="1">&nbsp;首页新闻列表置顶<br><br></label>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="2"  checked>&nbsp;以上都不选<br></label>
-                    </p>
-                </div>
-                
-                <div class="line2"></div>
-                <h2 class="relstatus">发布状态<label for="state" class="error success"></label></h2>
-                <div class="options">
-                    <p>
-                        <shiro:hasPermission name="news_instant_publish">
-                        <label><input class="radiostyle" type="radio" name="state" value="0">&nbsp;立即发布<br><br></label>
-                        </shiro:hasPermission>
-                        <shiro:hasPermission name="news_wait_publish">
-                        <label><input class="radiostyle" type="radio" name="state" value="1">&nbsp;暂存<br><br></label>
-                        </shiro:hasPermission>
-                        <label><input class="radiostyle" type="radio" name="state" value="2"  checked>&nbsp;提交审核<br><br></label>
-                    </p>
-                </div>
+                <input type="hidden" name="subjectPic" id="subjectPic" value="" > --%>
+					<%--头像--%>
 
-                <div class="submtpres">
-                    <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm();"/>
-                </div>
-                
-            </div>
-        </div>
-    </div>
-</form>
-<jsp:include page="/common/uploadPicJs.jsp"/>
+					<h2 class="relran">
+						展示范围<label for="newsScope" class="error success"></label>
+					</h2>
+					<div style="position: relative;">
+						<span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span> 
+						<input type="hidden" id="newsScope" name="newsScope" value="" /> 
+						<input type="hidden" id="newsScopeInfo" name="newsScopeInfo" value="" />
+						<lable style="position: absolute; top: 10px; left: 160px;" id="scopeShow"></lable>
+					</div>
+					<div class="line2"></div>
+					
+					<h2 class="relran">
+						新闻标签<label for="tag" class="error success"></label>
+					</h2>
+					<div style="position: relative;">
+						<span class="ranbut radiusbox" id="showTagLayer">点击选择标签</span> 
+						<input type="hidden" id="tag" name="tag" value="" /> 
+						<input type="hidden" id="tagInfo" name="tagInfo" value="" />
+						<lable style="position: absolute; top: 10px; left: 160px;" id="tagShow"></lable>
+					</div>
+					<div class="line2"></div>
+					
+					<h2 class="relran">
+						APP首页小图<label for="appPic" class="error success"></label>
+					</h2>
+					<div style="overflow: hidden;">
+						<img id="appPicBtn" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float: left; padding-right: 10px;">
+						<div style="color: #000; padding-top: 26px;">
+							请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!
+						</div>
+					</div>
+					<input type="hidden" name="appPic" id="appPic">
+					<%--头像--%>
+					<input type="hidden" name="uploadField" id="uploadField" value="">
 
-<!-- 展示范围选择开始 -->
-<div id="scopeLayer" class="busswi3">
-	<div id="scopeBar" class="sidebar3">
-		<form action="">
-	    	<a id="close3" href="javascript:;"  onclick="cancleFocusScope()"></a>
-	    	<h2 class="tit3">展示范围选择</h2>
-	    	<hr class="link3" >
-	        <div id="wrapper-250">
-		          <ul id="scopeTree" style="font-size: 18px; margin-top:10px;"></ul>
-	        </div>
-	        <div class="w-gg-btn">
-	            <input class="w-gg-qr w-gg-total" type="button" style="width: 80px;" value="确定"  id="scopeOk"/>
-				<input class="w-gg-qx w-gg-total" type="button" style="width: 80px;" value="取消"  onclick="cancleFocusScope()"/>
-	        </div>
-        </form>
-    </div>
-</div>
-<!-- 展示范围选择结束 -->
+					<div class="line2"></div>
+					<h2 class="relstatus">
+						是否推送<label for="isPush" class="error success"></label>
+					</h2>
+					<div class="options">
+						<p>
+							<label><input id="isPush1" class="radiostyle" type="radio" name="isPush" value="1">&nbsp;是</label> <em
+								style="color: #e7402f;">选择推送后，将通过系统推送至手机用户，非重要信息请勿选择</em><br>
+							<br> <label><input class="radiostyle" type="radio" name="isPush" value="0" checked>&nbsp;否<br></label>
+						</p>
+					</div>
+					
+					<div class="line2"></div>
+					<h2 class="relstatus">
+						推荐到焦点图<label for="isRecommend" class="error success"></label>
+					</h2>
+					<div class="options">
+						<p>
+							<label><input class="radiostyle" type="radio"
+								name="isRecommend" value="0">&nbsp;首页焦点图</label> <em
+								style="color: #000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br>
+							<br> <label><input class="radiostyle" type="radio"
+								name="isRecommend" value="1">&nbsp;首页新闻列表置顶<br> <br></label>
+							<label><input class="radiostyle" type="radio"
+								name="isRecommend" value="2" checked>&nbsp;以上都不选<br></label>
+						</p>
+					</div>
 
+					<div class="line2"></div>
+					<h2 class="relstatus">
+						发布状态<label for="state" class="error success"></label>
+					</h2>
+					<div class="options">
+						<p>
+							<shiro:hasPermission name="news_instant_publish">
+								<label><input class="radiostyle" type="radio"
+									name="state" value="0">&nbsp;立即发布<br> <br></label>
+							</shiro:hasPermission>
+							<shiro:hasPermission name="news_wait_publish">
+								<label><input class="radiostyle" type="radio"
+									name="state" value="1">&nbsp;暂存<br> <br></label>
+							</shiro:hasPermission>
+							<label><input class="radiostyle" type="radio"
+								name="state" value="2" checked>&nbsp;提交审核<br> <br></label>
+						</p>
+					</div>
+
+					<div class="submtpres">
+						<input id="qrbut" type="button" name="" value="确认提交" onclick="submitForm();" />
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
+	<jsp:include page="/common/uploadPicJs.jsp" />
+
+	<!-- 展示范围选择开始 -->
+	<div id="scopeLayer" class="busswi3">
+		<div id="scopeBar" class="sidebar3">
+			<form action="">
+				<a id="close3" href="javascript:;" onclick="cancleFocusScope()"></a>
+				<h2 class="tit3">展示范围选择</h2>
+				<hr class="link3">
+				<div id="wrapper-250">
+					<ul id="scopeTree" style="font-size: 18px; margin-top: 10px;"></ul>
+				</div>
+				<div class="w-gg-btn">
+					<input class="w-gg-qr w-gg-total" type="button" style="width: 80px;" value="确定" id="scopeOk" /> 
+					<input class="w-gg-qx w-gg-total" type="button" style="width: 80px;" value="取消" onclick="cancleFocusScope()" />
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- 展示范围选择结束 -->
+	
+	<!-- 新闻标签选择开始 -->
+	<div id="tagLayer" class="busswi3">
+		<div id="tagBar" class="sidebar3">
+			<form action="">
+				<a id="close3" href="javascript:;" onclick="cancleTag()"></a>
+				<h2 class="tit3">新闻标签选择</h2>
+				<hr class="link3">
+				<div id="wrapper-250">
+					<ul id="tagTree" style="font-size: 18px; margin-top: 10px;"></ul>
+				</div>
+				<div class="w-gg-btn">
+					<input class="w-gg-qr w-gg-total" type="button" style="width: 80px;" value="确定" id="tagOk" /> 
+					<input class="w-gg-qx w-gg-total" type="button" style="width: 80px;" value="取消" onclick="cancleTag()" />
+				</div>
+			</form>
+		</div>
+	</div>
+	<!-- 新闻标签选择结束 -->
 </body>
 <%--初始化文本编辑器--%>
-    
+
 <script type="text/javascript">
     //实例化编辑器
     var ue = UE.getEditor('content',{
@@ -250,17 +322,30 @@
     	]]
     });
     
-    function IsPash() {
+    $(document).ready(function(){
 		var isPush = document.getElementsByName("isPush");
-    	if(confirm("是否选择推送，如果点击'确定'将通过系统推送至手机用户，'取消'则不发送系统推送！")){
-    		isPush[0].checked = true;
-    		 return true;
-    	}else {
-    		isPush[0].checked = false;
-    		isPush[1].checked = true;
-    		return false;
-    	} 
-    }
+    	$('#isPush1').change(function(){
+    		$.confirm({
+    			'title'		: '选择推送重要提示',
+    			'message'	: '<font color="red"><b>请慎重选择推送！</b></font><br/>选择推送，会将此条新闻推送至<font color="red"><b>所有注册用户</b></font>手机桌面。<br/>如本篇新闻已进行过推送操作，<font color="red"><b>切勿再次推送！</b></font>否则会造成频繁推送！<br/>如确认推送，请选择【确定】，否则，请点击【取消】',
+    			'buttons'	: {
+    				'确定'	: {
+    					'class'	: 'blue',
+    					'action': function(){
+    						isPush[0].checked = true;
+    					}
+    				},
+    				'取消'	: {
+    					'class'	: 'gray',
+    					'action': function(){
+    						isPush[0].checked = false;
+    			    		isPush[1].checked = true;
+    					}	
+    				}
+    			}
+    		});
+    	});
+    });
     
     $(function() {
     	//大图
@@ -294,19 +379,44 @@
 	   	                    if(rows.length > 0) {
 	   	                        $('#scopeTree').tree('loadData', data.result);
 	   	                    }else{
-	   	                        $('.accordion2').html('很抱歉，没有相关记录。');
+	   	                        $('#scopeTree').html('很抱歉，没有相关记录。');
 	   	                    }
 	   	                }else{
-	   	                    $('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
+	   	                    $('#scopeTree').html('很抱歉，加载内容出错，我们及时修改问题。');
 	   	                }
 	   	            },
 	   	            error: function () {
-	   	                $('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
+	   	                $('#scopeTree').html('很抱歉，加载内容出错，我们及时修改问题。');
 	   	            }
 	   	        });
 	   	 });
     	
-	  //选择展示范围
+	 	// 显示选择新闻标签层
+	    $("#showTagLayer").click(function(){
+	   	        $("#tagLayer").fadeIn("slow");
+	   	        $.ajax({
+	   	            url: '${ctx}/business/businessNews/getTagTree.do',
+	   	            dataType: 'json',
+	   	            cache: false,
+	   	            success: function (data) {
+	   	                if(data.success == true){
+	   	                    var rows = data.result;
+	   	                    if(rows.length > 0) {
+	   	                        $('#tagTree').tree('loadData', data.result);
+	   	                    }else{
+	   	                        $('#tagTree').html('很抱歉，没有相关记录。');
+	   	                    }
+	   	                }else{
+	   	                    $('#tagTree').html('很抱歉，加载内容出错，我们及时修改问题。');
+	   	                }
+	   	            },
+	   	            error: function () {
+	   	                $('#tagTree').html('很抱歉，加载内容出错，我们及时修改问题。');
+	   	            }
+	   	        });
+	   	 });
+	 	
+	  	//选择展示范围
         $('#scopeOk').click(function() {
             var scopeIds = '';
             var scopeInfo = '';
@@ -351,11 +461,60 @@
             }
         });
     	
+      	// 选择新闻标签
+        $('#tagOk').click(function() {
+            var tagIds = '';
+            var tagInfo = '';
+            var tagNodes = $('#tagTree').tree('getChecked');
+            if(tagNodes != null && tagNodes.length > 0) {
+                for(var i=0;i<tagNodes.length;i++) {
+                    var node = tagNodes[i];
+                    var idArr = node.id.split('_');
+                    var typeid = idArr[0];
+                    if(typeid == 'tag') {
+                    	tagIds += idArr[1] + ':' + node.text + ',';
+                        tagInfo += node.text + ',';
+                    }
+                }
+                
+                if(tagIds != '') {
+                    if(tagIds.indexOf(',') > -1) {
+                        tagIds = tagIds.substring(0, tagIds.length-1);
+                        tagInfo = tagInfo.substring(0, tagInfo.length-1);
+                    }
+                }
+                $('#tag').val(tagIds);
+                $('#tagInfo').val(tagInfo);
+                
+                $('#tagShow').html(tagInfo);
+                $('#tagShow').focus();
+                
+                $("#tagLayer").fadeOut("slow");
+            }else{
+                alert('请选择展示范围');
+            }
+        });
+      	
+        // 选择新闻标签
+        $('#tagTree').tree({
+            checkbox: true,
+            onSelect: function(node){
+                var children = $('#tagTree').tree('getChildren', node.target);
+                if(children.length != 0) {
+                	$('#tagTree').tree('expend', node);
+                }
+            }
+        });
     });
     
- // 取消展示扩散范围
+ 	// 取消展示扩散范围
  	function cancleFocusScope() {
  	    $("#scopeLayer").fadeOut("slow");
+ 	}
+ 
+ 	 // 取消选择新闻标签
+ 	function cancleTag() {
+ 	    $("#tagLayer").fadeOut("slow");
  	}
 </script>
 </html>

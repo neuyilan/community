@@ -38,6 +38,7 @@
 			<result column="portrait" property="portrait" />
 			<result column="hotTime" property="hotTime" />
 			<result column="isNickname" property="isNickname" />
+			<result column="tag" property="tag" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -50,6 +51,7 @@
 			n.subjectPic,
 			n.appPic,
 			n.newsType,
+			n.tag,
 			n.publisherId,
 			n.publisherName,
 			n.publishTime,
@@ -103,6 +105,9 @@
 					</if>
 					<if test="newsType != null " >
 				   		and n.newsType = #{newsType}
+					</if>
+					<if test="tag != null and tag != ''" >
+				   		and n.tag = #{tag}
 					</if>
 					<if test="publisherId != null and publisherId != ''" >
 				   		and n.publisherId = #{publisherId}
@@ -220,7 +225,8 @@
 			n.editor,
 			n.isPush,
 			n.isRecommend,
-			n.isNickname
+			n.isNickname,
+			n.appPic
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
@@ -414,7 +420,6 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_news(
-		
 		title,
 		content,
 		pageUrl,
@@ -422,6 +427,7 @@
 		subjectPic,
 		appPic,
 		newsType,
+		tag,
 		publisherId,
 		publisherName,
 		publishTime,
@@ -446,13 +452,14 @@
 		isRecommend,
 		isNickname
 		) values(
-				#{title},
+		#{title},
 		#{content},
 		#{pageUrl},
 		#{brief},
 		#{subjectPic},
 		#{appPic},
 		#{newsType},
+		#{tag},
 		#{publisherId},
 		#{publisherName},
 		#{publishTime},
@@ -517,6 +524,9 @@
 			</if>
 			<if test="newsType != null " >
 			newsType=#{newsType},
+			</if>
+			<if test="tag != null and tag != ''" >
+			tag=#{tag},
 			</if>
 			<if test="publisherId != null and publisherId != ''" >
 			publisherId=#{publisherId},

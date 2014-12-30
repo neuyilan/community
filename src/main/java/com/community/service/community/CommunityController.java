@@ -134,7 +134,18 @@ public class CommunityController {
 			json += "\"communityList\":[";
 			for (BusinessCommunity businessCommunity : list) {
 				json += "{\"comId\":\""+businessCommunity.getComId()+"\",\"comName\":\""+businessCommunity.getComName()+"\",";
-				json += "\"cityName\":\""+businessCommunity.getCityName()+"\",\"areaName\":\""+businessCommunity.getCountyName()+"\"},";
+				if (businessCommunity.getCityName()==null) {
+					json += "\"cityName\":\"\"";
+				}else {
+					json += "\"cityName\":\""+businessCommunity.getCityName()+"\"";
+				}
+				if (businessCommunity.getCountyName()==null) {
+					json += ",\"areaName\":\"\"},";
+				}else {
+					
+					json += ",\"areaName\":\""+businessCommunity.getCountyName()+"\"},";
+				}
+				
 			}
 			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);
@@ -206,10 +217,29 @@ public class CommunityController {
 			json += "\"estateList\":[";
 			for (ManageEstate manageEstate : list) {
 				json += "{\"estateId\":\""+manageEstate.getEstateId()+"\",\"estateName\":\""+manageEstate.getEstateName()+"\",";
-				json += "\"comName\":\""+manageEstate.getComName()+"\",\"areaName\":\""+manageEstate.getCountyName()+"\",";
-				json += "\"cityName\":\""+manageEstate.getCityName()+"\",\"comId\":\""+manageEstate.getComId()+"\","
-						+ "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\","
-						+ "\"comName\":\""+manageEstate.getComName()+"\"},";
+				json += "\"comName\":\""+manageEstate.getComName()+"\",";
+				if (manageEstate.getCountyName()==null) {
+					json += "\"areaName\":\"\",";
+				}else {
+					json += "\"areaName\":\""+manageEstate.getCountyName()+"\",";
+				}
+				if (manageEstate.getCityName()==null) {
+					json += "\"cityName\":\"\",";
+				}else{
+					json += "\"cityName\":\""+manageEstate.getCityName()+"\",";
+				}
+				if (manageEstate.getStationId()==null) {
+					json += "\"stationId\":\"0\",\"staName\":\"\"";
+				} else {
+					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
+				}
+				if (manageEstate.getComId()==null) {
+					json += ",\"comId\":\"0\",\"comName\":\"\"},";
+				} else {
+					json += ",\"comId\":\""+manageEstate.getComId()+"\",\"comName\":\""+manageEstate.getComName()+"\"},";
+				}	
+				
+						
 			}
 			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);
@@ -1010,19 +1040,39 @@ public class CommunityController {
 		String json = "";
 		Properties p = propertiesUtil.getProperties("config.properties");
 		String ip = p.getProperty("imageIp");   
-		json += "{";
-		json += "\"errorCode\":\"200\",";
-		json += "\"message\":\"获取成功\",";
-		json += "\"content\":{";
-		json += "\"ID\":\"12\",";
-		json += "\"name\":\"圆圆\",";
-		json += "\"avatar\":\""+ip+"/images/yuanyuan.jpg"+"\",";
-		json += "\"brief\":\"我是朝青社区报的社长媛媛，谢谢您给我们提供新闻线索！您可以把情况告诉我们，我们会很快跟您联络。您也可以拨打我的电话：\",";
-		json += "\"tel\":\"13910830458\",";
-		json += "\"serviceTel\":\"53351217\"";
-		json += "}";
-		json += "}";
-		
+		String comId = request.getParameter("comId");
+		try {
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			if(comId.equals("8")){
+				json += "\"ID\":\"12\",";
+				json += "\"name\":\"圆圆\",";
+				json += "\"avatar\":\""+ip+"/images/yuanyuan.jpg"+"\",";
+				json += "\"brief\":\"我是朝青社区报的社长媛媛，谢谢您给我们提供新闻线索！您可以把情况告诉我们，我们会很快跟您联络。您也可以拨打我的电话：\",";
+				json += "\"tel\":\"13910830458\",";
+				json += "\"serviceTel\":\"53351217\"";
+			}else if(comId.equals("11")){
+				json += "\"ID\":\"12\",";
+				json += "\"name\":\"北苑社长\",";
+				json += "\"avatar\":\""+ip+"/images/yuanyuan.jpg"+"\",";
+				json += "\"brief\":\"我是北苑社区报的社长媛媛，谢谢您给我们提供新闻线索！您可以把情况告诉我们，我们会很快跟您联络。您也可以拨打我的电话：\",";
+				json += "\"tel\":\"13910830458\",";
+				json += "\"serviceTel\":\"53351217\"";
+			}else if (comId.equals("12")) {
+				json += "\"ID\":\"12\",";
+				json += "\"name\":\"天通苑社长\",";
+				json += "\"avatar\":\""+ip+"/images/yuanyuan.jpg"+"\",";
+				json += "\"brief\":\"我是天通苑社区报的社长媛媛，谢谢您给我们提供新闻线索！您可以把情况告诉我们，我们会很快跟您联络。您也可以拨打我的电话：\",";
+				json += "\"tel\":\"13910830458\",";
+				json += "\"serviceTel\":\"53351217\"";
+			}
+			json += "}";
+			json += "}";
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {

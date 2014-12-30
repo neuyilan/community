@@ -9,6 +9,7 @@
 			<result column="pic" property="pic" />
 			<result column="url" property="url" />
 			<result column="comId" property="comId" />
+			<result column="comNameScope" property="comNameScope" />
 			<result column="createTime" property="createTime" />
 			<result column="editTime" property="editTime" />
 			<result column="editor" property="editor" />
@@ -21,6 +22,7 @@
 			bn.pic,
 			bn.url,
 			bn.comId,
+			bn.comNameScope,
 			bn.createTime,
 			bn.editTime,
 			bn.editor
@@ -42,8 +44,11 @@
 					<if test="url != null and url != ''" >
 				   		and url = #{url}
 					</if>
+					<if test="curUserId != null and curUserId != ''" >
+						and res.userId=#{curUserId} 
+					</if>
 					<if test="comId != null and comId != ''" >
-				   		and bn.comId = #{comId}
+						and res.comId=#{comId} 
 					</if>
 					<if test="createTime != null and createTime != ''" >
 				   		and createTime = #{createTime}
@@ -90,7 +95,9 @@
 	
 	<!-- BusinessNewspaper根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessNewspaperResult" parameterType="Object">
-		select <include refid="Base_Column_List" />, bc.comName from business_newspaper bn left join business_community bc on bn.comId = bc.comId    
+		select DISTINCT<include refid="Base_Column_List" /> from business_newspaper bn
+		inner join business_newspaper_scope scope on bn.newspaperId = scope.newspaperId
+		inner join business_user_resource res on res.comId = scope.comId
 		<include refid="Base_Where_Clause" /> 
 	    <if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
@@ -102,7 +109,9 @@
 	
 	<!-- BusinessNewspaper列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_newspaper bn
+		select count(distinct(bn.newspaperId))  from business_newspaper bn
+		inner join business_newspaper_scope scope on bn.newspaperId = scope.newspaperId
+		inner join business_user_resource res on res.comId = scope.comId
 		<include refid="Base_Where_Clause" />
 	</select>
 	
@@ -134,6 +143,7 @@
 		pic,
 		url,
 		comId,
+		comNameScope,
 		createTime,
 		editTime,
 		editor
@@ -142,6 +152,7 @@
 		#{pic},
 		#{url},
 		#{comId},
+		#{comNameScope},
 		#{createTime},
 		#{editTime},
 		#{editor}
@@ -163,6 +174,9 @@
 			</if>
 			<if test="comId != null and comId != ''" >
 			comId=#{comId},
+			</if>
+			<if test="comNameScope != null and comNameScope != ''" >
+			comNameScope=#{comNameScope},
 			</if>
 			<if test="createTime != null and createTime != ''" >
 			createTime=#{createTime},

@@ -79,7 +79,16 @@
 	        			
 		            	<a class="nopotr2 s-baoliao-no" href="javascript:;" style="height:326px;"> 
 		                    <div class="info">
-		                    	<p style="float:left;">范围：<span style="color: #3EAF0E;">${focus.focusScope}</span></p>
+		                    	<p style="float:left;">范围：<span style="color: #3EAF0E;">
+			                    	<c:choose>
+										<c:when test="${fn:length(focus.focusScope) > 27}">
+											<c:out value="${fn:substring(focus.focusScope, 0, 26)}......" />
+										</c:when>
+										<c:otherwise>
+											<c:out value="${focus.focusScope}" />
+										</c:otherwise>
+									</c:choose>
+		                    	</span></p>
 		                    </div>
 		                    <time><fmt:formatDate value="${focus.selectTime }" pattern="yyyy-MM-dd HH:mm"/></time>
 		                    <hr class="link">
@@ -455,7 +464,7 @@
                     	var htmlDom = ''
                     	+ '<div class="manbox" '+styleStr+'>'
                     	+ '<a class="nopotr2 s-baoliao-no" href="javascript:;" style="height:326px;"> '
-                    	+ '<div class="info"><p style="float:left;">范围：<span style="color: #3EAF0E;">'+row.focusScope+'</span></p> </div>'
+                    	+ '<div class="info"><p style="float:left;">范围：<span style="color: #3EAF0E;">'+(row.focusScope.length >27 ? row.focusScope.substring(0, 26)+"......" : row.focusScope)+'</span></p> </div>'
                     	+ '<time>'+(row.selectTime != '' ? row.selectTime.substring(0, 16) : '')+'</time>'
                     	+ '<hr class="link">'
                     	+ '<h2 class="s-jdt-title title">'+row.title+'</h2>'

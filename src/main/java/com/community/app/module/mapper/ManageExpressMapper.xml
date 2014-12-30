@@ -104,7 +104,7 @@
 	
 	<!-- 按VO对象条件查询所有ManageExpress -->
 	<select id="findByExample_app" resultType="ManageExpress" parameterType="com.community.app.module.vo.ManageExpressQuery">
-		select <include refid="Base_Column_List_app" />,e.state,s.staTel from manage_express e left join manage_org_express oe on e.expressId=oe.expressId left join business_station s on s.stationId=oe.stationId  where s.stationId=#{stationId} 
+		select <include refid="Base_Column_List_app" />,oe.expState as state,s.staTel from manage_express e left join manage_org_express oe on e.expressId=oe.expressId left join business_station s on s.stationId=oe.stationId  where s.stationId=#{stationId} 
 	</select>
 	
 	<!-- 按驿站查找快递公司 -->

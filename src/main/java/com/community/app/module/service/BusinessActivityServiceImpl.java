@@ -368,7 +368,7 @@ public class BusinessActivityServiceImpl implements BusinessActivityService {
     			List<BusinessActivityScope> scopeList = businessActivityScopeDao.findByMap(paramMap1);
     			for (BusinessActivityScope businessActivityScope : scopeList) {
 					//查询该小区下的userId, baiduId, channelId
-					List appUserList = appUserDao.findUserPushIds(businessActivityScope.getEstateId());
+					List appUserList = appUserDao.findUserPushIds(businessActivityScope.getEstateId()+"");
 					AppPushLog appPushLog = new AppPushLog();
 					String title = "OK家";
 					String description = businessActivity.getTimingPushconTent();	
@@ -464,7 +464,7 @@ public class BusinessActivityServiceImpl implements BusinessActivityService {
 	    			List<BusinessActivityScope> scopeList = businessActivityScopeDao.findByMap(paramMap1);
 	    			for (BusinessActivityScope businessActivityScope : scopeList) {
 						//查询该小区下的userId, baiduId, channelId
-						List appUserList = appUserDao.findUserPushIds(businessActivityScope.getEstateId());
+						List appUserList = appUserDao.findUserPushIds(businessActivityScope.getEstateId()+"");
 						AppPushLog appPushLog = new AppPushLog();
 						String title = "OK家";
 						String description = businessActivity.getActName();	

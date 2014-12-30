@@ -358,7 +358,7 @@ public class BusinessNewsServiceImpl implements BusinessNewsService {
 	        for (; it.hasNext();) {
 	        	it.next();
 	        	imagecount++;
-				content += "<img src=\"/community"+image.get(imagecount+"")+"\"/>";
+				content += "<p><img src=\"/community"+image.get(imagecount+"")+"\"/></p>";
 	        }
 			
 			BusinessNews businessNews = new BusinessNews();
@@ -369,7 +369,7 @@ public class BusinessNewsServiceImpl implements BusinessNewsService {
 		    businessNews.setSubjectPic("");//大图
 		    businessNews.setAppPic(param.get("appPic"));//小图
 		    businessNews.setNewsType(2);//类型
-		    businessNews.setPublisherId(new Integer(param.get("content")));//发布人id
+		    businessNews.setPublisherId(new Integer(param.get("userId")));//发布人id
 		    businessNews.setPublisherName(param.get("nickname"));//发布人名称
 		    businessNews.setState(0);//状态
 		    businessNews.setPublishTime(ts);//发布时间

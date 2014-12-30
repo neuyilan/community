@@ -64,8 +64,53 @@ public class AppUserQuery extends BaseBean {
 	private String channelId;
 	private Integer deviceType;
 	private String dateField;
+	private String remarks;
+	private String wenxinId;
+	private String qqId;
+	private Integer comId;
+	private String ids;
 	
-    public String getDateField() {
+    public String getIds() {
+		return ids;
+	}
+
+	public void setIds(String ids) {
+		this.ids = ids;
+	}
+
+	public Integer getComId() {
+		return comId;
+	}
+
+	public void setComId(Integer comId) {
+		this.comId = comId;
+	}
+
+	public String getWenxinId() {
+		return wenxinId;
+	}
+
+	public void setWenxinId(String wenxinId) {
+		this.wenxinId = wenxinId;
+	}
+
+	public String getQqId() {
+		return qqId;
+	}
+
+	public void setQqId(String qqId) {
+		this.qqId = qqId;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getDateField() {
 		return dateField;
 	}
 

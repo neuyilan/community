@@ -9,13 +9,11 @@ package com.community.service.user;
  *
  */
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.community.app.module.bean.AppEstateUser;
 import com.community.app.module.bean.AppHomepage;
@@ -42,12 +39,12 @@ import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserCellphone;
 import com.community.app.module.bean.AppUserConfig;
 import com.community.app.module.bean.AppUserNews;
-import com.community.app.module.bean.BusinessBreakPic;
-import com.community.app.module.bean.BusinessCommunity;
-import com.community.app.module.bean.BusinessFeedback;
+import com.community.app.module.bean.BusinessActivity;
+import com.community.app.module.bean.BusinessAnno;
+import com.community.app.module.bean.BusinessChinmedichenacare;
 import com.community.app.module.bean.BusinessFocus;
+import com.community.app.module.bean.BusinessHealthydiet;
 import com.community.app.module.bean.BusinessNews;
-import com.community.app.module.bean.BusinessRepair;
 import com.community.app.module.bean.BusinessTel;
 import com.community.app.module.bean.BusinessTelGroup;
 import com.community.app.module.bean.MemberVO;
@@ -60,9 +57,11 @@ import com.community.app.module.service.AppUserCellphoneService;
 import com.community.app.module.service.AppUserConfigService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.BusinessActivityService;
 import com.community.app.module.service.BusinessAnnoService;
-import com.community.app.module.service.BusinessAnnoService;
+import com.community.app.module.service.BusinessChinmedichenacareService;
 import com.community.app.module.service.BusinessFocusService;
+import com.community.app.module.service.BusinessHealthydietService;
 import com.community.app.module.service.BusinessNewsService;
 import com.community.app.module.service.BusinessTelGroupService;
 import com.community.app.module.service.BusinessTelService;
@@ -76,14 +75,16 @@ import com.community.app.module.vo.AppUserConfigQuery;
 import com.community.app.module.vo.AppUserNewsQuery;
 import com.community.app.module.vo.AppUserQuery;
 import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.app.module.vo.BusinessFocusQuery;
-import com.community.app.module.vo.BusinessNewsQuery;
-import com.community.app.module.vo.BusinessRepairQuery;
 import com.community.app.module.vo.BusinessTelGroupQuery;
 import com.community.app.module.vo.BusinessTelQuery;
 import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.propertiesUtil;
+import com.qq.connect.api.OpenID;
+import com.qq.connect.api.qzone.UserInfo;
+import com.qq.connect.javabeans.AccessToken;
+import com.qq.connect.javabeans.qzone.UserInfoBean;
+import com.qq.connect.oauth.Oauth;
 
 @Controller
 @RequestMapping("/service/user")
@@ -128,6 +129,18 @@ public class UserController {
 	@Autowired
 	private BusinessNewsService businessNewsService;
 	
+	@Autowired
+	private BusinessActivityService businessActivityService;
+	
+	@Autowired
+	private BusinessAnnoService businessAnnoService;
+	
+	@Autowired
+	private BusinessChinmedichenacareService businessChinmedichenacareService;
+	
+	@Autowired
+	private BusinessHealthydietService businessHealthydietService;
+	
 	
 	
 	
@@ -143,6 +156,9 @@ public class UserController {
 	@RequestMapping(value = "regist")
 	public void regist(HttpServletRequest request,
 			HttpServletResponse response, AppUserQuery query) {
+		String openid = (String) request.getSession().getAttribute("openid");
+		String QQopenid = (String) request.getSession().getAttribute("QQopenid");
+		String nickname = (String) request.getSession().getAttribute("nickname");
 		AppUser appUser = new AppUser();
 		String json = "";
 		boolean whetherRepeat = false;
@@ -175,6 +191,21 @@ public class UserController {
 				appUser.setCreateTime(ts);
 				appUser.setEditTime(ts);
 				appUser.setLastLoginTime(ts);
+				if (openid!=null) {
+					appUser.setWenxinId(openid);
+				} else {
+					appUser.setWenxinId("");
+				}
+				if (QQopenid!=null) {
+					appUser.setQqId(QQopenid);
+				} else {
+					appUser.setQqId("");
+				}
+				if (nickname!=null) {
+					appUser.setNickname(nickname);
+				} else {
+					appUser.setNickname("");
+				}
 				appUserService.saveRegist(appUser);
 				// 保存成功
 				Properties p = propertiesUtil.getProperties("config.properties");
@@ -186,6 +217,7 @@ public class UserController {
 				json += "\"content\":{";
 				json += "\"sessionid\":\"42823AFB33\",";
 				json += "\"userType\":\""+MemberVO.getType()+"\",";
+				json += "\"isWorker\":\""+MemberVO.getIsWorker()+"\",";
 				json += "\"userId\":\""+MemberVO.getUserId()+"\",";
 				json += "\"portrait\":\""+ip+MemberVO.getPortrait()+"\",";
 				json += "\"realname\":{\"realname\":\""+MemberVO.getRealname()+"\",\"state\":\"1\"},";
@@ -203,8 +235,8 @@ public class UserController {
 				json += "\"estateId\":\""+MemberVO.getEstateId()+"\",";
 				json += "\"estateName\":\""+MemberVO.getEstateName()+"\",";
 				json += "\"estateAttr\":\""+ip+MemberVO.getEstateMap()+"\",";
-				if(MemberVO.getStaId()==null){
-					json += "\"stationId\":\"\",";
+				if(MemberVO.getStaId()==null || MemberVO.getStaId().equals("")){
+					json += "\"stationId\":\"0\",";
 				}else {
 					json += "\"stationId\":\""+MemberVO.getStaId()+"\",";
 				}
@@ -216,7 +248,7 @@ public class UserController {
 				json += "\"comId\":\""+MemberVO.getComId()+"\",";
 				json += "\"comName\":\""+MemberVO.getComName()+"\",";
 				if(MemberVO.getProId()==null){
-					json += "\"proId\":\"\",";
+					json += "\"proId\":\"0\",";
 				}else {
 					json += "\"proId\":\""+MemberVO.getProId()+"\",";
 				}
@@ -225,11 +257,20 @@ public class UserController {
 				}else {
 					json += "\"proName\":\""+MemberVO.getProName()+"\",";
 				}
-				if (MemberVO.getHomeAttr()!=null) {
-					json += "\"homeAttr\":\""+ip+MemberVO.getHomeAttr()+"\",";
+				if(MemberVO.getUnitId()!=null && !MemberVO.getUnitId().equals("0")){
+					if (MemberVO.getUnitHomeAttr()!=null) {
+						json += "\"homeAttr\":\""+ip+MemberVO.getUnitHomeAttr()+"\",";
+					}else {
+						json += "\"homeAttr\":\"\",";
+					}
 				}else {
-					json += "\"homeAttr\":\"\",";
+					if (MemberVO.getHomeAttr()!=null) {
+						json += "\"homeAttr\":\""+ip+MemberVO.getHomeAttr()+"\",";
+					}else {
+						json += "\"homeAttr\":\"\",";
+					}
 				}
+				
 				json += "\"familyId\":\""+MemberVO.getFamilyId()+"\",";
 				json += "\"familyNumber\":\""+MemberVO.getMount()+"\",";
 				json += "\"buildingId\":\""+MemberVO.getBuildingId()+"\",";
@@ -268,10 +309,13 @@ public class UserController {
 					json += "\"limitSwitch\":false,";
 				}
 				if(MemberVO.getBrokeSwitch()==0){
-					json += "\"brokeSwitch\":true";
+					json += "\"brokeSwitch\":true,";
 				}else{
-					json += "\"brokeSwitch\":false";
+					json += "\"brokeSwitch\":false,";
 				}
+				json +="\"isDoor\":\""+MemberVO.getIsDoor()+"\",";
+				json +="\"estateLongitude\":\""+MemberVO.getEstateLongitude()+"\",";
+				json +="\"estateLatitude\":\""+MemberVO.getEstateLatitude()+"\"";
 				json += "}";
 				json += "}";
 			} catch (Exception e) {
@@ -358,8 +402,8 @@ public class UserController {
 				json += "\"estateId\":\""+MemberVO.getEstateId()+"\",";
 				json += "\"estateName\":\""+MemberVO.getEstateName()+"\",";
 				json += "\"estateAttr\":\""+ip+MemberVO.getEstateMap()+"\",";
-				if(MemberVO.getStaId()==null){
-					json += "\"stationId\":\"\",";
+				if(MemberVO.getStaId()==null || MemberVO.getStaId().equals("")){
+					json += "\"stationId\":\"0\",";
 				}else {
 					json += "\"stationId\":\""+MemberVO.getStaId()+"\",";
 				}
@@ -371,7 +415,7 @@ public class UserController {
 				json += "\"comId\":\""+MemberVO.getComId()+"\",";
 				json += "\"comName\":\""+MemberVO.getComName()+"\",";
 				if(MemberVO.getProId()==null){
-					json += "\"proId\":\"\",";
+					json += "\"proId\":\"0\",";
 				}else {
 					json += "\"proId\":\""+MemberVO.getProId()+"\",";
 				}
@@ -432,10 +476,13 @@ public class UserController {
 					json += "\"limitSwitch\":false,";
 				}
 				if(MemberVO.getBrokeSwitch()==0){
-					json += "\"brokeSwitch\":true";
+					json += "\"brokeSwitch\":true,";
 				}else{
-					json += "\"brokeSwitch\":false";
+					json += "\"brokeSwitch\":false,";
 				}
+				json +="\"isDoor\":\""+MemberVO.getIsDoor()+"\",";
+				json +="\"estateLongitude\":\""+MemberVO.getEstateLongitude()+"\",";
+				json +="\"estateLatitude\":\""+MemberVO.getEstateLatitude()+"\"";
 				json += "}";
 				json += "}";
 				AppUser appUser1 = new AppUser();
@@ -1875,7 +1922,35 @@ public class UserController {
 				json += "\"list\":[";
 				for(int i=0;i<baseBean.getList().size();i++) {
 					AppUserNews appUserNews = (AppUserNews) baseBean.getList().get(i);
-					BusinessNews businessNews = businessNewsService.findById_app(appUserNews.getId());
+					String pic = "";
+					try {
+						if(appUserNews.getType()==0){
+							BusinessNews businessNews = businessNewsService.findById_app(appUserNews.getId());
+							pic = businessNews.getAppPic();
+						}else if (appUserNews.getType()==1) {
+							BusinessActivity activity = businessActivityService.findById_app(appUserNews.getId());
+							pic = activity.getAppPic();
+						} else if (appUserNews.getType()==3 || appUserNews.getType()==4) {
+							BusinessAnno businessAnno = businessAnnoService.findById_app(appUserNews.getId());
+							pic = businessAnno.getAppPic();	
+						}else if (appUserNews.getType()==9) {
+							BusinessChinmedichenacare businessChinmedichenacare = businessChinmedichenacareService.findById_app(appUserNews.getId());
+							pic = businessChinmedichenacare.getAppPic();	
+						}else if (appUserNews.getType()==10) {
+							BusinessHealthydiet businessHealthydiet = businessHealthydietService.findById_app(appUserNews.getId());
+							pic = businessHealthydiet.getAppPic();	
+
+						}
+					} catch (Exception e) {
+						// TODO: handle exception
+						continue;
+					}
+					
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+
+					
+					
 					json += "{";
 					json += "\"type\":\""+appUserNews.getType()+"\",";
 					json += "\"title\":\""+appUserNews.getNewTitle()+"\",";
@@ -1883,7 +1958,7 @@ public class UserController {
 					json += "\"ID\":\""+appUserNews.getId()+"\",";
 					json += "\"replieName\":\""+appUserNews.getLastMessageName()+"\",";
 					json += "\"content\":\""+appUserNews.getLastMessage()+"\",";
-					json += "\"pic\":\""+businessNews.getAppPic()+"\",";
+					json += "\"pic\":\""+ip+pic+"\",";
 					json += "\"url\":\"\"";
 					boolean  flag = false ; //我的消息列表状态
 					for (AppLatestNews appLatestNews2 : list) {
@@ -3676,6 +3751,123 @@ public class UserController {
 			e.printStackTrace();
 		}
 		
+		return mav;
+	}
+	
+	/**
+	 * 微信用户第三方登录或注册
+	 * 
+	 * @param userId
+	 *            ,sessionid,password
+	 * @return json
+	 */
+	@RequestMapping(value = "thirdPartyLogin")
+	public ModelAndView thirdPartyLogin(HttpServletRequest request,
+			HttpServletResponse response,BusinessFocusQuery query) {
+		ModelAndView mav = null;
+		try{
+			String openid = request.getParameter("openid");
+			String nickname = request.getParameter("nickname");
+			String type = request.getParameter("type");
+			String ID = request.getParameter("ID");
+			AppUserQuery appUserQuery = new AppUserQuery();
+			appUserQuery.setWenxinId(openid);
+			List<AppUser> list = appUserService.findByExample(appUserQuery);
+			if (list==null || list.size()==0) {
+				mav = new ModelAndView("redirect:/service/commiunity/index.json");
+				request.getSession().setAttribute("openid", openid);
+				request.getSession().setAttribute("nickname", nickname);
+				mav.addObject("ID", ID);
+				mav.addObject("type", type);
+			}else{
+				if ("4".equals(type)) {
+					mav = new ModelAndView("redirect:/service/activities/getActivitiesDetailsById.json");
+					mav.addObject("ID", ID);
+					mav.addObject("userId",list.get(0).getUserId());
+					mav.addObject("tel",list.get(0).getTel());
+					mav.addObject("download","0");
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	
+	/**
+	 * qq用户第三方登录或注册
+	 * 
+	 * @param userId
+	 *            ,sessionid,password
+	 * @return json
+	 */
+	@RequestMapping(value = "qqThirdPartyLogin")
+	public ModelAndView qqThirdPartyLogin(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView mav = null;
+		try{
+			AccessToken accessTokenObj = (new Oauth()).getAccessTokenByRequest(request);
+			String accessToken   = null,
+			QQopenid   = null;
+			String nickname = "";
+			long tokenExpireIn = 0L;
+            if (accessTokenObj.getAccessToken().equals("")) {
+//              我们的网站被CSRF攻击了或者用户取消了授权
+//              做一些数据统计工作
+              System.out.print("没有获取到响应参数");
+          } else {
+              accessToken = accessTokenObj.getAccessToken();
+              tokenExpireIn = accessTokenObj.getExpireIn();
+              request.getSession().setAttribute("demo_access_token", accessToken);
+              request.getSession().setAttribute("demo_token_expirein", String.valueOf(tokenExpireIn));
+              // 利用获取到的accessToken 去获取当前用的openid -------- start
+              OpenID openIDObj =  new OpenID(accessToken);
+              QQopenid = openIDObj.getUserOpenID();
+              request.getSession().setAttribute("demo_openid", QQopenid);
+             
+              // 利用获取到的accessToken,openid 去获取用户在Qzone的昵称等信息 
+              UserInfo qzoneUserInfo = new UserInfo(accessToken, QQopenid);
+              UserInfoBean userInfoBean = qzoneUserInfo.getUserInfo();
+
+              if (userInfoBean.getRet() == 0) {
+            	  nickname = userInfoBean.getNickname();
+//                  out.println(userInfoBean.getNickname() + "<br/>");
+//                  out.println(userInfoBean.getGender() + "<br/>");
+//                  out.println("黄钻等级： " + userInfoBean.getLevel() + "<br/>");
+//                  out.println("会员 : " + userInfoBean.isVip() + "<br/>");
+              } else {
+                  System.out.println("很抱歉，我们没能正确获取到您的信息，原因是： " + userInfoBean.getMsg());
+              }              
+          }
+			
+			
+			
+			String actArgs = request.getParameter("actArgs");
+			
+			String type = actArgs.split(",")[0];
+			String ID = actArgs.split(",")[1];
+			
+			AppUserQuery appUserQuery = new AppUserQuery();
+			appUserQuery.setQqId(QQopenid);
+			List<AppUser> list = appUserService.findByExample(appUserQuery);
+			if (list==null || list.size()==0) {
+				mav = new ModelAndView("redirect:/service/commiunity/index.json");
+				request.getSession().setAttribute("QQopenid", QQopenid);
+				request.getSession().setAttribute("nickname", nickname);
+				mav.addObject("ID", ID);
+				mav.addObject("type", type);
+			}else{
+				if ("4".equals(type)) {
+					mav = new ModelAndView("redirect:/service/activities/getActivitiesDetailsById.json");
+					mav.addObject("ID", ID);
+					mav.addObject("userId",list.get(0).getUserId());
+					mav.addObject("tel",list.get(0).getTel());
+					mav.addObject("download","0");
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		return mav;
 	}
 }

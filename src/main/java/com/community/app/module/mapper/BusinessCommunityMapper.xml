@@ -21,6 +21,7 @@
 			<result column="comCode" property="comCode" />
 			<result column="cityName" property="cityName" />
 			<result column="countyName" property="countyName" />
+			<result column="orgType" property="orgType" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -102,7 +103,7 @@
 	
 	<!-- 无条件查询所有BusinessCommunity -->
 	<select id="findAll" resultMap="BusinessCommunityResult">
-		select com.comId,com.comName,cou.countyName,ci.cityName from business_community com,manage_org o,manage_county cou,manage_city ci where com.orgId=o.orgId and o.countyId=cou.countyId and cou.cityId=ci.cityId
+		select com.comId,com.comName from business_community com
 	</select>
 	
 	<!-- 按Map对象条件查询所有BusinessCommunity -->
@@ -221,35 +222,23 @@
 		</set> 
 		where 
 		comId=#{comId}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessCommunity删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_community where 
 		comId=#{comId}
-																													</delete>
+	</delete>
 	
-	  
-    <!-- 获取用户负责的社区 -->
-    <select id="findComsByUser"  resultMap="BusinessCommunityResult" parameterType="java.lang.Integer">
+    <!-- 获取用户负责的社区 parameterType="java.lang.Integer"-->
+    <select id="findComsByUser"  resultMap="BusinessCommunityResult" parameterType="java.util.Map">
         select distinct(res.comId), com.comName from business_user_resource res 
 		inner join business_community com on com.comId = res.comId
+		<if test="orgType != 'operation'" >
 		where res.userId = #{userId} 
+		</if>
+		<if test="comId != null and comId != ''" >
+		 and res.comId = #{comId} 
+		</if>
     </select>
-	
 </mapper>
-	

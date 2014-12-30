@@ -27,6 +27,15 @@ public class BusinessCommunityQuery extends BaseBean {
 	private java.sql.Timestamp editTime;
 	private java.lang.String editor;
 	private java.lang.String comCode;
+	private java.lang.String orgType;
+
+	public java.lang.String getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(java.lang.String orgType) {
+		this.orgType = orgType;
+	}
 
 	public BusinessCommunityQuery(BusinessCommunity businessCommunity) {
 		this.comId = businessCommunity.getComId();
@@ -44,6 +53,7 @@ public class BusinessCommunityQuery extends BaseBean {
 		this.editTime = businessCommunity.getEditTime();
 		this.editor = businessCommunity.getEditor();
 		this.comCode = businessCommunity.getComCode();
+		this.orgType = businessCommunity.getOrgType();
 	}
 	
 	public BusinessCommunityQuery() {
@@ -173,6 +183,4 @@ public class BusinessCommunityQuery extends BaseBean {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
 	}
-	
 }
-

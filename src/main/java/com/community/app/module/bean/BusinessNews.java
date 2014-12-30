@@ -48,7 +48,16 @@ public class BusinessNews implements java.io.Serializable{
 	private String avatar;
 	private Integer selectId;
 	private Integer isNickname;
+	private String tag;
 	
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
 	public Integer getIsNickname() {
 		return isNickname;
 	}

@@ -30,6 +30,15 @@ public class BusinessCommunity implements java.io.Serializable{
 	private java.lang.String comCode;
 	private java.lang.String cityName;
 	private java.lang.String countyName;
+	private java.lang.String orgType;
+
+	public java.lang.String getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(java.lang.String orgType) {
+		this.orgType = orgType;
+	}
 
 	public BusinessCommunity(){
 	}

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.ServiceException;
 import com.community.framework.exception.DaoException;
-
 import com.community.app.module.vo.BusinessCommunityQuery;
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.dao.BusinessCommunityDao;
@@ -247,10 +246,10 @@ public class BusinessCommunityServiceImpl implements BusinessCommunityService {
 	 * @throws ServiceException
 	 */
 	@Transactional(readOnly = true)
-	public List<BusinessCommunity> findComsByUser(final Integer userId) throws ServiceException {
+	public List<BusinessCommunity> findComsByUser(final Map<String, Object> paramMap) throws ServiceException {
 		List<BusinessCommunity> list = new ArrayList<BusinessCommunity>() ;
 		try {
-			list=businessCommunityDao.findComsByUser(userId);
+			list=businessCommunityDao.findComsByUser(paramMap);
 		} catch (DaoException e) {
 			logger.debug("BusinessCommunityServiceImpl findComsByUser()：获取用户负责的社区！", e);
 			e.printStackTrace();

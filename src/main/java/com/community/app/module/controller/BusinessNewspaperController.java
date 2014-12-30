@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,10 +25,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessNewspaper;
+import com.community.app.module.bean.BusinessNewspaperScope;
+import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.CommunityBean;
+import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.BusinessCommunityService;
+import com.community.app.module.service.BusinessNewspaperScopeService;
 import com.community.app.module.service.BusinessNewspaperService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessNewspaperQuery;
+import com.community.framework.utils.CommonUtils;
 
 @Controller
 @RequestMapping("/business/businessNewspaper")
@@ -36,6 +44,8 @@ public class BusinessNewspaperController {
 	private BusinessNewspaperService businessNewspaperService;
 	@Autowired
 	private BusinessCommunityService businessCommunityService;
+	@Autowired
+	private BusinessNewspaperScopeService businessNewspaperScopeService;
 	
 	/**
 	 * 进入管理页
@@ -43,6 +53,8 @@ public class BusinessNewspaperController {
 	 */
 	@RequestMapping(value="list")
 	public ModelAndView list(BusinessNewspaperQuery query) {		
+		ShiroUser shiroUser = CommonUtils.getUser();
+		Map map = new HashMap();
 		BaseBean baseBean = new BaseBean();
 		List<BusinessCommunity> list = new ArrayList<BusinessCommunity>();
 		try{
@@ -54,8 +66,19 @@ public class BusinessNewspaperController {
 			}
 			query.setOrder("desc");
 			query.setSort("editTime");
+			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+				query.setCurUserId(shiroUser.getUserId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setComId(shiroUser.getCurComId());
+				map.put("comId", shiroUser.getCurComId());
+			}
 			baseBean = businessNewspaperService.findAllPage(query);
-			list = businessCommunityService.findAll();
+			
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			
+			list = businessCommunityService.findComsByUser(map);
 		}catch(Exception e){
 			GSLogger.error("进入businessNewspaper管理页时发生错误：/business/businessNewspaper/list", e);
 			e.printStackTrace();
@@ -74,6 +97,7 @@ public class BusinessNewspaperController {
 	@RequestMapping(value="getPageList")
 	public void getPageList(BusinessNewspaperQuery query, HttpServletResponse response) {
 		String json = "";
+		ShiroUser shiroUser = CommonUtils.getUser();
 		StringBuilder result = new StringBuilder();
 		try{
 			Subject currentUser = SecurityUtils.getSubject();  
@@ -81,6 +105,12 @@ public class BusinessNewspaperController {
 				query.setRows(11);
 			} else {  
 				query.setRows(12);
+			}
+			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+				query.setCurUserId(shiroUser.getUserId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setComId(shiroUser.getCurComId());
 			}
 			query.setOrder("desc");
 			query.setSort("editTime");
@@ -98,7 +128,7 @@ public class BusinessNewspaperController {
 			    .append("\"pic\":\"").append(businessNewspaper.getPic()).append("\"").append(",")
 			    .append("\"url\":\"").append(businessNewspaper.getUrl()).append("\"").append(",")
 			    .append("\"comId\":\"").append(businessNewspaper.getComId()).append("\"").append(",")
-			    .append("\"comName\":\"").append(businessNewspaper.getComName()).append("\"").append(",")
+			    .append("\"comNameScope\":\"").append(businessNewspaper.getComNameScope()).append("\"").append(",")
 			    .append("\"createTime\":\"").append(businessNewspaper.getCreateTime()).append("\"").append(",")
 			    .append("\"editTime\":\"").append(businessNewspaper.getEditTime()).append("\"").append(",")
 			    .append("\"editor\":\"").append(businessNewspaper.getEditor()).append("\"")
@@ -148,16 +178,35 @@ public class BusinessNewspaperController {
 	public void save(HttpServletRequest request, HttpServletResponse response, BusinessNewspaperQuery query) {
 		BusinessNewspaper businessNewspaper = new BusinessNewspaper();
 		String json = "";
+		String comNameScope = "";
 		try{
-			BusinessCommunity businessCommunity = businessCommunityService.findById(getUser().getOrgId());
+			ShiroUser shiroUser = CommonUtils.getUser();
+		    Map map = new HashMap();
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			map.put("comId", shiroUser.getCurComId());
+			List comList = businessCommunityService.findComsByUser(map);
+		    for(int i=0; i<comList.size(); i++) {
+		    	BusinessCommunity businessCommunity = (BusinessCommunity)comList.get(i);
+				comNameScope+="," + businessCommunity.getComName();
+			}
 		    businessNewspaper.setTitle(query.getTitle());
 		    businessNewspaper.setPic(query.getPic());
 		    businessNewspaper.setUrl(query.getUrl());
-		    businessNewspaper.setComId(businessCommunity.getComId());
+		    businessNewspaper.setComNameScope(comNameScope.substring(1));
 		    businessNewspaper.setEditor(getUser().getUserName());
 	        businessNewspaper.setCreateTime(new Timestamp(new Date().getTime()));
 	        businessNewspaper.setEditTime(new Timestamp(new Date().getTime()));
 			businessNewspaperService.save(businessNewspaper);
+			
+			for(int i=0; i<comList.size(); i++) {
+				BusinessCommunity businessCommunity = (BusinessCommunity)comList.get(i);
+				BusinessNewspaperScope bnsQuery = new BusinessNewspaperScope();
+				bnsQuery.setNewspaperId(businessNewspaper.getNewspaperId());
+				bnsQuery.setComId(businessCommunity.getComId());
+				bnsQuery.setComName(businessCommunity.getComName());
+				businessNewspaperScopeService.save(bnsQuery);
+			}
 			//保存成功
 			json = "{\"success\":\"true\",\"message\":\"保存成功\"}";
 		} catch(Exception e) {
@@ -202,15 +251,38 @@ public class BusinessNewspaperController {
 	@RequestMapping(value="update")
 	public void update(HttpServletRequest request, HttpServletResponse response, BusinessNewspaperQuery query) {
 		BusinessNewspaper businessNewspaper = null;
+		String comNameScope = "";
 		String json = "";
 		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+		    Map map = new HashMap();
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			map.put("comId", shiroUser.getCurComId());
+			List comList = businessCommunityService.findComsByUser(map);
+		    for(int i=0; i<comList.size(); i++) {
+		    	BusinessCommunity businessCommunity = (BusinessCommunity)comList.get(i);
+				comNameScope+="," + businessCommunity.getComName();
+			}
 		    businessNewspaper = businessNewspaperService.findById(query.getNewspaperId());
 		    businessNewspaper.setTitle(query.getTitle());
 		    businessNewspaper.setPic(query.getPic());
 		    businessNewspaper.setUrl(query.getUrl());
+		    businessNewspaper.setComNameScope(comNameScope.substring(1));
 		    businessNewspaper.setEditor(getUser().getUserName());
 	        businessNewspaper.setEditTime(new Timestamp(new Date().getTime()));
 			businessNewspaperService.update(businessNewspaper);
+			
+			businessNewspaperScopeService.delete(businessNewspaper.getNewspaperId());
+			for(int i=0; i<comList.size(); i++) {
+				BusinessCommunity businessCommunity = (BusinessCommunity)comList.get(i);
+				BusinessNewspaperScope bnsQuery = new BusinessNewspaperScope();
+				bnsQuery.setNewspaperId(businessNewspaper.getNewspaperId());
+				bnsQuery.setComId(businessCommunity.getComId());
+				bnsQuery.setComName(businessCommunity.getComName());
+				businessNewspaperScopeService.save(bnsQuery);
+			}
+			
 			
 			json = "{\"success\":\"true\",\"message\":\"编辑成功\"}";
 		} catch(Exception e) {
@@ -244,6 +316,7 @@ public class BusinessNewspaperController {
 					}
 				}else{
 					businessNewspaperService.delete(new Integer(id));
+					businessNewspaperScopeService.delete(new Integer(id));
 				}
 			}
 			json = "{\"success\":\"true\",\"message\":\"删除成功\"}";

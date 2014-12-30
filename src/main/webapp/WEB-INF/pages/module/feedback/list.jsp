@@ -182,7 +182,7 @@
 		                    <hr class="link y-qz-hr">
 		                    <shiro:hasPermission name="feedback_view_detail">
 	                    	<div class="operate operate2 blop" style="margin:0;" >
-								<span class="see" style="position:relative; height:50px;" id="block5" title="查看建议投诉详情" onclick="window.location.href='${ctx}/business/businessFeedback/getFeedDetails.do?feedbackId=${feedback.feedbackId}&fberId=${feedback.fberId}<c:if test="${feedback.newsCount > 0 }">&isNew=1</c:if>'">
+								<span class="see" style="position:relative; height:50px;" id="block5" title="查看建议投诉详情" onclick="window.location.href='${ctx}/business/businessFeedback/getFeedDetails.do?feedbackId=${feedback.feedbackId}&estateId=${feedback.estateId}&fberId=${feedback.fberId}<c:if test="${feedback.newsCount > 0 }">&isNew=1</c:if>'">
 									<c:if test="${feedback.newsCount > 0 }"><img style="position: absolute; right: 0px; top:7px;" src="<%=ctx %>/images/redCircle.png" /></c:if>
 								</span>
 							</div>
@@ -345,7 +345,7 @@
                     	+ '<hr class="link y-qz-hr">'
                     	<shiro:hasPermission name="feedback_view_detail">
                     	+ '<div class="operate operate2 blop" style="margin:0;" >'
-                    	+'<span class="see" style="position:relative; height:50px;" title="查看建议投诉详情" id="block5" onclick="window.location.href=\'<%=ctx%>/business/businessFeedback/getFeedDetails.do?feedbackId='+row.feedbackId+'&fberId='+row.fberId+(row.newsCount>0?'&isNew=1':'')+'\'">'
+                    	+'<span class="see" style="position:relative; height:50px;" title="查看建议投诉详情" id="block5" onclick="window.location.href=\'<%=ctx%>/business/businessFeedback/getFeedDetails.do?feedbackId='+row.feedbackId+'&estateId='+row.estateId+'&fberId='+row.fberId+(row.newsCount>0?'&isNew=1':'')+'\'">'
                     	+ (row.newsCount>0?'<img style="position: absolute; right: 0px; top:7px;" src="<%=ctx %>/images/redCircle.png" />':'')
                     	+'</span>'
                     	+'</div>'

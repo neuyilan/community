@@ -712,7 +712,7 @@ public class SecondaryMarketController {
 				businessProductComment.setReplyName(query.getReplyName());
 			}
 			businessProductCommentService.save(businessProductComment);
-			BusinessProduct businessProduct = businessProductService.findById(query.getID());
+			BusinessProduct businessProduct = businessProductService.findById_app(query.getID());
 			AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setSourceId(query.getID());
 			appLatestNews.setTo(0);
@@ -804,8 +804,8 @@ public class SecondaryMarketController {
 			AppUserNews appUserNews = new AppUserNews();
 			appUserNews.setUserId(query.getReplyId());
 			appUserNews.setCreateTime(ts);
-			appUserNews.setNewTitle(businessProduct.getTitle());
-			appUserNews.setType(10);
+			appUserNews.setNewTitle(businessProduct.getContent());
+			appUserNews.setType(8);
 			appUserNews.setId(query.getID());
 			appUserNews.setContent("");
 			appUserNews.setLastMessage(SensitivewordFilter.replaceSensitiveWord(query.getContent(),1,"*"));

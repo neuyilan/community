@@ -70,7 +70,16 @@
 	        		>
 		            	<a class="nopotr" href="javascript:;">
 		                    <div class="info">
-		                    	<p style="float:left;">所属社区：<span style="color: #3EAF0E;">${newspaper.comName }</span></p>
+		                    	<p style="float:left;">所属社区：<span style="color: #3EAF0E;">
+		                    		<c:choose>
+										<c:when test="${fn:length(newspaper.comNameScope) > 21}">
+											<c:out value="${fn:substring(newspaper.comNameScope, 0, 20)}......" />
+										</c:when>
+										<c:otherwise>
+											<c:out value="${newspaper.comNameScope}" />
+										</c:otherwise>
+									</c:choose>
+		                    	</span></p>
 		                    </div>
 		                    <time><fmt:formatDate value="${newspaper.createTime }" pattern="yyyy-MM-dd HH:mm"/></time>
 		                    <hr class="link">        
@@ -236,7 +245,7 @@
 	    	        	+ '>'                    	
 	                	+ '<a class="nopotr" href="javascript:;">'
 	                	+'<div class="info">'
-	                	+'<p style="float:left;">所属社区：<span style="color: #3EAF0E;">'+row.comName+'</span></p>'
+	                	+'<p style="float:left;">所属社区：<span style="color: #3EAF0E;">'+(row.comNameScope.length >21 ? row.comNameScope.substring(0, 20)+"......" : row.comNameScope)+'</span></p>'
 	                	+'</div>'
 	                	+'<time>'+(row.creatTime != '' ? row.createTime.substring(0, 16) : '')+'</time>'
 	                	+'<hr class="link">'

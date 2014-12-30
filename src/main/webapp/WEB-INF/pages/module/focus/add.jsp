@@ -56,16 +56,13 @@
                         maxlength : 64
                     },
                     focusScope: {
-                        required: true,
-                        maxlength : 128
+                        required: true
                     },
                     picUrl: {
-                        required: true,
-                        maxlength : 128
+                        required: true
                     },
                     pageUrl: {
-                        required: true,
-                        maxlength : 128
+                        required: true
                     },
                     state: {
                         required: true
@@ -73,7 +70,7 @@
                 },
                 messages: {
                     title: {
-                        required: '请填写新闻标题！'
+                        required: '请填写焦点图名称！'
                     },
                     focusScope: {
                         required: '请选择展示范围！'

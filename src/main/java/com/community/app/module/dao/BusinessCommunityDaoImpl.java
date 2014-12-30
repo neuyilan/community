@@ -7,13 +7,13 @@ import javax.annotation.Resource;
 
 
 
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
-
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.vo.BusinessCommunityQuery;
 
@@ -160,8 +160,8 @@ public class BusinessCommunityDaoImpl implements BusinessCommunityDao {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<BusinessCommunity> findComsByUser(final Integer userId) throws DaoException {
-		List<BusinessCommunity> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessCommunityDao.findComsByUser",userId);
+	public List<BusinessCommunity> findComsByUser(final Map<String, Object> paramMap) throws DaoException {
+		List<BusinessCommunity> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessCommunityDao.findComsByUser",paramMap);
 		return list;
 	}
 	

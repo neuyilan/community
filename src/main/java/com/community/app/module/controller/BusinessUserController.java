@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.community.app.module.bean.*;
 import com.community.app.module.service.*;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -26,9 +27,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessDepartmentQuery;
-
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.vo.BusinessUserQuery;
@@ -103,12 +104,10 @@ public class BusinessUserController {
 				}				
 				query.setOrgType(shiroUser.getOrgType());
 			}
-			
 			baseBean = businessUserService.findAllPage(query);
-			
 			//获取员工数
 			users = baseBean.getCount();
-					
+			
 			//获取部门数
 			BusinessDepartmentQuery departmentQuery = new BusinessDepartmentQuery();
 			departmentQuery.setOrgType(shiroUser.getOrgType());
@@ -368,15 +367,28 @@ public class BusinessUserController {
 		try{
 			//当前用户标识
 			ShiroUser shiroUser = CommonUtils.getUser();
-			orgType = shiroUser.getOrgType();
-			if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
-				mav = new ModelAndView("/module/businessUser/propertyAdd");
-			}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站去驿站的增加页面 范围需要到小区
-				mav = new ModelAndView("/module/businessUser/stationAdd");
-			}else if(orgType.equals(ModuleConst.COMMUNITY_CODE)){//社区报去社区报的增加页面，社区报用户不用添加小区
-				mav = new ModelAndView("/module/businessUser/communityAdd");
-			}else{//运营去运营的增加页面，只添加运营下的用户
-				mav = new ModelAndView("/module/businessUser/operationAdd");
+			if("".equals(shiroUser.getCurOrgType())) {
+				orgType = shiroUser.getOrgType();
+				if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
+					mav = new ModelAndView("/module/businessUser/propertyAdd");
+				}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站去驿站的增加页面 范围需要到小区
+					mav = new ModelAndView("/module/businessUser/stationAdd");
+				}else if(orgType.equals(ModuleConst.COMMUNITY_CODE)){//社区报去社区报的增加页面，社区报用户不用添加小区
+					mav = new ModelAndView("/module/businessUser/communityAdd");
+				}else{//运营去运营的增加页面，只添加运营下的用户
+					mav = new ModelAndView("/module/businessUser/operationAdd");
+				}
+			} else {
+				orgType = shiroUser.getCurOrgType();
+				if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
+					mav = new ModelAndView("/module/businessUser/propertyAdd");
+				}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站去驿站的增加页面 范围需要到小区
+					mav = new ModelAndView("/module/businessUser/stationAdd");
+				}else if(orgType.equals(ModuleConst.COMMUNITY_CODE)){//社区报去社区报的增加页面，社区报用户不用添加小区
+					mav = new ModelAndView("/module/businessUser/communityAdd");
+				}else{//运营去运营的增加页面，只添加运营下的用户
+					mav = new ModelAndView("/module/businessUser/operationAdd");
+				}
 			}
 			mav.addObject("positionId", shiroUser.getPositionId());
 		}catch(Exception e){
@@ -417,7 +429,13 @@ public class BusinessUserController {
 			mav = new ModelAndView("/module/businessUser/stationModify");
 		}else if(orgType.equals(ModuleConst.COMMUNITY_CODE) ){//社区报
 			mav = new ModelAndView("/module/businessUser/communityModify");
-			List comList = businessCommunityService.findComsByUser(query.getUserId());
+			
+			Map map = new HashMap();
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			map.put("comId", shiroUser.getCurComId());
+			
+			List comList = businessCommunityService.findComsByUser(map);
 			 mav.addObject("comList", comList);
 		}else{//运营
 			mav = new ModelAndView("/module/businessUser/operationModify");
@@ -1137,13 +1155,24 @@ public class BusinessUserController {
                     	comName = param_name; //社区名称
                     }
                 }
-                BusinessUserResource businessUserResource = new BusinessUserResource();
-                businessUserResource.setUserId(businessUser.getUserId());
                 if(!"".equals(comId)) {
-                    businessUserResource.setComId(new Integer(comId));
+                	Map paramMap = new HashMap();
+                	paramMap.put("comId", comId);
+                	List<ManageEstate> estateList = manageEstateService.findByMap(paramMap);
+                    if(estateList.size() > 0) {
+                    	for(int i=0; i<estateList.size(); i++) {
+                        	ManageEstate manageEstate = (ManageEstate)estateList.get(i);
+                            BusinessUserResource businessUserResource = new BusinessUserResource();
+                            businessUserResource.setUserId(businessUser.getUserId());
+                        	businessUserResource.setComId(new Integer(comId));
+                        	businessUserResource.setEstateId(manageEstate.getEstateId());
+                        	businessUserResource.setEstateName(manageEstate.getEstateName());
+                            businessUserResource.setCreateTime(ts);
+                            businessUserResource.setEditTime(ts);
+                            businessUserResourceService.save(businessUserResource);
+                    	}
+                    }
                 }        
-                businessUserResource.setCreateTime(ts);
-                businessUserResourceService.save(businessUserResource);
             }
             
             //BusinessUserResource businessUserResource = new BusinessUserResource();
@@ -1906,115 +1935,107 @@ public class BusinessUserController {
 			ShiroUser shiroUser = getUser();
 			List estateList = null;
 			JSONObject estateObj = null;
+			List buildList = null;
+			JSONObject buildObj = null;
 			Map paramMap = new HashMap();
-			if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区 不选择小区
-				//paramMap.put("comId", shiroUser.getOrgId());
-				//estateList = manageEstateService.findByMap(paramMap);
-				estateList = shiroUser.getEstateBeanList();
-				for(int i=0;i<estateList.size();i++) {
-					EstateBean estate = (EstateBean) estateList.get(i);
-					estateObj = new JSONObject();
-					estateObj.put("id", "estate_"+estate.getEstateId());
-					estateObj.put("text", estate.getEstateName());
-					estateObj.put("checkbox", true);
-					//obj.put("state", "close");
-					arr.add(estateObj);
-				}
-			}else if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业 获取到楼栋
-				//paramMap.put("proId", shiroUser.getOrgId());
-				//estateList = manageEstateService.findByMap(paramMap);
-				
-				/*for(int i=0;i<estateList.size();i++) {
-					ManageEstate estate = (ManageEstate) estateList.get(i);
-					estateObj = new JSONObject();
-					estateObj.put("id", "estate_"+estate.getEstateId());
-					estateObj.put("text", estate.getEstateName());
-					estateObj.put("checkbox", true);
-					estateObj.put("state", "open");
-					paramMap = new HashMap();
-					paramMap.put("estateId", estate.getEstateId());
-					List buildingList = manageBuildingService.findByMap(paramMap);
-					JSONArray buildingArr = new JSONArray();
-					for(int j=0;j<buildingList.size();j++) {
-						JSONObject buildingObj = new JSONObject();
-						ManageBuilding manageBuilding = (ManageBuilding) buildingList.get(j);
-						buildingObj.put("id", "building_"+manageBuilding.getBuildingId());
-						buildingObj.put("text", manageBuilding.getBuildingName());
-
-						//装载单元
-						paramMap = new HashMap();
-						paramMap.put("buildingId", manageBuilding.getBuildingId());
-						List unitList = manageUnitService.findByMap(paramMap);
-						JSONObject unitObj = null;
-						JSONArray unitArr = new JSONArray();
-						for(int k=0;k<unitList.size();k++) {
-							ManageUnit unit = (ManageUnit) unitList.get(k);
-							unitObj = new JSONObject();
-							unitObj.put("id", "unit_"+unit.getUnitId());
-							unitObj.put("text", unit.getUnitName());
-							unitObj.put("state", "closed");
-							unitArr.add(unitObj);
-						}
-						if(unitArr.size() > 0) {
-							buildingObj.put("state", "open");
-							buildingObj.put("children", unitArr);
-						}else{
-							buildingObj.put("state", "closed");
-						}	
-						buildingObj.put("state", "closed");
-						buildingArr.add(buildingObj);
+			
+			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+				if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区 不选择小区
+					estateList = shiroUser.getEstateBeanList();
+					for(int i=0;i<estateList.size();i++) {
+						EstateBean estate = (EstateBean) estateList.get(i);
+						estateObj = new JSONObject();
+						estateObj.put("id", "estate_"+estate.getEstateId());
+						estateObj.put("text", estate.getEstateName());
+						estateObj.put("checkbox", true);
+						//obj.put("state", "close");
+						arr.add(estateObj);
 					}
-					estateObj.put("children", buildingArr);
-					arr.add(estateObj);
-				}*/
-				arr = getBuildingTreeArray(shiroUser.getUserId());
-			}else if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {//驿站 选择小区
-				paramMap.put("userId", shiroUser.getUserId());
-				//estateList = manageEstateService.findByMap(paramMap);
-				List userResourceList = businessUserResourceService.findByMap(paramMap);
-				for(int i=0;i<userResourceList.size();i++) {
-					BusinessUserResource userResource = (BusinessUserResource) userResourceList.get(i);
-					estateObj = new JSONObject();
-					estateObj.put("id", "estate_"+userResource.getEstateId());
-					estateObj.put("text", userResource.getEstateName());
-					/*estateObj.put("state", "open");
-					paramMap = new HashMap();
-					paramMap.put("estateId", estate.getEstateId());
-					List buildingList = manageBuildingService.findByMap(paramMap);
-					JSONArray buildingArr = new JSONArray();
-					for(int j=0;j<buildingList.size();j++) {
-						JSONObject buildingObj = new JSONObject();
-						ManageBuilding manageBuilding = (ManageBuilding) buildingList.get(j);
-						buildingObj.put("id", "building_"+manageBuilding.getBuildingId());
-						buildingObj.put("text", manageBuilding.getBuildingName());
+				}else if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业 获取到楼栋
+					arr = getBuildingTreeArray(shiroUser.getUserId());
+				}else if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {//驿站 选择小区
+					paramMap.put("userId", shiroUser.getUserId());
+					List userResourceList = businessUserResourceService.findByMap(paramMap);
+					for(int i=0;i<userResourceList.size();i++) {
+						BusinessUserResource userResource = (BusinessUserResource) userResourceList.get(i);
+						estateObj = new JSONObject();
+						estateObj.put("id", "estate_"+userResource.getEstateId());
+						estateObj.put("text", userResource.getEstateName());
+						arr.add(estateObj);
+					}
+				}//运营不选择小区
+			} else {
+				if(ModuleConst.STATION_CODE.equals(shiroUser.getCurOrgType())) {//驿站 选择小区
+					List comList = businessCommunityService.findAll();
+					JSONObject comObj = null;
+					for(int i=0;i<comList.size();i++) {
+						BusinessCommunity community = (BusinessCommunity) comList.get(i);
+						comObj = new JSONObject();
+						paramMap = new HashMap();
+						paramMap.put("comId", community.getComId());
+						estateList = manageEstateService.findByMap(paramMap); 
+						if(estateList.size() > 0){
+							comObj.put("id", "com_"+community.getComId());
+							comObj.put("text", community.getComName());
+							JSONArray estateArr = new JSONArray();
+							for(int j=0;j<estateList.size();j++) {
+								ManageEstate estate = (ManageEstate) estateList.get(j);
+								estateObj = new JSONObject();
+								estateObj.put("id", "estate_"+estate.getEstateId());
+								estateObj.put("text", estate.getEstateName());
+								estateObj.put("checkbox", true);
+								estateObj.put("state", "close");
+								estateArr.add(estateObj);
+							}
+							comObj.put("children", estateArr);
+							arr.add(comObj);
+						}				
+					}
+				}else if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getCurOrgType())) {//物业 获取到楼栋
+					List comList = businessCommunityService.findAll();
+					JSONObject comObj = null;
+					for(int i=0;i<comList.size();i++) {
+						BusinessCommunity community = (BusinessCommunity) comList.get(i);
+						comObj = new JSONObject();
+						paramMap = new HashMap();
+						paramMap.put("comId", community.getComId());
+						estateList = manageEstateService.findByMap(paramMap); 
 						
-						//装载单元
-						paramMap = new HashMap();
-						paramMap.put("buildingId", manageBuilding.getBuildingId());
-						List unitList = manageUnitService.findByMap(paramMap);
-						JSONObject unitObj = null;
-						JSONArray unitArr = new JSONArray();
-						for(int k=0;k<unitList.size();k++) {
-							ManageUnit unit = (ManageUnit) unitList.get(k);
-							unitObj = new JSONObject();
-							unitObj.put("id", "unit_"+unit.getUnitId());
-							unitObj.put("text", unit.getUnitName());
-							unitObj.put("state", "closed");
-							unitArr.add(unitObj);
-						}
-						if(unitArr.size() > 0) {
-							buildingObj.put("state", "open");
-							buildingObj.put("children", unitArr);
-						}else{
-							buildingObj.put("state", "closed");
-						}	
-						buildingArr.add(buildingObj);
+						if(estateList.size() > 0){
+							comObj.put("id", "com_"+community.getComId());
+							comObj.put("text", community.getComName());
+							JSONArray estateArr = new JSONArray();
+							for(int j=0;j<estateList.size();j++) {
+								ManageEstate estate = (ManageEstate) estateList.get(j);
+								estateObj = new JSONObject();
+								paramMap = new HashMap();
+								paramMap.put("estateId", estate.getEstateId());
+								buildList = manageBuildingService.findByMap(paramMap);
+								
+								if(buildList.size() > 0) {
+									estateObj.put("id", "estate_"+estate.getEstateId());
+									estateObj.put("text", estate.getEstateName());
+									JSONArray buildingArray = new JSONArray();
+									for(int m=0;m<buildList.size();m++) {
+										ManageBuilding build = (ManageBuilding) buildList.get(m);
+										buildObj = new JSONObject();
+										
+										buildObj.put("id", "building_"+build.getBuildingId());
+										buildObj.put("text", build.getBuildingName());
+										buildObj.put("checkbox", true);
+										buildObj.put("state", "close");
+										buildingArray.add(buildObj);
+									}
+									estateObj.put("children", buildingArray);
+									estateArr.add(estateObj);
+								}
+							}
+							comObj.put("children", estateArr);
+							arr.add(comObj);
+						}				
 					}
-					estateObj.put("children", buildingArr);*/
-					arr.add(estateObj);
 				}
-			}//运营不选择小区
-		
+			}
 			jsonObj.put("success", true);
 			jsonObj.put("result", arr);
 		}catch(Exception e){
@@ -2480,7 +2501,12 @@ public class BusinessUserController {
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
 			//获取该用户负责的多社区范围
-			List comList = businessCommunityService.findComsByUser(shiroUser.getUserId());
+			Map map = new HashMap();
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			map.put("comId", shiroUser.getCurComId());
+			List comList = businessCommunityService.findComsByUser(map);
+			
 			JSONObject comObj = null;
 			Map paramMap = null;
 			for(int i=0;i<comList.size();i++) {

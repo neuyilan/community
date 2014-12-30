@@ -8,6 +8,7 @@ import java.util.Map;
 
 
 
+
 import org.springframework.stereotype.Repository;
 
 import com.community.framework.exception.DaoException;
@@ -116,6 +117,6 @@ public interface BusinessCommunityDao {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<BusinessCommunity> findComsByUser(final Integer userId) throws DaoException;
+	public List<BusinessCommunity> findComsByUser(final Map<String, Object> paramMap) throws DaoException;
 
 }

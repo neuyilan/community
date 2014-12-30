@@ -154,8 +154,8 @@
                 <h2 class="relstatus">推荐到首页新闻列表<label for="isRecommend" class="error success"></label></h2>
                 <div class="options">
                     <p>
-                        <input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test="${businessHealthydiet.isRecommend == 0 }"> checked </c:if> > 否<br><br>
-                        <input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test="${businessHealthydiet.isRecommend == 1 }"> checked </c:if> > 是<br>
+                        <label><input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test="${businessHealthydiet.isRecommend == 0 }"> checked </c:if> > 否</label><br><br>
+                        <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test="${businessHealthydiet.isRecommend == 1 }"> checked </c:if> > 是</label><br>
                     </p>
                 </div>
                 
@@ -176,12 +176,12 @@
                 <div class="options">
                     <p>
                         <shiro:hasPermission name="diet_instant_publish">
-                        <input class="radiostyle" type="radio" name="publishState" value="0" <c:if test="${businessHealthydiet.publishState == 0 }"> checked </c:if> >立即发布<br><br>
+                        <label><input class="radiostyle" type="radio" name="publishState" value="0" <c:if test="${businessHealthydiet.publishState == 0 }"> checked </c:if> > 立即发布</label><br><br>
                         </shiro:hasPermission>
                         <shiro:hasPermission name="diet_wait_publish">
-                        <input class="radiostyle" type="radio" name="publishState" value="1" <c:if test="${businessHealthydiet.publishState == 1 }"> checked </c:if> >暂缓发布<br><br>
+                        <label><input class="radiostyle" type="radio" name="publishState" value="1" <c:if test="${businessHealthydiet.publishState == 1 }"> checked </c:if> > 暂缓发布</label><br><br>
                         </shiro:hasPermission>
-                        <input class="radiostyle" type="radio" name="publishState" value="2" <c:if test="${businessHealthydiet.publishState == 2 }"> checked </c:if> >待审核<br><br>
+                        <label><input class="radiostyle" type="radio" name="publishState" value="2" <c:if test="${businessHealthydiet.publishState == 2 }"> checked </c:if> > 待审核</label><br><br>
                     </p>
                 </div>
 

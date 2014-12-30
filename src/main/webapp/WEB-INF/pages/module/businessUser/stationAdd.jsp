@@ -621,6 +621,7 @@
                 });
             });
 	      
+	      
             var flag = false;
         	//初始化表单并验证
         	$('#addForm').validate({
@@ -635,7 +636,7 @@
                     $('#addForm').form('submit', {
                         success:function(data){
                             var data = eval('(' + data + ')');  // 改变json对象为javascript对象
-                            //alert(data.message);
+                            alert(data.message);
                             window.location.href = '<%=ctx%>/business/businessUser/list.do';
                         }
                     });

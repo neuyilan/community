@@ -887,7 +887,8 @@
 		lastMessage,
 		briefMessage,
 		isVideo,
-		receiverId
+		receiverId,
+		estateId
 		) values(
 		#{senderId},
 		#{senderName},
@@ -908,7 +909,8 @@
 		#{lastMessage},
 		#{briefMessage},
 		#{isVideo},
-		#{receiverId}
+		#{receiverId},
+		(SELECT estateId FROM  manage_estate  WHERE stationId=#{station})
 		)
 	</insert>
 	

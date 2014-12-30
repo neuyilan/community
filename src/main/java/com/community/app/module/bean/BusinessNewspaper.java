@@ -20,6 +20,15 @@ public class BusinessNewspaper implements java.io.Serializable{
 	private java.sql.Timestamp editTime;
 	private java.lang.String editor;
 	private java.lang.String comName;
+	private java.lang.String comNameScope;
+	
+	public java.lang.String getComNameScope() {
+		return comNameScope;
+	}
+
+	public void setComNameScope(java.lang.String comNameScope) {
+		this.comNameScope = comNameScope;
+	}
 
 	public java.lang.String getComName() {
 		return comName;

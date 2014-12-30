@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
+
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.ServiceException;
 import com.community.app.module.bean.BusinessCommunity;
@@ -119,6 +120,6 @@ public interface BusinessCommunityService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public List<BusinessCommunity> findComsByUser(final Integer userId) throws ServiceException;
+	public List<BusinessCommunity> findComsByUser(final Map<String, Object> paramMap) throws ServiceException;
 
 }

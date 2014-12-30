@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessNewspaperScopeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessNewspaperScopeResult" type="BusinessNewspaperScope">
+			<result column="scopeId" property="scopeId" />
+			<result column="newspaperId" property="newspaperId" />
+			<result column="comId" property="comId" />
+			<result column="comName" property="comName" />
+			<result column="createTime" property="createTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			scopeId,
+			newspaperId,
+			comId,
+			comName,
+			createTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="scopeId != null and scopeId != ''" >
+				   		and scopeId = #{scopeId}
+					</if>
+					<if test="newspaperId != null and newspaperId != ''" >
+				   		and newspaperId = #{newspaperId}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and comId = #{comId}
+					</if>
+					<if test="comName != null and comName != ''" >
+				   		and comName = #{comName}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessNewspaperScope -->
+	<select id="findById"  resultMap="BusinessNewspaperScopeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_newspaper_scope where scopeId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessNewspaperScope -->
+	<select id="findAll" resultMap="BusinessNewspaperScopeResult">
+		select <include refid="Base_Column_List" /> from business_newspaper_scope 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessNewspaperScope -->
+	<select id="findByMap" resultMap="BusinessNewspaperScopeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_newspaper_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessNewspaperScope -->
+	<select id="findByExample" resultMap="BusinessNewspaperScopeResult" parameterType="com.community.app.module.vo.BusinessNewspaperScopeQuery">
+		select <include refid="Base_Column_List" /> from business_newspaper_scope <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewspaperScope根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessNewspaperScopeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_newspaper_scope  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessNewspaperScope列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_newspaper_scope 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessNewspaperScope保存数据 -->
+	<insert id="save" parameterType="BusinessNewspaperScope">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="scopeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_newspaper_scope(
+		newspaperId,
+		comId,
+		comName,
+		createTime
+		) values(
+		#{newspaperId},
+		#{comId},
+		#{comName},
+		#{createTime}
+		)
+	</insert>
+	
+	<!-- BusinessNewspaperScope修改数据 -->
+	<update id="update" parameterType="BusinessNewspaperScope">
+		update business_newspaper_scope 
+		<set>
+			<if test="newspaperId != null and newspaperId != ''" >
+			newspaperId=#{newspaperId},
+			</if>
+			<if test="comId != null and comId != ''" >
+			comId=#{comId},
+			</if>
+			<if test="comName != null and comName != ''" >
+			comName=#{comName},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime}
+			</if>
+		</set> 
+		where 
+		scopeId=#{scopeId}
+	</update>
+	
+	<!-- BusinessNewspaperScope删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_newspaper_scope where 
+		newspaperId=#{newspaperId}
+	</delete>
+</mapper>

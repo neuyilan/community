@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.community.app.module.bean.AppVerify;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.AppVerifyService;
+import com.community.app.module.service.ManageSendMsgService;
 import com.community.app.module.vo.AppVerifyQuery;
 import com.community.framework.utils.MessageChannelClient;
 import com.community.framework.utils.StringUtil;
@@ -36,7 +37,6 @@ public class VerifyController {
 	private AppVerifyService appVerifyService;
 	@Autowired
 	private AppUserService appUserService;
-	
 	/**
 	 * 用户注册时获取验证码，服务器返回验证码
 	 * @param cellphone

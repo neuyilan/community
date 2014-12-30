@@ -529,35 +529,6 @@
                     	//$('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
                     }
                 });
-        		
-        		//显示部门列表
-        		$.ajax({
-                    url: '<%=path %>/business/businessUser/getDepartmentListByUser.do',
-                    dataType: 'json',
-                    data: {positionId: '${positionId}'},
-                    cache: false,
-                    success: function (data) {
-                    	 
-                    	if(data.success == true){
-                    		var rows = data.result;
-                            if(rows.length > 0) {
-                            	var depDom = '';
-                            	for(var i=0;i<rows.length;i++) {
-                            		var row = rows[i];
-                            		depDom += '<div id="depId_'+row.depId+'">'+row.depName+'</div>';
-                            	}
-                            	$('#positionDiv').html(depDom);
-                            }else{
-                            	$('#positionTree').html('&nbsp;&nbsp;&nbsp;&nbsp;很抱歉，没有相关部门。');
-                            }
-                    	}else{
-                    		//$('.accordion2').html('很抱歉，没有相关记录。');
-                    	}
-                    },
-                    error: function () {
-                    	//$('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
-                    }
-                });
             });
 	        
 	      //选择范围结点

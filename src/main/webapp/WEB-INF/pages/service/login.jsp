@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <title>用户登录</title>
 <link type="text/css" rel="stylesheet" href="${ctx }/css/loginStyle.css"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <script src="${ctx }/js/activity/js/jquery-1.7.2.min.js"></script>
 </head>
 
@@ -29,21 +29,12 @@
         </form>
     </div>
     <div class="share">
-        <div class="stitle">
-            <hr>
-            <p>使用以下方式登录</p>
-        </div>
-        <div class="sharec">
-            <a>
-               <i></i>
-               <span>QQ</span> 
-            </a>
-            <a>
-               <i></i>
-               <span>微信</span> 
-            </a>
-        </div>
+         <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7b40f8aed5742389&redirect_uri=http://wx.bqsqcm.com/hello.php?str=${type },${ID }&response_type=code&scope=snsapi_userinfo&state=123&connect_redirect=1#wechat_redirect">
+           <i></i>
+           <span>使用微信登录</span> 
+        </a>
     </div>
+    
     <footer><a id="return"></a></footer>
 <script type="text/javascript">
 $(function(){
@@ -93,6 +84,16 @@ function msgbox(title,content){
 		    $(".tk").remove();
 	});
 }
+var cHeight;
+if (document.compatMode == "BackCompat") {
+   cHeight = document.body.clientHeight;
+}
+else {
+    cHeight = document.documentElement.clientHeight;
+}
+var minheight=parseInt(cHeight-200);
+$(".inpform").css("min-height",minheight);
+
 </script>
 </body>
 </html>

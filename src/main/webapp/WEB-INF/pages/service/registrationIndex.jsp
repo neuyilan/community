@@ -67,7 +67,7 @@
 						</c:when>
 						<c:when test="${value == 9}">
 							<li>
-			                    <div><p><span>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址</span><input type="text"  name="addr" id="addr"/></p></div>  
+			                    <div><p><span>小&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;区</span><input type="text"  name="addr" id="addr"/></p></div>  
 			                </li>
 						</c:when>
 					</c:choose>

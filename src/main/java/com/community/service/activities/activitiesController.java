@@ -244,9 +244,19 @@ public class activitiesController {
 		String sessionid = request.getParameter("sessionid");
 		//String sessionid = "sessionid";
 		String userId = request.getParameter("userId");
-		//Integer userId = 1;
-		AppUser appUser = appUserService.findById(new Integer(userId));
 		try{
+			
+			//Integer userId = 1;
+			if(userId!=null && !userId.equals("0") && !userId.equals("")){
+				AppUser appUser = appUserService.findById(new Integer(userId));
+				mav.addObject("protrait", ip+appUser.getPortrait());
+				mav.addObject("nickname", appUser.getNickname());
+			}else {
+				userId = "0";
+			}
+			
+			
+			
 			//获取活动信息
 			BusinessActivity activity = businessActivityService.findById_app(ID);
 			//判断活动类型跳转相应页面
@@ -288,8 +298,6 @@ public class activitiesController {
 			mav.addObject("ID", ID);
 			mav.addObject("sessionid", sessionid);
 			mav.addObject("userId", userId);
-			mav.addObject("protrait", ip+appUser.getPortrait());
-			mav.addObject("nickname", appUser.getNickname());
 			
 			//获取用户活动排名
 			Map paramMap = new HashMap();
@@ -368,8 +376,12 @@ public class activitiesController {
 					rank = businessActivityParticipate.getRank();
 				}
 			}
+			if (userId.equals("0")) {
+				rank = 0;
+			}
 			mav.addObject("flag", flag);
 			mav.addObject("rank", rank);
+			
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -407,14 +419,24 @@ public class activitiesController {
 		//String sessionid = "sessionid";
 		String userId = request.getParameter("userId");
 		//Integer userId = 1;
-		AppUser appUser = appUserService.findById(new Integer(userId));
-		AppLatestNews appLatestNews = new AppLatestNews();
-		appLatestNews.setUserId(new Integer(userId));
-		appLatestNews.setTypeId(8);
-		appLatestNews.setTo(0);
-		appLatestNews.setSourceId(ID);
-		appLatestNewsService.delete_app_id(appLatestNews);
+		
 		try{
+			//Integer userId = 1;
+			if(userId!=null && !userId.equals("0") && !userId.equals("")){
+				AppUser appUser = appUserService.findById(new Integer(userId));
+				mav.addObject("protrait", ip+appUser.getPortrait());
+				mav.addObject("nickname", appUser.getNickname());
+			}else {
+				userId = "0";
+			}
+			
+			AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(new Integer(userId));
+			appLatestNews.setTypeId(8);
+			appLatestNews.setTo(0);
+			appLatestNews.setSourceId(ID);
+			appLatestNewsService.delete_app_id(appLatestNews);
+			
 			//获取活动信息
 			BusinessActivity activity = businessActivityService.findById_app(ID);
 			//判断活动类型跳转相应页面
@@ -456,8 +478,6 @@ public class activitiesController {
 			mav.addObject("ID", ID);
 			mav.addObject("sessionid", sessionid);
 			mav.addObject("userId", userId);
-			mav.addObject("protrait", ip+appUser.getPortrait());
-			mav.addObject("nickname", appUser.getNickname());
 			
 			//获取用户活动排名
 			Map paramMap = new HashMap();
@@ -535,6 +555,9 @@ public class activitiesController {
 					BusinessActivityParticipate businessActivityParticipate = participateList.get(0);
 					rank = businessActivityParticipate.getRank();
 				}
+			}
+			if (userId.equals("0")) {
+				rank = 0;
 			}
 			mav.addObject("flag", flag);
 			mav.addObject("rank", rank);
@@ -1096,7 +1119,7 @@ public class activitiesController {
 					json = "";
 					json += "{";
 					json += "\"errorCode\":\"400\",";
-					json += "\"message\":\"参与失败\"";
+					json += "\"message\":\"您已经参与活动！不能重复参与！\"";
 					json += "}";
 				}
 				

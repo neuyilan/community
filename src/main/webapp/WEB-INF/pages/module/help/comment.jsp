@@ -356,7 +356,7 @@
 			          <ul id="scopeTree" style="font-size: 18px; margin-top:10px;"></ul>
 		        </div>
 		        <div class="w-gg-btn">
-		            <input class="w-gg-qr w-gg-total" type="button" style="width: 80px;" value="确定"  onclick="saveExpendEstates('${businessHelp.helpId}')"/>
+		            <input id="qdee" class="w-gg-qr w-gg-total" type="button" style="width: 80px;" value="确定"  onclick="saveExpendEstates('${businessHelp.helpId}')"/>
 					<input class="w-gg-qx w-gg-total" type="button" style="width: 80px;" value="取消"  onclick="cancleExpendEstates()"/>
 		        </div>
 	        </form>
@@ -366,6 +366,7 @@
 	
 	<script type="text/javascript">
 	    function saveExpendEstates(helpId) {
+	    	$('#qdee').attr("disabled","disabled");
 	    	var scopeIds = '';
 	        var scopeInfo = '';
 	        var scopeNodes = $('#scopeTree').tree('getChecked');

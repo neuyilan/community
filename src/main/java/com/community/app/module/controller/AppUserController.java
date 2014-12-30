@@ -5,6 +5,7 @@ import static com.community.framework.utils.CommonUtils.getFomatDate;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import com.community.app.module.bean.MemberVO;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessUserPropertyComService;
 import com.community.app.module.vo.AppUserQuery;
 import com.community.app.module.vo.BaseBean;
@@ -35,7 +37,9 @@ public class AppUserController {
 	private AppUserService appUserService;
 	@Autowired
 	private BusinessUserPropertyComService businessUserPropertyComService;
-	
+    @Autowired
+    private BusinessCommunityService businessCommunityService;
+    
 	/**
 	 * 进入管理页
 	 * @return
@@ -43,8 +47,10 @@ public class AppUserController {
 	@RequestMapping(value="list")
 	public ModelAndView list(AppUserQuery query) {	
 		BaseBean baseBean = new BaseBean();
+		ModelAndView mav = null;
+		List comList = null;
+		ShiroUser shiroUser = CommonUtils.getUser();
 		try{
-			ShiroUser shiroUser = CommonUtils.getUser();
 			if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业人员访问 
 				query.setCurUserId(shiroUser.getUserId());
 				//query.setOrgType(ModuleConst.PROPERTY_CODE);
@@ -57,16 +63,21 @@ public class AppUserController {
 			query.setRows(12);
 			baseBean = appUserService.findAllPage(query);
 			baseBean.setRows(12);
+			mav = new ModelAndView("/module/appUser/list");
+			if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType()) && (shiroUser.getCurOrgType() == "" || ModuleConst.OPERATION_CODE.equals(shiroUser.getCurOrgType()))) {
+				comList = businessCommunityService.findAll();
+				mav.addObject("orgType", shiroUser.getOrgType());
+				mav.addObject("comList", comList);
+			}
+			mav.addObject("baseBean", baseBean);
+			mav.addObject("pager", baseBean.getPager());
+			mav.addObject("type", query.getType());
+			mav.addObject("timeScope", query.getTimeScope());
+			mav.addObject("dateField", query.getDateField());
 		}catch(Exception e){
 			GSLogger.error("进入appUser管理页时发生错误：/app/appUser/enter", e);
 			e.printStackTrace();
 		}
-		ModelAndView mav = new ModelAndView("/module/appUser/list");
-		mav.addObject("baseBean", baseBean);
-		mav.addObject("pager", baseBean.getPager());
-		mav.addObject("type", query.getType());
-		mav.addObject("timeScope", query.getTimeScope());
-		mav.addObject("dateField", query.getDateField());
 		return mav;
 	}
 	
@@ -143,7 +154,6 @@ public class AppUserController {
 			try {
 				response.getWriter().write(json);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}catch(Exception e){
@@ -213,7 +223,8 @@ public class AppUserController {
                     .append("\"buildingName\":\"").append(appUser.getBuildingName()).append("\"").append(",")
                     .append("\"unitName\":\"").append(appUser.getUnitName()).append("\"").append(",")
                     .append("\"houseNo\":\"").append(appUser.getHouseNo()).append("\"").append(",")
-                    .append("\"staName\":\"").append(appUser.getStaName()).append("\"")
+                    .append("\"staName\":\"").append(appUser.getStaName()).append("\"").append(",")
+                    .append("\"remarks\":\"").append(appUser.getRemarks()).append("\"")
                     .append("}");
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding("utf-8");
@@ -228,7 +239,37 @@ public class AppUserController {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * 备注居民信息对象
+	 * @param request
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="updateRemarks")
+	public void updateRemarks(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="id") String id, @RequestParam(value="remarks") String remarks) {
+		AppUserQuery query = new AppUserQuery();
+		query.setUserId(Integer.parseInt(id));
+		AppUser appUser = appUserService.findById(query.getUserId());
+		String json = "";
+		try{
+			appUser.setRemarks(remarks);
+		    appUserService.updateRemarks(appUser);
+			json = "{\"success\":\"true\",\"message\":\"备注居民信息成功\"}"; 
+		} catch(Exception e) {
+			json = "{\"success\":\"false\",\"message\":\"备注居民信息失败\"}";
+			GSLogger.error("进入appUser新增页时发生错误：/app/appUser/getUserDetail", e);
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
     /**
      * 查询用户详情
      * @return

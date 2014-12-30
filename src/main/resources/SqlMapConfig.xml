@@ -63,6 +63,7 @@
         <typeAlias alias="BusinessLifeProp" type="com.community.app.module.bean.BusinessLifeProp"/>
         <typeAlias alias="BusinessNews" type="com.community.app.module.bean.BusinessNews"/>
         <typeAlias alias="BusinessNewspaper" type="com.community.app.module.bean.BusinessNewspaper"/>
+        <typeAlias alias="BusinessNewspaperScope" type="com.community.app.module.bean.BusinessNewspaperScope"/>
         <typeAlias alias="BusinessNewsComment" type="com.community.app.module.bean.BusinessNewsComment"/>
         <typeAlias alias="BusinessNewsRecommend" type="com.community.app.module.bean.BusinessNewsRecommend"/>
         <typeAlias alias="BusinessNewsView" type="com.community.app.module.bean.BusinessNewsView"/>
@@ -81,6 +82,8 @@
 		<typeAlias alias="businessProductType" type="com.community.app.module.bean.BusinessProductType"/>
 		<typeAlias alias="businessNewsScope" type="com.community.app.module.bean.BusinessNewsScope"/>
 		<typeAlias alias="manageExpressAll" type="com.community.app.module.bean.ManageExpressAll"/>
+		<typeAlias alias="manageTag" type="com.community.app.module.bean.ManageTag"/>
+		<typeAlias alias="manageTagType" type="com.community.app.module.bean.ManageTagType"/>
 		
         <!-- service -->
 		<typeAlias alias="BusinessCommunity" type="com.community.app.module.bean.BusinessCommunity"/>
@@ -132,6 +135,7 @@
 		<typeAlias alias="BusinessActivityVoteInformation" type="com.community.app.module.bean.BusinessActivityVoteInformation"/>
 		<typeAlias alias="BusinessActivityVoteOptions" type="com.community.app.module.bean.BusinessActivityVoteOptions"/>
 		<typeAlias alias="BusinessProductKeyword" type="com.community.app.module.bean.BusinessProductKeyword"/>
+		<typeAlias alias="ManageSendMsg" type="com.community.app.module.bean.ManageSendMsg"/>
 		
 		
 	</typeAliases>
@@ -193,6 +197,7 @@
         <mapper resource="com/community/app/module/mapper/BusinessLifePropMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessNewsMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessNewspaperMapper.xml" />
+        <mapper resource="com/community/app/module/mapper/BusinessNewspaperScopeMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessNewsCommentMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessNewsRecommendMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessNewsViewMapper.xml" />
@@ -213,7 +218,9 @@
 		<mapper resource="com/community/app/module/mapper/BusinessActivityRegistrationInformationMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessProductTypeMapper.xml" />		
 		<mapper resource="com/community/app/module/mapper/BusinessNewsScopeMapper.xml" />	
-		<mapper resource="com/community/app/module/mapper/ManageExpressAllMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/ManageExpressAllMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/ManageTagMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/ManageTagTypeMapper.xml" />	
 		
         <!-- service -->
 		<mapper resource="com/community/app/module/mapper/AppUserMapper.xml" />
@@ -259,9 +266,6 @@
 		<mapper resource="com/community/app/module/mapper/BusinessActivityVoteInformationMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessActivityVoteOptionsMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessProductKeywordMapper.xml" />
-		
-		
+		<mapper resource="com/community/app/module/mapper/ManageSendMsgMapper.xml" />
 	</mappers>
-	
 </configuration>
-

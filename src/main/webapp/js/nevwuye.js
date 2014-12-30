@@ -91,6 +91,11 @@
  		var idStr = $(obj).attr('id');
 		var field = idStr.substring(0, (idStr.indexOf('_')));
 		var idKey = idStr.substring(idStr.indexOf('_')+1);
+		if(field==="comId"){
+			 $('#estateUL').prev().val("");
+		     $('#estateUL').prev().prev().find('span').text("所有小区");
+		}
+		
 		//if(idKey != '') {//选中一项
 			//判断是字段还是时间范围,如果是字段直接赋值，并显示展示选中项，如果是时间范围则要弹出时间段选择框并赋值开始结束时间,最后提交参数到后台查询数据
 			if(idKey != 'scope') {

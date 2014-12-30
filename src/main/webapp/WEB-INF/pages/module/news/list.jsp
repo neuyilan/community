@@ -98,7 +98,14 @@
 									<c:if test="${news.newsType == 1 }">爆料</c:if>
 								</span>
 								<span class="s-xw-sq">所属社区：
-									 ${news.comName}
+									 <c:choose>
+										<c:when test="${fn:length(news.comName) > 12}">
+											<c:out value="${fn:substring(news.comName, 0, 11)}......" />
+										</c:when>
+										<c:otherwise>
+											<c:out value="${news.comName}" />
+										</c:otherwise>
+									</c:choose>
 								</span>
 							</div>
 		                    <time><fmt:formatDate value="${news.publishTime }" pattern="yyyy-MM-dd HH:mm"/></time>
@@ -351,7 +358,7 @@ function jump(pageNo) {
 	    	        	+ styleStr
 	    	        	+ '>'
 	    	        	+ '<a class="nopotr" href="javascript:;">'
-	                	+ '<div class="info"><span>类型：'+newsType+'</span><span class="s-xw-sq">所属社区：'+row.comName+'</span></div>'
+	                	+ '<div class="info"><span>类型：'+newsType+'</span><span class="s-xw-sq">所属社区：'+(row.comName.length >12 ? row.comName.substring(0, 11)+"......" : row.comName)+'</span></div>'
 	                	+ '<time>'+(row.publishTime != '' ? row.publishTime.substring(0, 16) : '')+'</time>'
 	                	+ '<hr class="link">'
 	                	+ '<h2 class="title">'+row.title+'</h2>'

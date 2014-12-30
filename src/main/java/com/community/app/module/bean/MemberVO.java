@@ -78,9 +78,46 @@ public class MemberVO {
     private Integer limitSwitch;            //限行通知
     private String baiduId;			  
     private String channelId;		  
-    private Integer deviceType;      
+    private Integer deviceType;
+    private String remarks;
     
-    public String getUnitHomeAttr() {
+    private Integer isDoor;//驿站是否支持预约上门
+    private String estateLongitude;//小区经度
+    private String estateLatitude;//小区纬度
+    
+    public Integer getIsDoor() {
+		return isDoor;
+	}
+
+	public void setIsDoor(Integer isDoor) {
+		this.isDoor = isDoor;
+	}
+
+	public String getEstateLongitude() {
+		return estateLongitude;
+	}
+
+	public void setEstateLongitude(String estateLongitude) {
+		this.estateLongitude = estateLongitude;
+	}
+
+	public String getEstateLatitude() {
+		return estateLatitude;
+	}
+
+	public void setEstateLatitude(String estateLatitude) {
+		this.estateLatitude = estateLatitude;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getUnitHomeAttr() {
 		return unitHomeAttr;
 	}
 

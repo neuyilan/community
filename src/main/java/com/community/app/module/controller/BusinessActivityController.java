@@ -492,44 +492,50 @@ public class BusinessActivityController {
             //执行推送接口
 			//活动向小区内的所有居民发送通知
 			if(businessActivity.getIsPush() != null && businessActivity.getIsPush() == 1 && (businessActivity.getState() == 0 || businessActivity.getState() == 1)) {//可推送
+				String ids = "";
 				for(int i=0;i<estateArr.length;i++) {
 					String[] scope = estateArr[i].split(":");
 					Integer estateId = new Integer(scope[0]);
-					//查询该小区下的userId, baiduId, channelId
-					List appUserList = appUserService.findUserPushIds(estateId);
-					AppPushLog appPushLog = new AppPushLog();
-					String title = "OK家";
-					String description = "【活动】"+businessActivity.getActName();	
-					Map paramMap = new HashMap();
-					paramMap.put("messageType", 9);
-					paramMap.put("ID", businessActivity.getActId());
-					paramMap.put("title", businessActivity.getActName());
-					paramMap.put("pic", businessActivity.getAppPic());
-					
-					for(int j=0;j<appUserList.size();j++) {
-						AppUser appUser = (AppUser) appUserList.get(j);
-						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-							Integer success = AppPushNotificationUtil.pushNotification(
-									title, 
-									description, 
-									appUser.getDeviceType(),
-									Long.valueOf(appUser.getChannelId()).longValue(), 
-									appUser.getBaiduId(),
-									paramMap
-									);
-							//记录推送日志
-							appPushLog.setUserId(appUser.getUserId());
-						    appPushLog.setUserName(appUser.getRealname());
-						    appPushLog.setBaiduId(appUser.getBaiduId());
-						    appPushLog.setChannelId(appUser.getChannelId());
-						    appPushLog.setTitle(title);
-						    appPushLog.setDescription(description);
-						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-						    appPushLog.setSendState(success);
-						    appPushLog.setSenderId(getUser().getUserId());
-						    appPushLog.setSenderName(getUser().getUserName());
-							appPushLogService.save(appPushLog);
-						}
+					ids +="'"+estateId+"',"; 
+				}
+				if(estateArr.length!=0){
+					ids = ids.substring(0, ids.length()-1);
+				}
+				
+				//查询该小区下的userId, baiduId, channelId
+				List appUserList = appUserService.findUserPushIds(ids);
+				AppPushLog appPushLog = new AppPushLog();
+				String title = "OK家";
+				String description = "【活动】"+businessActivity.getActName();	
+				Map paramMap = new HashMap();
+				paramMap.put("messageType", 9);
+				paramMap.put("ID", businessActivity.getActId());
+				paramMap.put("title", businessActivity.getActName());
+				paramMap.put("pic", businessActivity.getAppPic());
+				
+				for(int j=0;j<appUserList.size();j++) {
+					AppUser appUser = (AppUser) appUserList.get(j);
+					if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+						Integer success = AppPushNotificationUtil.pushNotification(
+								title, 
+								description, 
+								appUser.getDeviceType(),
+								Long.valueOf(appUser.getChannelId()).longValue(), 
+								appUser.getBaiduId(),
+								paramMap
+								);
+						//记录推送日志
+						appPushLog.setUserId(appUser.getUserId());
+					    appPushLog.setUserName(appUser.getRealname());
+					    appPushLog.setBaiduId(appUser.getBaiduId());
+					    appPushLog.setChannelId(appUser.getChannelId());
+					    appPushLog.setTitle(title);
+					    appPushLog.setDescription(description);
+					    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+					    appPushLog.setSendState(success);
+					    appPushLog.setSenderId(getUser().getUserId());
+					    appPushLog.setSenderName(getUser().getUserName());
+						appPushLogService.save(appPushLog);
 					}
 				}
 			}
@@ -851,11 +857,18 @@ public class BusinessActivityController {
           //执行推送接口
 			//活动向小区内的所有居民发送通知
 			if(businessActivity.getIsPush() != null && businessActivity.getIsPush() == 1  && (businessActivity.getState() == 0 || businessActivity.getState() == 1)) {//可推送
+				String ids = "";
 				for(int i=0;i<estateArr.length;i++) {
 					String[] scope = estateArr[i].split(":");
 					Integer estateId = new Integer(scope[0]);
-					//查询该小区下的userId, baiduId, channelId
-					List appUserList = appUserService.findUserPushIds(estateId);
+					ids +="'"+estateId+"',"; 
+				}
+				if(estateArr.length!=0){
+					ids = ids.substring(0, ids.length()-1);
+				}
+				
+				//查询该小区下的userId, baiduId, channelId
+				List appUserList = appUserService.findUserPushIds(ids);
 					AppPushLog appPushLog = new AppPushLog();
 					String title = "OK家";
 					String description = "【活动】"+businessActivity.getActName();	
@@ -891,7 +904,6 @@ public class BusinessActivityController {
 							appPushLogService.save(appPushLog);
 						}
 					}
-				}
 			}
 			
 			json = "{\"success\":\"true\",\"message\":\"编辑成功\"}";
@@ -970,7 +982,12 @@ public class BusinessActivityController {
 			// if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {//驿站
 			// List comList = businessCommunityService.findAll();
 			//获取该用户负责的多社区范围
-			List comList = businessCommunityService.findComsByUser(shiroUser.getUserId());
+			Map map = new HashMap();
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			map.put("comId", shiroUser.getCurComId());
+			
+			List comList = businessCommunityService.findComsByUser(map);
 			JSONObject comObj = null;
 			Map paramMap = null;
 			for(int i=0;i<comList.size();i++) {

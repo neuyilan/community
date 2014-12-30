@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <title>${title}</title>
 <link href="${ctx }/js/activity/css/style111.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
@@ -56,9 +56,9 @@ function msgbox(title,content){
 	});
 }
 var imgUrl = '${ctx }${appPic}';  
-var lineLink = window.location.href;  
+var lineLink = '${ctx }/service/property/getPopertyDetailsById.json?userId=${userId}&ID=${newsId}&download=1';  
 var descContent = "${title}";  
-var shareTitle = '【OK家】小区生活OK到家';  
+var shareTitle = '【OK家】小区生活 OK到家';  
 var appid = '';  
   
 function shareFriend() {  
@@ -81,7 +81,7 @@ function shareTimeline() {
                             "img_height": "640",  
                             "link": lineLink,  
                             "desc": descContent,  
-                            "title": shareTitle  
+                            "title": "【OK家】"+descContent  
                             }, function(res) {  
                             _report('timeline', res.err_msg);  
                             });  

@@ -3,30 +3,22 @@ package com.community.app.module.controller;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.community.app.module.vo.BaseBean;
-
 
 import com.community.app.module.bean.ManageBuilding;
 import com.community.app.module.service.ManageBuildingService;
 import com.community.app.module.vo.ManageBuildingQuery;
-
 
 @Controller
 @RequestMapping("/manage/manageBuilding")
@@ -34,8 +26,6 @@ public class ManageBuildingController {
 	private static Logger GSLogger = LoggerFactory.getLogger(ManageBuildingController.class);
 	@Autowired
 	private ManageBuildingService manageBuildingService;
-	
-	private final String LIST_ACTION = "redirect:/manage/manageBuilding/list.do";
 	
 	/**
 	 * 进入管理页

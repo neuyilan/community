@@ -152,7 +152,7 @@ public class BusinessUserServiceImpl implements BusinessUserService {
 				count=businessUserDao.selectCountByOperation(query);
 				query.setCount(count);
 				list=businessUserDao.findAllPageByOperation(query);
-			}if(ModuleConst.COMMUNITY_CODE.equals(query.getOrgType())) {//社区报单走自己的搜索
+			}else if(ModuleConst.COMMUNITY_CODE.equals(query.getOrgType())) {//社区报单走自己的搜索
 				count=businessUserDao.selectCountByCommunity(query);
 				query.setCount(count);
 				list=businessUserDao.findAllPageByCommunity(query);

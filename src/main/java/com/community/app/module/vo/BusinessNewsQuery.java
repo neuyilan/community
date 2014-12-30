@@ -64,8 +64,25 @@ public class BusinessNewsQuery extends BaseBean {
 	private String newsScope;
 	private Map<String,String> param;
 	private Map<String,String> image;
+	private String newsScopeInfo;
+	private String tag;
 	
-	
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	public String getNewsScopeInfo() {
+		return newsScopeInfo;
+	}
+
+	public void setNewsScopeInfo(String newsScopeInfo) {
+		this.newsScopeInfo = newsScopeInfo;
+	}
+
 	public Map<String, String> getParam() {
 		return param;
 	}

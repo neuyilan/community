@@ -41,7 +41,7 @@
 					<p>邮箱：<span>${businessActivityRegistrationInformation.email}</span></p>
 				</c:if>
 				<c:if test="${!empty businessActivityRegistrationInformation.addr}">
-					<p>地址：<span>${businessActivityRegistrationInformation.addr}</span></p>
+					<p>小区：<span>${businessActivityRegistrationInformation.addr}</span></p>
 				</c:if>
 			 </c:forEach>	
         </div>

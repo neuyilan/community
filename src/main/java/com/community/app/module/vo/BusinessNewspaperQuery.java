@@ -21,6 +21,33 @@ public class BusinessNewspaperQuery extends BaseBean {
 	private String startTime;
 	private String endTime;
 	private String keyWord;
+	private String comNameScope;
+	private java.lang.Integer curUserId;
+	private java.lang.Integer curComId;
+	
+	public java.lang.Integer getCurUserId() {
+		return curUserId;
+	}
+
+	public void setCurUserId(java.lang.Integer curUserId) {
+		this.curUserId = curUserId;
+	}
+
+	public java.lang.Integer getCurComId() {
+		return curComId;
+	}
+
+	public void setCurComId(java.lang.Integer curComId) {
+		this.curComId = curComId;
+	}
+
+	public String getComNameScope() {
+		return comNameScope;
+	}
+
+	public void setComNameScope(String comNameScope) {
+		this.comNameScope = comNameScope;
+	}
 
 	public String getTimeScope() {
 		return timeScope;

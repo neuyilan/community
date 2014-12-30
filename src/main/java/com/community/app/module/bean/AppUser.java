@@ -52,6 +52,42 @@ public class AppUser implements java.io.Serializable{
 	private String baiduId;
 	private String channelId;
 	private Integer deviceType;
+	private String remarks;
+	private String wenxinId;
+	private String qqId;
+	private Integer comId;
+	
+	public Integer getComId() {
+		return comId;
+	}
+
+	public void setComId(Integer comId) {
+		this.comId = comId;
+	}
+
+	public String getWenxinId() {
+		return wenxinId;
+	}
+
+	public void setWenxinId(String wenxinId) {
+		this.wenxinId = wenxinId;
+	}
+
+	public String getQqId() {
+		return qqId;
+	}
+
+	public void setQqId(String qqId) {
+		this.qqId = qqId;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
 
 	public Integer getDeviceType() {
 		return deviceType;

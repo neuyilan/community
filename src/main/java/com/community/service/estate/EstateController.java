@@ -90,10 +90,29 @@ public class EstateController {
 			json += "\"estateList\":[";
 			for (ManageEstate manageEstate : list) {
 				json += "{\"estateId\":\""+manageEstate.getEstateId()+"\",\"estateName\":\""+manageEstate.getEstateName()+"\",";
-				json += "\"comName\":\""+manageEstate.getComName()+"\",\"areaName\":\""+manageEstate.getCountyName()+"\",";
-				json += "\"cityName\":\""+manageEstate.getCityName()+"\",\"comId\":\""+manageEstate.getComId()+"\","
-						+ "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\","
-						+ "\"comName\":\""+manageEstate.getComName()+"\"},";
+				json += "\"comName\":\""+manageEstate.getComName()+"\",";
+				if (manageEstate.getCountyName()==null) {
+					json += "\"areaName\":\"\",";
+				}else {
+					json += "\"areaName\":\""+manageEstate.getCountyName()+"\",";
+				}
+				if (manageEstate.getCityName()==null) {
+					json += "\"cityName\":\"\",";
+				}else{
+					json += "\"cityName\":\""+manageEstate.getCityName()+"\",";
+				}
+				if (manageEstate.getStationId()==null) {
+					json += "\"stationId\":\"0\",\"staName\":\"\"";
+				} else {
+					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
+				}
+				if (manageEstate.getComId()==null) {
+					json += ",\"comId\":\"0\",\"comName\":\"\"},";
+				} else {
+					json += ",\"comId\":\""+manageEstate.getComId()+"\",\"comName\":\""+manageEstate.getComName()+"\"},";
+				}	
+				
+						
 			}
 			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);
@@ -166,10 +185,29 @@ public class EstateController {
 			json += "\"estateList\":[";
 			for (ManageEstate manageEstate : list) {
 				json += "{\"estateId\":\""+manageEstate.getEstateId()+"\",\"estateName\":\""+manageEstate.getEstateName()+"\",";
-				json += "\"comName\":\""+manageEstate.getComName()+"\",\"areaName\":\""+manageEstate.getCountyName()+"\",";
-				json += "\"cityName\":\""+manageEstate.getCityName()+"\",\"comId\":\""+manageEstate.getComId()+"\","
-						+ "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\","
-						+ "\"comName\":\""+manageEstate.getComName()+"\"},";
+				json += "\"comName\":\""+manageEstate.getComName()+"\",";
+				if (manageEstate.getCountyName()==null) {
+					json += "\"areaName\":\"\",";
+				}else {
+					json += "\"areaName\":\""+manageEstate.getCountyName()+"\",";
+				}
+				if (manageEstate.getCityName()==null) {
+					json += "\"cityName\":\"\",";
+				}else{
+					json += "\"cityName\":\""+manageEstate.getCityName()+"\",";
+				}
+				if (manageEstate.getStationId()==null) {
+					json += "\"stationId\":\"0\",\"staName\":\"\"";
+				} else {
+					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
+				}
+				if (manageEstate.getComId()==null) {
+					json += ",\"comId\":\"0\",\"comName\":\"\"},";
+				} else {
+					json += ",\"comId\":\""+manageEstate.getComId()+"\",\"comName\":\""+manageEstate.getComName()+"\"},";
+				}	
+				
+						
 			}
 			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);

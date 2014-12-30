@@ -290,6 +290,22 @@ public class AppUserServiceImpl implements AppUserService {
 	}
 	
 	/**
+	 * service
+	 * 修改AppUser数据remarks
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	@Transactional("transactionManager")
+	public void updateRemarks(AppUser entity) throws ServiceException {
+		try {
+			appUserDao.updateRemarks(entity);
+		} catch (DaoException e) {
+			logger.debug("AppUserServiceImpl updateRemarks()：修改AppUser发生错误！", e);
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 删除AppUser
 	 * @param entityId
 	 * @return
@@ -432,7 +448,7 @@ public class AppUserServiceImpl implements AppUserService {
      * @return
      * @throws ServiceException
      */
-    public List findUserPushIds(final Integer estateId) throws ServiceException {
+    public List findUserPushIds(final String estateId) throws ServiceException {
     	List list = new ArrayList() ;
 		try {
 			list=appUserDao.findUserPushIds(estateId);
@@ -508,4 +524,18 @@ public class AppUserServiceImpl implements AppUserService {
 		}
 		
 	}
+
+	public MemberVO findByCon(Map<String, Object> con) throws ServiceException {
+		// TODO Auto-generated method stub
+		MemberVO memberVO = new MemberVO();;
+		try {
+			memberVO=appUserDao.findByCon(con);
+		} catch (DaoException e) {
+			logger.debug("AppUserServiceImpl findByMap()：查询APP用户信息错误！", e);
+			e.printStackTrace();
+		}
+		return memberVO;
+	}
+	
+	
 }

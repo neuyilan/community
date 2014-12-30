@@ -67,7 +67,8 @@ public class BusinessExpController {
 	private BusinessAddressService businessAddressService;
 	@Autowired
 	private ManageExpressAllService manageExpressAllService;
-	
+	@Autowired
+	private ManageSendMsgService manageSendMsgService;
 	/**
 	 * 进入管理页
 	 * @return
@@ -750,6 +751,7 @@ public class BusinessExpController {
         		//sb.append("您正在申请注册OK家注册用户,验证码").append(messageContent).append(",2分钟内有效。【OK家】");
         		String content=URLEncoder.encode(sb.toString(), "utf8");
         		String result_mt = client.mdsmssend(cellphone, content, "", "", "", "");
+        		manageSendMsgService.save(cellphone,result_mt,messageContent,0);
             }
                 
 			//保存成功
@@ -920,6 +922,7 @@ public class BusinessExpController {
         		//sb.append("您正在申请注册OK家注册用户,验证码").append(messageContent).append(",2分钟内有效。【OK家】");
         		String content=URLEncoder.encode(sb.toString(), "utf8");
         		String result_mt = client.mdsmssend(cellphone, content, "", "", "", "");
+        		manageSendMsgService.save(cellphone,result_mt,messageContent,0);
             }
 			
 			//保存发送的处理
@@ -1140,6 +1143,7 @@ public class BusinessExpController {
 	        		//sb.append("您正在申请注册OK家注册用户,验证码").append(messageContent).append(",2分钟内有效。【OK家】");
 	        		String content=URLEncoder.encode(sb.toString(), "utf8");
 	        		String result_mt = client.mdsmssend(businessExp.getSenderTel(), content, "", "", "", "");
+	        		manageSendMsgService.save(businessExp.getSenderTel(),result_mt,messageContent,0);
 	            }
 		        
 		        //使用过发送快件服务的居民改变居民的状态为验证类型居民

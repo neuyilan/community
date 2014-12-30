@@ -286,6 +286,7 @@
     <!-- BusinessUser列表总数-->
     <select id="selectCountByOperation" resultType="java.lang.Integer"  parameterType="Object">
         select count(1) from business_user u
+        INNER JOIN business_position p ON p.positionId = u.positionId
         <!-- inner join business_department d on d.depId = u.depId -->
         <include refid="Base_Where_Clause" />
     </select>

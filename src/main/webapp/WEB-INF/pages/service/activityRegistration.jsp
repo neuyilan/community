@@ -170,6 +170,16 @@ $(document).ready(function(){
 	
 	//参加活动
 	$(".x-qg").click(function(e) {
+		if(userId==0){
+			if(window.confirm('参加活动需要登录！！是否进去登录页？')){
+				 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+                //alert("确定");
+                return null;
+             }else{
+                //alert("取消");
+                return null;
+            }
+		}
 	     var timeSlotId = $("#timeSlotId").val(); 
 	     if(timeSlotId==""){
 	    	 msgbox('提示','请选择场次');
@@ -180,6 +190,16 @@ $(document).ready(function(){
 	
 	//查看排名
 	$("#seeRank").click(function(e) {
+		if(userId==0){
+			if(window.confirm('查看活动需要登录！！是否进去登录页？')){
+				 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+                //alert("确定");
+                return null;
+             }else{
+                //alert("取消");
+                return null;
+            }
+		}
 		var timeSlotId = $("#partakeTimeSlotId").val(); 
 		window.location.href='${ctx}/service/activities/registrationInformation.json?ID=${actId}&userId=${userId}&tel=${tel}&timeSlotId='+timeSlotId;
      });
@@ -188,6 +208,7 @@ $(document).ready(function(){
 	
 	
 	 $("#content").click(function(){
+		 
 		 replyId = 0;//点击回复人id
 		 replyName = "";//点击回复人姓名
 		 replyType = 0;//点击回复人类型
@@ -195,6 +216,26 @@ $(document).ready(function(){
 	 });
 	//点赞
 	 $('.x-z a').click(function(){
+		 if(userId==0){
+				if(window.confirm('点赞活动需要登录！！是否进去登录页？')){
+					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+	                //alert("确定");
+	                return null;
+	             }else{
+	                //alert("取消");
+	                return null;
+	            }
+			}
+		 if(userId==0){
+				if(window.confirm('参加活动需要登录！！是否进去登录页？')){
+					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+	                //alert("确定");
+	                return null;
+	             }else{
+	                //alert("取消");
+	                return null;
+	            }
+			}
 	 	$.ajax({
            url: '${ctx}/service/activities/supportActivities.json',
            cache: false,
@@ -233,6 +274,16 @@ $(document).ready(function(){
 	
 	//评论
 	 $('#commentBtn').click(function() {
+		 if(userId==0){
+				if(window.confirm('评论活动需要登录！！是否进去登录页？')){
+					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+	                //alert("确定");
+	                return null;
+	             }else{
+	                //alert("取消");
+	                return null;
+	            }
+			}
 	 	var content = $('#comment').val();
 	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){

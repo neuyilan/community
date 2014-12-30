@@ -59,9 +59,9 @@
  }
  pv_q("http://10.1.17.210:8080/community/app/audio/2014-11-25/bqvoice1416899363213_10.amr", 500, 32);*/
  var imgUrl = '${ctx }${appPic}';  
- var lineLink = window.location.href;  
+ var lineLink = '${ctx }/service/commiunity/getJournalismDetailsById.json?userId=${userId}&ID=${newsId}&download=1';  
  var descContent = "${title}";  
- var shareTitle = '【OK家】小区生活OK到家';  
+ var shareTitle = '【OK家】小区生活 OK到家';  
  var appid = '';  
    
  function shareFriend() {  
@@ -84,7 +84,7 @@
                              "img_height": "640",  
                              "link": lineLink,  
                              "desc": descContent,  
-                             "title": shareTitle  
+                             "title": "【OK家】"+descContent  
                              }, function(res) {  
                              _report('timeline', res.err_msg);  
                              });  

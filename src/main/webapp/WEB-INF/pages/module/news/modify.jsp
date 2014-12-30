@@ -12,12 +12,14 @@
     <title>编辑新闻</title>
     <%@include file="/common/meta.jsp"%>
     <%@include file="/common/editorJs.jsp"%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="<%=ctx%>/js/jquery.confirm/jquery.confirm.css" />
     <script language="javascript" type="text/javascript" src="${ctx}/js/time/WdatePicker.js"></script>
     <script type="text/javascript" src="<%=ctx %>/js/jquery-easyui/jquery.easyui.min.js"></script>
    	<script src="<%=ctx %>/js/jquery.validate.min.js" type="text/javascript" ></script>
     <script src="<%=ctx %>/js/messages_zh.js" type="text/javascript" ></script>
-    <link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
+	<script src="<%=ctx%>/js/jquery.confirm/jquery.confirm.js"></script>
 
     <style type="text/css">
         label.error
@@ -92,6 +94,9 @@
                      newsScope: {
                      	required: true
                      },
+                     tag: {
+                         required: true
+                     },
                      appPic: {
                         required: true
                      },
@@ -119,6 +124,9 @@
                     },  */
                     newsScope: {
                     	required: '请选择新闻范围'
+                    },
+                    tag: {
+                    	required:  '请选择新闻标签'
                     },
                     appPic: {
                         required: '请选择APP首页小图！'
@@ -180,8 +188,19 @@
 		            	</c:forEach>
 		            </lable>
 	            </div>
+                <div class="line2"></div>
                 
-                <!-- <div class="line2"></div> -->
+                <h2 class="relran">
+					新闻标签<label for="tag" class="error success"></label>
+				</h2>
+				<div style="position: relative;">
+					<span class="ranbut radiusbox" id="showTagLayer">点击选择标签</span> 
+					<input type="hidden" id="tag" name="tag" value="${businessNews.tag }" /> 
+					<input type="hidden" id="tagInfo" name="tagInfo" value="${tagInfo }" />
+					<lable style="position: absolute; top: 10px; left: 160px;" id="tagShow">${tagInfo }</lable>
+				</div>
+				<div class="line2"></div>
+					
                 <h2 class="relran">APP首页小图<label for="appPic" class="error success"></label></h2>
                 <div style=" overflow:hidden;"><img id="appPicBtn" src="<%=ctx %><c:choose><c:when test="${businessNews.appPic==''}">/images/icon/add.jpg</c:when><c:otherwise>${businessNews.appPic}</c:otherwise></c:choose>" width="100" height="100"  style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
                 <input type="hidden" name="appPic" id="appPic" value="${businessNews.appPic}" > <%--头像--%>
@@ -192,7 +211,7 @@
                 <h2 class="relstatus">是否推送<label for="isPush" class="error success"></label></h2>
                 <div class="options">
                     <p>
-                        <label><input class="radiostyle" type="radio" name="isPush" value="1"  onclick="IsPash()">&nbsp;是</label>　　<em style="color:#e7402f;">选择推送后，将通过系统推送至手机用户，非重要信息请勿选择</em><br><br>
+                        <label><input id="isPush1"  class="radiostyle" type="radio" name="isPush" value="1">&nbsp;是</label>　　<em style="color:#e7402f;">选择推送后，将通过系统推送至手机用户，非重要信息请勿选择</em><br><br>
                         <label><input class="radiostyle" type="radio" name="isPush" value="0"  checked>&nbsp;否<br></label>
                     </p>
                 </div>
@@ -250,6 +269,25 @@
 </div>
 <!-- 展示范围选择结束 -->
 
+<!-- 新闻标签选择开始 -->
+<div id="tagLayer" class="busswi3">
+	<div id="tagBar" class="sidebar3">
+		<form action="">
+			<a id="close3" href="javascript:;" onclick="cancleTag()"></a>
+			<h2 class="tit3">新闻标签选择</h2>
+			<hr class="link3">
+			<div id="wrapper-250">
+				<ul id="tagTree" style="font-size: 18px; margin-top: 10px;"></ul>
+			</div>
+			<div class="w-gg-btn">
+				<input class="w-gg-qr w-gg-total" type="button" style="width: 80px;" value="确定" id="tagOk" /> 
+				<input class="w-gg-qx w-gg-total" type="button" style="width: 80px;" value="取消" onclick="cancleTag()" />
+			</div>
+		</form>
+	</div>
+</div>
+<!-- 新闻标签选择结束 -->
+	
 </body>
 <%--初始化文本编辑器--%>
     
@@ -261,17 +299,30 @@
     	]]
     });
     
-    function IsPash() {
+    $(document).ready(function(){
 		var isPush = document.getElementsByName("isPush");
-    	if(confirm("是否选择推送，如果点击'确定'将通过系统推送至手机用户，'取消'则不发送系统推送！")){
-    		isPush[0].checked = true;
-    		 return true;
-    	}else {
-    		isPush[0].checked = false;
-    		isPush[1].checked = true;
-    		return false;
-    	} 
-    }
+    	$('#isPush1').change(function(){
+    		$.confirm({
+    			'title'		: '选择推送重要提示',
+    			'message'	: '<font color="red"><b>请慎重选择推送！</b></font><br/>选择推送，会将此条新闻推送至<font color="red"><b>所有注册用户</b></font>手机桌面。<br/>如本篇新闻已进行过推送操作，<font color="red"><b>切勿再次推送！</b></font>否则会造成频繁推送！<br/>如确认推送，请选择【确定】，否则，请点击【取消】',
+    			'buttons'	: {
+    				'确定'	: {
+    					'class'	: 'blue',
+    					'action': function(){
+    						isPush[0].checked = true;
+    					}
+    				},
+    				'取消'	: {
+    					'class'	: 'gray',
+    					'action': function(){
+    						isPush[0].checked = false;
+    			    		isPush[1].checked = true;
+    					}	
+    				}
+    			}
+    		});
+    	});
+    });
     
     $(function() {
     	//大图
@@ -349,6 +400,31 @@
             }
         });
 		
+     	// 显示选择新闻标签层
+	    $("#showTagLayer").click(function(){
+	   	        $("#tagLayer").fadeIn("slow");
+	   	        $.ajax({
+	   	            url: '${ctx}/business/businessNews/getTagTree.do',
+	   	            dataType: 'json',
+	   	            cache: false,
+	   	            success: function (data) {
+	   	                if(data.success == true){
+	   	                    var rows = data.result;
+	   	                    if(rows.length > 0) {
+	   	                        $('#tagTree').tree('loadData', data.result);
+	   	                    }else{
+	   	                        $('#tagTree').html('很抱歉，没有相关记录。');
+	   	                    }
+	   	                }else{
+	   	                    $('#tagTree').html('很抱歉，加载内容出错，我们及时修改问题。');
+	   	                }
+	   	            },
+	   	            error: function () {
+	   	                $('#tagTree').html('很抱歉，加载内容出错，我们及时修改问题。');
+	   	            }
+	   	        });
+	   	 });
+     
 	    // 选择求助范围结点
         $('#scopeTree').tree({
             checkbox: true,
@@ -359,6 +435,51 @@
                 }
             }
         });
+	    
+     // 选择新闻标签
+        $('#tagOk').click(function() {
+            var tagIds = '';
+            var tagInfo = '';
+            var tagNodes = $('#tagTree').tree('getChecked');
+            if(tagNodes != null && tagNodes.length > 0) {
+                for(var i=0;i<tagNodes.length;i++) {
+                    var node = tagNodes[i];
+                    var idArr = node.id.split('_');
+                    var typeid = idArr[0];
+                    if(typeid == 'tag') {
+                    	tagIds += idArr[1] + ':' + node.text + ',';
+                        tagInfo += node.text + ',';
+                    }
+                }
+                
+                if(tagIds != '') {
+                    if(tagIds.indexOf(',') > -1) {
+                        tagIds = tagIds.substring(0, tagIds.length-1);
+                        tagInfo = tagInfo.substring(0, tagInfo.length-1);
+                    }
+                }
+                $('#tag').val(tagIds);
+                $('#tagInfo').val(tagInfo);
+                
+                $('#tagShow').html(tagInfo);
+                $('#tagShow').focus();
+                
+                $("#tagLayer").fadeOut("slow");
+            }else{
+                alert('请选择展示范围');
+            }
+        });
+      	
+        // 选择新闻标签
+        $('#tagTree').tree({
+            checkbox: true,
+            onSelect: function(node){
+                var children = $('#tagTree').tree('getChildren', node.target);
+                if(children.length != 0) {
+                	$('#tagTree').tree('expend', node);
+                }
+            }
+        });
     });
     
  	// 取消展示扩散范围
@@ -366,5 +487,9 @@
  	    $("#scopeLayer").fadeOut("slow");
  	}
     
+ 	 // 取消选择新闻标签
+ 	function cancleTag() {
+ 	    $("#tagLayer").fadeOut("slow");
+ 	}
 </script>
 </html>

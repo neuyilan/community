@@ -77,7 +77,8 @@
         u.estateName,
         u.baiduId,
         u.channelId,
-        u.deviceType
+        u.deviceType,
+        u.remarks
     </sql>
 
     <!-- 所有字段查询条件 -->
@@ -135,8 +136,11 @@
                 <if test="idCard != null and idCard != ''" >
                     and u.idCard = #{idCard}
                 </if>
+                <if test="comId != null and comId != ''" >
+                    and res.comId = #{comId}
+                </if>
                 <if test="estateId != null and estateId != ''" >
-                    and estateId = #{estateId}
+                    and u.estateId = #{estateId}
                 </if>
                 <if test="isNameSecret != null and isNameSecret != ''" >
                     and u.isNameSecret = #{isNameSecret}
@@ -158,6 +162,13 @@
                 </if>
                 <if test="editor != null and editor != ''" >
                     and u.editor = #{editor}
+                </if>
+                
+                <if test="qqId != null and qqId != ''" >
+                    and u.qqId = #{qqId}
+                </if>
+                <if test="wenxinId != null and wenxinId != ''" >
+                    and u.wenxinId = #{wenxinId}
                 </if>
                 
                 <if test="dimensionCode != null and dimensionCode != ''" >
@@ -223,7 +234,7 @@
 	</select>
 	
 	<!-- 按VO对象条件查询所有AppUser -->
-	<select id="findByExample" resultMap="AppUserResult" parameterType="com.community.app.module.vo.AppUserQuery">
+	<select id="findByExample" resultType="AppUser" parameterType="com.community.app.module.vo.AppUserQuery">
 		select <include refid="Base_Column_List" /> from app_user u <include refid="Base_Where_Clause" />
 	</select>
 	
@@ -363,7 +374,10 @@
 		dimensionCode,
 		lastLoginTime,
 		editTime,
-		portrait
+		portrait,
+		nickname,
+		wenxinId,
+		qqId
 		) values(
 		#{password},
 		#{tel},
@@ -375,7 +389,10 @@
 		#{dimensionCode},
 		#{lastLoginTime},
 		#{editTime},
-		#{portrait}
+		#{portrait},
+		#{nickname},
+		#{wenxinId},
+		#{qqId}
 		)
 		
     </insert>
@@ -511,6 +528,11 @@
          password=#{password},editTime=#{editTime} where userId = (select userId from app_user_cellphone c where cellphone=#{tel})
 	</update>
 	
+	<!-- AppUser修改数据remarks -->
+    <update id="updateRemarks" parameterType="AppUser">
+        update app_user set remarks=#{remarks} where userId=#{userId}
+	</update>
+	
 	  <!-- 清除关于该设备的百度id和设备号-->
     <update id="updateBaiduId" parameterType="AppUser">
         update app_user set 
@@ -553,11 +575,52 @@
         d.cellphone boundphone,
         e.staName,
         a.address,
-        a.estateName 
+        a.estateName,
+        a.remarks
         FROM app_user a LEFT JOIN  app_estate_user b ON  a.userId = b.userId LEFT JOIN manage_estate c ON a.estateId = c.estateId LEFT JOIN business_station e ON c.stationId = e.stationId LEFT JOIN
         (SELECT GROUP_CONCAT(cellphone) cellphone FROM app_user_cellphone WHERE userId = #{userId} ) d ON a.userId = #{userId}
         WHERE  a.userId = #{userId}
     </select>
+    
+    
+      <select id="findByCon" resultType="MemberVO" parameterType="java.util.Map">
+       SELECT
+        a.userId,
+        realname,
+        nickname,
+        tel,
+        sex,
+        birthday,
+        TYPE,
+        isWorker,
+        state,
+        registTime,
+        verifyTime,
+        verifier,
+        signature,
+        portrait,
+        a.estateId,
+        c.estateName oftenestate,
+        isNameSecret,
+        isTelSecret,
+        workerMemo,
+        weixin,
+        b.estateName,
+        buildingName,
+        unitName,
+        houseNo,
+        memberType,
+        d.cellphone boundphone,
+        e.staName,
+        a.address,
+        a.estateName,
+        a.remarks
+        FROM app_user a LEFT JOIN  app_estate_user b ON  a.userId = b.userId LEFT JOIN manage_estate c ON a.estateId = c.estateId LEFT JOIN business_station e ON c.stationId = e.stationId LEFT JOIN
+        (SELECT GROUP_CONCAT(cellphone) cellphone FROM app_user_cellphone WHERE userId = #{userId} ) d ON a.userId = #{userId}
+        WHERE  a.userId = #{userId}
+        and  b.estateId = #{estateId}
+    </select>
+    
     
     <select id="getAppUserInfoByTel" resultType="MemberVO" parameterType="java.lang.String">
    		SELECT me.comId, u.userId, u.estateId, u.realname, u.nickname, u.portrait, (SELECT GROUP_CONCAT(cellphone) FROM app_user_cellphone acp where acp.userId=u.userId) boundphone, 
@@ -592,6 +655,8 @@
         a.estateId,
         c.estateMap,
         c.estateName,
+        c.estateLongitude,
+        c.estateLatitude,
         a.dimensionCode,
         a.isNameSecret,
         a.isTelSecret,
@@ -612,6 +677,7 @@
         d.cellphone boundphone,
         e.staName,
         e.stationId staId,
+        e.isDoor,
         bc.comId,
         bc.comName,
         bp.proId,
@@ -675,10 +741,10 @@
     </select>
     
     <!-- 查询该小区下的userId, baiduId, channelId 给推送用 -->
-	<select id="findUserPushIds" resultType="AppUser"  parameterType="java.lang.Integer">
-		select u.userId, u.realname, u.baiduId, u.channelId, u.deviceType from app_user u
+	<select id="findUserPushIds" resultType="AppUser"  parameterType="com.community.app.module.vo.AppUserQuery">
+		select DISTINCT u.userId, u.realname, u.baiduId, u.channelId, u.deviceType from app_user u
 		inner join app_estate_user aeu on aeu.userId = u.userId
-		and aeu.estateId = #{estateId}
+		and aeu.estateId in (${ids})
 	</select>
 	
 	<!-- 查询该社区报下的userId, baiduId, channelId 给推送用 -->

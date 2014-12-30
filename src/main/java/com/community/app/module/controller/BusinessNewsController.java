@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +42,7 @@ import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsScope;
 import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.bean.ManageTag;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.push.AppPushNotificationUtil;
@@ -60,11 +62,13 @@ import com.community.app.module.service.BusinessNewsScopeService;
 import com.community.app.module.service.BusinessNewsService;
 import com.community.app.module.service.BusinessUserService;
 import com.community.app.module.service.ManageEstateService;
+import com.community.app.module.service.ManageTagService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessNewsCommentQuery;
 import com.community.app.module.vo.BusinessNewsQuery;
 import com.community.framework.utils.CommonUtils;
 import com.community.framework.utils.Uploader;
+import com.community.framework.utils.propertiesUtil;
 
 @Controller
 @RequestMapping("/business/businessNews")
@@ -102,6 +106,8 @@ public class BusinessNewsController {
 	private AppUserConfigService appUserConfigService;
 	@Autowired
 	private BusinessNewsScopeService businessNewsScopeService;
+	@Autowired
+	private ManageTagService manageTagService;
 	
 	/**
 	 * 进入管理页
@@ -458,7 +464,9 @@ public class BusinessNewsController {
 					paramMap.put("messageType", 7);
 					paramMap.put("ID", businessNews.getNewsId());
 					paramMap.put("title", businessNews.getTitle());
-					paramMap.put("pic", businessNews.getAppPic());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessNews.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -522,7 +530,9 @@ public class BusinessNewsController {
 						paramMap.put("messageType", 8);
 						paramMap.put("ID", businessBreak.getBreakerId());
 						paramMap.put("title", businessNews.getTitle());
-						paramMap.put("pic", businessNews.getAppPic());
+						Properties p = propertiesUtil.getProperties("config.properties");
+						String ip = p.getProperty("imageIp");   
+						paramMap.put("pic", ip+businessNews.getAppPic());
 						
 						Integer success = AppPushNotificationUtil.pushNotification(
 								title, 
@@ -704,6 +714,7 @@ public class BusinessNewsController {
 		    businessNews.setSubjectPic(query.getSubjectPic());
 		    businessNews.setAppPic(query.getAppPic());
 		    businessNews.setNewsType(0);
+		    businessNews.setTag(query.getTag());
 		    ShiroUser shiroUser = CommonUtils.getUser();
 		    businessNews.setPublisherId(shiroUser.getUserId());
 		    businessNews.setPublisherName(shiroUser.getUserName());
@@ -721,15 +732,16 @@ public class BusinessNewsController {
 		    businessNews.setIsAd(0);
 		    businessNews.setBreakId(query.getBreakId());
             //社区范围
-		    BusinessCommunity businessCommunity = businessCommunityService.findById(getUser().getOrgId());
+		    /*BusinessCommunity businessCommunity = businessCommunityService.findById(getUser().getOrgId());
             if(businessCommunity == null) {
             	businessNews.setPublishScope(0);
     		    businessNews.setComName("");  //社区名称
             } else {
             	businessNews.setPublishScope(businessCommunity.getComId());
     		    businessNews.setComName(businessCommunity.getComName());  //社区名称
-            }
-            
+            }*/
+		    businessNews.setComName(query.getNewsScopeInfo());  //社区范围
+		    
 		    businessNews.setEditor(getUser().getUserName());
 		    businessNews.setIsPush(query.getIsPush());
 		    if(query.getIsRecommend() != null) {//选择了推荐
@@ -836,7 +848,9 @@ public class BusinessNewsController {
 				paramMap.put("messageType", 7);
 				paramMap.put("ID", businessNews.getNewsId());
 				paramMap.put("title", businessNews.getTitle());
-				paramMap.put("pic", businessNews.getAppPic());
+				Properties p = propertiesUtil.getProperties("config.properties");
+				String ip = p.getProperty("imageIp");   
+				paramMap.put("pic", ip+businessNews.getAppPic());
 				
 				for(int j=0;j<appUserList.size();j++) {
 					AppUser appUser = (AppUser) appUserList.get(j);
@@ -891,6 +905,7 @@ public class BusinessNewsController {
 		BusinessNews businessNews = new BusinessNews();
 		List scopeList = new ArrayList();
 		String newsScope = "";
+		String tagInfo = "";
 		try{
 			businessNews = businessNewsService.findById(query.getNewsId());
 			Map paramMap = new HashMap();
@@ -900,6 +915,15 @@ public class BusinessNewsController {
 				BusinessNewsScope scope = (BusinessNewsScope)scopeList.get(i);
 				newsScope+= "," + scope.getComId()+":"+scope.getComName();
 			}
+			if(businessNews.getTag() != null && !businessNews.getTag().equals("")) {
+				String tagArr[] = businessNews.getTag().split(",");
+				if(tagArr.length > 0) {
+					for(int i=0; i<tagArr.length; i++) {
+						tagInfo += "," + tagArr[i].substring(tagArr[i].indexOf(":")+1);
+					}
+					tagInfo = tagInfo.substring(1);
+				}
+			}
 		}catch(Exception e){
 			GSLogger.error("进入businessNews修改页时发生错误：/business/businessNews/modify", e);
 			e.printStackTrace();
@@ -908,6 +932,7 @@ public class BusinessNewsController {
 		mav.addObject("businessNews", businessNews);
 		mav.addObject("scopeList", scopeList);
 		mav.addObject("newsScope", newsScope.substring(1));
+		mav.addObject("tagInfo", tagInfo);
 		return mav;
 	}
 	
@@ -948,6 +973,7 @@ public class BusinessNewsController {
 		    if(query.getState() == 0) {//已发布，保存发布时间，其他需要根据状态改变而保存发布时间
 		    	businessNews.setPublishTime(new Timestamp(System.currentTimeMillis()));
 		    }
+		    businessNews.setTag(query.getTag());
 		    businessNews.setAuditorId(0);
 		    businessNews.setAuditorName("");
 		    businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
@@ -1060,7 +1086,9 @@ public class BusinessNewsController {
 					paramMap.put("messageType", 7);
 					paramMap.put("ID", businessNews.getNewsId());
 					paramMap.put("title", businessNews.getTitle());
-					paramMap.put("pic", businessNews.getAppPic());
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					paramMap.put("pic", ip+businessNews.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1124,7 +1152,9 @@ public class BusinessNewsController {
 						paramMap.put("messageType", 8);
 						paramMap.put("ID", businessNews.getNewsId());
 						paramMap.put("title", businessNews.getTitle());
-						paramMap.put("pic", businessNews.getAppPic());
+						Properties p = propertiesUtil.getProperties("config.properties");
+						String ip = p.getProperty("imageIp");   
+						paramMap.put("pic", ip+businessNews.getAppPic());
 						
 						Integer success = AppPushNotificationUtil.pushNotification(
 								title, 
@@ -1279,7 +1309,12 @@ public class BusinessNewsController {
 			
 			ShiroUser shiroUser = CommonUtils.getUser();
 			//获取该用户负责的多社区范围
-			List comList = businessCommunityService.findComsByUser(shiroUser.getUserId());
+			Map map = new HashMap();
+			map.put("userId", shiroUser.getUserId());
+			map.put("orgType", shiroUser.getOrgType());
+			map.put("comId", shiroUser.getCurComId());
+			
+			List comList = businessCommunityService.findComsByUser(map);
 			JSONObject comObj = null;
 			Map paramMap = null;
 			for(int i=0;i<comList.size();i++) {
@@ -1301,6 +1336,47 @@ public class BusinessNewsController {
 			jsonObj.put("success", false);
 			jsonObj.put("message", "获取失败");
 			GSLogger.error("获取用户要扩散到的所有社区下的小区列表：/business/businessFocus/getExpendScopeTree", e);
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(jsonObj.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取所有新闻标签
+	 * @param response
+	 */
+	@RequestMapping(value="getTagTree")
+	public void getTagTree(HttpServletResponse response) {
+		JSONObject jsonObj = new JSONObject();
+		JSONArray tagArr = new JSONArray();
+		JSONObject tagObj = null;
+		try{
+			Map paramMap = new HashMap();
+			paramMap.put("tagType", "0");
+			List tagList = manageTagService.findByMap(paramMap);
+			
+			for(int i=0;i<tagList.size();i++) {
+				ManageTag manageTag = (ManageTag) tagList.get(i);
+				tagObj = new JSONObject();
+				if(tagList.size() > 0){
+					tagObj.put("id", "tag_"+manageTag.getTagId());
+					tagObj.put("text", manageTag.getTitle());
+					tagArr.add(tagObj);
+				}				
+			}
+			jsonObj.put("success", true);
+			jsonObj.put("result", tagArr);
+		}catch(Exception e){
+			jsonObj.put("success", false);
+			jsonObj.put("message", "获取失败");
+			GSLogger.error("获取新闻标签：/business/businessNews/getTagTree", e);
 			e.printStackTrace();
 		}
 		response.setHeader("Cache-Control", "no-cache");

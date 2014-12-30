@@ -342,7 +342,7 @@
 	
 	<!-- 根据id查询 BusinessProduct -->
 	<select id="findById"  resultType="BusinessProduct" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List1" />,pp.picUrl,s.addrName,s.addrUrl,u.portrait from business_product p,(select portrait from app_user u,business_product p where p.publisherId=u.userId and productId=#{id}) u,(select GROUP_CONCAT(picPath) picUrl from business_product_pic where productId = #{id}) pp,manage_estate e,business_station s where p.estateId=e.estateId and e.stationId=s.stationId and productId = #{id}
+		select <include refid="Base_Column_List1" />,pp.picUrl,u.portrait,u.nickname from business_product p,(select portrait,nickname from app_user u,business_product p where p.publisherId=u.userId and productId=#{id}) u,(select GROUP_CONCAT(picPath) picUrl from business_product_pic where productId = #{id}) pp,manage_estate e where p.estateId=e.estateId and productId = #{id}
 	</select>
 	
 	<!-- 根据id查询 BusinessProduct -->
@@ -352,7 +352,7 @@
 	
 	<!-- 根据id查询 BusinessProduct -->
 	<select id="findById_app"  resultType="BusinessProduct" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List1" />,pp.picUrl,s.addrName,s.addrUrl,u.portrait,u.nickname from business_product p,(select portrait,nickname from app_user u,business_product p where p.publisherId=u.userId and productId=#{id}) u,(select GROUP_CONCAT(picPath) picUrl from business_product_pic where productId = #{id}) pp,manage_estate e,business_station s where p.estateId=e.estateId and e.stationId=s.stationId and productId = #{id}
+		select <include refid="Base_Column_List1" />,pp.picUrl,u.portrait,u.nickname from business_product p,(select portrait,nickname from app_user u,business_product p where p.publisherId=u.userId and productId=#{id}) u,(select GROUP_CONCAT(picPath) picUrl from business_product_pic where productId = #{id}) pp,manage_estate e where p.estateId=e.estateId and productId = #{id}
 	</select>
 	
 	<!-- 无条件查询所有BusinessProduct -->
@@ -374,7 +374,11 @@
 	<select id="findAllPage" resultMap="BusinessProductResult" parameterType="Object">
 		select <include refid="Base_Column_List2" />,u.realname,u.nickname,u.portrait,GROUP_CONCAT(pp.picPath) picUrl, count(news.newsId) as newsCount from business_product p left 
 		join app_user u on userId=p.publisherId left join business_product_pic pp on p.productId = pp.productId 
-		inner join business_user_resource res on res.estateId = p.estateId
+		<if test="curUserId != null and curUserId != ''" >
+		<!-- inner join business_user_resource res on res.estateId = p.estateId -->
+		INNER JOIN manage_estate e ON e.estateId = p.estateId
+		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
 		left join app_latest_news news on news.sourceId = p.productId and news.typeId=39 and news.to=1
 		<include refid="Base_Where_Clause" />
 		GROUP BY p.productId
@@ -403,7 +407,11 @@
 	<!-- BusinessProduct列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(distinct(p.productId)) from business_product  p
-		inner join business_user_resource res on res.estateId = p.estateId
+		<if test="curUserId != null and curUserId != ''" >
+		<!-- inner join business_user_resource res on res.estateId = p.estateId -->
+		INNER JOIN manage_estate e ON e.estateId = p.estateId
+		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
 		<include refid="Base_Where_Clause" />
 	</select>
 	

@@ -43,7 +43,21 @@
 								<li id="timeScope_scope"><a href="javascript:;">选择时间范围</a></li>
 							</ul>
 						</li>
-												
+						<c:if test="${orgType =='operation' }">
+							<li id="comId_" class="navlist"><a href="javascript:;"><span>所有社区</span><b class="donbut"><i></i></b></a> 
+								<input type="hidden" name="comId" id="comId" value="" /> 
+								<ul class="erjnav">
+									<c:forEach items="${comList }" var="comBean" varStatus="key">
+										<li id="comId_${comBean.comId }"><a href="javascript:;">${comBean.comName }</a></li>
+									</c:forEach>
+								</ul>
+							</li>	
+							
+							<li id="estateId_" class="navlist"><a href="javascript:;"><span>所有小区</span><b class="donbut"><i></i></b></a> 
+								<input type="hidden" name="estateId" id="estateId" value="" /> 
+								<ul id="estateUL" class="erjnav"></ul>
+							</li>	
+						</c:if>					
 					</ul>
 					<p id="rowCount" style="float: left; line-height: 52px; color: #cc2510; font-weight: bold; margin-left: 20px;">共${pager.rowCount }条</p>
 				</div>
@@ -128,7 +142,15 @@
 							<li><span class="xxl">所属小区：<lable id="estateName"></lable></span></li>
 							<li><span class="xxl">注册时间：<lable id=registTime></lable></span></li>
 							<li><span class="xxl">验证时间：<lable id="verifyTime"></lable></span></li>
-							<li><span class="xxl">居民身份：<lable id="userIdentity"></lable></span></li> <br>
+							<li><span class="xxl">居民身份：<lable id="userIdentity"></lable></span></li>
+							<li><span class="xxl">备注居民：<lable id="remark" style="color: #cc2510;"></lable></span>
+								<div id="remarksDiv" class="s-xw-con" style="margin-top:10px;">
+									<input type="hidden" name="userId" id="userId"/>
+									<textarea class="iptnewtit" id="remarks" name="remarks" style="width:200px;height:22px; font-size:14px; padding-top:5px; padding-left:5px;" placeholder="请输入备注居民信息" ></textarea>
+									<input type="button" value="保存" onclick="submitRemarks()"> 
+									<input type="button" value="取消" onclick="$('#remarksDiv').hide();">
+								</div>
+							</li><br/>
 							<li id="one5" class="files"><a href="#one"><lable style="color: #333;">个人资料</lable></a></li>
 							<div class="link5"></div>
 							<li id="jmgl_one"><a href="#">头像：<span class="jmgl_poht" id="portrait"></span>
@@ -192,7 +214,7 @@
 			  }
 		});
 	});
-
+	
 	//初始化判断是否首页跳转过来的链接并更改默认搜索条件
 	$(function(){  
 		if($('#type').val() != undefined && $('#type').val() != '') {
@@ -202,7 +224,7 @@
 		if($('#timeScope').val() != undefined && $('#timeScope').val() != '') {
 			var objId = 'timeScope_'+$('#timeScope').val();
 			bindChange($('#'+objId));
-		}		
+		}
 	}); 
 	
 	//获取多参数
@@ -223,7 +245,9 @@
 					startTime: $('#startTime').val(),
 					endTime: $('#endTime').val(),
 					orderBy: $('#orderBy').val(),
-					dateField: $('#dateField').val()
+					dateField: $('#dateField').val(),
+					comId:$('#comId').val(),
+					estateId:$('#estateId').val()
 			};
 		}
 		return params;
@@ -295,6 +319,45 @@
                 $('.column').append('<div class="no-float"></div>');
                 $('#loading').css('display', 'none');
                 
+             	// 获取社区下对于的所有小区
+            	$('.erjnav').eq(3).html('');
+            	var comId = $("#comId").val();
+            	$.ajax({
+					type: 'post',
+			        url: '<%=path %>/manage/manageEstate/findEstateByComId.do',
+			        dataType: 'json',
+			        data: {comId : comId},
+			 		cache: false,
+			        success: function (data) {
+			            var rows = data.rows;
+	                	var estateId = $("#estateId").val();
+		            	var htmlDom = "";
+		            	
+	                	if(estateId != "") {
+		                	htmlDom = '<li id="estateId_"><a href="javascript:;">所有小区</a></li>';
+		                	$('.erjnav').eq(3).append(htmlDom);
+	                	}
+	                	
+			            if(rows.length > 0 && comId != "") {
+			            	for(var i=0;i<rows.length;i++) {
+			                	var row = rows[i];  
+			                	if(row.estateId != estateId) {
+				                	htmlDom = '<li id="estateId_'+row.estateId+'"><a href="javascript:;">'+row.estateName+'</a></li>';
+				                	$('.erjnav').eq(3).append(htmlDom);
+			                	}
+			            	}
+			            	$('#oneul').find('.erjnav:eq(3)>li').each(function(index, obj) {
+								bindClick($(obj));
+							});
+			            }else {
+			            	$('.erjnav').eq(3).html('');
+			            }
+			        },
+			        error: function () {
+			        	$('.erjnav:eq(3)').html('很抱歉，加载小区内容出错，我们及时修改问题。');
+			        }
+			    });
+            	
                 var vis = $("#pageUl li:not(#pageUl :first,#pageUl :last):visible");//显示的数量
                	var liCount = '';  
                 for(var pageno=1; pageno<=(data.pageCount); pageno++){
@@ -309,7 +372,6 @@
                 	}else{
                 		liCount = liCount + '<li style="display:none";><a  href="javascript:jump('+pageno+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
                 	}
-                	
                 }
                 var boolnext = '';
                 if((data.pageId)>=(data.pageCount)) { boolnext='#'; }else { boolnext='javascript:next();'; }
@@ -339,7 +401,7 @@
      //查看用户详情
      function seeUserDetail(userId) {
 	  	$('#userInfoLayer').fadeIn("slow");
-	  	
+		$('#remarksDiv').hide();
         $.getJSON('${ctx}/app/appUser/getUserDetail.do', {userId : userId}, function(data) {
             $('#userType').text(data.type == 0 ? '注册用户' : '验证用户');
             $('#estateName').text(data.estateName); //所属小区
@@ -355,22 +417,20 @@
             $('#address').text(data.estateName+data.buildingName+data.unitName+data.houseNo); //地址
             $('#oftenestate').text(data.oftenestate); //常用小区
             $('#staName').text(data.staName); //所属驿站
-            $('#userIdentity').text(data.isWorker == 0 ? "普通居民":"社区报记者")   ;  //居民身份
+            $('#userIdentity').text(data.isWorker == 0 ? "普通居民":"社区报记者");  //居民身份
+            $('#remark').text(data.remarks); 
+            $('#userId').val(data.userId);    
             //submtpres
             var html ;
-            if (data.isWorker == 0 )
-            {
-					html = "<input class=\"s-xw-btn1\" title=\" 开通记者权限\" type=\"button\" value=\"开通记者权限\" onclick=\"changeIdentity("+data.userId+",1);\"/>";  	
+            if (data.isWorker == 0 ) {
+					html = "<input id=\"qrbut5\" title=\" 开通记者权限\" type=\"button\" value=\"开通记者权限\" onclick=\"changeIdentity("+data.userId+",1);\"/>";  	
+            }  else {
+            		html = "<input id=\"qrbut5\" title=\" 关闭记者权限\" type=\"button\" value=\"关闭记者权限\" onclick=\"changeIdentity("+data.userId+",0);\"/>";  
             }
-            else
-            {
-            		html = "<input class=\"s-xw-btn1\" title=\" 关闭记者权限\" type=\"button\" value=\"关闭记者权限\" onclick=\"changeIdentity("+data.userId+",0);\"/>";  
-            }
+            html += "<input id=\"zsbut5\" title=\" 备注居民\" type=\"button\" value=\"备注居民\" onclick=\"showRemarks();\"/>";
             $('.submtpres').html(html);
         });
     }
-     
-     
      
      function changeIdentity(userId,isWork)
      {
@@ -382,9 +442,32 @@
 	            window.location.reload();
 	        });
 	    }
-//        window.location.href = '${ctx}/app/appUser/updateIdentity.do?userId='+userId;
      }
-  
+     
+     function showRemarks(){
+    	 $('#remarksDiv').fadeIn("slow");
+     }
+	 
+     function submitRemarks(){
+    	 var remarks = $('#remarks').val();
+    	 if(remarks == '') {
+    		 alert("请输入备注居民信息！");
+    	 } else {
+    		 var bool = window.confirm("您确定保存备注居民信息？");
+ 		     if(bool) {
+ 				$.post('updateRemarks.do', {
+ 		    		id : $('#userId').val(),
+ 		    		remarks : $('#remarks').val()
+ 		    		}, 
+ 		    		function(data) {
+ 		    			eval("data = "+data);
+ 		    			alert(data.message);
+ 		            	window.location.reload();
+ 		        }); 
+ 		    }
+    	 }
+     }
+     
     //用户使用记录
     function userReport(userId, realname) {
     	$('#activeLogLayer').fadeIn("slow");

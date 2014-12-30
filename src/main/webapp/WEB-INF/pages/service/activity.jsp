@@ -134,6 +134,16 @@ $(document).ready(function(){
 	
 	//参加活动
 	$(".x-qg").click(function(e) {
+		if(userId==0){
+			if(window.confirm('参加活动需要登录！！是否进去登录页？')){
+				 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+                //alert("确定");
+                return null;
+             }else{
+                //alert("取消");
+                return null;
+            }
+		}
 		if(nickname1=="" || nickname1==" "){
 			 msgbox('提示','抱歉，您需要去“个人中心”给自己起个昵称再来抢哦！');
 			return;	
@@ -189,6 +199,16 @@ $(document).ready(function(){
 	 });
 	//点赞
 	 $('.x-z a').click(function(){
+		 if(userId==0){
+				if(window.confirm('点赞活动需要登录！！是否进去登录页？')){
+					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+	                //alert("确定");
+	                return null;
+	             }else{
+	                //alert("取消");
+	                return null;
+	            }
+			}
 	 	$.ajax({
            url: '${ctx}/service/activities/supportActivities.json',
            cache: false,
@@ -227,6 +247,16 @@ $(document).ready(function(){
 	
 	//评论
 	 $('#commentBtn').click(function() {
+		 if(userId==0){
+				if(window.confirm('评论活动需要登录！！是否进去登录页？')){
+					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+	                //alert("确定");
+	                return null;
+	             }else{
+	                //alert("取消");
+	                return null;
+	            }
+			}
 	 	var content = $('#comment').val();
 	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){

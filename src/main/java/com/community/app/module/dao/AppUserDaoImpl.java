@@ -175,6 +175,15 @@ public class AppUserDaoImpl implements AppUserDao {
 	public void updatePassword(final AppUser entity) throws DaoException {
 		this.sqlSessionTemplate.update("com.community.app.module.dao.AppUserDao.updatePassword",entity);
 	}
+	
+	/**
+	 * 修改AppUser数据remarks
+	 * @param entity
+	 * @throws DaoException
+	 */
+	public void updateRemarks(final AppUser entity) throws DaoException {
+		this.sqlSessionTemplate.update("com.community.app.module.dao.AppUserDao.updateRemarks",entity);
+	}
 
 	/**
 	 * 删除AppUser
@@ -300,8 +309,10 @@ public class AppUserDaoImpl implements AppUserDao {
      * @return
      * @throws ServiceException
      */
-    public List findUserPushIds(final Integer estateId) throws DaoException {
-    	List list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.AppUserDao.findUserPushIds",estateId);
+    public List findUserPushIds(final String estateId) throws DaoException {
+    	AppUserQuery appUserQuery = new AppUserQuery();
+    	appUserQuery.setIds(estateId);
+    	List list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.AppUserDao.findUserPushIds",appUserQuery);
 		return list;
     }
     
@@ -315,4 +326,8 @@ public class AppUserDaoImpl implements AppUserDao {
     	List list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.AppUserDao.findUserPushIdsByCom",comId);
 		return list;
     }
+
+	public MemberVO findByCon(Map<String, Object> con) throws DaoException {
+		return this.sqlSessionTemplate.selectOne("com.community.app.module.dao.AppUserDao.findByCon", con);
+	}
 }

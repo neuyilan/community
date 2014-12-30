@@ -117,6 +117,13 @@ public interface AppUserDao {
 	public void updatePassword(final AppUser entity) throws DaoException;
 
 	/**
+	 * 修改AppUser数据remarks
+	 * @param entity
+	 * @throws DaoException
+	 */
+	public void updateRemarks(final AppUser entity) throws DaoException;
+	
+	/**
 	 * 删除AppUser
 	 * @param id
 	 * @return
@@ -203,7 +210,7 @@ public interface AppUserDao {
      * @return
      * @throws ServiceException
      */
-    public List findUserPushIds(final Integer estateId) throws DaoException;
+    public List findUserPushIds(final String estateId) throws DaoException;
     
     /**
      * 查询该社区下的userId, baiduId, channelId
@@ -212,5 +219,13 @@ public interface AppUserDao {
      * @throws ServiceException
      */
     public List findUserPushIdsByCom(final Integer comId) throws DaoException;
+
+    /**
+     * 根据社区id和用户id查询 用户详细信息
+     * @param con
+     * @return
+     * @throws DaoException
+     */
+	public MemberVO findByCon(Map<String, Object> con) throws DaoException;;
     
 }

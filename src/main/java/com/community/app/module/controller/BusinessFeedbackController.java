@@ -1,21 +1,18 @@
 package com.community.app.module.controller;
 
+import static com.community.framework.utils.CommonUtils.getUser;
+
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.community.app.module.bean.AppLatestNews;
-import com.community.app.module.bean.BusinessFeedbackComment;
-import com.community.app.module.bean.MemberVO;
-import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.service.AppLatestNewsService;
-import com.community.app.module.service.AppUserService;
-import com.community.app.module.service.BusinessFeedbackCommentService;
-import com.community.app.module.service.BusinessFeedbackReplyService;
-import com.community.app.module.service.BusinessRepairService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,16 +23,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.community.app.module.bean.AppLatestNews;
+import com.community.app.module.bean.BusinessFeedback;
+import com.community.app.module.bean.BusinessFeedbackComment;
+import com.community.app.module.bean.MemberVO;
+import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.ModuleConst;
+import com.community.app.module.service.AppLatestNewsService;
+import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.BusinessFeedbackCommentService;
+import com.community.app.module.service.BusinessFeedbackReplyService;
+import com.community.app.module.service.BusinessFeedbackService;
+import com.community.app.module.service.BusinessRepairService;
 import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
-import com.community.app.module.bean.BusinessFeedback;
-import com.community.app.module.common.ModuleConst;
-import com.community.app.module.service.BusinessFeedbackService;
 import com.community.app.module.vo.BusinessFeedbackQuery;
 import com.community.framework.utils.CommonUtils;
 import com.community.framework.utils.propertiesUtil;
-
-import static com.community.framework.utils.CommonUtils.getUser;
 
 @Controller
 @RequestMapping("/business/businessFeedback")
@@ -132,7 +136,12 @@ public class BusinessFeedbackController {
             //查询详情信息
             obj = businessFeedbackService.findById(query.getFeedbackId());
             //获取app端用户信息
-            userVO = appUserService.getAppUserInfo(query.getFberId());
+//          userVO = appUserService.getAppUserInfo(query.getFberId());
+            Map<String, Object> con = new HashMap<String, Object>();
+            con.put("userId", query.getFberId());
+            con.put("estateId", query.getEstateId());
+            userVO = appUserService.findByCon(con);
+            
             Map map = new HashMap();
             map.put("feedbackId", query.getFeedbackId());
             list = businessFeedbackCommentService.findByMap(map); //回复信息
@@ -303,8 +312,8 @@ public class BusinessFeedbackController {
 			    .append("\"editTime\":\"").append(businessFeedback.getEditTime()).append("\"").append(",")
 			    
 			    .append("\"expCode\":\"").append(businessFeedback.getExpCode()).append("\"").append(",")
-                .append("\"estateId\":\"").append(businessFeedback.getEditTime()).append("\"").append(",")
-                .append("\"estateName\":\"").append(businessFeedback.getEditTime()).append("\"").append(",")
+                .append("\"estateId\":\"").append(businessFeedback.getEstateId()).append("\"").append(",")
+                .append("\"estateName\":\"").append(businessFeedback.getEstateName()).append("\"").append(",")
                 .append("\"portrait\":\"").append(businessFeedback.getPortrait()).append("\"").append(",")
                 .append("\"address\":\"").append(businessFeedback.getAddress()).append("\"").append(",")
                 .append("\"lastCommentTime\":\"").append(businessFeedback.getLastCommentTime()).append("\"").append(",")

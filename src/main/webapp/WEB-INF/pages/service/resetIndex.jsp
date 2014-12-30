@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <title>手机号验证</title>
 <link type="text/css" rel="stylesheet" href="${ctx }/css/loginStyle.css"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <script src="${ctx }/js/activity/js/jquery-1.7.2.min.js"></script>
 </head>
 

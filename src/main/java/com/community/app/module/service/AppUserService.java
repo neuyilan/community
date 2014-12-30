@@ -116,6 +116,14 @@ public interface AppUserService {
 	public void updatePassword(final AppUser entity) throws ServiceException;
 
 	/**
+	 * service
+	 * 修改AppUser数据remarks
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void updateRemarks(final AppUser entity) throws ServiceException;
+	
+	/**
 	 * 删除AppUser
 	 * @param id
 	 * @return
@@ -184,7 +192,7 @@ public interface AppUserService {
      * @return
      * @throws ServiceException
      */
-    public List findUserPushIds(final Integer estateId) throws ServiceException;
+    public List findUserPushIds(final String estateId) throws ServiceException;
     
     /**
      * 查询该社区下的userId, baiduId, channelId
@@ -201,6 +209,13 @@ public interface AppUserService {
    	 * @throws 
    	 */	
    	public   void pushWeather() throws ServiceException;
+
+   	/**
+   	 * 按条件查询 用户信息
+   	 * @param con
+   	 * @throws ServiceException
+   	 */
+	public MemberVO findByCon(Map<String, Object> con) throws ServiceException;
     
     
 
