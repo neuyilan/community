@@ -6,6 +6,7 @@ import java.util.Map;
 
 
 
+
 import com.community.app.module.bean.MemberVO;
 
 import org.springframework.stereotype.Repository;
@@ -228,4 +229,11 @@ public interface AppUserDao {
      */
 	public MemberVO findByCon(Map<String, Object> con) throws DaoException;;
     
+    /**
+     * 查询该社区下的userId, baiduId, channelId
+     * @param obj
+     * @return
+     * @throws ServiceException
+     */
+    public List findPushIdsByCom(final AppUserQuery query) throws DaoException;
 }

@@ -605,7 +605,7 @@
         isTelSecret,
         workerMemo,
         weixin,
-        b.estateName,
+        GROUP_CONCAT(b.estateName) estateName,
         buildingName,
         unitName,
         houseNo,
@@ -618,7 +618,9 @@
         FROM app_user a LEFT JOIN  app_estate_user b ON  a.userId = b.userId LEFT JOIN manage_estate c ON a.estateId = c.estateId LEFT JOIN business_station e ON c.stationId = e.stationId LEFT JOIN
         (SELECT GROUP_CONCAT(cellphone) cellphone FROM app_user_cellphone WHERE userId = #{userId} ) d ON a.userId = #{userId}
         WHERE  a.userId = #{userId}
-        and  b.estateId = #{estateId}
+        <if test="estateId != null and estateId != ''" >
+              and  b.estateId = #{estateId}
+         </if>
     </select>
     
     
@@ -755,5 +757,16 @@
 		where e.comId = #{comId}
 	</select>
 	
+	<!-- 查询多个社区报下的userId, baiduId, channelId 给推送用 -->
+	<select id="findPushIdsByCom" resultType="AppUser"  parameterType="Object">
+		select distinct(u.userId), u.realname, u.baiduId, u.channelId, u.deviceType from app_user u
+		inner join app_estate_user aeu on aeu.userId = u.userId
+		inner join manage_estate e on e.estateId = aeu.estateId
+		where  e.comId in
+         <foreach item="item" index="index" collection="comIdArray" 
+                 open="(" separator="," close=")">
+                #{item}
+         </foreach>
+	</select>
 </mapper>
 	

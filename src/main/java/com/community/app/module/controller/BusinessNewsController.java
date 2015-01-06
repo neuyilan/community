@@ -63,6 +63,7 @@ import com.community.app.module.service.BusinessNewsService;
 import com.community.app.module.service.BusinessUserService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageTagService;
+import com.community.app.module.vo.AppUserQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessNewsCommentQuery;
 import com.community.app.module.vo.BusinessNewsQuery;
@@ -454,7 +455,24 @@ public class BusinessNewsController {
 			//发布并可以推送
 			if(businessNews.getState() == 0) {
 				//查询该社区下的userId, baiduId, channelId
-				List appUserList = appUserService.findUserPushIdsByCom(businessNews.getPublishScope());
+				Map map = new HashMap();
+				map.put("newsId", businessNews.getNewsId());
+				List<BusinessNewsScope> nsList = businessNewsScopeService.findByMap(map);
+				String comContact = "";
+				String[] comArr = null;
+				if(nsList.size() > 0) {
+					for(int j=0; j<nsList.size(); j++) {
+						BusinessNewsScope businessNewsScope = (BusinessNewsScope)nsList.get(j);
+						comContact += "," + businessNewsScope.getComId();
+					}
+					comArr = comContact.substring(1).split(",");
+				}
+				
+				AppUserQuery appUserQuery = new AppUserQuery();
+				appUserQuery.setComIdArray(comArr);
+				List appUserList = appUserService.findPushIdsByCom(appUserQuery);
+				
+				// List appUserList = appUserService.findUserPushIdsByCom(businessNews.getPublishScope());
 				AppPushLog appPushLog = new AppPushLog();
 				if(businessNews.getIsPush() == 1) {
 					String title = "OK家";
@@ -839,7 +857,24 @@ public class BusinessNewsController {
 			//发布并可以推送
 			if(businessNews.getState() == 0 && businessNews.getIsPush() == 1) {
 				//查询该社区下的userId, baiduId, channelId
-				List appUserList = appUserService.findUserPushIdsByCom(businessNews.getPublishScope());
+				Map map = new HashMap();
+				map.put("newsId", businessNews.getNewsId());
+				List<BusinessNewsScope> nsList = businessNewsScopeService.findByMap(map);
+				String comContact = "";
+				String[] comArr = null;
+				if(nsList.size() > 0) {
+					for(int j=0; j<nsList.size(); j++) {
+						BusinessNewsScope businessNewsScope = (BusinessNewsScope)nsList.get(j);
+						comContact += "," + businessNewsScope.getComId();
+					}
+					comArr = comContact.substring(1).split(",");
+				}
+				
+				AppUserQuery appUserQuery = new AppUserQuery();
+				appUserQuery.setComIdArray(comArr);
+				List appUserList = appUserService.findPushIdsByCom(appUserQuery);
+				
+				// List appUserList = appUserService.findUserPushIdsByCom(businessNews.getPublishScope());
 				AppPushLog appPushLog = new AppPushLog();
 				String title = "OK家";
 				String description = "【社区报】"+businessNews.getTitle();		
@@ -1076,7 +1111,25 @@ public class BusinessNewsController {
 			//发布并可以推送
 			if(businessNews.getState() == 0) {
 				//查询该社区下的userId, baiduId, channelId
-				List appUserList = appUserService.findUserPushIdsByCom(businessNews.getPublishScope());
+				Map map = new HashMap();
+				map.put("newsId", businessNews.getNewsId());
+				List<BusinessNewsScope> nsList = businessNewsScopeService.findByMap(map);
+				String comContact = "";
+				String[] comArr = null;
+				if(nsList.size() > 0) {
+					for(int j=0; j<nsList.size(); j++) {
+						BusinessNewsScope businessNewsScope = (BusinessNewsScope)nsList.get(j);
+						comContact += "," + businessNewsScope.getComId();
+					}
+					comArr = comContact.substring(1).split(",");
+				}
+				
+				AppUserQuery appUserQuery = new AppUserQuery();
+				appUserQuery.setComIdArray(comArr);
+				List appUserList = appUserService.findPushIdsByCom(appUserQuery);
+				
+				// List appUserList = appUserService.findUserPushIdsByCom(businessNews.getPublishScope());
+				
 				AppPushLog appPushLog = new AppPushLog();
 				if(businessNews.getIsPush() == 1) {
 					String title = "OK家";

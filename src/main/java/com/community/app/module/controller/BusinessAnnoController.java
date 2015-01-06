@@ -23,7 +23,6 @@ import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessAnnoScope;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessPosition;
-import com.community.app.module.bean.BusinessStation;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ShiroUser;
@@ -303,11 +302,17 @@ public class BusinessAnnoController {
 			e.printStackTrace();
 		}
 		ShiroUser shiroUser = CommonUtils.getUser();
-		if(shiroUser.getOrgType().equals(ModuleConst.PROPERTY_CODE)) {//物业
+		String orgType = "";
+		if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			orgType = shiroUser.getOrgType();
+		} else {
+			orgType = shiroUser.getCurOrgType();
+		}
+		if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
 			mav = new ModelAndView("/module/anno/propAdd");
-		}else if(shiroUser.getOrgType().equals(ModuleConst.STATION_CODE)) {//驿站
+		}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
 			mav = new ModelAndView("/module/anno/stationAdd");
-		}if(shiroUser.getOrgType().equals(ModuleConst.OPERATION_CODE)) {//运营
+		}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
 			mav = new ModelAndView("/module/anno/operationAdd");
 		}
 		return mav;
@@ -1510,13 +1515,20 @@ public class BusinessAnnoController {
 		JSONArray arr = new JSONArray();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			BusinessPosition businessPosition = businessPositionService.findById(shiroUser.getPositionId());
+			// BusinessPosition businessPosition = businessPositionService.findById(shiroUser.getPositionId());
+			String orgType = "";
+			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+				orgType = shiroUser.getOrgType();
+			} else {
+				orgType = shiroUser.getCurOrgType();
+			}
+			
 			//判断是哪种结构并获取该结构下的小区列表
 			//获取用户所在物业的小区
 			List estateList = null;
 			JSONObject estateObj = null;
 			//Map paramMap = new HashMap();
-			if(ModuleConst.COMMUNITY_CODE.equals(businessPosition.getOrgType())) {//社区
+			if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {//社区
 				//paramMap.put("comId", businessPosition.getOrgId());
 				estateList = shiroUser.getEstateBeanList();
 				for(int i=0;i<estateList.size();i++) {
@@ -1528,7 +1540,7 @@ public class BusinessAnnoController {
 					//obj.put("state", "close");
 					arr.add(estateObj);
 				}
-			}else if(ModuleConst.PROPERTY_CODE.equals(businessPosition.getOrgType())) {//物业
+			}else if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业
 				//paramMap.put("proId", businessPosition.getOrgId());
 				//estateList = manageEstateService.findByMap(paramMap);
 				estateList = shiroUser.getEstateBeanList();
@@ -1553,7 +1565,7 @@ public class BusinessAnnoController {
 					estateObj.put("children", buildingArr);*/
 					arr.add(estateObj);
 				}
-			}else if(ModuleConst.STATION_CODE.equals(businessPosition.getOrgType())) {//驿站
+			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站
 				//paramMap.put("stationId", businessPosition.getOrgId());
 				//estateList = manageEstateService.findByMap(paramMap);
 				estateList = shiroUser.getEstateBeanList();
@@ -1614,11 +1626,18 @@ public class BusinessAnnoController {
 		}
 		
 		ShiroUser shiroUser = CommonUtils.getUser();
-		if(shiroUser.getOrgType().equals(ModuleConst.PROPERTY_CODE)) {//物业
+		String orgType = "";
+		if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			orgType = shiroUser.getOrgType();
+		} else {
+			orgType = shiroUser.getCurOrgType();
+		}
+		
+		if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
 			mav = new ModelAndView("/module/anno/propModify");
-		}else if(shiroUser.getOrgType().equals(ModuleConst.STATION_CODE)) {//驿站
+		}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
 			mav = new ModelAndView("/module/anno/stationModify");
-		}if(shiroUser.getOrgType().equals(ModuleConst.OPERATION_CODE)) {//运营
+		}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
 			mav = new ModelAndView("/module/anno/operationModify");
 		}
 		//保存公告范围

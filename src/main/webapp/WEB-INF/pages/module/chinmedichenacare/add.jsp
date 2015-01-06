@@ -195,11 +195,7 @@
     
 <script type="text/javascript">
     //实例化编辑器
-    var ue = UE.getEditor('cmhcContent',{
-    	toolbars: [[
-			'undo', 'redo', '|', 'bold', 'underline', 'forecolor', 'backcolor', 'simpleupload', 'justifyleft', 'justifycenter', 'justifyright'
-    	]]
-    });
+    var ue = UE.getEditor('cmhcContent');
     
     $(function() {
     	/* //大图

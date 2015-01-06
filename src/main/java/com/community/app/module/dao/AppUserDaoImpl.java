@@ -326,7 +326,18 @@ public class AppUserDaoImpl implements AppUserDao {
     	List list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.AppUserDao.findUserPushIdsByCom",comId);
 		return list;
     }
-
+    
+    /**
+     * 查询该社区下的userId, baiduId, channelId
+     * @param obj
+     * @return
+     * @throws ServiceException
+     */
+    public List findPushIdsByCom(final AppUserQuery query) throws DaoException {
+    	List list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.AppUserDao.findPushIdsByCom",query);
+		return list;
+    }
+    
 	public MemberVO findByCon(Map<String, Object> con) throws DaoException {
 		return this.sqlSessionTemplate.selectOne("com.community.app.module.dao.AppUserDao.findByCon", con);
 	}

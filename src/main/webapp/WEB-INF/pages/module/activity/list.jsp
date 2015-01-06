@@ -85,7 +85,16 @@
 		            	<a class="nopotr2 s-baoliao-no" href="javascript:;">
 		                    <div class="info">
 		                    	<p style="float:left;">活动类型：<span style="color: #3EAF0E;">${act.typeName }</span></p>
-		                    	<p style="float:right">活动范围：<span  style="color: #3EAF0E;">${act.actScope }</span></p>
+		                    	<p style="float:right">活动范围：<span  style="color: #3EAF0E;">
+			                    	<c:choose>
+										<c:when test="${fn:length(act.actScope) > 11}">
+											<c:out value="${fn:substring(act.actScope, 0, 10)}......" />
+										</c:when>
+										<c:otherwise>
+											<c:out value="${act.actScope}" />
+										</c:otherwise>
+									</c:choose>
+								</span></p>
 		                    </div>
 		                    <time><fmt:formatDate value="${act.createTime }" pattern="yyyy-MM-dd HH:mm"/></time>
 		                    <hr class="link">        
@@ -509,7 +518,7 @@
 	    	        	+ styleStr
 	    	        	+ '>'                    	
 	                	+ '<a class="nopotr s-baoliao-no" href="javascript:;">'
-	                	+ '<div class="info"><p style="float:left;">活动类型：<span style="color: #3EAF0E;">'+row.typeName+'</span></p><p style="float:right">活动范围：<span  style="color: #3EAF0E;">'+row.actScope+'</span></p></div>'
+	                	+ '<div class="info"><p style="float:left;">活动类型：<span style="color: #3EAF0E;">'+row.typeName+'</span></p><p style="float:right">活动范围：<span  style="color: #3EAF0E;">'+(row.actScope.length >11 ? row.actScope.substring(0, 10)+"......" : row.actScope)+'</span></p></div>'
 	                	+ '<time>'+(row.creatTime != '' ? row.createTime.substring(0, 16) : '')+'</time>'
 	                	+ '<hr class="link">'
 	                	+ '<h2 class="y-shq-title title">'+row.actName+'</h2>'

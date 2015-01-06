@@ -437,8 +437,10 @@
 	<select id="findAllPage" resultMap="BusinessActivityResult" parameterType="Object">
 		select <include refid="Base_Column_List" /> from business_activity a
 		INNER JOIN business_activity_scope s ON s.actId = a.actId
+		<if test="curUserId != null and curUserId != ''" >
 		INNER JOIN manage_estate e ON e.estateId = s.estateId
 		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
 		<include refid="Base_Where_Clause" />
 		group by a.actId
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >

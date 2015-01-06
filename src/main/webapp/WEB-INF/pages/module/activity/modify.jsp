@@ -301,11 +301,7 @@
 <%--初始化文本编辑器--%>
 <script type="text/javascript">
     //实例化编辑器
-    var ue = UE.getEditor('actEditor',{
-    	toolbars: [[
-    				'undo', 'redo', '|', 'bold', 'underline', 'forecolor', 'backcolor', 'simpleupload', 'justifyleft', 'justifycenter', 'justifyright'
-    	    	]]
-    	    });
+    var ue = UE.getEditor('actEditor');
 	
     /* function IsPash() {
 		var isPush = document.getElementsByName("isPush");
@@ -958,11 +954,10 @@
             var scopeAry = [];
             var scopeInfo = '';
             var scopeNodes = $('#scopeTree').tree('getChecked');
-            var root  = $('#scopeTree').tree('getRoot');
             if(scopeNodes != null && scopeNodes.length > 0) {
                 for(var i=0;i<scopeNodes.length;i++) {
                 	var node = scopeNodes[i];
-                	if(node.id!=root.id){
+                	if(node.id.indexOf("com")<0){
                 		var idArr = node.id.split('_');
                         var typeid = idArr[0];
                         scopeIds += idArr[1] + ':' + node.text + ',';

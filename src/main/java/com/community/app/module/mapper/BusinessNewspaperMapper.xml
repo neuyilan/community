@@ -73,6 +73,54 @@
 		</where>
 	</sql>
 	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			a.newspaperId,
+			a.title,
+			a.pic,
+			a.url,
+			a.comId,
+			a.comNameScope,
+			a.createTime,
+			a.editTime,
+			a.editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="newspaperId != null and newspaperId != ''" >
+				   		and a.newspaperId = #{newspaperId}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and a.title = #{title}
+					</if>
+					<if test="pic != null and pic != ''" >
+				   		and a.pic = #{pic}
+					</if>
+					<if test="url != null and url != ''" >
+				   		and a.url = #{url}
+					</if>
+					<if test="curUserId != null and curUserId != ''" >
+						and a.userId=#{curUserId} 
+					</if>
+					<if test="comId != null and comId != ''" >
+						and a.comId=#{comId} 
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
 	<!-- 根据id查询 BusinessNewspaper -->
 	<select id="findById"  resultMap="BusinessNewspaperResult" parameterType="java.lang.Integer">
 		select <include refid="Base_Column_List" /> from business_newspaper bn where bn.newspaperId = #{id}
@@ -117,8 +165,8 @@
 	
 	<!-- BusinessNewspaper根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage_app" resultMap="BusinessNewspaperResult" parameterType="Object">
-		select <include refid="Base_Column_List" /> from business_newspaper bn
-		<include refid="Base_Where_Clause" /> 
+		select <include refid="Base_Column_List_app" /> from business_newspaper a inner join business_newspaper_scope s on a.newspaperId=s.newspaperId
+		<include refid="Base_Where_Clause_app" /> 
 	    <if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
 	    </if>

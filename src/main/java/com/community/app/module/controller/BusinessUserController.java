@@ -87,6 +87,9 @@ public class BusinessUserController {
 			ShiroUser shiroUser = CommonUtils.getUser();
 			if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
 				query.setOrgType(shiroUser.getCurOrgType());
+				if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+					query.setCurComId(shiroUser.getCurComId());
+				}
 				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 					query.setCurEstateId(shiroUser.getCurEstateId());
 				}
@@ -280,6 +283,12 @@ public class BusinessUserController {
 			ShiroUser shiroUser = CommonUtils.getUser();
 			if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
 				query.setOrgType(shiroUser.getCurOrgType());
+				if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+					query.setCurComId(shiroUser.getCurComId());
+				}
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
 			}else{//当前没有选择部门 物业、驿站、社区报 只能看到本部门及负责范围内的所有员工 运营能看到所有运营的员工
 				if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //运营的员工不按社区查看
 					query.setCurComId(0);//过滤掉社区查询条件，否则会出错
@@ -367,28 +376,20 @@ public class BusinessUserController {
 		try{
 			//当前用户标识
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if("".equals(shiroUser.getCurOrgType())) {
+			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
 				orgType = shiroUser.getOrgType();
-				if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
-					mav = new ModelAndView("/module/businessUser/propertyAdd");
-				}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站去驿站的增加页面 范围需要到小区
-					mav = new ModelAndView("/module/businessUser/stationAdd");
-				}else if(orgType.equals(ModuleConst.COMMUNITY_CODE)){//社区报去社区报的增加页面，社区报用户不用添加小区
-					mav = new ModelAndView("/module/businessUser/communityAdd");
-				}else{//运营去运营的增加页面，只添加运营下的用户
-					mav = new ModelAndView("/module/businessUser/operationAdd");
-				}
 			} else {
 				orgType = shiroUser.getCurOrgType();
-				if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
-					mav = new ModelAndView("/module/businessUser/propertyAdd");
-				}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站去驿站的增加页面 范围需要到小区
-					mav = new ModelAndView("/module/businessUser/stationAdd");
-				}else if(orgType.equals(ModuleConst.COMMUNITY_CODE)){//社区报去社区报的增加页面，社区报用户不用添加小区
-					mav = new ModelAndView("/module/businessUser/communityAdd");
-				}else{//运营去运营的增加页面，只添加运营下的用户
-					mav = new ModelAndView("/module/businessUser/operationAdd");
-				}
+			}
+			
+			if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
+				mav = new ModelAndView("/module/businessUser/propertyAdd");
+			}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站去驿站的增加页面 范围需要到小区
+				mav = new ModelAndView("/module/businessUser/stationAdd");
+			}else if(orgType.equals(ModuleConst.COMMUNITY_CODE)){//社区报去社区报的增加页面，社区报用户不用添加小区
+				mav = new ModelAndView("/module/businessUser/communityAdd");
+			}else{//运营去运营的增加页面，只添加运营下的用户
+				mav = new ModelAndView("/module/businessUser/operationAdd");
 			}
 			mav.addObject("positionId", shiroUser.getPositionId());
 		}catch(Exception e){
@@ -422,7 +423,12 @@ public class BusinessUserController {
 		}
         ModelAndView mav = new ModelAndView();
         ShiroUser shiroUser = CommonUtils.getUser();
-		String orgType = shiroUser.getOrgType();
+		String orgType = "";
+		if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			orgType = shiroUser.getOrgType();
+		} else {
+			orgType = shiroUser.getCurOrgType();
+		}
 		if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
 			mav = new ModelAndView("/module/businessUser/propertyModify");
 		}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站
@@ -1688,10 +1694,16 @@ public class BusinessUserController {
 		JSONObject jsonObj = new JSONObject();
 		try{
 			ShiroUser shiroUser = getUser();
-			BusinessPosition businessPosition = businessPositionService.findById(shiroUser.getPositionId());
+			// BusinessPosition businessPosition = businessPositionService.findById(shiroUser.getPositionId());
 			//判断是哪种结构并获取该结构下的部门列表
 			Map paramMap = new HashMap();
-			paramMap.put("orgType", shiroUser.getOrgType());
+			String orgType = "";
+			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+				orgType = shiroUser.getOrgType();
+			} else {
+				orgType = shiroUser.getCurOrgType();
+			}
+			paramMap.put("orgType", orgType);
 			List depList = businessDepartmentService.findByMap(paramMap);
 			
 			JSONArray arr = new JSONArray();
@@ -2190,9 +2202,15 @@ public class BusinessUserController {
 		try{
 			ShiroUser shiroUser = getUser();
 			Map paramMap = new HashMap();
+			String orgType = "";
+			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+				orgType = shiroUser.getOrgType();
+			} else {
+				orgType = shiroUser.getCurOrgType();
+			}
 			List moduleList = null;
 			//如果是运营，则需要将4个模块都拼进树结构里
-			if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			if(ModuleConst.OPERATION_CODE.equals(orgType)) {
 				String[] modules = {
 						ModuleConst.OPERATION_CODE,
 						ModuleConst.PROPERTY_CODE,
@@ -2217,7 +2235,7 @@ public class BusinessUserController {
 				}
 				
 			}else{
-				paramMap.put("moduleCode", shiroUser.getOrgType());
+				paramMap.put("moduleCode", orgType);
 				moduleList = manageModuleService.findByMap(paramMap);
 				if(moduleList != null && moduleList.size() > 0 ) {
 					ManageModule module = (ManageModule) moduleList.get(0);

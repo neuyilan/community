@@ -683,8 +683,7 @@
 			function showAnnoContent(annoId) {
 				$('#annoContentDom').html('');
 				$.ajax({
-					url: '<%=ctx%>
-	/business/businessAnno/getAnnoJson.do',
+					url: '<%=ctx%>/business/businessAnno/getAnnoJson.do',
 			type : 'post',
 			dataType : 'json',
 			data : {

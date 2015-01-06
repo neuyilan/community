@@ -69,8 +69,17 @@ public class AppUserQuery extends BaseBean {
 	private String qqId;
 	private Integer comId;
 	private String ids;
+	private String[] comIdArray;
 	
-    public String getIds() {
+    public String[] getComIdArray() {
+		return comIdArray;
+	}
+
+	public void setComIdArray(String[] comIdArray) {
+		this.comIdArray = comIdArray;
+	}
+
+	public String getIds() {
 		return ids;
 	}
 

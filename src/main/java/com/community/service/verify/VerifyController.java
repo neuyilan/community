@@ -37,6 +37,8 @@ public class VerifyController {
 	private AppVerifyService appVerifyService;
 	@Autowired
 	private AppUserService appUserService;
+	@Autowired
+	private ManageSendMsgService manageSendMsgService;
 	/**
 	 * 用户注册时获取验证码，服务器返回验证码
 	 * @param cellphone
@@ -72,6 +74,7 @@ public class VerifyController {
 					// 发送短信
 					str="您正在申请注册OK家注册用户,验证码"+str+",2分钟内有效。【OK家】";
 					String returnMessage = returnMessageRrid(query.getCellphone(), str);
+					manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
 					if(!returnMessage.contains("-")) {
 						json += "{";
 						json += "\"errorCode\":\"200\",";

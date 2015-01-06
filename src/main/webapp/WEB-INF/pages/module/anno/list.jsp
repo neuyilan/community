@@ -103,7 +103,15 @@
 	        			</shiro:hasPermission>
 	        			
 		            	<a class="nopotr" href="javascript:;">
-		                    <div class="info">公告范围：<span>${anno.annoScopeInfo }</span></div>
+		                    <div class="info">公告范围：<span>
+		                    	<c:choose>
+									<c:when test="${fn:length(anno.annoScopeInfo) > 23}">
+										<c:out value="${fn:substring(anno.annoScopeInfo, 0, 22)}......" />
+									</c:when>
+									<c:otherwise>
+										<c:out value="${anno.annoScopeInfo}" />
+									</c:otherwise>
+								</c:choose></span></div>
 		                    <time><fmt:formatDate value="${anno.publishTime }" pattern="yyyy-MM-dd HH:mm"/></time>
 		                    <hr class="link">
 		                    <h2 class="title">${anno.annoTitle }</h2>
@@ -358,7 +366,7 @@
     	        		+ styleStr 
     	        		+ '>'
                         + '<a class="nopotr" href="javascript:;">'
-    		            + '<div class="info">'+row.annoId+'公告范围：<span>'+row.annoScopeInfo+'</span></div>'
+    		            + '<div class="info">公告范围：<span>'+(row.annoScopeInfo.length >23 ? row.annoScopeInfo.substring(0, 22)+"......" : row.annoScopeInfo)+'</span></div>'
     		            + '<time>'+(row.publishTime != '' ? row.publishTime.substring(0, 16) : '')+'</time>'
     		            + '<hr class="link">'
     		            + '<h2 class="title">'+row.annoTitle+'</h2>'

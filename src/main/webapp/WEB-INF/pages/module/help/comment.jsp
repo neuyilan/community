@@ -267,6 +267,7 @@
 					<c:forEach items="${listExpend}" var="listExpend" varStatus="status">
 							<label onclick="delExpendestates('${listExpend.expendEstatesId}')"><span class="y-qzxq-s2">${listExpend.estateName} <em>x&nbsp;</em></span></label>
 					</c:forEach>
+					<input type="hidden" id="helpArray" name="helpArray" value="${estateArr }">
 					<shiro:hasPermission name="help_add_expand">
 	                <i></i>
 	                <a id="showScopeLayer" style="cursor:pointer;">点击添加扩散范围</a>
@@ -366,9 +367,10 @@
 	
 	<script type="text/javascript">
 	    function saveExpendEstates(helpId) {
-	    	$('#qdee').attr("disabled","disabled");
+	    	// $('#qdee').attr("disabled","disabled");
 	    	var scopeIds = '';
 	        var scopeInfo = '';
+	        var scopeArr = "";
 	        var scopeNodes = $('#scopeTree').tree('getChecked');
 	        if(scopeNodes != null && scopeNodes.length > 0) {
 	            for(var i=0;i<scopeNodes.length;i++) {
@@ -377,10 +379,12 @@
 	                var typeid = idArr[0];
 	                if(typeid == 'eatate') {
 	                	scopeIds += idArr[1] + ':' + node.text + ',';
+	                	scopeArr += $("#helpArray").val()+"," + idArr[1];
 	                }
 	            }
 	            if(scopeIds != '') {
 	                if(scopeIds.indexOf(',') > -1) {
+		                $("#helpArray").val(scopeArr);
 	                    scopeIds = scopeIds.substring(0, scopeIds.length-1);
 	                	$.post('${ctx}/business/businessHelpExpendestates/save.do', {
 	               			helpId: helpId,
@@ -413,8 +417,10 @@
 		   	        $("#scopeLayer").fadeIn("slow");
 		   	        //显示楼栋数结构
 		   	        $.ajax({
+		   	        	type: 'post',
 		   	            url: '${ctx}/business/businessHelp/getExpendScopeTree.do',
 		   	            dataType: 'json',
+		   	         	data: {helpArray: $("#helpArray").val()},
 		   	            cache: false,
 		   	            success: function (data) {
 		   	                if(data.success == true){

@@ -174,8 +174,7 @@ label.error {
 					</h2>
 					<%--文本编辑器--%>
 					<!--style给定宽度可以影响编辑器的最终宽度-->
-					<textarea id="content" name="content" type="text/plain"
-						style="width: 1024px; height: 500px;"></textarea>
+					<textarea id="content" name="content" type="text/plain" style="width: 1024px; height: 500px;"></textarea>
 
 					<%-- <h2 class="relran">列表页大图<label for="subjectPic" class="error success"></label></h2>
                 <div style=" overflow:hidden;"><img id="subjectPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
@@ -316,11 +315,7 @@ label.error {
 
 <script type="text/javascript">
     //实例化编辑器
-    var ue = UE.getEditor('content',{
-    	toolbars: [[
-			'undo', 'redo', '|', 'bold', 'underline', 'forecolor', 'backcolor', 'simpleupload', 'justifyleft', 'justifycenter', 'justifyright'
-    	]]
-    });
+    var ue = UE.getEditor('content');
     
     $(document).ready(function(){
 		var isPush = document.getElementsByName("isPush");

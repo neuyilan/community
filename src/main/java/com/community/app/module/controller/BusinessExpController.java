@@ -711,7 +711,7 @@ public class BusinessExpController {
 						&& appUser.getChannelId() != null 
 						&& !"".equals(appUser.getChannelId())) {
             		String title = "OK家";
-					String description = "【"+businessExp.getStation()+"】尊贵的主人，我是您的快件。现已到达社区服务驿站，请您快来社区服务驿站接我吧！取件签收码："+ businessExp.getCode();
+					String description = "【"+businessExp.getStation()+"】尊贵的主人，我是您的快件。已到达驿站，请您快来驿站接我吧！取件签收码："+ businessExp.getCode();
 					
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 3);
@@ -883,7 +883,7 @@ public class BusinessExpController {
 						&& appUser.getChannelId() != null 
 						&& !"".equals(appUser.getChannelId())) {
             		String title = "OK家";
-					String description = "【"+businessExp.getStation()+"】尊贵的主人，我是您要发出的快件，现在我已经奔向目的地了，我的编码是：" + businessExp.getExpCompany() + " " + businessExp.getExpCode();
+					String description = "【"+businessExp.getStation()+"】尊贵的主人，我是您要发出的快件，我已奔向目的地，运单号：" + businessExp.getExpCompany() + " " + businessExp.getExpCode();
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 6);
 					paramMap.put("ID", businessExp.getExpId());
@@ -1104,7 +1104,7 @@ public class BusinessExpController {
 							&& sendUser.getChannelId() != null 
 							&& !"".equals(sendUser.getChannelId())) {
 	            		String title = "OK家";
-						String description = "【"+businessExp.getStation()+"】尊贵的主人，我是您要发出的快件，现在我已经奔向目的地了，我的编码是：" + businessExp.getExpCompany() + " " + businessExp.getExpCode();
+						String description = "【"+businessExp.getStation()+"】尊贵的主人，我是您要发出的快件，我已奔向目的地，运单号：" + businessExp.getExpCompany() + " " + businessExp.getExpCode();
 						Map paramMap = new HashMap();
 						paramMap.put("messageType", 6);
 						paramMap.put("ID", businessExp.getExpId());
@@ -1795,7 +1795,7 @@ public class BusinessExpController {
 						&& appUser.getChannelId() != null 
 						&& !"".equals(appUser.getChannelId())) {
             		String title = "OK家";
-					String description = "【"+businessExp.getStation()+"】尊贵的主人，我是您要发出的快件，现在驿站服务人员“"+shiroUser.getUserName()+"”已经出发来家里接我了！";
+					String description = "【"+businessExp.getStation()+"】现在驿站服务人员“"+shiroUser.getUserName()+"”已出发来家里取件了！";
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 5);
 					paramMap.put("ID", businessExp.getExpId());

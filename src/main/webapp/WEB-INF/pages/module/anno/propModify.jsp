@@ -234,11 +234,7 @@
 <%--初始化文本编辑器--%>
 <script type="text/javascript">
     //实例化编辑器
-    var um = UE.getEditor('myEditor',{
-   	toolbars: [[
-   				'undo', 'redo', '|', 'bold', 'underline', 'forecolor', 'backcolor', 'simpleupload', 'justifyleft', 'justifycenter', 'justifyright'
-   	    	]]
-   	    });
+    var um = UE.getEditor('myEditor');
     
     $(function() {
     	$(document).keyup(function(event){

@@ -477,6 +477,23 @@ public class AppUserServiceImpl implements AppUserService {
     }
     
     /**
+     * 查询该社区下的userId, baiduId, channelId
+     * @param obj
+     * @return
+     * @throws ServiceException
+     */
+    public List findPushIdsByCom(final AppUserQuery query) throws ServiceException {
+    	List list = new ArrayList() ;
+		try {
+			list=appUserDao.findPushIdsByCom(query);
+		} catch (DaoException e) {
+			logger.debug("AppUserServiceImpl findPushIdsByCom()：查询该社区下的userId, baiduId, channelId返回条数发生错误！", e);
+			e.printStackTrace();
+		}
+		return list;
+    }
+    
+    /**
 	 * 推送天气
 	 * @param 
 	 * @return

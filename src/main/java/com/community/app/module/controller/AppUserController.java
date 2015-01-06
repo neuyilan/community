@@ -5,7 +5,9 @@ import static com.community.framework.utils.CommonUtils.getFomatDate;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -186,7 +188,13 @@ public class AppUserController {
 		try{
             StringBuilder result = new StringBuilder("");
 
-            MemberVO appUser = appUserService.getAppUserInfo(query.getUserId());
+//            MemberVO appUser = appUserService.getAppUserInfo(query.getUserId());
+            
+            Map<String, Object> con = new HashMap<String, Object>();
+            con.put("userId", query.getUserId());
+            con.put("estateId", query.getEstateId()); 
+            MemberVO appUser = appUserService.findByCon(con);
+            
             Date date = appUser.getBirthday();
             String birthday = "";
             if(date != null) {

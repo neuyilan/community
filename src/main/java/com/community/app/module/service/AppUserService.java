@@ -5,6 +5,7 @@ import java.util.Map;
 
 
 
+
 import com.community.app.module.bean.MemberVO;
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.ServiceException;
@@ -201,6 +202,14 @@ public interface AppUserService {
      * @throws ServiceException
      */
     public List findUserPushIdsByCom(final Integer comId) throws ServiceException;
+    
+    /**
+     * 查询该社区下的userId, baiduId, channelId
+     * @param obj
+     * @return
+     * @throws ServiceException
+     */
+    public List findPushIdsByCom(final AppUserQuery query) throws ServiceException;
     
     /**
    	 * 推送天气

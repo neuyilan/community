@@ -203,6 +203,7 @@ public class BusinessHelpController {
         BusinessHelpCommentQuery query = new BusinessHelpCommentQuery();
         List<BusinessHelpPic> list = new ArrayList<BusinessHelpPic>();
         List<BusinessHelpExpendestates> listExpend = new ArrayList<BusinessHelpExpendestates>();
+        String estateArr = "";
 		try{
             int id = Integer.parseInt(helpId);
             query.setHelp(id);
@@ -216,6 +217,9 @@ public class BusinessHelpController {
             paramMap.put("helpId", id);
             list = businessHelpPicService.findByMap(paramMap);
             listExpend = businessHelpExpendestatesService.findByMap(paramMap);
+            for(BusinessHelpExpendestates helpBean : listExpend) {
+            	estateArr += "," + helpBean.getEstateId();
+            }
         }catch(Exception e){
 			GSLogger.error("进入businessNews管理页时发生错误：/business/businessHelp/comment", e);
 			e.printStackTrace();
@@ -225,6 +229,7 @@ public class BusinessHelpController {
         mav.addObject("businessHelp", businessHelp);
         mav.addObject("list", list);
         mav.addObject("listExpend", listExpend);
+        mav.addObject("estateArr", estateArr);
         mav.addObject("pager", baseBean.getPager());
         
 		return mav;
@@ -421,13 +426,19 @@ public class BusinessHelpController {
 	 * @param response
 	 */
 	@RequestMapping(value="getExpendScopeTree")
-	public void getExpendScopeTree(HttpServletResponse response) {
+	public void getExpendScopeTree(HttpServletRequest request, HttpServletResponse response) {
 		JSONObject jsonObj = new JSONObject();
 		JSONArray comArr = new JSONArray();
-		
+		String helpArray = request.getParameter("helpArray").substring(1);
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {//驿站
+			String orgType = "";
+			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+				orgType = shiroUser.getOrgType();
+			} else {
+				orgType = shiroUser.getCurOrgType();
+			}
+			if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站
 				List comList = businessCommunityService.findAll();
 				JSONObject comObj = null;
 				Map paramMap = null;
@@ -443,11 +454,13 @@ public class BusinessHelpController {
 					for(int j=0;j<estateList.size();j++) {
 						ManageEstate estate = (ManageEstate) estateList.get(j);
 						JSONObject estateObj = new JSONObject();
-						estateObj.put("id", "eatate_"+estate.getEstateId());
-						estateObj.put("text", estate.getEstateName());
-						estateObj.put("checkbox", true);
-						estateObj.put("state", "close");
-						estateArr.add(estateObj);
+						if(!helpArray.contains(String.valueOf(estate.getEstateId()))) {
+							estateObj.put("id", "eatate_"+estate.getEstateId());
+							estateObj.put("text", estate.getEstateName());
+							estateObj.put("checkbox", true);
+							estateObj.put("state", "close");
+							estateArr.add(estateObj);
+						}
 					}
 					comObj.put("children", estateArr);
 					comArr.add(comObj);

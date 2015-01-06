@@ -293,11 +293,7 @@
     
 <script type="text/javascript">
     //实例化编辑器
-    var ue = UE.getEditor('content',{
-    	toolbars: [[
-			'undo', 'redo', '|', 'bold', 'underline', 'forecolor', 'backcolor', 'simpleupload', 'justifyleft', 'justifycenter', 'justifyright'
-    	]]
-    });
+    var ue = UE.getEditor('content');
     
     $(document).ready(function(){
 		var isPush = document.getElementsByName("isPush");

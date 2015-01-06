@@ -1,39 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-<meta charset="utf-8">
-
-<title>修改员工信息</title>
-
-<%@include file="/common/meta.jsp"%>
-<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/style.css" >
-<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/adaptive-2.css" >
-<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
-<script src="<%=ctx %>/js/jquery-1.7.2.min.js" type="text/javascript" ></script>
-<%-- <script src="<%=ctx %>/js/coveragelayer.js" type="text/javascript"></script> --%>
-<script type="text/javascript" src="<%=ctx %>/js/jquery-easyui/jquery.easyui.min.js"></script>
-<script src="<%=ctx %>/js/jquery.validate.min.js" type="text/javascript" ></script>
-<style type="text/css"> 
-label.error 
-{ 
-color:Red; 
-font-size:13px; 
-margin-left:5px; 
-padding-left:16px; 
-} 
-</style> 
+	<meta charset="utf-8">
+	<title>修改运营员工信息</title>
+	<%@include file="/common/meta.jsp"%>
+	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/style.css" >
+	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/adaptive-2.css" >
+	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
+	<script src="<%=ctx %>/js/jquery-1.7.2.min.js" type="text/javascript" ></script>
+	<script type="text/javascript" src="<%=ctx %>/js/jquery-easyui/jquery.easyui.min.js"></script>
+	<script src="<%=ctx %>/js/jquery.validate.min.js" type="text/javascript" ></script>
+	<style type="text/css"> 
+		label.error { color:Red; font-size:13px; margin-left:5px;  padding-left:16px; } 
+	</style> 
 </head>
- 
 <body class="bagcolr">
 <div class="wrapper wranews">
     <div class="newsrel">
         <form id="addForm" modelAttribute="businessUser" method="post" action="updateOperation.do">
-    	<div class="header-public"><span class="return" onclick="history.go(-1)"></span>修改员工</div>
+    	<div class="header-public"><span class="return" onclick="history.go(-1)"></span>修改运营员工信息</div>
         <div class="cont-l">
         <input type="hidden" name="userId" id="userId" value="${businessUser.userId }" />
         	<h2 class="relran">公司邮箱<font color="red">*</font><label for="userEmail" class="error success"></label></h2>
@@ -60,10 +47,12 @@ padding-left:16px;
             	      <input type="radio" name="sex"  class="radiostyle" id="sex1" value="0" <c:if test="${businessUser.sex == 0 }"> checked </c:if> />男 <br><br>
             	      <input type="radio" name="sex" class="radiostyle"  id="sex2" value="1" <c:if test="${businessUser.sex == 1 }"> checked </c:if> />女<br>
           	      </p>
-            </div><br>
+            </div>
+            <div class="line2"></div>
             
             <h2 class="relran">年龄<label for="age" class="error success"></label></h2>
             <input  name="age" style="width:100px;" class="iptnewtit" type="text" id="age"  placeholder='' value="${businessUser.age }" /> 岁
+            <div class="line2"></div>
             
             <h2 class="relstatus">婚姻状况<label for="isMarriage" class="error success"></label></h2>
             <div class="options">
@@ -71,18 +60,24 @@ padding-left:16px;
             	      <input type="radio" name="isMarriage" class="radiostyle" id="isMarriage1" value="0" <c:if test="${businessUser.isMarriage == 0 }"> checked </c:if> />已婚 <br><br>
             	      <input type="radio"  name="isMarriage" class="radiostyle" id="isMarriage2" value="1" <c:if test="${businessUser.isMarriage == 1 }"> checked </c:if> />未婚<br>
           	      </p>
-            </div><br>
+            </div>
+			<div class="line2"></div>
             
             <h2 class="relran">籍贯<label for="hometown" class="error success"></label></h2>
             <input  name="hometown" style="width:100px;" class="iptnewtit" type="text" id="hometown" placeholder='' value="${businessUser.hometown }" /><br>
+            <div class="line2"></div>
             
             <h2 class="relran">民族<label for="nation" class="error success"></label></h2>
             <input  name="nation" style="width:100px;" class="iptnewtit" type="text" id="nation" placeholder='' value="${businessUser.nation }" />
+            <div class="line2"></div>
             
             <h2 class="relran">所属职务<font color="red">*</font><label for="positionId" class="error success"></label></h2>
-            <span class="ranbut radiusbox" id="showPositionLayer">点击绑定职务</span>
-            <input type="hidden" name="positionId" id="positionId" value="${businessUser.positionId }" />
-            <span id="position">${businessUser.posName}</span>
+            <div style="position: relative;">
+				<span class="ranbut radiusbox" id="showPositionLayer">点击绑定职务</span>
+	            <input type="hidden" name="positionId" id="positionId" value="${businessUser.positionId }" />
+				<span style="position: absolute; top: 10px; left: 160px;" id="position">${businessUser.posName}</span>
+			</div>
+            <div class="line2"></div>
             
             <%-- <h2 class="relran">负责范围<font color="red">*</font><label for="scope" class="error success"></label></h2>
             <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围&nbsp;&nbsp;</span>
@@ -96,11 +91,13 @@ padding-left:16px;
             </span> --%>
             
             <h2 class="relran">权限设定<font color="red">*</font><label for="rights" class="error success"></label></h2>
-            <span class="ranbut radiusbox" id="showRightLayer">点击设置权限</span>
-            <input type="hidden" id="rights" name="rights" value="${businessUser.rights }" />
-            <input type="hidden" id="modules" name="modules" value="" />
-            <input type="hidden" id="rightsInfo" name="rightsInfo" value="" />
-            <div id="rightShow">${businessUser.rightsInfo }</div>
+            <div style="position: relative;">
+				<span class="ranbut radiusbox" id="showRightLayer">点击设置权限</span>
+	            <input type="hidden" id="rights" name="rights" value="${businessUser.rights }" />
+	            <input type="hidden" id="modules" name="modules" value="" />
+	            <input type="hidden" id="rightsInfo" name="rightsInfo" value="" />
+				<span style="position: absolute; top: 10px; left: 160px;" id="rightShow">${businessUser.rightsInfo }</span>
+			</div>
             <div class="line2"></div>
             
             <h2 class="relran">人员昵称<font color="red">*</font><label for="nickname" class="error success"></label></h2>
