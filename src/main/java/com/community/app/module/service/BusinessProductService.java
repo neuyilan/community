@@ -159,12 +159,28 @@ public interface BusinessProductService {
 	
 
 	/**
+	 * 新增商品 for PHP
+	 * 保存BusinessProduct数据
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void addProductPHP(final BusinessProductQuery query) throws ServiceException;
+	
+	/**
 	 * 修改商品
 	 * 保存BusinessProduct数据
 	 * @param entity
 	 * @throws ServiceException
 	 */
 	public void editProduct(final BusinessProductQuery query) throws ServiceException;
+
+	/**
+	 * 修改商品 for PHP
+	 * 保存BusinessProduct数据
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void editProductPHP(BusinessProductQuery query);
 	
 	
 

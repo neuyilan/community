@@ -37,6 +37,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.AppEstateUserQuery;
 import com.community.app.module.vo.ManageBuildingQuery;
 import com.community.app.module.vo.ManageEstateQuery;
+import com.community.app.module.vo.ManageUnitQuery;
 import com.community.app.module.bean.AppEstateUser;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.BusinessAnno;
@@ -245,23 +246,21 @@ public class EstateController {
 		String json = "";
 		try{
 			List<ManageBuilding> buildingList = manageBuildingService.findByExample(query);
-			List<ManageUnit> unitList = manageUnitService.getUnitByEstateId(query.getEstateId());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
 			json += "\"list\":[";
 			for (ManageBuilding manageBuilding : buildingList) {
+				ManageUnitQuery manageUnitQuery = new ManageUnitQuery();
+				manageUnitQuery.setBuildingId(manageBuilding.getBuildingId());
+				List<ManageUnit> unitList = manageUnitService.findByExample(manageUnitQuery);
 				json += "{\"buildingId\":\""+manageBuilding.getBuildingId()+"\",\"name\":\""+manageBuilding.getBuildingName()+"\",";
 				json += "\"units\":[";
-				int count = 0;
 				for (ManageUnit manageUnit : unitList) {
-					if(manageUnit.getBuildingId()==manageBuilding.getBuildingId()){
-						json += "{\"unitId\":\""+manageUnit.getUnitId()+"\",\"name\":\""+manageUnit.getUnitName()+"\"},";
-						count++;
-					}
+					json += "{\"unitId\":\""+manageUnit.getUnitId()+"\",\"name\":\""+manageUnit.getUnitName()+"\"},";
 				}
-				if(count > 0) {
+				if(unitList.size() > 0) {
 					json = json.substring(0, json.length()-1);
 				}
 				json += "]";

@@ -238,8 +238,6 @@ public class CommunityController {
 				} else {
 					json += ",\"comId\":\""+manageEstate.getComId()+"\",\"comName\":\""+manageEstate.getComName()+"\"},";
 				}	
-				
-						
 			}
 			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);
@@ -604,6 +602,46 @@ public class CommunityController {
 			e.printStackTrace();
 		}
 		return mav;	
+	}
+	
+	/**
+	 * 用户查看北京社区报中新闻的评论
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getJournalismDetailsById_title")
+	public void getJournalismDetailsById_title(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			Integer newsId = new Integer(request.getParameter("ID"));
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");  
+			BusinessNews businessNews = businessNewsService.findById_app(newsId);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"title\":\""+businessNews.getTitle()+"\",";
+			json += "\"pic\":\""+ip+businessNews.getAppPic()+"\"";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -1049,24 +1087,24 @@ public class CommunityController {
 			if(comId.equals("8")){
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"圆圆\",";
-				json += "\"avatar\":\""+ip+"/images/yuanyuan.jpg"+"\",";
-				json += "\"brief\":\"我是朝青社区报的社长媛媛，谢谢您给我们提供新闻线索！您可以把情况告诉我们，我们会很快跟您联络。您也可以拨打我的电话：\",";
+				json += "\"avatar\":\""+ip+"/images/icon/keke.jpg"+"\",";
+				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以可以拨打爆料热线：\",";
 				json += "\"tel\":\"13910830458\",";
-				json += "\"serviceTel\":\"53351217\"";
+				json += "\"serviceTel\":\"53351216\"";
 			}else if(comId.equals("11")){
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"北苑社长\",";
-				json += "\"avatar\":\""+ip+"/images/yuanyuan.jpg"+"\",";
-				json += "\"brief\":\"我是北苑社区报的社长媛媛，谢谢您给我们提供新闻线索！您可以把情况告诉我们，我们会很快跟您联络。您也可以拨打我的电话：\",";
+				json += "\"avatar\":\""+ip+"/images/icon/keke.jpg"+"\",";
+				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以可以拨打爆料热线：\",";
 				json += "\"tel\":\"13910830458\",";
-				json += "\"serviceTel\":\"53351217\"";
+				json += "\"serviceTel\":\"84999119\"";
 			}else if (comId.equals("12")) {
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"天通苑社长\",";
-				json += "\"avatar\":\""+ip+"/images/yuanyuan.jpg"+"\",";
-				json += "\"brief\":\"我是天通苑社区报的社长媛媛，谢谢您给我们提供新闻线索！您可以把情况告诉我们，我们会很快跟您联络。您也可以拨打我的电话：\",";
+				json += "\"avatar\":\""+ip+"/images/	````````````````````````````````````````````````````````````````/keke.jpg"+"\",";
+				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以可以拨打爆料热线：\",";
 				json += "\"tel\":\"13910830458\",";
-				json += "\"serviceTel\":\"53351217\"";
+				json += "\"serviceTel\":\"80788388\"";
 			}
 			json += "}";
 			json += "}";

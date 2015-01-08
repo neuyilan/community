@@ -8,12 +8,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/>
-<title>${title}</title>
+<title>OK家 ${title}</title>
 <link href="${ctx }/js/activity/css/style111.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
+<div id='wx_logo' style='margin:0 auto;display:none;'>
+<img src='${ctx }${appPic}' width="400px" height="400px"/>
+</div>
 <div class="x-main">
 <div class="scroll">
     <div class="x-total" id="content">

@@ -125,6 +125,8 @@ public class StationController {
 			json += "\"ID\":\""+businessStation.getStationId()+"\",";
 			json += "\"name\":\""+businessStation.getStaName()+"\",";
 			json += "\"tel\":\""+businessStation.getStaTel()+"\",";
+			json += "\"addr\":\""+businessStation.getAddrUrl()+"\",";
+			json += "\"staBrief\":\""+businessStation.getStaBrief()+"\",";
 			json += "\"serviceList\":[";
 			for (com.community.app.module.bean.BusinessStationService businessStationService : list) {
 				if("驿站位置".equals(businessStationService.getServiceName())){
@@ -140,15 +142,43 @@ public class StationController {
 				json = json.substring(0, json.length()-1);
 			}
 			json += "],";
-			json += "\"personnel\":[";
-			for (BusinessUser businessUser : userList) {
-				json += "{\"userId\":\""+businessUser.getUserId()+"\",\"name\":\""+businessUser.getNickname()+"\",\"portrait\":\""+ip+businessUser.getAvatar()+"\"},";
+			
+			List<BusinessUser> businessUserList = businessUserService.findByStationGril(query.getID());
+			json += "\"grilList\":[";
+			for (BusinessUser businessUser : businessUserList) {
+				json += "{\"ID\":\""+businessUser.getUserId()+"\",\"age\":\""+businessUser.getAge()+"\",\"name\":\""+businessUser.getNickname()+"\",\"avatar\":\""+ip+businessUser.getAvatar()+"\",\"tel\":\""+businessUser.getStationtel()+"\",\"userBrief\":\""+businessUser.getComWord()+"\"},";
 			}
-			if(userList.size() > 0) {
+			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);
 			}
 			json += "],";
-			json += "\"title\":\""+businessStation.getStaBrief()+"\",\"content\":\""+businessStation.getStaService()+"\"";
+			
+			BusinessAnnoQuery businessAnnoQuery = new BusinessAnnoQuery();
+			businessAnnoQuery.setRows(15);
+			businessAnnoQuery.setOrder("desc");
+			businessAnnoQuery.setSort("publishTime");
+			businessAnnoQuery.setAnnoScope(query.getEstateId()+"");
+			businessAnnoQuery.setAnnoType(0);
+			businessAnnoQuery.setPublishState(0);
+			BaseBean baseBean = businessAnnoService.findAllPage_app(businessAnnoQuery);
+			json += "\"notice\":";
+			for(int i=0;i<baseBean.getList().size();i++) {
+				if (i==1) {
+					break;
+				}
+				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
+				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle()+"\",\"time\":\""
+				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief()+"\",";
+				if("".equals(businessAnno.getAnnoPic()) || businessAnno.getAnnoPic()==null  || businessAnno.getAnnoPic().indexOf("/images/icon/")>=0){
+					json +="\"pic\":\"\",";
+				}else{
+					json +="\"pic\":\""+ip+businessAnno.getAnnoPic()+"\",";
+				}
+				json += "\"publisherId\":\""+businessAnno.getPublisherId()+"\",\"publisherName\":\""+businessAnno.getNickname()+"\",\"avatar\":\""+ip+businessAnno.getPortrait()+"\"},";
+			}
+			if(baseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
 			json += "}";
 			json += "}";
 		}catch(Exception e){
@@ -1145,6 +1175,46 @@ public class StationController {
 	}
 	
 	/**
+	 * 用户查看北京社区报中新闻的评论
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getStationDetailsById_title")
+	public void getStationDetailsById_title(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			Integer newsId = new Integer(request.getParameter("ID"));
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");  
+			BusinessAnno businessAnno = businessAnnoService.findById_app(newsId);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"title\":\""+businessAnno.getAnnoTitle()+"\",";
+			json += "\"pic\":\""+ip+businessAnno.getAppPic()+"\"";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 用户查看驿站类回复我的详情
 	 * @param userId,sessionid,ID
 	 * @return
@@ -1199,5 +1269,61 @@ public class StationController {
 			e.printStackTrace();
 		}
 		return mav;	
+	}
+	
+	/**
+	 * 用户查看驿站留言墙
+	 * @param userId,sessionid,advinceId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getStationMessage")
+	public void getStationMessage (HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		json += "{";
+		json += "\"errorCode\":\"200\",";
+		json += "\"message\":\"执行成功\",";
+		json += "\"content\":{";
+		json += "\"PageState\":true,";
+		json += "\"reviewList\":[";
+		json += "{\"userId\":\"1\",\"avatar\":\"头像\",\"name\":\"金大亮\",\"commentTime\":\"2011-11-11 19:11:11\",\"content\":\"你好\",\"replyType\":\"0\"},";
+		json += "{\"userId\":\"2\",\"avatar\":\"头像\",\"name\":\"金小亮\",\"commentTime\":\"2011-11-11 19:11:11\",\"content\":\"你好！！\",\"replyType\":\"0\"},";
+		json += "{\"userId\":\"3\",\"avatar\":\"头像\",\"name\":\"顾唐\",\"commentTime\":\"2011-11-11 19:11:11\",\"content\":\"你好！！！！！\",\"replyType\":\"1\"}";
+		json += "]";
+		json += "}";
+		json += "}";
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户评论驿站留言墙
+	 * @param userId,sessionid,advinceId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="saveStationMessage")
+	public void saveStationMessage (HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		json += "{";
+		json += "\"errorCode\":\"200\",";
+		json += "\"message\":\"评论成功\"";
+		json += "}";
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -25,7 +25,7 @@ public interface BusinessFocusService {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public BusinessFocus findById_app(final Integer id) throws ServiceException;
+	public List<BusinessFocus> findById_app(final Integer id) throws ServiceException;
 	
 	/**
 	 * 无条件查询所有BusinessFocus

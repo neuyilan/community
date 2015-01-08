@@ -1037,6 +1037,46 @@ public class propertyController {
 	}
 	
 	/**
+	 * 用户查看北京社区报中新闻的评论
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getPopertyDetailsById_title")
+	public void getPopertyDetailsById_title(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			Integer newsId = new Integer(request.getParameter("ID"));
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");  
+			BusinessAnno businessAnno = businessAnnoService.findById_app(newsId);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"title\":\""+businessAnno.getAnnoTitle()+"\",";
+			json += "\"pic\":\""+ip+businessAnno.getAppPic()+"\"";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 用户查看新闻类回复我的详情
 	 * @param userId,sessionid,ID
 	 * @return

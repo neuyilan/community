@@ -172,6 +172,36 @@ public class DateUtil {
         time = sfd.format(date);  
         return time;  
     }  
+    //不加年
+    public static String getTime1(Date date) {  
+        String todySDF = "今天 HH:mm";  
+        String yesterDaySDF = "昨天 HH:mm";  
+        String otherSDF = "MM-dd HH:mm";  
+        SimpleDateFormat sfd = null;  
+        String time = "";  
+        Calendar dateCalendar = Calendar.getInstance();  
+        dateCalendar.setTime(date);  
+        Date now = new Date();  
+        Calendar targetCalendar = Calendar.getInstance();  
+        targetCalendar.setTime(now);  
+        targetCalendar.set(Calendar.HOUR_OF_DAY, 0);  
+        targetCalendar.set(Calendar.MINUTE, 0);  
+        if (dateCalendar.after(targetCalendar)) {  
+            sfd = new SimpleDateFormat(todySDF);  
+            time = sfd.format(date);  
+            return time;  
+        } else {  
+            targetCalendar.add(Calendar.DATE, -1);  
+            if (dateCalendar.after(targetCalendar)) {  
+                sfd = new SimpleDateFormat(yesterDaySDF);  
+                time = sfd.format(date);  
+                return time;  
+            }  
+        }  
+        sfd = new SimpleDateFormat(otherSDF);  
+        time = sfd.format(date);  
+        return time;  
+    }  
     
     public static String getInterval(Timestamp timestamp) { //传入的时间格式必须类似于2012-8-21 17:53:20这样的格式  
         String interval = null;  

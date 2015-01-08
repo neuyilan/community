@@ -115,12 +115,12 @@
 				   		and e.estateMap = #{estateMap}
 					</if>
 					<if test="estateLongitude != null" >
-				   		and e.estateLongitude BETWEEN #{estateLongitude}-0.023529412
-				   		AND #{estateLongitude}+0.023529412
+				   		and e.estateLongitude BETWEEN #{estateLongitude}-0.0045
+				   		AND #{estateLongitude}+0.0045
 					</if>
 					<if test="estateLatitude != null and estateLatitude != ''" >
-				   		and e.estateLatitude BETWEEN #{estateLatitude}-0.023529412
-				   		and #{estateLatitude}+0.023529412
+				   		and e.estateLatitude BETWEEN #{estateLatitude}-0.0045
+				   		and #{estateLatitude}+0.0045
 					</if>
 					<if test="estateCarMap != null and estateCarMap != ''" >
 				   		and e.estateCarMap = #{estateCarMap}

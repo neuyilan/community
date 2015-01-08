@@ -27,7 +27,7 @@ public interface BusinessFocusDao {
 	 * @return
 	 * @throws DaoException
 	 */
-	public BusinessFocus findById_app(final Integer id) throws DaoException;
+	public List<BusinessFocus> findById_app(final Integer id) throws DaoException;
 	
 	/**
 	 * 无条件查询所有BusinessFocus

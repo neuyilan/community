@@ -20,7 +20,16 @@ public class BusinessStationServiceQuery extends BaseBean {
 	private java.sql.Timestamp createTime;
 	private java.sql.Timestamp editTime;
 	private java.lang.Integer userId;
+	private java.lang.Integer estateId;
 	
+	public java.lang.Integer getEstateId() {
+		return estateId;
+	}
+
+	public void setEstateId(java.lang.Integer estateId) {
+		this.estateId = estateId;
+	}
+
 	public java.lang.Integer getUserId() {
 		return userId;
 	}

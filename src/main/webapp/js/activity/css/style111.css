@@ -135,3 +135,7 @@ img{ vertical-align:middle;}
 .fxdown{ text-align:center;}
 .fxdown img{ max-width:100%; height:auto;}
 
+.x-cx video {
+    height: auto !important;
+    width: 100% !important;
+}

@@ -87,7 +87,10 @@ public class BusinessProductController {
 			ShiroUser shiroUser = CommonUtils.getUser();
 			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}			
+			}		
+			if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {
+				query.setOrgType(shiroUser.getOrgType());
+			}		
 			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
 			}
@@ -127,6 +130,9 @@ public class BusinessProductController {
 			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
 			}	
+			if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {
+				query.setOrgType(shiroUser.getOrgType());
+			}
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
 			}

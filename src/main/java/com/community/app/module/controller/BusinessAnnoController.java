@@ -424,10 +424,6 @@ public class BusinessAnnoController {
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 1);
 					paramMap.put("ID", businessAnno.getAnnoId());
-					paramMap.put("title", businessAnno.getAnnoTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessAnno.getAppPic());
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
 						//System.out.println("name  "+appUser.getRealname() + "baiudId   "+appUser.getBaiduId());
@@ -610,10 +606,6 @@ public class BusinessAnnoController {
 					paramMap = new HashMap();
 					paramMap.put("messageType", 1);
 					paramMap.put("ID", businessAnno.getAnnoId());
-					paramMap.put("title", businessAnno.getAnnoTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -778,10 +770,6 @@ public class BusinessAnnoController {
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 2);
 					paramMap.put("ID", businessAnno.getAnnoId());
-					paramMap.put("title", businessAnno.getAnnoTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1023,10 +1011,6 @@ public class BusinessAnnoController {
 					paramMap = new HashMap();
 					paramMap.put("messageType", 2);
 					paramMap.put("ID", businessAnno.getAnnoId());
-					paramMap.put("title", businessAnno.getAnnoTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1178,10 +1162,6 @@ public class BusinessAnnoController {
 				Map paramMap = new HashMap();
 				paramMap.put("messageType", 14);
 				paramMap.put("ID", businessAnno.getAnnoId());
-				paramMap.put("title", businessAnno.getAnnoTitle());
-				Properties p = propertiesUtil.getProperties("config.properties");
-				String ip = p.getProperty("imageIp");   
-				paramMap.put("pic", ip+businessAnno.getAppPic());
 				
 				for(int j=0;j<appUserList.size();j++) {
 					AppUser appUser = (AppUser) appUserList.get(j);
@@ -1398,10 +1378,6 @@ public class BusinessAnnoController {
 					paramMap = new HashMap();
 					paramMap.put("messageType", 14);
 					paramMap.put("ID", businessAnno.getAnnoId());
-					paramMap.put("title", businessAnno.getAnnoTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -2107,10 +2083,6 @@ public class BusinessAnnoController {
 					paramMap = new HashMap();
 					paramMap.put("messageType", 14);
 					paramMap.put("ID", businessAnno.getAnnoId());
-					paramMap.put("title", businessAnno.getAnnoTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessAnno.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);

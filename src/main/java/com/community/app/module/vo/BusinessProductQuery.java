@@ -67,6 +67,16 @@ public class BusinessProductQuery extends BaseBean {
 	private Integer curComId; //当前社区ID
 	private String nickname;
 	private String realname;
+	private String orgType;		//部门类型
+	private String picPaths[];  //商品多图片路径
+	
+	public String getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(String orgType) {
+		this.orgType = orgType;
+	}
 
 	public String getLike() {
 		return like;
@@ -599,6 +609,14 @@ public class BusinessProductQuery extends BaseBean {
 		
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	public String[] getPicPaths() {
+		return picPaths;
+	}
+
+	public void setPicPaths(String[] picPaths) {
+		this.picPaths = picPaths;
 	}
 	
 }

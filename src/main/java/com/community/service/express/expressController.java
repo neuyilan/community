@@ -1071,7 +1071,7 @@ public class expressController {
 			json += "\"orderCode\":\""+BusinessExp.getExpCode()+"\",";
 			if(query.getType()!=5){
 				if(query.getType()==3 || query.getType()==4){
-					json += "\"time\":\""+DateUtil.getInterval(BusinessExp.getCheckInTime()).replace("2014-", "")+"\",";
+					json += "\"time\":\""+DateUtil.getTime1(new Date(BusinessExp.getCheckInTime().getTime()))+"\",";
 					json += "\"payMount\":\""+BusinessExp.getPayMount()+"\",";
 					json += "\"money\":\""+BusinessExp.getAgentMount()+"\",";
 					json += "\"isPay\":\""+BusinessExp.getIsPay()+"\",";
@@ -1100,7 +1100,7 @@ public class expressController {
 					}
 					
 					json += "\"name\":\""+businessExpResolve.getResolverName()+"\",";
-					String date = DateUtil.getInterval1(businessExpResolve.getResolveTime()).replace("2014-", "").replace(" ", "\\r\\n");
+					String date = DateUtil.getTime1(new Date(businessExpResolve.getResolveTime().getTime())).replace(" ", "\\r\\n");
 					json += "\"commentTime\":\""+date+"\",";
 					json += "\"content\":\""+businessExpResolve.getResolveMemo()+"\",";
 					json += "\"videoUrl\":\""+ip+businessExpResolve.getResolveMemo()+"\",";
@@ -1114,7 +1114,7 @@ public class expressController {
 				}
 				json += "]";
 			}else{
-				json += "\"time\":\""+DateUtil.getInterval(BusinessExp.getCheckInTime())+"\",";
+				json += "\"time\":\""+DateUtil.getTime1(new Date(BusinessExp.getCheckInTime().getTime()))+"\",";
 				json += "\"content\":\""+BusinessExp.getLastMessage()+"\",";
 				json += "\"payMount\":\""+BusinessExp.getPayMount()+"\",";
 				json += "\"money\":\""+BusinessExp.getAgentMount()+"\",";
@@ -1328,42 +1328,52 @@ public class expressController {
 	public void updateRecipient (HttpServletRequest request, HttpServletResponse response,BusinessExpQuery query) {
 		String json = "";
 		try {
-			BusinessExp BusinessExp = new BusinessExp();
-			BusinessExp.setExpId(query.getID());
-			Timestamp  ts=new Timestamp(new Date().getTime());
-			BusinessExp.setModifyTime(ts);
-			BusinessExp.setIsVideo(0);
-			if(query.getType()==2){
-				BusinessExp.setReceiverAddr(query.getAddress());
-				BusinessExp.setReceiverName(query.getSenderName());
-				BusinessExp.setReceiverTel(query.getTel());
-				BusinessExp.setExpState(5);
-				BusinessExp.setLastMessage("您预约 服务驿站送货上门");
-				BusinessExp.setBriefMessage(DateUtil.nowTime1()+"\\r\\n运单号："+query.getOrderCode()+"\\r\\n您预约 服务驿站送货上门");
-			}else{
-				BusinessExp.setExpState(4);
-				BusinessExp.setLastMessage("您预约 去服务驿站上门自提");
-				BusinessExp.setBriefMessage(DateUtil.nowTime1()+"\\r\\n运单号："+query.getOrderCode()+"\\r\\n您预约 去服务驿站上门自提");
+			BusinessExp exp = businessExpService.findById_app(query.getID());
+			if (exp.getExpState()==3) {
+				BusinessExp BusinessExp = new BusinessExp();
+				BusinessExp.setExpId(query.getID());
+				Timestamp  ts=new Timestamp(new Date().getTime());
+				BusinessExp.setModifyTime(ts);
+				BusinessExp.setIsVideo(0);
+				if(query.getType()==2){
+					BusinessExp.setReceiverAddr(query.getAddress());
+					BusinessExp.setReceiverName(query.getSenderName());
+					BusinessExp.setReceiverTel(query.getTel());
+					BusinessExp.setExpState(5);
+					BusinessExp.setLastMessage("您预约 服务驿站送货上门");
+					BusinessExp.setBriefMessage(DateUtil.nowTime1()+"\\r\\n运单号："+query.getOrderCode()+"\\r\\n您预约 服务驿站送货上门");
+				}else{
+					BusinessExp.setExpState(4);
+					BusinessExp.setLastMessage("您预约 去服务驿站上门自提");
+					BusinessExp.setBriefMessage(DateUtil.nowTime1()+"\\r\\n运单号："+query.getOrderCode()+"\\r\\n您预约 去服务驿站上门自提");
+				}
+				businessExpService.update_state(BusinessExp);
+				AppLatestNews appLatestNews = new AppLatestNews();
+				appLatestNews.setUserId(query.getUserId());
+				appLatestNews.setTypeId(21);
+				appLatestNews.setSourceId(query.getID());
+				appLatestNews.setTo(0);
+				appLatestNews.setEstateId(0);
+				appLatestNewsService.save_app(appLatestNews);
+				appLatestNews.setTypeId(24);
+				appLatestNewsService.save_app(appLatestNews);
+				appLatestNews.setTypeId(26);
+				appLatestNewsService.save_app(appLatestNews);
+				appLatestNews.setTypeId(38);//快递
+				appLatestNews.setTo(1);
+				appLatestNewsService.save_app(appLatestNews);
+				json += "{";
+				json += "\"errorCode\":\"200\",";
+				json += "\"message\":\"修改成功\"";
+				json += "}";
+			}else {
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"快递状态已改变\"";
+				json += "}";
 			}
-			businessExpService.update_state(BusinessExp);
-			AppLatestNews appLatestNews = new AppLatestNews();
-			appLatestNews.setUserId(query.getUserId());
-			appLatestNews.setTypeId(21);
-			appLatestNews.setSourceId(query.getID());
-			appLatestNews.setTo(0);
-			appLatestNews.setEstateId(0);
-			appLatestNewsService.save_app(appLatestNews);
-			appLatestNews.setTypeId(24);
-			appLatestNewsService.save_app(appLatestNews);
-			appLatestNews.setTypeId(26);
-			appLatestNewsService.save_app(appLatestNews);
-			appLatestNews.setTypeId(38);//快递
-			appLatestNews.setTo(1);
-			appLatestNewsService.save_app(appLatestNews);
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"修改成功\"";
-			json += "}";
+			
 		}catch(Exception e){
 			json = "";
 			json += "{";

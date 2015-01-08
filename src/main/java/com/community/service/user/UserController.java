@@ -44,7 +44,9 @@ import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessChinmedichenacare;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessHealthydiet;
+import com.community.app.module.bean.BusinessHelp;
 import com.community.app.module.bean.BusinessNews;
+import com.community.app.module.bean.BusinessProduct;
 import com.community.app.module.bean.BusinessTel;
 import com.community.app.module.bean.BusinessTelGroup;
 import com.community.app.module.bean.MemberVO;
@@ -62,7 +64,9 @@ import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessChinmedichenacareService;
 import com.community.app.module.service.BusinessFocusService;
 import com.community.app.module.service.BusinessHealthydietService;
+import com.community.app.module.service.BusinessHelpService;
 import com.community.app.module.service.BusinessNewsService;
+import com.community.app.module.service.BusinessProductService;
 import com.community.app.module.service.BusinessTelGroupService;
 import com.community.app.module.service.BusinessTelService;
 import com.community.app.module.vo.AppEstateUserQuery;
@@ -76,6 +80,8 @@ import com.community.app.module.vo.AppUserNewsQuery;
 import com.community.app.module.vo.AppUserQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessFocusQuery;
+import com.community.app.module.vo.BusinessHelpQuery;
+import com.community.app.module.vo.BusinessProductQuery;
 import com.community.app.module.vo.BusinessTelGroupQuery;
 import com.community.app.module.vo.BusinessTelQuery;
 import com.community.framework.utils.DateUtil;
@@ -140,6 +146,11 @@ public class UserController {
 	
 	@Autowired
 	private BusinessHealthydietService businessHealthydietService;
+	@Autowired
+	private BusinessProductService businessProductService;
+	
+	@Autowired
+	private BusinessHelpService businessHelpService;
 	
 	
 	
@@ -3053,68 +3064,86 @@ public class UserController {
 	public void getUserEstateIndex(HttpServletRequest request,
 			HttpServletResponse response,AppHomepageQuery query) {
 		Properties p = propertiesUtil.getProperties("config.properties");
-		Properties pTop = propertiesUtil.getProperties("newTop.properties");
 		String ip = p.getProperty("imageIp");   
 		String json = "";
 		try{
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("publishTime");
-			BusinessFocus BusinessFocus = businessFocusService.findById_app(query.getEstateId());
-			BaseBean baseBean = appHomepageService.findAllPage_app(query);
+			//获取焦点图
+			List<BusinessFocus> list = businessFocusService.findById_app(query.getEstateId());
 			query.setTop(1);
+			//获取最新
 			BaseBean topBaseBean = appHomepageService.findAllPage(query);
+			
+			BusinessProductQuery BusinessProductQuery = new BusinessProductQuery();
+			BusinessProductQuery.setRows(15);
+			BusinessProductQuery.setEstateId(query.getEstateId());
+			BusinessProductQuery.setType(null);
+			BusinessProductQuery.setDealState(0);
+			BusinessProductQuery.setOrder("desc");
+			BusinessProductQuery.setSort("editTime");
+			//获取二手
+			BaseBean productBaseBean = businessProductService.findAllPage_app(BusinessProductQuery);
+			
+			BusinessHelpQuery BusinessHelpQuery = new BusinessHelpQuery();
+			BusinessHelpQuery.setRows(15);
+			BusinessHelpQuery.setEstateId(query.getEstateId());
+			BusinessHelpQuery.setOrder("desc");
+			BusinessHelpQuery.setSort("editTime");
+			BaseBean helpBaseBean = businessHelpService.findAllPage_app(BusinessHelpQuery);
+
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
-			if (query.getPage()==1) {
+			json += "\"expState\":\"2\",";
+			json += "\"adList\":[";
+			for (int i=0;i<list.size();i++) {
+				if (i==4) {
+					break;
+				}
+				BusinessFocus BusinessFocus = list.get(i);
 				if(BusinessFocus.getSourceType()==0){
-					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
-						json +="\"url\":\""+ip+BusinessFocus.getPageUrl()+"\"";
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
 						json +="\"url\":\"\"";
 					}
 					json +="},";
 				}else if (BusinessFocus.getSourceType()==1){
-					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
-						json +="\"url\":\""+ip+BusinessFocus.getPageUrl()+"\"";
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
 						json +="\"url\":\"\"";
 					}
 					json +="},";
 				}else if (BusinessFocus.getSourceType()==2){
-					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
-						json +="\"url\":\""+ip+BusinessFocus.getPageUrl()+"\"";
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
 						json +="\"url\":\"\"";
 					}
 					json +="},";
 				}else{
-					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
-						json +="\"url\":\""+ip+BusinessFocus.getPageUrl()+"\"";
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
 						json +="\"url\":\"\"";
 					}
 					json +="},";	
 				}
 			}
-			json += "\"PageState\":";
-			if(baseBean.getCount()>query.getPage()*query.getRows()){
-				json += "true,";
-			}else{
-				json += "false,";
+			if(list.size() > 0) {
+				json = json.substring(0, json.length()-1);
 			}
-			json += "\"newsList\":[";
-//			if(!"".equals(pTop.getProperty("ID")) && query.getPage()==1){
-//				json += "{\"serviceCode\":\""+pTop.getProperty("serviceCode")+"\",\"ID\":\""+pTop.getProperty("ID")+"\",\"title\":\""+pTop.getProperty("title")+"\",\"time\":\""
-//						+pTop.getProperty("time").substring(0, pTop.getProperty("time").indexOf(" "))+"\",\"brief\":\""+pTop.getProperty("brief")+"\",\"pic\":\""+ip+pTop.getProperty("pic")+"\"},";
-//			}
-			for(int i=0;i<topBaseBean.getList().size() && i<2;i++) {
+			json += "],";
+			json += "\"news\":";
+			for(int i=0;i<1;i++) {
 				AppHomepage appHomepage = (AppHomepage) topBaseBean.getList().get(i);
 //				if(appHomepage.getId().equals(Integer.parseInt(pTop.getProperty("ID")))){
 //					continue;
@@ -3142,100 +3171,51 @@ public class UserController {
 							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
 				}
 			}
-			if(topBaseBean.getList().size()==0){
-				for(int i=0;i<baseBean.getList().size();i++) {
-					AppHomepage appHomepage = (AppHomepage) baseBean.getList().get(i);
-//					if(appHomepage.getId().equals(Integer.parseInt(pTop.getProperty("ID")))){
-//						continue;
-//					}
-					if(appHomepage.getType()==0){
-						json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
-					}else if (appHomepage.getType()==1){
-						json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-					}else if (appHomepage.getType()==4){
-						json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-					}else if (appHomepage.getType()==5){
-						json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
-					}else if (appHomepage.getType()==6){
-						json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-					}else if (appHomepage.getType()==7){
-						json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-					}else{
-						json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-					}
+			
+			json += "\"productList\":[";
+			for(int i=0;i<productBaseBean.getList().size();i++) {
+				if (i==4) {
+					break;
 				}
-			}else {
-				for(int i=0;i<baseBean.getList().size();i++) {
-					AppHomepage appHomepage = (AppHomepage) baseBean.getList().get(i);
-//					if(appHomepage.getId().equals(Integer.parseInt(pTop.getProperty("ID")))){
-//						continue;
-//					}
-					if(topBaseBean.getList().size()==1){
-						AppHomepage appHomepage1 = (AppHomepage) topBaseBean.getList().get(0);
-						if(appHomepage.getId().equals(appHomepage1.getId())){
-							
-						}else if(appHomepage.getType()==0){
-							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
-						}else if (appHomepage.getType()==1){
-							json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else if (appHomepage.getType()==4){
-							json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else if (appHomepage.getType()==5){
-							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
-						}else if (appHomepage.getType()==6){
-							json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else if (appHomepage.getType()==7){
-							json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else{
-							json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}
-					}else{
-						AppHomepage appHomepage1 = (AppHomepage) topBaseBean.getList().get(0);
-						AppHomepage appHomepage2 = (AppHomepage) topBaseBean.getList().get(1);
-						if(appHomepage.getId().equals(appHomepage1.getId()) || appHomepage.getId().equals(appHomepage2.getId())){
-							
-						}else if(appHomepage.getType()==0){
-							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
-						}else if (appHomepage.getType()==1){
-							json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else if (appHomepage.getType()==4){
-							json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else if (appHomepage.getType()==5){
-							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
-						}else if (appHomepage.getType()==6){
-							json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else if (appHomepage.getType()==7){
-							json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}else{
-							json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-						}
-					}
+				BusinessProduct businessProduct = (BusinessProduct) productBaseBean.getList().get(i);
+				json += "{\"ID\":\""+businessProduct.getProductId()+"\",\"title\":\""+businessProduct.getTitle()+"\",\"time\":\""
+				+DateUtil.getInterval(businessProduct.getEditTime()).substring(0, DateUtil.getInterval(businessProduct.getEditTime()).indexOf(" "))+"\",\"brief\":\""+businessProduct.getContent()+"\",\"publisherId\":\""+businessProduct.getPublisherId()+"\","
+						+"\"publisherName\":\""+businessProduct.getPublisherName()+"\",\"avatar\":\""+ip+businessProduct.getPortrait()+"\","
+						+"\"addr\":\""+businessProduct.getEstateScope()+"\",\"type\":\""+businessProduct.getDealType()+"\",\"OnSale\":\""+businessProduct.getIsEstateAgent()+
+						"\",\"price\":\""+businessProduct.getPrice()+"\",\"pic\":\"";
+				if(businessProduct.getPicUrl()!=null){
+					String[] pic = businessProduct.getPicUrl().split(",");
+					json += ip+pic[0];
 				}
+				json += "\"},";
 			}
+			if(productBaseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "],";
 			
-			
-			if(baseBean.getList().size() > 0 || topBaseBean.getList().size() > 0) {
+			json += "\"helpList\":[";
+			for(int i=0;i<helpBaseBean.getList().size();i++) {
+				if (i==2) {
+					break;
+				}
+				BusinessHelp businessHelp = (BusinessHelp) helpBaseBean.getList().get(i);
+				json += "{";
+				json += "\"ID\":\""+businessHelp.getHelpId()+"\",";
+				json += "\"time\":\""+DateUtil.getInterval(businessHelp.getHelpTime())+"\",";
+				json += "\"brief\":\""+businessHelp.getHelpContent()+"\",";
+				json += "\"publisherId\":\""+businessHelp.getNickname()+"\",";
+				if(businessHelp.getIsNickname()==1){
+					json += "\"publisherName\":\"小区居民\",";
+				}else {
+					json += "\"publisherName\":\""+businessHelp.getHelperName()+"\",";
+				}
+				json += "\"avatar\":\""+ip+businessHelp.getPortrait()+"\",";
+				json += "\"supports\":\""+businessHelp.getSupports()+"\",";
+				json += "\"comments\":\""+businessHelp.getComments()+"\"";
+				json += "},";
+			}
+			if(helpBaseBean.getList().size() > 0) {
 				json = json.substring(0, json.length()-1);
 			}
 			json += "]";

@@ -53,15 +53,15 @@ public class BusinessFocusServiceImpl implements BusinessFocusService {
 	 * @throws ServiceException
 	 */
 	@Transactional(readOnly = true)
-	public BusinessFocus findById_app(final Integer id) throws ServiceException {
-		BusinessFocus businessFocus = new BusinessFocus();
+	public List<BusinessFocus> findById_app(final Integer id) throws ServiceException {
+		List<BusinessFocus> list = new ArrayList<BusinessFocus>();
 		try {
-			businessFocus = businessFocusDao.findById_app(id);
+			list = businessFocusDao.findById_app(id);
 		} catch (DaoException e) {
 			logger.debug("BusinessFocusServiceImpl findById_app()：查询单个BusinessFocus发生错误！", e);
 			e.printStackTrace();
 		}
-		return businessFocus;
+		return list;
 	}
 	
 	/**

@@ -1,23 +1,31 @@
 package com.community.framework.utils;
 
-import org.apache.commons.fileupload.DiskFileUpload;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadBase.InvalidContentTypeException;
 import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
-import sun.misc.BASE64Decoder;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import sun.misc.BASE64Decoder;
 
 /**
  * UEditor文件上传辅助类
@@ -174,15 +182,22 @@ public class Uploader {
 						this.type = "."+this.originalName.substring(this.originalName.lastIndexOf(".")+1, this.originalName.length());
 						SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
 						String dateString = sf.format(new Date());
-						this.url = filedir + "/image/"+filePath+"/" + dateString;
+						this.url = filedir + "/image/"+filePath+"/" + dateString;  //dir
 						File folder = new File(this.url);
 						if(!folder.exists()) {
 							folder.mkdirs();
 						}
 						String newFileName = new Timestamp(System.currentTimeMillis()).getTime() + this.type;
+						String tmpPicDir = this.url + "/tmp/";
+						File tmpFolder = new File(tmpPicDir);
+						if(!tmpFolder.exists()) {
+							tmpFolder.mkdirs();
+						}
+						String tmpPicFile = tmpPicDir  + newFileName;
 						this.url = this.url + "/" + newFileName;
 						System.out.println("文件保存路径为:"+this.url);
-						File file = new File(this.url);
+						//File file = new File(this.url);
+						File file = new File(tmpPicFile);
 						InputStream inputSteam=fileItem.getInputStream();
 						BufferedInputStream fis=new BufferedInputStream(inputSteam);
 					    FileOutputStream fos=new FileOutputStream(file);
@@ -197,6 +212,12 @@ public class Uploader {
 					    fos.close();
 					    fis.close();
 						inputSteam.close();
+						//压缩图片
+						CompressPicDemo cpd = new CompressPicDemo();
+						cpd.compressPic(tmpPicFile, this.url,  100, 100, true);
+						//压缩后删除原文件
+						if (file.exists())
+							file.delete();
 						System.out.println("文件："+filename+"上传成功!");
 					}else{//字段
 						String fieldName = fileItem.getFieldName();//字段名

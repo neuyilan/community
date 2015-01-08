@@ -38,9 +38,9 @@ public class BusinessFocusDaoImpl implements BusinessFocusDao {
 	 * @return
 	 * @throws DaoException
 	 */
-	public BusinessFocus findById_app(final Integer id) throws DaoException {
+	public List<BusinessFocus> findById_app(final Integer id) throws DaoException {
 		List<BusinessFocus> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessFocusDao.findById_app",id);
-		return list.get(0);
+		return list;
 	}
 	
 	/**

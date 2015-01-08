@@ -249,6 +249,53 @@ public class SecondaryMarketController {
 		}
 	}
 	
+	
+	/**
+	 * 用户发布商品  for PHP
+	 * @param userId,sessionid,productId,name,price,desc,contact,cellphone,qq,weixin,isAgent,pics,submitType
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="addProductPHP")
+	public void addProductPHP(HttpServletRequest request, HttpServletResponse response,BusinessProductQuery query) {
+		String json = "";
+		try{
+			businessProductService.addProduct(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"发布成功\"";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"发布失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			appStatisticsClick.setUserId(query.getUserId());  //new Integer(param.get("userId")));
+			appStatisticsClick.setType(7);
+			appStatisticsClick.setTypeName("发布跳蚤");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * 用户编辑商品
 	 * @param userId,sessionid,productId,name,price,desc,contact,cellphone,qq,weixin,isAgent,pics,submitType
@@ -292,6 +339,54 @@ public class SecondaryMarketController {
 			appStatisticsClick.setCreateTime(ts);
 			appStatisticsClick.setEditTime(ts);
 			appStatisticsClick.setUserId(new Integer(param.get("userId")));
+			appStatisticsClick.setType(8);
+			appStatisticsClick.setTypeName("编辑跳蚤");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 用户编辑商品 for PHP
+	 * @param userId,sessionid,productId,name,price,desc,contact,cellphone,qq,weixin,isAgent,pics,submitType
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="editProductPHP")
+	public void editProductPHP(HttpServletRequest request, HttpServletResponse response,BusinessProductQuery query) {
+		String json = "";
+		Map map = (Map) request.getAttribute("resultMap");
+		try{
+			businessProductService.editProductPHP(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"编辑成功\"";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"编辑失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			appStatisticsClick.setUserId(query.getUserId());//(new Integer(param.get("userId")));
 			appStatisticsClick.setType(8);
 			appStatisticsClick.setTypeName("编辑跳蚤");
 			appStatisticsClickService.save(appStatisticsClick);

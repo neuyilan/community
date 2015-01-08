@@ -182,7 +182,13 @@
 	<select id="findAllPage" resultMap="BusinessFocusResult" parameterType="Object">
 		select <include refid="Base_Column_List" /> from business_focus f 
 		inner join app_focus_scope scope on f.focusId = scope.focusId
-		inner join business_user_resource res on res.estateId = scope.estateId
+		<if test="curUserId != null and curUserId != ''" >
+		INNER JOIN manage_estate e ON e.estateId = scope.estateId
+		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
+		<if test="curUserId == null" >
+		INNER JOIN business_user_resource res ON res.estateId = scope.estateId
+		</if>
 		<include refid="Base_Where_Clause" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
@@ -196,7 +202,13 @@
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(distinct(f.focusId)) as annoCount from business_focus f
 		inner join app_focus_scope scope on scope.focusId = f.focusId
-		inner join business_user_resource res on res.estateId = scope.estateId
+		<if test="curUserId != null and curUserId != ''" >
+		INNER JOIN manage_estate e ON e.estateId = scope.estateId
+		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
+		<if test="curUserId == null" >
+		INNER JOIN business_user_resource res ON res.estateId = scope.estateId
+		</if>
 		<include refid="Base_Where_Clause" />
 	</select>
 	

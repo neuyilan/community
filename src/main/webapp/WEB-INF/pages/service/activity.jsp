@@ -8,12 +8,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/>
-<title>活动详情</title>
+<title>OK家 ${title}</title>
 <link href="${ctx }/js/activity/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
+<div id='wx_logo' style='margin:0 auto;display:none;'>
+<img src='${ctx }${appPic}' width="400px" height="400px"/>
+</div>
 <div id="bodyDiv" class="x-main">
 <div class="scroll">
     <div class="x-total">
@@ -48,8 +51,16 @@
                     <a><img src="${ctx }/js/activity/images/zk.png"></a>
                     <em>${supports}</em>
                 </span>
+                
             </div>
         </div>
+        <c:if test="${download==1 }">
+         	<div class="fxdown">
+	            <a href="${ctx }/download/index.html?id=12">
+	                <img src="${ctx }/images/click.png"/>
+	            </a>    
+	        </div>
+	      </c:if>
     </div>
     <div class="x-total x-pl">
         <p class="x-pc">全部评论(<span id="commentsCount">${comments }</span>)</p>
@@ -488,5 +499,63 @@ function msgbox(title,content){
 		    $(".tk").remove();
 	});
 }
+
+var imgUrl = '${ctx }${appPic}';  
+var lineLink = '${ctx }/service/commiunity/getActivitiesDetailsById.json?ID=${ID}&download=1';  
+var descContent = "${title}";  
+var shareTitle = '【OK家】小区生活 OK到家';  
+var appid = '';  
+  
+function shareFriend() {  
+    WeixinJSBridge.invoke('sendAppMessage',{  
+                            "appid": appid,  
+                            "img_url": imgUrl,  
+                            "img_width": "640",  
+                            "img_height": "640",  
+                            "link": lineLink,  
+                            "desc": descContent,  
+                            "title": shareTitle  
+                            }, function(res) {  
+                            _report('send_msg', res.err_msg);  
+                            })  
+}  
+function shareTimeline() {  
+    WeixinJSBridge.invoke('shareTimeline',{  
+                            "img_url": imgUrl,  
+                            "img_width": "640",  
+                            "img_height": "640",  
+                            "link": lineLink,  
+                            "desc": descContent,  
+                            "title": "【OK家】"+descContent  
+                            }, function(res) {  
+                            _report('timeline', res.err_msg);  
+                            });  
+}  
+function shareWeibo() {  
+    WeixinJSBridge.invoke('shareWeibo',{  
+                            "content": descContent,  
+                            "url": lineLink,  
+                            }, function(res) {  
+                            _report('weibo', res.err_msg);  
+                            });  
+}  
+// 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。  
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {  
+  
+        // 发送给好友  
+        WeixinJSBridge.on('menu:share:appmessage', function(argv){  
+            shareFriend();  
+            });  
+  
+        // 分享到朋友圈  
+        WeixinJSBridge.on('menu:share:timeline', function(argv){  
+            shareTimeline();  
+            });  
+  
+        // 分享到微博  
+        WeixinJSBridge.on('menu:share:weibo', function(argv){  
+            shareWeibo();  
+            });  
+        }, false);  
 </script>
 

@@ -481,10 +481,6 @@ public class BusinessNewsController {
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 7);
 					paramMap.put("ID", businessNews.getNewsId());
-					paramMap.put("title", businessNews.getTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessNews.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -726,7 +722,11 @@ public class BusinessNewsController {
 		String json = "";
 		try{
 		    businessNews.setTitle(query.getTitle());
-		    businessNews.setContent(query.getContent());
+		    if(query.getContent().contains("newsvideo")) {
+		    	businessNews.setContent(query.getContent().replaceAll("/newsvideo", request.getContextPath()+"/newsvideo"));
+		    } else {
+			    businessNews.setContent(query.getContent());
+		    }
 		    businessNews.setPageUrl("");
 		    businessNews.setBrief(query.getBrief());
 		    businessNews.setSubjectPic(query.getSubjectPic());
@@ -800,13 +800,20 @@ public class BusinessNewsController {
 				    businessFocus.setAuditInfo("");
 				    
 				    Map paramMap = new HashMap();
-				    paramMap.put("comId", businessNews.getPublishScope());
-				    List estateList = manageEstateService.findByMap(paramMap);
-				    for(int j=0;j<estateList.size();j++) {
-						ManageEstate manageEstate = (ManageEstate) estateList.get(j);
-						sb.append(manageEstate.getEstateName()).append(",");
-					}
-				    
+				    paramMap.put("newsId", businessNews.getNewsId());
+				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
+
+				    System.out.println("============newsScopeList.size()===============" + newsScopeList.size());
+				    for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	List estateList = manageEstateService.findByMap(paramMap);
+				    	for(int j=0;j<estateList.size();j++) {
+							ManageEstate manageEstate = (ManageEstate) estateList.get(j);
+							sb.append(manageEstate.getEstateName()).append(",");
+						}
+				    }
 				    businessFocus.setFocusScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
 				    businessFocus.setVisits(0);
 				    businessFocus.setSupports(0);
@@ -815,16 +822,21 @@ public class BusinessNewsController {
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
 					
-					AppFocusScope appFocusScope = new AppFocusScope();
-					for(int j=0;j<estateList.size();j++) {
-						  ManageEstate manageEstate = (ManageEstate) estateList.get(j);
-						  appFocusScope.setFocusId(businessFocus.getFocusId());
-						  appFocusScope.setEstateId(manageEstate.getEstateId());
-						  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
-						  appFocusScopeService.save(appFocusScope);
-					}
+					for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	List estateList = manageEstateService.findByMap(paramMap);
+				    	AppFocusScope appFocusScope = new AppFocusScope();
+						for(int j=0;j<estateList.size();j++) {
+							  ManageEstate manageEstate = (ManageEstate) estateList.get(j);
+							  appFocusScope.setFocusId(businessFocus.getFocusId());
+							  appFocusScope.setEstateId(manageEstate.getEstateId());
+							  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+							  appFocusScopeService.save(appFocusScope);
+						}
+				    }
 				}
-				
 			}
 			if(businessNews.getState() == 0){
 				AppHomepage appHomepage = new AppHomepage();
@@ -882,10 +894,8 @@ public class BusinessNewsController {
 				Map paramMap = new HashMap();
 				paramMap.put("messageType", 7);
 				paramMap.put("ID", businessNews.getNewsId());
-				paramMap.put("title", businessNews.getTitle());
 				Properties p = propertiesUtil.getProperties("config.properties");
 				String ip = p.getProperty("imageIp");   
-				paramMap.put("pic", ip+businessNews.getAppPic());
 				
 				for(int j=0;j<appUserList.size();j++) {
 					AppUser appUser = (AppUser) appUserList.get(j);
@@ -984,7 +994,11 @@ public class BusinessNewsController {
 		try{
 		    businessNews = businessNewsService.findById(query.getNewsId());
 		    businessNews.setTitle(query.getTitle());
-		    businessNews.setContent(query.getContent());
+		    if(query.getContent().contains("newsvideo")) {
+		    	businessNews.setContent(query.getContent().replace(request.getContextPath()+"/newsvideo", "/newsvideo").replaceAll("/newsvideo", request.getContextPath()+"/newsvideo"));
+		    } else {
+			    businessNews.setContent(query.getContent());
+		    }
 		    businessNews.setPageUrl("");
 		    businessNews.setBrief(query.getBrief());
 		    String path = request.getContextPath();
@@ -1138,10 +1152,6 @@ public class BusinessNewsController {
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 7);
 					paramMap.put("ID", businessNews.getNewsId());
-					paramMap.put("title", businessNews.getTitle());
-					Properties p = propertiesUtil.getProperties("config.properties");
-					String ip = p.getProperty("imageIp");   
-					paramMap.put("pic", ip+businessNews.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
@@ -1204,10 +1214,6 @@ public class BusinessNewsController {
 						Map paramMap = new HashMap();
 						paramMap.put("messageType", 8);
 						paramMap.put("ID", businessNews.getNewsId());
-						paramMap.put("title", businessNews.getTitle());
-						Properties p = propertiesUtil.getProperties("config.properties");
-						String ip = p.getProperty("imageIp");   
-						paramMap.put("pic", ip+businessNews.getAppPic());
 						
 						Integer success = AppPushNotificationUtil.pushNotification(
 								title, 

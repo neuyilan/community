@@ -510,8 +510,6 @@ public class BusinessActivityController {
 				Map paramMap = new HashMap();
 				paramMap.put("messageType", 9);
 				paramMap.put("ID", businessActivity.getActId());
-				paramMap.put("title", businessActivity.getActName());
-				paramMap.put("pic", businessActivity.getAppPic());
 				
 				for(int j=0;j<appUserList.size();j++) {
 					AppUser appUser = (AppUser) appUserList.get(j);
@@ -876,8 +874,6 @@ public class BusinessActivityController {
 					Map paramMap = new HashMap();
 					paramMap.put("messageType", 9);
 					paramMap.put("ID", businessActivity.getActId());
-					paramMap.put("title", businessActivity.getActName());
-					paramMap.put("pic", businessActivity.getAppPic());
 					
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);

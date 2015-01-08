@@ -106,7 +106,7 @@
 						and a.userId=#{curUserId} 
 					</if>
 					<if test="comId != null and comId != ''" >
-						and a.comId=#{comId} 
+						and s.comId=#{comId} 
 					</if>
 					<if test="createTime != null and createTime != ''" >
 				   		and createTime = #{createTime}
@@ -177,8 +177,8 @@
 	
 	<!-- BusinessNewspaper列表总数-->
 	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_newspaper bn
-		<include refid="Base_Where_Clause" />
+		select count(1) from business_newspaper a inner join business_newspaper_scope s on a.newspaperId=s.newspaperId
+		<include refid="Base_Where_Clause_app" />
 	</select>
 	
 	<!-- BusinessNewspaper保存数据 -->

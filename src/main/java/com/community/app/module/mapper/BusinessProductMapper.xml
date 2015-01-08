@@ -374,10 +374,18 @@
 	<select id="findAllPage" resultMap="BusinessProductResult" parameterType="Object">
 		select <include refid="Base_Column_List2" />,u.realname,u.nickname,u.portrait,GROUP_CONCAT(pp.picPath) picUrl, count(news.newsId) as newsCount from business_product p left 
 		join app_user u on userId=p.publisherId left join business_product_pic pp on p.productId = pp.productId 
-		<if test="curUserId != null and curUserId != ''" >
-		<!-- inner join business_user_resource res on res.estateId = p.estateId -->
-		INNER JOIN manage_estate e ON e.estateId = p.estateId
-		INNER JOIN business_user_resource res ON res.comId = e.comId
+		<if test="orgType !='station'" >
+			<if test="curUserId != null and curUserId != ''" >
+			<!-- inner join business_user_resource res on res.estateId = p.estateId -->
+			INNER JOIN manage_estate e ON e.estateId = p.estateId
+			INNER JOIN business_user_resource res ON res.comId = e.comId
+			</if>
+			<if test="curUserId == null" >
+			INNER JOIN business_user_resource res ON res.estateId = p.estateId
+			</if>
+		</if>
+		<if test="orgType =='station'" >
+			INNER JOIN business_user_resource res ON res.estateId = p.estateId
 		</if>
 		left join app_latest_news news on news.sourceId = p.productId and news.typeId=39 and news.to=1
 		<include refid="Base_Where_Clause" />
@@ -407,10 +415,18 @@
 	<!-- BusinessProduct列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(distinct(p.productId)) from business_product  p
-		<if test="curUserId != null and curUserId != ''" >
-		<!-- inner join business_user_resource res on res.estateId = p.estateId -->
-		INNER JOIN manage_estate e ON e.estateId = p.estateId
-		INNER JOIN business_user_resource res ON res.comId = e.comId
+		<if test="orgType !='station'" >
+			<if test="curUserId != null and curUserId != ''" >
+			<!-- inner join business_user_resource res on res.estateId = p.estateId -->
+			INNER JOIN manage_estate e ON e.estateId = p.estateId
+			INNER JOIN business_user_resource res ON res.comId = e.comId
+			</if>
+			<if test="curUserId == null" >
+			INNER JOIN business_user_resource res ON res.estateId = p.estateId
+			</if>
+		</if>
+		<if test="orgType =='station'" >
+			INNER JOIN business_user_resource res ON res.estateId = p.estateId
 		</if>
 		<include refid="Base_Where_Clause" />
 	</select>

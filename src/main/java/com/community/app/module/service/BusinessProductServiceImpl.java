@@ -11,6 +11,7 @@ import java.util.Map;
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -482,6 +483,148 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 				appLatestNews.setUserId(new Integer(param.get("userId")));
 				appLatestNews.setTypeId(2);
 				appLatestNews.setSourceId(new Integer(param.get("productId")));
+				appLatestNews.setTo(0);
+				appLatestNews.setEstateId(0);
+				appLatestNewsDao.save_app(appLatestNews);
+				appLatestNews.setTypeId(6);
+				appLatestNewsDao.save_app(appLatestNews);
+				appLatestNews.setTypeId(39);//二手
+				appLatestNews.setTo(1);
+				appLatestNewsDao.save_app(appLatestNews);
+			}
+		} catch (DaoException e) {
+			logger.debug("BusinessProductServiceImpl addProduct()：修改商品发生错误！", e);
+			e.printStackTrace();
+		}
+	}
+
+
+	/**
+	 * 新增商品 for PHP
+	 *
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void addProductPHP(BusinessProductQuery query)
+			throws ServiceException {
+		try {
+
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			BusinessProduct businessProduct = new BusinessProduct();
+			
+			businessProduct.setDealType(query.getType());
+			businessProduct.setPublisherId(query.getPublisherId());
+			businessProduct.setContent(query.getContact());
+			businessProduct.setTitle("");
+			businessProduct.setContactName(query.getContactName());
+			businessProduct.setContactTel(query.getContactTel());
+			businessProduct.setContactQq("");
+			businessProduct.setCreateTime(ts);
+			businessProduct.setEditTime(ts);			
+			
+			businessProduct.setIsEstateAgent(1);
+			businessProduct.setDealState(0);
+			businessProduct.setEstateId(query.getEstateId());
+			businessProduct.setPrice(query.getPrice());
+			if (query.getTypeId()!=null && query.getTypeId().toString()!="0") {
+				businessProduct.setTypeId(query.getTypeId());
+				businessProduct.setTypeName(query.getTypeName());
+			}else {
+				businessProduct.setTypeId(0);
+				businessProduct.setTypeName("");
+			}
+			BusinessProduct BusinessProduct1 = businessProductDao.save_app(businessProduct);
+
+			String picPaths[] = query.getPicPaths();
+			for(int i=0;i<picPaths.length;i++)
+			{
+	        	BusinessProductPic businessProductPic = new BusinessProductPic();
+				businessProductPic.setCreateTime(ts);
+				businessProductPic.setProductId(BusinessProduct1.getProductId());
+				businessProductPic.setPicPath(picPaths[i]);
+				businessProductPicDao.save_app(businessProductPic);
+			}
+			
+			
+			AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(query.getUserId());//new Integer(param.get("userId")));
+			appLatestNews.setTypeId(2);
+			appLatestNews.setSourceId(BusinessProduct1.getProductId());
+			appLatestNews.setTo(0);
+			appLatestNews.setEstateId(0);
+			appLatestNewsDao.save_app(appLatestNews);
+			appLatestNews.setTypeId(6);
+			appLatestNewsDao.save_app(appLatestNews);
+			appLatestNews.setTypeId(39);//二手
+			appLatestNews.setTo(1);
+			appLatestNewsDao.save_app(appLatestNews);
+		} catch (DaoException e) {
+			logger.debug("BusinessProductServiceImpl addProduct()：新增商品发生错误！", e);
+			e.printStackTrace();
+		}
+	
+		
+	}
+
+
+
+	public void editProductPHP(BusinessProductQuery query) {
+		try {
+			
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			BusinessProduct businessProduct = new BusinessProduct();
+			if("0".equals(query.getSubmitType())){
+				businessProduct.setProductId(query.getProductId());
+				businessProduct.setDealState(3);
+				businessProduct.setEditTime(ts);
+				businessProductDao.update_app(businessProduct);
+			}else if ("2".equals(query.getSubmitType())) {
+				businessProduct.setProductId(query.getProductId());
+				businessProduct.setDealState(0);
+				businessProduct.setEditTime(ts);
+				businessProductDao.update_app(businessProduct);
+			}else if ("3".equals(query.getSubmitType())) {
+				businessProduct.setProductId(query.getProductId());
+				businessProduct.setDealState(5);
+				businessProduct.setEditTime(ts);
+				businessProductDao.update_app(businessProduct);
+			}else{
+				businessProduct.setProductId(query.getProductId());
+				businessProduct.setContent(query.getContact());
+				businessProduct.setTitle("");
+				businessProduct.setContactName(query.getContactName());
+				businessProduct.setContactTel(query.getContactTel());
+				businessProduct.setContactQq("");
+				businessProduct.setEditTime(ts);
+				//businessProduct.setIsEstateAgent(new Integer(param.get("isAgent")));
+				businessProduct.setIsEstateAgent(1);
+				businessProduct.setDealState(0);
+				businessProduct.setPrice(query.getPrice());
+				if (query.getTypeId()!=null && query.getTypeId().toString()!="0") {
+					businessProduct.setTypeId(query.getTypeId());
+					businessProduct.setTypeName(query.getTypeName());
+				}else {
+					businessProduct.setTypeId(0);
+					businessProduct.setTypeName("");
+				}
+				businessProductDao.update_app(businessProduct);
+				businessProductPicDao.delete_app(query.getProductId());
+
+				
+				String picPaths[] = query.getPicPaths();
+				for(int i=0;i<picPaths.length;i++)
+				{
+		        	BusinessProductPic businessProductPic = new BusinessProductPic();
+					businessProductPic.setCreateTime(ts);
+					businessProductPic.setProductId(query.getProductId());
+					businessProductPic.setPicPath(picPaths[i]);
+					businessProductPicDao.save_app(businessProductPic);
+				}
+				
+				AppLatestNews appLatestNews = new AppLatestNews();
+				appLatestNews.setUserId(query.getUserId());
+				appLatestNews.setTypeId(2);
+				appLatestNews.setSourceId(query.getProductId());
 				appLatestNews.setTo(0);
 				appLatestNews.setEstateId(0);
 				appLatestNewsDao.save_app(appLatestNews);

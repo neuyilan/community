@@ -441,6 +441,9 @@
 		INNER JOIN manage_estate e ON e.estateId = s.estateId
 		INNER JOIN business_user_resource res ON res.comId = e.comId
 		</if>
+		<if test="curUserId == null" >
+		INNER JOIN business_user_resource res ON res.estateId = s.estateId
+		</if>
 		<include refid="Base_Where_Clause" />
 		group by a.actId
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -455,8 +458,13 @@
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(distinct(a.actId)) from business_activity a
 		INNER JOIN business_activity_scope s ON s.actId = a.actId
+		<if test="curUserId != null and curUserId != ''" >
 		INNER JOIN manage_estate e ON e.estateId = s.estateId
 		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
+		<if test="curUserId == null" >
+		INNER JOIN business_user_resource res ON res.estateId = s.estateId
+		</if>
 		<include refid="Base_Where_Clause" />
 	</select>
 	
