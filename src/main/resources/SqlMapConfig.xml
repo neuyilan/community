@@ -84,6 +84,7 @@
 		<typeAlias alias="manageExpressAll" type="com.community.app.module.bean.ManageExpressAll"/>
 		<typeAlias alias="manageTag" type="com.community.app.module.bean.ManageTag"/>
 		<typeAlias alias="manageTagType" type="com.community.app.module.bean.ManageTagType"/>
+		<typeAlias alias="businessStationMessage" type="com.community.app.module.bean.BusinessStationMessage"/>
 		
         <!-- service -->
 		<typeAlias alias="BusinessCommunity" type="com.community.app.module.bean.BusinessCommunity"/>
@@ -221,6 +222,7 @@
 		<mapper resource="com/community/app/module/mapper/ManageExpressAllMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/ManageTagMapper.xml" />	
 		<mapper resource="com/community/app/module/mapper/ManageTagTypeMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessStationMessageMapper.xml" />
 		
         <!-- service -->
 		<mapper resource="com/community/app/module/mapper/AppUserMapper.xml" />

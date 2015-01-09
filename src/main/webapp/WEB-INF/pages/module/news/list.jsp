@@ -438,15 +438,15 @@ function jump(pageNo) {
 	    }
 	}
 	
-	// 置顶该条新闻
+	// 置为社区头条
 	function stickForm(newsId) {
         $.post("findAllHotById.do", {id : newsId}, function(data) {
         	eval("data = "+data);
         	var bool ="";
         	if(data.oldtitle == "") {
-	        	bool = window.confirm("您确认要置顶显示：\n\""+data.title+"\"");
+	        	bool = window.confirm("您确认要置为社区头条：\n\""+data.title+"\"");
         	} else {
-        		bool = window.confirm("您确认要置顶显示：\n\""+data.title+"\"\n将替换掉\n\""+data.oldtitle+"\"");
+        		bool = window.confirm("您确认要置为社区头条：\n\""+data.title+"\"\n将替换掉\n\""+data.oldtitle+"\"");
         	}
     	    if(bool) {
     	    	$.post("updateNewsHotState.do", {id : newsId,oldnewsId : data.oldnewsId}, function(data1) {
@@ -582,10 +582,10 @@ function jump(pageNo) {
 	            	$('#showstate').html("已发布");
 	            	$('#ding').html("");
 	            	if(data.isHot != 1) {
-		            	// $('#ding').html("<input class=\"s-xw-btn1\" title=\"置顶该条新闻\" type=\"button\" value=\"设置为置顶\" onclick=\"stickForm("+data.newsId+");\"/>");
+		            	// $('#ding').html("<input class=\"s-xw-btn1\" title=\"置顶该社区头条\" type=\"button\" value=\"设置为社区头条\" onclick=\"stickForm("+data.newsId+");\"/>");
 		            	var rightStr = "";
 		            	<shiro:hasPermission name="news_settop_news">
-		            		rightStr += "<input id=\"qrbut5\" title=\"置顶该条新闻\" type=\"submit\" value=\"设置为置顶\" onclick=\"stickForm("+data.newsId+");\"/>";
+		            		rightStr += "<input id=\"qrbut5\" title=\"置为社区头条\" type=\"submit\" value=\"设置为社区头条\" onclick=\"stickForm("+data.newsId+");\"/>";
 		            	</shiro:hasPermission>
 		            	<shiro:hasPermission name="news_withdrawn_news">
 		            		rightStr += "<input id=\"zsbut5\" title=\" 撤回发布该条新闻\" type=\"button\" value=\"撤回发布\" onclick=\"cancelNewsPublishState("+data.newsId+");\"/>";

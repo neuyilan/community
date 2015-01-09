@@ -280,7 +280,7 @@ public class BusinessNewsController {
     public void findAllHotById(HttpServletResponse response, @RequestParam(value="id") String id) {
     	String json = "";
         try{
-        	int size = 2;  //最大置顶数
+        	int size = 1;  //最大置顶数
         	List<BusinessNews> list = businessNewsService.findAllHotById();
         	BusinessNews businessNews = businessNewsService.findById(Integer.parseInt(id));
         	
@@ -485,7 +485,7 @@ public class BusinessNewsController {
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
 						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-							System.out.println("居民     "+appUser.getRealname());
+							// System.out.println("居民     "+appUser.getRealname());
 							Integer success = AppPushNotificationUtil.pushNotification(
 									title, 
 									description, 
@@ -803,7 +803,6 @@ public class BusinessNewsController {
 				    paramMap.put("newsId", businessNews.getNewsId());
 				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
 
-				    System.out.println("============newsScopeList.size()===============" + newsScopeList.size());
 				    for(int i=0; i<newsScopeList.size(); i++) {
 				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
 				    	paramMap = new HashMap();
@@ -1156,7 +1155,7 @@ public class BusinessNewsController {
 					for(int j=0;j<appUserList.size();j++) {
 						AppUser appUser = (AppUser) appUserList.get(j);
 						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-							System.out.println("居民     "+appUser.getRealname());
+							// System.out.println("居民     "+appUser.getRealname());
 							Integer success = AppPushNotificationUtil.pushNotification(
 									title, 
 									description, 

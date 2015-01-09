@@ -197,12 +197,21 @@
 						and res.userId=#{curUserId} 
 					</if>
 					<if test="curEstateId != null and curEstateId != ''" >
-						and res.estateId=#{curEstateId} 
+						<if test="orgType !='operation'" >
+							and res.estateId=#{curEstateId} 
+						</if>
+						<if test="orgType =='operation'" >
+							and p.estateId=#{curEstateId} 
+						</if>
 					</if>
 					<if test="curComId != null and curComId != ''" >
-						and res.comId=#{curComId} 
+						<if test="orgType =='operation' and curOrgType =='community'">
+							and e.comId=#{curComId} 
+						</if>
+						<if test="orgType =='community'">
+							and res.comId=#{curComId} 
+						</if>
 					</if>
-					
 			</trim>
 		</where>
 	</sql>
@@ -380,8 +389,8 @@
 			INNER JOIN manage_estate e ON e.estateId = p.estateId
 			INNER JOIN business_user_resource res ON res.comId = e.comId
 			</if>
-			<if test="curUserId == null" >
-			INNER JOIN business_user_resource res ON res.estateId = p.estateId
+			<if test="orgType =='operation' and curOrgType =='community'">
+			INNER JOIN manage_estate e ON e.estateId = p.estateId
 			</if>
 		</if>
 		<if test="orgType =='station'" >
@@ -421,8 +430,8 @@
 			INNER JOIN manage_estate e ON e.estateId = p.estateId
 			INNER JOIN business_user_resource res ON res.comId = e.comId
 			</if>
-			<if test="curUserId == null" >
-			INNER JOIN business_user_resource res ON res.estateId = p.estateId
+			<if test="orgType =='operation' and curOrgType =='community'">
+			INNER JOIN manage_estate e ON e.estateId = p.estateId
 			</if>
 		</if>
 		<if test="orgType =='station'" >

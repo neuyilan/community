@@ -255,6 +255,6 @@
 		</dependency>
   </dependencies>
   <build>
-    <finalName>spring</finalName>
+    <finalName>community</finalName>
   </build>
 </project>

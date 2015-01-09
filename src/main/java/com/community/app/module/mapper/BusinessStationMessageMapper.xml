@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessStationMessageDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessStationMessageResult" type="BusinessStationMessage">
+			<result column="commentId" property="commentId" />
+			<result column="stationId" property="stationId" />
+			<result column="commentorId" property="commentorId" />
+			<result column="commentorName" property="commentorName" />
+			<result column="content" property="content" />
+			<result column="commentTime" property="commentTime" />
+			<result column="replyId" property="replyId" />
+			<result column="replyName" property="replyName" />
+			<result column="commentorState" property="commentorState" />
+			<result column="replyState" property="replyState" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			commentId,
+			stationId,
+			commentorId,
+			commentorName,
+			content,
+			commentTime,
+			replyId,
+			replyName,
+			commentorState,
+			replyState
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="commentId != null and commentId != ''" >
+				   		and commentId = #{commentId}
+					</if>
+					<if test="stationId != null and stationId != ''" >
+				   		and stationId = #{stationId}
+					</if>
+					<if test="commentorId != null and commentorId != ''" >
+				   		and commentorId = #{commentorId}
+					</if>
+					<if test="commentorName != null and commentorName != ''" >
+				   		and commentorName = #{commentorName}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and content = #{content}
+					</if>
+					<if test="commentTime != null and commentTime != ''" >
+				   		and commentTime = #{commentTime}
+					</if>
+					<if test="replyId != null and replyId != ''" >
+				   		and replyId = #{replyId}
+					</if>
+					<if test="replyName != null and replyName != ''" >
+				   		and replyName = #{replyName}
+					</if>
+					<if test="commentorState != null and commentorState != ''" >
+				   		and commentorState = #{commentorState}
+					</if>
+					<if test="replyState != null and replyState != ''" >
+				   		and replyState = #{replyState}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessStationMessage -->
+	<select id="findById"  resultMap="BusinessStationMessageResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_station_message where commentId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessStationMessage -->
+	<select id="findAll" resultMap="BusinessStationMessageResult">
+		select <include refid="Base_Column_List" /> from business_station_message 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessStationMessage -->
+	<select id="findByMap" resultMap="BusinessStationMessageResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_station_message <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessStationMessage -->
+	<select id="findByExample" resultMap="BusinessStationMessageResult" parameterType="com.community.app.module.vo.BusinessStationMessageQuery">
+		select <include refid="Base_Column_List" /> from business_station_message <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessStationMessage根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessStationMessageResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_station_message  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessStationMessage列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_station_message 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessStationMessage保存数据 -->
+	<insert id="save" parameterType="BusinessStationMessage">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="commentId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_station_message(
+		
+		stationId,
+		commentorId,
+		commentorName,
+		content,
+		commentTime,
+		replyId,
+		replyName,
+		commentorState,
+		replyState
+		) values(
+		#{stationId},
+		#{commentorId},
+		#{commentorName},
+		#{content},
+		#{commentTime},
+		#{replyId},
+		#{replyName},
+		#{commentorState},
+		#{replyState}
+		)
+	</insert>
+	
+	<!-- BusinessStationMessage修改数据 -->
+	<update id="update" parameterType="BusinessStationMessage">
+		update business_station_message 
+		<set>
+			<if test="stationId != null and stationId != ''" >
+			stationId=#{stationId},
+			</if>
+			<if test="commentorId != null and commentorId != ''" >
+			commentorId=#{commentorId},
+			</if>
+			<if test="commentorName != null and commentorName != ''" >
+			commentorName=#{commentorName},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="commentTime != null and commentTime != ''" >
+			commentTime=#{commentTime},
+			</if>
+			<if test="replyId != null and replyId != ''" >
+			replyId=#{replyId},
+			</if>
+			<if test="replyName != null and replyName != ''" >
+			replyName=#{replyName},
+			</if>
+			<if test="commentorState != null and commentorState != ''" >
+			commentorState=#{commentorState},
+			</if>
+			<if test="replyState != null and replyState != ''" >
+			replyState=#{replyState}
+			</if>
+		</set> 
+		where 
+		commentId=#{commentId}
+	</update>
+	
+	<!-- BusinessStationMessage删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_station_message where 
+		commentId=#{commentId}
+	</delete>
+</mapper>
