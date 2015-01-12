@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessShopFlowDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessShopFlowResult" type="BusinessShopFlow">
+			<result column="flowId" property="flowId" />
+			<result column="userId" property="userId" />
+			<result column="shopId" property="shopId" />
+			<result column="clickTime" property="clickTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			flowId,
+			userId,
+			shopId,
+			clickTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="flowId != null and flowId != ''" >
+				   		and flowId = #{flowId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="shopId != null and shopId != ''" >
+				   		and shopId = #{shopId}
+					</if>
+					<if test="clickTime != null and clickTime != ''" >
+				   		and clickTime = #{clickTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessShopFlow -->
+	<select id="findById"  resultMap="BusinessShopFlowResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_shop_flow where flowId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessShopFlow -->
+	<select id="findAll" resultMap="BusinessShopFlowResult">
+		select <include refid="Base_Column_List" /> from business_shop_flow 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessShopFlow -->
+	<select id="findByMap" resultMap="BusinessShopFlowResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_shop_flow <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessShopFlow -->
+	<select id="findByExample" resultMap="BusinessShopFlowResult" parameterType="com.community.app.module.vo.BusinessShopFlowQuery">
+		select <include refid="Base_Column_List" /> from business_shop_flow <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessShopFlow根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessShopFlowResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_shop_flow  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessShopFlow列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_shop_flow 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessShopFlow保存数据 -->
+	<insert id="save" parameterType="BusinessShopFlow">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="flowId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_shop_flow(
+		
+		userId,
+		shopId,
+		clickTime
+		) values(
+				#{userId},
+		#{shopId},
+		#{clickTime}
+		)
+	</insert>
+	
+	<!-- BusinessShopFlow修改数据 -->
+	<update id="update" parameterType="BusinessShopFlow">
+		update business_shop_flow 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="shopId != null and shopId != ''" >
+			shopId=#{shopId},
+			</if>
+			<if test="clickTime != null and clickTime != ''" >
+			clickTime=#{clickTime}
+			</if>
+		</set> 
+		where 
+		flowId=#{flowId}
+		
+		
+		
+	</update>
+	
+	<!-- BusinessShopFlow删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_shop_flow where 
+		flowId=#{flowId}
+							</delete>
+	
+</mapper>
+	

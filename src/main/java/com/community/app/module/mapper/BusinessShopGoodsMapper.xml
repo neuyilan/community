@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessShopGoodsDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessShopGoodsResult" type="BusinessShopGoods">
+			<result column="goodsId" property="goodsId" />
+			<result column="goodsName" property="goodsName" />
+			<result column="goodsNO" property="goodsNO" />
+			<result column="goodsPrice" property="goodsPrice" />
+			<result column="goodsAmount" property="goodsAmount" />
+			<result column="goodsAgio" property="goodsAgio" />
+			<result column="orderId" property="orderId" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			goodsId,
+			goodsName,
+			goodsNO,
+			goodsPrice,
+			goodsAmount,
+			goodsAgio,
+			orderId
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="goodsId != null and goodsId != ''" >
+				   		and goodsId = #{goodsId}
+					</if>
+					<if test="goodsName != null and goodsName != ''" >
+				   		and goodsName = #{goodsName}
+					</if>
+					<if test="goodsNO != null and goodsNO != ''" >
+				   		and goodsNO = #{goodsNO}
+					</if>
+					<if test="goodsPrice != null and goodsPrice != ''" >
+				   		and goodsPrice = #{goodsPrice}
+					</if>
+					<if test="goodsAmount != null and goodsAmount != ''" >
+				   		and goodsAmount = #{goodsAmount}
+					</if>
+					<if test="goodsAgio != null and goodsAgio != ''" >
+				   		and goodsAgio = #{goodsAgio}
+					</if>
+					<if test="orderId != null and orderId != ''" >
+				   		and orderId = #{orderId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessShopGoods -->
+	<select id="findById"  resultMap="BusinessShopGoodsResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_shop_goods where goodsId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessShopGoods -->
+	<select id="findAll" resultMap="BusinessShopGoodsResult">
+		select <include refid="Base_Column_List" /> from business_shop_goods 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessShopGoods -->
+	<select id="findByMap" resultMap="BusinessShopGoodsResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_shop_goods <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessShopGoods -->
+	<select id="findByExample" resultMap="BusinessShopGoodsResult" parameterType="com.community.app.module.vo.BusinessShopGoodsQuery">
+		select <include refid="Base_Column_List" /> from business_shop_goods <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessShopGoods根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessShopGoodsResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_shop_goods  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessShopGoods列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_shop_goods 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessShopGoods保存数据 -->
+	<insert id="save" parameterType="BusinessShopGoods">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="goodsId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_shop_goods(
+		
+		goodsName,
+		goodsNO,
+		goodsPrice,
+		goodsAmount,
+		goodsAgio,
+		orderId
+		) values(
+				#{goodsName},
+		#{goodsNO},
+		#{goodsPrice},
+		#{goodsAmount},
+		#{goodsAgio},
+		#{orderId}
+		)
+	</insert>
+	
+	<!-- BusinessShopGoods修改数据 -->
+	<update id="update" parameterType="BusinessShopGoods">
+		update business_shop_goods 
+		<set>
+			<if test="goodsName != null and goodsName != ''" >
+			goodsName=#{goodsName},
+			</if>
+			<if test="goodsNO != null and goodsNO != ''" >
+			goodsNO=#{goodsNO},
+			</if>
+			<if test="goodsPrice != null and goodsPrice != ''" >
+			goodsPrice=#{goodsPrice},
+			</if>
+			<if test="goodsAmount != null and goodsAmount != ''" >
+			goodsAmount=#{goodsAmount},
+			</if>
+			<if test="goodsAgio != null and goodsAgio != ''" >
+			goodsAgio=#{goodsAgio},
+			</if>
+			<if test="orderId != null and orderId != ''" >
+			orderId=#{orderId}
+			</if>
+		</set> 
+		where 
+		goodsId=#{goodsId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessShopGoods删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_shop_goods where 
+		goodsId=#{goodsId}
+													</delete>
+	
+</mapper>
+	

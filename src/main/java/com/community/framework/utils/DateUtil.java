@@ -3,6 +3,7 @@ package com.community.framework.utils;
 
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -52,6 +53,8 @@ public class DateUtil {
 	}
 	public static void main(String[] args) {
 		//System.out.println(nowTime1());
+		Timestamp tt = getTimeStampFromStr("20150112145401");
+		System.err.println(tt);
 	}
 	
 	public static Calendar setStartDay(Calendar cal)
@@ -282,5 +285,26 @@ public class DateUtil {
             interval = getTime(d2);  
        // }  
         return interval;  
-    }  
+    }
+    
+    /**
+     * 传入时间字符串  长度14 
+     * 	例如：20150112145401
+     * @param dateStr
+     * @return
+     */
+    public static Timestamp getTimeStampFromStr(String dateStr) { //传入的时间格式必须类似于2012-8-21 17:53:20这样的格式  
+     	Date date;
+        Timestamp  ret = null ;
+		try {
+			date = new SimpleDateFormat("yyyyMMddHHmmss").parse(dateStr);
+			ret = new Timestamp(date.getTime());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     	return ret;
+    }
+    
+
 }

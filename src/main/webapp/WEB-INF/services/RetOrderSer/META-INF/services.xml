@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.5.6  Built on : Aug 30, 2011 (10:00:16 CEST) -->
+<serviceGroup>
+    <service name="RetOrderSer">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.community.ws.shop.ser.RetOrderSerMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">com.community.ws.shop.ser.RetOrderSerSkeleton</parameter>
+<!--         <parameter name="ServiceObjectSupplier">org.apache.axis2.extensions.spring.receivers.SpringServletContextObjectSupplier</parameter>   -->
+<!--         <parameter name="SpringBeanName">BusinessShopOrderService</parameter>   -->
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="retOrder" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://ser.shop.ws.community.com">
+            <actionMapping>urn:retOrder</actionMapping>
+            <outputActionMapping>http://ser.shop.ws.community.com/RetOrderSerPortType/retOrderResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>
