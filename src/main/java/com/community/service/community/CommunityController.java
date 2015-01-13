@@ -50,6 +50,7 @@ import com.community.app.module.vo.BusinessNewspaperQuery;
 import com.community.app.module.vo.BusinessProductQuery;
 import com.community.app.module.vo.BusinessProductSupportQuery;
 import com.community.app.module.vo.ManageEstateQuery;
+import com.community.app.module.vo.ManageTagQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.bean.AppUser;
@@ -66,6 +67,7 @@ import com.community.app.module.bean.BusinessProduct;
 import com.community.app.module.bean.BusinessProductComment;
 import com.community.app.module.bean.BusinessProductSupport;
 import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.bean.ManageTag;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
@@ -78,6 +80,7 @@ import com.community.app.module.service.BusinessNewsService;
 import com.community.app.module.service.BusinessNewsSupportService;
 import com.community.app.module.service.BusinessNewspaperService;
 import com.community.app.module.service.ManageEstateService;
+import com.community.app.module.service.ManageTagService;
 import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.propertiesUtil;
@@ -110,6 +113,9 @@ public class CommunityController {
 	private AppStatisticsClickService appStatisticsClickService;
 	@Autowired
 	private BusinessImagesService businessImagesService;
+	@Autowired
+	private ManageTagService manageTagService;
+	
 	
 	
 	
@@ -1311,6 +1317,51 @@ public class CommunityController {
 			json += "\"errorCode\":\"400\",";
 			json += "\"message\":\"获取失败\"";
 			json += "}";
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 根据用户所在地域获取该地域的所有社区，默认地域为北京
+	 * @param areacode
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getTagList")
+	public void getTagList(HttpServletRequest request, HttpServletResponse response,ManageTagQuery query) {
+		String json = "";
+		try{
+			query.setTagType(0);
+			List<ManageTag> list = manageTagService.findByExample(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"搜索成功\",";
+			json += "\"content\":{";
+			json += "\"list\":[";
+			for (ManageTag banageTag : list) {
+				json += "{\"tagId\":\""+banageTag.getTagId()+"\",\"title\":\""+banageTag.getTitle()+"\"},";
+			}
+			if(list.size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			GSLogger.error("进入businessCommunity管理页时发生错误：/business/businessCommunity/enter", e);
 			e.printStackTrace();
 		}
 		response.setHeader("Cache-Control", "no-cache");

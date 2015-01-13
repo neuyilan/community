@@ -72,6 +72,16 @@
               
                   if (
                   "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "orderAmount_type1".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.OrderAmount_type1.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
                   "userId_type1".equals(typeName)){
                    
                             return  com.community.ws.shop.req.xsd.UserId_type1.Factory.parse(reader);

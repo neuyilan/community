@@ -21,7 +21,6 @@ import com.community.ws.common.ApplicationSingleton;
 /**
  * RetOrderSerSkeleton java skeleton for the axisService
  */
-//public class RetOrderSerSkeleton  {
 public class RetOrderSerSkeleton {
 
 	/**
@@ -30,17 +29,16 @@ public class RetOrderSerSkeleton {
 	 * @param retOrder
 	 */
 
+	private BusinessShopOrderService businessShopOrderService;
 
-//	private static ApplicationContext ctx; 
-	
-	private BusinessShopOrderService businessShopOrderService ;
-	
-	private BusinessShopGoodsService businessShopGoodsService ;
-	
-	private BusinessShopFlowService  businessShopFlowService ;
-	
+	private BusinessShopGoodsService businessShopGoodsService;
+
+	private BusinessShopFlowService businessShopFlowService;
+
 	public com.community.ws.shop.ser.RetOrderResponse retOrder(
 			com.community.ws.shop.ser.RetOrder retOrder) {
+		// TODO : fill this with the necessary business logic
+
 		// TODO : fill this with the necessary business logic
 		// throw new java.lang.UnsupportedOperationException("Please implement "
 		// + this.getClass().getName() + "#retOrder");
@@ -53,55 +51,69 @@ public class RetOrderSerSkeleton {
 		com.community.ws.shop.rsp.xsd.RetDesc_type1 rdType = new com.community.ws.shop.rsp.xsd.RetDesc_type1();
 		rcType.setRetCode_type0(code);
 		rdType.setRetDesc_type0(desc);
-		
+
 		retMsg.setRetCode(rcType);
 		retMsg.setRetDesc(rdType);
-		
+
 		roote.setRetMsg(retMsg);
 		retOrderResponse.set_return(roote);
-		/*= (BusinessShopOrderService) this.ctx.getBean("businessShopOrderService");
-		*/
-		
+		/*
+		 * = (BusinessShopOrderService)
+		 * this.ctx.getBean("businessShopOrderService");
+		 */
+
 		try {
 			com.community.ws.shop.req.xsd.Root root = retOrder.getRoot();
-			com.community.ws.shop.req.xsd.Header header =  root.getHeader();
-			com.community.ws.shop.req.xsd.FlowId_type1 flowId = header.getFlowId();
-			com.community.ws.shop.req.xsd.Body  body = root.getBody();
+			com.community.ws.shop.req.xsd.Header header = root.getHeader();
+			com.community.ws.shop.req.xsd.FlowId_type1 flowId = header
+					.getFlowId();
+			com.community.ws.shop.req.xsd.Body body = root.getBody();
 			com.community.ws.shop.req.xsd.Order order = body.getOrder();
-			//ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
-			businessShopOrderService = (BusinessShopOrderService) ApplicationSingleton.getInstance().getBean("BusinessShopOrderService");
-			businessShopGoodsService = (BusinessShopGoodsService) ApplicationSingleton.getInstance().getBean("BusinessShopGoodsService");
-			businessShopFlowService =  (BusinessShopFlowService) ApplicationSingleton.getInstance().getBean("BusinessShopFlowService");
-			BusinessShopFlow flow = businessShopFlowService.findById(Integer.valueOf(flowId.getFlowId_type0()));
-			if (flow == null)
-			{
+			// ClassPathXmlApplicationContext context = new
+			// ClassPathXmlApplicationContext("applicationContext.xml");
+			businessShopOrderService = (BusinessShopOrderService) ApplicationSingleton
+					.getInstance().getBean("BusinessShopOrderService");
+			businessShopGoodsService = (BusinessShopGoodsService) ApplicationSingleton
+					.getInstance().getBean("BusinessShopGoodsService");
+			businessShopFlowService = (BusinessShopFlowService) ApplicationSingleton
+					.getInstance().getBean("BusinessShopFlowService");
+			BusinessShopFlow flow = businessShopFlowService.findById(Integer
+					.valueOf(flowId.getFlowId_type0()));
+			if (flow == null) {
 				rcType.setRetCode_type0("1001");
 				rdType.setRetDesc_type0("未查到用户进入商铺记录!");
 				return retOrderResponse;
 			}
-			BusinessShopOrder businessShopOrder= new BusinessShopOrder();
+			BusinessShopOrder businessShopOrder = new BusinessShopOrder();
 
 			businessShopOrder.setEstateId(0);
 			businessShopOrder.setNickName("test");
 			businessShopOrder.setOrderNo(order.getOrderNo().getOrderNo_type0());
-			businessShopOrder.setOrderTime(DateUtil.getTimeStampFromStr(order.getOrderTime().getOrderTime_type0()));
+			businessShopOrder.setOrderTime(DateUtil.getTimeStampFromStr(order
+					.getOrderTime().getOrderTime_type0()));
 			businessShopOrder.setShopId(1000);
 			businessShopOrder.setUserId(1000);
 			businessShopOrder.setOrderAmount(1000.01);
 			businessShopOrderService.save(businessShopOrder);
-			
+
 			System.out.println(businessShopOrderService == null);
-			
-			com.community.ws.shop.req.xsd.GoodsList goodList = order.getGoodsList();
-			com.community.ws.shop.req.xsd.Goods[] goodsAry = goodList.getGoods();
-			for(com.community.ws.shop.req.xsd.Goods goods : goodsAry)
-			{
-				BusinessShopGoods businessShopGoods= new BusinessShopGoods();
-				businessShopGoods.setGoodsNO(goods.getGoodsNO().getGoodsNO_type0());
-				businessShopGoods.setGoodsName(goods.getGoodsName().getGoodsName_type0());
-				businessShopGoods.setGoodsPrice(Double.valueOf(goods.getGoodsPrice().getGoodsPrice_type0()));
-				businessShopGoods.setGoodsAmount(Integer.valueOf(goods.getGoodsAmount().getGoodsAmount_type0()));
-				businessShopGoods.setGoodsAgio(Double.valueOf(goods.getGoodsAgio().getGoodsAgio_type0()));
+
+			com.community.ws.shop.req.xsd.GoodsList goodList = order
+					.getGoodsList();
+			com.community.ws.shop.req.xsd.Goods[] goodsAry = goodList
+					.getGoods();
+			for (com.community.ws.shop.req.xsd.Goods goods : goodsAry) {
+				BusinessShopGoods businessShopGoods = new BusinessShopGoods();
+				businessShopGoods.setGoodsNO(goods.getGoodsNO()
+						.getGoodsNO_type0());
+				businessShopGoods.setGoodsName(goods.getGoodsName()
+						.getGoodsName_type0());
+				businessShopGoods.setGoodsPrice(Double.valueOf(goods
+						.getGoodsPrice().getGoodsPrice_type0()));
+				businessShopGoods.setGoodsAmount(Integer.valueOf(goods
+						.getGoodsAmount().getGoodsAmount_type0()));
+				businessShopGoods.setGoodsAgio(Double.valueOf(goods
+						.getGoodsAgio().getGoodsAgio_type0()));
 				businessShopGoods.setOrderId(11);
 				businessShopGoodsService.save(businessShopGoods);
 			}
@@ -121,44 +133,10 @@ public class RetOrderSerSkeleton {
 			rdType.setRetDesc_type0("抱歉！未知错误。请联系管理员");
 			e.printStackTrace();
 		}
-		
-		// orderNo,   userId,   nickName,   estateId,   orderAmount,   shopId,   orderTime  
 
+		// orderNo, userId, nickName, estateId, orderAmount, shopId, orderTime
 
 		return retOrderResponse;
 	}
-
-//	public void setApplicationContext(ApplicationContext ctx)
-//			throws BeansException {
-//		// TODO Auto-generated method stub
-//		this.ctx = ctx;
-//	}
-
-	
-//	public Object getServiceObject(AxisService axisService) throws AxisFault {
-//		// TODO Auto-generated method stub
-//		 Parameter springBeanName = axisService.getParameter("SpringBeanName");
-//	        String beanName = ((String) springBeanName.getValue()).trim();
-//	        if (beanName != null) {
-//	            if (ctx == null)
-//	                throw new AxisFault("applicationContext is NULL! ");
-//	            if (ctx.getBean(beanName) == null)
-//	                throw new AxisFault("Axis2 Can't find Spring Bean: " + beanName);
-//	            return ctx.getBean(beanName);
-//	        } else {
-//	            throw new AxisFault(Messages.getMessage("paramIsNotSpecified",
-//	                    "SERVICE_SPRING_BEANNAME"));
-//	        }
-////		return null;
-//	}
-
-//	public BusinessShopOrderService getBusinessShopOrderService() {
-//		return businessShopOrderService;
-//	}
-//
-//	public void setBusinessShopOrderService(
-//			BusinessShopOrderService businessShopOrderService) {
-//		this.businessShopOrderService = businessShopOrderService;
-//	}
 
 }

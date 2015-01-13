@@ -29,6 +29,7 @@ import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsScope;
 import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.BusinessBreakAudioService;
@@ -229,8 +230,8 @@ public class BusinessBreakController {
 		try{
 			BusinessBreak businessBreak = businessBreakService.checkBreakDetail(Integer.parseInt(id));
 			List<BusinessBreakPic> businessBreakPicList =  businessBreakPicService.findPicListByBreakId(Integer.parseInt(id));
-			BusinessCommunity businessCommunity = businessCommunityService.findById(getUser().getOrgId());
-			
+			// BusinessCommunity businessCommunity = businessCommunityService.findById(getUser().getOrgId());
+			BusinessCommunity businessCommunity = businessCommunityService.findById(Integer.parseInt(businessBreak.getComId()));
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");   
 			StringBuilder sb = new StringBuilder();
@@ -240,7 +241,7 @@ public class BusinessBreakController {
 			businessNews.setTitle("");
 			businessNews.setBrief(businessBreak.getBreakContent());
 			businessNews.setContent(businessBreak.getBreakContent() + "<br>" + sb.toString());
-			businessNews.setPublishScope(businessCommunity.getComId());
+			businessNews.setPublishScope(null);
 		    businessNews.setComName(businessCommunity.getComName());  //社区名称
 			businessNews.setCreateTime(businessBreak.getCreateTime());
 			businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));

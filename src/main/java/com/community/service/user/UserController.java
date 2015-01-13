@@ -39,9 +39,11 @@ import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserCellphone;
 import com.community.app.module.bean.AppUserConfig;
 import com.community.app.module.bean.AppUserNews;
+import com.community.app.module.bean.AppVerify;
 import com.community.app.module.bean.BusinessActivity;
 import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessChinmedichenacare;
+import com.community.app.module.bean.BusinessExp;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessHealthydiet;
 import com.community.app.module.bean.BusinessHelp;
@@ -59,9 +61,11 @@ import com.community.app.module.service.AppUserCellphoneService;
 import com.community.app.module.service.AppUserConfigService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.AppVerifyService;
 import com.community.app.module.service.BusinessActivityService;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessChinmedichenacareService;
+import com.community.app.module.service.BusinessExpService;
 import com.community.app.module.service.BusinessFocusService;
 import com.community.app.module.service.BusinessHealthydietService;
 import com.community.app.module.service.BusinessHelpService;
@@ -69,6 +73,7 @@ import com.community.app.module.service.BusinessNewsService;
 import com.community.app.module.service.BusinessProductService;
 import com.community.app.module.service.BusinessTelGroupService;
 import com.community.app.module.service.BusinessTelService;
+import com.community.app.module.service.ManageSendMsgService;
 import com.community.app.module.vo.AppEstateUserQuery;
 import com.community.app.module.vo.AppHomepageQuery;
 import com.community.app.module.vo.AppLatestNewsQuery;
@@ -78,13 +83,17 @@ import com.community.app.module.vo.AppUserCellphoneQuery;
 import com.community.app.module.vo.AppUserConfigQuery;
 import com.community.app.module.vo.AppUserNewsQuery;
 import com.community.app.module.vo.AppUserQuery;
+import com.community.app.module.vo.AppVerifyQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessFocusQuery;
 import com.community.app.module.vo.BusinessHelpQuery;
+import com.community.app.module.vo.BusinessNewsQuery;
 import com.community.app.module.vo.BusinessProductQuery;
 import com.community.app.module.vo.BusinessTelGroupQuery;
 import com.community.app.module.vo.BusinessTelQuery;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.StringUtil;
+import com.community.framework.utils.messagesUtil;
 import com.community.framework.utils.propertiesUtil;
 import com.qq.connect.api.OpenID;
 import com.qq.connect.api.qzone.UserInfo;
@@ -151,6 +160,15 @@ public class UserController {
 	
 	@Autowired
 	private BusinessHelpService businessHelpService;
+	
+	@Autowired
+	private BusinessExpService businessExpService;
+	
+	@Autowired
+	private AppVerifyService appVerifyService;
+	
+	@Autowired
+	private ManageSendMsgService manageSendMsgService;
 	
 	
 	
@@ -329,6 +347,220 @@ public class UserController {
 				json +="\"estateLatitude\":\""+MemberVO.getEstateLatitude()+"\"";
 				json += "}";
 				json += "}";
+			} catch (Exception e) {
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"注册失败\"";
+				json += "}";
+				GSLogger.error("保存appUser信息时发生错误：/app/appUser/save", e);
+				e.printStackTrace();
+			}
+		} else {
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"注册手机号重复\"";
+			json += "}";
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户使用电话和密码快速注册
+	 * 
+	 * @param cellphone
+	 *            ,password
+	 * @return json
+	 */
+	@RequestMapping(value = "fastRegist")
+	public void fastRegist(HttpServletRequest request,
+			HttpServletResponse response, AppUserQuery query) {
+		String openid = (String) request.getSession().getAttribute("openid");
+		String QQopenid = (String) request.getSession().getAttribute("QQopenid");
+		String nickname = (String) request.getSession().getAttribute("nickname");
+		AppUser appUser = new AppUser();
+		String json = "";
+		boolean whetherRepeat = false;
+		try {
+			whetherRepeat = appUserService.whetherRepeat(query.getCellphone());
+		} catch (Exception e) {
+			GSLogger.error("验证tel是否重复", e);
+			e.printStackTrace();
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"注册失败\"";
+			json += "}";
+		}
+		if (whetherRepeat) {
+			try {
+				String str=StringUtil.createRandom(true, 6);
+				String uuid= UUID.randomUUID().toString();
+				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+				String dateString = sf.format(new Date());
+				String filedir = "app/image/" +dateString+"/"+uuid+".png";
+				appUser.setPath(request.getSession().getServletContext().getRealPath("/").replace("\\", "/"));
+				appUser.setFiledir(filedir);
+				appUser.setPassword(str);
+				appUser.setTel(query.getCellphone());
+				appUser.setEstateId(query.getEstateId());
+				appUser.setType(0);
+				appUser.setState(1);
+				Timestamp ts = new Timestamp(new Date().getTime());
+				appUser.setPortrait("/images/morentouxiang.png");
+				appUser.setCreateTime(ts);
+				appUser.setEditTime(ts);
+				appUser.setLastLoginTime(ts);
+				if (openid!=null) {
+					appUser.setWenxinId(openid);
+				} else {
+					appUser.setWenxinId("");
+				}
+				if (QQopenid!=null) {
+					appUser.setQqId(QQopenid);
+				} else {
+					appUser.setQqId("");
+				}
+				if (nickname!=null) {
+					appUser.setNickname(nickname);
+				} else {
+					appUser.setNickname("");
+				}
+				appUserService.saveRegist(appUser);
+				// 保存成功
+				Properties p = propertiesUtil.getProperties("config.properties");
+				String ip = p.getProperty("imageIp");   
+				MemberVO MemberVO = appUserService.getAppUserLoginInfo(appUser);
+				json += "{";
+				json += "\"errorCode\":\"200\",";
+				json += "\"message\":\"登录成功\",";
+				json += "\"content\":{";
+				json += "\"sessionid\":\"42823AFB33\",";
+				json += "\"userType\":\""+MemberVO.getType()+"\",";
+				json += "\"isWorker\":\""+MemberVO.getIsWorker()+"\",";
+				json += "\"userId\":\""+MemberVO.getUserId()+"\",";
+				json += "\"portrait\":\""+ip+MemberVO.getPortrait()+"\",";
+				json += "\"realname\":{\"realname\":\""+MemberVO.getRealname()+"\",\"state\":\"1\"},";
+				json += "\"nickname\":\""+MemberVO.getNickname()+"\",";
+				json += "\"signatrue\":\""+MemberVO.getSignature()+"\",";
+				json += "\"tel\":\""+query.getCellphone()+"\",";
+				json += "\"sex\":\""+MemberVO.getSex()+"\",";
+				json += "\"birthday\":\"";
+				if(MemberVO.getBirthday()!=null){
+					json += new SimpleDateFormat("yyyy-MM-dd").format(MemberVO.getBirthday().getTime());
+				}
+				json += "\",";
+				json += "\"twoCode\":\""+ip+MemberVO.getDimensionCode()+"\",";
+				json += "\"informationState\":true,";
+				json += "\"estateId\":\""+MemberVO.getEstateId()+"\",";
+				json += "\"estateName\":\""+MemberVO.getEstateName()+"\",";
+				json += "\"estateAttr\":\""+ip+MemberVO.getEstateMap()+"\",";
+				if(MemberVO.getStaId()==null || MemberVO.getStaId().equals("")){
+					json += "\"stationId\":\"0\",";
+				}else {
+					json += "\"stationId\":\""+MemberVO.getStaId()+"\",";
+				}
+				if(MemberVO.getStaName()==null){
+					json += "\"staName\":\"\",";
+				}else {
+					json += "\"staName\":\""+MemberVO.getStaName()+"\",";
+				}
+				json += "\"comId\":\""+MemberVO.getComId()+"\",";
+				json += "\"comName\":\""+MemberVO.getComName()+"\",";
+				if(MemberVO.getProId()==null){
+					json += "\"proId\":\"0\",";
+				}else {
+					json += "\"proId\":\""+MemberVO.getProId()+"\",";
+				}
+				if(MemberVO.getProName()==null){
+					json += "\"proName\":\"\",";
+				}else {
+					json += "\"proName\":\""+MemberVO.getProName()+"\",";
+				}
+				if(MemberVO.getUnitId()!=null && !MemberVO.getUnitId().equals("0")){
+					if (MemberVO.getUnitHomeAttr()!=null) {
+						json += "\"homeAttr\":\""+ip+MemberVO.getUnitHomeAttr()+"\",";
+					}else {
+						json += "\"homeAttr\":\"\",";
+					}
+				}else {
+					if (MemberVO.getHomeAttr()!=null) {
+						json += "\"homeAttr\":\""+ip+MemberVO.getHomeAttr()+"\",";
+					}else {
+						json += "\"homeAttr\":\"\",";
+					}
+				}
+				
+				json += "\"familyId\":\""+MemberVO.getFamilyId()+"\",";
+				json += "\"familyNumber\":\""+MemberVO.getMount()+"\",";
+				json += "\"buildingId\":\""+MemberVO.getBuildingId()+"\",";
+				json += "\"buildingName\":\""+MemberVO.getBuildingName()+"\",";
+				json += "\"unitId\":\""+MemberVO.getUnitId()+"\",";
+				json += "\"unitName\":\""+MemberVO.getUnitName()+"\",";
+				json += "\"houseNo\":\""+MemberVO.getHouseNo()+"\",";
+				if(MemberVO.getHelpSwitch()==0){
+					json += "\"SeekHelpMessageReply\":true,";
+				}else{
+					json += "\"SeekHelpMessageReply\":false,";
+				}
+				if(MemberVO.getMarketSwitch()==0){
+					json += "\"SecondaryMarketMessageReply\":true,";
+				}else{
+					json += "\"SecondaryMarketMessageReply\":false,";
+				}
+				if(MemberVO.getServiceSwitch()==0){
+					json += "\"serviceSwitch\":true,";
+				}else{
+					json += "\"serviceSwitch\":false,";
+				}
+				if(MemberVO.getExpressSwitch()==0){
+					json += "\"expressSwitch\":true,";
+				}else{
+					json += "\"expressSwitch\":false,";
+				}
+				if(MemberVO.getWeatherSwitch()==0){
+					json += "\"weatherSwitch\":true,";
+				}else{
+					json += "\"weatherSwitch\":false,";
+				}
+				if(MemberVO.getLimitSwitch()==0){
+					json += "\"limitSwitch\":true,";
+				}else{
+					json += "\"limitSwitch\":false,";
+				}
+				if(MemberVO.getBrokeSwitch()==0){
+					json += "\"brokeSwitch\":true,";
+				}else{
+					json += "\"brokeSwitch\":false,";
+				}
+				json +="\"isDoor\":\""+MemberVO.getIsDoor()+"\",";
+				json +="\"estateLongitude\":\""+MemberVO.getEstateLongitude()+"\",";
+				json +="\"estateLatitude\":\""+MemberVO.getEstateLatitude()+"\"";
+				json += "}";
+				json += "}";
+				
+				//短信发送随机密码
+				AppVerify appVerify = new AppVerify();
+				appVerify.setCellphone(query.getCellphone());
+			    appVerify.setVerificationCode(str);
+			    appVerify.setCreateTime(query.getCreateTime());
+		        appVerify.setCreateTime(ts);
+		        AppVerifyQuery appVerifyQuery = new AppVerifyQuery();
+		        appVerifyQuery.setCellphone(query.getCellphone());
+		        appVerifyService.delete(appVerifyQuery);
+				appVerifyService.save(appVerify);
+				// 发送短信
+				str="您已通过手机号"+query.getCellphone()+"快速注册成为“OK家”居民，初始密码为："+str+"立即下载OK家APP，享受小区生活服务：http://www.bqsqcm.com/community/download/index.html?id=18";
+				String returnMessage = messagesUtil.returnMessageRrid(query.getCellphone(), str);
+				manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
 			} catch (Exception e) {
 				json = "";
 				json += "{";
@@ -3067,18 +3299,46 @@ public class UserController {
 		String ip = p.getProperty("imageIp");   
 		String json = "";
 		try{
+			//获取快递信息
+			int expState = 1;
+			int expId = 0;
+			AppLatestNewsQuery appLatestNewsQuery = new AppLatestNewsQuery();
+			appLatestNewsQuery.setUserId(query.getUserId());
+			appLatestNewsQuery.setTo(0);
+			appLatestNewsQuery.setTypeId(26);
+			List<AppLatestNews> latestlist = appLatestNewsService.findByExample(appLatestNewsQuery);
+			for (AppLatestNews appLatestNews : latestlist) {
+				BusinessExp businessExp = businessExpService.findById_app(appLatestNews.getSourceId());
+				if (!(businessExp==null)) {
+					if(appLatestNews.getSourceId().equals(businessExp.getExpId())){
+						expState = 2;
+						expId = businessExp.getExpId();
+						break;
+					}
+				}
+				
+			}
+			
+			//获取焦点图
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("publishTime");
-			//获取焦点图
 			List<BusinessFocus> list = businessFocusService.findById_app(query.getEstateId());
 			query.setTop(1);
 			//获取最新
-			BaseBean topBaseBean = appHomepageService.findAllPage(query);
+			BusinessNewsQuery businessNewsQuery = new BusinessNewsQuery();
+			businessNewsQuery.setRows(15);
+			businessNewsQuery.setOrder("desc");
+			businessNewsQuery.setSort("publishTime");
+			businessNewsQuery.setPublishScope(query.getComId());
+			businessNewsQuery.setState(0);
+			businessNewsQuery.setIsHot(1);
+			BaseBean topBaseBean = businessNewsService.findAllPage_app(businessNewsQuery);
+
 			
 			BusinessProductQuery BusinessProductQuery = new BusinessProductQuery();
 			BusinessProductQuery.setRows(15);
-			BusinessProductQuery.setEstateId(query.getEstateId());
+			BusinessProductQuery.setComId(query.getComId());
 			BusinessProductQuery.setType(null);
 			BusinessProductQuery.setDealState(0);
 			BusinessProductQuery.setOrder("desc");
@@ -3097,7 +3357,8 @@ public class UserController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
-			json += "\"expState\":\"2\",";
+			json += "\"expState\":\""+expState+"\",";
+			json += "\"expId\":\""+expId+"\",";
 			json += "\"adList\":[";
 			for (int i=0;i<list.size();i++) {
 				if (i==4) {
@@ -3143,34 +3404,26 @@ public class UserController {
 			}
 			json += "],";
 			json += "\"news\":";
-			for(int i=0;i<1;i++) {
-				AppHomepage appHomepage = (AppHomepage) topBaseBean.getList().get(i);
-//				if(appHomepage.getId().equals(Integer.parseInt(pTop.getProperty("ID")))){
-//					continue;
-//				}
-				if(appHomepage.getType()==0){
-					json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
-				}else if (appHomepage.getType()==1){
-					json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-				}else if (appHomepage.getType()==4){
-					json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-				}else if (appHomepage.getType()==5){
-					json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
-				}else if (appHomepage.getType()==6){
-					json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-				}else if (appHomepage.getType()==7){
-					json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
-				}else{
-					json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
-							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+			if (topBaseBean.getList().size()==0) {
+				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
+				json +="\"pic\":\"\",";
+				json +="\"comments\":\"\",";
+				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
+			}else {
+				for(int i=0;i<1;i++) {
+					BusinessNews businessNews = (BusinessNews) topBaseBean.getList().get(i);
+					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
+					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
+					json +="\"pic\":\""+ip+businessNews.getSubjectPic()+"\",";
+					json +="\"comments\":\""+businessNews.getComments()+"\",";
+					if(businessNews.getNewsType()==1){
+						json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getNickname()+"\",\"avatar\":\""+ip+businessNews.getPortrait()+"\",\"type\":\"1\"},";
+					}else {
+						json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getBuNickname()+"\",\"avatar\":\""+ip+businessNews.getAvatar()+"\",\"type\":\"0\"},";
+					}
 				}
 			}
+			
 			
 			json += "\"productList\":[";
 			for(int i=0;i<productBaseBean.getList().size();i++) {

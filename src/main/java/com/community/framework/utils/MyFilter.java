@@ -26,11 +26,11 @@ public class MyFilter implements Filter {
 		arg0.setCharacterEncoding("utf-8");
 		HttpServletRequest request = (HttpServletRequest)arg0 ;
 
-		   Enumeration names = request.getHeaderNames();  
+		   Enumeration<?> names = request.getHeaderNames();  
 	        StringBuilder sb = new StringBuilder("headerInfo---");  
 	        while(names.hasMoreElements()) {  
 	            String name = names.nextElement().toString();  
-	            Enumeration headers = request.getHeaders(name);  
+	            Enumeration<?> headers = request.getHeaders(name);  
 	            sb.append(name).append(":");  
 	            while(headers.hasMoreElements()) {  
 	                sb.append(headers.nextElement()).append(" ");  

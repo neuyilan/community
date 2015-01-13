@@ -79,6 +79,19 @@ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"  targetNamespace="http://ser.
 		            </xs:restriction> 
 		          </xs:simpleType>
 		          </xs:element>
+		          
+		         <xs:element minOccurs="1" maxOccurs="1"  name="orderAmount" >
+		          <xs:annotation> 
+		            <xs:documentation>订单金额</xs:documentation> 
+		          </xs:annotation>  
+		          <xs:simpleType> 
+		            <xs:restriction base="xs:string"> 
+		              <xs:maxLength value="40"/>  
+		              <xs:minLength value="0"/> 
+		            </xs:restriction> 
+		          </xs:simpleType>
+		          </xs:element>
+		          
                     <xs:element minOccurs="1" maxOccurs="1"  name="orderTime"   >
 		          <xs:annotation> 
 		            <xs:documentation>下单时间</xs:documentation> 

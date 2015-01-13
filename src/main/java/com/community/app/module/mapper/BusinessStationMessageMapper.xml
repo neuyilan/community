@@ -6,6 +6,7 @@
 	<resultMap id="BusinessStationMessageResult" type="BusinessStationMessage">
 			<result column="commentId" property="commentId" />
 			<result column="stationId" property="stationId" />
+			<result column="estateId" property="estateId" />
 			<result column="commentorId" property="commentorId" />
 			<result column="commentorName" property="commentorName" />
 			<result column="content" property="content" />
@@ -20,6 +21,7 @@
 	<sql id="Base_Column_List" >
 			commentId,
 			stationId,
+			estateId,
 			commentorId,
 			commentorName,
 			content,
@@ -39,6 +41,9 @@
 					</if>
 					<if test="stationId != null and stationId != ''" >
 				   		and stationId = #{stationId}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and estateId = #{estateId}
 					</if>
 					<if test="commentorId != null and commentorId != ''" >
 				   		and commentorId = #{commentorId}
@@ -114,6 +119,7 @@
 		insert into business_station_message(
 		
 		stationId,
+		estateId,
 		commentorId,
 		commentorName,
 		content,
@@ -124,6 +130,7 @@
 		replyState
 		) values(
 		#{stationId},
+		#{estateId},
 		#{commentorId},
 		#{commentorName},
 		#{content},
@@ -141,6 +148,9 @@
 		<set>
 			<if test="stationId != null and stationId != ''" >
 			stationId=#{stationId},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
 			</if>
 			<if test="commentorId != null and commentorId != ''" >
 			commentorId=#{commentorId},

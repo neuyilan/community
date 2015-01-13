@@ -9,6 +9,7 @@ public class BusinessStationMessageQuery extends BaseBean {
 
 	private java.lang.Integer commentId;
 	private java.lang.Integer stationId;
+	private java.lang.Integer estateId;
 	private java.lang.Integer commentorId;
 	private java.lang.String commentorName;
 	private java.lang.String content;
@@ -17,6 +18,12 @@ public class BusinessStationMessageQuery extends BaseBean {
 	private java.lang.String replyName;
 	private java.lang.Integer commentorState;
 	private java.lang.Integer replyState;
+	private java.lang.String timeScope;
+	private java.lang.String startTime;
+	private java.lang.String endTime;
+	private java.lang.String keyWord;
+	private Integer curUserId;		//当前用户ID
+	private String curOrgType;		//当前部门类型
 
 	public BusinessStationMessageQuery(BusinessStationMessage businessStationMessage) {
 		this.commentId = businessStationMessage.getCommentId();
@@ -29,10 +36,67 @@ public class BusinessStationMessageQuery extends BaseBean {
 		this.replyName = businessStationMessage.getReplyName();
 		this.commentorState = businessStationMessage.getCommentorState();
 		this.replyState = businessStationMessage.getReplyState();
+		this.estateId = businessStationMessage.getEstateId();
 	}
 
 	public BusinessStationMessageQuery() {
 
+	}
+
+	public java.lang.Integer getEstateId() {
+		return estateId;
+	}
+
+	public void setEstateId(java.lang.Integer estateId) {
+		this.estateId = estateId;
+	}
+
+	public java.lang.String getTimeScope() {
+		return timeScope;
+	}
+
+	public void setTimeScope(java.lang.String timeScope) {
+		this.timeScope = timeScope;
+	}
+
+	public java.lang.String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(java.lang.String startTime) {
+		this.startTime = startTime;
+	}
+
+	public java.lang.String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(java.lang.String endTime) {
+		this.endTime = endTime;
+	}
+
+	public java.lang.String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(java.lang.String keyWord) {
+		this.keyWord = keyWord;
+	}
+
+	public Integer getCurUserId() {
+		return curUserId;
+	}
+
+	public void setCurUserId(Integer curUserId) {
+		this.curUserId = curUserId;
+	}
+
+	public String getCurOrgType() {
+		return curOrgType;
+	}
+
+	public void setCurOrgType(String curOrgType) {
+		this.curOrgType = curOrgType;
 	}
 
 	public java.lang.Integer getCommentId() {

@@ -113,7 +113,7 @@
 	
 	<!-- 按VO对象条件查询所有BusinessExpFav -->
 	<select id="findByExample" resultType="BusinessExpFav" parameterType="com.community.app.module.vo.BusinessExpFavQuery">
-		select <include refid="Base_Column_List_app" />,s.addrName,s.addrUrl,s.staTel from business_station s left join business_exp_fav f on f.stationId=s.stationId <include refid="Base_Where_Clause_app" /> order by createTime desc limit 0,1
+		select <include refid="Base_Column_List_app" />,s.addrName,s.addrUrl,s.staTel,s.staLongitude,s.staLatitude from business_station s left join business_exp_fav f on f.stationId=s.stationId <include refid="Base_Where_Clause_app" /> order by createTime desc limit 0,1
 	</select>
 	
 	<!-- BusinessExpFav根据搜索条件，搜索分页数据 -->

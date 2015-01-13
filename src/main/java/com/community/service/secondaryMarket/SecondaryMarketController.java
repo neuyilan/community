@@ -260,6 +260,7 @@ public class SecondaryMarketController {
 	public void addProductPHP(HttpServletRequest request, HttpServletResponse response,BusinessProductQuery query) {
 		String json = "";
 		try{
+			query.setPicPaths(request.getParameterValues("image"));
 			businessProductService.addProduct(query);
 			json += "{";
 			json += "\"errorCode\":\"200\",";

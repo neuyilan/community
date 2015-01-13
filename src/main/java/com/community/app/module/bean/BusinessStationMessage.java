@@ -13,6 +13,7 @@ public class BusinessStationMessage implements java.io.Serializable {
 
 	private java.lang.Integer commentId;
 	private java.lang.Integer stationId;
+	private java.lang.Integer estateId;
 	private java.lang.Integer commentorId;
 	private java.lang.String commentorName;
 	private java.lang.String content;
@@ -23,6 +24,14 @@ public class BusinessStationMessage implements java.io.Serializable {
 	private java.lang.Integer replyState;
 
 	public BusinessStationMessage() {
+	}
+
+	public java.lang.Integer getEstateId() {
+		return estateId;
+	}
+
+	public void setEstateId(java.lang.Integer estateId) {
+		this.estateId = estateId;
 	}
 
 	public BusinessStationMessage(java.lang.Integer commentId) {

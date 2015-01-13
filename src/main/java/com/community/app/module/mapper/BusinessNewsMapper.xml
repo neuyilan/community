@@ -287,9 +287,6 @@
 					<if test="supports != null and supports != ''" >
 				   		and n.supports = #{supports}
 					</if>
-					<if test="publishScope != null and publishScope != ''" >
-				   		and n.publishScope = #{publishScope}
-					</if>
 					<if test="setTime != null and setTime != ''" >
 				   		and n.setTime = #{setTime}
 					</if>
@@ -313,6 +310,9 @@
 					</if>
 					<if test="isRecommend != null and isRecommend != ''" >
 				   		and n.isRecommend = #{isRecommend}
+					</if>
+					<if test="tag != null and tag != ''" >
+				   		and n.tag like '%#{tag}%'
 					</if>
 			</trim>
 		</where>
@@ -380,7 +380,7 @@
 	
 	<!-- BusinessNews根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage_app" resultType="BusinessNews" parameterType="Object">
-		select <include refid="Base_Column_List1" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId 
+		select <include refid="Base_Column_List1" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId  left join business_news_scope s on s.newsId = n.newsId and s.comId=#{publishScope}
 		<include refid="Base_Where_Clause1" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
@@ -392,7 +392,7 @@
 	
 	<!-- BusinessNews列表总数-->
 	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_news n
+		select count(1) from  business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId  left join business_news_scope s on s.newsId = n.newsId and s.comId=#{publishScope}
 		<include refid="Base_Where_Clause1" />
 	</select>
 	

@@ -145,14 +145,16 @@ public class BusinessStationMessageServiceImpl implements BusinessStationMessage
 		int count=0;
 		BaseBean baseBean = new BaseBean();
 		try {
-			list=businessStationMessageDao.findAllPage(query);
 			count=businessStationMessageDao.selectCount(query);
+			query.setCount(count);
+			list=businessStationMessageDao.findAllPage(query);
 		} catch (DaoException e) {
 			logger.debug("BusinessStationMessageServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
 			e.printStackTrace();
 		}
 		baseBean.setList(list);
 		baseBean.setCount(count);
+		baseBean.setPage(query.getPage());
 		return baseBean;
 	}
 	

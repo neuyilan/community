@@ -1,6 +1,7 @@
 package com.community.app.module.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.BusinessStationMessage;
+import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.BusinessStationMessageService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessStationMessageQuery;
+import com.community.framework.utils.CommonUtils;
 
 @Controller
 @RequestMapping("/business/businessStationMessage")
@@ -29,14 +33,27 @@ public class BusinessStationMessageController {
 	 * 进入管理页
 	 * @return
 	 */
-	@RequestMapping(value="enter")
-	public ModelAndView enter() {		
+	@RequestMapping(value="list")
+	public ModelAndView list(BusinessStationMessageQuery query) {		
+		BaseBean baseBean = new BaseBean();
 		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+				query.setCurUserId(shiroUser.getUserId());
+			}
+			query.setRows(11);
+			query.setOrder("desc");
+			query.setSort("commentTime");
+			baseBean = businessStationMessageService.findAllPage(query);
+			
 		}catch(Exception e){
-			GSLogger.error("进入businessStationMessage管理页时发生错误：/business/businessStationMessage/enter", e);
+			GSLogger.error("进入businessStationMessage管理页时发生错误：/module/stationMessage/list", e);
 			e.printStackTrace();
 		}
-		ModelAndView mav = new ModelAndView("/business/businessStationMessage/enter");
+		ModelAndView mav = new ModelAndView("/module/stationMessage/list");
+		mav.addObject("baseBean", baseBean);
+		mav.addObject("pager", baseBean.getPager());
+		mav.addObject("curEstateId", CommonUtils.getUser().getCurEstateId());
 		return mav;
 	}
 	
@@ -44,19 +61,31 @@ public class BusinessStationMessageController {
 	 * 列示或者查询所有数据
 	 * @return
 	 */
-	@RequestMapping(value="list")
-	public void list(BusinessStationMessageQuery query, HttpServletResponse response) {
+	@RequestMapping(value="getPageList")
+	public void getPageList(BusinessStationMessageQuery query, HttpServletResponse response) {
 		String json = "";
 		StringBuilder result = new StringBuilder();
 		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+				query.setCurUserId(shiroUser.getUserId());
+			}
+			query.setRows(11);
+			query.setOrder("desc");
+			query.setSort("commentTime");
 			BaseBean baseBean = businessStationMessageService.findAllPage(query);
-			result.append("{\"total\":").append(baseBean.getCount()).append(",")
+			
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"curEstateId\":").append(CommonUtils.getUser().getCurEstateId()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
 			.append("\"rows\":[");
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessStationMessage businessStationMessage = (BusinessStationMessage) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"commentId\":\"").append(businessStationMessage.getCommentId()).append("\"").append(",")
 			    .append("\"stationId\":\"").append(businessStationMessage.getStationId()).append("\"").append(",")
+			    .append("\"estateId\":\"").append(businessStationMessage.getEstateId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessStationMessage.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessStationMessage.getCommentorName()).append("\"").append(",")
 			    .append("\"content\":\"").append(businessStationMessage.getContent()).append("\"").append(",")
@@ -78,11 +107,10 @@ public class BusinessStationMessageController {
 			try {
 				response.getWriter().write(json);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}catch(Exception e){
-			GSLogger.error("显示businessStationMessage列表时发生错误：/business/businessStationMessage/list", e);
+			GSLogger.error("显示businessStationMessage列表时发生错误：/module/stationMessage/list", e);
 			e.printStackTrace();
 		}
 	}
@@ -95,10 +123,10 @@ public class BusinessStationMessageController {
 	public ModelAndView add(BusinessStationMessageQuery query) {		
 		try{
 		}catch(Exception e){
-			GSLogger.error("进入businessStationMessage新增页时发生错误：/business/businessStationMessage/add", e);
+			GSLogger.error("进入businessStationMessage新增页时发生错误：/module/stationMessage/add", e);
 			e.printStackTrace();
 		}
-		ModelAndView mav = new ModelAndView("/business/businessStationMessage/add");
+		ModelAndView mav = new ModelAndView("/module/stationMessage/add");
 		return mav;
 	}
 	
@@ -113,15 +141,17 @@ public class BusinessStationMessageController {
 		BusinessStationMessage businessStationMessage = new BusinessStationMessage();
 		String json = "";
 		try{
-		    businessStationMessage.setStationId(query.getStationId());
-		    businessStationMessage.setCommentorId(query.getCommentorId());
-		    businessStationMessage.setCommentorName(query.getCommentorName());
+			ShiroUser shiroUser = CommonUtils.getUser();
+		    businessStationMessage.setStationId(0);
+		    businessStationMessage.setEstateId(shiroUser.getCurEstateId());
+		    businessStationMessage.setCommentorId(shiroUser.getUserId());
+		    businessStationMessage.setCommentorName(shiroUser.getNickName());
 		    businessStationMessage.setContent(query.getContent());
-		    businessStationMessage.setCommentTime(query.getCommentTime());
-		    businessStationMessage.setReplyId(query.getReplyId());
-		    businessStationMessage.setReplyName(query.getReplyName());
-		    businessStationMessage.setCommentorState(query.getCommentorState());
-		    businessStationMessage.setReplyState(query.getReplyState());
+		    businessStationMessage.setCommentTime(new Timestamp(System.currentTimeMillis()));
+		    businessStationMessage.setReplyId(0);
+		    businessStationMessage.setReplyName("");
+		    businessStationMessage.setCommentorState(1);
+		    businessStationMessage.setReplyState(1);
 			businessStationMessageService.save(businessStationMessage);
 			//保存成功
 			json = "{\"success\":\"true\",\"message\":\"保存成功\"}";

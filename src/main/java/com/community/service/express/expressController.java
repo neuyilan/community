@@ -664,15 +664,27 @@ public class expressController {
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");   
 			List<BusinessExpFav> list = businessExpFavService.findByExample(query);
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\",";
-			json += "\"content\":{";
-			json += "\"expressAd\":\""+list.get(0).getInfo()+"\",";
-			json += "\"attr\":\""+ip+list.get(0).getAddrUrl()+"\",";
-			json += "\"tel\":\""+list.get(0).getStaTel()+"\"";
-			json += "}";
-			json += "}";
+			if (list.size()==0) {
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"获取失败\"";
+				json += "}";
+			}else{
+				json += "{";
+				json += "\"errorCode\":\"200\",";
+				json += "\"message\":\"获取成功\",";
+				json += "\"content\":{";
+				json += "\"expressAd\":\""+list.get(0).getInfo()+"\",";
+				json += "\"attr\":\""+ip+list.get(0).getAddrUrl()+"\",";
+				json += "\"tel\":\""+list.get(0).getStaTel()+"\"";
+				json += "\"staLongitude\":\""+list.get(0).getStaLongitude()+"\"";
+				json += "\"staLatitude\":\""+list.get(0).getStaLatitude()+"\"";
+				json += "}";
+				json += "}";
+			}
+				
+			
 		}catch(Exception e){
 			json = "";
 			json += "{";

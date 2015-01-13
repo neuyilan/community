@@ -92,6 +92,36 @@
                             
 
                         /**
+                        * field for OrderAmount
+                        */
+
+                        
+                                    protected com.community.ws.shop.req.xsd.OrderAmount_type1 localOrderAmount ;
+                                
+
+                           /**
+                           * Auto generated getter method
+                           * @return com.community.ws.shop.req.xsd.OrderAmount_type1
+                           */
+                           public  com.community.ws.shop.req.xsd.OrderAmount_type1 getOrderAmount(){
+                               return localOrderAmount;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param OrderAmount
+                               */
+                               public void setOrderAmount(com.community.ws.shop.req.xsd.OrderAmount_type1 param){
+                            
+                                            this.localOrderAmount=param;
+                                    
+
+                               }
+                            
+
+                        /**
                         * field for OrderTime
                         */
 
@@ -258,6 +288,12 @@
                                                  throw new org.apache.axis2.databinding.ADBException("orderNo cannot be null!!");
                                             }
                                            localOrderNo.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","orderNo"),
+                                               factory,xmlWriter);
+                                        
+                                            if (localOrderAmount==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("orderAmount cannot be null!!");
+                                            }
+                                           localOrderAmount.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","orderAmount"),
                                                factory,xmlWriter);
                                         
                                             if (localOrderTime==null){
@@ -453,6 +489,15 @@
                                     elementList.add(localOrderNo);
                                 
                             elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
+                                                                      "orderAmount"));
+                            
+                            
+                                    if (localOrderAmount==null){
+                                         throw new org.apache.axis2.databinding.ADBException("orderAmount cannot be null!!");
+                                    }
+                                    elementList.add(localOrderAmount);
+                                
+                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
                                                                       "orderTime"));
                             
                             
@@ -567,6 +612,22 @@
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","orderNo").equals(reader.getName())){
                                 
                                                 object.setOrderNo(com.community.ws.shop.req.xsd.OrderNo_type1.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
+                                }
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","orderAmount").equals(reader.getName())){
+                                
+                                                object.setOrderAmount(com.community.ws.shop.req.xsd.OrderAmount_type1.Factory.parse(reader));
                                               
                                         reader.next();
                                     

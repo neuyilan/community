@@ -24,7 +24,26 @@ public class BusinessExpFav implements java.io.Serializable{
 	private String addrName="";
 	private String addrUrl="";
 	private String staTel="";
+	private double staLongitude;
+	private double staLatitude;
 	
+	
+	public double getStaLongitude() {
+		return staLongitude;
+	}
+
+	public void setStaLongitude(double staLongitude) {
+		this.staLongitude = staLongitude;
+	}
+
+	public double getStaLatitude() {
+		return staLatitude;
+	}
+
+	public void setStaLatitude(double staLatitude) {
+		this.staLatitude = staLatitude;
+	}
+
 	public String getStaTel() {
 		return staTel;
 	}

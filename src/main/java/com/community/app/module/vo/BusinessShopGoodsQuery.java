@@ -23,7 +23,7 @@ public class BusinessShopGoodsQuery extends BaseBean {
 	public BusinessShopGoodsQuery(BusinessShopGoods businessShopGoods) {
 		this.goodsId = businessShopGoods.getGoodsId();
 		this.goodsName = businessShopGoods.getGoodsName();
-		this.goodsNo = businessShopGoods.getGoodsNo();
+		this.goodsNo = businessShopGoods.getGoodsNO();
 		this.goodsPrice = businessShopGoods.getGoodsPrice();
 		this.goodsAmount = businessShopGoods.getGoodsAmount();
 		this.goodsAgio = businessShopGoods.getGoodsAgio();

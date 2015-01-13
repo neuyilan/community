@@ -24,6 +24,7 @@ import org.apache.commons.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.lang.StringUtils;
 
 import sun.misc.BASE64Decoder;
 
@@ -188,7 +189,12 @@ public class Uploader {
 							folder.mkdirs();
 						}
 						String newFileName = new Timestamp(System.currentTimeMillis()).getTime() + this.type;
-						String tmpPicDir = this.url + "/tmp/";
+						String tmp;
+						if (fileItem.getSize()/1024 > 100)
+							 tmp = "tmp/";
+						else
+							tmp="";
+						String tmpPicDir = this.url +"/" + tmp;//"/tmp/";
 						File tmpFolder = new File(tmpPicDir);
 						if(!tmpFolder.exists()) {
 							tmpFolder.mkdirs();
@@ -212,12 +218,16 @@ public class Uploader {
 					    fos.close();
 					    fis.close();
 						inputSteam.close();
-						//压缩图片
-						CompressPicDemo cpd = new CompressPicDemo();
-						cpd.compressPic(tmpPicFile, this.url,  100, 100, true);
-						//压缩后删除原文件
-						if (file.exists())
-							file.delete();
+						if (StringUtils.isNotBlank(tmp))
+						{
+							//压缩图片
+							CompressPicDemo cpd = new CompressPicDemo();
+							cpd.compressPic(tmpPicFile, this.url,  100, 100, true);
+							//压缩后删除原文件
+							if (file.exists())
+								file.delete();
+						}
+						
 						System.out.println("文件："+filename+"上传成功!");
 					}else{//字段
 						String fieldName = fileItem.getFieldName();//字段名
