@@ -41,26 +41,6 @@
 
               
                   if (
-                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "Order".equals(typeName)){
-                   
-                            return  com.community.ws.shop.req.xsd.Order.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://rsp.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "retCode_type1".equals(typeName)){
-                   
-                            return  com.community.ws.shop.rsp.xsd.RetCode_type1.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
                   "http://rsp.shop.ws.community.com/xsd".equals(namespaceURI) &&
                   "Root".equals(typeName)){
                    
@@ -102,6 +82,106 @@
               
                   if (
                   "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "Body".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.Body.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "para_c_type1".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.Para_c_type1.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "goodsAgio_type1".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.GoodsAgio_type1.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "para_c_type3".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.Para_c_type3.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "GoodsList".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.GoodsList.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://rsp.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "RetMsg".equals(typeName)){
+                   
+                            return  com.community.ws.shop.rsp.xsd.RetMsg.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "Root".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.Root.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "shopCode_type1".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.ShopCode_type1.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "Order".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.Order.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://rsp.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "retCode_type1".equals(typeName)){
+                   
+                            return  com.community.ws.shop.rsp.xsd.RetCode_type1.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
                   "goodsAmount_type1".equals(typeName)){
                    
                             return  com.community.ws.shop.req.xsd.GoodsAmount_type1.Factory.parse(reader);
@@ -112,9 +192,19 @@
               
                   if (
                   "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "Body".equals(typeName)){
+                  "para_b_type3".equals(typeName)){
                    
-                            return  com.community.ws.shop.req.xsd.Body.Factory.parse(reader);
+                            return  com.community.ws.shop.req.xsd.Para_b_type3.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "para_b_type1".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.Para_b_type1.Factory.parse(reader);
                         
 
                   }
@@ -135,16 +225,6 @@
                   "goodsName_type1".equals(typeName)){
                    
                             return  com.community.ws.shop.req.xsd.GoodsName_type1.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "goodsAgio_type1".equals(typeName)){
-                   
-                            return  com.community.ws.shop.req.xsd.GoodsAgio_type1.Factory.parse(reader);
                         
 
                   }
@@ -182,26 +262,6 @@
               
                   if (
                   "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "GoodsList".equals(typeName)){
-                   
-                            return  com.community.ws.shop.req.xsd.GoodsList.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://rsp.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "RetMsg".equals(typeName)){
-                   
-                            return  com.community.ws.shop.rsp.xsd.RetMsg.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
                   "flowId_type1".equals(typeName)){
                    
                             return  com.community.ws.shop.req.xsd.FlowId_type1.Factory.parse(reader);
@@ -222,6 +282,16 @@
               
                   if (
                   "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
+                  "para_a_type3".equals(typeName)){
+                   
+                            return  com.community.ws.shop.req.xsd.Para_a_type3.Factory.parse(reader);
+                        
+
+                  }
+
+              
+                  if (
+                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
                   "Header".equals(typeName)){
                    
                             return  com.community.ws.shop.req.xsd.Header.Factory.parse(reader);
@@ -232,19 +302,9 @@
               
                   if (
                   "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "Root".equals(typeName)){
+                  "para_a_type1".equals(typeName)){
                    
-                            return  com.community.ws.shop.req.xsd.Root.Factory.parse(reader);
-                        
-
-                  }
-
-              
-                  if (
-                  "http://req.shop.ws.community.com/xsd".equals(namespaceURI) &&
-                  "shopCode_type1".equals(typeName)){
-                   
-                            return  com.community.ws.shop.req.xsd.ShopCode_type1.Factory.parse(reader);
+                            return  com.community.ws.shop.req.xsd.Para_a_type1.Factory.parse(reader);
                         
 
                   }

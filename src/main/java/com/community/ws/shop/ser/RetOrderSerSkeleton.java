@@ -18,26 +18,28 @@ import com.community.framework.exception.ServiceException;
 import com.community.framework.utils.DateUtil;
 import com.community.ws.common.ApplicationSingleton;
 
+
+
 /**
  * RetOrderSerSkeleton java skeleton for the axisService
  */
 public class RetOrderSerSkeleton {
 
-	/**
-	 * Auto generated method signature
-	 * 
-	 * @param retOrder
-	 */
-
+	
+	
 	private BusinessShopOrderService businessShopOrderService;
 
 	private BusinessShopGoodsService businessShopGoodsService;
 
 	private BusinessShopFlowService businessShopFlowService;
-
+	
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param retOrder
+	 */
 	public com.community.ws.shop.ser.RetOrderResponse retOrder(
 			com.community.ws.shop.ser.RetOrder retOrder) {
-		// TODO : fill this with the necessary business logic
 
 		// TODO : fill this with the necessary business logic
 		// throw new java.lang.UnsupportedOperationException("Please implement "
@@ -56,7 +58,7 @@ public class RetOrderSerSkeleton {
 		retMsg.setRetDesc(rdType);
 
 		roote.setRetMsg(retMsg);
-		retOrderResponse.set_return(roote);
+		retOrderResponse.setRoot(roote);
 		/*
 		 * = (BusinessShopOrderService)
 		 * this.ctx.getBean("businessShopOrderService");
@@ -79,11 +81,12 @@ public class RetOrderSerSkeleton {
 					.getInstance().getBean("BusinessShopFlowService");
 			BusinessShopFlow flow = businessShopFlowService.findById(Integer
 					.valueOf(flowId.getFlowId_type0()));
-			if (flow == null) {
-				rcType.setRetCode_type0("1001");
-				rdType.setRetDesc_type0("未查到用户进入商铺记录!");
-				return retOrderResponse;
-			}
+//			if (flow == null) {
+//				rcType.setRetCode_type0("1001");
+//				rdType.setRetDesc_type0("未查到用户进入商铺记录!");
+//				return retOrderResponse;
+//			}			
+			
 			BusinessShopOrder businessShopOrder = new BusinessShopOrder();
 
 			businessShopOrder.setEstateId(0);

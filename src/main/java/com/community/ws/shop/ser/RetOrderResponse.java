@@ -33,30 +33,30 @@
         
 
                         /**
-                        * field for _return
+                        * field for Root
                         */
 
                         
-                                    protected com.community.ws.shop.rsp.xsd.RootE local_return ;
+                                    protected com.community.ws.shop.rsp.xsd.RootE localRoot ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return com.community.ws.shop.rsp.xsd.RootE
                            */
-                           public  com.community.ws.shop.rsp.xsd.RootE get_return(){
-                               return local_return;
+                           public  com.community.ws.shop.rsp.xsd.RootE getRoot(){
+                               return localRoot;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param _return
+                               * @param param Root
                                */
-                               public void set_return(com.community.ws.shop.rsp.xsd.RootE param){
+                               public void setRoot(com.community.ws.shop.rsp.xsd.RootE param){
                             
-                                            this.local_return=param;
+                                            this.localRoot=param;
                                     
 
                                }
@@ -159,10 +159,10 @@
                
                    }
                
-                                            if (local_return==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("return cannot be null!!");
+                                            if (localRoot==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("root cannot be null!!");
                                             }
-                                           local_return.serialize(new javax.xml.namespace.QName("http://ser.shop.ws.community.com","return"),
+                                           localRoot.serialize(new javax.xml.namespace.QName("http://ser.shop.ws.community.com","root"),
                                                factory,xmlWriter);
                                         
                     xmlWriter.writeEndElement();
@@ -328,13 +328,13 @@
 
                 
                             elementList.add(new javax.xml.namespace.QName("http://ser.shop.ws.community.com",
-                                                                      "return"));
+                                                                      "root"));
                             
                             
-                                    if (local_return==null){
-                                         throw new org.apache.axis2.databinding.ADBException("return cannot be null!!");
+                                    if (localRoot==null){
+                                         throw new org.apache.axis2.databinding.ADBException("root cannot be null!!");
                                     }
-                                    elementList.add(local_return);
+                                    elementList.add(localRoot);
                                 
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
@@ -414,9 +414,9 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://ser.shop.ws.community.com","return").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://ser.shop.ws.community.com","root").equals(reader.getName())){
                                 
-                                                object.set_return(com.community.ws.shop.rsp.xsd.RootE.Factory.parse(reader));
+                                                object.setRoot(com.community.ws.shop.rsp.xsd.RootE.Factory.parse(reader));
                                               
                                         reader.next();
                                     

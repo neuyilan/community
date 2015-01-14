@@ -32,36 +32,6 @@
         
 
                         /**
-                        * field for Body
-                        */
-
-                        
-                                    protected com.community.ws.shop.req.xsd.Body localBody ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return com.community.ws.shop.req.xsd.Body
-                           */
-                           public  com.community.ws.shop.req.xsd.Body getBody(){
-                               return localBody;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Body
-                               */
-                               public void setBody(com.community.ws.shop.req.xsd.Body param){
-                            
-                                            this.localBody=param;
-                                    
-
-                               }
-                            
-
-                        /**
                         * field for Header
                         */
 
@@ -86,6 +56,36 @@
                                public void setHeader(com.community.ws.shop.req.xsd.Header param){
                             
                                             this.localHeader=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Body
+                        */
+
+                        
+                                    protected com.community.ws.shop.req.xsd.Body localBody ;
+                                
+
+                           /**
+                           * Auto generated getter method
+                           * @return com.community.ws.shop.req.xsd.Body
+                           */
+                           public  com.community.ws.shop.req.xsd.Body getBody(){
+                               return localBody;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Body
+                               */
+                               public void setBody(com.community.ws.shop.req.xsd.Body param){
+                            
+                                            this.localBody=param;
                                     
 
                                }
@@ -188,16 +188,16 @@
                
                    }
                
-                                            if (localBody==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("body cannot be null!!");
-                                            }
-                                           localBody.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","body"),
-                                               factory,xmlWriter);
-                                        
                                             if (localHeader==null){
                                                  throw new org.apache.axis2.databinding.ADBException("header cannot be null!!");
                                             }
                                            localHeader.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","header"),
+                                               factory,xmlWriter);
+                                        
+                                            if (localBody==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("body cannot be null!!");
+                                            }
+                                           localBody.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","body"),
                                                factory,xmlWriter);
                                         
                     xmlWriter.writeEndElement();
@@ -363,15 +363,6 @@
 
                 
                             elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
-                                                                      "body"));
-                            
-                            
-                                    if (localBody==null){
-                                         throw new org.apache.axis2.databinding.ADBException("body cannot be null!!");
-                                    }
-                                    elementList.add(localBody);
-                                
-                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
                                                                       "header"));
                             
                             
@@ -379,6 +370,15 @@
                                          throw new org.apache.axis2.databinding.ADBException("header cannot be null!!");
                                     }
                                     elementList.add(localHeader);
+                                
+                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
+                                                                      "body"));
+                            
+                            
+                                    if (localBody==null){
+                                         throw new org.apache.axis2.databinding.ADBException("body cannot be null!!");
+                                    }
+                                    elementList.add(localBody);
                                 
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
@@ -458,9 +458,9 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","body").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","header").equals(reader.getName())){
                                 
-                                                object.setBody(com.community.ws.shop.req.xsd.Body.Factory.parse(reader));
+                                                object.setHeader(com.community.ws.shop.req.xsd.Header.Factory.parse(reader));
                                               
                                         reader.next();
                                     
@@ -474,9 +474,9 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","header").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","body").equals(reader.getName())){
                                 
-                                                object.setHeader(com.community.ws.shop.req.xsd.Header.Factory.parse(reader));
+                                                object.setBody(com.community.ws.shop.req.xsd.Body.Factory.parse(reader));
                                               
                                         reader.next();
                                     

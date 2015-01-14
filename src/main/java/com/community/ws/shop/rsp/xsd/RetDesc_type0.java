@@ -56,7 +56,7 @@
                                */
                                public void setRetDesc_type0(java.lang.String param){
                             
-                                            if (  (0 <= java.lang.String.valueOf(param).length()) &&  (java.lang.String.valueOf(param).length() <= 500)  ) {
+                                            if (  (0 <= java.lang.String.valueOf(param).length()) &&  (java.lang.String.valueOf(param).length() <= 512)  ) {
                                                 this.localRetDesc_type0=param;
                                             }
                                             else {

@@ -1,30 +1,30 @@
 
 /**
- * RetDesc_type1.java
+ * Para_a_type0.java
  *
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.5.6  Built on : Aug 30, 2011 (10:01:01 CEST)
  */
             
-                package com.community.ws.shop.rsp.xsd;
+                package com.community.ws.shop.req.xsd;
             
 
             /**
-            *  RetDesc_type1 bean class
+            *  Para_a_type0 bean class
             */
         
-        public  class RetDesc_type1
+        public  class Para_a_type0
         implements org.apache.axis2.databinding.ADBBean{
         
                 public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
-                "http://rsp.shop.ws.community.com/xsd",
-                "retDesc_type1",
+                "http://req.shop.ws.community.com/xsd",
+                "para_a_type0",
                 "");
 
             
 
         private static java.lang.String generatePrefix(java.lang.String namespace) {
-            if(namespace.equals("http://rsp.shop.ws.community.com/xsd")){
+            if(namespace.equals("http://req.shop.ws.community.com/xsd")){
                 return "";
             }
             return org.apache.axis2.databinding.utils.BeanUtil.getUniquePrefix();
@@ -33,31 +33,31 @@
         
 
                         /**
-                        * field for RetDesc_type0
+                        * field for Para_a_type0
                         */
 
                         
-                                    protected java.lang.String localRetDesc_type0 ;
+                                    protected java.lang.String localPara_a_type0 ;
                                 
 
                            /**
                            * Auto generated getter method
                            * @return java.lang.String
                            */
-                           public  java.lang.String getRetDesc_type0(){
-                               return localRetDesc_type0;
+                           public  java.lang.String getPara_a_type0(){
+                               return localPara_a_type0;
                            }
 
                            
                         
                             /**
                                * Auto generated setter method
-                               * @param param RetDesc_type0
+                               * @param param Para_a_type0
                                */
-                               public void setRetDesc_type0(java.lang.String param){
+                               public void setPara_a_type0(java.lang.String param){
                             
-                                            if (  (0 <= java.lang.String.valueOf(param).length()) &&  (java.lang.String.valueOf(param).length() <= 512)  ) {
-                                                this.localRetDesc_type0=param;
+                                            if (  (0 <= java.lang.String.valueOf(param).length()) &&  (java.lang.String.valueOf(param).length() <= 60)  ) {
+                                                this.localPara_a_type0=param;
                                             }
                                             else {
                                                 throw new java.lang.RuntimeException();
@@ -69,7 +69,7 @@
 
                             public java.lang.String toString(){
                                 
-                                        return localRetDesc_type0.toString();
+                                        return localPara_a_type0.toString();
                                     
                             }
                         
@@ -106,7 +106,7 @@
                        new org.apache.axis2.databinding.ADBDataSource(this,MY_QNAME){
 
                  public void serialize(org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-                       RetDesc_type1.this.serialize(MY_QNAME,factory,xmlWriter);
+                       Para_a_type0.this.serialize(MY_QNAME,factory,xmlWriter);
                  }
                };
                return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(
@@ -153,25 +153,25 @@
 
                             // add the type details if this is used in a simple type
                                if (serializeType){
-                                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://rsp.shop.ws.community.com/xsd");
+                                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://req.shop.ws.community.com/xsd");
                                    if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
                                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                                           namespacePrefix+":retDesc_type1",
+                                           namespacePrefix+":para_a_type0",
                                            xmlWriter);
                                    } else {
                                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                                           "retDesc_type1",
+                                           "para_a_type0",
                                            xmlWriter);
                                    }
                                }
                             
-                                          if (localRetDesc_type0==null){
+                                          if (localPara_a_type0==null){
                                             
                                                      throw new org.apache.axis2.databinding.ADBException("Value cannot be null !!");
                                                 
                                          }else{
                                         
-                                                       xmlWriter.writeCharacters(localRetDesc_type0);
+                                                       xmlWriter.writeCharacters(localPara_a_type0);
                                             
                                          }
                                     
@@ -339,7 +339,7 @@
                  return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(MY_QNAME,
                             new java.lang.Object[]{
                             org.apache.axis2.databinding.utils.reader.ADBXMLStreamReader.ELEMENT_TEXT,
-                            org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localRetDesc_type0)
+                            org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localPara_a_type0)
                             },
                             null);
 
@@ -354,25 +354,25 @@
 
         
         
-                public static RetDesc_type1 fromString(java.lang.String value,
+                public static Para_a_type0 fromString(java.lang.String value,
                                                     java.lang.String namespaceURI){
-                    RetDesc_type1 returnValue = new  RetDesc_type1();
+                    Para_a_type0 returnValue = new  Para_a_type0();
                     
-                            returnValue.setRetDesc_type0(
+                            returnValue.setPara_a_type0(
                                 org.apache.axis2.databinding.utils.ConverterUtil.convertToString(value));
                         
 
                     return returnValue;
                 }
 
-                public static RetDesc_type1 fromString(javax.xml.stream.XMLStreamReader xmlStreamReader,
+                public static Para_a_type0 fromString(javax.xml.stream.XMLStreamReader xmlStreamReader,
                                                                     java.lang.String content) {
                     if (content.indexOf(":") > -1){
                         java.lang.String prefix = content.substring(0,content.indexOf(":"));
                         java.lang.String namespaceUri = xmlStreamReader.getNamespaceContext().getNamespaceURI(prefix);
-                        return RetDesc_type1.Factory.fromString(content,namespaceUri);
+                        return Para_a_type0.Factory.fromString(content,namespaceUri);
                     } else {
-                       return RetDesc_type1.Factory.fromString(content,"");
+                       return Para_a_type0.Factory.fromString(content,"");
                     }
                 }
 
@@ -385,9 +385,9 @@
         * Postcondition: If this object is an element, the reader is positioned at its end element
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
-        public static RetDesc_type1 parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            RetDesc_type1 object =
-                new RetDesc_type1();
+        public static Para_a_type0 parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
+            Para_a_type0 object =
+                new Para_a_type0();
 
             int event;
             java.lang.String nillableValue = null;
@@ -414,7 +414,7 @@
                                 
                                     java.lang.String content = reader.getElementText();
                                     
-                                              object.setRetDesc_type0(
+                                              object.setPara_a_type0(
                                                     org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                             
                               }  // End of if for expected property start element

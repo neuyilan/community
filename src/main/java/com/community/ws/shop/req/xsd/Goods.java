@@ -32,66 +32,6 @@
         
 
                         /**
-                        * field for GoodsAgio
-                        */
-
-                        
-                                    protected com.community.ws.shop.req.xsd.GoodsAgio_type1 localGoodsAgio ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return com.community.ws.shop.req.xsd.GoodsAgio_type1
-                           */
-                           public  com.community.ws.shop.req.xsd.GoodsAgio_type1 getGoodsAgio(){
-                               return localGoodsAgio;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param GoodsAgio
-                               */
-                               public void setGoodsAgio(com.community.ws.shop.req.xsd.GoodsAgio_type1 param){
-                            
-                                            this.localGoodsAgio=param;
-                                    
-
-                               }
-                            
-
-                        /**
-                        * field for GoodsAmount
-                        */
-
-                        
-                                    protected com.community.ws.shop.req.xsd.GoodsAmount_type1 localGoodsAmount ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return com.community.ws.shop.req.xsd.GoodsAmount_type1
-                           */
-                           public  com.community.ws.shop.req.xsd.GoodsAmount_type1 getGoodsAmount(){
-                               return localGoodsAmount;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param GoodsAmount
-                               */
-                               public void setGoodsAmount(com.community.ws.shop.req.xsd.GoodsAmount_type1 param){
-                            
-                                            this.localGoodsAmount=param;
-                                    
-
-                               }
-                            
-
-                        /**
                         * field for GoodsNO
                         */
 
@@ -176,6 +116,198 @@
                                public void setGoodsPrice(com.community.ws.shop.req.xsd.GoodsPrice_type1 param){
                             
                                             this.localGoodsPrice=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for GoodsAmount
+                        */
+
+                        
+                                    protected com.community.ws.shop.req.xsd.GoodsAmount_type1 localGoodsAmount ;
+                                
+
+                           /**
+                           * Auto generated getter method
+                           * @return com.community.ws.shop.req.xsd.GoodsAmount_type1
+                           */
+                           public  com.community.ws.shop.req.xsd.GoodsAmount_type1 getGoodsAmount(){
+                               return localGoodsAmount;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param GoodsAmount
+                               */
+                               public void setGoodsAmount(com.community.ws.shop.req.xsd.GoodsAmount_type1 param){
+                            
+                                            this.localGoodsAmount=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for GoodsAgio
+                        */
+
+                        
+                                    protected com.community.ws.shop.req.xsd.GoodsAgio_type1 localGoodsAgio ;
+                                
+
+                           /**
+                           * Auto generated getter method
+                           * @return com.community.ws.shop.req.xsd.GoodsAgio_type1
+                           */
+                           public  com.community.ws.shop.req.xsd.GoodsAgio_type1 getGoodsAgio(){
+                               return localGoodsAgio;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param GoodsAgio
+                               */
+                               public void setGoodsAgio(com.community.ws.shop.req.xsd.GoodsAgio_type1 param){
+                            
+                                            this.localGoodsAgio=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Para_a
+                        */
+
+                        
+                                    protected com.community.ws.shop.req.xsd.Para_a_type3 localPara_a ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localPara_aTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return com.community.ws.shop.req.xsd.Para_a_type3
+                           */
+                           public  com.community.ws.shop.req.xsd.Para_a_type3 getPara_a(){
+                               return localPara_a;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Para_a
+                               */
+                               public void setPara_a(com.community.ws.shop.req.xsd.Para_a_type3 param){
+                            
+                                       if (param != null){
+                                          //update the setting tracker
+                                          localPara_aTracker = true;
+                                       } else {
+                                          localPara_aTracker = false;
+                                              
+                                       }
+                                   
+                                            this.localPara_a=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Para_b
+                        */
+
+                        
+                                    protected com.community.ws.shop.req.xsd.Para_b_type3 localPara_b ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localPara_bTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return com.community.ws.shop.req.xsd.Para_b_type3
+                           */
+                           public  com.community.ws.shop.req.xsd.Para_b_type3 getPara_b(){
+                               return localPara_b;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Para_b
+                               */
+                               public void setPara_b(com.community.ws.shop.req.xsd.Para_b_type3 param){
+                            
+                                       if (param != null){
+                                          //update the setting tracker
+                                          localPara_bTracker = true;
+                                       } else {
+                                          localPara_bTracker = false;
+                                              
+                                       }
+                                   
+                                            this.localPara_b=param;
+                                    
+
+                               }
+                            
+
+                        /**
+                        * field for Para_c
+                        */
+
+                        
+                                    protected com.community.ws.shop.req.xsd.Para_c_type3 localPara_c ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localPara_cTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return com.community.ws.shop.req.xsd.Para_c_type3
+                           */
+                           public  com.community.ws.shop.req.xsd.Para_c_type3 getPara_c(){
+                               return localPara_c;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Para_c
+                               */
+                               public void setPara_c(com.community.ws.shop.req.xsd.Para_c_type3 param){
+                            
+                                       if (param != null){
+                                          //update the setting tracker
+                                          localPara_cTracker = true;
+                                       } else {
+                                          localPara_cTracker = false;
+                                              
+                                       }
+                                   
+                                            this.localPara_c=param;
                                     
 
                                }
@@ -278,18 +410,6 @@
                
                    }
                
-                                            if (localGoodsAgio==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("goodsAgio cannot be null!!");
-                                            }
-                                           localGoodsAgio.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAgio"),
-                                               factory,xmlWriter);
-                                        
-                                            if (localGoodsAmount==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("goodsAmount cannot be null!!");
-                                            }
-                                           localGoodsAmount.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAmount"),
-                                               factory,xmlWriter);
-                                        
                                             if (localGoodsNO==null){
                                                  throw new org.apache.axis2.databinding.ADBException("goodsNO cannot be null!!");
                                             }
@@ -308,6 +428,36 @@
                                            localGoodsPrice.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsPrice"),
                                                factory,xmlWriter);
                                         
+                                            if (localGoodsAmount==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("goodsAmount cannot be null!!");
+                                            }
+                                           localGoodsAmount.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAmount"),
+                                               factory,xmlWriter);
+                                        
+                                            if (localGoodsAgio==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("goodsAgio cannot be null!!");
+                                            }
+                                           localGoodsAgio.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAgio"),
+                                               factory,xmlWriter);
+                                         if (localPara_aTracker){
+                                            if (localPara_a==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("para_a cannot be null!!");
+                                            }
+                                           localPara_a.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","para_a"),
+                                               factory,xmlWriter);
+                                        } if (localPara_bTracker){
+                                            if (localPara_b==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("para_b cannot be null!!");
+                                            }
+                                           localPara_b.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","para_b"),
+                                               factory,xmlWriter);
+                                        } if (localPara_cTracker){
+                                            if (localPara_c==null){
+                                                 throw new org.apache.axis2.databinding.ADBException("para_c cannot be null!!");
+                                            }
+                                           localPara_c.serialize(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","para_c"),
+                                               factory,xmlWriter);
+                                        }
                     xmlWriter.writeEndElement();
                
 
@@ -471,24 +621,6 @@
 
                 
                             elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
-                                                                      "goodsAgio"));
-                            
-                            
-                                    if (localGoodsAgio==null){
-                                         throw new org.apache.axis2.databinding.ADBException("goodsAgio cannot be null!!");
-                                    }
-                                    elementList.add(localGoodsAgio);
-                                
-                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
-                                                                      "goodsAmount"));
-                            
-                            
-                                    if (localGoodsAmount==null){
-                                         throw new org.apache.axis2.databinding.ADBException("goodsAmount cannot be null!!");
-                                    }
-                                    elementList.add(localGoodsAmount);
-                                
-                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
                                                                       "goodsNO"));
                             
                             
@@ -515,6 +647,51 @@
                                     }
                                     elementList.add(localGoodsPrice);
                                 
+                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
+                                                                      "goodsAmount"));
+                            
+                            
+                                    if (localGoodsAmount==null){
+                                         throw new org.apache.axis2.databinding.ADBException("goodsAmount cannot be null!!");
+                                    }
+                                    elementList.add(localGoodsAmount);
+                                
+                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
+                                                                      "goodsAgio"));
+                            
+                            
+                                    if (localGoodsAgio==null){
+                                         throw new org.apache.axis2.databinding.ADBException("goodsAgio cannot be null!!");
+                                    }
+                                    elementList.add(localGoodsAgio);
+                                 if (localPara_aTracker){
+                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
+                                                                      "para_a"));
+                            
+                            
+                                    if (localPara_a==null){
+                                         throw new org.apache.axis2.databinding.ADBException("para_a cannot be null!!");
+                                    }
+                                    elementList.add(localPara_a);
+                                } if (localPara_bTracker){
+                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
+                                                                      "para_b"));
+                            
+                            
+                                    if (localPara_b==null){
+                                         throw new org.apache.axis2.databinding.ADBException("para_b cannot be null!!");
+                                    }
+                                    elementList.add(localPara_b);
+                                } if (localPara_cTracker){
+                            elementList.add(new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd",
+                                                                      "para_c"));
+                            
+                            
+                                    if (localPara_c==null){
+                                         throw new org.apache.axis2.databinding.ADBException("para_c cannot be null!!");
+                                    }
+                                    elementList.add(localPara_c);
+                                }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -593,38 +770,6 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAgio").equals(reader.getName())){
-                                
-                                                object.setGoodsAgio(com.community.ws.shop.req.xsd.GoodsAgio_type1.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAmount").equals(reader.getName())){
-                                
-                                                object.setGoodsAmount(com.community.ws.shop.req.xsd.GoodsAmount_type1.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsNO").equals(reader.getName())){
                                 
                                                 object.setGoodsNO(com.community.ws.shop.req.xsd.GoodsNO_type1.Factory.parse(reader));
@@ -669,7 +814,84 @@
                                     // A start element we are not expecting indicates an invalid parameter was passed
                                     throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
                                 }
-                              
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAmount").equals(reader.getName())){
+                                
+                                                object.setGoodsAmount(com.community.ws.shop.req.xsd.GoodsAmount_type1.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
+                                }
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","goodsAgio").equals(reader.getName())){
+                                
+                                                object.setGoodsAgio(com.community.ws.shop.req.xsd.GoodsAgio_type1.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
+                                }
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","para_a").equals(reader.getName())){
+                                
+                                                object.setPara_a(com.community.ws.shop.req.xsd.Para_a_type3.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","para_b").equals(reader.getName())){
+                                
+                                                object.setPara_b(com.community.ws.shop.req.xsd.Para_b_type3.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://req.shop.ws.community.com/xsd","para_c").equals(reader.getName())){
+                                
+                                                object.setPara_c(com.community.ws.shop.req.xsd.Para_c_type3.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
+                                        
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             
