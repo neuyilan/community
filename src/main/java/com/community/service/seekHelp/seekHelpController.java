@@ -397,6 +397,62 @@ public class seekHelpController {
 		}
 	}
 	
+	
+	/**
+	 * 用户查看邻里求助详情 for H5
+	 * @param userId,sessionid,ID
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getSeekHelpDetailsByIdForH5")
+	public ModelAndView getSeekHelpDetailsByIdForH5(HttpServletRequest request, HttpServletResponse response,BusinessHelpQuery query) {
+		ModelAndView mav = new ModelAndView("/service/seekHelp/detail");
+		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
+			AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(query.getUserId());
+			appLatestNews.setTypeId(28);
+			appLatestNews.setTo(0);
+			appLatestNews.setSourceId(query.getID());
+			appLatestNewsService.delete_app_id(appLatestNews);
+			appLatestNews.setTypeId(8);
+			appLatestNewsService.delete_app_id(appLatestNews);
+			
+			if(businessHelp.getIsNickname()==1)
+				businessHelp.setHelperName("小区居民");
+			
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			if(null==query.getUserId()){
+				appStatisticsClick.setUserId(0);
+			}else{
+				appStatisticsClick.setUserId(query.getUserId());
+			}
+			appStatisticsClick.setType(17);
+			appStatisticsClick.setTypeName("查看邻里求助详情");
+			appStatisticsClickService.save(appStatisticsClick);
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+			
+			mav.addObject("userId", query.getUserId()); 
+			mav.addObject("ID", query.getID()); 
+//			mav.addObject("ctx", ctx); 
+			
+			mav.addObject("ctx", ctx); 
+			mav.addObject("businessHelp", businessHelp);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		
+		return mav;
+	}
+	
+	
 	/**
 	 * 用户查看邻里求助的评论
 	 * @param userId,sessionid,ID,page,rows
@@ -405,6 +461,86 @@ public class seekHelpController {
 	 */
 	@RequestMapping(value="getSeekHelpReviewById")
 	public void getSeekHelpReviewById(HttpServletRequest request, HttpServletResponse response,BusinessHelpCommentQuery query) {
+		String json = "";
+		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			query.setRows(15);
+			query.setOrder("desc");
+			query.setSort("commentTime");
+			query.setHelp(query.getID());
+			BaseBean baseBean = businessHelpCommentService.findAllPage_app(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			
+			json += "\"PageState\":";
+			if(baseBean.getCount()>query.getPage()*query.getRows()){
+				json += "true,";
+			}else{
+				json += "false,";
+			}
+			json += "\"reviewList\":[";
+			for(int i=0;i<baseBean.getList().size();i++) {
+				BusinessHelpComment BusinessHelpComment = (BusinessHelpComment) baseBean.getList().get(i);
+				json += "{\"userId\":\""+BusinessHelpComment.getCommentorId()+"\",";
+				if(BusinessHelpComment.getCommentorState()==1){
+					json +="\"avatar\":\""+ip+BusinessHelpComment.getAvatar()+"\",\"name\":\""
+							+BusinessHelpComment.getBuNickname()+"\",";
+				}else{
+					json +="\"avatar\":\""+ip+BusinessHelpComment.getPortrait()+"\",\"name\":\""
+							+BusinessHelpComment.getNickname()+"\",";
+				}
+				json +="\"commentTime\":\""+DateUtil.getInterval(BusinessHelpComment.getCommentTime())+"\",";
+					json += "\"replyName\":\""+BusinessHelpComment.getReplyName()+"\",";
+					json += "\"replyId\":\""+BusinessHelpComment.getReplyId()+"\",";
+					json += "\"content\":\""+BusinessHelpComment.getContent()+"\",";
+					if(BusinessHelpComment.getCommentorState()==1){
+						json +="\"userType\":\"1\",";
+					}else{
+						json +="\"userType\":\"0\",";
+					}
+					if(BusinessHelpComment.getReplyState()==1){
+						json +="\"replyType\":\"1\"";
+					}else{
+						json +="\"replyType\":\"0\"";
+					}
+					json += "},";
+			}
+			if(baseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 用户查看邻里求助的评论 for H5
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getSeekHelpReviewByIdH5")
+	public void getSeekHelpReviewByIdH5(HttpServletRequest request, HttpServletResponse response,BusinessHelpCommentQuery query) {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
