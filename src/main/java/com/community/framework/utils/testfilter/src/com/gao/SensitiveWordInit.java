@@ -130,7 +130,8 @@ public class SensitiveWordInit {
 	private Set<String> readSensitiveWordFile() throws Exception{
 		Set<String> set = null;
 		String path = SensitiveWordInit.class.getClassLoader().getResource("SensitiveWord.txt").getPath();//通过URI形式
-		File file = new File(path);    //读取文件
+//		File file = new File(path);    //读取文件
+		File file = new File(java.net.URLDecoder.decode(path,"utf-8") );
 		InputStreamReader read = new InputStreamReader(new FileInputStream(file),"utf-8");
 		try {
 			if(file.isFile() && file.exists()){      //文件流是否存在
