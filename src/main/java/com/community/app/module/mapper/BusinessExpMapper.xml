@@ -622,6 +622,9 @@
 						<if test="type ==6" >
 							and expState = 0   and expType=1 or expState=1  and expType=1 and senderId=#{userId} or   senderId=#{userId} and expState = 3 and expType=0 or  senderId=#{userId} and expState = 4 and expType=0 or senderId=#{userId} and expState = 5 and expType=0 or senderId=#{userId} and expState = 7 and expType=0 or senderId=#{userId} and expState=1 and expType=0
 						</if>
+						<if test="type ==7" >
+							and expState = 3 and expType=0 
+						</if>
 						<if test="type ==10" >
 							and expState = 2 and expType=1  or expState=6 and expType=0 and senderId=#{userId}
 						</if>
@@ -641,6 +644,9 @@
 						</if>
 						<if test="type ==6" >
 							and expState = 0   and expType=1 or expState=1  and expType=1 and receiverId=#{userId} or   receiverId=#{userId} and expState = 3 and expType=0 or  receiverId=#{userId} and expState = 4 and expType=0 or receiverId=#{userId} and expState = 5 and expType=0 or receiverId=#{userId} and expState = 7 and expType=0 or receiverId=#{userId} and expState=1 and expType=0
+						</if>
+						<if test="type ==7" >
+							and expState = 3 and expType=0 
 						</if>
 					</if>
 					

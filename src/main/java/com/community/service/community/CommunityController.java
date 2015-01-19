@@ -450,6 +450,8 @@ public class CommunityController {
 					json +="\"pic\":\""+ip+businessNews.getSubjectPic()+"\",";
 				}
 				
+				json +="\"comments\":\""+businessNews.getComments()+"\",";
+				
 				if(businessNews.getNewsType()==1){
 					json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getNickname()+"\",\"avatar\":\""+ip+businessNews.getPortrait()+"\",\"type\":\"1\"},";
 				}else {
@@ -465,6 +467,8 @@ public class CommunityController {
 				}else{
 					json +="\"pic\":\""+ip+businessNews.getSubjectPic()+"\",";
 				}
+				
+				json +="\"comments\":\""+businessNews.getComments()+"\",";
 				
 				if(businessNews.getNewsType()==1){
 					json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getNickname()+"\",\"avatar\":\""+ip+businessNews.getPortrait()+"\",\"type\":\"1\"},";
@@ -1094,21 +1098,21 @@ public class CommunityController {
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"圆圆\",";
 				json += "\"avatar\":\""+ip+"/images/icon/keke.jpg"+"\",";
-				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以可以拨打爆料热线：\",";
+				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以拨打爆料热线：\",";
 				json += "\"tel\":\"13910830458\",";
 				json += "\"serviceTel\":\"53351216\"";
 			}else if(comId.equals("11")){
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"北苑社长\",";
 				json += "\"avatar\":\""+ip+"/images/icon/keke.jpg"+"\",";
-				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以可以拨打爆料热线：\",";
+				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以拨打爆料热线：\",";
 				json += "\"tel\":\"13910830458\",";
 				json += "\"serviceTel\":\"84999119\"";
 			}else if (comId.equals("12")) {
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"天通苑社长\",";
 				json += "\"avatar\":\""+ip+"/images/	````````````````````````````````````````````````````````````````/keke.jpg"+"\",";
-				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以可以拨打爆料热线：\",";
+				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以拨打爆料热线：\",";
 				json += "\"tel\":\"13910830458\",";
 				json += "\"serviceTel\":\"80788388\"";
 			}

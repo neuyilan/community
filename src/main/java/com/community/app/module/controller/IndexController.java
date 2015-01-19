@@ -705,8 +705,10 @@ public class IndexController {
 			if(estateId != null && estateId != 0) {
 				ManageEstate manageEstate = manageEstateService.findById(estateId);
 				shiroUser.setCurEstateName(manageEstate.getEstateName());
+				shiroUser.setCurStateId(manageEstate.getStationId());
 			}else{
 				shiroUser.setCurEstateName("全部小区");
+				shiroUser.setCurStateId(0);
 			}
 			
 		} catch (AuthenticationException e) {

@@ -49,6 +49,9 @@
 					<if test="editTime != null and editTime != ''" >
 				   		and editTime = #{editTime}
 					</if>
+					<if test="stationId != null" >
+				   		and stationId = #{stationId}
+					</if>
 			</trim>
 		</where>
 	</sql>
@@ -146,14 +149,16 @@
 		info,
 		createTime,
 		editor,
-		editTime
+		editTime,
+		stationId
 		) values(
 				#{startDate},
 		#{endDate},
 		#{info},
 		#{createTime},
 		#{editor},
-		#{editTime}
+		#{editTime},
+		#{stationId}
 		)
 	</insert>
 	
@@ -177,7 +182,10 @@
 			editor=#{editor},
 			</if>
 			<if test="editTime != null and editTime != ''" >
-			editTime=#{editTime}
+			editTime=#{editTime},
+			</if>
+			<if test="stationId != null and stationId != ''" >
+			stationId=#{stationId}
 			</if>
 		</set> 
 		where 

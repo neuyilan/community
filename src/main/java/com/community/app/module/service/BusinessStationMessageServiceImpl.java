@@ -159,6 +159,32 @@ public class BusinessStationMessageServiceImpl implements BusinessStationMessage
 	}
 	
 	/**
+	 * 根据搜索条件，搜索分页数据
+	 * @param query
+	 * @param pageData
+	 * @return
+	 * @throws ServiceException
+	 */
+	@Transactional(readOnly = true)
+	public BaseBean findAllPage_app(final BusinessStationMessageQuery query) throws ServiceException {
+		List<BusinessStationMessage> list = new ArrayList<BusinessStationMessage>() ;
+		int count=0;
+		BaseBean baseBean = new BaseBean();
+		try {
+			count=businessStationMessageDao.selectCount_app(query);
+			query.setCount(count);
+			list=businessStationMessageDao.findAllPage_app(query);
+		} catch (DaoException e) {
+			logger.debug("BusinessStationMessageServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
+			e.printStackTrace();
+		}
+		baseBean.setList(list);
+		baseBean.setCount(count);
+		baseBean.setPage(query.getPage());
+		return baseBean;
+	}
+	
+	/**
 	 * 根据搜索条件，搜索分页总数
 	 * @param pageData
 	 * @return

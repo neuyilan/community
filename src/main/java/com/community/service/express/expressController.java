@@ -677,8 +677,8 @@ public class expressController {
 				json += "\"content\":{";
 				json += "\"expressAd\":\""+list.get(0).getInfo()+"\",";
 				json += "\"attr\":\""+ip+list.get(0).getAddrUrl()+"\",";
-				json += "\"tel\":\""+list.get(0).getStaTel()+"\"";
-				json += "\"staLongitude\":\""+list.get(0).getStaLongitude()+"\"";
+				json += "\"tel\":\""+list.get(0).getStaTel()+"\",";
+				json += "\"staLongitude\":\""+list.get(0).getStaLongitude()+"\",";
 				json += "\"staLatitude\":\""+list.get(0).getStaLatitude()+"\"";
 				json += "}";
 				json += "}";
@@ -987,7 +987,39 @@ public class expressController {
 					json += "\"isVideo\":\""+businessExp.getIsVideo()+"\",";
 					if(businessExp.getExpState()==3){
 						json += "\"type\":\"3\"";
-					}else if(businessExp.getExpState()==4 || businessExp.getExpState()==5){
+					}else if(businessExp.getExpState()==4 || businessExp.getExpState()==5 || businessExp.getExpState()==0){
+						json += "\"type\":\"2\"";
+					}else{
+						json += "\"type\":\"1\"";
+					}
+					boolean  flag = false ; //我的快递列表状态
+					for (AppLatestNews appLatestNews2 : list) {
+						if(appLatestNews2.getSourceId().equals(businessExp.getExpId())){
+							flag = true;
+						}
+					}
+					if (flag) {
+						json += ",\"status\":true";
+					}else {
+						json += ",\"status\":false";
+					}
+					json +="},";
+				}
+			}else if (query.getType()==7) {
+				for(int i=0;i<baseBean.getList().size();i++) {
+					BusinessExp businessExp = (BusinessExp) baseBean.getList().get(i);
+					json += "{";
+					json += "\"expressId\":\""+businessExp.getExpId()+"\",";
+					json += "\"logo\":\""+ip+businessExp.getLogo()+"\",";
+					json += "\"company\":\""+businessExp.getExpCompany()+"\",";
+					json += "\"orderCode\":\""+businessExp.getExpCode()+"\",";
+					json += "\"time\":\""+ DateUtil.getInterval(businessExp.getModifyTime())+"\",";
+					json += "\"lastReply\":\""+businessExp.getLastMessage()+"\",";
+					json += "\"expType\":\""+businessExp.getExpType()+"\",";
+					json += "\"isVideo\":\""+businessExp.getIsVideo()+"\",";
+					if(businessExp.getExpState()==3){
+						json += "\"type\":\"3\"";
+					}else if(businessExp.getExpState()==4 || businessExp.getExpState()==5 || businessExp.getExpState()==0){
 						json += "\"type\":\"2\"";
 					}else{
 						json += "\"type\":\"1\"";
@@ -1235,36 +1267,45 @@ public class expressController {
 	public void updateExpress (HttpServletRequest request, HttpServletResponse response,BusinessExpQuery query) {
 		String json = "";
 		try {
-			BusinessExp BusinessExp = new BusinessExp();
-			Timestamp  ts=new Timestamp(new Date().getTime());
-			BusinessExp.setModifyTime(ts);
-			BusinessExp.setExpId(query.getID());
-			if(query.getType()==1){
-				BusinessExp.setExpState(8);
-				businessExpService.update_app(BusinessExp);
-				AppLatestNews appLatestNews = new AppLatestNews();
-				appLatestNews.setUserId(query.getUserId());
-				appLatestNews.setEstateId(0);
-				appLatestNews.setTypeId(38);//快递
-				appLatestNews.setTo(1);
-				appLatestNewsService.save_app(appLatestNews);
-			}else{
-				BusinessExp.setExpState(3);
-				businessExpService.update_Schedule(BusinessExp);
-				AppLatestNews appLatestNews = new AppLatestNews();
-				appLatestNews.setUserId(query.getUserId());
-				appLatestNews.setTypeId(21);
-				appLatestNews.setSourceId(query.getID());
-				appLatestNews.setTo(0);
-				appLatestNews.setEstateId(0);
-				appLatestNewsService.save_app(appLatestNews);
-				appLatestNews.setTypeId(24);
-				appLatestNewsService.save_app(appLatestNews);
-				appLatestNews.setTypeId(26);
-				appLatestNewsService.save_app(appLatestNews);
-				appLatestNews.setTypeId(38);//快递
-				appLatestNews.setTo(1);
-				appLatestNewsService.save_app(appLatestNews);
+			BusinessExp exp = businessExpService.findById_app(query.getID());
+			if (exp.getExpState()==0 || exp.getExpState()==4 || exp.getExpState()==5) {
+				BusinessExp BusinessExp = new BusinessExp();
+				Timestamp  ts=new Timestamp(new Date().getTime());
+				BusinessExp.setModifyTime(ts);
+				BusinessExp.setExpId(query.getID());
+				if(query.getType()==1){
+					BusinessExp.setExpState(8);
+					businessExpService.update_app(BusinessExp);
+					AppLatestNews appLatestNews = new AppLatestNews();
+					appLatestNews.setUserId(query.getUserId());
+					appLatestNews.setEstateId(0);
+					appLatestNews.setTypeId(38);//快递
+					appLatestNews.setTo(1);
+					appLatestNewsService.save_app(appLatestNews);
+				}else{
+					BusinessExp.setExpState(3);
+					businessExpService.update_Schedule(BusinessExp);
+					AppLatestNews appLatestNews = new AppLatestNews();
+					appLatestNews.setUserId(query.getUserId());
+					appLatestNews.setTypeId(21);
+					appLatestNews.setSourceId(query.getID());
+					appLatestNews.setTo(0);
+					appLatestNews.setEstateId(0);
+					appLatestNewsService.save_app(appLatestNews);
+					appLatestNews.setTypeId(24);
+					appLatestNewsService.save_app(appLatestNews);
+					appLatestNews.setTypeId(26);
+					appLatestNewsService.save_app(appLatestNews);
+					appLatestNews.setTypeId(38);//快递
+					appLatestNews.setTo(1);
+					appLatestNewsService.save_app(appLatestNews);
+				}
+			}else {
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"快递状态已改变\"";
+				json += "}";
 			}
 			json += "{";
 			json += "\"errorCode\":\"200\",";

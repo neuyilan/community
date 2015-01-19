@@ -9,8 +9,7 @@
 <meta charset="utf-8">
 <title>小区开聊详情</title> 
 <link href="${ctx }/js/activity/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${ctx }/tmp0/css/style.css" rel="stylesheet" type="text/css" />
-
+<%-- <link href="${ctx }/tmp0/css/style.css" rel="stylesheet" type="text/css" /> --%>
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" /> 
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 </head>
@@ -21,7 +20,7 @@
         <h1>小区开聊</h1>      
         <a class="a-back"></a>
     </header>
-    <div class="kl-content kl-div">
+    <div class="kl-content kl-div" >
        <input type="hidden" id="supTmp" value="">
        <input type="hidden" id="noZan" value="N">
         <p class="kl-head">
@@ -37,8 +36,8 @@
                 <i class="bgpl"></i>
                 <em>${businessHelp.comments}</em>
             </span>
-            <span class="kl-z">
-                <a class="bgz"></a>
+            <span class="kl-z" id="supportsaSpan">
+                <a class="bgz" id="supportsa"></a>     
                 <em id="supports"></em>
             </span>
         </p>
@@ -77,11 +76,18 @@
         $(".kl-wyhf").click(function(e) {
 			$(".kl-total").css("display","none");
             $(".kl-hfpage").css("display","block");
+           	replyId=0;
+           	replyName="";
+            replyType =0;
+           	$("#CommentStr").attr("placeholder","请输入回复内容...");
+            $("#CommentStr").val("");   
         });
 		$(".kl-hfpage .a-back").click(function(e) {
 			$(".kl-hfpage").css("display","none");
             $(".kl-total").css("display","block");
-        });
+            $("#CommentStr").val("");   
+            $("#CommentStr").attr("placeholder","回复："+replyName);
+        });    
 		
 // 		$("#send").click(function(e) {
 // 			msgbox('提示',"评论成功！");
@@ -103,7 +109,10 @@
  var page = 0 ;//当前页面
  var PageState=false;//是否有下一页
  var screenHeight=document.documentElement.clientHeight;
- $('.kl-z em').text('${businessHelp.supports}');
+ var dianZan=0;   //点赞次数
+//  $('.kl-z em').text('${businessHelp.supports}'); 
+
+$('#supports').text('${businessHelp.supports}'); 
  $("#supTmp").val('${businessHelp.supports}');
  
  
@@ -137,19 +146,30 @@
 // 		 $("#replaceinp").attr("placeholder","回复:");
 // 	 });
 	 //点赞
-	 $('.kl-z a').click(function(){
-		   $('.kl-z a').append('<em class="x-add">+1</em>');
-		   $('.kl-z a').css("background-image","url(${ctx}/images/zyellow.png)");
-		   $('.kl-z em').css("color","#fd8b07");
-		   $('.x-add').css({'position':'absolute', 'color':'#fd8b07','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
-			   $(this).fadeIn('fast').remove();
-			   var Num = parseInt($("#supTmp").attr("value")); 
+	 $('#supportsa').click(function(){
+//		 	$('#supportsa').append('<em id="plusOne" class="x-add">+1</em>');  
+		    $('#supportsa').append('<em id="plusOne" class="x-add"></em>');
+		 	help_dianzhan();
+// 			if (dianZan != 0)
+// 				$('#plusOne').text('');
+			dianZan++;
+		    $('#supportsa').css("background-image","url(${ctx}/images/zyellow.png)");
+		    $('#supports').css("color","#fd8b07");
+		    $('.x-add').css({'position':'absolute', 'color':'#fd8b07','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
+			   
+			$(this).fadeIn('fast').remove();        
+			var Num = parseInt($("#supTmp").attr("value")); 
+
+// 			   alert($('#plusOne').val());
+// 			   alert($('.x-add').text("")); 
 // 			   Num++;
-			   $('.kl-z em').text(Num);
-			   $('.kl-z a').css("background-image","url(${ctx}/images/zgray.png)");
-			   $('.kl-z em').css("color","#7c7c7c");
+// 			   $('.kl-z em').text(Num);
+		    $('#supports').text(Num);
+			$('#supportsa').css("background-image","url(${ctx}/images/zgray.png)");
+// 			   $('.kl-z em').css("color","#7c7c7c");
+			$('#supports').css("color","#7c7c7c");
 		   });
-		   help_dianzhan();
+		   
 	    });
 	 
 		//评论
@@ -172,10 +192,10 @@
 			           	sessionid: '${sessionid}', 
 			           	content: content,
 			           	userId: '${userId}',
-			           	publisherId : publisherId
-// 			           	replyId:replyId ,
-// 			           	replyName:replyName,
-// 		 		    	replyType:replyType
+			           	publisherId : publisherId,
+			           	replyId:replyId ,
+			           	replyName:replyName,
+		 		    	replyType:replyType
 		 		    },
 		 		    type: 'post',
 		            dataType: 'json',
@@ -184,8 +204,10 @@
 		 	     		 msgbox('提示','评论成功');
 		 	     		$(".kl-hfpage").css("display","none");
 		 	            $(".kl-total").css("display","block");
-// 		 	           jump(1);  
-// 		 	           page=1;   
+// 		 	           $('#comments').append(newContent);
+					   $('#comments').html("");
+		 	           page=1;
+		 	           jump(1); 
 		 	      	   }else{
 		 	      		 msgbox('提示','评论失败'); 
 		 	      		$(".kl-hfpage").css("display","none");
@@ -244,15 +266,42 @@
 		        $('.c-more a').click();
 		    }  
 		  };
+		  
+		 //firefox下检测状态改变只能用oninput,且需要用addEventListener来注册事件。 
+// 		 if(/msie/i.test(navigator.userAgent))    //ie浏览器 
+// 		 {
+// 			 document.getElementById('replaceinp').onpropertychange=handle ;
+// 		 } 
+// 		 else 
+// 		 {//非ie浏览器，比如Firefox 
+// 		 	document.getElementById('comment').addEventListener("input",handle,false); 
+// 		 }
  });
+ 
+//当状态改变的时候执行的函数 
+ function handle() {
+	//document.getElementById('msg').innerHTML='输入的文字长度为：'+document.getElementById('txt').value.length; 
+	$("#replaceinp").val(" ");
+	if($("#CommentStr").val().length==0){
+		$("#replaceinp").val("");
+		$("#replaceinp").attr("placeholder","回复："+replyName);
+	}
+	/*if(document.getElementById('replaceinp').value.length>0){
+		$("#comment").val($("#replaceinp").val());
+		$("#replaceinp").attr("value","");
+		$("#comment").focus();
+	}*/
+ } 
  
  function help_dianzhan()
  {
 	 
 	    if($("#noZan").val() == 'Y')
 	    {
-	    		$('.kl-z em').text('已赞过了，再赞他会骄傲的…');
-	    		return ; 
+	    	
+// 	    		$('.kl-z em').text('已赞过了，再赞他会骄傲的…');
+	    		$('#supports').text('已赞过了，再赞他会骄傲的…');
+	    		return ;
 	    }
 	    $("#noZan").val('Y');
 	    
@@ -269,16 +318,21 @@
         
         success: function (data) {
      	   if(data.errorCode == 200) {
-     		 $('.kl-z em').text(data.message);
+//      	 $('.kl-z em').text(data.message);
+// 			 $('#supportsa').append('<em id="plusOne" class="x-add">+1</em>');
+             $('#plusOne').text('+1');
+			 $('#supports').text(data.message);
      		 $("#supTmp").val( parseInt($("#supTmp").attr("value"))+1);
      	   }else{
      		  $("#supTmp").val( $("#supTmp").attr("value"));
-     		  $('.kl-z em').text(data.message);
+//       	 $('.kl-z em').text(data.message);
+ 			 $('#supports').text(data.message);
      	   }
         },
         error: function() {
         	 $("#supTmp").val( $("#supTmp").attr("value"));
-        	 $('.kl-z em').text('点赞失败');
+//      	 $('.kl-z em').text('点赞失败');
+			 $('#supports').text('点赞失败');
         }
     });
 
@@ -307,7 +361,7 @@ function jump(nextNo) {
                 	for(var i=0;i<rows.length;i++) {
                 		var row = rows[i];   
                 		var newContent = '';
-                		newContent = '<li><div class="kl-hftotal tab"> <p class="tleft kl-img">';
+                		newContent = '<div class="kl-hftotal tab"  > <p class="tleft kl-img">';
                 		if("${ctx}"==row.avatar)
                 			newContent += '<img src="${ctx }/images/morentouxiang.png"/>';
                 		else
@@ -328,9 +382,68 @@ function jump(nextNo) {
 	       					}
 	       				}
                			newContent += '</p>  <div class="kl-user tleft"> <p class="kl-people">'+uname+'</p>';
+               			
+               			
+               			
+               			if(row.replyId==0){
+                   			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">'+row.content+'</span></span></p></div></div>';
+            			}else{
+            				if(row.replyType==1){
+                       			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">回复  <em>'+row.replyName+'(官方)：</em>'+row.content+'</span></span></p></div></div>';
+//             					newContent+= '<div class="one">'+ '<span>回复</sapn>' +'<span>'+row.replyName+'(官方):</span>' +row.content+'</div>';
+            				}else{
+                       			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">回复  <em>'+row.replyName+'：</em>'+row.content+'</span></span></p></div></div>';
+            				}
+            			}
+               			
                			newContent += ' <p class="kl-hfcon kl-top"><span>'+row.content+'</span></span></p></div></div>';
-               			newContent += '<p class="kl-hftime kl-top"><time>'+row.commentTime+'</time></p></li>';
-                	    $('#comments').append(newContent);			
+               			
+               			
+               			
+               			
+               			
+               			newContent += '<p class="kl-hftime kl-top"><time>'+row.commentTime+'</time></p>';
+               			var div = $('<li></li>');
+						div.append(newContent);
+                	    $('#comments').append(div);	
+                	    
+//                 	    var div = $('#comments');  </ul> 
+						
+            			if(row.userId!=userId){
+            				div.find("img").attr("replyId",row.userId);
+            				if(row.name=="" || row.name==null){
+            					div.find("img").attr("replyName","匿名");
+            				}else{
+            					div.find("img").attr("replyName",row.name);
+            				}
+            				div.find("img").attr("replyType",row.userType);  
+
+                			div.click(function(){
+                				
+                				replyId = $(this).find("img").attr("replyId");//点击回复人id
+                				replyName = $(this).find("img").attr("replyName");//点击回复人姓名
+                				replyType = $(this).find("img").attr("replyType");//点击回复人类型
+//                 				alert(replyName);
+                				$("#CommentStr").attr("placeholder","回复："+replyName);
+                				$(".kl-total").css("display","none");
+                	            $(".kl-hfpage").css("display","block");
+
+                  			 });
+            			}else{
+            				
+            				div.click(function(){
+//                				 alert("ddd");
+//                  				 replyId = 0;//点击回复人id
+//                  				 replyName = "";//点击回复人姓名
+//                  				 $("#replaceinp").attr("placeholder","回复:");
+								replyId = 0;
+               					replyName = "";
+//                					replyType = "";
+               					msgbox('提示',"您不能自己回复自己");
+	               			});
+	           			}
+                	    
+                	    
                 	}
                 }
                 

@@ -62,7 +62,9 @@
             $('#ztysbtn').click(function() {
             	if(parseInt('${curEstateId}') == 0) {
         			alert("请先切换到小区");return;
-        		}
+        		}else if(parseInt('${curStateId}') == 0) {
+           			alert("当前小区没有服务驿站");return;
+           		}
             	$('#y-kd-ztysin').fadeIn('slow');
             });
 
@@ -181,7 +183,9 @@
         function jumpUrl(url) {
     		if(parseInt('${curEstateId}') == 0) {
     			alert("请先切换到小区");return;
-    		}else{
+    		}else if(parseInt('${curStateId}') == 0) {
+       			alert("当前小区没有服务驿站");return;
+       		}else{
     			window.location.href = url;
     		}
     	}

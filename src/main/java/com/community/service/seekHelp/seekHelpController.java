@@ -404,8 +404,8 @@ public class seekHelpController {
 	 * @return
 	 * json
 	 */
-	@RequestMapping(value="getSeekHelpDetailsByIdForH5")
-	public ModelAndView getSeekHelpDetailsByIdForH5(HttpServletRequest request, HttpServletResponse response,BusinessHelpQuery query) {
+	@RequestMapping(value="getSeekHelpDetailsByIdHTML")
+	public ModelAndView getSeekHelpDetailsByIdHTML(HttpServletRequest request, HttpServletResponse response,BusinessHelpQuery query) {
 		ModelAndView mav = new ModelAndView("/service/seekHelp/detail");
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
@@ -449,32 +449,6 @@ public class seekHelpController {
 		
 		return mav;
 	}
-	
-	
-	/**
-	 * 回复页面
-	 * @param userId,sessionid,ID,page
-	 * @return
-	 * json
-	 */
-	@RequestMapping(value="replyPage")
-	public ModelAndView replyPage(HttpServletRequest request, HttpServletResponse response,BusinessHelpCommentQuery query) {
-		try{
-		}catch(Exception e){
-			GSLogger.error("进入replyPage回复页时发生错误：/service/seekHelp/replyPage", e);
-			e.printStackTrace();
-		}
-		ModelAndView mav = new ModelAndView("/service/seekHelp/reply");
-		String path = request.getContextPath();
-		String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
-		mav.addObject("ctx", ctx); 
-		mav.addObject("ID", query.getID()); 
-		mav.addObject("userId", query.getUserId());
-		
-		return mav;
-	}
-	
-	
 	
 	/**
 	 * 用户查看邻里求助的评论
@@ -554,9 +528,6 @@ public class seekHelpController {
 			e.printStackTrace();
 		}
 	}
-	
-	
-
 	
 	/**
 	 * 用户查看邻里求助回复我的评论

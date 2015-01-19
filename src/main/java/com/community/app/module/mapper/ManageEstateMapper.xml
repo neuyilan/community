@@ -187,6 +187,12 @@
 		<if test="serviceCode==40010" >
 			and l.typeId = 8
 		</if>
+		<if test="serviceCode==40011" >
+			and l.typeId = 9
+		</if>
+		<if test="serviceCode==40012" >
+			and l.typeId = 10
+		</if>
 	</select>
 	
 	<!-- 无条件查询所有ManageEstate -->

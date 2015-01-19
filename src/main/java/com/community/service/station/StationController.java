@@ -45,8 +45,10 @@ import com.community.app.module.bean.BusinessAnnoComment;
 import com.community.app.module.bean.BusinessAnnoSupport;
 import com.community.app.module.bean.BusinessFeedback;
 import com.community.app.module.bean.BusinessProduct;
+import com.community.app.module.bean.BusinessProductComment;
 import com.community.app.module.bean.BusinessPropertyMaterial;
 import com.community.app.module.bean.BusinessStation;
+import com.community.app.module.bean.BusinessStationMessage;
 import com.community.app.module.bean.BusinessTel;
 import com.community.app.module.bean.BusinessTelGroup;
 import com.community.app.module.bean.BusinessUser;
@@ -58,6 +60,7 @@ import com.community.app.module.service.BusinessAnnoCommentService;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessAnnoSupportService;
 import com.community.app.module.service.BusinessFeedbackService;
+import com.community.app.module.service.BusinessStationMessageService;
 import com.community.app.module.service.BusinessStationService;
 import com.community.app.module.service.BusinessStationServiceService;
 import com.community.app.module.service.BusinessUserService;
@@ -67,6 +70,7 @@ import com.community.app.module.vo.BusinessAnnoCommentQuery;
 import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.app.module.vo.BusinessAnnoSupportQuery;
 import com.community.app.module.vo.BusinessFeedbackQuery;
+import com.community.app.module.vo.BusinessStationMessageQuery;
 import com.community.app.module.vo.BusinessStationServiceQuery;
 import com.community.app.module.vo.BusinessTelQuery;
 import com.community.framework.utils.DateUtil;
@@ -100,6 +104,8 @@ public class StationController {
 	private AppUserService appUserService;
 	@Autowired
 	private AppStatisticsClickService appStatisticsClickService;
+	@Autowired
+	private BusinessStationMessageService businessStationMessageService;
 	
 	
 	/**
@@ -126,6 +132,8 @@ public class StationController {
 			json += "\"name\":\""+businessStation.getStaName()+"\",";
 			json += "\"tel\":\""+businessStation.getStaTel()+"\",";
 			json += "\"addr\":\""+businessStation.getAddrUrl()+"\",";
+			json += "\"staLongitude\":\""+businessStation.getStaLongitude()+"\",";
+			json += "\"staLatitude\":\""+businessStation.getStaLatitude()+"\",";
 			json += "\"staBrief\":\""+businessStation.getStaBrief()+"\",";
 			json += "\"serviceList\":[";
 			for (com.community.app.module.bean.BusinessStationService businessStationService : list) {
@@ -1278,20 +1286,67 @@ public class StationController {
 	 * json
 	 */
 	@RequestMapping(value="getStationMessage")
-	public void getStationMessage (HttpServletRequest request, HttpServletResponse response) {
+	public void getStationMessage (HttpServletRequest request, HttpServletResponse response,BusinessStationMessageQuery query) {
 		String json = "";
-		json += "{";
-		json += "\"errorCode\":\"200\",";
-		json += "\"message\":\"执行成功\",";
-		json += "\"content\":{";
-		json += "\"PageState\":true,";
-		json += "\"reviewList\":[";
-		json += "{\"userId\":\"1\",\"avatar\":\"头像\",\"name\":\"金大亮\",\"commentTime\":\"2011-11-11 19:11:11\",\"content\":\"你好\",\"replyType\":\"0\"},";
-		json += "{\"userId\":\"2\",\"avatar\":\"头像\",\"name\":\"金小亮\",\"commentTime\":\"2011-11-11 19:11:11\",\"content\":\"你好！！\",\"replyType\":\"0\"},";
-		json += "{\"userId\":\"3\",\"avatar\":\"头像\",\"name\":\"顾唐\",\"commentTime\":\"2011-11-11 19:11:11\",\"content\":\"你好！！！！！\",\"replyType\":\"1\"}";
-		json += "]";
-		json += "}";
-		json += "}";
+		try {
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			query.setRows(15);
+			query.setOrder("desc");
+			query.setSort("commentTime");
+			BaseBean baseBean = businessStationMessageService.findAllPage_app(query);
+			
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"执行成功\",";
+			json += "\"content\":{";
+			json += "\"PageState\":";
+			if(baseBean.getCount()>query.getPage()*query.getRows()){
+				json += "true,";
+			}else{
+				json += "false,";
+			}
+			json += "\"reviewList\":[";
+			for(int i=0;i<baseBean.getList().size();i++) {
+				BusinessStationMessage businessStationMessage = (BusinessStationMessage) baseBean.getList().get(i);
+				json += "{\"userId\":\""+businessStationMessage.getCommentorId()+"\",";
+				if(businessStationMessage.getCommentorState()==1){
+					json +="\"avatar\":\""+ip+businessStationMessage.getAvatar()+"\",\"name\":\""
+							+businessStationMessage.getBuNickname()+"\",";
+				}else{
+					json +="\"avatar\":\""+ip+businessStationMessage.getPortrait()+"\",\"name\":\""
+							+businessStationMessage.getNickname()+"\",";
+				}
+				json +="\"commentTime\":\""+DateUtil.getInterval(businessStationMessage.getCommentTime())+"\",";
+					json += "\"replyName\":\""+businessStationMessage.getReplyName()+"\",";
+					json += "\"replyId\":\""+businessStationMessage.getReplyId()+"\",";
+					json += "\"content\":\""+businessStationMessage.getContent()+"\",";
+					if(businessStationMessage.getCommentorState()==1){
+						json +="\"userType\":\"1\",";
+					}else{
+						json +="\"userType\":\"0\",";
+					}
+					if(businessStationMessage.getReplyState()==1){
+						json +="\"replyType\":\"1\"";
+					}else{
+						json +="\"replyType\":\"0\"";
+					}
+					json += "},";
+			}
+			if(baseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"修改失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
 		
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
@@ -1310,13 +1365,40 @@ public class StationController {
 	 * json
 	 */
 	@RequestMapping(value="saveStationMessage")
-	public void saveStationMessage (HttpServletRequest request, HttpServletResponse response) {
+	public void saveStationMessage (HttpServletRequest request, HttpServletResponse response,BusinessStationMessageQuery query) {
 		String json = "";
-		json += "{";
-		json += "\"errorCode\":\"200\",";
-		json += "\"message\":\"评论成功\"";
-		json += "}";
-		
+		try{
+			BusinessStationMessage businessStationMessage = new BusinessStationMessage();
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			businessStationMessage.setCommentTime(ts);
+			businessStationMessage.setStationId(query.getStationId());
+			businessStationMessage.setCommentorId(query.getUserId());
+			businessStationMessage.setContent(SensitivewordFilter.replaceSensitiveWord(query.getContent(),1,"*"));
+			businessStationMessage.setCommentorState(0);//居民
+			businessStationMessage.setReplyState(0);
+			if(null==query.getReplyId()){
+				businessStationMessage.setReplyId(0);
+			}else{
+				businessStationMessage.setReplyId(query.getReplyId());
+			}
+			if(null==query.getReplyName()){
+				businessStationMessage.setReplyName("");
+			}else{
+				businessStationMessage.setReplyName(query.getReplyName());
+			}
+			businessStationMessageService.save(businessStationMessage);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"评论成功\"";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"评论失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {

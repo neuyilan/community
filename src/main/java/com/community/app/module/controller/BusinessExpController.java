@@ -215,10 +215,9 @@ public class BusinessExpController {
         mav.addObject("expState", query.getExpState());
         mav.addObject("expressList", expressList);
         mav.addObject("curEstateId", CommonUtils.getUser().getCurEstateId());
+        mav.addObject("curStateId", CommonUtils.getUser().getCurStateId());
         return mav;
 	}
-	
-	
 	
 	/**
 	 * 导出快递单
@@ -520,7 +519,7 @@ public class BusinessExpController {
 		try{
 			Map paramMap = new HashMap();
 			ShiroUser shiroUser = CommonUtils.getUser();
-			paramMap.put("stationId", shiroUser.getOrgId());
+			paramMap.put("stationId", shiroUser.getCurStateId());
 			List list = businessExpFavService.findByMap(paramMap);
 			if(list != null && list.size() > 0) {
 				businessExpFav = (BusinessExpFav) list.get(0);

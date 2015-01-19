@@ -260,8 +260,9 @@ public class SecondaryMarketController {
 	public void addProductPHP(HttpServletRequest request, HttpServletResponse response,BusinessProductQuery query) {
 		String json = "";
 		try{
-			query.setPicPaths(request.getParameterValues("image"));
-			businessProductService.addProduct(query);
+			String str = request.getParameter("images");
+			query.setPicPaths(str.split(","));
+			businessProductService.addProductPHP(query);
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"发布成功\"";
@@ -358,7 +359,8 @@ public class SecondaryMarketController {
 	@RequestMapping(value="editProductPHP")
 	public void editProductPHP(HttpServletRequest request, HttpServletResponse response,BusinessProductQuery query) {
 		String json = "";
-		Map map = (Map) request.getAttribute("resultMap");
+		String str = request.getParameter("images");
+		query.setPicPaths(str.split(","));
 		try{
 			businessProductService.editProductPHP(query);
 			json += "{";

@@ -65,6 +65,15 @@ public interface BusinessStationMessageService {
 	 * @throws ServiceException
 	 */
 	public BaseBean findAllPage(final BusinessStationMessageQuery query) throws ServiceException;
+	
+	/**
+	 * 根据搜索条件，搜索分页数据
+	 * @param query
+	 * @param pageData
+	 * @return
+	 * @throws ServiceException
+	 */
+	public BaseBean findAllPage_app(final BusinessStationMessageQuery query) throws ServiceException;
 
 	/**
 	 * 根据搜索条件，搜索分页总数

@@ -94,6 +94,18 @@ public class BusinessStationMessageDaoImpl implements BusinessStationMessageDao 
 		List<BusinessStationMessage> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessStationMessageDao.findAllPage",query);
 		return list;
 	}
+	
+	/**
+	 * 根据搜索条件，搜索分页数据
+	 * @param query
+	 * @param pageData
+	 * @return
+	 * @throws DaoException
+	 */
+	public List<BusinessStationMessage> findAllPage_app(final BusinessStationMessageQuery query) throws DaoException {
+		List<BusinessStationMessage> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessStationMessageDao.findAllPage_app",query);
+		return list;
+	}
 
 	/**
 	 * 根据搜索条件，搜索分页总数
@@ -103,6 +115,17 @@ public class BusinessStationMessageDaoImpl implements BusinessStationMessageDao 
 	 */
 	public int selectCount(final BusinessStationMessageQuery query) throws DaoException {
 		int count = this.sqlSessionTemplate.selectOne("com.community.app.module.dao.BusinessStationMessageDao.selectCount",query);
+		return count;
+	}
+	
+	/**
+	 * 根据搜索条件，搜索分页总数
+	 * @param pageData
+	 * @return
+	 * @throws DaoException
+	 */
+	public int selectCount_app(final BusinessStationMessageQuery query) throws DaoException {
+		int count = this.sqlSessionTemplate.selectOne("com.community.app.module.dao.BusinessStationMessageDao.selectCount_app",query);
 		return count;
 	}
 	

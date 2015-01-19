@@ -4,26 +4,19 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.community.app.module.vo.BaseBean;
-
 
 import com.community.app.module.bean.BusinessExpFav;
 import com.community.app.module.bean.ShiroUser;
@@ -33,15 +26,12 @@ import com.community.framework.utils.CommonUtils;
 
 import static com.community.framework.utils.CommonUtils.getUser;
 
-
 @Controller
 @RequestMapping("/business/businessExpFav")
 public class BusinessExpFavController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessExpFavController.class);
 	@Autowired
 	private BusinessExpFavService businessExpFavService;
-	
-	private final String LIST_ACTION = "redirect:/business/businessExpFav/list.do";
 	
 	/**
 	 * 进入管理页
@@ -148,7 +138,7 @@ public class BusinessExpFavController {
 			    businessExpFav.setCreateTime(new Timestamp(System.currentTimeMillis()));
 			    businessExpFav.setEditor(getUser().getUserName());
 			    businessExpFav.setEditTime(new Timestamp(System.currentTimeMillis()));
-			    businessExpFav.setStationId(getUser().getOrgId());
+			    businessExpFav.setStationId(getUser().getCurStateId());
 				businessExpFavService.save(businessExpFav);
 			}
 		    

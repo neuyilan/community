@@ -65,6 +65,15 @@ public interface BusinessStationMessageDao {
 	 * @throws DaoException
 	 */
 	public List<BusinessStationMessage> findAllPage(final BusinessStationMessageQuery query) throws DaoException;
+	
+	/**
+	 * 根据搜索条件，搜索分页数据
+	 * @param query
+	 * @param pageData
+	 * @return
+	 * @throws DaoException
+	 */
+	public List<BusinessStationMessage> findAllPage_app(final BusinessStationMessageQuery query) throws DaoException;
 
 	/**
 	 * 根据搜索条件，搜索分页总数
@@ -73,6 +82,14 @@ public interface BusinessStationMessageDao {
 	 * @throws DaoException
 	 */
 	public int selectCount(final BusinessStationMessageQuery query) throws DaoException;
+	
+	/**
+	 * 根据搜索条件，搜索分页总数
+	 * @param pageData
+	 * @return
+	 * @throws DaoException
+	 */
+	public int selectCount_app(final BusinessStationMessageQuery query) throws DaoException;
 	
 	/**
 	 * 保存BusinessStationMessage数据

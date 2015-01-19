@@ -41,7 +41,7 @@
               'directionalityltr', 'directionalityrtl', 'indent', '|',
               'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
               'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
-              'simpleupload', 'insertimage', 'map', 'insertvideo', 'pagebreak', 'template', 'background', '|',
+              'simpleupload', 'insertimage', 'map', 'pagebreak', 'template', 'background', '|',
               'date', 'time', 'spechars', '|',
               'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
               'preview', 'searchreplace', 'help'

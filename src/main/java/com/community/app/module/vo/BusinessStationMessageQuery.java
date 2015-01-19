@@ -24,6 +24,24 @@ public class BusinessStationMessageQuery extends BaseBean {
 	private java.lang.String keyWord;
 	private Integer curUserId;		//当前用户ID
 	private String curOrgType;		//当前部门类型
+	private java.lang.Integer ID;
+	private java.lang.Integer userId;
+
+	public java.lang.Integer getID() {
+		return ID;
+	}
+
+	public void setID(java.lang.Integer iD) {
+		ID = iD;
+	}
+
+	public java.lang.Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(java.lang.Integer userId) {
+		this.userId = userId;
+	}
 
 	public BusinessStationMessageQuery(BusinessStationMessage businessStationMessage) {
 		this.commentId = businessStationMessage.getCommentId();

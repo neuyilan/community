@@ -386,6 +386,7 @@ public class UserController {
 		String openid = (String) request.getSession().getAttribute("openid");
 		String QQopenid = (String) request.getSession().getAttribute("QQopenid");
 		String nickname = (String) request.getSession().getAttribute("nickname");
+		nickname = request.getParameter("nickname");
 		AppUser appUser = new AppUser();
 		String json = "";
 		boolean whetherRepeat = false;
@@ -558,7 +559,7 @@ public class UserController {
 		        appVerifyService.delete(appVerifyQuery);
 				appVerifyService.save(appVerify);
 				// 发送短信
-				str="您已通过手机号"+query.getCellphone()+"快速注册成为“OK家”居民，初始密码为："+str+"立即下载OK家APP，享受小区生活服务：http://www.bqsqcm.com/community/download/index.html?id=18";
+				str="您已通过手机号"+query.getCellphone()+"快速注册成为“OK家”居民，初始密码为："+str+"立即下载OK家APP，享受小区生活服务：http://www.bqsqcm.com/community/download/index.html?id=18【OK家】";
 				String returnMessage = messagesUtil.returnMessageRrid(query.getCellphone(), str);
 				manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
 			} catch (Exception e) {
@@ -3310,7 +3311,7 @@ public class UserController {
 			for (AppLatestNews appLatestNews : latestlist) {
 				BusinessExp businessExp = businessExpService.findById_app(appLatestNews.getSourceId());
 				if (!(businessExp==null)) {
-					if(appLatestNews.getSourceId().equals(businessExp.getExpId())){
+					if(businessExp.getExpState()==3){
 						expState = 2;
 						expId = businessExp.getExpId();
 						break;
@@ -3471,7 +3472,20 @@ public class UserController {
 			if(helpBaseBean.getList().size() > 0) {
 				json = json.substring(0, json.length()-1);
 			}
+			json += "],";
+			
+			json += "\"mall\":{";
+			json += "\"title\":\"新年大集\",";		
+			json += "\"url\":\"http://www.taobao.com/\",";		
+			json += "\"list\":[";
+			json += "{\"ID\":\"1\",\"price\":\"11\",\"brief\":\"江西赣南脐橙12个（约200g-250g）\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i2/TB1EnURGXXXXXbYaXXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://detail.tmall.com/item.htm?spm=a3204.7139825.7139825.4.m0XdpH&id=42260938716&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_42260938716_129940\"},";
+			json += "{\"ID\":\"2\",\"price\":\"11\",\"brief\":\"皮薄肉嫩 酸甜畅享\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i1/TB1Abr4GpXXXXbkaXXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://detail.tmall.com/item.htm?spm=a3204.7139825.7139825.5.m0XdpH&id=42296726901&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_42296726901_129940\"},";
+			json += "{\"ID\":\"3\",\"price\":\"11\",\"brief\":\"新疆阿克苏冰糖心苹果5斤 超大果(果径85-90mm)\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i3/TB1GAk8GVXXXXXmXFXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://chaoshi.detail.tmall.com/item.htm?&spm=a3204.7139825.7139825.6.m0XdpH&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_43027834257_129940&userBucket=4&id=43027834257\"}";
 			json += "]";
+			json += "}";
+
+			
+			
 			json += "}";
 			json += "}";
 		}catch(Exception e){
