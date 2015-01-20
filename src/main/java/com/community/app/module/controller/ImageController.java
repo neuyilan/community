@@ -68,6 +68,8 @@ public class ImageController {
 			response.addHeader("Access-Control-Allow-Origin", "*");  
 			response.addHeader("P3P","CP=CAO PSA OUR");  
 			response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");  
+			   response.addHeader("Access-Control-Allow-Origin", "*");  
+		        response.addHeader("Access-Control-Allow-Headers", "x-requested-with");  
 //			response.setHeader("Content-Type", "text/json"); 
 			
 			response.setCharacterEncoding("utf-8");

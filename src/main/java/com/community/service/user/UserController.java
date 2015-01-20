@@ -3437,10 +3437,15 @@ public class UserController {
 						+"\"publisherName\":\""+businessProduct.getPublisherName()+"\",\"avatar\":\""+ip+businessProduct.getPortrait()+"\","
 						+"\"addr\":\""+businessProduct.getEstateScope()+"\",\"type\":\""+businessProduct.getDealType()+"\",\"OnSale\":\""+businessProduct.getIsEstateAgent()+
 						"\",\"price\":\""+businessProduct.getPrice()+"\",\"pic\":\"";
-				if(businessProduct.getPicUrl()!=null){
-					String[] pic = businessProduct.getPicUrl().split(",");
-					json += ip+pic[0];
+				if(businessProduct.getDealType()==1){
+					json += ip+"/images/icon/qiugou.png";
+				}else {
+					if(businessProduct.getPicUrl()!=null){
+						String[] pic = businessProduct.getPicUrl().split(",");
+						json += ip+pic[0];
+					}
 				}
+				
 				json += "\"},";
 			}
 			if(productBaseBean.getList().size() > 0) {
@@ -3479,7 +3484,7 @@ public class UserController {
 			json += "\"url\":\"http://www.taobao.com/\",";		
 			json += "\"list\":[";
 			json += "{\"ID\":\"1\",\"price\":\"11\",\"brief\":\"江西赣南脐橙12个（约200g-250g）\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i2/TB1EnURGXXXXXbYaXXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://detail.tmall.com/item.htm?spm=a3204.7139825.7139825.4.m0XdpH&id=42260938716&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_42260938716_129940\"},";
-			json += "{\"ID\":\"2\",\"price\":\"11\",\"brief\":\"皮薄肉嫩 酸甜畅享\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i1/TB1Abr4GpXXXXbkaXXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://detail.tmall.com/item.htm?spm=a3204.7139825.7139825.5.m0XdpH&id=42296726901&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_42296726901_129940\"},";
+			json += "{\"ID\":\"2\",\"price\":\"11\",\"brief\":\"皮薄肉嫩  酸甜畅享5斤 超大果(果径85-90mm)\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i1/TB1Abr4GpXXXXbkaXXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://detail.tmall.com/item.htm?spm=a3204.7139825.7139825.5.m0XdpH&id=42296726901&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_42296726901_129940\"},";
 			json += "{\"ID\":\"3\",\"price\":\"11\",\"brief\":\"新疆阿克苏冰糖心苹果5斤 超大果(果径85-90mm)\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i3/TB1GAk8GVXXXXXmXFXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://chaoshi.detail.tmall.com/item.htm?&spm=a3204.7139825.7139825.6.m0XdpH&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_43027834257_129940&userBucket=4&id=43027834257\"}";
 			json += "]";
 			json += "}";

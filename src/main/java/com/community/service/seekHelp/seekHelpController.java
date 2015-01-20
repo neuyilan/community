@@ -399,14 +399,97 @@ public class seekHelpController {
 	
 	
 	/**
-	 * 用户查看邻里求助详情 for H5
+	 * 用户查看邻里求助详情 for APP H5
 	 * @param userId,sessionid,ID
 	 * @return
 	 * json
 	 */
 	@RequestMapping(value="getSeekHelpDetailsByIdHTML")
 	public ModelAndView getSeekHelpDetailsByIdHTML(HttpServletRequest request, HttpServletResponse response,BusinessHelpQuery query) {
-		ModelAndView mav = new ModelAndView("/service/seekHelp/detail");
+		ModelAndView mav = new ModelAndView("/service/seekHelp/detailAPP");
+		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
+			AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(query.getUserId());
+			appLatestNews.setTypeId(28);
+			appLatestNews.setTo(0);
+			appLatestNews.setSourceId(query.getID());
+			appLatestNewsService.delete_app_id(appLatestNews);
+			appLatestNews.setTypeId(8);
+			appLatestNewsService.delete_app_id(appLatestNews);
+			
+			if(businessHelp.getIsNickname()==1)
+				businessHelp.setHelperName("小区居民");
+			
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			if(null==query.getUserId()){
+				appStatisticsClick.setUserId(0);
+			}else{
+				appStatisticsClick.setUserId(query.getUserId());
+			}
+			appStatisticsClick.setType(17);
+			appStatisticsClick.setTypeName("查看邻里求助详情");
+			appStatisticsClickService.save(appStatisticsClick);
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+			
+			mav.addObject("userId", query.getUserId()); 
+			mav.addObject("ID", query.getID()); 
+//			mav.addObject("ctx", ctx);
+			mav.addObject("ctx", ctx);
+			mav.addObject("businessHelp", businessHelp);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return mav;
+	}
+	
+	
+	/**
+	 * 用户查看邻里求助详情  回复页面 for PHP H5  
+	 * @param userId,sessionid,ID
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getSeekHelpReplyPHP")
+	public ModelAndView getSeekHelpReplyPHP(HttpServletRequest request, HttpServletResponse response,BusinessHelpQuery query) {
+		ModelAndView mav = new ModelAndView("/service/seekHelp/replyPHP");
+		try{
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+			
+			mav.addObject("replyId", request.getParameter("replyId"));
+			mav.addObject("replyName", request.getParameter("replyName"));
+			mav.addObject("replyType", request.getParameter("replyType"));
+			
+			mav.addObject("userId", query.getUserId()); 
+			mav.addObject("ID", query.getID()); 
+			mav.addObject("ctx", ctx);
+//			mav.addObject("businessHelp", query);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return mav;
+	}
+	
+	
+	
+	/**
+	 * 用户查看邻里求助详情 for PHP H5
+	 * @param userId,sessionid,ID
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getSeekHelpDetailsByIdHTMLPHP")
+	public ModelAndView getSeekHelpDetailsByIdHTMLPHP(HttpServletRequest request, HttpServletResponse response,BusinessHelpQuery query) {
+		ModelAndView mav = new ModelAndView("/service/seekHelp/detailPHP");
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");   

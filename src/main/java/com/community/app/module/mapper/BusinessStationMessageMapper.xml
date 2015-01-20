@@ -36,39 +36,48 @@
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-					<if test="commentId != null and commentId != ''" >
-				   		and commentId = #{commentId}
-					</if>
-					<if test="stationId != null and stationId != ''" >
-				   		and stationId = #{stationId}
-					</if>
-					<if test="estateId != null and estateId != ''" >
-				   		and estateId = #{estateId}
-					</if>
-					<if test="commentorId != null and commentorId != ''" >
-				   		and commentorId = #{commentorId}
-					</if>
-					<if test="commentorName != null and commentorName != ''" >
-				   		and commentorName = #{commentorName}
-					</if>
-					<if test="content != null and content != ''" >
-				   		and content = #{content}
-					</if>
-					<if test="commentTime != null and commentTime != ''" >
-				   		and commentTime = #{commentTime}
-					</if>
-					<if test="replyId != null and replyId != ''" >
-				   		and replyId = #{replyId}
-					</if>
-					<if test="replyName != null and replyName != ''" >
-				   		and replyName = #{replyName}
-					</if>
-					<if test="commentorState != null and commentorState != ''" >
-				   		and commentorState = #{commentorState}
-					</if>
-					<if test="replyState != null and replyState != ''" >
-				   		and replyState = #{replyState}
-					</if>
+				<if test="commentId != null and commentId != ''" >
+			   		and commentId = #{commentId}
+				</if>
+				<if test="stationId != null and stationId != ''" >
+			   		and stationId = #{stationId}
+				</if>
+				<if test="estateId != null and estateId != ''" >
+			   		and estateId = #{estateId}
+				</if>
+				<if test="commentorId != null and commentorId != ''" >
+			   		and commentorId = #{commentorId}
+				</if>
+				<if test="commentorName != null and commentorName != ''" >
+			   		and commentorName = #{commentorName}
+				</if>
+				<if test="content != null and content != ''" >
+			   		and content = #{content}
+				</if>
+				<if test="commentTime != null and commentTime != ''" >
+			   		and commentTime = #{commentTime}
+				</if>
+				<if test="replyId != null and replyId != ''" >
+			   		and replyId = #{replyId}
+				</if>
+				<if test="replyName != null and replyName != ''" >
+			   		and replyName = #{replyName}
+				</if>
+				<if test="commentorState != null and commentorState != ''" >
+			   		and commentorState = #{commentorState}
+				</if>
+				<if test="replyState != null and replyState != ''" >
+			   		and replyState = #{replyState}
+				</if>
+				<if test="timeScope != null and timeScope != ''" >
+      				and #{timeScope} >= DATEDIFF(now(), commentTime)
+	      		</if>
+	      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+	      			and date(commentTime) between '${startTime}' and '${endTime}'
+	      		</if>
+				<if test="keyWord != null and keyWord != ''" >
+			   		and (content like '%${keyWord}%' or commentorName like '%${keyWord}%' )   
+				</if>
 			</trim>
 		</where>
 	</sql>

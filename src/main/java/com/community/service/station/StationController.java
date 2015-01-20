@@ -131,7 +131,7 @@ public class StationController {
 			json += "\"ID\":\""+businessStation.getStationId()+"\",";
 			json += "\"name\":\""+businessStation.getStaName()+"\",";
 			json += "\"tel\":\""+businessStation.getStaTel()+"\",";
-			json += "\"addr\":\""+businessStation.getAddrUrl()+"\",";
+			json += "\"addr\":\""+ip+businessStation.getAddrUrl()+"\",";
 			json += "\"staLongitude\":\""+businessStation.getStaLongitude()+"\",";
 			json += "\"staLatitude\":\""+businessStation.getStaLatitude()+"\",";
 			json += "\"staBrief\":\""+businessStation.getStaBrief()+"\",";

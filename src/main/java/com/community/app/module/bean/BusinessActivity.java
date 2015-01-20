@@ -48,7 +48,7 @@ public class BusinessActivity implements java.io.Serializable {
 	private Integer isImportant;
 	private String refuseMemo;
 	private java.sql.Timestamp importantTime;
-	
+
 	private Integer isTimingPush;
 	private String timingPushconTent;
 	private java.sql.Timestamp timingPushTime;
@@ -59,7 +59,80 @@ public class BusinessActivity implements java.io.Serializable {
 	private Integer votes;
 	private String content;
 	private String image;
+
+	private String couponName;
+	private String couponDesc;
+	private String couponImg;
+	private Integer couponNum;
+	private String couponStartDate;
+	private String couponEndDate;
+	private String couponValid;
+	private String reportExcel;
 	
+	public String getReportExcel() {
+		return reportExcel;
+	}
+
+	public void setReportExcel(String reportExcel) {
+		this.reportExcel = reportExcel;
+	}
+
+	public String getCouponName() {
+		return couponName;
+	}
+
+	public void setCouponName(String couponName) {
+		this.couponName = couponName;
+	}
+
+	public String getCouponDesc() {
+		return couponDesc;
+	}
+
+	public void setCouponDesc(String couponDesc) {
+		this.couponDesc = couponDesc;
+	}
+
+	public String getCouponImg() {
+		return couponImg;
+	}
+
+	public void setCouponImg(String couponImg) {
+		this.couponImg = couponImg;
+	}
+
+	public Integer getCouponNum() {
+		return couponNum;
+	}
+
+	public void setCouponNum(Integer couponNum) {
+		this.couponNum = couponNum;
+	}
+
+	public String getCouponStartDate() {
+		return couponStartDate;
+	}
+
+	public void setCouponStartDate(String couponStartDate) {
+		this.couponStartDate = couponStartDate;
+	}
+
+	public String getCouponEndDate() {
+		return couponEndDate;
+	}
+
+	public void setCouponEndDate(String couponEndDate) {
+		this.couponEndDate = couponEndDate;
+	}
+
+	public String getCouponValid() {
+		return couponValid;
+	}
+
+	public void setCouponValid(String couponValid) {
+		this.couponValid = couponValid;
+	}
+
 	public String getContent() {
 		return content;
 	}

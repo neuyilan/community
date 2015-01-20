@@ -154,6 +154,7 @@ public class BusinessStationMessageServiceImpl implements BusinessStationMessage
 		}
 		baseBean.setList(list);
 		baseBean.setCount(count);
+		baseBean.setRows(query.getRows());
 		baseBean.setPage(query.getPage());
 		return baseBean;
 	}

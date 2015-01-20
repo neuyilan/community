@@ -205,7 +205,7 @@
 		 		    		}
 		 		    		
 		 		    	}
-		 		    	newContent+='</dd>';
+		 		    	newContent+='</dd>'
 		 		    	newContent+='</dl>';
 		 				$('#comments').prepend(newContent);
 		 				$('#comment').val("");

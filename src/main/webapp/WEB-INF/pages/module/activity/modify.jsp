@@ -41,14 +41,17 @@
             <!-- <span class="ranbut radiusbox" id="typeLayerShow">点击选择类型</span> -->
             <label><input class="radiostyle2" type="radio" id="typeId" name="typeId" value="1" <c:if test='${businessActivity.typeId == 1}'> checked </c:if> > 定时抢</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="2"  <c:if test='${businessActivity.typeId == 2}'> checked </c:if>> 报名活动</label>　
-            <label><input class="radiostyle2" type="radio" name="typeId" value="3"  <c:if test='${businessActivity.typeId == 3}'> checked </c:if>>&nbsp;投票活动</label>
+            <label><input class="radiostyle2" type="radio" name="typeId" value="3"  <c:if test='${businessActivity.typeId == 3}'> checked </c:if>>&nbsp;投票活动</label>　
+            <label><input class="radiostyle2" type="radio" name="typeId" value="4"  <c:if test='${businessActivity.typeId == 4}'> checked </c:if>>&nbsp;优惠活动</label>
             <input type="hidden" id="typeName" name="typeName" value="${businessActivity.typeName }" >
             
             <!-- 报名活动 -->
             <div id="bmhdId"></div>
             <!-- 投票活动 -->
 	        <div id="tphdId"></div>
-	        
+            <!-- 优惠活动 -->
+            <div id="yhqId"></div>
+            
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动范围<label for="actScope" class="error success"></label></h2>
             <div style="position:relative;">
@@ -66,9 +69,9 @@
             <h2 class="relran" style="font-weight: bold;">APP首页小图<label for="appPic" class="error success"></label></h2>
             <div id="divImg" style=" overflow:hidden;"><img id="appPicBtn" src="<%=ctx %><c:choose><c:when test="${businessActivity.appPic==''}">/images/icon/add.jpg</c:when><c:otherwise>${businessActivity.appPic}</c:otherwise></c:choose>" width="100" height="100"  style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
             <input type="hidden" name="appPic" id="appPic" value="${businessActivity.appPic }">
-            
             <input type="hidden" name="uploadField" id="uploadField" value="">
-            
+                        
+            <div class="line2"></div>
             <h2 class="newscont">活动内容<label for="actContent" class="error success"></label></h2>
             <%--文本编辑器--%>
             <script type="text/plain" id="actEditor" style="width:840px;height:240px;">${businessActivity.actContent }</script>
@@ -193,6 +196,7 @@
         </div>
     </div>
 </div>
+
 <!-- 类型层 -->
 <div id="typeLayer" class="busswi3">
     <div class="sidebar3">
@@ -212,8 +216,8 @@
         </div>
     </div>
 </div>
-
 <!-- 范围层 -->
+
 <!-- 范围选择开始 -->
 <link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
@@ -233,6 +237,29 @@
         </div>
     </div>
 </div>
+
+<!-- 上传优惠券文件开始 -->
+<div class="busswi4" style="height:100%; position:fixed;">
+    <div class="sidebar4" style="height:100%;">
+      <a id="close4" title="关闭" href="javascript:;" onclick="$('.busswi4').fadeOut('slow');"></a>
+      <h2 class="tit4">文件选择</h2>               
+      <div id="wrapper-250">        
+        <ul class="accordion4">         
+          <li id="one4" class="files">
+            <span class="add4"></span>
+            <a href="#one" id="btnUploadImg2">点击浏览上传</a>
+            <a style="margin-left:30px; color:#E94D2F; text-decoration:underline;" href="<%=ctx%>/common/charge_template.xls">下载EXCEL模板</a>
+          </li>
+          <li class="sub-menu4"></li> 
+        </ul>          
+      </div>  
+      <div class="w-gg-btn">
+        <input type="button" value="确定" class="w-gg-qr w-gg-total" style="width:100px;" onclick="saveUpload()">
+		<input type="button" value="取消" class="w-gg-qx w-gg-total" style="width:100px;" onclick="cancleUpload()">
+      </div>
+    </div>     
+</div>
+<!-- 上传优惠券文件结束 -->
 
 <!-- 设定时间开始 -->
 <div id="setTimeLayer" class="busswi">
@@ -291,7 +318,6 @@
        	</div>
     </div>
 </div>
-
 </form>
 
 <jsp:include page="/common/uploadPicJs.jsp"/>
@@ -302,18 +328,6 @@
 <script type="text/javascript">
     //实例化编辑器
     var ue = UE.getEditor('actEditor');
-	
-    /* function IsPash() {
-		var isPush = document.getElementsByName("isPush");
-		if(confirm("是否选择推送，如果点击'确定'将通过系统推送至手机用户，'取消'则不发送系统推送！")){
-    		isPush[0].checked = true;
-    		 return true;
-    	}else {
-    		isPush[0].checked = false;
-    		isPush[1].checked = true;
-    		return false;
-    	} 
-    } */
     
     $(document).ready(function(){
 		var isPush = document.getElementsByName("isPush");
@@ -359,6 +373,63 @@
     		$('#timingPushconTent').hide();
     	}
     }
+  	
+    function cancleUpload() {
+		$('#reportExcel').val("");
+		$('#reportExcel2').html("");
+		$('.busswi4').fadeOut('slow');
+	}
+	
+	function saveUpload() {
+		if($('#reportExcel').val() == "") {
+			alert("请选择上传Excel文件!");
+		} else {
+			$('#reportExcel2').html($('#excelname').val());
+    		$('.busswi4').fadeOut('slow');
+		}
+	}
+	
+	$(function() {
+		init2();
+	});
+	    
+	//初始化
+	function init2() {
+		//初始化文件上传
+		var btnImg = document.getElementById("btnUploadImg2");
+		var img = document.getElementById("imgShow");
+		var hidImgName = document.getElementById("hidImgName");
+		g_AjxUploadImg2(btnImg, img, hidImgName);
+	}
+	    
+	//文件上传
+	function g_AjxUploadImg2(btn, img, hidPut) {
+		var button = btn, interval;
+		new AjaxUpload(button, {
+            action: '${ctx}/business/businessActivity/uploadExcel.do',
+            data: {},
+            name: 'exclefile',
+            onSubmit: function(file, ext) {
+                if (!(ext && /^(xlsx|XLSX|xls|XLS)$/.test(ext))) {
+                    alert("您上传的excel格式不对，请重新选择！");
+                    return false;
+                }
+			},
+            onComplete: function(file, response) {
+                var content = response.replace('<pre>','').replace('</pre>','');
+                content = content.substring(content.indexOf('>')+1);
+               	// alert('content   '+content);
+                var json = $.parseJSON(content);
+				
+                if (json.success) {
+                    $('.sub-menu4').append('&nbsp;&nbsp;<input type="hidden" id="excelname" name="excelname" value="'+json.message.split("|")[1]+'"/><a style="color:#a6a6a6;" href="#">'+json.message.split("|")[1]+'&nbsp;&nbsp;('+json.message.split("|")[0]+'KB)</a>');
+                    $('#reportExcel').val($('#excelname').val());
+                } else  {
+                    alert(json.message);
+                }
+            }
+	    });
+	}
   
     $(function () {
 	    $(document).keyup(function(event){
@@ -386,6 +457,10 @@
     		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
     		+'<input class="iptnewtit" type="text" id="rank" name="rank" value="${businessActivity.rank }"/>名以前，可获奖';
     		$("#rankId").append(htmlDom);
+    		$("#bmhdId").empty();
+ 			$("#yhqId").empty();
+    		$("#tphdId").empty();
+			$("#typeName").val("定时抢");
     		$("input[name='state']:eq(0)").val("1");
     		
     		//显示定时提醒
@@ -394,6 +469,7 @@
                 $("#setTimeLayer").css("height",$(document.body).outerHeight(true)+'px');
                 $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
             });
+    		
     	} else if($("input[name='typeId']:checked").val() == 2){
     		var htmlDom=''
 				+'<h2 class="relstatus">活动次数<label for="times" class="error success"></label></h2>'
@@ -424,6 +500,8 @@
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" value="${businessActivity.endTime}"/>';
 	 			$("#bmhdId").append(htmlDom);
 	 			$("#rankId").empty("");
+	 			$("#yhqId").empty();
+	    		$("#tphdId").empty();
 				$("#typeName").val("报名活动");
 				$("input[name='state']:eq(0)").val("0");
 				
@@ -470,6 +548,7 @@
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" value="${businessActivity.endTime}"/>';
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();
+	 			$("#yhqId").empty();
 	    		$("#tphdId").append(htmlDom);
 				$("#typeName").val("投票活动");
 				$("input[name='state']:eq(0)").val("0");
@@ -608,6 +687,51 @@
 				    	$('#uploadField1').val('image');
 					});
 			    });
+    	} else if($("input[name='typeId']:checked").val() == 4){
+    		var htmlDom = ''
+   			+'<div class="line2"></div>'
+   			+'<h2 class="title">优惠券名称<label for="couponName" class="error success"></label></h2>'
+   			+'<input class="iptnewtit" type="text" id="couponName" name="couponName" placeholder="请输入优惠券名称32字以内" value="${businessActivity.couponName}"/>'
+              
+   			+'<div class="line2"></div>'
+   			+'<h2 class="relran">使用规则<label for="couponDesc" class="error success"></label></h2>'
+   			+'<textarea name="couponDesc" id="couponDesc" rows="10" cols="113">${businessActivity.couponDesc}</textarea> 	'
+              
+   			+'<div class="line2"></div>'
+   			+'<h2 class="relran" style="font-weight: bold;">优惠券图片<label for="couponImg" class="error success"></label></h2>'
+   			+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}${businessActivity.couponImg}" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
+   			+'<input type="hidden" name="couponImg" id="couponImg" value="${businessActivity.couponImg}">'
+              
+   			+'<div class="line2"></div>'
+   			+'<h2 class="relran">使用有效期<label for="couponStartDate" class="error success"></label><label for="couponEndDate" class="error success"></label></h2>'
+   			+'<input class="iptnewtit" type="text" name="couponStartDate" value="${businessActivity.couponStartDate}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd\'})" style="width:200px" placeholder="请选择开始时间"> 至'
+   			+'<input class="iptnewtit" type="text" name="couponEndDate" value="${businessActivity.couponEndDate}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd\'})" style="width:200px" placeholder="请选择结束时间">'
+              
+   			+'<div class="line2"></div>'
+   			+'<h2 class="title">优惠券数量<label for="couponNum" class="error success"></label></h2>'
+   			+'<input class="iptnewtit" type="text" id="couponNum" name="couponNum" value="${businessActivity.couponNum}" placeholder="请输入优惠券数量" style="width:200px;"/>&nbsp;&nbsp;张'
+   			
+   			+'<div class="line2"></div>'
+   			+'<h2 class="relran">导入优惠券<label for="reportExcel" class="error success"></label></h2>'
+   			+'<div style="position:relative;">'
+   			+'<span class="ranbut radiusbox" onclick="$(\'.busswi4\').fadeIn(\'slow\');">点击选择上传</span>'
+   			+'<lable style="position: absolute; top: 10px; left: 160px;" id="reportExcel2">${businessActivity.reportExcel}</lable>'
+   			+'</div>'
+   			+'<input type="hidden" name="reportExcel" id="reportExcel" value="${businessActivity.reportExcel}">'; 
+   			$("#rankId").empty();
+    		$("#bmhdId").empty();
+    		$("#tphdId").empty();
+    		$("#typeName").val("优惠活动");
+			$("input[name='state']:eq(0)").val("1");
+			$("#yhqId").append(htmlDom);
+   				
+   			// 优惠券大图
+   	    	$('#couponImgBtn').click(function() {
+   	    		$('#picUploadLayer').fadeIn('slow');
+   	    		//初始化上传
+   	        	uploadInit('activity', 'couponImg', '1', '0');
+   	        	$('#uploadField').val('couponImg');
+   	    	});	
     	}
 		
 	 	// 活动类型 
@@ -615,26 +739,27 @@
 			var $typeId = $("input[name='typeId']:checked").val();
 			if ($typeId == 1) {
 				var htmlDom = ''
-		    		+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
-		    		+'<div style="position:relative;">'
-		    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
-		    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
-		    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
-		    		+'</div>'
-		    		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
-		    		+'<input class="iptnewtit" type="text" id="rank" name="rank"/>名以前，可获奖';
-		    		$("#bmhdId").empty();
-		    		$("#tphdId").empty("");
-		    		$("#rankId").append(htmlDom);
-					$("#typeName").val("定时抢");
-					$("input[name='state']:eq(0)").val("1");
-					
-					//显示定时提醒
-			        $("#setTimeBtn").click(function(){
-			            $("#setTimeLayer").fadeIn("slow");
-			            $("#setTimeLayer").css("height",$(document.body).outerHeight(true)+'px');
-			            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
-			        });
+	    		+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
+	    		+'<div style="position:relative;">'
+	    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
+	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
+	    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
+	    		+'</div>'
+	    		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
+	    		+'<input class="iptnewtit" type="text" id="rank" name="rank"/>名以前，可获奖';
+	    		$("#bmhdId").empty();
+	    		$("#tphdId").empty();
+	    		$("#yhqId").empty();
+	    		$("#rankId").append(htmlDom);
+				$("#typeName").val("定时抢");
+				$("input[name='state']:eq(0)").val("1");
+				
+				//显示定时提醒
+		        $("#setTimeBtn").click(function(){
+		            $("#setTimeLayer").fadeIn("slow");
+		            $("#setTimeLayer").css("height",$(document.body).outerHeight(true)+'px');
+		            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
+		        });
 			} else if ($typeId == 2) {
 				var htmlDom=''
 					+'<h2 class="relstatus">活动次数<label for="times" class="error success"></label></h2>'
@@ -662,6 +787,7 @@
 		 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
 		 			$("#bmhdId").append(htmlDom);
 		 			$("#rankId").empty("");
+		 			$("#yhqId").empty();
 		    		$("#tphdId").empty("");
 					$("#typeName").val("报名活动");
 					$("input[name='state']:eq(0)").val("0");
@@ -695,35 +821,73 @@
 				    });
 			} else if ($typeId == 3) {
 				var htmlDom = ''
-					+'<div class="line2"></div>'
-		    		+'<h2 class="relstatus">投票类型<label for="voteType" class="error success"></label></h2>'
-		    		+'<label><input class="radiostyle2" type="radio"name="voteType" value="1" checked >&nbsp;文字</label>　'
-		    		+'<label><input class="radiostyle2" type="radio" name="voteType" value="2"  >&nbsp;图片</label>　'
-		    		+'<label><input class="radiostyle2" type="radio" name="voteType" value="3"  >&nbsp;混合</label>'
-		    		+'<div id="voteTypeDiv"></div>'
-		    		+'<div class="line2"></div>'
-		    		+'<h2 class="relran">可投票数<label for="votes" class="error success"></label></h2>'
-		    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" />个 投票项目</label>'
-		    		+'<div class="line2"></div>'
-		    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
-		 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
-		    		$("#bmhdId").empty();
-		    		$("#rankId").empty();
-		    		$("#tphdId").append(htmlDom);
-					$("#typeName").val("投票活动");
-					$("input[name='state']:eq(0)").val("0");
-					
-					var htmlvoteType = '';
+				+'<div class="line2"></div>'
+	    		+'<h2 class="relstatus">投票类型<label for="voteType" class="error success"></label></h2>'
+	    		+'<label><input class="radiostyle2" type="radio"name="voteType" value="1" checked >&nbsp;文字</label>　'
+	    		+'<label><input class="radiostyle2" type="radio" name="voteType" value="2"  >&nbsp;图片</label>　'
+	    		+'<label><input class="radiostyle2" type="radio" name="voteType" value="3"  >&nbsp;混合</label>'
+	    		+'<div id="voteTypeDiv"></div>'
+	    		+'<div class="line2"></div>'
+	    		+'<h2 class="relran">可投票数<label for="votes" class="error success"></label></h2>'
+	    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" />个 投票项目</label>'
+	    		+'<div class="line2"></div>'
+	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
+	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
+	    		$("#bmhdId").empty();
+	    		$("#rankId").empty();
+	 			$("#yhqId").empty();
+	    		$("#tphdId").append(htmlDom);
+				$("#typeName").val("投票活动");
+				$("input[name='state']:eq(0)").val("0");
+				
+				var htmlvoteType = '';
+				if ($("input[name='voteType']:checked").val() == 1) {
+					htmlvoteType = ''
+					+'<span id="voteTypeSpan">'
+					+'<input id="content" type="text" class="iptnewtit"  name="content" style="width:240px"  placeholder="请输入选项内容" />&nbsp;&nbsp;'
+					+'<input class="voteTypeBtn" type="button" name="voteTypeContentBtn" value="添加" /><br>'
+					+'</span>';
+					$("#voteTypeDiv").html(htmlvoteType);
+				}
+				
+				// 增加投票活动--文本
+			    $("input[name='voteTypeContentBtn']").click(function() {
+			    	var voteTypeContentBtn = ''
+			    	+'<span>'
+			    	+'<input id="content" type="text" class="iptnewtit"  name="content" style="width:240px"  placeholder="请输入选项内容" />&nbsp;&nbsp;'
+			    	+'<a style="cursor:pointer;" onclick="javascript:$(this).parent().remove();">删除</a><br>'
+			    	+'</span>';
+			    	$("#voteTypeDiv").append(voteTypeContentBtn);
+			    });
+				
+				// 投票活动类型 
+			    $("input[name='voteType']").change(function() {
+					var $voteType = $("input[name='voteType']:checked").val();
+				
 					if ($("input[name='voteType']:checked").val() == 1) {
 						htmlvoteType = ''
 						+'<span id="voteTypeSpan">'
 						+'<input id="content" type="text" class="iptnewtit"  name="content" style="width:240px"  placeholder="请输入选项内容" />&nbsp;&nbsp;'
 						+'<input class="voteTypeBtn" type="button" name="voteTypeContentBtn" value="添加" /><br>'
 						+'</span>';
-						$("#voteTypeDiv").html(htmlvoteType);
+					} else if ($voteType == 2) {
+						htmlvoteType = ''
+						+'<span id="voteTypeSpan">'
+						+'<div id="voteTypeImgDiv" style=" overflow:hidden;"><img id="voteTypeImg" src="${ctx}/images/icon/add.jpg" width="130" height="130" style="float:left; padding-top:20px; padding-right:20px;"></div>'
+						+'<input type="hidden" name="image" id="image"> '
+						+'<input type="hidden" name="uploadField1" id="uploadField1">'
+						+'</span>';
+					} else if ($voteType == 3) {
+						htmlvoteType = ''
+						+'<span id="voteTypeSpan">'
+						+'<div id="voteTypeConImgDiv" style=" overflow:hidden;"><div class="actpublish "><img id="voteTypeContentImg" src="${ctx}/images/icon/add.jpg" width="130" height="130"></div></div>'
+						+'<input type="hidden" name="image" id="image"> '
+						+'<input type="hidden" name="uploadField1" id="uploadField1">'
+						+'</span>';
 					}
+					$("#voteTypeDiv").html(htmlvoteType);
 					
-					// 增加投票活动--文本
+				 	// 增加投票活动--文本
 				    $("input[name='voteTypeContentBtn']").click(function() {
 				    	var voteTypeContentBtn = ''
 				    	+'<span>'
@@ -732,60 +896,68 @@
 				    	+'</span>';
 				    	$("#voteTypeDiv").append(voteTypeContentBtn);
 				    });
-					
-					// 投票活动类型 
-				    $("input[name='voteType']").change(function() {
-						var $voteType = $("input[name='voteType']:checked").val();
-					
-						if ($("input[name='voteType']:checked").val() == 1) {
-							htmlvoteType = ''
-							+'<span id="voteTypeSpan">'
-							+'<input id="content" type="text" class="iptnewtit"  name="content" style="width:240px"  placeholder="请输入选项内容" />&nbsp;&nbsp;'
-							+'<input class="voteTypeBtn" type="button" name="voteTypeContentBtn" value="添加" /><br>'
-							+'</span>';
-						} else if ($voteType == 2) {
-							htmlvoteType = ''
-							+'<span id="voteTypeSpan">'
-							+'<div id="voteTypeImgDiv" style=" overflow:hidden;"><img id="voteTypeImg" src="${ctx}/images/icon/add.jpg" width="130" height="130" style="float:left; padding-top:20px; padding-right:20px;"></div>'
-							+'<input type="hidden" name="image" id="image"> '
-							+'<input type="hidden" name="uploadField1" id="uploadField1">'
-							+'</span>';
-						} else if ($voteType == 3) {
-							htmlvoteType = ''
-							+'<span id="voteTypeSpan">'
-							+'<div id="voteTypeConImgDiv" style=" overflow:hidden;"><div class="actpublish "><img id="voteTypeContentImg" src="${ctx}/images/icon/add.jpg" width="130" height="130"></div></div>'
-							+'<input type="hidden" name="image" id="image"> '
-							+'<input type="hidden" name="uploadField1" id="uploadField1">'
-							+'</span>';
-						}
-						$("#voteTypeDiv").html(htmlvoteType);
-						
-					 	// 增加投票活动--文本
-					    $("input[name='voteTypeContentBtn']").click(function() {
-					    	var voteTypeContentBtn = ''
-					    	+'<span>'
-					    	+'<input id="content" type="text" class="iptnewtit"  name="content" style="width:240px"  placeholder="请输入选项内容" />&nbsp;&nbsp;'
-					    	+'<a style="cursor:pointer;" onclick="javascript:$(this).parent().remove();">删除</a><br>'
-					    	+'</span>';
-					    	$("#voteTypeDiv").append(voteTypeContentBtn);
-					    });
-					 	
-					  	// 增加投票活动--图片
-						$('#voteTypeImg').click(function() {
-							$('#picUploadLayer1').fadeIn('slow');
-							//初始化上传
-					    	uploadInit1('voteType', 'image', '0', '0', 'i');
-					    	$('#uploadField1').val('image');
-						});
-					  	
-						// 增加投票活动--文本&图片
-						$('#voteTypeContentImg').click(function() {
-							$('#picUploadLayer1').fadeIn('slow');
-							//初始化上传
-					    	uploadInit1('voteType', 'image', '0', '0', 'ci');
-					    	$('#uploadField1').val('image');
-						});
-				    });
+				 	
+				  	// 增加投票活动--图片
+					$('#voteTypeImg').click(function() {
+						$('#picUploadLayer1').fadeIn('slow');
+						//初始化上传
+				    	uploadInit1('voteType', 'image', '0', '0', 'i');
+				    	$('#uploadField1').val('image');
+					});
+				  	
+					// 增加投票活动--文本&图片
+					$('#voteTypeContentImg').click(function() {
+						$('#picUploadLayer1').fadeIn('slow');
+						//初始化上传
+				    	uploadInit1('voteType', 'image', '0', '0', 'ci');
+				    	$('#uploadField1').val('image');
+					});
+			    });
+			}else if ($typeId == 4) {
+				var htmlDom = ''
+				+'<div class="line2"></div>'
+				+'<h2 class="title">优惠券名称<label for="couponName" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" id="couponName" name="couponName" placeholder="请输入优惠券名称32字以内" />'
+            
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">使用规则<label for="couponDesc" class="error success"></label></h2>'
+				+'<textarea name="couponDesc" id="couponDesc" rows="10" cols="113"></textarea> 	'
+            
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">优惠券图片<label for="couponImg" class="error success"></label></h2>'
+				+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
+				+'<input type="hidden" name="couponImg" id="couponImg" value="">'
+            
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">使用有效期<label for="couponStartDate" class="error success"></label><label for="couponEndDate" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" name="couponStartDate" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd\'})" style="width:200px" placeholder="请选择开始时间"> 至'
+				+'<input class="iptnewtit" type="text" name="couponEndDate" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd\'})" style="width:200px" placeholder="请选择结束时间">'
+            	
+				+'<div class="line2"></div>'
+				+'<h2 class="title">优惠券数量<label for="couponNum" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" id="couponNum" name="couponNum" placeholder="请输入优惠券数量" style="width:200px;"/>&nbsp;&nbsp;张'
+				
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">导入优惠券<label for="reportExcel" class="error success"></label></h2>'
+				+'<div style="position:relative;">'
+				+'<span class="ranbut radiusbox" onclick="$(\'.busswi4\').fadeIn(\'slow\');">点击选择上传</span>'
+				+'<lable style="position: absolute; top: 10px; left: 160px;" id="reportExcel2"></lable>'
+				+'</div>'
+				+'<input type="hidden" name="reportExcel" id="reportExcel" value="">'; 
+				$("#rankId").empty();
+	    		$("#bmhdId").empty();
+	    		$("#tphdId").empty();
+	    		$("#typeName").val("优惠活动");
+				$("input[name='state']:eq(0)").val("1");
+				$("#yhqId").append(htmlDom);
+				
+				// 优惠券大图
+		    	$('#couponImgBtn').click(function() {
+		    		$('#picUploadLayer').fadeIn('slow');
+		    		//初始化上传
+		        	uploadInit('activity', 'couponImg', '1', '0');
+		        	$('#uploadField').val('couponImg');
+		    	});
 			}
 		});
 	    
@@ -1094,6 +1266,30 @@
    	                    }
    	                }
                 },
+                couponName: {
+                    required: true,
+                    maxlength : 32
+                },
+                couponDesc: {
+                    required: true,
+                    maxlength : 64
+                },
+                couponImg: {
+                    required: true
+                },
+                couponNum: {
+                    required: true,
+                    digits: true
+                },
+                couponStartDate: {
+                    required: true
+                },
+                couponEndDate: {
+                    required: true
+                },
+                reportExcel: {
+                    required: true
+                },
                 state: {
                     required: true
                 }
@@ -1150,6 +1346,30 @@
                 endTime: {
                     required:  '请选择报名截至日期！',
    					remote: '报名截止时间必须小于报名活动时间'
+                },
+                couponName: {
+                	required: '请填写优惠券名称！',
+                    maxlength: '优惠券名称为32字以内'
+                },
+                couponDesc: {
+                	required: '请填写使用规则！',
+                    maxlength: '使用规则为64字以内'
+                },
+                couponImg: {
+                	 required:  '请上传优惠券图片！'
+                },
+                couponNum: {
+                	required:  '请输入优惠券数量！',
+                    digits: '优惠券数量必须为数字'
+                },
+                couponStartDate: {
+                	required: '请选择有效期开始时间！'
+                },
+                couponEndDate: {
+                	required: '请选择有效期结束时间！'
+                },
+                reportExcel: {
+                	required: '请上传excle格式的文件！'
                 },
                 state: {
                     required: '请选择发布状态！'

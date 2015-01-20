@@ -74,7 +74,7 @@
 					<if test="estateId != null and estateId != ''" >
 				   		and n.estateId = #{estateId}
 					</if>
-					<if test="userId != null and userId != ''" >
+					<if test="userId != null" >
 				   		and n.userId = #{userId}
 					</if>
 					<if test="to != null" >

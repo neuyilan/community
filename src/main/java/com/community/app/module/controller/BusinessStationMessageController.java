@@ -41,7 +41,7 @@ public class BusinessStationMessageController {
 			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
 			}
-			query.setRows(11);
+			query.setRows(12);
 			query.setOrder("desc");
 			query.setSort("commentTime");
 			baseBean = businessStationMessageService.findAllPage(query);
@@ -54,6 +54,7 @@ public class BusinessStationMessageController {
 		mav.addObject("baseBean", baseBean);
 		mav.addObject("pager", baseBean.getPager());
 		mav.addObject("curEstateId", CommonUtils.getUser().getCurEstateId());
+		mav.addObject("curStateId", CommonUtils.getUser().getCurStateId());
 		return mav;
 	}
 	
@@ -70,7 +71,7 @@ public class BusinessStationMessageController {
 			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
 			}
-			query.setRows(11);
+			query.setRows(12);
 			query.setOrder("desc");
 			query.setSort("commentTime");
 			BaseBean baseBean = businessStationMessageService.findAllPage(query);
@@ -78,6 +79,7 @@ public class BusinessStationMessageController {
 			result.append("{\"total\":").append(baseBean.getCount()).append(",");
 			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
 			result.append("\"curEstateId\":").append(CommonUtils.getUser().getCurEstateId()).append(",");
+			result.append("\"pageSize\":").append(baseBean.getPager().getPageSize()).append(",");
 			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
 			.append("\"rows\":[");
 			for(int i=0;i<baseBean.getList().size();i++) {
@@ -142,7 +144,7 @@ public class BusinessStationMessageController {
 		String json = "";
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-		    businessStationMessage.setStationId(0);
+		    businessStationMessage.setStationId(shiroUser.getCurStateId());
 		    businessStationMessage.setEstateId(shiroUser.getCurEstateId());
 		    businessStationMessage.setCommentorId(shiroUser.getUserId());
 		    businessStationMessage.setCommentorName(shiroUser.getNickName());

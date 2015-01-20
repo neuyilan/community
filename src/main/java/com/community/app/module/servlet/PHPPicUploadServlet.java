@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -16,15 +17,15 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.lang.StringUtils;
 
 import com.community.framework.utils.Uploader;
+import com.community.framework.utils.propertiesUtil;
 /**
  * WEB图片上传的Serlvet类
  * 
  * Servlet implementation class FileUploadServlet
  */
-public class PicUploadServlet extends HttpServlet {
+public class PHPPicUploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ServletFileUpload upload;
 	private final long MAXSize = 4194304*2L;//4*2MB
@@ -33,7 +34,7 @@ public class PicUploadServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PicUploadServlet() {
+    public PHPPicUploadServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -53,7 +54,7 @@ public class PicUploadServlet extends HttpServlet {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException{
-		this.doPost(request, response);
+			this.doPost(request, response);
 	}
 	
 	/**
@@ -68,11 +69,25 @@ public class PicUploadServlet extends HttpServlet {
 		String url = null;
 		String picPath = "";
 		try {
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
 			String folderName = request.getParameter("folderName");
+			String tmpurl = request.getParameter("tmpurl");
+			
 			System.out.println("==========folderName==========" + folderName);
 			Uploader uploader = new Uploader(request);
 			picPath = uploader.upload(folderName);
+			tmpurl += "?picurl="+ip+picPath;
 			System.out.println("上传文件成功!" + picPath);
+			response.setHeader("Content-type:text/html;charset=utf-8", "no-cache");
+			String josnString = "<html><head>";
+			josnString += "<script  type=\"text/javascript\">window.location.href=\""+tmpurl+"\"</script>"; //注意这里！  
+					  
+			josnString += "</head><body>" +
+					"</body></html>";  
+			
+			out.write(josnString);
+			out.close();
 			//out.write(picPath);
 			//out.write("adfsdf");
 		} catch (FileUploadException e) {
@@ -82,18 +97,10 @@ public class PicUploadServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response.addHeader("P3P","CP=CAO PSA OUR");  
-		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); 
-		   response.addHeader("Access-Control-Allow-Origin", "*");  
-	        response.addHeader("Access-Control-Allow-Headers", "x-requested-with");  
 		//out.flush();
 		//request.setAttribute("resultMap", resultMap);
 		//request.getRequestDispatcher("/business/").forward(request, response);
-		request.setAttribute("picPath", picPath);
-		String isPHP = request.getParameter("isPHP");
-		if (StringUtils.isNotBlank(isPHP) && "Y".equals(isPHP))
-			request.getRequestDispatcher("/image/uploadSinglePicPHP.do").forward(request, response);
-		else
-			request.getRequestDispatcher("/image/uploadSinglePic.do").forward(request, response);
+		//request.setAttribute("picPath", picPath);
+		//request.getRequestDispatcher("/image/uploadSinglePic.json").forward(request, response);
 	}
 }

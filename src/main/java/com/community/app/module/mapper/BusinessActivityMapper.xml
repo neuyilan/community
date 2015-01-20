@@ -47,6 +47,13 @@
 			
 			<result column="voteType" property="voteType" />
 			<result column="votes" property="votes" />
+			
+			<result column="couponName" property="couponName" />
+			<result column="couponDesc" property="couponDesc" />
+			<result column="couponImg" property="couponImg" />
+			<result column="couponNum" property="couponNum" />
+			<result column="couponValid" property="couponValid" />
+			<result column="reportExcel" property="reportExcel" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -91,8 +98,14 @@
 			a.attributeValues,
 			a.timingPublicTime,
 			a.refuseMemo,
-			voteType,
-			votes
+			a.voteType,
+			a.votes,
+			a.couponName,
+			a.couponDesc,
+			a.couponImg,
+			a. couponNum,
+			a.couponValid,
+			a.reportExcel
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
@@ -535,6 +548,12 @@
 		times,
 		voteType,
 		votes,
+		couponName,
+		couponDesc,
+		couponImg,
+		couponNum,
+		couponValid,
+		reportExcel,
 		refuseMemo
 		) values(
 		#{typeId},
@@ -577,6 +596,12 @@
 		#{times},
 		#{voteType},
 		#{votes},
+		#{couponName},
+		#{couponDesc},
+		#{couponImg},
+		#{couponNum},
+		#{couponValid},
+		#{reportExcel},
 		#{refuseMemo}			
 		)
 	</insert>
@@ -707,6 +732,24 @@
 			</if>
 			<if test="votes != null and votes != ''" >
 			votes=#{votes},
+			</if>
+			<if test="couponName != null and couponName != ''" >
+			couponName=#{couponName},
+			</if>
+			<if test="couponDesc != null and couponDesc != ''" >
+			couponDesc=#{couponDesc},
+			</if>
+			<if test="couponImg != null and couponImg != ''" >
+			couponImg=#{couponImg},
+			</if>
+			<if test="couponNum != null and couponNum != ''" >
+			couponNum=#{couponNum},
+			</if>
+			<if test="couponValid != null and couponValid != ''" >
+			couponValid=#{couponValid},
+			</if>
+			<if test="reportExcel != null and reportExcel != ''" >
+			reportExcel=#{reportExcel},
 			</if>
 			<if test="refuseMemo != null and refuseMemo != ''" >
 			refuseMemo=#{refuseMemo}

@@ -36,12 +36,12 @@
 	                    </li>
 	                </ul>
 	                <p style="float:left; line-height:52px; color:#cc2510; font-weight:bold; margin-left:10px;" id="rowCount">共${pager.rowCount}条</p>
-	                <a class="scbox-btn" href="#" onclick="jumpUrl()">新增留言墙</a>
+	                <shiro:hasPermission name="message_add"><a class="scbox-btn" href="#" onclick="jumpUrl()">新增留言墙</a></shiro:hasPermission>
 	            </div>
 	        	<div id="search"><div class="borbox"><input id="searbox" type="text" name="keyWord" value=""  placeholder='留言内容搜索' /><input id="searbut" type="button"  onclick="search()" value="" /></div></div>
 	        </div>
 	        
-	        <div class="review-b">
+	        <div class="review-b lyq">
 				<div id="commentDiv">
 					<c:forEach items="${baseBean.list}" var="bean" varStatus="status">
 						<div id="comment_${bean.commentId }" class="cominfo">
@@ -56,37 +56,26 @@
 									<p class="text">${bean.content}</p>
 								</div>
 								<div class="opera">
-									<span class="arrow">
-										<img src="${ctx}/images/icon/arrow1.png" title="回复该评论"  width="40" height="40" onclick="showReplyForm(${bean.commentId},${status.index+1},${pager.rowCount})" />
-									</span> 
-									<span class="del1" onclick="deleteComment('${bean.commentId}')">
-										<img src="${ctx}/images/icon/dels.png" title="删除该评论" width="22" height="25" />
+									<span class="arrow lyqdel">
+										<shiro:hasPermission name="message_delete"><img src="${ctx}/images/icon/dels.png" title="删除该留言"  width="22" height="25" onclick="deleteStationMessage('${bean.commentId}')"/></shiro:hasPermission>
 									</span>
 								</div>
 							</a>
-							<div  id="replyForm_${status.index+1}" class="reply" style="display:none;">
-								<input id="replyId_${bean.commentId }" type="hidden" name="replyId"  value="${bean.commentorId}" /> 
-								<input id="replyName_${bean.commentId }" type="hidden" name="replyName"  value="${bean.commentorName}" /> 
-								<input id="replyState_${bean.commentId }" type="hidden" name="replyState"  value="${bean.replyState}" /> 
-								<input id="commentorState_${bean.commentId }" type="hidden" name="commentorState"  value="${bean.commentorState}" /> 
-				            	<textarea placeholder="请输入回复内容..." class="reptext" id="content_${bean.commentId}" name="content"></textarea>
-				                <hr class="link">
-				                <a href="javascript:;" class="cancel" onclick="hiddenReplyForm('${bean.commentId}','${status.index+1}')">取消</a>
-				                <input class="subm" type="button" value="提交" onclick="saveComment('${bean.commentId}')"/>
-				            </div>
 						</div>
 					</c:forEach>
 				</div>
 			</div>
+			
+			<div class="no-float"></div>
 			<div class="page">
 				<div class="pagec">
 	            	<input type="hidden" id="pageCount" value="${pager.pageCount}" />
 	                <ul id="pageUl">
-	                	<li><a id="arrow-l" class="arrow" href="javascript:prev();" <c:if test="${pager.pageId <= 1 }"> disabled </c:if> ></a></li>
+	                	<li><a id="arrow-l" class="arrow" href="javascript:prev(${pager.pageSize});"></a></li>
 	                	<c:forEach items="${pager.indexs }" var="pageNo">
-	                		<li><a <c:if test="${pageNo == 1}"> id="curr" </c:if> href="javascript:jump(${pageNo });"><span id="page_${pageNo }">${pageNo }</span></a></li>
+	                		<li><a <c:if test="${pageNo == 1}"> id="curr" </c:if> href="javascript:jump(${pageNo },${pager.pageSize});"><span id="page_${pageNo }">${pageNo }</span></a></li>
 	                	</c:forEach>
-	                	<li><a id="arrow-r" class="arrow" href="javascript:next();" <c:if test="${pager.pageId >= pager.pageCount }"> disabled </c:if> ></a></li>
+	                	<li><a id="arrow-r" class="arrow" href="javascript:next(${pager.pageSize});" <c:if test="${pager.pageId >= pager.pageCount }"> disabled </c:if> ></a></li>
 	                </ul>
 	        	</div>
 	        </div>
@@ -145,37 +134,47 @@
 	function jumpUrl() {
 		if(parseInt('${curEstateId}') == 0) {
 			alert("请先切换到小区");return;
-		}else{
+		} else if(parseInt('${curStateId}') == 0) {
+   			alert("请选择有服务驿站的小区");return;
+   		} else{
 			$('#msgInfoLayer').fadeIn('slow');
 		}
 	}
 	
 	//获取多参数
 	function getParams() {
-		var params = '';
 		var keyWord = $("input[name='keyWord']").val();
-		if(keyWord != '' && keyWord != null) {
-			params = {keyWord: keyWord};
-		}else{
-			params = {
+		var params = {
 				timeScope: $('#timeScope').val(),
 				startTime: $('#startTime').val(),
-				endTime: $('#endTime').val()
+				endTime: $('#endTime').val(), 
+				keyWord: keyWord
 			};
-		}
 		return params;
 	}  
 	
+	//搜索
+    function search() {
+    	jump(1,' ${pager.pageSize}');
+    }
+	
 	//跳转页面
-	function jump(pageNo) {
-		$('.column').html('');
-		$('#loading').css('display', 'block');
+	function jump(pageNo, pageSize) {
+		
 		var params = getParams();
-		if(pageNo != undefined && pageNo != 0) {
-			params.page = pageNo;
-		}else{
-			params.page = 1;
-		}
+    	if(pageNo != 0) {
+    		params.page = pageNo;
+    	} else {
+    		params.page = 1;
+    		pageNo = 1;
+    	}
+    	var pagesize = '';
+    	if(pageSize == undefined){
+    		 pagesize = '${pager.pageSize}';
+    	} else {
+    		pagesize = pageSize;
+    	}
+    	
 		$.ajax({
 			type: 'post',
 	        url: '<%=path %>/business/businessStationMessage/getPageList.do',
@@ -186,16 +185,32 @@
 	        	$("#rowCount").html("共" + data.total + "条");  // 根据查询条件更新总条数 
 	            var rows = data.rows;
 	            if(rows.length > 0) {
+	            	$('#commentDiv').html('');
 	            	for(var i=0;i<rows.length;i++) {
 	                	var row = rows[i];  
-	                	var htmlDom = '';
-	                	$('.column').append(htmlDom);
+	                	var htmlDom = ''
+	                		+'<div id="comment_'+row.commentId+'" class="cominfo">'
+	                		+'<a class="cominfobox" href="javascript:;"> '
+	                		+'<span class="rakin">'+parseInt((pageNo-1)*pagesize +i+1) +'</span>'
+	                		+'<div class="textinfo">'
+	                		+'<span class="aut">'+(row.commentorName==""||row.commentorName=='null'?"匿名":row.commentorName) +'</span>'
+	                		+'<time>'+(row.commentTime != null ? row.commentTime.substring(0, 16) : '')+'</time>'
+	                		+'<div class="no-float"></div>'
+	                		+'<p class="text">'+row.content+'</p>'
+	                		+'</div>'
+	                		+'<div class="opera">'
+	                		+'<span class="arrow lyqdel">'
+	                		+'<shiro:hasPermission name="message_delete"><img src="${ctx}/images/icon/dels.png" title="删除该留言" width="22" height="25" onclick="deleteStationMessage('+row.commentId+')"/></shiro:hasPermission>'
+	                		+'</span>'
+	                		+'</div>'
+	                		+'</a>'
+	                		+'</div>';
+	                	$('#commentDiv').append(htmlDom);
 	                }
 	            }else{
-	            	$('.column').html('很抱歉，没有相关记录。');
+	            	$('#commentDiv').html('很抱歉，没有相关记录。');
 	            }
-	            $('.column').append('<div class="no-float"></div>');
-	            $('#loading').css('display', 'none');
+	            $('#commentDiv').append('<div class="no-float"></div>');;
 	            
 	            var vis = $("#pageUl li:not(#pageUl :first,#pageUl :last):visible");//显示的数量
                	var liCount = '';  
@@ -207,16 +222,16 @@
                 		}
                 	}
                 	if(flag){
-                		liCount = liCount + '<li><a   href="javascript:jump('+pageno+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
+                		liCount = liCount + '<li><a   href="javascript:jump('+pageno+','+data.pageSize+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
                 	}else{
-                		liCount = liCount + '<li style="display:none";><a  href="javascript:jump('+pageno+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
+                		liCount = liCount + '<li style="display:none";><a  href="javascript:jump('+pageno+','+data.pageSize+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
                 	}
                 	
                 }
                 var boolnext = '';
-                if((data.pageId)>=(data.pageCount)) { boolnext='#'; }else { boolnext='javascript:next();'; }
+                if((data.pageId)>=(data.pageCount)) { boolnext='#'; }else { boolnext='javascript:next('+data.pageSize+');'; }
                 var boolprev = '';
-                if((data.pageId)<=1) { boolprev='#'; }else { boolprev='javascript:prev();';  }
+                if((data.pageId)<=1) { boolprev='#'; }else { boolprev='javascript:prev('+data.pageSize+');';  }
 	           	var pageDom = ''
 	           		+ '<div class="pagec"><ul id="pageUl">'
 	           		+ '<li><a id="arrow-l" class="arrow" href="'+boolprev+'"></a></li>'
@@ -233,6 +248,27 @@
 	    });
 	}
 	
+	//上一页
+    function prev(pageSize) {
+    	var currNo = $('#curr').first().text();
+    	var prevNo = parseInt(currNo) - 1;
+    	if(prevNo <= 0) {
+    		prevNo = 1;
+    	}
+    	jump(prevNo, pageSize);
+    }
+    
+    //下一页
+    function next(pageSize) {
+    	var currNo = $('#curr').first().text();
+    	var nextNo = parseInt(currNo) + 1;
+    	var pageCount = $('#pageCount').val();
+    	if(nextNo > pageCount) {
+    		nextNo = pageCount;
+    	}
+    	jump(nextNo, pageSize);
+    }
+    
 	function saveStationMessage() {
 		if(($('#content').val()).trim() == '') {
 			alert("请填写留言内容!");
@@ -266,10 +302,10 @@
 	}
 	
 	// 删除留言
-	function deleteStationMessage() {
+	function deleteStationMessage(commentId) {
 		var bool = window.confirm("您确定要删除该条留言？");
 	    if(bool) {
-	        $.post("delete.do", function(data) {
+	        $.post("delete.do", {id :commentId}, function(data) {
 	        	eval("data = "+data);
     			alert(data.message);
 	            window.location.reload();

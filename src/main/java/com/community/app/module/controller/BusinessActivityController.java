@@ -1,12 +1,21 @@
 package com.community.app.module.controller;
 
+import static com.community.framework.utils.CommonUtils.getCellValue;
+import static com.community.framework.utils.CommonUtils.getJSONString;
+import static com.community.framework.utils.CommonUtils.getLongTime;
+import static com.community.framework.utils.CommonUtils.getMergedRegionValue;
 import static com.community.framework.utils.CommonUtils.getUser;
+import static com.community.framework.utils.CommonUtils.isMergedRegion;
+import static com.community.framework.utils.CommonUtils.isMobileNO;
+import static com.community.framework.utils.CommonUtils.print;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +28,15 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -34,6 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.AppFocusScope;
@@ -42,10 +59,12 @@ import com.community.app.module.bean.AppHomepageScope;
 import com.community.app.module.bean.AppPushLog;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.BusinessActivity;
+import com.community.app.module.bean.BusinessActivityCoupon;
 import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivityScope;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
+import com.community.app.module.bean.BusinessCharger;
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.ManageEstate;
@@ -59,6 +78,7 @@ import com.community.app.module.service.AppHomepageService;
 import com.community.app.module.service.AppPushLogService;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessActivityCommentService;
+import com.community.app.module.service.BusinessActivityCouponService;
 import com.community.app.module.service.BusinessActivityParticipateService;
 import com.community.app.module.service.BusinessActivityRegistrationInformationService;
 import com.community.app.module.service.BusinessActivityRegistrationTimeslotService;
@@ -79,6 +99,7 @@ import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
 import com.community.app.module.vo.BusinessActivityVoteInformationQuery;
 import com.community.app.module.vo.BusinessActivityVoteOptionsQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.excel.PaseExcel;
 
 @Controller
 @RequestMapping("/business/businessActivity")
@@ -118,6 +139,8 @@ public class BusinessActivityController {
 	private BusinessCommunityService businessCommunityService;
 	@Autowired
 	private BusinessActivityVoteInformationService businessActivityVoteInformationService;
+	@Autowired
+	private BusinessActivityCouponService businessActivityCouponService;
 	
 	/**
 	 * 进入管理页
@@ -344,6 +367,15 @@ public class BusinessActivityController {
 	        } else if(query.getTypeId() == 3) {
 	        	businessActivity.setVoteType(query.getVoteType());
 	        	businessActivity.setVotes(query.getVotes());
+	        } else if(query.getTypeId() == 4) {
+	        	businessActivity.setPublishDate(query.getCouponEndDate());
+			    businessActivity.setPublishTime("00:00");
+	        	businessActivity.setCouponName(query.getCouponName());
+	        	businessActivity.setCouponDesc(query.getCouponDesc());
+	        	businessActivity.setCouponImg(query.getCouponImg());
+	        	businessActivity.setCouponNum(query.getCouponNum());
+	        	businessActivity.setCouponValid(query.getCouponStartDate()+"~"+query.getCouponEndDate());
+	        	businessActivity.setReportExcel(query.getReportExcel());
 	        }
 	        // 活动状态为定时发布时 设置定时发布时间 
 	        if(query.getState() == 6) {
@@ -417,8 +449,32 @@ public class BusinessActivityController {
 	    	            }
             		}
             	}
+            } else if(query.getTypeId() == 4) {
+            	if(!"".equals(businessActivity.getReportExcel()) && businessActivity.getReportExcel() != null) {            
+    	            try {
+                        File file = new File(CommonUtils.LOCALEXCELPATH, businessActivity.getReportExcel());
+                       
+                        String path = file.getPath();
+                        String[] columns = {"couponCode"};
+                        
+                        List<BusinessActivityCoupon> list = parse(path, 0, 1, 0, 1, columns);
+                        for(int i=0;i<list.size();i++) {
+            				BusinessActivityCoupon businessActivityCoupon = (BusinessActivityCoupon) list.get(i);
+            				
+            				businessActivityCoupon.setActId(businessActivity.getActId());
+            				businessActivityCoupon.setCouponCode(businessActivityCoupon.getCouponCode());
+            				businessActivityCoupon.setState(0);
+            				businessActivityCoupon.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            				businessActivityCoupon.setEditTime(new Timestamp(System.currentTimeMillis()));
+            				businessActivityCoupon.setEditor("");
+            				businessActivityCoupon.setUserId(getUser().getUserId());
+            				businessActivityCouponService.save(businessActivityCoupon);
+            			}
+    	            } catch (Exception e) {
+    	                e.printStackTrace();
+    	            }
+    	        }
             }
-            
             //活动范围 ： 针对社区和驿站的小区
             String scopeString = query.getActScope();
             String[] estateArr = scopeString.split(",");
@@ -577,10 +633,10 @@ public class BusinessActivityController {
   			mav.addObject("scope", sb.toString().subSequence(0, sb.toString().length()-1));
   		}
   		
-  		if(businessActivity.getTypeId() ==2) {
+  		if(businessActivity.getTypeId() == 2) {
   			List<BusinessActivityRegistrationTimeslot> businessActivityRegistrationTimeslot = businessActivityRegistrationTimeslotService.findByMap(paramMap);
   			mav.addObject("businessActivityRegistrationTimeslot", businessActivityRegistrationTimeslot);
-  		} else if(businessActivity.getTypeId() ==3) {
+  		} else if(businessActivity.getTypeId() == 3) {
   			List<BusinessActivityVoteOptions> businessActivityVoteOptions = businessActivityVoteOptionsService.findByMap(paramMap);
   			mav.addObject("businessActivityVoteOptions", businessActivityVoteOptions);
   			if(businessActivity.getVoteType() == 2 || businessActivity.getVoteType() == 3) {
@@ -592,6 +648,10 @@ public class BusinessActivityController {
 		  			 mav.addObject("imgJoin", imgJoin);
 	  			}
   			}
+  		} else if(businessActivity.getTypeId() == 4) {
+  			String couponValid[] = businessActivity.getCouponValid().split("~");
+  			businessActivity.setCouponStartDate(couponValid[0]);
+  			businessActivity.setCouponEndDate(couponValid[1]);
   		}
         mav.addObject("businessActivity", businessActivity);
         return mav;
@@ -646,7 +706,8 @@ public class BusinessActivityController {
 		    businessActivity.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		    businessActivity.setEditTime(new Timestamp(System.currentTimeMillis()));
 		    // 活动结束时间
-		    if(query.getEndTime() != null && !"".equals(query.getEditTime1()) && (query.getTypeId() == 2 || query.getTypeId() == 3)) {
+
+			if(query.getEndTime() != null && !"".equals(query.getEditTime1()) && (query.getTypeId() == 2 || query.getTypeId() == 3)) {
 		    	 businessActivity.setStartTime(sdf.format(new Date()));
 				 businessActivity.setEndTime(query.getEndTime()); 
 				 SimpleDateFormat sfDate = new SimpleDateFormat("yyyy-MM-dd");
@@ -659,6 +720,7 @@ public class BusinessActivityController {
 	        	businessActivity.setStartTime(query.getStartTime());
 				 businessActivity.setEndTime(query.getEndTime());
 	        }
+		    
 		    businessActivity.setEditor(getUser().getUserName());
 	        if(query.getActScope() != null && !"".equals(query.getActScope())) {
 	        	businessActivity.setActScope(query.getActScope());
@@ -693,6 +755,15 @@ public class BusinessActivityController {
 	        } else if(query.getTypeId() == 3) {
 	        	businessActivity.setVoteType(query.getVoteType());
 	        	businessActivity.setVotes(query.getVotes());
+	        } else if(query.getTypeId() == 4) {
+	        	businessActivity.setPublishDate(query.getCouponEndDate());
+			    businessActivity.setPublishTime("00:00");
+	        	businessActivity.setCouponName(query.getCouponName());
+	        	businessActivity.setCouponDesc(query.getCouponDesc());
+	        	businessActivity.setCouponImg(query.getCouponImg());
+	        	businessActivity.setCouponNum(query.getCouponNum());
+	        	businessActivity.setCouponValid(query.getCouponStartDate()+"~"+query.getCouponEndDate());
+	        	businessActivity.setReportExcel(query.getReportExcel());
 	        }
 	        
 	        // 活动状态为定时发布时 设置定时发布时间 
@@ -770,6 +841,33 @@ public class BusinessActivityController {
 	            		}
 	            	}
             	}
+            } else if(query.getTypeId() == 4) {
+            	if(!"".equals(businessActivity.getReportExcel()) && businessActivity.getReportExcel() != null) {        
+
+                    businessActivityCouponService.delete(businessActivity.getActId());
+    	            try {
+                        File file = new File(CommonUtils.LOCALEXCELPATH, businessActivity.getReportExcel());
+                       
+                        String path = file.getPath();
+                        String[] columns = {"couponCode"};
+                        
+                        List<BusinessActivityCoupon> list = parse(path, 0, 1, 0, 1, columns);
+                        for(int i=0;i<list.size();i++) {
+            				BusinessActivityCoupon businessActivityCoupon = (BusinessActivityCoupon) list.get(i);
+            				
+            				businessActivityCoupon.setActId(businessActivity.getActId());
+            				businessActivityCoupon.setCouponCode(businessActivityCoupon.getCouponCode());
+            				businessActivityCoupon.setState(0);
+            				businessActivityCoupon.setCreateTime(new Timestamp(System.currentTimeMillis()));
+            				businessActivityCoupon.setEditTime(new Timestamp(System.currentTimeMillis()));
+            				businessActivityCoupon.setEditor("");
+            				businessActivityCoupon.setUserId(getUser().getUserId());
+            				businessActivityCouponService.save(businessActivityCoupon);
+            			}
+    	            } catch (Exception e) {
+    	                e.printStackTrace();
+    	            }
+    	        }
             }
             
             //活动范围 ： 针对社区和驿站的小区
@@ -1666,4 +1764,134 @@ public class BusinessActivityController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 上传EXCEL文件操作
+	 * @param exclefile
+	 * @param response
+	 */
+    @RequestMapping(value="uploadExcel")
+    public void uploadExcel(@RequestParam MultipartFile[] exclefile, HttpServletResponse response) {
+        //上传附件
+        try {
+            for(MultipartFile file : exclefile){
+                if(!file.isEmpty()){
+                    String fname = FilenameUtils.getBaseName(file.getOriginalFilename());
+                    String extense = FilenameUtils.getExtension(file.getOriginalFilename());
+                    DecimalFormat decimalFormat=new DecimalFormat(".0");
+                    long ltime = getLongTime();
+                    String fname2 =  fname + ltime + "." + extense;
+                    File newfile =  new File(CommonUtils.LOCALEXCELPATH, fname2);
+                    //拷贝到服务器临时文件进行验证excel格式是否正确
+                    FileUtils.copyInputStreamToFile(file.getInputStream(), newfile);
+                   
+                    String path = newfile.getPath();
+                    
+                    String msg = parse(path, decimalFormat.format(((float)file.getSize()/1024)), fname2 ,0, 1, 0, 1);
+                    print(response, msg);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public String parse(String path, String filename, String filename2, int sheet0, int rowfrom, int columnfrom, int columnto) throws Exception {
+        int i = 0; //行值
+        int c = 0; //列值
+        try {
+            Workbook workbook = CommonUtils.getWorkbook(path);
+            Sheet sheet = workbook.getSheetAt(sheet0);
+
+            for(Row row : sheet) {
+                //从第几行开始解析
+                if(i >= rowfrom) {
+                    int lastnum = row.getLastCellNum();
+                    if(lastnum != 1) {
+                        return getJSONString(false, "请检查Excel模板，正确模板为1列，您上传的模板为" + lastnum + "列。");
+                    }
+                    for(int m = 0; m < lastnum; m++) {
+                        Cell cell = row.getCell(m);
+                        if(m != 4) {
+                            if(cell == null) {
+                                return getJSONString(false, getMessage(i, m, "数据不能为空！"));
+                            } else {
+                                String value = getCellValue(cell).trim();
+                                //判断手机号是否为数据并且是13位,第2列为手机号
+                                if(m == 1 && !isMobileNO(value)) {
+                                    return getJSONString(false, getMessage(i, m, "手机号格式不正确！"));
+                                }
+                                if(m == 6 && value.length() > 2000) {
+                                    return getJSONString(false, getMessage(i, m, "您填写的通知内容超过了2000个字符！"));
+                                }
+                            }
+                        }
+                    }
+                    c = 0;  //归零
+                }
+                i++;
+            }
+        } catch (Exception e) {
+            throw new Exception("Excel导入第"+i+"行第"+c+"列失败，请检查Excel数据格式是否正确！");
+        }
+        return getJSONString(true, filename.concat("|").concat(filename2));
+    }
+
+    private String getMessage(int row, int column, String msg) {
+        return "第"+(row+1)+"行,第"+(column+1)+"列，" + msg ;
+    }
+    
+    public List parse(String path, int sheet0, int rowfrom, int columnfrom, int columnto, String[] columns) throws Exception {
+        List list = new ArrayList();
+        int i = 0;
+        int c = 0;
+        try {
+            Workbook workbook = CommonUtils.getWorkbook(path);
+            Sheet sheet = workbook.getSheetAt(sheet0);
+            
+            for(Row row : sheet) {
+            	BusinessActivityCoupon obj = new BusinessActivityCoupon();
+                /*List idxList = new ArrayList();
+            	for(int idx = 0; idx<=6; idx++) {
+            		idxList.add(idx);
+            	}*/
+                //从第几行开始解析
+                if(i >= rowfrom) {
+                    for (Cell cell : row) {
+                        int columnnum = cell.getColumnIndex();
+                        c = columnnum;
+                       /* for(int idx=0;idx<idxList.size();idx++) {
+                        	int idxValue = (Integer) idxList.get(idx);
+                        	if(idxValue == columnnum) {
+                        		idxList.remove(idx);
+                        	}
+                        }*/
+                        int rownum = cell.getRowIndex();
+
+                        //到第几列时解析结束
+                        if(columnfrom <= columnnum && columnnum <= columnto && columnnum <= columns.length - 1 ) {
+                            String cellvalue = "";
+                            if(isMergedRegion(sheet, rownum , columnnum)) {
+                                cellvalue = getMergedRegionValue(sheet, rownum , columnnum);
+                            } else {
+                                    cellvalue = getCellValue(cell);
+                            }
+                            BeanUtils.setProperty(obj, columns[columnnum], cellvalue);
+                            //++c;
+                        }
+                    }
+                    /*for(int idx=0;idx<idxList.size();idx++) {
+                    	int idxValue = (Integer) idxList.get(idx);
+                    	BeanUtils.setProperty(obj, columns[idxValue], "");
+                    }*/
+                    //c = 0;  //归零
+                    list.add(obj);
+                }
+                i++;
+            }
+        } catch (Exception e) {
+            throw new Exception("Excel导入第"+i+"行第"+c+"列失败，请检查Excel数据格式是否正确！");
+        }
+        return list;
+    }
 }

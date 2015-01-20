@@ -37,15 +37,15 @@ import java.util.regex.Pattern;
  */
 public class CommonUtils<CloseableHttpClient> {
     //图片上传地址
-    public static final String LOCALIMGPATH = "F:/pic/";
+    public static final String LOCALIMGPATH = "C:/pic/";
     //图片http地址
     public static final String HTTPLOCALIMGPATH = "http://localhost:8080/community/attach/140720/";
     //远程图片上传地址
-    public static final String REMOTEIMGPATH = "F:/pic/";
+    public static final String REMOTEIMGPATH = "C:/pic/";
     //本地EXCEL路径
-    public static final String LOCALEXCELPATH = "F:/pic/";
+    public static final String LOCALEXCELPATH = "C:/pic/";
     //远程EXCEL路径
-    public static final String REMOTEEXCELPATH = "F:/pic/";
+    public static final String REMOTEEXCELPATH = "C:/pic/";
     //小图片
     public static final String SMALL = "S_M_A_L_L";
 
