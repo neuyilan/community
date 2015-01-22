@@ -375,4 +375,44 @@ public class BusinessBreakServiceImpl implements BusinessBreakService {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * service
+	 * 发布爆料
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void publishBrokePHP(final BusinessBreak entity,String[] images)  throws ServiceException {
+		try {
+			BusinessBreak businessBreak = businessBreakDao.save(entity);
+			
+			for (int i = 0; i < images.length; i++) {
+				BusinessBreakPic businessBreakPic = new BusinessBreakPic();
+				businessBreakPic.setBreakId(businessBreak.getBreakId());
+				businessBreakPic.setCreateTime(entity.getCreateTime());
+				businessBreakPic.setEditTime(entity.getCreateTime());
+				businessBreakPic.setPicUrl(images[i]);
+				businessBreakPicDao.save(businessBreakPic);
+			}
+			
+	        AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(entity.getBreakerId());
+			appLatestNews.setTypeId(0);
+			appLatestNews.setSourceId(businessBreak.getBreakId());
+			appLatestNews.setTo(0);
+			appLatestNews.setEstateId(0);
+			appLatestNewsDao.save_app(appLatestNews);
+			appLatestNews.setTypeId(1);
+			appLatestNewsDao.save_app(appLatestNews);
+			appLatestNews.setTypeId(33);
+			appLatestNewsDao.save_app(appLatestNews);
+			appLatestNews.setTypeId(40);//爆料
+			appLatestNews.setTo(1);
+			appLatestNewsDao.save_app(appLatestNews);
+			
+		} catch (DaoException e) {
+			logger.debug("BusinessBreakServiceImpl save()：保存BusinessBreak发生错误！", e);
+			e.printStackTrace();
+		}
+	}
 }

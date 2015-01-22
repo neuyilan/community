@@ -113,7 +113,7 @@ public class seekHelpController {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp"); 
 			query.setRows(15);
 			query.setHelperId(query.getUserId());
 			query.setOrder("desc");
@@ -464,11 +464,11 @@ public class seekHelpController {
 			String path = request.getContextPath();
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
 			
+			mav.addObject("userId", request.getParameter("userId"));
+			mav.addObject("publisherId", request.getParameter("publisherId"));
 			mav.addObject("replyId", request.getParameter("replyId"));
 			mav.addObject("replyName", request.getParameter("replyName"));
 			mav.addObject("replyType", request.getParameter("replyType"));
-			
-			mav.addObject("userId", query.getUserId()); 
 			mav.addObject("ID", query.getID()); 
 			mav.addObject("ctx", ctx);
 //			mav.addObject("businessHelp", query);
@@ -550,10 +550,14 @@ public class seekHelpController {
 			query.setSort("commentTime");
 			query.setHelp(query.getID());
 			BaseBean baseBean = businessHelpCommentService.findAllPage_app(query);
+			BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"rowCount\":"+baseBean.getCount()+",";
+			json += "\"supports\":\""+businessHelp.getSupports()+"\",";
+			json += "\"comments\":\""+businessHelp.getComments()+"\",";
 			
 			json += "\"PageState\":";
 			if(baseBean.getCount()>query.getPage()*query.getRows()){
@@ -631,10 +635,16 @@ public class seekHelpController {
 			query.setCommentorState(0);
 			query.setReplyState(0);
 			BaseBean baseBean = businessHelpCommentService.findAllPage_app(query);
+			BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
+
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"rowCount\":"+baseBean.getCount()+",";
+			json += "\"supports\":\""+businessHelp.getSupports()+"\",";
+			json += "\"comments\":\""+businessHelp.getComments()+"\",";
+			
 			json += "\"PageState\":";
 			if(baseBean.getCount()>query.getPage()*query.getRows()){
 				json += "true,";
@@ -728,7 +738,7 @@ public class seekHelpController {
 				}
 				businessHelpCommentService.save(businessHelpComment);
 				BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
-				AppUser appUser = appUserService.findById(query.getPublisherId());
+				AppUser appUser = appUserService.findById(businessHelp.getHelperId());
 				if(businessHelp.getState()==0){
 					BusinessHelp businessHelp1 = new BusinessHelp();
 					businessHelp1.setHelpId(query.getID());
@@ -740,54 +750,11 @@ public class seekHelpController {
 				appLatestNews.setSourceId(query.getID());
 				appLatestNews.setTo(0);
 				appLatestNews.setEstateId(0);
-				appLatestNews.setUserId(query.getPublisherId());
+				appLatestNews.setUserId(businessHelp.getHelperId());
 				appLatestNews.setTypeId(27);//我的求助
 				appLatestNewsService.save_app(appLatestNews);
 				appLatestNews.setTypeId(28);//我的求助列表
 				appLatestNewsService.save_app(appLatestNews);
-				Map paramMapTemp = new HashMap();
-				paramMapTemp.put("userId", appUser.getUserId());
-				List configList = appUserConfigService.findByMap(paramMapTemp);
-				AppUserConfig appUserConfig = null;
-				if(configList != null) {
-					appUserConfig = (AppUserConfig) configList.get(0);
-				}
-				if(appUserConfig != null && 
-						appUserConfig.getHelpSwitch() == 0 && 
-						appUser.getBaiduId() != null && 
-						!"".equals(appUser.getBaiduId()) && 
-						appUser.getChannelId() != null && 
-						!"".equals(appUser.getChannelId()) && 
-						!query.getUserId().equals(query.getPublisherId())) {
-	        		String title = "OK家";
-					String description = "【我的求助】您的发布的求助信息，得到了TA的回复，快来看看吧。";
-					
-					Map paramMap = new HashMap();
-					paramMap.put("messageType", 13);
-					paramMap.put("ID", query.getID());
-					
-					Integer success = AppPushNotificationUtil.pushNotification(
-							title, 
-							description, 
-							appUser.getDeviceType(),
-							Long.valueOf(appUser.getChannelId()).longValue(), 
-							appUser.getBaiduId(),
-							paramMap
-							);
-					//记录推送日志
-					AppPushLog appPushLog = new AppPushLog();
-					appPushLog.setUserId(appUser.getUserId());
-				    appPushLog.setUserName(appUser.getRealname());
-				    appPushLog.setBaiduId(appUser.getBaiduId());
-				    appPushLog.setChannelId(appUser.getChannelId());
-				    appPushLog.setTitle(title);
-				    appPushLog.setDescription(description);
-				    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-				    appPushLog.setSendState(success);
-				    appPushLog.setSenderId(appUser.getUserId());
-				    appPushLog.setSenderName(appUser.getNickname());
-					appPushLogService.save(appPushLog);
-				}
 				json += "{";
 				json += "\"errorCode\":\"200\",";
 				json += "\"message\":\"评论成功\",";
@@ -870,7 +837,7 @@ public class seekHelpController {
 				}
 				businessHelpCommentService.save(businessHelpComment);
 				BusinessHelp businessHelp = businessHelpService.findById(query.getID());
-				AppUser appUser = appUserService.findById(query.getPublisherId());
+				AppUser appUser = appUserService.findById(businessHelp.getHelperId());
 				AppUserNews appUserNews = new AppUserNews();
 				appUserNews.setUserId(query.getReplyId());
 				appUserNews.setCreateTime(ts);
@@ -892,54 +859,11 @@ public class seekHelpController {
 				appLatestNewsService.save_app(appLatestNews);
 				appLatestNews.setTypeId(9);//我的消息回复我的
 				appLatestNewsService.save_app(appLatestNews);
-				appLatestNews.setUserId(query.getPublisherId());
+				appLatestNews.setUserId(businessHelp.getHelperId());
 				appLatestNews.setTypeId(27);//我的求助
 				appLatestNewsService.save_app(appLatestNews);
 				appLatestNews.setTypeId(28);//我的求助列表
 				appLatestNewsService.save_app(appLatestNews);
-				Map paramMapTemp = new HashMap();
-				paramMapTemp.put("userId", appUser.getUserId());
-				List configList = appUserConfigService.findByMap(paramMapTemp);
-				AppUserConfig appUserConfig = null;
-				if(configList != null) {
-					appUserConfig = (AppUserConfig) configList.get(0);
-				}
-				if(appUserConfig != null && 
-						appUserConfig.getHelpSwitch() == 0 && 
-						appUser.getBaiduId() != null && 
-						!"".equals(appUser.getBaiduId()) && 
-						appUser.getChannelId() != null && 
-						!"".equals(appUser.getChannelId()) && 
-						!query.getUserId().equals(query.getPublisherId())) {
-	        		String title = "OK家";
-					String description = "【我的求助】您的发布的求助信息，得到了TA的回复，快来看看吧。";
-					
-					Map paramMap = new HashMap();
-					paramMap.put("messageType", 13);
-					paramMap.put("ID", query.getID());
-					
-					Integer success = AppPushNotificationUtil.pushNotification(
-							title, 
-							description, 
-							appUser.getDeviceType(),
-							Long.valueOf(appUser.getChannelId()).longValue(), 
-							appUser.getBaiduId(),
-							paramMap
-							);
-					//记录推送日志
-					AppPushLog appPushLog = new AppPushLog();
-					appPushLog.setUserId(appUser.getUserId());
-				    appPushLog.setUserName(appUser.getRealname());
-				    appPushLog.setBaiduId(appUser.getBaiduId());
-				    appPushLog.setChannelId(appUser.getChannelId());
-				    appPushLog.setTitle(title);
-				    appPushLog.setDescription(description);
-				    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-				    appPushLog.setSendState(success);
-				    appPushLog.setSenderId(appUser.getUserId());
-				    appPushLog.setSenderName(appUser.getNickname());
-					appPushLogService.save(appPushLog);
-				}
 				json += "{";
 				json += "\"errorCode\":\"200\",";
 				json += "\"message\":\"评论成功\",";

@@ -11,14 +11,14 @@ img{ vertical-align:middle;}
 .hide{ display:none; }
 
 .x-main{}
-.x-main .x-total{ margin:10px; border:1px solid #dcdcdc; background:#fff; padding:0px 10px 10px; border-radius:6px;}
-.x-main .x-title{ margin: 0px;font-size:20px; color:#000000; line-height:26px;font-weight:bold; padding:10px  0px ;}
-.x-main .x-total .x-xt{ margin:0; padding:5px 0px; border-bottom:1px solid #e2e2e2; font-size:14px; position:relative;}
-.x-main .x-total .x-xt img{ width:30px; height:30px; border-radius:30px;}
-.x-xt .x-xdd{ padding-left:5px;}
-.x-xt .x-xsj{ position:absolute; right:0; top:10px;}
+.x-news{ padding:0 16px; background-color:#fff;}
+.x-main .x-title{margin: 0px;font-size:18px; color:#424242; line-height:23px;font-weight:bold; padding:12px 0px;}
+.x-main .x-xt{ margin:0; padding:6px 0px; border-bottom:1px solid #d8d8d7; position:relative; line-height:22px;}
+.x-main .x-xt img{ width:30px; height:30px; border-radius:30px;}
+.x-xt .x-xdd{ padding-left:8px; font-size:12.5px; color:#424242;}
+.x-xt .x-xsj{ position:absolute; right:0; top:10px; font-size:12px; color:#626262;}
 
-.x-cx{ font-size:18px; line-height:26px; color:#595959;}
+.x-cx{ font-size:16px; line-height:24px; color:#424242;}
 .x-cx img{ width:100% !important; height:auto;}
 .x-cx p{ width:100% !important;}
 .x-content hr{ margin:20px -10px 4px -10px; border-top: 1px solid #e2e2e2;}

@@ -483,9 +483,11 @@ public class SecondaryMarketController {
 						+"\"publisherName\":\""+businessProduct.getPublisherName()+"\",\"avatar\":\""+ip+businessProduct.getPortrait()+"\","
 						+"\"addr\":\""+businessProduct.getEstateScope()+"\",\"type\":\""+businessProduct.getDealType()+"\",\"OnSale\":\""+businessProduct.getIsEstateAgent()+
 						"\",\"price\":\""+businessProduct.getPrice()+"\",\"pic\":\"";
-				if(businessProduct.getPicUrl()!=null){
+				if(businessProduct.getPicUrl()!=null && !"".equals(businessProduct.getPicUrl())){
 					String[] pic = businessProduct.getPicUrl().split(",");
 					json += ip+pic[0];
+				}else {
+					json += ip+"/images/icon/qiugou.png";
 				}
 				json += "\"},";
 			}

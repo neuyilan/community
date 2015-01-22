@@ -638,6 +638,70 @@ public class healthydietController {
 	}
 	
 	/**
+	 * 用户查看健康饮食的详情
+	 * @param userId,sessionid,ID
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getDetailsByIdComment")
+	public ModelAndView getDetailsByIdComment(HttpServletRequest request, HttpServletResponse response) {
+		Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
+		String phpIp = p.getProperty("phpIp");   
+		Integer newsId = new Integer(request.getParameter("ID"));
+		//Integer newsId = 48;
+		String sessionid = request.getParameter("sessionid");
+		//String sessionid = "sessionid";
+		Integer userId = new Integer(request.getParameter("userId"));
+		//Integer userId = 1;
+		AppUser appUser = appUserService.findById(userId);
+		
+		ModelAndView mav = new ModelAndView("/service/healthydietComment");
+		
+		List commentList = new ArrayList();
+		String path = request.getContextPath();
+		String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+		String protrait = ip+appUser.getPortrait();
+		BusinessHealthydiet businessHealthydiet = businessHealthydietService.findById_app(newsId);
+		mav.addObject("ctx", ctx);
+		mav.addObject("newsId", businessHealthydiet.getHealId());
+		mav.addObject("doctorBrief", businessHealthydiet.getDoctorBrief());
+		mav.addObject("publisherName", businessHealthydiet.getDoctorName());
+		mav.addObject("publishTime", businessHealthydiet.getPublishTime());
+		mav.addObject("publisherProtrait", ip+businessHealthydiet.getAvatar());
+		mav.addObject("title",businessHealthydiet.getHealTitle());
+		mav.addObject("newsContent", businessHealthydiet.getHealContent());
+		mav.addObject("protrait", protrait);
+		mav.addObject("supports", businessHealthydiet.getSupports());
+		mav.addObject("comments", businessHealthydiet.getComments());
+		mav.addObject("realName", appUser.getRealname());
+		mav.addObject("newsId", newsId);
+		mav.addObject("sessionid", sessionid);
+		mav.addObject("userId", userId);
+		mav.addObject("nickname", appUser.getNickname());
+		mav.addObject("download", request.getParameter("download"));
+		mav.addObject("phpIp", phpIp);
+		mav.addObject("appPic", businessHealthydiet.getAppPic());
+
+
+		Map propMap = new HashMap();
+		propMap.put("newsId",businessHealthydiet.getHealId());
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			appStatisticsClick.setUserId(userId);
+			appStatisticsClick.setType(88);
+			appStatisticsClick.setTypeName("健康饮食详情");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return mav;	
+	}
+	
+	/**
 	 * 用户查看健康饮食回复我的详情
 	 * @param userId,sessionid,ID
 	 * @return

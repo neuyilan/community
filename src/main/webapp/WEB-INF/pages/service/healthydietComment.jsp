@@ -24,6 +24,10 @@
                 <p class="x-title"><span>${title}</span></p>
             </div>
         </div>
+       <%--  <div class="x-intro">
+            <p class="x-itname"><span>${publisherName}</span>介绍：</p>
+            <p class="x-itcon">${doctorBrief}</p>
+        </div> --%>
         
         <div class="x-content">
             <div class="x-cx">
@@ -67,7 +71,6 @@
 <script src="${ctx }/js/activity/js/jquery-1.7.2.min.js"></script>
 <script src="${ctx }/js/jquery.showLoading.min.js"></script>
 <script>
-
 /*赞*/
  var userId = '${userId}';//登录用户头像地址
  var protrait = '${protrait}';//登录用户头像地址
@@ -77,7 +80,6 @@
  var replyType =0;//点击回复人类型
  var page = 0 ;//当前页面
  var PageState=false;//是否有下一页
- var screenHeight=document.documentElement.clientHeight;
  if("${ctx}"==protrait){
 	 protrait = '${ctx}/images/morentouxiang.png';
 }
@@ -85,39 +87,26 @@
 	 nickname = '匿名';
 }
  $(document).ready(function(){
-	 //$("#comment").focus(function(){
-	//		$(".scroll").css("bottom","357px");
-	//		$(".x-inp").css("bottom","300px");
-	//	 });
-	///	 $("#comment").blur(function(){
-	//		$(".scroll").css("bottom","57px");
-	//		$(".x-inp").css("bottom","0px");
-	//	 });
-	 $("#content").click(function(){
-		 replyId = 0;//点击回复人id
-		 replyName = "";//点击回复人姓名
-		 replyType = 0;//点击回复人类型
-		 $("#replaceinp").attr("placeholder","回复:");
-	 });
-	 /* $('.x-z a').click(function(){
-        $('.x-z a').append('<em class="x-add">+1</em>');
-		$('.x-z img').attr("src","images/ze.png");
-		$('.x-z em').css("color","#e41212");
-        $('.x-add').css({'position':'absolute', 'color':'#FF0000','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
-          $(this).fadeIn('fast').remove();
-          var Num = parseInt($('.x-z em').text());
-          Num++;
-          $('.x-z em').text(Num);
-		  $('.x-z img').attr("src","images/zk.png");
-		  $('.x-z em').css("color","#030303");
-        });
-	 }); */
-	 
-
+		 $("#content").click(function(){
+			 replyId = 0;//点击回复人id
+			 replyName = "";//点击回复人姓名
+			 replyType = 0;//点击回复人类型
+			 $("#replaceinp").attr("placeholder","回复:");
+		 });
 		//点赞
 		 $('.x-z a').click(function(){
+			 if(userId==0){
+					if(window.confirm('参加活动需要登录！！是否进去登录页？')){
+						 window.location.href='${phpId}wxokjia/reggoin.php';
+		                //alert("确定");
+		                return null;
+		             }else{
+		                //alert("取消");
+		                return null;
+		            }
+				}
 		 	$.ajax({
-	           url: '${ctx}/service/commiunity/supportJournalism.json',
+	           url: '${ctx}/service/healthydiet/support.json',
 	           cache: false,
 	           type: 'post',
 	           dataType: 'json',
@@ -129,7 +118,7 @@
 	           success: function (data) {
 	        	   //eval('data=' + data);
 	        	   if(data.errorCode == 200) {
-	        		    $('.x-z a').append('<em class="x-add">+1</em>');
+	        		   $('.x-z a').append('<em class="x-add">+1</em>');
 						$('.x-z img').attr("src","${ctx }/js/activity/images/ze.png");
 						$('.x-z img').attr("disabled",true);
 						$('.x-z em').css("color","#e41212");
@@ -147,13 +136,23 @@
 	        	   }
 	           },
 	           error: function() {
-	               msgbox('提示','点赞失败');
+	               msgbox('提示','评论失败');
 	           }
 	       });
 		 });
 		
 		//评论
 		 $('#commentBtn').click(function() {
+			 if(userId==0){
+					if(window.confirm('参加活动需要登录！！是否进去登录页？')){
+						 window.location.href='${phpId}wxokjia/reggoin.php';
+		                //alert("确定");
+		                return null;
+		             }else{
+		                //alert("取消");
+		                return null;
+		            }
+				}
 		 	var content = $('#comment').val();
 		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
@@ -162,9 +161,9 @@
 			}
 		 	var url="";
 		 	if(replyId==0){
-		 		url = '${ctx}/service/commiunity/saveJournalismReview.json';
+		 		url = '${ctx}/service/healthydiet/saveReview.json';
 		 	}else{
-		 		url = '${ctx}/service/commiunity/saveJournalismReply.json';
+		 		url = '${ctx}/service/healthydiet/saveReply.json';
 		 	}
 		 	if(content != '') {
 		 		$.ajax({
@@ -228,57 +227,57 @@
 		 	$("#replaceinp").attr("placeholder","回复:");
 		 });
 		
-		$('#nextBtn').click(function() {
-		 	if(PageState) {
-		 		page++;
-		 		jump(page);
-		 		return;
-		 	}else{
-		 		$('#curr').text('亲已经到底了');
-		 		$('#nextBtn').attr('disabled', true);
-		 		return;
-		 	}
-		});
-		page++;
-		jump(page);
-		document.onkeydown = function(e){    
-		    var ev = document.all ? window.event : e;  
-		    if(ev.keyCode==13) {// 如（ev.ctrlKey && ev.keyCode==13）为ctrl+Center 触发  
-		        //要处理的事件  
-		        $('#commentBtn').click();
-		    }  
-		  }  
-		 //firefox下检测状态改变只能用oninput,且需要用addEventListener来注册事件。 
-		 if(/msie/i.test(navigator.userAgent))    //ie浏览器 
-		 {document.getElementById('replaceinp').onpropertychange=handle 
-		 } 
-		 else 
-		 {//非ie浏览器，比如Firefox 
-		 document.getElementById('comment').addEventListener("input",handle,false); 
-		 } 
- });
-//当状态改变的时候执行的函数 
- function handle() {
-	//document.getElementById('msg').innerHTML='输入的文字长度为：'+document.getElementById('txt').value.length; 
-	$("#replaceinp").val(" ");
-	if($("#comment").val().length==0){
-		$("#replaceinp").val("");
-		$("#replaceinp").attr("placeholder","回复："+replyName);
-	}
-	/*if(document.getElementById('replaceinp').value.length>0){
-		$("#comment").val($("#replaceinp").val());
-		$("#replaceinp").attr("value","");
-		$("#comment").focus();
-	}*/
+		 $('#nextBtn').click(function() {
+			 	if(PageState) {
+			 		page++;
+			 		jump(page);
+			 		return;
+			 	}else{
+			 		$('#curr').text('亲已经到底了');
+			 		$('#nextBtn').attr('disabled', true);
+			 		return;
+			 	}
+			});
+			page++;
+			jump(page);
+			document.onkeydown = function(e){    
+			    var ev = document.all ? window.event : e;  
+			    if(ev.keyCode==13) {// 如（ev.ctrlKey && ev.keyCode==13）为ctrl+Center 触发  
+			        //要处理的事件  
+			        $('#commentBtn').click();
+			    }  
+			  }  
+			 //firefox下检测状态改变只能用oninput,且需要用addEventListener来注册事件。 
+			 if(/msie/i.test(navigator.userAgent))    //ie浏览器 
+			 {document.getElementById('replaceinp').onpropertychange=handle 
+			 } 
+			 else 
+			 {//非ie浏览器，比如Firefox 
+			 document.getElementById('comment').addEventListener("input",handle,false); 
+			 } 
+	 });
+	//当状态改变的时候执行的函数 
+	 function handle() {
+		//document.getElementById('msg').innerHTML='输入的文字长度为：'+document.getElementById('txt').value.length; 
+		$("#replaceinp").val(" ");
+		if($("#comment").val().length==0){
+			$("#replaceinp").val("");
+			$("#replaceinp").attr("placeholder","回复："+replyName);
+		}
+		/*if(document.getElementById('replaceinp').value.length>0){
+			$("#comment").val($("#replaceinp").val());
+			$("#replaceinp").attr("value","");
+			$("#comment").focus();
+		}*/
 
-	
- } 
+		
+	 } 
 
  
 //获取下页评论内容
 function jump(nextNo) {
 	$.ajax({
-		    url: '${ctx}/service/commiunity/getJournalismReviewByUserId.json',
+		    url: '${ctx}/service/healthydiet/getReviewByUserId.json',
 		    cache: false,
 		    type: 'post',
             dataType: 'json',
@@ -290,7 +289,6 @@ function jump(nextNo) {
 		    },
 		    success: function (data) {
 		    	//eval('data=' + data);
-		    	$("#commentsCount").text(data.content.count);
 		    	PageState=data.content.PageState;
                 var rows = data.content.reviewList;
                 if(rows.length > 0) {
@@ -383,7 +381,6 @@ function msgbox(title,content){
 		    $(".tk").remove();
 	});
 }
-
 </script>
 </body>
 </html>

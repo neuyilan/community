@@ -158,6 +158,65 @@ public class BrokeController {
 	}
 	
 	/**
+	 * 用户发布我的爆料
+	 * @param userId,content,speechSounds,pics
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="publishBrokePHP")
+	public void publishBrokePHP(HttpServletRequest request, HttpServletResponse response,BusinessBreakQuery query) {
+		String json = "";
+		try{
+			String str = request.getParameter("images");
+			BusinessBreak businessBreak = new BusinessBreak();
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			businessBreak.setBreakerId(query.getUserId());
+			businessBreak.setEditTime(ts);
+			businessBreak.setCreateTime(ts);
+			businessBreak.setBreakContent(query.getContent());
+			businessBreak.setBreakTime(ts);
+			businessBreak.setComId(query.getComId());
+			businessBreak.setLastCommentTime(ts);
+			businessBreak.setEstateId(query.getEstateId());
+			businessBreak.setIsNickname(query.getIsNickname());
+			businessBreakService.publishBrokePHP(businessBreak,str.split(","));
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"发布成功\"";
+			json += "}";
+			
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"发布失败\"";
+			json += "}";
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			appStatisticsClick.setUserId(query.getUserId());
+			appStatisticsClick.setType(59);
+			appStatisticsClick.setTypeName("发布爆料");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 用户查看我的爆料
 	 * @param userId,sessionid,type,page,rows
 	 * @return

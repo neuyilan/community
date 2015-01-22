@@ -288,8 +288,8 @@ public class DateUtil {
     }
     
     /**
-     * 传入时间字符串  长度14 
-     * 	例如：20150112145401
+     * 传入时间字符串  长度14 返回 Timestamp 类型
+     * 例如：20150112145401
      * @param dateStr
      * @return
      */

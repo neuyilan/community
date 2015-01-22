@@ -95,6 +95,7 @@ import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.StringUtil;
 import com.community.framework.utils.messagesUtil;
 import com.community.framework.utils.propertiesUtil;
+import com.community.framework.utils.weather;
 import com.qq.connect.api.OpenID;
 import com.qq.connect.api.qzone.UserInfo;
 import com.qq.connect.javabeans.AccessToken;
@@ -3297,6 +3298,241 @@ public class UserController {
 	public void getUserEstateIndex(HttpServletRequest request,
 			HttpServletResponse response,AppHomepageQuery query) {
 		Properties p = propertiesUtil.getProperties("config.properties");
+		Properties pTop = propertiesUtil.getProperties("newTop.properties");
+		String ip = p.getProperty("imageIp");   
+		String json = "";
+		try{
+			query.setRows(15);
+			query.setOrder("desc");
+			query.setSort("publishTime");
+			
+			List<BusinessFocus> list = businessFocusService.findById_app(query.getEstateId());
+			BusinessFocus BusinessFocus = list.get(0);
+			BaseBean baseBean = appHomepageService.findAllPage_app(query);
+			query.setTop(1);
+			BaseBean topBaseBean = appHomepageService.findAllPage(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			if (query.getPage()==1) {
+				if(BusinessFocus.getSourceType()==0){
+					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					if(BusinessFocus.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";
+				}else if (BusinessFocus.getSourceType()==1){
+					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					if(BusinessFocus.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";
+				}else if (BusinessFocus.getSourceType()==2){
+					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					if(BusinessFocus.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";
+				}else{
+					json += "\"ad\":{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					if(BusinessFocus.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";	
+				}
+			}
+			json += "\"PageState\":";
+			if(baseBean.getCount()>query.getPage()*query.getRows()){
+				json += "true,";
+			}else{
+				json += "false,";
+			}
+			json += "\"newsList\":[";
+//			if(!"".equals(pTop.getProperty("ID")) && query.getPage()==1){
+//				json += "{\"serviceCode\":\""+pTop.getProperty("serviceCode")+"\",\"ID\":\""+pTop.getProperty("ID")+"\",\"title\":\""+pTop.getProperty("title")+"\",\"time\":\""
+//						+pTop.getProperty("time").substring(0, pTop.getProperty("time").indexOf(" "))+"\",\"brief\":\""+pTop.getProperty("brief")+"\",\"pic\":\""+ip+pTop.getProperty("pic")+"\"},";
+//			}
+			for(int i=0;i<topBaseBean.getList().size() && i<2;i++) {
+				AppHomepage appHomepage = (AppHomepage) topBaseBean.getList().get(i);
+//				if(appHomepage.getId().equals(Integer.parseInt(pTop.getProperty("ID")))){
+//					continue;
+//				}
+				if(appHomepage.getType()==0){
+					json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
+				}else if (appHomepage.getType()==1){
+					json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+				}else if (appHomepage.getType()==4){
+					json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+				}else if (appHomepage.getType()==5){
+					json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
+				}else if (appHomepage.getType()==6){
+					json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+				}else if (appHomepage.getType()==7){
+					json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+				}else{
+					json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+							+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+				}
+			}
+			if(topBaseBean.getList().size()==0){
+				for(int i=0;i<baseBean.getList().size();i++) {
+					AppHomepage appHomepage = (AppHomepage) baseBean.getList().get(i);
+//					if(appHomepage.getId().equals(Integer.parseInt(pTop.getProperty("ID")))){
+//						continue;
+//					}
+					if(appHomepage.getType()==0){
+						json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
+					}else if (appHomepage.getType()==1){
+						json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+					}else if (appHomepage.getType()==4){
+						json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+					}else if (appHomepage.getType()==5){
+						json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
+					}else if (appHomepage.getType()==6){
+						json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+					}else if (appHomepage.getType()==7){
+						json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+					}else{
+						json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+								+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+					}
+				}
+			}else {
+				for(int i=0;i<baseBean.getList().size();i++) {
+					AppHomepage appHomepage = (AppHomepage) baseBean.getList().get(i);
+//					if(appHomepage.getId().equals(Integer.parseInt(pTop.getProperty("ID")))){
+//						continue;
+//					}
+					if(topBaseBean.getList().size()==1){
+						AppHomepage appHomepage1 = (AppHomepage) topBaseBean.getList().get(0);
+						if(appHomepage.getId().equals(appHomepage1.getId())){
+							
+						}else if(appHomepage.getType()==0){
+							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
+						}else if (appHomepage.getType()==1){
+							json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else if (appHomepage.getType()==4){
+							json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else if (appHomepage.getType()==5){
+							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
+						}else if (appHomepage.getType()==6){
+							json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else if (appHomepage.getType()==7){
+							json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else{
+							json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}
+					}else{
+						AppHomepage appHomepage1 = (AppHomepage) topBaseBean.getList().get(0);
+						AppHomepage appHomepage2 = (AppHomepage) topBaseBean.getList().get(1);
+						if(appHomepage.getId().equals(appHomepage1.getId()) || appHomepage.getId().equals(appHomepage2.getId())){
+							
+						}else if(appHomepage.getType()==0){
+							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"0\"},";
+						}else if (appHomepage.getType()==1){
+							json += "{\"serviceCode\":\"30003\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else if (appHomepage.getType()==4){
+							json += "{\"serviceCode\":\"30005\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else if (appHomepage.getType()==5){
+							json += "{\"serviceCode\":\"30002\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\",\"isBroke\":\"1\"},";
+						}else if (appHomepage.getType()==6){
+							json += "{\"serviceCode\":\"30030\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else if (appHomepage.getType()==7){
+							json += "{\"serviceCode\":\"30031\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}else{
+							json += "{\"serviceCode\":\"30004\",\"ID\":\""+appHomepage.getId()+"\",\"title\":\""+appHomepage.getTitle()+"\",\"time\":\""
+									+DateUtil.getInterval(appHomepage.getPublishTime()).substring(0, DateUtil.getInterval(appHomepage.getPublishTime()).indexOf(" "))+"\",\"brief\":\""+appHomepage.getBrief()+"\",\"pic\":\""+ip+appHomepage.getPic()+"\"},";
+						}
+					}
+				}
+			}
+			
+			
+			if(baseBean.getList().size() > 0 || topBaseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			if(null==query.getUserId()){
+				appStatisticsClick.setUserId(0);
+			}else{
+				appStatisticsClick.setUserId(query.getUserId());
+			}
+			appStatisticsClick.setType(0);
+			appStatisticsClick.setTypeName("点击首页");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * APP获取首页信息，包括广告和新闻
+	 * 
+	 * @param userId
+	 *            ,sessionid,estateId,stationId,comId,proId,page,rows
+	 * @return json
+	 */
+	@RequestMapping(value = "getAppIndex")
+	public void getAppIndex(HttpServletRequest request,
+			HttpServletResponse response,AppHomepageQuery query) {
+		Properties p = propertiesUtil.getProperties("config.properties");
 		String ip = p.getProperty("imageIp");   
 		String json = "";
 		try{
@@ -3415,7 +3651,7 @@ public class UserController {
 					BusinessNews businessNews = (BusinessNews) topBaseBean.getList().get(i);
 					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
 					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
-					json +="\"pic\":\""+ip+businessNews.getSubjectPic()+"\",";
+					json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
 					json +="\"comments\":\""+businessNews.getComments()+"\",";
 					if(businessNews.getNewsType()==1){
 						json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getNickname()+"\",\"avatar\":\""+ip+businessNews.getPortrait()+"\",\"type\":\"1\"},";
@@ -3437,13 +3673,11 @@ public class UserController {
 						+"\"publisherName\":\""+businessProduct.getPublisherName()+"\",\"avatar\":\""+ip+businessProduct.getPortrait()+"\","
 						+"\"addr\":\""+businessProduct.getEstateScope()+"\",\"type\":\""+businessProduct.getDealType()+"\",\"OnSale\":\""+businessProduct.getIsEstateAgent()+
 						"\",\"price\":\""+businessProduct.getPrice()+"\",\"pic\":\"";
-				if(businessProduct.getDealType()==1){
-					json += ip+"/images/icon/qiugou.png";
+				if(businessProduct.getPicUrl()!=null && !"".equals(businessProduct.getPicUrl())){
+					String[] pic = businessProduct.getPicUrl().split(",");
+					json += ip+pic[0];
 				}else {
-					if(businessProduct.getPicUrl()!=null){
-						String[] pic = businessProduct.getPicUrl().split(",");
-						json += ip+pic[0];
-					}
+					json += ip+"/images/icon/qiugou.png";
 				}
 				
 				json += "\"},";
@@ -3479,14 +3713,11 @@ public class UserController {
 			}
 			json += "],";
 			
+			
 			json += "\"mall\":{";
 			json += "\"title\":\"新年大集\",";		
-			json += "\"url\":\"http://www.taobao.com/\",";		
-			json += "\"list\":[";
-			json += "{\"ID\":\"1\",\"price\":\"11\",\"brief\":\"江西赣南脐橙12个（约200g-250g）\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i2/TB1EnURGXXXXXbYaXXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://detail.tmall.com/item.htm?spm=a3204.7139825.7139825.4.m0XdpH&id=42260938716&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_42260938716_129940\"},";
-			json += "{\"ID\":\"2\",\"price\":\"11\",\"brief\":\"皮薄肉嫩  酸甜畅享5斤 超大果(果径85-90mm)\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i1/TB1Abr4GpXXXXbkaXXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://detail.tmall.com/item.htm?spm=a3204.7139825.7139825.5.m0XdpH&id=42296726901&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_42296726901_129940\"},";
-			json += "{\"ID\":\"3\",\"price\":\"11\",\"brief\":\"新疆阿克苏冰糖心苹果5斤 超大果(果径85-90mm)\",\"pic\":\"http://img03.taobaocdn.com/imgextra/i3/TB1GAk8GVXXXXXmXFXXXXXXXXXX_!!0-item_pic.jpg_160x160q90.jpg\",\"url\":\"http://chaoshi.detail.tmall.com/item.htm?&spm=a3204.7139825.7139825.6.m0XdpH&acm=lb-tms-1172644-41436.1003.4.129940&scm=1003.4.lb-tms-1172644-41436.ITEM_43027834257_129940&userBucket=4&id=43027834257\"}";
-			json += "]";
+			json += "\"url\":\"http://wx.bqsqcm.com/okjiashop/\",";		
+			json += "\"list\":"+weather.grabMindex();
 			json += "}";
 
 			

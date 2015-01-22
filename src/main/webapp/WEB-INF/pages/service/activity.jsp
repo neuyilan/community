@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/>
 <title>OK家 ${title}</title>
-<link href="${ctx }/js/activity/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/js/activity/css/activityRegistrationStyle.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -147,7 +147,7 @@ $(document).ready(function(){
 	$(".x-qg").click(function(e) {
 		if(userId==0){
 			if(window.confirm('参加活动需要登录！！是否进去登录页？')){
-				 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+				 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
                 //alert("确定");
                 return null;
              }else{
@@ -212,7 +212,7 @@ $(document).ready(function(){
 	 $('.x-z a').click(function(){
 		 if(userId==0){
 				if(window.confirm('点赞活动需要登录！！是否进去登录页？')){
-					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+					 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
 	                //alert("确定");
 	                return null;
 	             }else{
@@ -260,7 +260,7 @@ $(document).ready(function(){
 	 $('#commentBtn').click(function() {
 		 if(userId==0){
 				if(window.confirm('评论活动需要登录！！是否进去登录页？')){
-					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+					 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
 	                //alert("确定");
 	                return null;
 	             }else{

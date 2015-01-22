@@ -132,6 +132,33 @@ public class weather {
 		}
 
 	}
+	
+	/**
+	 * 抓取商品
+	 * 
+	 * @param
+	 * @return
+	 * @throws
+	 */
+	public static String grabMindex() {
+		Document doc;
+		String json = "";
+		try {
+			doc = Jsoup
+					.connect(
+							"http://wx.bqsqcm.com/okjiashop/mobile/mindex.php")
+					.get();
+			String title = doc.title();
+			// 今天
+			Elements arr= doc.select("div.mindex");
+			json = arr.get(0).text();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json;
+
+	}
 
 	/**
 	 * 设置weather.properties的值
@@ -186,8 +213,7 @@ public class weather {
 	}
 
 	public static void main(String[] args) throws Exception {
-		Timestamp  ts=new Timestamp(new Date().getTime());
-		System.out.println(dayForWeek("2014-12-7"));
+		grabMindex();
 	}
 
 	/**

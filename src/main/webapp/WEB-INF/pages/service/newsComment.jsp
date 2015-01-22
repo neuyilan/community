@@ -116,6 +116,16 @@
 
 		//点赞
 		 $('.x-z a').click(function(){
+			 if(userId==0){
+					if(window.confirm('参加活动需要登录！！是否进去登录页？')){
+						 window.location.href='${phpId}wxokjia/reggoin.php';
+		                //alert("确定");
+		                return null;
+		             }else{
+		                //alert("取消");
+		                return null;
+		            }
+				}
 		 	$.ajax({
 	           url: '${ctx}/service/commiunity/supportJournalism.json',
 	           cache: false,
@@ -154,6 +164,16 @@
 		
 		//评论
 		 $('#commentBtn').click(function() {
+			 if(userId==0){
+					if(window.confirm('参加活动需要登录！！是否进去登录页？')){
+						 window.location.href='${phpId}wxokjia/reggoin.php';
+		                //alert("确定");
+		                return null;
+		             }else{
+		                //alert("取消");
+		                return null;
+		            }
+				}
 		 	var content = $('#comment').val();
 		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){

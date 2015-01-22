@@ -29,13 +29,33 @@
 <script src="${ctx}/js/activity/js/jquery-1.7.2.min.js"></script>
 <script src="${ctx}/js/jquery.showLoading.min.js"></script>
 <script>    
-$(function(){
-	if ('${replyId}' != 0)
-	   $("#CommentStr").attr("placeholder","回复：${replyName}");
-});
 
+$(function(){
+	   alert("dddd");
+
+});
 $(document).ready(function(){
-	 $('#send').click(function() {
+	
+	 $('#send').click(function() {		
+		 
+			$.ajax({
+	 		    url: 'http://wx.bqsqcm.com/okjiashop/mobile/mindex.php',
+	 		    cache: false,
+	 		    data: {},
+	 		    type: 'get', 
+	            dataType: 'json',
+	 		    success: function (data) {
+	            	for(var i=0;i<data.length;i++) {
+	            		$("#thumb").val(data[i].id);
+	            		$("#publisherId").val(data[i].name); 
+	            	}
+	 		    },
+	 		    error: function () {
+	 		       msgbox('提示','评论失败');
+	 		    }
+	 		});
+			
+			
 		 	var content = $('#CommentStr').val();
 		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){

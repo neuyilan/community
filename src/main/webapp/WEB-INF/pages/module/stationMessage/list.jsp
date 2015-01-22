@@ -272,7 +272,9 @@
 	function saveStationMessage() {
 		if(($('#content').val()).trim() == '') {
 			alert("请填写留言内容!");
-		} else {
+		} else if($('#content').val().length > 500) {
+			alert("留言内容不能大于500字!");
+		}else {
 			$('#qrbut7').attr("disabled","disabled");
 			$.post('save.do', {content:$('#content').val()}, 
     		function(data) {

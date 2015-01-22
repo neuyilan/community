@@ -90,7 +90,7 @@ public class BusinessStationMessageController {
 			    .append("\"estateId\":\"").append(businessStationMessage.getEstateId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessStationMessage.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessStationMessage.getCommentorName()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessStationMessage.getContent()).append("\"").append(",")
+			    .append("\"content\":\"").append(businessStationMessage.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessStationMessage.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessStationMessage.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessStationMessage.getReplyName()).append("\"").append(",")

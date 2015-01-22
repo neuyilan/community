@@ -444,11 +444,7 @@ public class CommunityController {
 				BusinessNews businessNews = (BusinessNews) topBaseBean.getList().get(i);
 				json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
 				+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
-				if("".equals(businessNews.getSubjectPic()) || businessNews.getSubjectPic()==null || businessNews.getSubjectPic().indexOf("/images/icon/")>=0){
-					json +="\"pic\":\"\",";
-				}else{
-					json +="\"pic\":\""+ip+businessNews.getSubjectPic()+"\",";
-				}
+				json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
 				
 				json +="\"comments\":\""+businessNews.getComments()+"\",";
 				
@@ -462,11 +458,7 @@ public class CommunityController {
 				BusinessNews businessNews = (BusinessNews) baseBean.getList().get(i);
 				json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
 				+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
-				if("".equals(businessNews.getSubjectPic()) || businessNews.getSubjectPic()==null || businessNews.getSubjectPic().indexOf("/images/icon/")>=0){
-					json +="\"pic\":\"\",";
-				}else{
-					json +="\"pic\":\""+ip+businessNews.getSubjectPic()+"\",";
-				}
+				json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
 				
 				json +="\"comments\":\""+businessNews.getComments()+"\",";
 				
@@ -607,6 +599,93 @@ public class CommunityController {
 			appStatisticsClick.setType(12);
 			appStatisticsClick.setTypeName("新闻详情");
 			appStatisticsClick.setId(newsId);
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return mav;	
+	}
+	
+	/**
+	 * 用户查看北京社区报中新闻带评论的详情
+	 * @param userId,sessionid,ID
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getJournalismDetailsByIdComment")
+	public ModelAndView getJournalismDetailsByIdComment (HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView("/service/newsComment");
+		String userId = request.getParameter("userId");
+		String newsId = request.getParameter("ID");
+		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			String phpIp = p.getProperty("phpIp");   
+			
+			//Integer newsId = 48;
+			String sessionid = request.getParameter("sessionid");
+			//String sessionid = "sessionid";
+			
+			//Integer userId = 1;
+			AppUser appUser = appUserService.findById(new Integer(userId));
+			AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(new Integer(userId));
+			appLatestNews.setTypeId(35);
+			appLatestNews.setTo(0);
+			appLatestNews.setSourceId(new Integer(newsId));
+			appLatestNewsService.delete_app_id(appLatestNews);
+			
+			
+			List commentList = new ArrayList();
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+			String protrait = ip+appUser.getPortrait();
+			BusinessNews businessNews = businessNewsService.findById_app(new Integer(newsId));
+			mav.addObject("ctx", ctx);
+			if(businessNews.getNewsType()==1){
+				if (businessNews.getIsNickname()!=null && businessNews.getIsNickname()==1) {
+					mav.addObject("publisherName","小区居民");
+				}else{
+					mav.addObject("publisherName",businessNews.getNickname());
+				}
+				mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
+			}else if (businessNews.getNewsType()==2){
+				mav.addObject("publisherName",businessNews.getNickname());
+				mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
+			}else {
+				mav.addObject("publisherName",businessNews.getBuNickname());
+				mav.addObject("publisherProtrait",ip+businessNews.getAvatar());
+			}
+			mav.addObject("newsId", businessNews.getNewsId());
+			mav.addObject("appPic", businessNews.getAppPic());
+			mav.addObject("publishTime", businessNews.getPublishTime());
+			mav.addObject("title", businessNews.getTitle());
+			mav.addObject("newsContent", businessNews.getContent().replace("?tp=webp",""));
+			mav.addObject("protrait", protrait);
+			mav.addObject("supports", businessNews.getSupports());
+			mav.addObject("comments", businessNews.getComments());
+			mav.addObject("realName", appUser.getRealname());
+			mav.addObject("nickname", appUser.getNickname());
+			mav.addObject("newsId", newsId);
+			mav.addObject("sessionid", sessionid);
+			mav.addObject("userId", userId);
+			mav.addObject("download", request.getParameter("download"));
+			mav.addObject("phpIp", phpIp);
+			Map propMap = new HashMap();
+			propMap.put("newsId", businessNews.getNewsId());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			appStatisticsClick.setUserId(new Integer(userId));
+			appStatisticsClick.setType(12);
+			appStatisticsClick.setTypeName("新闻详情");
+			appStatisticsClick.setId(new Integer(newsId));
 			appStatisticsClickService.save(appStatisticsClick);
 		}catch(Exception e){
 			e.printStackTrace();

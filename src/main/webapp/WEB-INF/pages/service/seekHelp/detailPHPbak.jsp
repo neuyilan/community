@@ -375,9 +375,7 @@ function jump(nextNo) {
 	       					}
 	       				}
                			newContent += '</p>  <div class="kl-user tleft"> <p class="kl-people">'+uname+'</p>';
-               			
-               			
-               			
+
                			if(row.replyId==0){
                    			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">'+row.content+'</span></span></p></div></div>';
             			}else{
@@ -390,11 +388,7 @@ function jump(nextNo) {
             			}
                			
 //                			newContent += ' <p class="kl-hfcon kl-top"><span>'+row.content+'</span></span></p></div></div>';
-               			
-               			
-               			
-               			
-               			
+	
                			newContent += '<p class="kl-hftime kl-top"><time>'+row.commentTime+'</time></p>';
                			var div = $('<li></li>');
 						div.append(newContent);

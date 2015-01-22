@@ -21,7 +21,7 @@
         <p class="kl-head">
             <img src="${ctx }/${businessHelp.portrait}"/>
             <span class="kl-name">${businessHelp.helperName}  </span>
-            <span class="kl-time">${businessHelp.helpTime}  </span> 
+            <span class="kl-time"><fmt:formatDate value="${businessHelp.helpTime}" pattern="yyyy-MM-dd HH:mm"/> </span>  
         </p>
         <div id="conents" class="kl-con">
            
@@ -42,9 +42,10 @@
         <ul id="comments">
         </ul>
         <div class="c-more">
-            <hr>
-            <a>查看更多</a>
-        </div>
+			<i></i>
+			<a>查看更多</a>
+			<i></i>
+		</div>
     </div>
     <div class="fixed kl-bottom">
         <a class="kl-wyhf"><span>我要回复</span></a>  
@@ -66,11 +67,14 @@
 <!--     </div> -->
 
 <form action="" id="frm" method="post" name="frm">
+	<input type="hidden" name="userId"   id="userId" value="${userId}"/>
+    <input type="hidden" name="publisherId"   id="publisherId" value="${businessHelp.helperId}"/>
+    <input type="hidden" name="ID"   id="ID" value="${ID}"/> 
 	<input type="hidden" name="replyId"   id="replyId" value=""/>
 	<input type="hidden" name="replyName" id="replyName" value=""/>
 	<input type="hidden" name="replyType" id="replyType" value=""/>
 </form>
-<script src="${ctx}/js/activity/js/jquery-1.7.2.min.js"></script>
+<script src="${ctx}/js/activity/js/jquery-2.1.1.min.js"></script>
 <script src="${ctx}/js/jquery.showLoading.min.js"></script>
     <script>
         $(".kl-wyhf").click(function(e) {
@@ -377,20 +381,13 @@ function jump(nextNo) {
                        			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">回复  <em>'+row.replyName+'：</em>'+row.content+'</span></span></p></div></div>';
             				}
             			}
-               			
-//                			newContent += ' <p class="kl-hfcon kl-top"><span>'+row.content+'</span></span></p></div></div>';
-               			
-               			
-               			
-               			
+               				
                			
                			newContent += '<p class="kl-hftime kl-top"><time>'+row.commentTime+'</time></p>';
                			var div = $('<li></li>');
 						div.append(newContent);
-                	    $('#comments').append(div);	
-                	    
-//                 	    var div = $('#comments');  </ul> 
-						
+                	    $('#comments').append(div);
+//                 	    var div = $('#comments');  </ul>
             			if(row.userId!=userId){
             				div.find("img").attr("replyId",row.userId);
             				if(row.name=="" || row.name==null){
@@ -402,21 +399,16 @@ function jump(nextNo) {
 
                 			div.click(function(){
                 				$('#replyId').val($(this).find("img").attr("replyId"));//点击回复人id
-                				$('#replyId').val($(this).find("img").attr("replyName"));//点击回复人姓名
-                				$('#replyId').val($(this).find("img").attr("replyType"));//点击回复人类型
+                				$('#replyName').val($(this).find("img").attr("replyName"));//点击回复人姓名
+                				$('#replyType').val($(this).find("img").attr("replyType"));//点击回复人类型
                 				document.getElementById("frm").action='${ctx}/service/seekHelp/getSeekHelpReplyPHP.json';
                 				document.getElementById("frm").submit(); 
                   			 });
             			}else{
-            				
             				div.click(function(){
-//                				 alert("ddd");
-//                  				 replyId = 0;//点击回复人id
-//                  				 replyName = "";//点击回复人姓名
-//                  				 $("#replaceinp").attr("placeholder","回复:");
-								replyId = 0;
-               					replyName = "";
-//                			    replyType = "";
+                				$('#replyId').val(0);//点击回复人id
+                				$('#replyName').val("");//点击回复人姓名
+                				$('#replyType').val(0);//点击回复人类型
                					msgbox('提示',"您不能自己回复自己");
 	               			});
 	           			}

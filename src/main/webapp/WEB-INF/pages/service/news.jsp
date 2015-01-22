@@ -19,7 +19,7 @@
 
 <div class="x-main">
 <div class="scroll">
-    <div class="x-total" id="content">
+    <div class="x-news" id="content">
         <div class="x-infor">
             <p class="x-xt"><img src="${publisherProtrait}"><span class="x-xdd">${publisherName}</span> <span class="x-xsj"><fmt:formatDate value="${publishTime }" pattern="yyyy-MM-dd HH:mm"/></span></p>
             <div class="x-head">

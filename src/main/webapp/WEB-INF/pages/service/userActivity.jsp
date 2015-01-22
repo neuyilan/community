@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/>
 <title>活动详情</title>
-<link href="${ctx }/js/activity/css/style.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/js/activity/css/activityRegistrationStyle.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
 </head>
 

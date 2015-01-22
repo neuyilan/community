@@ -7,10 +7,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
+import com.community.framework.utils.propertiesUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -508,16 +510,18 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 	public void addProductPHP(BusinessProductQuery query)
 			throws ServiceException {
 		try {
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
 
 			Timestamp  ts=new Timestamp(new Date().getTime());
 			BusinessProduct businessProduct = new BusinessProduct();
 			
 			businessProduct.setDealType(query.getType());
-			businessProduct.setPublisherId(query.getPublisherId());
-			businessProduct.setContent(query.getContact());
+			businessProduct.setPublisherId(query.getUserId());
+			businessProduct.setContent(query.getDesc());
 			businessProduct.setTitle("");
-			businessProduct.setContactName(query.getContactName());
-			businessProduct.setContactTel(query.getContactTel());
+			businessProduct.setContactName(query.getContact());
+			businessProduct.setContactTel(query.getCellphone());
 			businessProduct.setContactQq("");
 			businessProduct.setCreateTime(ts);
 			businessProduct.setEditTime(ts);			
@@ -541,7 +545,7 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 	        	BusinessProductPic businessProductPic = new BusinessProductPic();
 				businessProductPic.setCreateTime(ts);
 				businessProductPic.setProductId(BusinessProduct1.getProductId());
-				businessProductPic.setPicPath(picPaths[i]);
+				businessProductPic.setPicPath(picPaths[i].replace(ip, ""));
 				businessProductPicDao.save_app(businessProductPic);
 			}
 			
@@ -589,11 +593,11 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 				businessProduct.setEditTime(ts);
 				businessProductDao.update_app(businessProduct);
 			}else{
-				businessProduct.setProductId(query.getProductId());
-				businessProduct.setContent(query.getContact());
+				businessProduct.setProductId(query.getUserId());
+				businessProduct.setContent(query.getDesc());
 				businessProduct.setTitle("");
-				businessProduct.setContactName(query.getContactName());
-				businessProduct.setContactTel(query.getContactTel());
+				businessProduct.setContactName(query.getContact());
+				businessProduct.setContactTel(query.getCellphone());
 				businessProduct.setContactQq("");
 				businessProduct.setEditTime(ts);
 				//businessProduct.setIsEstateAgent(new Integer(param.get("isAgent")));

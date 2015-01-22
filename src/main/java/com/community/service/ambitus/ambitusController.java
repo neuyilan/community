@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,6 +57,7 @@ import com.community.app.module.service.BusinessBusStationService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.framework.utils.FileUtil;
+import com.community.framework.utils.propertiesUtil;
 
 
 @Controller
@@ -283,6 +285,44 @@ public class ambitusController {
 			json += "]";
 			json += "}";
 			json += "]";
+			json += "}";
+			json += "}";
+		} catch (Exception e) {
+			e.printStackTrace();
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+		}
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户查看地铁图片详情
+	 * @param userId,sessionid
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getbeijingdt")
+	public void getbeijingdt(HttpServletRequest request, HttpServletResponse response,ManageEstateQuery query) {
+		String json = "";
+		try {
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"pic\":\""+ip+"/images/icon/beijingdt.jpg\"";
 			json += "}";
 			json += "}";
 		} catch (Exception e) {

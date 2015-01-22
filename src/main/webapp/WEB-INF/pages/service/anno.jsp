@@ -18,7 +18,7 @@
 <img src='${ctx }${appPic}' width="400px" height="400px"/>
 </div>
 <div class="x-main">
-    <div class="x-total">
+    <div class="x-news">
         <div class="x-infor">
             <p class="x-xt"><span class="x-xdd">${publisherName}</span> <span class="x-xsj"><fmt:formatDate value="${publishTime }" pattern="yyyy-MM-dd HH:mm"/></span></p>
             <hr class="x-line">

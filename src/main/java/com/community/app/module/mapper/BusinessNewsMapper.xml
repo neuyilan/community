@@ -312,7 +312,7 @@
 				   		and n.isRecommend = #{isRecommend}
 					</if>
 					<if test="tag != null and tag != ''" >
-				   		and n.tag like '%#{tag}%'
+				   		and n.tag like '%${tag}%'
 					</if>
 			</trim>
 		</where>

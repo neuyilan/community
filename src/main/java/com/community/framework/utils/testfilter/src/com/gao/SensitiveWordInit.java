@@ -143,7 +143,7 @@ public class SensitiveWordInit {
 					//System.out.println("txt:"+txt);
 			    }
 			}
-			else{         //不存在抛出异常信息
+			else{//不存在抛出异常信息
 				throw new Exception("敏感词库文件不存在");
 			}
 		} catch (Exception e) {

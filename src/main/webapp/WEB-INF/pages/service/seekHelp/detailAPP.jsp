@@ -19,48 +19,16 @@
        <input type="hidden" id="noZan" value="N">
         <p class="kl-head">
             <img src="${ctx }/${businessHelp.portrait}"/>
-            <span class="kl-name">${businessHelp.helperName}  </span>
-            <span class="kl-time">${businessHelp.helpTime}  </span> 
+            <span class="kl-name">${businessHelp.helperName}</span>
+            <span class="kl-time"><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm"/></span> 
         </p>
         <div id="conents" class="kl-con">
         </div>
     </div>
 </div>
     
-    <div class="kl-hfpage">
-        <header class="header">
-            <h1>回复</h1>
-            <a class="a-back"></a>
-            <a id="send" class="a-searchbtn radius10 a-hf">发 送</a>
-        </header>
-        <div class="bl-winp hf-winp">
-            <div class="bl-ninp">
-                <textarea id="CommentStr" placeholder="请输入回复内容..." maxlength="280"></textarea>
-                <p class="bl-inpfont">还可以输入<span id="charNum">280</span>个汉字</p>
-            </div>
-        </div>
-    </div>
-    
-<script src="${ctx}/js/activity/js/jquery-1.7.2.min.js"></script>
-<script src="${ctx}/js/jquery.showLoading.min.js"></script>
-    <script>
-        $(".kl-wyhf").click(function(e) {
-			$(".kl-total").css("display","none");
-            $(".kl-hfpage").css("display","block");
-           	replyId=0;
-           	replyName="";
-            replyType =0;
-           	$("#CommentStr").attr("placeholder","请输入回复内容...");
-            $("#CommentStr").val("");   
-        });
-		$(".kl-hfpage .a-back").click(function(e) {
-			$(".kl-hfpage").css("display","none");
-            $(".kl-total").css("display","block");
-            $("#CommentStr").val("");   
-            $("#CommentStr").attr("placeholder","回复："+replyName);
-        });    
-		
-</script>
+<script src="${ctx}/js/activity/js/jquery-2.1.1.min.js"></script>
+<%-- <script src="${ctx}/js/jquery.showLoading.min.js"></script> --%>
      
 <script>
 /*赞*/
@@ -80,15 +48,13 @@
 $('#supports').text('${businessHelp.supports}'); 
  $("#supTmp").val('${businessHelp.supports}');
  
- 
  //$('.kl-z em'). 
  var contents = '${businessHelp.helpContent}';
-
  var pics  = '${businessHelp.pics}';
  var imgs = new Array(); 
- imgs = pics.split(",");
  if (pics != null && pics != '') 
 {
+	 imgs = pics.split(",");
 	 for (var i=0;i<imgs.length ;i++ )
 	 { 
 		 contents += '<br/><img src="${ctx}/'+imgs[i]+'"/>'; 
@@ -102,93 +68,6 @@ $('#supports').text('${businessHelp.supports}');
 }
  if(nickname==""){
 	 nickname = '匿名';
-}
- $(document).ready(function(){
-
-
-		
-		$('.c-more a').click(function() {
-		 	if(PageState) {
-		 		page++;
-		 		jump(page);
-		 		return;
-		 	}else{
-		 		$('.c-more a').text('亲已经到底了');
-		 		$('.c-more a').attr('disabled', true);
-		 		return;
-		 	}
-		});
-		page++;
-		jump(page);
-		document.onkeydown = function(e){    
-		    var ev = document.all ? window.event : e;  
-		    if(ev.keyCode==13) {// 如（ev.ctrlKey && ev.keyCode==13）为ctrl+Center 触发  
-		        //要处理的事件  
-		        $('.c-more a').click();
-		    }  
-		  };
-		  
- });
- 
-//当状态改变的时候执行的函数 
- function handle() {
-	//document.getElementById('msg').innerHTML='输入的文字长度为：'+document.getElementById('txt').value.length; 
-	$("#replaceinp").val(" ");
-	if($("#CommentStr").val().length==0){
-		$("#replaceinp").val("");
-		$("#replaceinp").attr("placeholder","回复："+replyName);
-	}
- } 
- 
- function help_dianzhan()
- {
-	    if($("#noZan").val() == 'Y')
-	    {
-	    		$('#supports').text('已赞过了，再赞他会骄傲的…');
-	    		return ;
-	    }
-	    $("#noZan").val('Y');
-	    
-		$.ajax({
-        url: '${ctx}/service/seekHelp/supportSeekHelp.json',
-        cache: false,
-        type: 'post',
-        dataType: 'json',
-        data: {
-		    	ID: '${ID}',
-	           	sessionid: '${sessionid}', 
-	           	userId: '${userId}'
-        },
-        
-        success: function (data) {
-     	   if(data.errorCode == 200) {
-             $('#plusOne').text('+1');
-			 $('#supports').text(data.message);
-     		 $("#supTmp").val( parseInt($("#supTmp").attr("value"))+1);
-     	   }else{
-     		  $("#supTmp").val( $("#supTmp").attr("value"));
- 			 $('#supports').text(data.message);
-     	   }
-        },
-        error: function() {
-        	 $("#supTmp").val( $("#supTmp").attr("value"));
-			 $('#supports').text('点赞失败');
-        }
-    });
-
-}
-
-//获取下页评论内容
-function msgbox(title,content){
-	 var shtml="<div class='tk'><div class='tcontent'><div class='thead'>";
-	 shtml += "<p>"+content+"</p>";
-	 shtml += "</div>";
-	 shtml += "<div class='tbtn'><p>确定</p></div>";
-	 shtml += "</div>";
-	 $("body").append(shtml);
-	 $(".tbtn p").click(function(e) {
-		    $(".tk").remove();
-	});
 }
 
 </script>

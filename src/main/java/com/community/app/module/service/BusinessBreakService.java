@@ -136,5 +136,13 @@ public interface BusinessBreakService {
 	 * @throws ServiceException
 	 */
 	public void publishBroke(final BusinessBreak entity,Map imageMap,Map audioMap) throws ServiceException;
+	
+	/**
+	 * service
+	 * 发布爆料
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void publishBrokePHP(final BusinessBreak entity,String[] images) throws ServiceException;
 
 }
