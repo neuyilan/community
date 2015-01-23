@@ -12,7 +12,6 @@ package com.community.service.seekHelp;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -20,56 +19,34 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-
-
-import com.community.app.module.vo.AppLatestNewsQuery;
-import com.community.app.module.vo.BusinessHelpCommentQuery;
-import com.community.app.module.vo.BusinessHelpQuery;
-import com.community.app.module.vo.BusinessHelpSupportQuery;
-import com.community.app.module.vo.BusinessNewsCommentQuery;
-import com.community.app.module.vo.BusinessNewsSupportQuery;
-import com.community.app.module.vo.BusinessRepairQuery;
 import com.community.app.module.bean.AppLatestNews;
-import com.community.app.module.bean.AppPushLog;
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.bean.AppUser;
-import com.community.app.module.bean.AppUserConfig;
 import com.community.app.module.bean.AppUserNews;
-import com.community.app.module.bean.BusinessAnno;
-import com.community.app.module.bean.BusinessFeedback;
-import com.community.app.module.bean.BusinessFeedbackComment;
 import com.community.app.module.bean.BusinessHelp;
 import com.community.app.module.bean.BusinessHelpComment;
 import com.community.app.module.bean.BusinessHelpSupport;
-import com.community.app.module.bean.BusinessNews;
-import com.community.app.module.bean.BusinessNewsComment;
-import com.community.app.module.bean.BusinessNewsSupport;
-import com.community.app.module.push.AppPushNotificationUtil;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppPushLogService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserConfigService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
-import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessHelpCommentService;
 import com.community.app.module.service.BusinessHelpService;
 import com.community.app.module.service.BusinessHelpSupportService;
-import com.community.app.module.vo.BusinessAnnoQuery;
+import com.community.app.module.vo.AppLatestNewsQuery;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessHelpCommentQuery;
+import com.community.app.module.vo.BusinessHelpQuery;
+import com.community.app.module.vo.BusinessHelpSupportQuery;
 import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
@@ -492,7 +469,9 @@ public class seekHelpController {
 		ModelAndView mav = new ModelAndView("/service/seekHelp/detailPHP");
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp");
+			String phpIp = p.getProperty("phpIp");   
+			mav.addObject("phpIp", phpIp);
 			BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
 			AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setUserId(query.getUserId());
@@ -1046,6 +1025,58 @@ public class seekHelpController {
 			query.setImage(image);
 			query.setAudio(audio);
 			businessHelpService.publishSeekHelpRepair(query);
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"发布成功\"";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"发布失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			if(null==query.getUserId()){
+				appStatisticsClick.setUserId(0);
+			}else{
+				appStatisticsClick.setUserId(query.getUserId());
+			}
+			appStatisticsClick.setType(21);
+			appStatisticsClick.setTypeName("发布邻里求助");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户发布邻里求助
+	 * @param userId,sessionid,content,type
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="publishSeekHelpRepairPHP")
+	public void publishSeekHelpRepairPHP (HttpServletRequest request, HttpServletResponse response,BusinessHelpQuery query) {
+		String json = "";
+		try{
+			String str = request.getParameter("images");
+			query.setImages(str.split(","));
+			businessHelpService.publishSeekHelpRepairPHP(query);
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"发布成功\"";

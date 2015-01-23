@@ -41,6 +41,7 @@ public class BusinessHelpQuery extends BaseBean {
 	private Map<String,String> param;
 	private Map<String,String> image;
 	private Map<String,String> audio;
+	private String [] images;
 	
 	private Integer curUserId;
 	private Integer curEstateId;
@@ -48,7 +49,33 @@ public class BusinessHelpQuery extends BaseBean {
 	private String realname;
 	private String nickname;
 	private String tel;
+	private String content;
+	private Integer isNickname ;
 	
+	public Integer getIsNickname() {
+		return isNickname;
+	}
+
+	public void setIsNickname(Integer isNickname) {
+		this.isNickname = isNickname;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String[] getImages() {
+		return images;
+	}
+
+	public void setImages(String[] images) {
+		this.images = images;
+	}
+
 	public String getRealname() {
 		return realname;
 	}

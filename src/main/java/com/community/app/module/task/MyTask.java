@@ -36,7 +36,7 @@ public class MyTask {
     public void taskisTimingPublicTime(){  //1分钟查询活动是否有定时发布
         //System.out.println(new Date());  
         businessActivityService.isTimingPublicTime();
-    }  
+    }
 //    @Scheduled(cron="0 0 14 * * ? ") //14点时检查快件是否是问题件  
     public void taskExp1(){  
         System.out.println(new Date());    

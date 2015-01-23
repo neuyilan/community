@@ -574,7 +574,9 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 
 	public void editProductPHP(BusinessProductQuery query) {
 		try {
-			
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+
 			Timestamp  ts=new Timestamp(new Date().getTime());
 			BusinessProduct businessProduct = new BusinessProduct();
 			if("0".equals(query.getSubmitType())){
@@ -621,7 +623,7 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 		        	BusinessProductPic businessProductPic = new BusinessProductPic();
 					businessProductPic.setCreateTime(ts);
 					businessProductPic.setProductId(query.getProductId());
-					businessProductPic.setPicPath(picPaths[i]);
+					businessProductPic.setPicPath(picPaths[i].replace(ip, ""));
 					businessProductPicDao.save_app(businessProductPic);
 				}
 				

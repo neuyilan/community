@@ -163,7 +163,7 @@ header.header{ height:43px; background:url(../images/border.gif) repeat-x bottom
 .header a{ position:absolute; top:14px;}
 .header .a-back{ width:9px; height:15px; left:14px; background:url(../images/back.png); background-size:100% 100%; -webkit-background-size:100% 100%;}
 .header .a-more{ width:18px; height:14px; right:14px; background:url(../images/more.gif); background-size:100% 100%; -webkit-background-size:100% 100%;}
-
+.header .a-hfont{ position:absolute; left:14px; font-size:14px;}
 
 /*小区开聊详情*/
 .kl-div {background-color: #fff;margin-top: 6px;padding: 0 16px;}
@@ -197,6 +197,7 @@ header.header{ height:43px; background:url(../images/border.gif) repeat-x bottom
 
 /*回复*/
 .kl-hfpage{ display:none;}
+.kl-hfpage .header{ background:#fff; border-bottom:1px solid #d2d2d2;}
 .header .a-hf{ background-color:#fd8b07;border:none; font-size:12px; padding:3px 12px; top:9px; right:8px; color:#ffffff;}
 .hf-winp{ border-bottom:none;}
 .hf-winp .bl-inpfont{ background:none; font-size:11px;}
@@ -205,22 +206,7 @@ header.header{ height:43px; background:url(../images/border.gif) repeat-x bottom
 .bl-ninp textarea{ border:none; height:124px; font-size:13px;}
 .bl-inpfont{ border-top:1px solid #b3b3b3; line-height:28px; text-align:right; padding-right:10px; background-color:#f9f9f9;}
 
-/*家政*/
-.jz-info li{ background-color:#fff;}
-.jz-info .xf-detail{ padding:12px;}
-.jz-cate{ font-size:16px; color:#202020; margin:6px 0; position:relative;}
-.jz-cate span{ position:absolute; right:0; font-size:14px; color:#565656;}
-.jz-cate em{ color:#fd8b07;}
-.jz-intro{ font-size:13px; color:#565656; line-height:20px;}
-.jz-info .xf-detail .l-img{ width:80px;}
-.jz-info .xf-detail .l-img img{ width:80px; height:81px; border-radius:24px; vertical-align:top;}
-.jz-info .xf-right{ padding-left:14px;}
-.xf-detail{ display:table; width:100%; box-sizing:border-box; -webkit-box-sizing:border-box; padding:0 12px; font-size:15px; color:#303030; margin:8px 0;}
-.l-img{ display:table-cell; vertical-align:middle; padding-right:9px; width:74px;}
-.l-info{ display:table-cell; vertical-align:middle;}
-.xf-right{ display:table-cell; width:10px; vertical-align:middle;}
-.xf-right i{ display:inline-block;}
-.rightgif{ width:10px; height:16px; background:url(../images/right.gif) center center no-repeat; background-size:10px 16px; -webkit-background-size:10px 16px;}
+
 
 
 

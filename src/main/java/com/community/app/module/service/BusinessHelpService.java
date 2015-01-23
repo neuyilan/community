@@ -133,5 +133,12 @@ public interface BusinessHelpService {
 	 * @throws ServiceException
 	 */
 	public void publishSeekHelpRepair(final BusinessHelpQuery query) throws ServiceException;
+	
+	/**
+	 * 新增求助PHP
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void publishSeekHelpRepairPHP(final BusinessHelpQuery query) throws ServiceException;
 
 }

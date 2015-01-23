@@ -622,12 +622,15 @@ public class CommunityController {
 			String ip = p.getProperty("imageIp");   
 			String phpIp = p.getProperty("phpIp");   
 			
-			//Integer newsId = 48;
-			String sessionid = request.getParameter("sessionid");
-			//String sessionid = "sessionid";
-			
 			//Integer userId = 1;
-			AppUser appUser = appUserService.findById(new Integer(userId));
+			if(userId!=null && !userId.equals("0") && !userId.equals("")){
+				AppUser appUser = appUserService.findById(new Integer(userId));
+				mav.addObject("protrait", ip+appUser.getPortrait());
+				mav.addObject("nickname", appUser.getNickname());
+			}else {
+				userId = "0";
+			}
+
 			AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setUserId(new Integer(userId));
 			appLatestNews.setTypeId(35);
@@ -639,7 +642,6 @@ public class CommunityController {
 			List commentList = new ArrayList();
 			String path = request.getContextPath();
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
-			String protrait = ip+appUser.getPortrait();
 			BusinessNews businessNews = businessNewsService.findById_app(new Integer(newsId));
 			mav.addObject("ctx", ctx);
 			if(businessNews.getNewsType()==1){
@@ -661,18 +663,13 @@ public class CommunityController {
 			mav.addObject("publishTime", businessNews.getPublishTime());
 			mav.addObject("title", businessNews.getTitle());
 			mav.addObject("newsContent", businessNews.getContent().replace("?tp=webp",""));
-			mav.addObject("protrait", protrait);
 			mav.addObject("supports", businessNews.getSupports());
 			mav.addObject("comments", businessNews.getComments());
-			mav.addObject("realName", appUser.getRealname());
-			mav.addObject("nickname", appUser.getNickname());
+			
 			mav.addObject("newsId", newsId);
-			mav.addObject("sessionid", sessionid);
 			mav.addObject("userId", userId);
 			mav.addObject("download", request.getParameter("download"));
 			mav.addObject("phpIp", phpIp);
-			Map propMap = new HashMap();
-			propMap.put("newsId", businessNews.getNewsId());
 		}catch(Exception e){
 			e.printStackTrace();
 		}

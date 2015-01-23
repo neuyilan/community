@@ -117,8 +117,8 @@
 		//点赞
 		 $('.x-z a').click(function(){
 			 if(userId==0){
-					if(window.confirm('参加活动需要登录！！是否进去登录页？')){
-						 window.location.href='${phpId}wxokjia/reggoin.php';
+					if(window.confirm('请您填写相关信息。')){
+						 window.location.href='${phpIp}/wxokjia/reggoin.php';
 		                //alert("确定");
 		                return null;
 		             }else{
@@ -165,8 +165,8 @@
 		//评论
 		 $('#commentBtn').click(function() {
 			 if(userId==0){
-					if(window.confirm('参加活动需要登录！！是否进去登录页？')){
-						 window.location.href='${phpId}wxokjia/reggoin.php';
+					if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
+						 window.location.href='${phpIp}/wxokjia/reggoin.php';
 		                //alert("确定");
 		                return null;
 		             }else{

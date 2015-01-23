@@ -313,6 +313,7 @@ public class BusinessNewsController {
 	public void updateNewsHotState(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="id") String id, @RequestParam(value="oldnewsId") String oldnewsId) {
 		BusinessNews businessNews0 = new BusinessNews();
 		BusinessNews businessNews = new BusinessNews();
+		BusinessNews businessNews1 = businessNewsService.findById(Integer.parseInt(id));
 		String json = "";
 		try{
 			if(!oldnewsId.trim().equals("")) {
@@ -330,7 +331,11 @@ public class BusinessNewsController {
 			
 			Map paramMap = new HashMap();
 			paramMap.put("id", businessNews.getNewsId());
-			paramMap.put("type", "0");
+			if(businessNews1.getNewsType() == 1){
+				paramMap.put("type", 5);
+			} else{
+				paramMap.put("type", 0);
+			}
 			List list = appHomepageService.findByMap(paramMap);
 			AppHomepage appHomepage = (AppHomepage)list.get(0);
 			if(appHomepage != null) {
@@ -401,7 +406,11 @@ public class BusinessNewsController {
 			if(count>0 && businessNews.getState() == 1) {
 				Map paramMap = new HashMap();
 				paramMap.put("id", Integer.parseInt(id));
-				paramMap.put("type", 0);
+				if(businessNews.getNewsType() == 1){
+					paramMap.put("type", 5);
+				} else{
+					paramMap.put("type", 0);
+				}
 				List<AppHomepage> list = appHomepageService.findByMap(paramMap);
 				if(list.size() == 1) {
 					AppHomepage AppHomepage = (AppHomepage)list.get(0);
@@ -1273,10 +1282,15 @@ public class BusinessNewsController {
 				}else{
 					Boolean  result = businessNewsService.delete(new Integer(id));
 					if(result) {
+						BusinessNews businessNews = businessNewsService.findById(Integer.parseInt(id));
 						businessNewsScopeService.deleteScopeByNews(new Integer(id));
 						Map paramMap = new HashMap();
 						paramMap.put("id", Integer.parseInt(id));
-						paramMap.put("type", 0);
+						if(businessNews.getNewsType() == 1){
+							paramMap.put("type", 5);
+						} else{
+							paramMap.put("type", 0);
+						}
 						List<AppHomepage> list = appHomepageService.findByMap(paramMap);
 						
 						if(list.size() == 1) {

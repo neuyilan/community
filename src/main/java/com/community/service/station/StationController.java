@@ -1190,52 +1190,55 @@ public class StationController {
 	 */
 	@RequestMapping(value="getStationDetailsByIdComment")
 	public ModelAndView getStationDetailsByIdComment(HttpServletRequest request, HttpServletResponse response) {
-		Properties p = propertiesUtil.getProperties("config.properties");
-		String ip = p.getProperty("imageIp");   
-		String phpIp = p.getProperty("phpIp");   
-
-		Integer newsId = new Integer(request.getParameter("ID"));
-		//Integer newsId = 48;
-		String sessionid = request.getParameter("sessionid");
-		//String sessionid = "sessionid";
-		Integer userId = new Integer(request.getParameter("userId"));
-		//Integer userId = 1;
-		AppUser appUser = appUserService.findById(userId);
-		
 		ModelAndView mav = new ModelAndView("/service/propertyComment");
-		
-		List commentList = new ArrayList();
-		String path = request.getContextPath();
-		String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
-		String protrait = ip+appUser.getPortrait();
-		BusinessAnno businessAnno = businessAnnoService.findById_app(newsId);
-		mav.addObject("ctx", ctx);
-		mav.addObject("newsId", businessAnno.getAnnoId());
-		mav.addObject("publisherName", businessAnno.getNickname());
-		mav.addObject("publishTime", businessAnno.getPublishTime());
-		mav.addObject("publisherProtrait", ip+businessAnno.getPortrait());
-		mav.addObject("title",businessAnno.getAnnoTitle());
-		mav.addObject("newsContent", businessAnno.getAnnoContent());
-		mav.addObject("protrait", protrait);
-		mav.addObject("supports", businessAnno.getSupports());
-		mav.addObject("comments", businessAnno.getComments());
-		mav.addObject("realName", appUser.getRealname());
-		mav.addObject("newsId", newsId);
-		mav.addObject("sessionid", sessionid);
-		mav.addObject("userId", userId);
-		mav.addObject("nickname", appUser.getNickname());
-		mav.addObject("download", request.getParameter("download"));
-		mav.addObject("phpIp", phpIp);
-		mav.addObject("appPic", businessAnno.getAppPic());
-		Map propMap = new HashMap();
-		propMap.put("newsId", businessAnno.getAnnoId());
+		String newsId = request.getParameter("ID");
+		//Integer newsId = 48;
+		String userId = request.getParameter("userId");
+
+		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			String phpIp = p.getProperty("phpIp");   
+			
+			//Integer userId = 1;
+			if(userId!=null && !userId.equals("0") && !userId.equals("")){
+				AppUser appUser = appUserService.findById(new Integer(userId));
+				mav.addObject("protrait", ip+appUser.getPortrait());
+				mav.addObject("nickname", appUser.getNickname());
+			}else {
+				userId = "0";
+			}
+			
+			
+			List commentList = new ArrayList();
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+			BusinessAnno businessAnno = businessAnnoService.findById_app(new Integer(newsId));
+			mav.addObject("ctx", ctx);
+			mav.addObject("newsId", businessAnno.getAnnoId());
+			mav.addObject("publisherName", businessAnno.getNickname());
+			mav.addObject("publisherProtrait", ip+businessAnno.getPortrait());
+			mav.addObject("publishTime", businessAnno.getPublishTime());
+			mav.addObject("title",businessAnno.getAnnoTitle());
+			mav.addObject("newsContent", businessAnno.getAnnoContent());
+			mav.addObject("supports", businessAnno.getSupports());
+			mav.addObject("comments", businessAnno.getComments());
+			mav.addObject("newsId", newsId);
+			mav.addObject("userId", userId);
+			mav.addObject("phpIp", phpIp);
+			mav.addObject("download", request.getParameter("download"));
+			mav.addObject("appPic", businessAnno.getAppPic());
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
 		try{
 			Timestamp  ts=new Timestamp(new Date().getTime());
 			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
 			appStatisticsClick.setCreateTime(ts);
 			appStatisticsClick.setEditTime(ts);
-			appStatisticsClick.setUserId(userId);
+			appStatisticsClick.setUserId(new Integer(userId));
 			appStatisticsClick.setType(33);
 			appStatisticsClick.setTypeName("驿站公告详情");
 			appStatisticsClickService.save(appStatisticsClick);

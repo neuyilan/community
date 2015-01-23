@@ -21,7 +21,7 @@ img{ vertical-align:middle;}
 .x-cx{ font-size:16px; line-height:24px; color:#424242;}
 .x-cx img{ width:100% !important; height:auto;}
 .x-cx p{ width:100% !important;}
-.x-content hr{ margin:20px -10px 4px -10px; border-top: 1px solid #e2e2e2;}
+.x-content hr{ margin:20px 0px 4px 0px; border-top: 1px solid #e2e2e2;}
 .x-zs{ height:38px; position:relative; font-weight:bold;}
 .x-btn{ display:block; width:56%; margin:0 auto; text-align:center; border-radius:6px; height:38px; line-height:38px; color:#fff;}
 .x-djs{ background:#858585; border:1px solid #5b5959; cursor:default;}

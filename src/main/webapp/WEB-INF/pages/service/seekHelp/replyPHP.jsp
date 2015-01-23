@@ -14,8 +14,7 @@
 </head>
 <body>
 	<header class="header">
-		<h1>回复</h1>
-		<a class="a-back"></a> 
+		<a class="a-hfont">回复评论</a> 
 		<a class="a-searchbtn radius10 a-hf" id="send">发 送</a>
 	</header>
 	<div class="bl-winp hf-winp">
@@ -63,13 +62,16 @@ $(document).ready(function(){
 		 		    success: function (data) {
 		 	     	   if(data.errorCode == 200) {
 		 	     		 msgbox('提示','评论成功');
+		 	     		 window.history.go(-1);
 		 	      	   }else{
 		 	      		 msgbox('提示','评论失败'); 
+		 	      		 window.history.go(-1);
 		 	      	   }
 		 		    	
 		 		    },
 		 		    error: function () {
 		 		       msgbox('提示','评论失败');
+		 		       window.history.go(-1);
 		 		    }
 		 		});
 		 	}else{

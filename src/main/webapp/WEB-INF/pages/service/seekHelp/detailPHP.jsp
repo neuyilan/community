@@ -78,6 +78,16 @@
 <script src="${ctx}/js/jquery.showLoading.min.js"></script>
     <script>
         $(".kl-wyhf").click(function(e) {
+        	if(userId==0){
+				if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
+					 window.location.href='${phpIp}/wxokjia/reggoin.php';
+	                //alert("确定");
+	                return null;
+	             }else{
+	                //alert("取消");
+	                return null;
+	            }
+			}
 			$("#replyId").val(0);
 			$("#replyName").val("");
 			$("#replyType").val(0);
@@ -142,6 +152,17 @@ $("#supTmp").val('${businessHelp.supports}');
 // 	 });
 	 //点赞
 	 $('#supportsa').click(function(){
+		 
+		 if(userId==0){
+				if(window.confirm('请您填写相关信息。')){
+					 window.location.href='${phpIp}/wxokjia/reggoin.php';
+	                //alert("确定");
+	                return null;
+	             }else{
+	                //alert("取消");
+	                return null;
+	            }
+			}
 //		 	$('#supportsa').append('<em id="plusOne" class="x-add">+1</em>');  
 		    $('#supportsa').append('<em id="plusOne" class="x-add"></em>');
 		 	help_dianzhan();
@@ -398,6 +419,16 @@ function jump(nextNo) {
             				div.find("img").attr("replyType",row.userType);  
 
                 			div.click(function(){
+                				if(userId==0){
+                					if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
+                						 window.location.href='${phpIp}/wxokjia/reggoin.php';
+                		                //alert("确定");
+                		                return null;
+                		             }else{
+                		                //alert("取消");
+                		                return null;
+                		            }
+                				}
                 				$('#replyId').val($(this).find("img").attr("replyId"));//点击回复人id
                 				$('#replyName').val($(this).find("img").attr("replyName"));//点击回复人姓名
                 				$('#replyType').val($(this).find("img").attr("replyType"));//点击回复人类型
@@ -406,6 +437,16 @@ function jump(nextNo) {
                   			 });
             			}else{
             				div.click(function(){
+            				     if(userId==0){
+                					if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
+                						 window.location.href='${phpIp}/wxokjia/reggoin.php';
+                		                //alert("确定");
+                		                return null;
+                		             }else{
+                		                //alert("取消");
+                		                return null;
+                		            }
+                				}
                 				$('#replyId').val(0);//点击回复人id
                 				$('#replyName').val("");//点击回复人姓名
                 				$('#replyType').val(0);//点击回复人类型

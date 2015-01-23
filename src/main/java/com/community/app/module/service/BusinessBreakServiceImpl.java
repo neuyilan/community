@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.ServiceException;
 import com.community.framework.exception.DaoException;
+import com.community.framework.utils.propertiesUtil;
 import com.community.app.module.vo.BusinessBreakQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessBreak;
@@ -384,6 +386,9 @@ public class BusinessBreakServiceImpl implements BusinessBreakService {
 	 */
 	public void publishBrokePHP(final BusinessBreak entity,String[] images)  throws ServiceException {
 		try {
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			
 			BusinessBreak businessBreak = businessBreakDao.save(entity);
 			
 			for (int i = 0; i < images.length; i++) {
@@ -391,7 +396,7 @@ public class BusinessBreakServiceImpl implements BusinessBreakService {
 				businessBreakPic.setBreakId(businessBreak.getBreakId());
 				businessBreakPic.setCreateTime(entity.getCreateTime());
 				businessBreakPic.setEditTime(entity.getCreateTime());
-				businessBreakPic.setPicUrl(images[i]);
+				businessBreakPic.setPicUrl(images[i].replace(ip, ""));
 				businessBreakPicDao.save(businessBreakPic);
 			}
 			

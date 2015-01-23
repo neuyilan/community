@@ -85,11 +85,13 @@
 		<typeAlias alias="manageTag" type="com.community.app.module.bean.ManageTag"/>
 		<typeAlias alias="manageTagType" type="com.community.app.module.bean.ManageTagType"/>
 		<typeAlias alias="businessStationMessage" type="com.community.app.module.bean.BusinessStationMessage"/>
+		<typeAlias alias="businessActivityCoupon" type="com.community.app.module.bean.BusinessActivityCoupon"/>
 		
 		<typeAlias alias="businessShopOrder" type="com.community.app.module.bean.BusinessShopOrder"/>
 		<typeAlias alias="businessShopGoods" type="com.community.app.module.bean.BusinessShopGoods"/>
 		<typeAlias alias="businessShopFlow" type="com.community.app.module.bean.BusinessShopFlow"/>
 		<typeAlias alias="businessShop" type="com.community.app.module.bean.BusinessShop"/>
+		<typeAlias alias="businessShopType" type="com.community.app.module.bean.BusinessShopType"/>
 		
 		
 		
@@ -230,11 +232,13 @@
 		<mapper resource="com/community/app/module/mapper/ManageTagMapper.xml" />	
 		<mapper resource="com/community/app/module/mapper/ManageTagTypeMapper.xml" />	
 		<mapper resource="com/community/app/module/mapper/BusinessStationMessageMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessActivityCouponMapper.xml" />
 		
 		<mapper resource="com/community/app/module/mapper/BusinessShopFlowMapper.xml"/>
 		<mapper resource="com/community/app/module/mapper/BusinessShopGoodsMapper.xml"/>
 		<mapper resource="com/community/app/module/mapper/BusinessShopMapper.xml"/>
 		<mapper resource="com/community/app/module/mapper/BusinessShopOrderMapper.xml"/>
+		<mapper resource="com/community/app/module/mapper/BusinessShopTypeMapper.xml"/>
 		
 		
         <!-- service -->

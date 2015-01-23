@@ -7,10 +7,12 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
+import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 
 import org.slf4j.Logger;
@@ -366,6 +368,55 @@ public class BusinessHelpServiceImpl implements BusinessHelpService {
 	        }
 	        AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setUserId(new Integer(param.get("userId")));
+			appLatestNews.setTypeId(27);//我的邻里求助
+			appLatestNews.setSourceId(businessHelp1.getHelpId());
+			appLatestNews.setTo(0);
+			appLatestNews.setEstateId(0);
+			appLatestNewsDao.save_app(appLatestNews);
+			appLatestNews.setTypeId(28);//我的邻里求助列表
+			appLatestNewsDao.save_app(appLatestNews);
+			
+			
+			
+		} catch (DaoException e) {
+			logger.debug("BusinessFeedbackServiceImpl save()：保存BusinessFeedback发生错误！", e);
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 新增求助PHP
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void publishSeekHelpRepairPHP(final BusinessHelpQuery query) throws ServiceException {
+		try {
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+
+			BusinessHelp businessHelp = new BusinessHelp();
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			businessHelp.setHelperId(query.getUserId());
+			businessHelp.setEditTime(ts);
+			businessHelp.setCreateTime(ts);
+			businessHelp.setHelpContent(SensitivewordFilter.replaceSensitiveWord(query.getContent(),1,"*"));
+			businessHelp.setHelpTime(ts);
+			businessHelp.setIsExpend(query.getIsExpend());
+			businessHelp.setEstateId(query.getEstateId());
+			businessHelp.setIsNickname(query.getIsNickname());
+			BusinessHelp businessHelp1 = businessHelpDao.save(businessHelp);
+			
+			String [] images = query.getImages();
+			for (int i = 0; i < images.length; i++) {
+				BusinessHelpPic BusinessHelpPic = new BusinessHelpPic();
+	        	BusinessHelpPic.setHelpId(businessHelp1.getHelpId());
+	        	BusinessHelpPic.setCreateTime(ts);
+	        	BusinessHelpPic.setEditTime(ts);
+	        	BusinessHelpPic.setPicUrl(images[i].replace(ip, ""));
+	        	businessHelpPicDao.save(BusinessHelpPic);
+			}
+	        AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(query.getUserId());
 			appLatestNews.setTypeId(27);//我的邻里求助
 			appLatestNews.setSourceId(businessHelp1.getHelpId());
 			appLatestNews.setTo(0);
