@@ -169,7 +169,7 @@ $("#supTmp").val('${businessHelp.supports}');
 // 			if (dianZan != 0)
 // 				$('#plusOne').text('');
 			dianZan++;
-		    $('#supportsa').css("background-image","url(${ctx}/images/zyellow.png)");
+		    $('#supportsa').css("background-image","url(${ctx}/js/activity/images/zyellow.png)");
 		    $('#supports').css("color","#fd8b07");
 		    $('.x-add').css({'position':'absolute', 'color':'#fd8b07','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
 			   
@@ -177,7 +177,7 @@ $("#supTmp").val('${businessHelp.supports}');
 			var Num = parseInt($("#supTmp").attr("value")); 
 
 		    $('#supports').text(Num);
-			$('#supportsa').css("background-image","url(${ctx}/images/zgray.png)");
+			$('#supportsa').css("background-image","url(${ctx}/js/activity/images/zgray.png)");
 			$('#supports').css("color","#7c7c7c");
 		   });
 		   

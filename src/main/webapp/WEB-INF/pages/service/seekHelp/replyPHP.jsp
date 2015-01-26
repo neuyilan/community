@@ -13,10 +13,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
 </head>
 <body>
+<div class="kl-hfpage">
 	<header class="header">
 		<a class="a-hfont">回复评论</a> 
 		<a class="a-searchbtn radius10 a-hf" id="send">发 送</a>
 	</header>
+</div>
 	<div class="bl-winp hf-winp">
 		<div class="bl-ninp">
 			<textarea placeholder="请输入回复内容..." id="CommentStr"></textarea>
@@ -32,11 +34,11 @@ $(function(){
 	if ('${replyId}' != 0)
 	   $("#CommentStr").attr("placeholder","回复：${replyName}");
 });
-
+var artFlag=0;
 $(document).ready(function(){
 	 $('#send').click(function() {
 		 	var content = $('#CommentStr').val();
-		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
 				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文');
 				return;
@@ -62,20 +64,25 @@ $(document).ready(function(){
 		 		    success: function (data) {
 		 	     	   if(data.errorCode == 200) {
 		 	     		 msgbox('提示','评论成功');
-		 	     		 window.history.go(-1);
+// 		 	     		 window.history.go(-1);
+		 	     		artFlag=1;
+						 
 		 	      	   }else{
 		 	      		 msgbox('提示','评论失败'); 
-		 	      		 window.history.go(-1);
+// 		 	      		 window.history.go(-1);
+		 	      		artFlag=1;
 		 	      	   }
 		 		    	
 		 		    },
 		 		    error: function () {
 		 		       msgbox('提示','评论失败');
-		 		       window.history.go(-1);
+// 		 		       window.history.go(-1);
+		 		      artFlag=1;
 		 		    }
 		 		});
 		 	}else{
 		 		 msgbox('提示','评论不能为空');
+		 		artFlag=0;
 		 		return;
 		 	}
 		 });
@@ -107,6 +114,8 @@ function msgbox(title,content){
 	 $("body").append(shtml);
 	 $(".tbtn p").click(function(e) {
 		    $(".tk").remove();
+		    if (artFlag == 1)
+		    	self.location=document.referrer;
 	});
 }
 </script>

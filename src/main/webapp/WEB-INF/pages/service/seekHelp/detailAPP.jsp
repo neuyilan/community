@@ -14,7 +14,7 @@
 
 <body>
     <div class="kl-total">
-    <div class="kl-content kl-div" >
+    <div style="background-color: #fff;padding: 0 16px;">
        <input type="hidden" id="supTmp" value="">
        <input type="hidden" id="noZan" value="N">
         <p class="kl-head">
@@ -22,7 +22,7 @@
             <span class="kl-name">${businessHelp.helperName}</span>
             <span class="kl-time"><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm"/></span> 
         </p>
-        <div id="conents" class="kl-con">
+        <div id="conents"  style="margin:10px 0; line-height:22px;padding-bottom:15px;">
         </div>
     </div>
 </div>
