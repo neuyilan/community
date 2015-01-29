@@ -64,6 +64,32 @@
   </servlet-mapping>
   <!-- app上传servlet结束 -->
   
+  <!-- WEB图片上传servlet开始 -->
+  <servlet>
+    <description></description>
+    <display-name>PicUploadServlet</display-name>
+    <servlet-name>PicUploadServlet</servlet-name>
+    <servlet-class>com.community.app.module.servlet.PicUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PicUploadServlet</servlet-name>
+    <url-pattern>/PicUploadServlet</url-pattern>
+  </servlet-mapping>
+  <!-- WEB图片servlet结束 -->
+  
+  <!-- PHP图片上传servlet开始 -->
+  <servlet>
+    <description></description>
+    <display-name>PHPPicUploadServlet</display-name>
+    <servlet-name>PHPPicUploadServlet</servlet-name>
+    <servlet-class>com.community.app.module.servlet.PHPPicUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PHPPicUploadServlet</servlet-name>
+    <url-pattern>/PHPPicUploadServlet</url-pattern>
+  </servlet-mapping>
+  <!-- PHP图片servlet结束 -->
+  
   <!-- axis2 start -->
   	<servlet>
 		<servlet-name>AxisServlet</servlet-name>
@@ -88,20 +114,6 @@
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
   <!-- axis2 end -->
-  
-  <!-- WEB图片上传servlet开始 -->
-  <servlet>
-    <description></description>
-    <display-name>PicUploadServlet</display-name>
-    <servlet-name>PicUploadServlet</servlet-name>
-    <servlet-class>com.community.app.module.servlet.PicUploadServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>PicUploadServlet</servlet-name>
-    <url-pattern>/PicUploadServlet</url-pattern>
-  </servlet-mapping>
-  <!-- WEB图片servlet结束 -->
-  
     <!-- Spring encoding filter -->  
     <!-- <filter>  
         <filter-name>encodingFilter</filter-name>  

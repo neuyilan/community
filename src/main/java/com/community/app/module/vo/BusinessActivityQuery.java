@@ -84,7 +84,16 @@ public class BusinessActivityQuery extends BaseBean {
 	private String couponEndDate;
 	private String couponValid;
 	private String reportExcel;
+	private String cellphone;
 	
+	public String getCellphone() {
+		return cellphone;
+	}
+
+	public void setCellphone(String cellphone) {
+		this.cellphone = cellphone;
+	}
+
 	public String getReportExcel() {
 		return reportExcel;
 	}

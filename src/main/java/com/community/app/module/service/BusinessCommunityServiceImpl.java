@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.app.module.vo.BusinessCommunityQuery;
 import com.community.app.module.bean.BusinessCommunity;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.dao.BusinessCommunityDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessCommunityQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessCommunityService")
 @Transactional
@@ -89,6 +90,24 @@ public class BusinessCommunityServiceImpl implements BusinessCommunityService {
 		List<BusinessCommunity> list = new ArrayList<BusinessCommunity>() ;
 		try {
 			list=businessCommunityDao.findByMap(paramMap);
+		} catch (DaoException e) {
+			logger.debug("BusinessCommunityServiceImpl findByMap()：按Map对象条件查询所有BusinessCommunity发生错误！", e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	/**
+	 * 按Map对象条件查询所有BusinessCommunity (关联BUSINESS_USER_RESOURCE 查询)
+	 * @param paramMap
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@Transactional(readOnly = true)
+	public List<CommunityBean> findByCon(final Map paramMap) throws ServiceException {
+		List<CommunityBean> list = new ArrayList<CommunityBean>() ;
+		try {
+			list=businessCommunityDao.findByCon(paramMap);
 		} catch (DaoException e) {
 			logger.debug("BusinessCommunityServiceImpl findByMap()：按Map对象条件查询所有BusinessCommunity发生错误！", e);
 			e.printStackTrace();

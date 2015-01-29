@@ -369,10 +369,10 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 			BusinessProduct businessProduct = new BusinessProduct();
 			businessProduct.setDealType(new Integer(param.get("type")));
 			businessProduct.setPublisherId(new Integer(param.get("userId")));
-			businessProduct.setContent(param.get("desc"));
+			businessProduct.setContent(param.get("desc").replace("\"", ""));
 			businessProduct.setTitle("");
-			businessProduct.setContactName(param.get("contact"));
-			businessProduct.setContactTel(param.get("cellphone"));
+			businessProduct.setContactName(param.get("contact").replace("\"", ""));
+			businessProduct.setContactTel(param.get("cellphone").replace("\"", ""));
 			businessProduct.setContactQq("");
 			businessProduct.setCreateTime(ts);
 			businessProduct.setEditTime(ts);
@@ -450,10 +450,10 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 				businessProductDao.update_app(businessProduct);
 			}else{
 				businessProduct.setProductId(new Integer(param.get("productId")));
-				businessProduct.setContent(param.get("desc"));
+				businessProduct.setContent(param.get("desc").replace("\"", ""));
 				businessProduct.setTitle("");
-				businessProduct.setContactName(param.get("contact"));
-				businessProduct.setContactTel(param.get("cellphone"));
+				businessProduct.setContactName(param.get("contact").replace("\"", ""));
+				businessProduct.setContactTel(param.get("cellphone").replace("\"", ""));
 				businessProduct.setContactQq("");
 				businessProduct.setEditTime(ts);
 				//businessProduct.setIsEstateAgent(new Integer(param.get("isAgent")));
@@ -518,10 +518,10 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 			
 			businessProduct.setDealType(query.getType());
 			businessProduct.setPublisherId(query.getUserId());
-			businessProduct.setContent(query.getDesc());
+			businessProduct.setContent(query.getDesc().replace("\"", ""));
 			businessProduct.setTitle("");
-			businessProduct.setContactName(query.getContact());
-			businessProduct.setContactTel(query.getCellphone());
+			businessProduct.setContactName(query.getContact().replace("\"", ""));
+			businessProduct.setContactTel(query.getCellphone().replace("\"", ""));
 			businessProduct.setContactQq("");
 			businessProduct.setCreateTime(ts);
 			businessProduct.setEditTime(ts);			
@@ -542,6 +542,9 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 			String picPaths[] = query.getPicPaths();
 			for(int i=0;i<picPaths.length;i++)
 			{
+				if (picPaths[i].equals("")) {
+					continue;
+				}
 	        	BusinessProductPic businessProductPic = new BusinessProductPic();
 				businessProductPic.setCreateTime(ts);
 				businessProductPic.setProductId(BusinessProduct1.getProductId());
@@ -596,10 +599,10 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 				businessProductDao.update_app(businessProduct);
 			}else{
 				businessProduct.setProductId(query.getUserId());
-				businessProduct.setContent(query.getDesc());
+				businessProduct.setContent(query.getDesc().replace("\"", ""));
 				businessProduct.setTitle("");
-				businessProduct.setContactName(query.getContact());
-				businessProduct.setContactTel(query.getCellphone());
+				businessProduct.setContactName(query.getContact().replace("\"", ""));
+				businessProduct.setContactTel(query.getCellphone().replace("\"", ""));
 				businessProduct.setContactQq("");
 				businessProduct.setEditTime(ts);
 				//businessProduct.setIsEstateAgent(new Integer(param.get("isAgent")));
@@ -620,6 +623,9 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 				String picPaths[] = query.getPicPaths();
 				for(int i=0;i<picPaths.length;i++)
 				{
+					if (picPaths[i].equals("")) {
+						continue;
+					}
 		        	BusinessProductPic businessProductPic = new BusinessProductPic();
 					businessProductPic.setCreateTime(ts);
 					businessProductPic.setProductId(query.getProductId());

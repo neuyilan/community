@@ -7,12 +7,12 @@ import javax.annotation.Resource;
 
 
 
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.community.framework.exception.DaoException;
-
 import com.community.app.module.bean.BusinessShop;
 import com.community.app.module.vo.BusinessShopQuery;
 
@@ -140,6 +140,12 @@ public class BusinessShopDaoImpl implements BusinessShopDao {
 		}else{
 			return false;
 		}
+	}
+
+	public Map<String, Object> findUserInfo(Map<String, Object> map)
+			throws DaoException {
+		// TODO Auto-generated method stub
+		return  this.sqlSessionTemplate.selectOne("com.community.app.module.dao.BusinessShopDao.findUserInfo", map);
 	}
 	
 }

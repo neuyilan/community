@@ -5,17 +5,15 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-
-
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.community.app.module.bean.BusinessCommunity;
+import com.community.app.module.common.CommunityBean;
+import com.community.app.module.vo.BusinessCommunityQuery;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
-import com.community.app.module.bean.BusinessCommunity;
-import com.community.app.module.vo.BusinessCommunityQuery;
 
 @Repository("BusinessCommunityDao")
 @Transactional
@@ -63,6 +61,16 @@ public class BusinessCommunityDaoImpl implements BusinessCommunityDao {
 	 */	
 	public List<BusinessCommunity> findByMap(final Map<String, Object> paramMap) throws DaoException {
 		List<BusinessCommunity> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessCommunityDao.findByMap", paramMap);
+		return list;
+	}
+	
+	/**
+	 * 按Map对象条件查询所有BusinessCommunity (关联BUSINESS_USER_RESOURCE 查询)
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<CommunityBean> findByCon(final Map<String, Object> paramMap) throws DaoException {
+		List<CommunityBean> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessCommunityDao.findByCon", paramMap);
 		return list;
 	}
 	

@@ -64,7 +64,6 @@ import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivityScope;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
-import com.community.app.module.bean.BusinessCharger;
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.ManageEstate;
@@ -99,7 +98,6 @@ import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
 import com.community.app.module.vo.BusinessActivityVoteInformationQuery;
 import com.community.app.module.vo.BusinessActivityVoteOptionsQuery;
 import com.community.framework.utils.CommonUtils;
-import com.community.framework.utils.excel.PaseExcel;
 
 @Controller
 @RequestMapping("/business/businessActivity")
@@ -368,8 +366,12 @@ public class BusinessActivityController {
 	        	businessActivity.setVoteType(query.getVoteType());
 	        	businessActivity.setVotes(query.getVotes());
 	        } else if(query.getTypeId() == 4) {
-	        	businessActivity.setPublishDate(query.getCouponEndDate());
-			    businessActivity.setPublishTime("00:00");
+	        	/*businessActivity.setPublishDate(query.getCouponEndDate());
+			    businessActivity.setPublishTime("00:00");*/
+	        	String planTime = query.getPlanTime();
+			    String[] timeArr = planTime.split(" ");
+			    businessActivity.setPublishDate(timeArr[0]);
+			    businessActivity.setPublishTime(timeArr[1]);
 	        	businessActivity.setCouponName(query.getCouponName());
 	        	businessActivity.setCouponDesc(query.getCouponDesc());
 	        	businessActivity.setCouponImg(query.getCouponImg());
@@ -756,8 +758,13 @@ public class BusinessActivityController {
 	        	businessActivity.setVoteType(query.getVoteType());
 	        	businessActivity.setVotes(query.getVotes());
 	        } else if(query.getTypeId() == 4) {
-	        	businessActivity.setPublishDate(query.getCouponEndDate());
-			    businessActivity.setPublishTime("00:00");
+	        	/*businessActivity.setPublishDate(query.getCouponEndDate());
+			    businessActivity.setPublishTime("00:00");*/
+	        	String planTime = query.getPlanTime();
+			    String[] timeArr = planTime.split(" ");
+			    businessActivity.setPublishDate(timeArr[0]);
+			    businessActivity.setPublishTime(timeArr[1]);
+			    
 	        	businessActivity.setCouponName(query.getCouponName());
 	        	businessActivity.setCouponDesc(query.getCouponDesc());
 	        	businessActivity.setCouponImg(query.getCouponImg());

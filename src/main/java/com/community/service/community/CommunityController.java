@@ -171,7 +171,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -264,7 +264,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -325,7 +325,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -486,7 +486,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -535,70 +535,75 @@ public class CommunityController {
 	 */
 	@RequestMapping(value="getJournalismDetailsById")
 	public ModelAndView getJournalismDetailsById (HttpServletRequest request, HttpServletResponse response) {
-		Properties p = propertiesUtil.getProperties("config.properties");
-		String ip = p.getProperty("imageIp");   
-		Integer newsId = new Integer(request.getParameter("ID"));
-		//Integer newsId = 48;
-		String sessionid = request.getParameter("sessionid");
-		//String sessionid = "sessionid";
-		Integer userId = new Integer(request.getParameter("userId"));
-		//Integer userId = 1;
-		AppUser appUser = appUserService.findById(userId);
-		AppLatestNews appLatestNews = new AppLatestNews();
-		appLatestNews.setUserId(userId);
-		appLatestNews.setTypeId(35);
-		appLatestNews.setTo(0);
-		appLatestNews.setSourceId(newsId);
-		appLatestNewsService.delete_app_id(appLatestNews);
-		
 		ModelAndView mav = new ModelAndView("/service/news");
-		
-		List commentList = new ArrayList();
-		String path = request.getContextPath();
-		String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
-		String protrait = ip+appUser.getPortrait();
-		BusinessNews businessNews = businessNewsService.findById_app(newsId);
-		mav.addObject("ctx", ctx);
-		if(businessNews.getNewsType()==1){
-			if (businessNews.getIsNickname()!=null && businessNews.getIsNickname()==1) {
-				mav.addObject("publisherName","小区居民");
-			}else{
-				mav.addObject("publisherName",businessNews.getNickname());
+		String userId = request.getParameter("userId");
+		String newsId = request.getParameter("ID");
+		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			String phpIp = p.getProperty("phpIp");   
+			
+			//Integer userId = 1;
+			if(userId!=null && !userId.equals("0") && !userId.equals("")){
+				AppUser appUser = appUserService.findById(new Integer(userId));
+				mav.addObject("protrait", ip+appUser.getPortrait());
+				mav.addObject("nickname", appUser.getNickname());
+			}else {
+				userId = "0";
 			}
-			mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
-		}else if (businessNews.getNewsType()==2){
-			mav.addObject("publisherName",businessNews.getNickname());
-			mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
-		}else {
-			mav.addObject("publisherName",businessNews.getBuNickname());
-			mav.addObject("publisherProtrait",ip+businessNews.getAvatar());
+
+			AppLatestNews appLatestNews = new AppLatestNews();
+			appLatestNews.setUserId(new Integer(userId));
+			appLatestNews.setTypeId(35);
+			appLatestNews.setTo(0);
+			appLatestNews.setSourceId(new Integer(newsId));
+			appLatestNewsService.delete_app_id(appLatestNews);
+			
+			
+			List commentList = new ArrayList();
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+			BusinessNews businessNews = businessNewsService.findById_app(new Integer(newsId));
+			mav.addObject("ctx", ctx);
+			if(businessNews.getNewsType()==1){
+				if (businessNews.getIsNickname()!=null && businessNews.getIsNickname()==1) {
+					mav.addObject("publisherName","小区居民");
+				}else{
+					mav.addObject("publisherName",businessNews.getNickname());
+				}
+				mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
+			}else if (businessNews.getNewsType()==2){
+				mav.addObject("publisherName",businessNews.getNickname());
+				mav.addObject("publisherProtrait",ip+businessNews.getPortrait());
+			}else {
+				mav.addObject("publisherName",businessNews.getBuNickname());
+				mav.addObject("publisherProtrait",ip+businessNews.getAvatar());
+			}
+			mav.addObject("newsId", businessNews.getNewsId());
+			mav.addObject("appPic", businessNews.getAppPic());
+			mav.addObject("publishTime", businessNews.getPublishTime());
+			mav.addObject("title", businessNews.getTitle());
+			mav.addObject("newsContent", businessNews.getContent().replace("?tp=webp",""));
+			mav.addObject("supports", businessNews.getSupports());
+			mav.addObject("comments", businessNews.getComments());
+			
+			mav.addObject("newsId", newsId);
+			mav.addObject("userId", userId);
+			mav.addObject("download", request.getParameter("download"));
+			mav.addObject("phpIp", phpIp);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-		mav.addObject("newsId", businessNews.getNewsId());
-		mav.addObject("appPic", businessNews.getAppPic());
-		mav.addObject("publishTime", businessNews.getPublishTime());
-		mav.addObject("title", businessNews.getTitle());
-		mav.addObject("newsContent", businessNews.getContent().replace("?tp=webp",""));
-		mav.addObject("protrait", protrait);
-		mav.addObject("supports", businessNews.getSupports());
-		mav.addObject("comments", businessNews.getComments());
-		mav.addObject("realName", appUser.getRealname());
-		mav.addObject("nickname", appUser.getNickname());
-		mav.addObject("newsId", newsId);
-		mav.addObject("sessionid", sessionid);
-		mav.addObject("userId", userId);
-		mav.addObject("download", request.getParameter("download"));
-		Map propMap = new HashMap();
-		propMap.put("newsId", businessNews.getNewsId());
 		
 		try{
 			Timestamp  ts=new Timestamp(new Date().getTime());
 			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
 			appStatisticsClick.setCreateTime(ts);
 			appStatisticsClick.setEditTime(ts);
-			appStatisticsClick.setUserId(userId);
+			appStatisticsClick.setUserId(new Integer(userId));
 			appStatisticsClick.setType(12);
 			appStatisticsClick.setTypeName("新闻详情");
-			appStatisticsClick.setId(newsId);
+			appStatisticsClick.setId(new Integer(newsId));
 			appStatisticsClickService.save(appStatisticsClick);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -723,7 +728,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -805,7 +810,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -896,7 +901,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -957,7 +962,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1058,7 +1063,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1129,7 +1134,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1200,7 +1205,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1256,7 +1261,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1304,7 +1309,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1342,7 +1347,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1402,7 +1407,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1447,7 +1452,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -3,18 +3,13 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
-
-
 import org.springframework.stereotype.Repository;
 
+import com.community.app.module.bean.BusinessCommunity;
+import com.community.app.module.common.CommunityBean;
+import com.community.app.module.vo.BusinessCommunityQuery;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
-import com.community.app.module.bean.BusinessCommunity;
-import com.community.app.module.vo.BusinessCommunityQuery;
 
 @Repository
 public interface BusinessCommunityDao {
@@ -48,6 +43,14 @@ public interface BusinessCommunityDao {
 	 * @throws DaoException
 	 */	
 	public List<BusinessCommunity> findByMap(final Map<String, Object> paramMap) throws DaoException;
+	
+	
+	/**
+	 * 按Map对象条件查询所有BusinessCommunity (关联BUSINESS_USER_RESOURCE 查询)
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<CommunityBean> findByCon(final Map<String, Object> paramMap) throws DaoException;
 	
 	/**
 	 * 按Map对象条件查询所有BusinessCommunity-限制返回条数

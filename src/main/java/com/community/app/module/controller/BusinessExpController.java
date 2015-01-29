@@ -1566,7 +1566,7 @@ public class BusinessExpController {
 		    	}else{//本人
 		    		picker = "本人";
 		    	}
-		    	businessExpResolve.setResolveMemo("快件已签收\\r\\n签收人("+picker+")："+query.getSignname()+"\\r\\n办理人："+shiroUser.getUserName()+"\\r\\n联系方式："+businessUser.getUserTel());
+		    businessExpResolve.setResolveMemo("快件已签收\\r\\n签收人("+picker+")："+businessExp.getSignname()+"\\r\\n办理人："+shiroUser.getUserName()+"\\r\\n联系方式："+businessUser.getUserTel());
 		    businessExpResolveService.save(businessExpResolve);
 		    
 		    BusinessExpBackresolve businessExpBackresolve = new BusinessExpBackresolve();
@@ -1582,7 +1582,7 @@ public class BusinessExpController {
 		    	}else{//本人
 		    		picker = "本人";
 		    	}
-		    businessExpBackresolve.setResolveMemo("快件已签收\\r\\n签收人("+picker+")："+query.getSignname()+"\\r\\n办理人："+shiroUser.getUserName()+"\\r\\n联系方式："+businessUser.getUserTel());
+		    businessExpBackresolve.setResolveMemo("快件已签收\\r\\n签收人("+picker+")："+businessExp.getSignname()+"\\r\\n办理人："+shiroUser.getUserName()+"\\r\\n联系方式："+businessUser.getUserTel());
 		    businessExpBackresolveService.save(businessExpBackresolve);
 		    
 		    String currTime = String.valueOf(businessExp.getModifyTime()).substring(0, 16);

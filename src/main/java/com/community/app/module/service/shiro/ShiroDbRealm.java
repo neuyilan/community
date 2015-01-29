@@ -12,11 +12,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -29,16 +27,12 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
-import org.apache.shiro.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessMenu;
 import com.community.app.module.bean.BusinessPosition;
-import com.community.app.module.bean.BusinessStation;
 import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.bean.BusinessUserResource;
-import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ManageModule;
 import com.community.app.module.bean.ManageModulemenu;
 import com.community.app.module.bean.ManageUserFunction;
@@ -47,7 +41,6 @@ import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.MenuComparator;
 import com.community.app.module.common.ModuleConst;
-import com.community.app.module.common.StationBean;
 import com.community.app.module.common.UserMenuBean;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessMenuService;
@@ -59,9 +52,6 @@ import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageModuleService;
 import com.community.app.module.service.ManageModulemenuService;
 import com.community.app.module.service.ManageUserFunctionService;
-import com.community.app.module.vo.ManageModulemenuQuery;
-import com.community.framework.utils.CommonUtils;
-import com.community.framework.utils.ShiroUtil;
 
 /**
  * 系统用户认证授权管理
@@ -143,6 +133,12 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				//加盐，加密，压缩
 				RandomNumberGenerator rng = new SecureRandomNumberGenerator();
 				Object salt = rng.nextBytes();
+				
+				shiroUser.setComList(null);
+				shiroUser.setEstateBeanList(null);
+				shiroUser.setEstateList(null); 
+				shiroUser.setMenuList(null);
+				
 				SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
 						shiroUser, 
 						//ShiroUtil.encrypt(businessUser.getUserPassword()), 
@@ -172,51 +168,22 @@ public class ShiroDbRealm extends AuthorizingRealm{
 	
 	//初始化业务关键信息
 	private void initBiz(ShiroUser shiroUser) {
-		Map paramMap = new HashMap();
+		Map<String,Object> paramMap = new HashMap<String,Object>();
 		paramMap.put("userId", shiroUser.getUserId());
-		List userResourceList = businessUserResourceService.findByMap(paramMap);
+		paramMap.put("isRelated", "1");  //是否关联  BUSINESS_USER_RESOURCE  1 关联， 2 无关联
+		List<BusinessUserResource> userResourceList = businessUserResourceService.findByMap(paramMap);
+//		//测试
+//		shiroUser.setOrgType(ModuleConst.COMMUNITY_CODE);
 		if(shiroUser.getOrgType().equals(ModuleConst.STATION_CODE)) {//驿站
 			if(userResourceList != null) {
-				for(int i=0;i<userResourceList.size();i++) {
-					BusinessUserResource businessUserResource = (BusinessUserResource) userResourceList.get(i);
-					ManageEstate manageEstate = manageEstateService.findById(businessUserResource.getEstateId());
-					EstateBean estateBean = new EstateBean();
-					estateBean.setEstateId(manageEstate.getEstateId());
-					estateBean.setEstateName(manageEstate.getEstateName());
-					shiroUser.getEstateBeanList().add(estateBean);
-				}
+				List<EstateBean> manageEstateList = manageEstateService.findByCon(paramMap);
+				shiroUser.setEstateBeanList(manageEstateList);
 			}
 		}else if(shiroUser.getOrgType().equals(ModuleConst.COMMUNITY_CODE)) {//社区
 			if(userResourceList != null) {
-				List estateList = new ArrayList();//小区列表
-				List comList = new ArrayList();//社区列表
-				for(int i=0;i<userResourceList.size();i++) {
-					BusinessUserResource businessUserResource = (BusinessUserResource) userResourceList.get(i);
-					if(businessUserResource.getEstateId() != null && businessUserResource.getEstateId() != 0) {
-						ManageEstate manageEstate = manageEstateService.findById(businessUserResource.getEstateId());
-						EstateBean estateBean = new EstateBean();
-						estateBean.setEstateId(manageEstate.getEstateId());
-						estateBean.setEstateName(manageEstate.getEstateName());
-						shiroUser.getEstateBeanList().add(estateBean);
-					}
-					//组装社区列表
-					boolean hasCom = false;
-					for(int j=0;j<comList.size();j++) {
-						CommunityBean communityBean = (CommunityBean) comList.get(j);
-						if(communityBean.getComId() == businessUserResource.getComId()) {
-							hasCom = true;
-						}
-					}
-					if(!hasCom) {
-						CommunityBean communityBean = new CommunityBean();
-						if(businessUserResource.getComId() != null && businessUserResource.getComId() != 0) {
-							BusinessCommunity businessCommunity = businessCommunityService.findById(businessUserResource.getComId());
-							communityBean.setComId(businessCommunity.getComId());
-							communityBean.setComName(businessCommunity.getComName());
-							comList.add(communityBean);
-						}						
-					}
-				}
+				List<EstateBean> manageEstateList = manageEstateService.findByCon(paramMap);//小区列表
+				shiroUser.setEstateBeanList(manageEstateList);
+				List<CommunityBean> comList = businessCommunityService.findByCon(paramMap);//社区列表
 				shiroUser.setComList(comList);
 			}
 		}else if(shiroUser.getOrgType().equals(ModuleConst.PROPERTY_CODE)) {//物业 组织小区列表
@@ -224,23 +191,14 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				initPropertyEstate(shiroUser, userResourceList);
 			}
 		}else{//运营组织所有社区列表，小区列表
-			List comList = businessCommunityService.findAll();
-			for(int i=0;i<comList.size();i++) {
-				BusinessCommunity businessCommunity = (BusinessCommunity) comList.get(i);
-				CommunityBean communityBean = new CommunityBean();
-				communityBean.setComId(businessCommunity.getComId());
-				communityBean.setComName(businessCommunity.getComName());
-				shiroUser.getComList().add(communityBean);
-			}
-			
-			List estateList = manageEstateService.findAll();
-			for(int i=0;i<estateList.size();i++) {
-				ManageEstate manageEstate = (ManageEstate) estateList.get(i);
-				EstateBean estateBean = new EstateBean();
-				estateBean.setEstateId(manageEstate.getEstateId());
-				estateBean.setEstateName(manageEstate.getEstateName());
-				shiroUser.getEstateBeanList().add(estateBean);
-			}
+//			List<BusinessCommunity> comList = businessCommunityService.findAll();
+			paramMap.put("isRelated", "2"); //全查 非关联  <==> findAll
+			List<CommunityBean> comList = businessCommunityService.findByCon(paramMap);
+			shiroUser.setComList(comList);
+//			List<ManageEstate> estateList = manageEstateService.findAll();
+			paramMap.put("isRelated", "2"); //全查 非关联  <==> findAll
+			List<EstateBean> manageEstateList = manageEstateService.findByCon(paramMap);
+			shiroUser.setEstateBeanList(manageEstateList);
 		}
 	}
 	

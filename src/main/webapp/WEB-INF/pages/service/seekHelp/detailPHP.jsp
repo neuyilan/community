@@ -178,7 +178,7 @@ $("#supTmp").val('${businessHelp.supports}');
 
 		    $('#supports').text(Num);
 			$('#supportsa').css("background-image","url(${ctx}/js/activity/images/zgray.png)");
-			$('#supports').css("color","#7c7c7c");
+ 			$('#supports').css("color","#000000");
 		   });
 		   
 	    });
@@ -189,7 +189,7 @@ $("#supTmp").val('${businessHelp.supports}');
 		 	var content = $('#CommentStr').val();
 		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
-				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文');
+				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
 				return;
 			}
 		 	var url="";
@@ -212,28 +212,28 @@ $("#supTmp").val('${businessHelp.supports}');
 		            dataType: 'json',
 		 		    success: function (data) {
 		 	     	   if(data.errorCode == 200) {
-		 	     		 msgbox('提示','评论成功');
+		 	     		 msgbox('提示','评论成功','确认');
 		 	     		$(".kl-hfpage").css("display","none");
 		 	            $(".kl-total").css("display","block");
 					    $('#comments').html("");
 		 	           page=1;
 		 	           jump(1); 
 		 	      	   }else{
-		 	      		 msgbox('提示','评论失败'); 
+		 	      		 msgbox('提示','评论失败','确认'); 
 		 	      		$(".kl-hfpage").css("display","none");
 		 	            $(".kl-total").css("display","block");
 		 	      	   }
 		 		    	
 		 		    },
 		 		    error: function () {
-		 		       msgbox('提示','评论失败');
+		 		       msgbox('提示','评论失败','确认');
 		 		      
 		 		      $(".kl-hfpage").css("display","none");
 		 	          $(".kl-total").css("display","block");
 		 		    }
 		 		});
 		 	}else{
-		 		 msgbox('提示','评论不能为空');
+		 		 msgbox('提示','评论不能为空','确认');
 		 		$(".kl-hfpage").css("display","none");
 	            $(".kl-total").css("display","block");
 		 		return;
@@ -450,7 +450,8 @@ function jump(nextNo) {
                 				$('#replyId').val(0);//点击回复人id
                 				$('#replyName').val("");//点击回复人姓名
                 				$('#replyType').val(0);//点击回复人类型
-               					msgbox('提示',"您不能自己回复自己");
+               					msgbox('提示',"您不能自己回复自己",'确认');
+               					
 	               			});
 	           			}
                 	    
@@ -460,20 +461,36 @@ function jump(nextNo) {
                 
 		    },
 		    error: function () {
-		        msgbox('提示','获取下页评论内容失败');
+		        msgbox('提示','获取下页评论内容失败','确认');
 		    }
 		});
 }
-function msgbox(title,content){
-	 var shtml="<div class='tk'><div class='tcontent'><div class='thead'>";
-	 shtml += "<p>"+content+"</p>";
-	 shtml += "</div>";
-	 shtml += "<div class='tbtn'><p>确定</p></div>";
-	 shtml += "</div>";
-	 $("body").append(shtml);
-	 $(".tbtn p").click(function(e) {
-		    $(".tk").remove();
-	});
+
+function msgbox(title,content,btn,fun){
+	 var tk=$("<div class='tk'></div>");
+	 var tcontent=$("<div class='tcontent'></div>");
+	 tk.append(tcontent);
+	 if(title!=""){
+		 tcontent.append("<p class='title'>"+title+"</p>");
+	 }
+	 tcontent.append("<div class='thead'><p>"+content+"</p></div>");
+	 tcontent.append("<div class='tbtn'></div>");
+	 var tbtn = $("<div class='tbtn'></div>");
+	 tcontent.append(tbtn);
+	 var btnA = $("<a>"+btn+"</a>");
+	 tbtn.append(btnA);
+	 $("body").append(tk);
+	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+	 btnA.click(function(){
+		 $(".tk").remove();
+	 });
+	 btnA.click(fun);
+}
+
+function close(){
+	$(".tbtn a").click(function(e) {
+    $(".tk").remove();
+});
 }
 
 </script>

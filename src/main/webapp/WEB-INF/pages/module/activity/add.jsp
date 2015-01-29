@@ -74,6 +74,9 @@
             <script type="text/plain" id="actEditor" style="width:840px;height:240px;"></script>
             <input type="hidden" name="actContent" id="actContent">
 			
+            <!-- 优惠活动--活动时间设置-->
+            <div id="yhqAvtiveTime"></div>
+            
             <%--<h2 class="newscont">活动周期</h2>
             <input class="Wdate" type="text" name="startTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"> 至
             <input class="Wdate" type="text" name="endTime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"><font color="red">*</font>
@@ -423,10 +426,12 @@
     		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
     		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
     		+'</div>'
+    		+'<div class="line2"></div>'
     		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
     		+'<input class="iptnewtit" type="text" id="rank" name="rank"/>名以前，可获奖';
     		$("#rankId").append(htmlDom);
  			$("#yhqId").empty();
+ 			$("#yhqAvtiveTime").empty();
     		$("#bmhdId").empty();
     		$("#tphdId").empty();
     		$("#typeName").val("定时抢");
@@ -472,6 +477,7 @@
 	 			$("#bmhdId").append(htmlDom);
 	 			$("#rankId").empty();
 	 			$("#yhqId").empty();
+	 			$("#yhqAvtiveTime").empty();
 	 			$("#tphdId").empty();
 				$("#typeName").val("报名活动");
 				$("input[name='state']:eq(0)").val("0");
@@ -512,11 +518,13 @@
 	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
 	    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
 	    		+'</div>'
+	    		+'<div class="line2"></div>'
 	    		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
 	    		+'<input class="iptnewtit" type="text" id="rank" name="rank"/>名以前，可获奖';
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
 	    		$("#yhqId").empty();
+	    		$("#yhqAvtiveTime").empty();
 	    		$("#rankId").append(htmlDom);
 				$("#typeName").val("定时抢");
 				$("input[name='state']:eq(0)").val("1");
@@ -545,6 +553,7 @@
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();
 	    		$("#yhqId").empty();
+	    		$("#yhqAvtiveTime").empty();
 	    		$("#tphdId").append(htmlDom);
 				$("#typeName").val("投票活动");
 				$("input[name='state']:eq(0)").val("0");
@@ -660,12 +669,23 @@
 				+'<lable style="position: absolute; top: 10px; left: 160px;" id="reportExcel2"></lable>'
 				+'</div>'
 				+'<input type="hidden" name="reportExcel" id="reportExcel" value="">'; 
+				
+				var htmlDom1 = ''
+				+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
+	    		+'<div style="position:relative;">'
+	    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
+	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
+	    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
+	    		+'</div>'
+	    		+'<div class="line2"></div>';
+	    		
 				$("#rankId").empty();
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
 	    		$("#typeName").val("优惠活动");
 				$("input[name='state']:eq(0)").val("1");
 				$("#yhqId").append(htmlDom);
+				$("#yhqAvtiveTime").append(htmlDom1);
 				
 				// 优惠券大图
 		    	$('#couponImgBtn').click(function() {
@@ -674,6 +694,13 @@
 		        	uploadInit('activity', 'couponImg', '1', '0');
 		        	$('#uploadField').val('couponImg');
 		    	});
+				
+		    	//显示定时提醒
+		        $("#setTimeBtn").click(function(){
+		            $("#setTimeLayer").fadeIn("slow");
+		            $("#setTimeLayer").css("height",$(document.body).outerHeight(true)+'px');
+		            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
+		        });
 			}
 		});
 	    

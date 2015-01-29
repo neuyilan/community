@@ -57,7 +57,7 @@ $('#supports').text('${businessHelp.supports}');
 	 imgs = pics.split(",");
 	 for (var i=0;i<imgs.length ;i++ )
 	 { 
-		 contents += '<br/><img src="${ctx}/'+imgs[i]+'"/>'; 
+		 contents += '<br/><img style="height: auto !important;width: 100% !important;" src="${ctx}/'+imgs[i]+'"/>'; 
 	 }
 } 
 

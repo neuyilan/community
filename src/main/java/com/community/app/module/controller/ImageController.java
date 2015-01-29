@@ -53,39 +53,4 @@ public class ImageController {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * 上传单张图片操作 for PHP
-	 * @return
-	 */
-	@RequestMapping(value="uploadSinglePicPHP")
-	public void uploadSinglePicPHP(HttpServletRequest request, HttpServletResponse response) {	
-		String json = "" ;//"{\"success\":\"true\",\"message\":\"保存成功\"}";
-		try {
-			String picPath = (String) request.getAttribute("picPath");
-			response.setHeader("Cache-Control", "no-cache");
-			response.setHeader("Content-Type", "application/json;charset=UTF-8");
-			response.addHeader("Access-Control-Allow-Origin", "*");  
-			response.addHeader("P3P","CP=CAO PSA OUR");  
-			response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");  
-			   response.addHeader("Access-Control-Allow-Origin", "*");  
-		        response.addHeader("Access-Control-Allow-Headers", "x-requested-with");  
-//			response.setHeader("Content-Type", "text/json"); 
-			
-			response.setCharacterEncoding("utf-8");
-//			json = "{\"success\":\"true\",\"message\":\"保存成功\"}";
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"picPath\":\""+picPath+"\"";
-			json += "}";
-			response.getWriter().write(json);
-		} catch (IOException e) {
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"返回图片路径失败\"";
-			json += "}";
-			e.printStackTrace();
-		}
-	}
 }

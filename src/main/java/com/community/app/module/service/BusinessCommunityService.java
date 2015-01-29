@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
+
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.ServiceException;
 import com.community.app.module.bean.BusinessCommunity;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.vo.BusinessCommunityQuery;
 
 
@@ -50,6 +52,14 @@ public interface BusinessCommunityService {
 	 * @throws ServiceException
 	 */	
 	public List<BusinessCommunity> findByMap(final Map<String, Object> paramMap) throws ServiceException;
+	
+	
+	/**
+	 * 按Map对象条件查询所有BusinessCommunity  (关联BUSINESS_USER_RESOURCE 查询)
+	 * @return
+	 * @throws ServiceException
+	 */	
+	public List<CommunityBean> findByCon(final Map<String, Object> paramMap) throws ServiceException;
 	
 	/**
 	 * 按Map对象条件查询所有BusinessCommunity-限制返回条数

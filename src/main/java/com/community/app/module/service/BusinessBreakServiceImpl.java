@@ -390,8 +390,11 @@ public class BusinessBreakServiceImpl implements BusinessBreakService {
 			String ip = p.getProperty("imageIp");   
 			
 			BusinessBreak businessBreak = businessBreakDao.save(entity);
-			
+			System.out.println(images.length);
 			for (int i = 0; i < images.length; i++) {
+				if (images[i].equals("")) {
+					continue;
+				}
 				BusinessBreakPic businessBreakPic = new BusinessBreakPic();
 				businessBreakPic.setBreakId(businessBreak.getBreakId());
 				businessBreakPic.setCreateTime(entity.getCreateTime());

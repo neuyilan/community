@@ -332,7 +332,7 @@ public class BusinessHelpServiceImpl implements BusinessHelpService {
 			businessHelp.setHelperId(new Integer(param.get("userId")));
 			businessHelp.setEditTime(ts);
 			businessHelp.setCreateTime(ts);
-			businessHelp.setHelpContent(SensitivewordFilter.replaceSensitiveWord(param.get("content"),1,"*"));
+			businessHelp.setHelpContent(SensitivewordFilter.replaceSensitiveWord(param.get("content"),1,"*").replace("\"", ""));
 			businessHelp.setHelpTime(ts);
 			businessHelp.setIsExpend(new Integer(param.get("isExpend")));
 			businessHelp.setEstateId(new Integer(param.get("estateId")));
@@ -399,7 +399,7 @@ public class BusinessHelpServiceImpl implements BusinessHelpService {
 			businessHelp.setHelperId(query.getUserId());
 			businessHelp.setEditTime(ts);
 			businessHelp.setCreateTime(ts);
-			businessHelp.setHelpContent(SensitivewordFilter.replaceSensitiveWord(query.getContent(),1,"*"));
+			businessHelp.setHelpContent(SensitivewordFilter.replaceSensitiveWord(query.getContent(),1,"*").replace("\"", ""));
 			businessHelp.setHelpTime(ts);
 			businessHelp.setIsExpend(query.getIsExpend());
 			businessHelp.setEstateId(query.getEstateId());
@@ -408,6 +408,9 @@ public class BusinessHelpServiceImpl implements BusinessHelpService {
 			
 			String [] images = query.getImages();
 			for (int i = 0; i < images.length; i++) {
+				if (images[i].equals("")) {
+					continue;
+				}
 				BusinessHelpPic BusinessHelpPic = new BusinessHelpPic();
 	        	BusinessHelpPic.setHelpId(businessHelp1.getHelpId());
 	        	BusinessHelpPic.setCreateTime(ts);

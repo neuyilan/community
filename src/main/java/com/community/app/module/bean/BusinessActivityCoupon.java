@@ -19,6 +19,15 @@ public class BusinessActivityCoupon implements java.io.Serializable {
 	private java.sql.Timestamp createTime;
 	private java.sql.Timestamp editTime;
 	private java.lang.String editor;
+	private java.lang.String cellphone;
+
+	public java.lang.String getCellphone() {
+		return cellphone;
+	}
+
+	public void setCellphone(java.lang.String cellphone) {
+		this.cellphone = cellphone;
+	}
 
 	public BusinessActivityCoupon() {
 	}

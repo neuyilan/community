@@ -20,11 +20,18 @@
 <div id="bodyDiv" class="x-main">
 <div class="scroll">
     <div class="x-total">
+    	<div class="x-infor">
+            <div class="x-head">
+                <p class="x-title"><span>${title}</span></p>
+            </div>
+            <div class="x-jop">剩余数量<br><span>${count}</span></div>
+        </div>
         <div class="x-content">
             <div class="x-cx">
                <p>${actContent}</p>
             </div>
             <hr/>
+             <p class="x-des">使用有效期：2012年12月8日至2013年12月31日</p>
             <div class="x-zs">
             <input type="hidden" name="ID" id="ID" value="${ID }" />
             <input type="hidden" name="rank" id="rank" value="${rank }" />
@@ -35,10 +42,12 @@
             <input type="hidden" name="endTime" id="endTime" value="${endTime }" />
             <input type="hidden" name="endTime" id="dateTime" value="${dateTime }" />
             <input type="hidden" name="time" id="dateTime" value="${dateTime}" />
+            	          
             	
             	<a class="x-btn x-djs">
             		<span id="tpli_counter"></span>
             	</a>
+            	
                 <a class="x-btn x-qg">
                 	<span>立即开抢</span>
                 </a>
@@ -62,6 +71,7 @@
 	        </div>
 	      </c:if>
     </div>
+    
     <div class="x-total x-pl">
         <p class="x-pc">全部评论(<span id="commentsCount">${comments }</span>)</p>
         <div id="pos"></div>
@@ -156,7 +166,7 @@ $(document).ready(function(){
             }
 		}
 		if(nickname1=="" || nickname1==" "){
-			 msgbox('提示','抱歉，您需要去“个人中心”给自己起个昵称再来抢哦！','确认');
+			 msgbox('提示','抱歉，您需要去“个人中心”给自己起个昵称再来抢哦！','确定');
 			 close();
 			return;	
 		}
@@ -165,37 +175,8 @@ $(document).ready(function(){
 		$('#bodyDiv').showLoading();
          $(".x-qg").css("display","none");
 	     $(".x-pm").css("display","block");*/
-	     $.ajax({
-	           url: '${ctx}/service/activities/participateActivites.json',
-	           cache: false,
-	           type: 'post',
-	           dataType: 'json',
-	           data: {
-	           	ID: '${actId}',
-	           	sessionid: '${sessionid}', 
-	           	userId: '${userId}'
-	           },
-	           success: function (data) {
-	        	   if(data.errorCode == '200') {
-	        		    $("#seeRank").click();
-						/*msgbox('提示',data.message);
-						$(".x-djs").css("display","none");
-						$(".x-pm").css("display","block");
-						$(".x-qg").css("display","none");
-						$(".x-pm").html("<span>您当前的排名<i id='x-pmw'>"+data.content.rank+"</i>位</span>");
-						//$('#x-pmw').text(data.content.rank);
-						$('#bodyDiv').hideLoading();*/
-	        	   }else{
-	        		   msgbox('提示',data.message,'确认');
-	        		   close();
-	        	   }
-	           },
-	           error: function() {
-	               msgbox('提示','参与失败','确认');
-	               close();
-	               
-	           }
-	       });
+		window.location.href='${ctx}/service/activities/receiveCouponPage.json?userId='+userId+"&ID="+"${ID}";
+
      });
 	
 	//查看排名
@@ -215,8 +196,8 @@ $(document).ready(function(){
 	//点赞
 	 $('.x-z a').click(function(){
 		 if(userId==0){
-				if(window.confirm('请您填写相关信息。')){
-					 window.location.href='${phpIp}/wxokjia/reggoin.php';
+				if(window.confirm('点赞活动需要登录！！是否进去登录页？')){
+					 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
 	                //alert("确定");
 	                return null;
 	             }else{
@@ -251,12 +232,12 @@ $(document).ready(function(){
 			        });
 			        //alert(data.message);
         	   }else{
-        		   msgbox('提示',data.message,'确认');
+        		   msgbox('提示',data.message,'确定');
         		   close();
         	   }
            },
            error: function() {
-               msgbox('提示','评论失败','确认');
+               msgbox('提示','评论失败','确定');
                close();
            }
        });
@@ -265,8 +246,8 @@ $(document).ready(function(){
 	//评论
 	 $('#commentBtn').click(function() {
 		 if(userId==0){
-				if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
-					 window.location.href='${phpIp}/wxokjia/reggoin.php';
+				if(window.confirm('评论活动需要登录！！是否进去登录页？')){
+					 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
 	                //alert("确定");
 	                return null;
 	             }else{
@@ -277,7 +258,7 @@ $(document).ready(function(){
 	 	var content = $('#comment').val();
 	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){
-			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
+			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确定');
 			 close();
 			return;
 		}
@@ -342,13 +323,12 @@ $(document).ready(function(){
 	 			 	document.getElementById("anchor_scroll").click();
 	 		    },
 	 		    error: function () {
-	 		       msgbox('提示','评论失败','确认');
-	 		      close();
+	 		       msgbox('提示','评论失败');
 	 		    }
 	 		});
 	 	}else{
-	 		 msgbox('提示','评论不能为空','确认');
-	 		close();
+	 		 msgbox('提示','评论不能为空','确定');
+	 		 close();
 	 		return;
 	 	}
 	 	$("#replaceinp").attr("placeholder","回复:");
@@ -484,8 +464,8 @@ function jump(nextNo) {
             			
         			}else{
             			div.find("img").click(function(){
-          					msgbox('提示',"您不能自己回复自己",'确认');
-          					close();
+          					 msgbox('提示',"您不能自己回复自己",'确定');
+          					 close();
               			});
           			}
         			
@@ -494,7 +474,7 @@ function jump(nextNo) {
             
 	    },
 	    error: function () {
-	        msgbox('提示','获取下页评论内容失败','确认');
+	        msgbox('提示','获取下页评论内容失败','确定');
 	        close();
 	    }
 	});
@@ -512,8 +492,8 @@ function msgbox(title,content,btn){
 }
 function close(){
 	$(".tbtn a").click(function(e) {
-     $(".tk").remove();
- });
+       $(".tk").remove();
+   });
 
 }
 

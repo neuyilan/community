@@ -333,15 +333,16 @@ public class BusinessAnnoController {
 		try{
 			ShiroUser shiroUser = getUser();
 			// 获取用户所在物业管理的小区
-			List estateList = shiroUser.getEstateList();
-			ManageEstate manageEstate = (ManageEstate) estateList.get(0);
+			// List estateList = shiroUser.getEstateList();
+			// ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
             businessAnno.setPublisherName(username);
 		    businessAnno.setAnnoTitle(query.getAnnoTitle());
 		    businessAnno.setBrief(query.getBrief());
 		    businessAnno.setAnnoContent(query.getAnnoContent());
 		    businessAnno.setAnnoType(query.getAnnoType());
-		    businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
+		    // businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
+		    businessAnno.setAnnoScope("0");
 		    businessAnno.setAnnoBuilding(query.getAnnoBuilding());
 		    businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
 		    businessAnno.setAnnoPic(query.getAnnoPic());
@@ -487,8 +488,8 @@ public class BusinessAnnoController {
 			businessAnno = businessAnnoService.findById(query.getAnnoId());
 			ShiroUser shiroUser = getUser();
 			//获取用户所在物业管理的小区
-			List estateList = shiroUser.getEstateList();
-			ManageEstate manageEstate = (ManageEstate) estateList.get(0);
+			// List estateList = shiroUser.getEstateList();
+			// ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(shiroUser.getUserId());
             businessAnno.setPublisherName(shiroUser.getUserName());
 		    businessAnno.setAnnoTitle(query.getAnnoTitle());
@@ -498,7 +499,8 @@ public class BusinessAnnoController {
 		    }
 		    businessAnno.setIsImportant(query.getIsImportant()==null?0:query.getIsImportant());
 		    businessAnno.setAnnoType(query.getAnnoType());
-		    businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
+		    // businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
+		    businessAnno.setAnnoScope("0");
 		    businessAnno.setAnnoBuilding(query.getAnnoBuilding());
 		    businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
 		    String path = request.getContextPath();
@@ -667,9 +669,10 @@ public class BusinessAnnoController {
 		try{
 			ShiroUser shiroUser = getUser();
 			List estateList = shiroUser.getEstateList();
-			ManageEstate manageEstate = (ManageEstate) estateList.get(0);
+			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
-            businessAnno.setAnnoScope(String.valueOf(manageEstate.getEstateId()));
+            //businessAnno.setAnnoScope(String.valueOf(manageEstate.getEstateId()));
+            businessAnno.setAnnoScope("0");
             businessAnno.setAnnoBuilding(query.getAnnoBuilding());
             businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
             businessAnno.setPublisherName(username);
@@ -856,10 +859,11 @@ public class BusinessAnnoController {
 		try{
 			businessAnno = businessAnnoService.findById(query.getAnnoId());
 			ShiroUser shiroUser = getUser();
-			List estateList = shiroUser.getEstateList();
-			ManageEstate manageEstate = (ManageEstate) estateList.get(0);
+			// List estateList = shiroUser.getEstateList();
+			// ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
-            businessAnno.setAnnoScope(String.valueOf(manageEstate.getEstateId()));
+            // businessAnno.setAnnoScope(String.valueOf(manageEstate.getEstateId()));
+            businessAnno.setAnnoScope("0");
             businessAnno.setAnnoBuilding(query.getAnnoBuilding());
             businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
             businessAnno.setPublisherName(username);

@@ -153,11 +153,13 @@
 				        });
 				        //alert(data.message);
 	        	   }else{
-	        		   msgbox('提示',data.message);
+	        		   msgbox('提示',data.message,'确认');
+	        		   close();
 	        	   }
 	           },
 	           error: function() {
-	               msgbox('提示','点赞失败');
+	               msgbox('提示','点赞失败','确认');
+	               close();
 	           }
 	       });
 		 });
@@ -175,9 +177,10 @@
 		            }
 				}
 		 	var content = $('#comment').val();
-		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
-				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文');
+				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
+				 close();
 				return;
 			}
 		 	var url="";
@@ -205,7 +208,7 @@
 		 		    	//alert('评论成功');
 		 		    	//eval('data=' + data);
 		 		    	//$('#comment').attr('disabled', true);
-		 		    	var newContent = '';
+		 		    	/*var newContent = '';
 		 		    	newContent+= '<dl class="s-clt">';
 		 		    	newContent+= '<dt>';
 		 		    	newContent+='<a href="#" class="pto"><img src="'+protrait+'"></a>';
@@ -227,7 +230,7 @@
 		 		    	}
 		 		    	newContent+='</dd>'
 		 		    	newContent+='</dl>';
-		 				$('#comments').prepend(newContent);
+		 				$('#comments').prepend(newContent);*/
 		 				$('#comment').val("");
 		 				$('#replaceinp').val("");
 		 				replyId = 0;//点击回复人id
@@ -235,14 +238,19 @@
 		 				replyType = 0;//点击回复人类型
 		 				$("#replaceinp").attr("placeholder","回复："+replyName);
 		 				$("#commentsCount").text(data.content.comments);
+		 				$('#comments').html("");
+		 				jump(1);
+		 				
 		 			 	document.getElementById("anchor_scroll").click();
 		 		    },
 		 		    error: function () {
-		 		       msgbox('提示','评论失败');
+		 		       msgbox('提示','评论失败','确认');
+		 		      close();
 		 		    }
 		 		});
 		 	}else{
-		 		 msgbox('提示','评论不能为空');
+		 		 msgbox('提示','评论不能为空','确认');
+		 		 close();
 		 		return;
 		 	}
 		 	$("#replaceinp").attr("placeholder","回复:");
@@ -298,7 +306,7 @@
 //获取下页评论内容
 function jump(nextNo) {
 	$.ajax({
-		    url: '${ctx}/service/commiunity/getJournalismReviewByUserId.json',
+		    url: '${ctx}/service/commiunity/getJournalismReviewById.json',
 		    cache: false,
 		    type: 'post',
             dataType: 'json',
@@ -379,7 +387,8 @@ function jump(nextNo) {
                 			
             			}else{
 	            			div.find("img").click(function(){
-	           					 msgbox('提示',"您不能自己回复自己");
+	           					 msgbox('提示',"您不能自己回复自己",'确认');
+	           					 close();
 	               			});
 	           			}
             			
@@ -388,20 +397,27 @@ function jump(nextNo) {
                 
 		    },
 		    error: function () {
-		        msgbox('提示','获取下页评论内容失败');
+		        msgbox('提示','获取下页评论内容失败','确认');
+		        close();
 		    }
 		});
 }
-function msgbox(title,content){
-	 var shtml="<div class='tk'><div class='tcontent'><div class='thead'>";
-	 shtml+="<p>"+content+"</p>";
-	 shtml +="</div>";
-	  shtml += "<div class='tbtn'><p>确定</p></div>";
-	 shtml += "</div>";
+function msgbox(title,content,btn){
+	 var shtml="<div class='tk'><div class='tcontent'>";
+	 if(title!=""){
+	     shtml+="<p class='title'>"+title+"</p>";
+	 }
+	 shtml+="<div class='thead'><p>"+content+"</p></div>";
+	 shtml += "<div class='tbtn'><a>"+btn+"</a></div>";
+	 shtml += "</div></div>";
 	 $("body").append(shtml);
-	 $(".tbtn p").click(function(e) {
-		    $(".tk").remove();
-	});
+	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+}
+function close(){
+	$(".tbtn a").click(function(e) {
+      $(".tk").remove();
+  });
+
 }
 
 </script>

@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import net.sf.json.JSONArray;
 import net.sf.json.util.NewBeanInstanceStrategy;
 
 import org.jsoup.Jsoup;
@@ -212,9 +213,7 @@ public class weather {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
-		grabMindex();
-	}
+	
 
 	/**
 	 * 判断当前日期是星期几
@@ -281,5 +280,40 @@ public class weather {
 		   return str;
 		 
 		}
+	
+	/**
+	 * 抓取电话发送商品
+	 * 
+	 * @param
+	 * @return
+	 * @throws
+	 */
+	public static String grabTel() {
+		Document doc;
+		String json = "";
+		try {
+			doc = Jsoup
+					.connect(
+							"http://wx.bqsqcm.com/okjiashop/mobile/mindex.php")
+					.get();
+			String title = doc.title();
+			// 今天
+			Elements arr= doc.select("div.mindex");
+			json = arr.get(0).text();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json;
+
+	}
+	
+	public static void main(String[] args) throws Exception {
+		 JSONArray jsonArray = JSONArray.fromObject( "['111','111','111']" );  
+		 for (Object object : jsonArray) {
+			System.err.println(object);
+		}
+	     System.out.println( jsonArray );  
+	}
 
 }

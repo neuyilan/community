@@ -15,6 +15,7 @@ import com.community.framework.exception.ServiceException;
 import com.community.framework.exception.DaoException;
 import com.community.app.module.vo.ManageEstateQuery;
 import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.common.EstateBean;
 import com.community.app.module.dao.ManageEstateDao;
 
 @Service("ManageEstateService")
@@ -107,6 +108,26 @@ public class ManageEstateServiceImpl implements ManageEstateService {
 			list=manageEstateDao.findByMap(paramMap);
 		} catch (DaoException e) {
 			logger.debug("ManageEstateServiceImpl findByMap()：按Map对象条件查询所有ManageEstate发生错误！", e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	
+	/**
+	 * 按Map对象条件查询所有ManageEstate  (关联BUSINESS_USER_RESOURCE 查询)
+	 * @param paramMap
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@Transactional(readOnly = true)
+	public List<EstateBean> findByCon(final Map paramMap) throws ServiceException {
+		List<EstateBean> list = new ArrayList<EstateBean>() ;
+		try {
+			list=manageEstateDao.findByCon(paramMap);
+		} catch (DaoException e) {
+			logger.debug("ManageEstateServiceImpl findByMap()：按Map对象(关联BUSINESS_USER_RESOURCE 查询)条件查询所有ManageEstate发生错误！", e);
 			e.printStackTrace();
 		}
 		return list;

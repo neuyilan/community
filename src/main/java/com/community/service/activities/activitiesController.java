@@ -46,6 +46,7 @@ import com.community.app.module.vo.BaseBean;
 
 
 import com.community.app.module.vo.BusinessActivityCommentQuery;
+import com.community.app.module.vo.BusinessActivityCouponQuery;
 import com.community.app.module.vo.BusinessActivityParticipateQuery;
 import com.community.app.module.vo.BusinessActivityQuery;
 import com.community.app.module.vo.BusinessActivityRegistrationInformationQuery;
@@ -62,6 +63,7 @@ import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessActivity;
 import com.community.app.module.bean.BusinessActivityComment;
+import com.community.app.module.bean.BusinessActivityCoupon;
 import com.community.app.module.bean.BusinessActivityParticipate;
 import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
@@ -74,11 +76,13 @@ import com.community.app.module.bean.BusinessNewsComment;
 import com.community.app.module.bean.BusinessNewsSupport;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.bean.index;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessActivityCommentService;
+import com.community.app.module.service.BusinessActivityCouponService;
 import com.community.app.module.service.BusinessActivityParticipateService;
 import com.community.app.module.service.BusinessActivityRegistrationInformationService;
 import com.community.app.module.service.BusinessActivityRegistrationTimeslotService;
@@ -89,9 +93,11 @@ import com.community.app.module.service.BusinessActivityVoteOptionsService;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.ManageEstateService;
+import com.community.app.module.service.ManageSendMsgService;
 import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.framework.utils.CommonUtils;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.messagesUtil;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.weather;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
@@ -129,6 +135,10 @@ public class activitiesController {
 	private BusinessActivityVoteOptionsService businessActivityVoteOptionsService;
 	@Autowired
 	private BusinessActivityVoteInformationService businessActivityVoteInformationService;
+	@Autowired
+	private BusinessActivityCouponService businessActivityCouponService;
+	@Autowired
+	private ManageSendMsgService manageSendMsgService;
 	
 	
 	
@@ -204,7 +214,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -239,12 +249,24 @@ public class activitiesController {
 		ModelAndView mav = new ModelAndView("/service/activity");
 		Properties p = propertiesUtil.getProperties("config.properties");
 		String ip = p.getProperty("imageIp");   
+		String phpIp = p.getProperty("phpIp");   
 		Integer ID = new Integer(request.getParameter("ID"));
 		//Integer ID = 11;
 		String sessionid = request.getParameter("sessionid");
 		//String sessionid = "sessionid";
 		String userId = request.getParameter("userId");
 		try{
+			
+			//获取活动信息
+			BusinessActivity activity = businessActivityService.findById_app(ID);
+			//判断活动类型跳转相应页面
+			if(activity.getTypeId()==2){
+				mav = new ModelAndView("/service/activityRegistration");
+			}else if (activity.getTypeId()==3) {
+				mav = new ModelAndView("/service/activityVote");
+			}else if (activity.getTypeId()==4) {
+				mav = new ModelAndView("/service/activityCoupon");
+			}
 			
 			//Integer userId = 1;
 			if(userId!=null && !userId.equals("0") && !userId.equals("")){
@@ -257,14 +279,7 @@ public class activitiesController {
 			
 			
 			
-			//获取活动信息
-			BusinessActivity activity = businessActivityService.findById_app(ID);
-			//判断活动类型跳转相应页面
-			if(activity.getTypeId()==2){
-				mav = new ModelAndView("/service/activityRegistration");
-			}else if (activity.getTypeId()==3) {
-				mav = new ModelAndView("/service/activityVote");
-			}
+			
 			
 			String path = request.getContextPath();
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
@@ -281,6 +296,7 @@ public class activitiesController {
 			mav.addObject("protrait", activity.getState());//活动状态
 			mav.addObject("state", activity.getState());//活动状态
 			mav.addObject("ranks", activity.getRank());//活动排位
+			mav.addObject("phpIp", phpIp);
 			String startTime = activity.getPublishDate() + " " + activity.getPublishTime() + ":00";
 			//开始结束时间计算
 			if(activity.getTypeId()==1 || activity.getTypeId()==3){
@@ -370,6 +386,12 @@ public class activitiesController {
 				mav.addObject("voteType", activity.getVoteType());
 				mav.addObject("list", list);
 				mav.addObject("count", count);
+			}else if (activity.getTypeId()==4) {
+				BusinessActivityCouponQuery businessActivityCouponQuery = new BusinessActivityCouponQuery();
+				businessActivityCouponQuery.setActId(ID);
+				businessActivityCouponQuery.setState(0);
+				int  count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
+				mav.addObject("count", count);
 			}else {
 				List<BusinessActivityParticipate> participateList = businessActivityParticipateService.findByMap(paramMap);
 				if(participateList.size() > 0) {//已参与活动
@@ -436,7 +458,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -697,7 +719,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -787,7 +809,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -848,7 +870,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -949,7 +971,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1019,7 +1041,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1179,26 +1201,11 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) {
-		String s = "++";  
-		 System.out.println("aaa1111111" + ":" + s.matches("[`~!@#$%^&*()+=|{}':;',//[//].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]+")); //true    
-		String regEx = "[u4e00-u9fa5\\w]";  
-		
-		Pattern pat = Pattern.compile(regEx);  
-		Matcher mat = pat.matcher(s);  
-		boolean rs = mat.find();  
-		System.out.println(rs);
-		for(int i=1;i<=mat.groupCount();i++){  
-			System.out.println(mat.group(i));  
-		}  
-		System.out.println(1123);
 	}
 	
 	/**
@@ -1315,4 +1322,139 @@ public class activitiesController {
 		return mav;	
 	}
 	
+	/**
+	 * 跳转至领取优惠信息页
+	 * @param tel,userId,actId,timeSlotId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="receiveCouponPage")
+	public ModelAndView receiveCouponPage(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		ModelAndView mav = new ModelAndView("/service/receiveCoupon");
+		Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
+		try{
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+			mav.addObject("ctx", ctx);
+			mav.addObject("userId", query.getUserId());
+			mav.addObject("actId", query.getID());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			if(null==query.getUserId()){
+				appStatisticsClick.setUserId(0);
+			}else{
+				appStatisticsClick.setUserId(query.getUserId());
+			}
+			appStatisticsClick.setType(28);
+			appStatisticsClick.setTypeName("领取优惠券");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return mav;	
+	}
+	
+	/**
+	 * 用户参与活动
+	 * @param comId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="receiveCoupon")
+	public synchronized  void receiveCoupon(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
+		List<BusinessActivityCoupon> list;
+		String json = "";
+		if(query.getUserId()==null){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"用户错误\"";
+			json += "}";
+		}else{
+			//query.setActId(query.getID());
+			try{
+				BusinessActivityCouponQuery businessActivityCouponQuery = new BusinessActivityCouponQuery();
+				businessActivityCouponQuery.setActId(query.getID());
+				businessActivityCouponQuery.setState(0);
+				//查看未领取优惠券数量
+				int count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
+				//如果为空则提示抢完
+				if(count!=0){
+					businessActivityCouponQuery.setUserId(query.getUserId());
+					businessActivityCouponQuery.setState(null);
+					//查看用户是否领取过优惠券
+					count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
+					//如果领取则提示不能重复参与
+					if(count==0){
+						businessActivityCouponQuery.setUserId(null);
+						businessActivityCouponQuery.setState(0);
+						//查找未领取优惠券
+						list = businessActivityCouponService.findByExample(businessActivityCouponQuery);
+						BusinessActivity activity = businessActivityService.findById_app(query.getActId());
+						Timestamp  ts=new Timestamp(new Date().getTime());
+						BusinessActivityCoupon businessActivityCoupon = new BusinessActivityCoupon();
+						businessActivityCoupon.setCouponId(list.get(0).getCouponId());
+						businessActivityCoupon.setState(1);
+						businessActivityCoupon.setUserId(query.getUserId());
+						businessActivityCoupon.setCellphone(query.getCellphone());
+						businessActivityCoupon.setEditTime(ts);
+						//修改优惠券状态
+						businessActivityCouponService.update(businessActivityCoupon);
+						
+						//发送短信
+						String str="恭喜！您成功领取了（"+activity.getCouponName()+"），使用验证码为："+list.get(0).getCouponCode()+"，请妥善保存，并于"+activity.getCouponValid()+"期间内使用。【OK家】";
+						String returnMessage = messagesUtil.returnMessageRrid(query.getCellphone(), str);
+						manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
+						
+						json += "{";
+						json += "\"errorCode\":\"200\",";
+						json += "\"message\":\"参与成功\"";
+						json += "}";
+					}else {
+						json = "";
+						json += "{";
+						json += "\"errorCode\":\"400\",";
+						json += "\"message\":\"您已经参与活动！不能重复参与！\"";
+						json += "}";
+					}
+					
+				}else {
+					json = "";
+					json += "{";
+					json += "\"errorCode\":\"400\",";
+					json += "\"message\":\"抱歉！您下手慢了，优惠券已经被别人抢光了。\"";
+					json += "}";
+				}
+				
+				
+			}catch(Exception e){
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"参与失败\"";
+				json += "}";
+				e.printStackTrace();
+			}
+		}
+		
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

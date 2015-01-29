@@ -1,6 +1,7 @@
 package com.community.app.module.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,13 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-
-import com.community.app.module.vo.BusinessShopQuery;
 import com.community.app.module.bean.BusinessShop;
 import com.community.app.module.dao.BusinessShopDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessShopQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessShopService")
 @Transactional
@@ -220,6 +220,20 @@ public class BusinessShopServiceImpl implements BusinessShopService {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+	/**
+	 * 根据userid、estateId查询 用户 信息
+	 */
+	public Map<String, Object> findUserInfo(Map<String, Object> map) {
+		Map<String, Object> retMap = new HashMap<String, Object>();
+		try {
+			retMap = businessShopDao.findUserInfo(map);
+		} catch (DaoException e) {
+			logger.debug("BusinessShopServiceImpl delete()：删除BusinessShop发生错误！", e);
+			e.printStackTrace();
+		}
+		return retMap;
 	}
 	
 }

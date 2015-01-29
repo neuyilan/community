@@ -24,6 +24,11 @@
 			<result column="comId" property="comId" />
 	</resultMap>
 	
+	<resultMap id="EstateBeanResult" type="com.community.app.module.common.EstateBean">
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+	</resultMap>
+	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
 			estateId,
@@ -208,6 +213,21 @@
 	<!-- 按Map对象条件查询所有ManageEstate -->
 	<select id="findByMap" resultMap="ManageEstateResult" parameterType="java.util.Map">
 		select <include refid="Base_Column_List" /> from manage_estate <include refid="Base_Where_Clause" />
+	</select>
+	
+   <!-- 按Map对象条件查询所有ManageEstate (关联BUSINESS_USER_RESOURCE 查询) -->
+	<select id="findByCon" resultMap="EstateBeanResult" parameterType="java.util.Map">
+		SELECT
+	 		distinct me.estateId,me.estateName
+		FROM
+	 		manage_estate me
+	 	<if test="isRelated != null and isRelated != '' and isRelated == 1" >
+		 		, business_user_resource bur
+		  		where me.estateId = bur.estateId
+	  		<if test="userId != null and userId != ''" >
+				and bur.userId = #{userId}
+			</if>
+		</if>
 	</select>
 	
 	<!-- 按Map对象条件查询所有ManageEstate -->

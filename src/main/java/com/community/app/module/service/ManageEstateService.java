@@ -8,9 +8,11 @@ import java.util.Map;
 
 
 
+
 import com.community.app.module.vo.BaseBean;
 import com.community.framework.exception.ServiceException;
 import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.common.EstateBean;
 import com.community.app.module.vo.ManageEstateQuery;
 
 
@@ -54,6 +56,14 @@ public interface ManageEstateService {
 	 * @throws ServiceException
 	 */	
 	public List<ManageEstate> findByMap(final Map<String, Object> paramMap) throws ServiceException;
+	
+	
+	/**
+	 * 按Map对象条件查询所有ManageEstate (关联BUSINESS_USER_RESOURCE 查询)
+	 * @return
+	 * @throws ServiceException
+	 */	
+	public List<EstateBean> findByCon(final Map<String, Object> paramMap) throws ServiceException;
 	
 	/**
 	 * 按Map对象条件查询所有ManageEstate-限制返回条数

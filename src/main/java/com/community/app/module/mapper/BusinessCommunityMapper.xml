@@ -24,6 +24,11 @@
 			<result column="orgType" property="orgType" />
 	</resultMap>
 	
+    <resultMap id="CommunityBeanResult" type="com.community.app.module.common.CommunityBean">
+			<result column="comId" property="comId" />
+			<result column="comName" property="comName" />
+	</resultMap>
+	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
 			comId,
@@ -109,6 +114,21 @@
 	<!-- 按Map对象条件查询所有BusinessCommunity -->
 	<select id="findByMap" resultMap="BusinessCommunityResult" parameterType="java.util.Map">
 		select <include refid="Base_Column_List" /> from business_community <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessCommunity (关联BUSINESS_USER_RESOURCE 查询)-->
+	<select id="findByCon" resultMap="CommunityBeanResult" parameterType="java.util.Map">
+		SELECT
+			distinct  bc.comId  , bc.comName
+		FROM
+		  	business_community bc
+	    <if test="isRelated != null and isRelated != '' and isRelated == 1" >
+			  	, business_user_resource bur
+			  	where bc.comId = bur.comId
+				<if test="userId != null and userId != ''" >
+					and bur.usreId = #{userId}
+				</if>
+		</if>
 	</select>
 	
 	<!-- 按VO对象条件查询所有BusinessCommunity -->

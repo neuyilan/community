@@ -202,6 +202,22 @@
 		
 	</update>
 	
+	<!-- 根据 userid, estateid 查询 -->
+	<select id="findUserInfo" resultType="java.util.HashMap"  parameterType="java.util.Map">
+		select u.tel as primobile,u.nickname, u.userId as userid ,
+		e.estateLatitude as latitude , e.estateLongitude as longitude 
+		from  app_user u join
+		manage_estate e 
+		where 1=1
+		<if test="userId != null and userId != ''" >
+		  		and u.userId = #{userId}
+		</if>
+		<if test="estateId != null and estateId != ''" >
+		  		and e.estateId = #{estateId}
+		</if>
+	</select>
+	
+	
 	<!-- BusinessShop删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_shop where 

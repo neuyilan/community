@@ -7,10 +7,10 @@ import java.util.Map;
 
 
 
+
 import org.springframework.stereotype.Repository;
 
 import com.community.framework.exception.DaoException;
-
 import com.community.app.module.bean.BusinessShop;
 import com.community.app.module.vo.BusinessShopQuery;
 
@@ -100,5 +100,10 @@ public interface BusinessShopDao {
 	 * @throws DaoException
 	 */
 	public boolean delete(final Integer id) throws DaoException;
+
+	/**
+	 * 根据userid、estateId查询 用户 信息
+	 */
+	public Map<String, Object> findUserInfo(Map<String, Object> map) throws DaoException;
 
 }

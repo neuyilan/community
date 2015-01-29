@@ -96,4 +96,9 @@ public interface BusinessShopService {
 	 */
 	public boolean delete(final Integer id) throws ServiceException;
 
+	/**
+	 * 根据userid、estateId查询 用户 信息
+	 */
+	public Map<String, Object> findUserInfo(Map<String, Object> map);
+
 }

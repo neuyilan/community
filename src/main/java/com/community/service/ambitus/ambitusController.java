@@ -201,7 +201,7 @@ public class ambitusController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -299,7 +299,7 @@ public class ambitusController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -337,7 +337,7 @@ public class ambitusController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json);
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

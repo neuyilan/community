@@ -84,9 +84,11 @@
 			if(az.test($("#nickname").val())!=true)
 			{
 				if($("#nickname").val().length==0){
-					msgbox('提示',"昵称不能为空");
+					msgbox('提示',"昵称不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"昵称过长");
+					msgbox('提示',"昵称过长",'确认');
+					close();
 				}
 				return false;
 			}
@@ -95,9 +97,11 @@
 			if(az.test($("#realname").val())!=true)
 			{
 				if($("#realname").val().length==0){
-					msgbox('提示',"真实姓名不能为空");
+					msgbox('提示',"真实姓名不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"真实姓名过长");
+					msgbox('提示',"真实姓名过长",'确认');
+					close();
 				}
 				return false;
 			}
@@ -107,9 +111,11 @@
 			if(az.test($("#tel").val())!=true)
 			{
 				if($("#tel").val().length==0){
-					msgbox('提示',"联系电话不能为空");
+					msgbox('提示',"联系电话不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"请输入真实电话信息");
+					msgbox('提示',"请输入真实电话信息",'确认');
+					close();
 				}
 				return false;
 			}
@@ -119,9 +125,11 @@
 			if(az.test($("#birthday").val())!=true)
 			{
 				if($("#birthday").val().length==0){
-					msgbox('提示',"生日不能为空");
+					msgbox('提示',"生日不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"生日过长");
+					msgbox('提示',"生日过长",'确认');
+					close();
 				}
 				return false;
 			}
@@ -131,9 +139,11 @@
 			if(az.test($("#age").val())!=true)
 			{
 				if($("#age").val().length==0){
-					msgbox('提示',"年龄不能为空");
+					msgbox('提示',"年龄不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"请输入真实年龄");
+					msgbox('提示',"请输入真实年龄",'确认');
+					close();
 				}
 				return false;
 			}
@@ -143,9 +153,11 @@
 			if(az.test($("#job").val())!=true)
 			{
 				if($("#job").val().length==0){
-					msgbox('提示',"职业不能为空");
+					msgbox('提示',"职业不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"职业过长");
+					msgbox('提示',"职业过长",'确认');
+					close();
 				}
 				return false;
 			}
@@ -155,9 +167,11 @@
 			if(az.test($("#ID").val())!=true)
 			{
 				if($("#ID").val().length==0){
-					msgbox('提示',"身份证不能为空");
+					msgbox('提示',"身份证不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"请输入您的真实身份证号");
+					msgbox('提示',"请输入您的真实身份证号",'确认');
+					close();
 				}
 				return false;
 			}
@@ -167,9 +181,11 @@
 			if(az.test($("#email").val())!=true)
 			{
 				if($("#email").val().length==0){
-					msgbox('提示',"邮箱不能为空");
+					msgbox('提示',"邮箱不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"邮箱格式不正确");
+					msgbox('提示',"邮箱格式不正确",'确认');
+					close();
 				}
 				return false;
 			}
@@ -179,9 +195,11 @@
 			if(az.test($("#addr").val())!=true)
 			{
 				if($("#addr").val().length==0){
-					msgbox('提示',"地址不能为空");
+					msgbox('提示',"地址不能为空",'确认');
+					close();
 				}else{
-					msgbox('提示',"地址过长");
+					msgbox('提示',"地址过长",'确认');
+					close();
 				}
 				return false;
 			}
@@ -212,24 +230,32 @@
 	        		   alert("您的报名已成功，时间为【${time}】,请牢记时间准时参加！");
                        window.location.href = '${ctx}/service/activities/getActivitiesDetailsById.json?ID=${ID}&userId=${userId}&tel=${tel}';
 	        	   }else{
-	        		   msgbox('提示',data.message);
+	        		   msgbox('提示',data.message,'确认');
+	        		   close();
 	        	   }
 	           },
 	           error: function() {
-	               msgbox('提示','评论失败');
+	               msgbox('提示','评论失败','确认');
+	               close();
 	           }
 	       });
 	})
-function msgbox(title,content){
-	 var shtml="<div class='tk'><div class='tcontent'><div class='thead'>";
-	 shtml+="<p>"+content+"</p>";
-	 shtml +="</div>";
-	  shtml += "<div class='tbtn'><p>确定</p></div>";
-	 shtml += "</div>";
+function msgbox(title,content,btn){
+	 var shtml="<div class='tk'><div class='tcontent'>";
+	 if(title!=""){
+	     shtml+="<p class='title'>"+title+"</p>";
+	 }
+	 shtml+="<div class='thead'><p>"+content+"</p></div>";
+	 shtml += "<div class='tbtn'><a>"+btn+"</a></div>";
+	 shtml += "</div></div>";
 	 $("body").append(shtml);
-	 $(".tbtn p").click(function(e) {
-		    $(".tk").remove();
-	});
+	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+}
+function close(){
+	$(".tbtn a").click(function(e) {
+      $(".tk").remove();
+  });
+
 }
 </script>
 </body>

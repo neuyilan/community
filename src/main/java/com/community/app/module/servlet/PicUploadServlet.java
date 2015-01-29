@@ -16,7 +16,6 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.lang.StringUtils;
 
 import com.community.framework.utils.Uploader;
 /**
@@ -82,18 +81,10 @@ public class PicUploadServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		response.addHeader("P3P","CP=CAO PSA OUR");  
-		response.addHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); 
-		   response.addHeader("Access-Control-Allow-Origin", "*");  
-	        response.addHeader("Access-Control-Allow-Headers", "x-requested-with");  
 		//out.flush();
 		//request.setAttribute("resultMap", resultMap);
 		//request.getRequestDispatcher("/business/").forward(request, response);
 		request.setAttribute("picPath", picPath);
-		String isPHP = request.getParameter("isPHP");
-		if (StringUtils.isNotBlank(isPHP) && "Y".equals(isPHP))
-			request.getRequestDispatcher("/image/uploadSinglePicPHP.do").forward(request, response);
-		else
-			request.getRequestDispatcher("/image/uploadSinglePic.do").forward(request, response);
+		request.getRequestDispatcher("/image/uploadSinglePic.do").forward(request, response);
 	}
 }

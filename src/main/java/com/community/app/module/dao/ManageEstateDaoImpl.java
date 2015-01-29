@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 
 
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
 import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.common.EstateBean;
 import com.community.app.module.vo.ManageEstateQuery;
 
 @Repository("ManageEstateDao")
@@ -76,6 +78,16 @@ public class ManageEstateDaoImpl implements ManageEstateDao {
 	 */	
 	public List<ManageEstate> findByMap(final Map<String, Object> paramMap) throws DaoException {
 		List<ManageEstate> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.ManageEstateDao.findByMap", paramMap);
+		return list;
+	}
+	
+	/**
+	 * 按Map对象条件查询所有ManageEstate (关联BUSINESS_USER_RESOURCE 查询)
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<EstateBean> findByCon(final Map<String, Object> paramMap) throws DaoException {
+		List<EstateBean> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.ManageEstateDao.findByCon", paramMap);
 		return list;
 	}
 	

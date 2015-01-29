@@ -32,15 +32,15 @@
 <script>    
 $(function(){
 	if ('${replyId}' != 0)
-	   $("#CommentStr").attr("placeholder","回复：${replyName}");
+	   $("#CommentStr").attr("placeholder","回复${replyName}：");
 });
 var artFlag=0;
 $(document).ready(function(){
 	 $('#send').click(function() {
 		 	var content = $('#CommentStr').val();
-		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
-				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文');
+				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
 				return;
 			}
 		 	var url="";
@@ -63,25 +63,31 @@ $(document).ready(function(){
 		            dataType: 'json',
 		 		    success: function (data) {
 		 	     	   if(data.errorCode == 200) {
-		 	     		 msgbox('提示','评论成功');
+		 	     		 msgbox('提示','评论成功','确认',function(){
+		 	     			goback();
+		 	     		 });
 // 		 	     		 window.history.go(-1);
 		 	     		artFlag=1;
 						 
 		 	      	   }else{
-		 	      		 msgbox('提示','评论失败'); 
+		 	     		 msgbox('提示','评论失败','确认',function(){
+		 	     			goback();
+		 	     		 });
 // 		 	      		 window.history.go(-1);
 		 	      		artFlag=1;
 		 	      	   }
 		 		    	
 		 		    },
 		 		    error: function () {
-		 		       msgbox('提示','评论失败');
+		 	     	   msgbox('提示','评论失败','确认',function(){
+		 	     			goback();
+		 	     		 });
 // 		 		       window.history.go(-1);
 		 		      artFlag=1;
 		 		    }
 		 		});
 		 	}else{
-		 		 msgbox('提示','评论不能为空');
+		 		 msgbox('提示','评论不能为空','确认');
 		 		artFlag=0;
 		 		return;
 		 	}
@@ -105,18 +111,49 @@ $(".a-back").click(function(e) {
 	window.history.go(-1);
 });
 
-function msgbox(title,content){
-	 var shtml="<div class='tk'><div class='tcontent'><div class='thead'>";
-	 shtml += "<p>"+content+"</p>";
-	 shtml += "</div>";
-	 shtml += "<div class='tbtn'><p>确定</p></div>";
-	 shtml += "</div>";
-	 $("body").append(shtml);
-	 $(".tbtn p").click(function(e) {
-		    $(".tk").remove();
-		    if (artFlag == 1)
-		    	self.location=document.referrer;
-	});
+
+
+//function msgbox(title,content,btn){
+//	 var shtml="<div class='tk'><div class='tcontent'>";
+//	 if(title!=""){
+//	     shtml+="<p class='title'>"+title+"</p>";
+//	 }
+//	 shtml+="<div class='thead'><p>"+content+"</p></div>";
+//	 shtml += "<div class='tbtn'><a>"+btn+"</a></div>";
+//	 shtml += "</div></div>";
+//	 $("body").append(shtml);
+//	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+//}
+function msgbox(title,content,btn,fun){
+	 var tk=$("<div class='tk'></div>");
+	 var tcontent=$("<div class='tcontent'></div>");
+	 tk.append(tcontent);
+	 if(title!=""){
+		 tcontent.append("<p class='title'>"+title+"</p>");
+	 }
+	 tcontent.append("<div class='thead'><p>"+content+"</p></div>");
+	 tcontent.append("<div class='tbtn'></div>");
+	 var tbtn = $("<div class='tbtn'></div>");
+	 tcontent.append(tbtn);
+	 var btnA = $("<a>"+btn+"</a>");
+	 tbtn.append(btnA);
+	 $("body").append(tk);
+	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+	 btnA.click(function(){
+		 $(".tk").remove();
+	 });
+	 btnA.click(
+);
+}
+
+function goback()
+{
+	self.location=document.referrer;
+}
+function close(){
+	$(".tbtn a").click(function(e) {
+     $(".tk").remove();
+ });
 }
 </script>
 

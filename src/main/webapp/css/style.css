@@ -395,27 +395,27 @@ input{ border:0; border:none; background:none;}
 .review .review-t .serachbox #submt{width:50px; height:40px; float:right; background:url(../images/icon/search2.png) no-repeat center center; cursor:pointer;}
 .review .review-b{width:92%; margin:0 auto;}
 .review .review-b .comnum{font-size:20px; color:#000;}
-.review .review-b .cominfo{ margin-bottom:20px; position:relative; height:102px;}
-.review .review-b .cominfo .cominfobox{border:1px solid #d9d9d9; width:60%; height:100px; border-radius:5px; overflow:hidden; display:block; cursor:default; float:left; position:relative;}
-.review .review-b .cominfo .borred{border:1px solid #cc2410;}/*点击后样式*/
-.review .review-b .cominfo .borred .opera{ background:#fff;}/*点击后样式*/
-.review .review-b .cominfo .cominfobox:hover{border:1px solid #cc2410;}
-.review .review-b .cominfo .cominfobox:hover .opera{ background:#fff;}
-.review .review-b .cominfo .rakin{ display:block; float:left; font-size:36px; color:#7d7d7d; width:70px; height:100px; line-height:100px; text-align:center;}
-.review .review-b .cominfo .textinfo{ float:left; position:absolute;left:70px; right:120px;  padding:10px 2px;}
-.review .review-b .cominfo .opera{ float:right; width:120px; height:100px; background:#f8f8f8; border-left:1px solid #d9d9d9; position:relative;}
-.review .review-b .cominfo .textinfo .aut{ font-size:12px; color:#222222;}
-.review .review-b .cominfo .textinfo time{ font-size:12px; color:#222222; margin-left:20px;}
-.review .review-b .cominfo .textinfo .text{ font-size:14px; color:#222222; padding:8px 0;}
-.review .review-b .cominfo .opera .arrow{width:40px; height:40px; margin:30px auto 30px; display:block;}
-.review .review-b .cominfo .opera .del1{ position:absolute; bottom:0px; right:5px; cursor:pointer;}
-.review .review-b .cominfo .reply{ display:none;}
-.review .review-b .cominfo .reply{ border:1px solid #cc2410; position:absolute; left:62%; top:0; z-index:999; border-radius:5px; overflow:hidden;}
-.review .review-b .cominfo .reply .reptext{ border:0; border:none; resize:none; height:150px; width:220px; padding:5px 10px; font-size:12px; color:#717171;}
-.review .review-b .cominfo .reply .link{width:96%; height:1px; margin:0 auto; border:0; border:none; background:#c6c6c6;}
-.review .review-b .cominfo .reply .cancel{height:24px; line-height:24px; text-align:center; display:block; float:left; margin:5px 5px 5px 120px; font-size:12px; color:#6b6b6b !important;}
-.review .review-b .cominfo .reply .subm{ background:#cc2510; cursor:pointer; width:60px; height:24px; color:#fff; font-size:12px; border-radius:4px; margin:5px; float:right;}
-.review .review-b .cominfo .reply .subm:hover{background:#bf0505; cursor:pointer;}
+.review-b .cominfo{ margin-bottom:20px; position:relative; height:102px;}
+.review-b .cominfo .cominfobox{border:1px solid #d9d9d9; width:60%; height:100px; border-radius:5px; overflow:hidden; display:block; cursor:default; float:left; position:relative;}
+.review-b .cominfo .borred{border:1px solid #cc2410;}/*点击后样式*/
+.review-b .cominfo .borred .opera{ background:#fff;}/*点击后样式*/
+.review-b .cominfo .cominfobox:hover{border:1px solid #cc2410;}
+.review-b .cominfo .cominfobox:hover .opera{ background:#fff;}
+.review-b .cominfo .rakin{ display:block; float:left; font-size:36px; color:#7d7d7d; width:70px; height:100px; line-height:100px; text-align:center;}
+.review-b .cominfo .textinfo{ float:left; position:absolute;left:70px; right:120px;  padding:10px 2px;}
+.review-b .cominfo .opera{ float:right; width:120px; height:100px; background:#f8f8f8; border-left:1px solid #d9d9d9; position:relative;}
+.review-b .cominfo .textinfo .aut{ font-size:12px; color:#222222; padding-right:20px}
+.review-b .cominfo .textinfo time{ font-size:12px; color:#222222;}
+.review-b .cominfo .textinfo .text{ font-size:14px; color:#222222; padding:8px 0;}
+.review-b .cominfo .opera .arrow{width:40px; height:40px; margin:30px auto 30px; display:block;}
+.review-b .cominfo .opera .del1{ position:absolute; bottom:0px; right:5px; cursor:pointer;}
+.review-b .cominfo .reply{ display:none;}
+.review-b .cominfo .reply{ border:1px solid #cc2410; position:absolute; left:62%; top:0; z-index:999; border-radius:5px; overflow:hidden;}
+.review-b .cominfo .reply .reptext{ border:0; border:none; resize:none; height:150px; width:220px; padding:5px 10px; font-size:12px; color:#717171;}
+.review-b .cominfo .reply .link{width:96%; height:1px; margin:0 auto; border:0; border:none; background:#c6c6c6;}
+.review-b .cominfo .reply .cancel{height:24px; line-height:24px; text-align:center; display:block; float:left; margin:5px 5px 5px 120px; font-size:12px; color:#6b6b6b !important;}
+.review-b .cominfo .reply .subm{ background:#cc2510; cursor:pointer; width:60px; height:24px; color:#fff; font-size:12px; border-radius:4px; margin:5px; float:right;}
+.review-b .cominfo .reply .subm:hover{background:#bf0505; cursor:pointer;}
 
 /*翻页效果*/
 
@@ -1535,4 +1535,8 @@ height: 40px;padding: 0 10px;vertical-align: top;width: 320px;margin-bottom:10px
     width: 33px;
 }
 
+/*2015.1.20 留言墙*/
+.lyq{background-color:#fff; margin:15px auto; width:97%;}
+.lyq #commentDiv{ padding:15px;}
+.review-b .cominfo .opera .lyqdel{ width:22px; height:25px; margin:38px auto 38px;}
 

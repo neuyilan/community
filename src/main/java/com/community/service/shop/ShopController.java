@@ -1,10 +1,15 @@
 package com.community.service.shop;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -12,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.BusinessShop;
@@ -21,6 +25,7 @@ import com.community.app.module.service.BusinessShopService;
 import com.community.app.module.service.BusinessShopTypeService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessShopQuery;
+import com.community.framework.utils.HttpReq;
 
 
 @Controller
@@ -48,16 +53,19 @@ public class ShopController {
 			String estateId = request.getParameter("estateId");
 			String userId = request.getParameter("userId");
 			String typeId = request.getParameter("typeId");
-			
-//			BaseBean baseBean = businessShopService.findAllPage(query);
+
 			List<BusinessShop> shopList = businessShopService.findAll();
 			BusinessShopType shopType = businessShopTypeService.findById(Integer.valueOf(typeId));
+			
 			if (StringUtils.isNotBlank(shopType.getTypeName()))
 				mav.addObject("typeName", shopType.getTypeName());
 			if (StringUtils.isNotBlank(estateId))
 				mav.addObject("estateId", estateId);
 			if (StringUtils.isNotBlank(userId))
 				mav.addObject("userId", userId);
+			if (StringUtils.isNotBlank(typeId))
+				mav.addObject("typeId", typeId);
+			
 			String path = request.getContextPath();
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
 			mav.addObject("ctx", ctx);
@@ -83,25 +91,45 @@ public class ShopController {
 		try{
 			String path = request.getContextPath();
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
-			mav.addObject("ctx", ctx);
-			mav.addObject("shopURL", "http://www.baidu.com"); 
-			
-//			String estateId = request.getParameter("estateId");
-//			String userId = request.getParameter("userId");
+
+			String estateId = request.getParameter("estateId");
+			String userId = request.getParameter("userId");
 //			String typeId = request.getParameter("typeId");
-//			
-//			List<BusinessShop> shopList = businessShopService.findAll();
-//			BusinessShopType shopType = businessShopTypeService.findById(Integer.valueOf(typeId));
-//			if (StringUtils.isNotBlank(shopType.getTypeName()))
-//				mav.addObject("typeName", shopType.getTypeName());
-//			if (StringUtils.isNotBlank(estateId))
-//				mav.addObject("estateId", estateId);
-//			if (StringUtils.isNotBlank(userId))
-//				mav.addObject("userId", userId);
-//			String path = request.getContextPath();
-//			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
-//			mav.addObject("ctx", ctx);
-//			mav.addObject("shopList", shopList);
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("estateId", estateId);
+			map.put("userId", userId);
+//			map.put("typeId", typeId);
+			
+			Map<String,Object> shopList = businessShopService.findUserInfo(map); 
+			JSONObject json = JSONObject.fromObject(shopList);
+			System.out.println(json); 
+			String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";			  
+//	    	String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";
+	    	JSONObject rspJson = HttpReq.post(loginUrl, json);
+	    	System.out.println(rspJson);
+	    	if (rspJson != null)
+			{
+				System.out.println(rspJson.get("status"));
+				System.out.println(rspJson.get("token"));
+			}
+	    	
+	    	
+	    	Cookie cookie = new Cookie("bu54tk",rspJson.get("token").toString());
+	    	cookie.setMaxAge(24*3600);
+	    	cookie.setPath("/");
+	    	response.addCookie(cookie);
+	    	
+	    	
+	    	
+	    	
+			mav.addObject("ctx", ctx);
+			String goUrl = "http://5teacher.com/wap/do/ask/list/?token="+rspJson.get("token");
+			mav.addObject("shopURL", goUrl); 
+//			附近名师：http://5teacher.com/wap/search-teacher.html
+//		        名师推荐：http://5teacher.com/wap/do/weixin/appointTeacher/appoint/?fromid=3
+//			免费答疑：http://5teacher.com/wap/do/ask/list/?token=
+//			订单查询：http://5teacher.com/wap/do/weixin/order/list/?openId=
+			System.out.println("http://5teacher.com/wap/do/ask/list/?token="+rspJson.get("token"));
 			
 		}catch(Exception e){
 			GSLogger.error("进入shop列表页时发生错误：/service/shop/shopList", e);

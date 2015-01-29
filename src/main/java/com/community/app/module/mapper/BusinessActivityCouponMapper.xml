@@ -12,6 +12,7 @@
 			<result column="createTime" property="createTime" />
 			<result column="editTime" property="editTime" />
 			<result column="editor" property="editor" />
+			<result column="cellphone" property="cellphone" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -42,7 +43,7 @@
 					<if test="userId != null and userId != ''" >
 				   		and userId = #{userId}
 					</if>
-					<if test="state != null and state != ''" >
+					<if test="state != null" >
 				   		and state = #{state}
 					</if>
 					<if test="createTime != null and createTime != ''" >
@@ -135,6 +136,9 @@
 			</if>
 			<if test="state != null and state != ''" >
 			state=#{state},
+			</if>
+			<if test="cellphone != null and cellphone != ''" >
+			cellphone=#{cellphone},
 			</if>
 			<if test="createTime != null and createTime != ''" >
 			createTime=#{createTime},

@@ -209,8 +209,8 @@ $(document).ready(function(){
 	//参加活动
 	$(".x-qg").click(function(e) {
 		if(userId==0){
-			if(window.confirm('参加活动需要登录！！是否进去登录页？')){
-				 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+			if(window.confirm('为了确保您正常参与活动，请您填写相关信息。')){
+				 window.location.href='${phpIp}/wxokjia/reggoin.php';
                 //alert("确定");
                 return null;
              }else{
@@ -221,7 +221,8 @@ $(document).ready(function(){
 	     var optionsId = $("[name=optionsId]:checked"); 
 	     var ids="";
 	     if(optionsId.size()==0){
-	    	 msgbox('提示','请选择投票项');
+	    	 msgbox('提示','请选择投票项','确认');
+	    	 close();
 	    	 return false;
 	     }
 	     for(var i=0;i<optionsId.size();i++){
@@ -241,17 +242,20 @@ $(document).ready(function(){
 	           success: function (data) {
 	        	   //eval('data=' + data);
 	        	   if(data.errorCode == 200) {
-	        		   msgbox('提示',data.message);
+	        		   msgbox('提示',data.message,'确认');
+	        		   close();
 	        		   setTimeout(function(){
 	        			   location.reload();
 	        		   },1000);
 	        		  
 	        	   }else{
-	        		   msgbox('提示',data.message);
+	        		   msgbox('提示',data.message,'确认');
+	        		   close();
 	        	   }
 	           },
 	           error: function() {
-	               msgbox('提示','参与失败');
+	               msgbox('提示','参与失败','确认');
+	               close();
 	           }
 	       });
 	
@@ -286,7 +290,7 @@ $(document).ready(function(){
 	 $('.x-z a').click(function(){
 		 if(userId==0){
 				if(window.confirm('点赞活动需要登录！！是否进去登录页？')){
-					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+					 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
 	                //alert("确定");
 	                return null;
 	             }else{
@@ -321,11 +325,13 @@ $(document).ready(function(){
 			        });
 			        //alert(data.message);
         	   }else{
-        		   msgbox('提示',data.message);
+        		   msgbox('提示',data.message,'确认');
+        		   close();
         	   }
            },
            error: function() {
-               msgbox('提示','评论失败');
+               msgbox('提示','评论失败','确认');
+               close();
            }
        });
 	 });
@@ -333,8 +339,8 @@ $(document).ready(function(){
 	//评论
 	 $('#commentBtn').click(function() {
 		 if(userId==0){
-				if(window.confirm('评论活动需要登录！！是否进去登录页？')){
-					 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
+				if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
+					 window.location.href='${phpIp}/wxokjia/reggoin.php';
 	                //alert("确定");
 	                return null;
 	             }else{
@@ -343,9 +349,10 @@ $(document).ready(function(){
 	            }
 			}
 	 	var content = $('#comment').val();
-	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;",\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){
-			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文');
+			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
+			 close();
 			return;
 		}
 	 	var url="";
@@ -409,11 +416,13 @@ $(document).ready(function(){
 	 			 	document.getElementById("anchor_scroll").click();
 	 		    },
 	 		    error: function () {
-	 		       msgbox('提示','评论失败');
+	 		       msgbox('提示','评论失败','确认');
+	 		      close();
 	 		    }
 	 		});
 	 	}else{
-	 		 msgbox('提示','评论不能为空');
+	 		 msgbox('提示','评论不能为空','确认');
+	 		close();
 	 		return;
 	 	}
 	 	$("#replaceinp").attr("placeholder","回复:");
@@ -572,7 +581,8 @@ function jump(nextNo) {
             			
         			}else{
             			div.find("img").click(function(){
-          					 msgbox('提示',"您不能自己回复自己");
+          					 msgbox('提示',"您不能自己回复自己",'确认');
+          					close();
               			});
           			}
         			
@@ -581,20 +591,27 @@ function jump(nextNo) {
             
 	    },
 	    error: function () {
-	        msgbox('提示','获取下页评论内容失败');
+	        msgbox('提示','获取下页评论内容失败','确认');
+	        close();
 	    }
 	});
 }
-function msgbox(title,content){
-	 var shtml="<div class='tk'><div class='tcontent'><div class='thead'>";
-	 shtml+="<p>"+content+"</p>";
-	 shtml +="</div>";
-	  shtml += "<div class='tbtn'><p>确定</p></div>";
-	 shtml += "</div>";
+function msgbox(title,content,btn){
+	 var shtml="<div class='tk'><div class='tcontent'>";
+	 if(title!=""){
+	     shtml+="<p class='title'>"+title+"</p>";
+	 }
+	 shtml+="<div class='thead'><p>"+content+"</p></div>";
+	 shtml += "<div class='tbtn'><a>"+btn+"</a></div>";
+	 shtml += "</div></div>";
 	 $("body").append(shtml);
-	 $(".tbtn p").click(function(e) {
-		    $(".tk").remove();
-	});
+	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+}
+function close(){
+	$(".tbtn a").click(function(e) {
+     $(".tk").remove();
+ });
+
 }
 
 </script>
