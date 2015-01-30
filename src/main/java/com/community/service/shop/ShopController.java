@@ -38,6 +38,7 @@ public class ShopController {
 	private BusinessShopTypeService businessShopTypeService;
 	
 	private final String LIST_ACTION = "redirect:/business/businessShop/list.do";
+
 	
 	/**
 	 * 用户查看商铺列表 for H5
@@ -99,43 +100,98 @@ public class ShopController {
 			map.put("estateId", estateId);
 			map.put("userId", userId);
 //			map.put("typeId", typeId);
-			
+			BusinessShop shop = businessShopService.findById(query.getShopId());
 			Map<String,Object> shopList = businessShopService.findUserInfo(map); 
 			JSONObject json = JSONObject.fromObject(shopList);
 			System.out.println(json); 
-			String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";			  
-//	    	String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";
-	    	JSONObject rspJson = HttpReq.post(loginUrl, json);
-	    	System.out.println(rspJson);
-	    	if (rspJson != null)
-			{
-				System.out.println(rspJson.get("status"));
-				System.out.println(rspJson.get("token"));
-			}
-	    	
-	    	
-	    	Cookie cookie = new Cookie("bu54tk",rspJson.get("token").toString());
-	    	cookie.setMaxAge(24*3600);
-	    	cookie.setPath("/");
-	    	response.addCookie(cookie);
-	    	
-	    	
-	    	
+
+	    	Cookie bu54token = getCookieByName(request, "bu54tk");
+	    	Cookie currUserId = getCookieByName(request, "curUid");
+	    	String bu54tk = "" ;
+	    	String curUid = "" ;
+
+	    	if (bu54token != null && currUserId != null && userId.equals( currUserId.getValue()) )
+ 	    	{
+	    		bu54tk = bu54token.getValue();
+	    		curUid = currUserId.getValue();
+	    	}
+	    	if (StringUtils.isBlank(bu54tk) || StringUtils.isBlank(curUid))
+	    	{
+	    		String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";			  
+		    	JSONObject rspJson = HttpReq.post(loginUrl, json);
+		    	System.out.println(rspJson);
+		    	//登陆 返回的status 1：登陆成功 2 用户不存在 3 密码不正确
+		    	if (rspJson != null)
+				{
+		    		if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "1".equals(rspJson.get("status").toString()))
+		    		{
+		    			System.out.println(rspJson.get("status"));
+						System.out.println(rspJson.get("token"));
+						addCookie(response,"bu54tk",rspJson.get("token").toString(), Integer.MAX_VALUE);
+			    		addCookie(response,"curUid",request.getParameter("userId"), Integer.MAX_VALUE);
+		    		}else if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "2".equals(rspJson.get("status").toString()))
+		    		{
+			    		String regUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/register";			  
+				    	JSONObject rspJsonReg = HttpReq.post(regUrl, json);
+		    			System.out.println(rspJsonReg.get("status"));
+						System.out.println(rspJsonReg.get("token"));
+						addCookie(response, "bu54tk",rspJson.get("token").toString(), Integer.MAX_VALUE);
+			    		addCookie(response, "curUid",request.getParameter("userId"),Integer.MAX_VALUE);
+		    		}else if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "3".equals(rspJson.get("status").toString()))
+					{
+						
+					}
+				}
+	    		
+	    	}
 	    	
 			mav.addObject("ctx", ctx);
-			String goUrl = "http://5teacher.com/wap/do/ask/list/?token="+rspJson.get("token");
+			String goUrl = shop.getShopUrl()+bu54tk;
 			mav.addObject("shopURL", goUrl); 
 //			附近名师：http://5teacher.com/wap/search-teacher.html
 //		        名师推荐：http://5teacher.com/wap/do/weixin/appointTeacher/appoint/?fromid=3
 //			免费答疑：http://5teacher.com/wap/do/ask/list/?token=
 //			订单查询：http://5teacher.com/wap/do/weixin/order/list/?openId=
-			System.out.println("http://5teacher.com/wap/do/ask/list/?token="+rspJson.get("token"));
+			System.out.println(goUrl);
 			
 		}catch(Exception e){
 			GSLogger.error("进入shop列表页时发生错误：/service/shop/shopList", e);
 			e.printStackTrace();
 		}
 		return mav;
+	}
+	
+	
+	/**
+	 * 将cookie封装到Map里面
+	 * @param request
+	 * @return
+	 */
+	private static Map<String,Cookie> ReadCookieMap(HttpServletRequest request){  
+	    Map<String,Cookie> cookieMap = new HashMap<String,Cookie>();
+	    Cookie[] cookies = request.getCookies();
+	    if(null!=cookies){
+	        for(Cookie cookie : cookies){
+	            cookieMap.put(cookie.getName(), cookie);
+	        }
+	    }
+	    return cookieMap;
+	}
+	public static void addCookie(HttpServletResponse response,String name,String value,int maxAge){
+	    Cookie cookie = new Cookie(name,value);
+	    cookie.setPath("/");
+	    if(maxAge>0)  cookie.setMaxAge(maxAge);
+	    response.addCookie(cookie);
+	}
+	
+	public static Cookie getCookieByName(HttpServletRequest request,String name){
+	    Map<String,Cookie> cookieMap = ReadCookieMap(request);
+	    if(cookieMap.containsKey(name)){
+	        Cookie cookie = (Cookie)cookieMap.get(name);
+	        return cookie;
+	    }else{
+	        return null;
+	    }   
 	}
 	
 	/**

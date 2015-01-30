@@ -142,8 +142,7 @@ function msgbox(title,content,btn,fun){
 	 btnA.click(function(){
 		 $(".tk").remove();
 	 });
-	 btnA.click(
-);
+	 btnA.click(fun);
 }
 
 function goback()

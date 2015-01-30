@@ -4,7 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!doctype html>
-<html>
+<html  style=" height:100%;">
 <head>
 <meta charset="utf-8">
 <title>小区开聊详情</title> 
@@ -13,8 +13,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 </head>
 
-<body>
-    <div class="kl-total">
+<body  style=" height:100%;">
+    <div class="kl-total"><div class="kl-scroll">
     <div class="kl-content kl-div" >
        <input type="hidden" id="supTmp" value="">
        <input type="hidden" id="noZan" value="N">
@@ -47,7 +47,8 @@
 			<i></i>
 		</div>
     </div>
-    <div class="fixed kl-bottom">
+	</div>
+    <div class="kl-bottom">
         <a class="kl-wyhf"><span>我要回复</span></a>  
     </div>
 </div>

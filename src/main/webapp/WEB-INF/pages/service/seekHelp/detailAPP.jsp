@@ -22,7 +22,7 @@
             <span class="kl-name">${businessHelp.helperName}</span>
             <span class="kl-time"><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm"/></span> 
         </p>
-        <div id="conents"  style="margin:10px 0; line-height:22px;padding-bottom:15px;">
+        <div id="conents"  style="margin:10px 0 0; line-height:22px;padding-bottom:15px;">
         </div>
     </div>
 </div>
