@@ -469,7 +469,7 @@ public class BusinessActivityController {
             				businessActivityCoupon.setCreateTime(new Timestamp(System.currentTimeMillis()));
             				businessActivityCoupon.setEditTime(new Timestamp(System.currentTimeMillis()));
             				businessActivityCoupon.setEditor("");
-            				businessActivityCoupon.setUserId(getUser().getUserId());
+            				businessActivityCoupon.setUserId(0);
             				businessActivityCouponService.save(businessActivityCoupon);
             			}
     	            } catch (Exception e) {
@@ -868,7 +868,7 @@ public class BusinessActivityController {
             				businessActivityCoupon.setCreateTime(new Timestamp(System.currentTimeMillis()));
             				businessActivityCoupon.setEditTime(new Timestamp(System.currentTimeMillis()));
             				businessActivityCoupon.setEditor("");
-            				businessActivityCoupon.setUserId(getUser().getUserId());
+            				businessActivityCoupon.setUserId(0);
             				businessActivityCouponService.save(businessActivityCoupon);
             			}
     	            } catch (Exception e) {

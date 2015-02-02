@@ -404,165 +404,177 @@ public class UserController {
 		}
 		if (whetherRepeat) {
 			try {
-				String str=StringUtil.createRandom(true, 6);
-				String uuid= UUID.randomUUID().toString();
-				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-				String dateString = sf.format(new Date());
-				String filedir = "app/image/" +dateString+"/"+uuid+".png";
-				appUser.setPath(request.getSession().getServletContext().getRealPath("/").replace("\\", "/"));
-				appUser.setFiledir(filedir);
-				appUser.setPassword(str);
-				appUser.setTel(query.getCellphone());
-				appUser.setEstateId(query.getEstateId());
-				appUser.setType(0);
-				appUser.setState(1);
-				Timestamp ts = new Timestamp(new Date().getTime());
-				appUser.setPortrait("/images/morentouxiang.png");
-				appUser.setCreateTime(ts);
-				appUser.setEditTime(ts);
-				appUser.setLastLoginTime(ts);
-				if (openid!=null) {
-					appUser.setWenxinId(openid);
-				} else {
-					appUser.setWenxinId("");
-				}
-				if (QQopenid!=null) {
-					appUser.setQqId(QQopenid);
-				} else {
-					appUser.setQqId("");
-				}
-				if (nickname!=null) {
-					appUser.setNickname(nickname);
-				} else {
-					appUser.setNickname("");
-				}
-				appUserService.saveRegist(appUser);
-				// 保存成功
-				Properties p = propertiesUtil.getProperties("config.properties");
-				String ip = p.getProperty("imageIp");   
-				MemberVO MemberVO = appUserService.getAppUserLoginInfo(appUser);
-				json += "{";
-				json += "\"errorCode\":\"200\",";
-				json += "\"message\":\"登录成功\",";
-				json += "\"content\":{";
-				json += "\"sessionid\":\"42823AFB33\",";
-				json += "\"userType\":\""+MemberVO.getType()+"\",";
-				json += "\"isWorker\":\""+MemberVO.getIsWorker()+"\",";
-				json += "\"userId\":\""+MemberVO.getUserId()+"\",";
-				json += "\"portrait\":\""+ip+MemberVO.getPortrait()+"\",";
-				json += "\"realname\":{\"realname\":\""+MemberVO.getRealname()+"\",\"state\":\"1\"},";
-				json += "\"nickname\":\""+MemberVO.getNickname()+"\",";
-				json += "\"signatrue\":\""+MemberVO.getSignature()+"\",";
-				json += "\"tel\":\""+query.getCellphone()+"\",";
-				json += "\"sex\":\""+MemberVO.getSex()+"\",";
-				json += "\"birthday\":\"";
-				if(MemberVO.getBirthday()!=null){
-					json += new SimpleDateFormat("yyyy-MM-dd").format(MemberVO.getBirthday().getTime());
-				}
-				json += "\",";
-				json += "\"twoCode\":\""+ip+MemberVO.getDimensionCode()+"\",";
-				json += "\"informationState\":true,";
-				json += "\"estateId\":\""+MemberVO.getEstateId()+"\",";
-				json += "\"estateName\":\""+MemberVO.getEstateName()+"\",";
-				json += "\"estateAttr\":\""+ip+MemberVO.getEstateMap()+"\",";
-				if(MemberVO.getStaId()==null || MemberVO.getStaId().equals("")){
-					json += "\"stationId\":\"0\",";
+				AppUserQuery AppUserQuery = new AppUserQuery();
+				AppUserQuery.setNickname(query.getNickname());
+				int count = appUserService.selectCount(AppUserQuery);
+				if(count>0 && !"".equals(nickname)){
+					json += "{";
+					json += "\"errorCode\":\"400\",";
+					json += "\"message\":\"昵称已被人使用\"";
+					json += "}";
 				}else {
-					json += "\"stationId\":\""+MemberVO.getStaId()+"\",";
-				}
-				if(MemberVO.getStaName()==null){
-					json += "\"staName\":\"\",";
-				}else {
-					json += "\"staName\":\""+MemberVO.getStaName()+"\",";
-				}
-				json += "\"comId\":\""+MemberVO.getComId()+"\",";
-				json += "\"comName\":\""+MemberVO.getComName()+"\",";
-				if(MemberVO.getProId()==null){
-					json += "\"proId\":\"0\",";
-				}else {
-					json += "\"proId\":\""+MemberVO.getProId()+"\",";
-				}
-				if(MemberVO.getProName()==null){
-					json += "\"proName\":\"\",";
-				}else {
-					json += "\"proName\":\""+MemberVO.getProName()+"\",";
-				}
-				if(MemberVO.getUnitId()!=null && !MemberVO.getUnitId().equals("0")){
-					if (MemberVO.getUnitHomeAttr()!=null) {
-						json += "\"homeAttr\":\""+ip+MemberVO.getUnitHomeAttr()+"\",";
-					}else {
-						json += "\"homeAttr\":\"\",";
+					String str=StringUtil.createRandom(true, 6);
+					String uuid= UUID.randomUUID().toString();
+					SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+					String dateString = sf.format(new Date());
+					String filedir = "app/image/" +dateString+"/"+uuid+".png";
+					appUser.setPath(request.getSession().getServletContext().getRealPath("/").replace("\\", "/"));
+					appUser.setFiledir(filedir);
+					appUser.setPassword(str);
+					appUser.setTel(query.getCellphone());
+					appUser.setEstateId(query.getEstateId());
+					appUser.setType(0);
+					appUser.setState(1);
+					Timestamp ts = new Timestamp(new Date().getTime());
+					appUser.setPortrait("/images/morentouxiang.png");
+					appUser.setCreateTime(ts);
+					appUser.setEditTime(ts);
+					appUser.setLastLoginTime(ts);
+					if (openid!=null) {
+						appUser.setWenxinId(openid);
+					} else {
+						appUser.setWenxinId("");
 					}
-				}else {
-					if (MemberVO.getHomeAttr()!=null) {
-						json += "\"homeAttr\":\""+ip+MemberVO.getHomeAttr()+"\",";
-					}else {
-						json += "\"homeAttr\":\"\",";
+					if (QQopenid!=null) {
+						appUser.setQqId(QQopenid);
+					} else {
+						appUser.setQqId("");
 					}
+					if (nickname!=null) {
+						appUser.setNickname(nickname);
+					} else {
+						appUser.setNickname("");
+					}
+					appUserService.saveRegist(appUser);
+					// 保存成功
+					Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					MemberVO MemberVO = appUserService.getAppUserLoginInfo(appUser);
+					json += "{";
+					json += "\"errorCode\":\"200\",";
+					json += "\"message\":\"登录成功\",";
+					json += "\"content\":{";
+					json += "\"sessionid\":\"42823AFB33\",";
+					json += "\"userType\":\""+MemberVO.getType()+"\",";
+					json += "\"isWorker\":\""+MemberVO.getIsWorker()+"\",";
+					json += "\"userId\":\""+MemberVO.getUserId()+"\",";
+					json += "\"portrait\":\""+ip+MemberVO.getPortrait()+"\",";
+					json += "\"realname\":{\"realname\":\""+MemberVO.getRealname()+"\",\"state\":\"1\"},";
+					json += "\"nickname\":\""+MemberVO.getNickname()+"\",";
+					json += "\"signatrue\":\""+MemberVO.getSignature()+"\",";
+					json += "\"tel\":\""+query.getCellphone()+"\",";
+					json += "\"sex\":\""+MemberVO.getSex()+"\",";
+					json += "\"birthday\":\"";
+					if(MemberVO.getBirthday()!=null){
+						json += new SimpleDateFormat("yyyy-MM-dd").format(MemberVO.getBirthday().getTime());
+					}
+					json += "\",";
+					json += "\"twoCode\":\""+ip+MemberVO.getDimensionCode()+"\",";
+					json += "\"informationState\":true,";
+					json += "\"estateId\":\""+MemberVO.getEstateId()+"\",";
+					json += "\"estateName\":\""+MemberVO.getEstateName()+"\",";
+					json += "\"estateAttr\":\""+ip+MemberVO.getEstateMap()+"\",";
+					if(MemberVO.getStaId()==null || MemberVO.getStaId().equals("")){
+						json += "\"stationId\":\"0\",";
+					}else {
+						json += "\"stationId\":\""+MemberVO.getStaId()+"\",";
+					}
+					if(MemberVO.getStaName()==null){
+						json += "\"staName\":\"\",";
+					}else {
+						json += "\"staName\":\""+MemberVO.getStaName()+"\",";
+					}
+					json += "\"comId\":\""+MemberVO.getComId()+"\",";
+					json += "\"comName\":\""+MemberVO.getComName()+"\",";
+					if(MemberVO.getProId()==null){
+						json += "\"proId\":\"0\",";
+					}else {
+						json += "\"proId\":\""+MemberVO.getProId()+"\",";
+					}
+					if(MemberVO.getProName()==null){
+						json += "\"proName\":\"\",";
+					}else {
+						json += "\"proName\":\""+MemberVO.getProName()+"\",";
+					}
+					if(MemberVO.getUnitId()!=null && !MemberVO.getUnitId().equals("0")){
+						if (MemberVO.getUnitHomeAttr()!=null) {
+							json += "\"homeAttr\":\""+ip+MemberVO.getUnitHomeAttr()+"\",";
+						}else {
+							json += "\"homeAttr\":\"\",";
+						}
+					}else {
+						if (MemberVO.getHomeAttr()!=null) {
+							json += "\"homeAttr\":\""+ip+MemberVO.getHomeAttr()+"\",";
+						}else {
+							json += "\"homeAttr\":\"\",";
+						}
+					}
+					
+					json += "\"familyId\":\""+MemberVO.getFamilyId()+"\",";
+					json += "\"familyNumber\":\""+MemberVO.getMount()+"\",";
+					json += "\"buildingId\":\""+MemberVO.getBuildingId()+"\",";
+					json += "\"buildingName\":\""+MemberVO.getBuildingName()+"\",";
+					json += "\"unitId\":\""+MemberVO.getUnitId()+"\",";
+					json += "\"unitName\":\""+MemberVO.getUnitName()+"\",";
+					json += "\"houseNo\":\""+MemberVO.getHouseNo()+"\",";
+					if(MemberVO.getHelpSwitch()==0){
+						json += "\"SeekHelpMessageReply\":true,";
+					}else{
+						json += "\"SeekHelpMessageReply\":false,";
+					}
+					if(MemberVO.getMarketSwitch()==0){
+						json += "\"SecondaryMarketMessageReply\":true,";
+					}else{
+						json += "\"SecondaryMarketMessageReply\":false,";
+					}
+					if(MemberVO.getServiceSwitch()==0){
+						json += "\"serviceSwitch\":true,";
+					}else{
+						json += "\"serviceSwitch\":false,";
+					}
+					if(MemberVO.getExpressSwitch()==0){
+						json += "\"expressSwitch\":true,";
+					}else{
+						json += "\"expressSwitch\":false,";
+					}
+					if(MemberVO.getWeatherSwitch()==0){
+						json += "\"weatherSwitch\":true,";
+					}else{
+						json += "\"weatherSwitch\":false,";
+					}
+					if(MemberVO.getLimitSwitch()==0){
+						json += "\"limitSwitch\":true,";
+					}else{
+						json += "\"limitSwitch\":false,";
+					}
+					if(MemberVO.getBrokeSwitch()==0){
+						json += "\"brokeSwitch\":true,";
+					}else{
+						json += "\"brokeSwitch\":false,";
+					}
+					json +="\"isDoor\":\""+MemberVO.getIsDoor()+"\",";
+					json +="\"estateLongitude\":\""+MemberVO.getEstateLongitude()+"\",";
+					json +="\"estateLatitude\":\""+MemberVO.getEstateLatitude()+"\"";
+					json += "}";
+					json += "}";
+					
+					//短信发送随机密码
+					AppVerify appVerify = new AppVerify();
+					appVerify.setCellphone(query.getCellphone());
+				    appVerify.setVerificationCode(str);
+				    appVerify.setCreateTime(query.getCreateTime());
+			        appVerify.setCreateTime(ts);
+			        AppVerifyQuery appVerifyQuery = new AppVerifyQuery();
+			        appVerifyQuery.setCellphone(query.getCellphone());
+			        appVerifyService.delete(appVerifyQuery);
+					appVerifyService.save(appVerify);
+					// 发送短信
+					str="您已通过手机号"+query.getCellphone()+"快速注册成为“OK家”居民，初始密码为："+str+"立即下载OK家APP，享受小区生活服务：http://www.bqsqcm.com/community/download/index.html?id=18【OK家】";
+					String returnMessage = messagesUtil.returnMessageRrid(query.getCellphone(), str);
+					manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
 				}
 				
-				json += "\"familyId\":\""+MemberVO.getFamilyId()+"\",";
-				json += "\"familyNumber\":\""+MemberVO.getMount()+"\",";
-				json += "\"buildingId\":\""+MemberVO.getBuildingId()+"\",";
-				json += "\"buildingName\":\""+MemberVO.getBuildingName()+"\",";
-				json += "\"unitId\":\""+MemberVO.getUnitId()+"\",";
-				json += "\"unitName\":\""+MemberVO.getUnitName()+"\",";
-				json += "\"houseNo\":\""+MemberVO.getHouseNo()+"\",";
-				if(MemberVO.getHelpSwitch()==0){
-					json += "\"SeekHelpMessageReply\":true,";
-				}else{
-					json += "\"SeekHelpMessageReply\":false,";
-				}
-				if(MemberVO.getMarketSwitch()==0){
-					json += "\"SecondaryMarketMessageReply\":true,";
-				}else{
-					json += "\"SecondaryMarketMessageReply\":false,";
-				}
-				if(MemberVO.getServiceSwitch()==0){
-					json += "\"serviceSwitch\":true,";
-				}else{
-					json += "\"serviceSwitch\":false,";
-				}
-				if(MemberVO.getExpressSwitch()==0){
-					json += "\"expressSwitch\":true,";
-				}else{
-					json += "\"expressSwitch\":false,";
-				}
-				if(MemberVO.getWeatherSwitch()==0){
-					json += "\"weatherSwitch\":true,";
-				}else{
-					json += "\"weatherSwitch\":false,";
-				}
-				if(MemberVO.getLimitSwitch()==0){
-					json += "\"limitSwitch\":true,";
-				}else{
-					json += "\"limitSwitch\":false,";
-				}
-				if(MemberVO.getBrokeSwitch()==0){
-					json += "\"brokeSwitch\":true,";
-				}else{
-					json += "\"brokeSwitch\":false,";
-				}
-				json +="\"isDoor\":\""+MemberVO.getIsDoor()+"\",";
-				json +="\"estateLongitude\":\""+MemberVO.getEstateLongitude()+"\",";
-				json +="\"estateLatitude\":\""+MemberVO.getEstateLatitude()+"\"";
-				json += "}";
-				json += "}";
 				
-				//短信发送随机密码
-				AppVerify appVerify = new AppVerify();
-				appVerify.setCellphone(query.getCellphone());
-			    appVerify.setVerificationCode(str);
-			    appVerify.setCreateTime(query.getCreateTime());
-		        appVerify.setCreateTime(ts);
-		        AppVerifyQuery appVerifyQuery = new AppVerifyQuery();
-		        appVerifyQuery.setCellphone(query.getCellphone());
-		        appVerifyService.delete(appVerifyQuery);
-				appVerifyService.save(appVerify);
-				// 发送短信
-				str="您已通过手机号"+query.getCellphone()+"快速注册成为“OK家”居民，初始密码为："+str+"立即下载OK家APP，享受小区生活服务：http://www.bqsqcm.com/community/download/index.html?id=18【OK家】";
-				String returnMessage = messagesUtil.returnMessageRrid(query.getCellphone(), str);
-				manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
 			} catch (Exception e) {
 				json = "";
 				json += "{";
@@ -4356,4 +4368,64 @@ public class UserController {
 		}
 		return mav;
 	}
+	
+	/**
+	 * 用户点击app焦点图
+	 * 
+	 * @param userId
+	 *            ,sessionid,password
+	 * @return json
+	 */
+	@RequestMapping(value = "getNickname")
+	public void getNickname(HttpServletRequest request,
+			HttpServletResponse response) {
+		String json = "";
+		try{
+			Properties p = propertiesUtil.getProperties("nameTheLibrary.properties");
+			String[] surname = p.getProperty("surname").split(","); 
+			String[] name = p.getProperty("name").split(","); 
+			String nickname = "";
+			int count = 0;
+			while (true) {
+				int i = (int)(Math.random()*surname.length);
+				int y = (int)(Math.random()*name.length);
+				nickname = surname[i]+name[y];
+				if (count!=0) {
+					nickname+= count;
+				}
+				AppUserQuery AppUserQuery = new AppUserQuery();
+				AppUserQuery.setNickname(nickname);
+				int flag = appUserService.selectCount(AppUserQuery);
+				if (flag==0) {
+					break;
+				}
+				count++;
+			}
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"保存成功\"";
+			json += "\"content\":{";
+			json += "\"nickname\":\""+nickname+"\"";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"保存失败\"";
+			json += "}";
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 }

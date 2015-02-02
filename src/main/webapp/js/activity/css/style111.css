@@ -18,7 +18,7 @@ img{ vertical-align:middle;}
 .x-xt .x-xdd{ padding-left:8px; font-size:12.5px; color:#424242;}
 .x-xt .x-xsj{ position:absolute; right:0; top:10px; font-size:12px; color:#626262;}
 
-.x-cx{ font-size:16px; line-height:24px; color:#424242;}
+.x-cx{ font-size:16px; line-height:24px; color:#424242;padding-bottom:12px;}
 
 
 .x-cx img{ width:100% !important; height:auto;}
@@ -44,7 +44,7 @@ img{ vertical-align:middle;}
 .s-active{ background:#f1f1f1;}
 .s-active em img{ width:30px; height:30px; border-radius:30px;}
 
-.x-cx p:nth-child(1){ margin-top:0;}
+.x-cx p{ margin:0;}
 .sortdes {color: #3a3a3a;font-size: 17px;margin: 20px;}
 .sortdes span {color: #ff0000;font-size: 28px;}
 .winname{  color: #eb6211;font-style: italic;}
@@ -83,7 +83,7 @@ img{ vertical-align:middle;}
 .hd-sel{ background:url(/community/js/activity/images/sel.jpg) right center no-repeat; background-size:27px 20px; -webkit-background-size:27px 20px; -moz-background-size:27px 20px;}
 
 
-.x-infor{padding:10px 0;}
+.x-infor{padding:10px 0 0;}
 .x-head{ display:table; width:100%;}
 .x-jop{ display:table-cell; width:80px; background-color:#00a0da; color:#ffffff; text-align:center; border-radius:4px; vertical-align:middle; line-height:28px;}
 .tp-tit{ font-size:18px; color:#4c4c4c; line-height:28px;}

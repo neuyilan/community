@@ -431,8 +431,7 @@
 	
 	<!-- BusinessAnno列表总数-->
 	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_anno a right join business_anno_scope s
-		on a.annoId = s.annoId 
+		select count(1) from business_anno_scope s left join business_anno  a on s.estateId=#{annoScope} and s.annoId=a.annoId
 		<include refid="Base_Where_Clause1" />
 	</select>
 	

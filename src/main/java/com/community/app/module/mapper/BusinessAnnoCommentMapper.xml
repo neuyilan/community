@@ -76,7 +76,7 @@
 				   		and commentTime = #{commentTime}
 					</if>
 					<if test="commentorState == 0 and repliedState == 0" >
-				   		and commentorState = '0' and repliedState = '0' and commentorId = #{userId} or annoId = #{annoId} and commentorState = '0' and repliedState = '0' and repliedId = #{userId}
+				   		and commentorState = '0'  and commentorId = #{userId} or annoId = #{annoId}  and repliedState = '0' and repliedId = #{userId}
 					</if>
 			</trim>
 		</where>

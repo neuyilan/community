@@ -200,9 +200,9 @@
 			            <!-- 出售商品分类 -->
 			            <div id="productType"></div>
 			            
-			            <div class="line2"></div>
+			            <!-- <div class="line2"></div>
 			            <h2 class="relran">物品标题<label for="title" class="error success"></label></h2>
-			            <input class="iptnewtit" type="text" name="title" id="title" placeholder='请输入物品名称32个字以内' />
+			            <input class="iptnewtit" type="text" name="title" id="title" placeholder='请输入物品名称32个字以内' /> -->
 			            
 			            <h2 class="newscont">物品描述<label for="content" class="error success"></label></h2>
 			            <textarea class="iptnewtit" id="content" name="content" style="width:624px;height:200px; padding-top:8px;"></textarea>

@@ -63,7 +63,7 @@
 				   		and replyName = #{replyName}
 					</if>
 					<if test="commentorState == 0 and replyState == 0" >
-				   		and commentorState = '0' and replyState = '0' and commentorId = #{userId} or newsId = #{newsId} and commentorState = '0' and replyState = '0' and replyId = #{userId}
+				   		and commentorState = '0'  and commentorId = #{userId} or newsId = #{newsId}  and replyState = '0' and replyId = #{userId}
 					</if>
 			</trim>
 		</where>

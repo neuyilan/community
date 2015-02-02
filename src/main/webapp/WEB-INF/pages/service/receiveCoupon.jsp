@@ -31,7 +31,7 @@
 					close()
 				}else{
 					msgbox('提示',"请输入真实电话信息",'确定');
-					close();
+					
 
 				}
 				return false;
@@ -44,43 +44,48 @@
 	           dataType: 'json',
 	           data: {
 	        	actId: '${actId}',
-	        	userId: '${userId}'
+	        	userId: '${userId}',
+	        	cellphone:$("#cellphone").val()
 	           },
 	           success: function (data) {
 	        	   //eval('data=' + data);
 	        	   if(data.errorCode == 200) {
 	        		   msgbox('提示',data.message,'确定');
-	        		   close();
+	        		   
 
 	        		   self.location=document.referrer;
 	        	   }else{
 	        		   msgbox('提示',data.message,'确定');
-	        		   close();
+	        		   
 
 	        	   }
 	           },
 	           error: function() {
 	               msgbox('提示','评论失败','确定');
-	               close();
+	               
 	           }
 	       });
 	})
- function msgbox(title,content,btn){
-	 var shtml="<div class='tk'><div class='tcontent'>";
+ function msgbox(title,content,btn,fun){
+	 $(".tk").remove();
+	 var tk=$("<div class='tk'></div>");
+	 var tcontent=$("<div class='tcontent'></div>");
+	 tk.append(tcontent);
 	 if(title!=""){
-	     shtml+="<p class='title'>"+title+"</p>";
+		 tcontent.append("<p class='title'>"+title+"</p>");
 	 }
-	 shtml+="<div class='thead'><p>"+content+"</p></div>";
-	 shtml += "<div class='tbtn'><a>"+btn+"</a></div>";
-	 shtml += "</div></div>";
-	 $("body").append(shtml);
+	 tcontent.append("<div class='thead'><p>"+content+"</p></div>");
+	 tcontent.append("<div class='tbtn'></div>");
+	 var tbtn = $("<div class='tbtn'></div>");
+	 tcontent.append(tbtn);
+	 var btnA = $("<a>"+btn+"</a>");
+	 tbtn.append(btnA);
+	 $("body").append(tk);
 	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
-}
-function close(){
-	$(".tbtn a").click(function(e) {
-        $(".tk").remove();
-    });
-
+	 btnA.click(function(){
+		 $(".tk").remove();
+	 });
+	 btnA.click(fun);
 }
 
 </script>

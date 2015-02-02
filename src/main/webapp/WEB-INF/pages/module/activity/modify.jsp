@@ -65,10 +65,10 @@
             <div id="divImg" style=" overflow:hidden;"><img id="actPicBtn" src="<%=ctx %><c:choose><c:when test="${businessActivity.actPic==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessActivity.actPic}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="actPic" id="actPic" value="${businessActivity.actPic }"> 
             
-            <div class="line2"></div>
+            <%-- <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">APP首页小图<label for="appPic" class="error success"></label></h2>
             <div id="divImg" style=" overflow:hidden;"><img id="appPicBtn" src="<%=ctx %><c:choose><c:when test="${businessActivity.appPic==''}">/images/icon/add.jpg</c:when><c:otherwise>${businessActivity.appPic}</c:otherwise></c:choose>" width="100" height="100"  style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
-            <input type="hidden" name="appPic" id="appPic" value="${businessActivity.appPic }">
+            <input type="hidden" name="appPic" id="appPic" value="${businessActivity.appPic }"> --%>
             <input type="hidden" name="uploadField" id="uploadField" value="">
                         
             <div class="line2"></div>
@@ -149,10 +149,10 @@
                         <input class="radiostyle" type="radio" name="recommend" value="0" <c:if test='${businessActivity.recommend == 0}'> checked </c:if> >
                         首页焦点图</label>
                     　　<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-                    <label>
+                    <%-- <label>
                         <input class="radiostyle" type="radio" name="recommend" value="1" <c:if test='${businessActivity.recommend == 1}'> checked </c:if> >
                         首页新闻列表置顶</label>
-                    <br><br>
+                    <br><br> --%>
                     <label>
                         <input class="radiostyle" type="radio" name="recommend" value="2" <c:if test='${businessActivity.recommend == 2}'> checked </c:if>>以上都不选
                     </label><br>
@@ -1064,12 +1064,12 @@
     	});
     	
     	//APP小图
-    	$('#appPicBtn').click(function() {
+    	/* $('#appPicBtn').click(function() {
     		$('#picUploadLayer').fadeIn('slow');
     		//初始化上传
         	uploadInit('activity', 'appPic', '0', '0');
         	$('#uploadField').val('appPic');
-    	});    
+    	});     */
     	
     	//显示类型展示层
     	$('#typeLayerShow').click(function() {
@@ -1262,9 +1262,9 @@
                 actPic: {
                     required: true
                 },
-                appPic: {
+                /* appPic: {
                     required: true
-                },
+                }, */
                 actContent: {
                     required: true
                 },
@@ -1354,9 +1354,9 @@
                 actPic: {
                     required: '请选择活动图片！'
                 },
-                appPic: {
+                /* appPic: {
                     required: '请选择APP首页图片！'
-                },
+                }, */
                 actContent: {
                     required: '请填写活动内容！'
                 },

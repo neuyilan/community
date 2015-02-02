@@ -62,7 +62,7 @@
 				   		and content like '%${keyWord}%'
 					</if>
 					<if test="commentorState == 0 and replyState == 0" >
-				   		and commentorState = '0' and replyState = '0' and commentorId = #{userId} or help = #{help} and commentorState = '0' and replyState = '0' and replyId = #{userId}
+				   		and commentorState = '0'  and commentorId = #{userId} or help = #{help}  and replyState = '0' and replyId = #{userId}
 					</if>
 			</trim>
 		</where>

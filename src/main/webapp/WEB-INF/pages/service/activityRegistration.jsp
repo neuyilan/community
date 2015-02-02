@@ -183,7 +183,7 @@ $(document).ready(function(){
 	     var timeSlotId = $("#timeSlotId").val(); 
 	     if(timeSlotId==""){
 	    	 msgbox('提示','请选择场次','确认');
-	    	 close();
+	    	 
 	    	 return false;
 	     }
 	     window.location.href='${ctx}/service/activities/registrationIndex.json?ID=${actId}&userId=${userId}&tel=${tel}&timeSlotId='+timeSlotId;
@@ -253,8 +253,8 @@ $(document).ready(function(){
         		   $('.x-z a').append('<em class="x-add">+1</em>');
 					$('.x-z img').attr("src","${ctx }/js/activity/images/ze.png");
 					$('.x-z img').attr("disabled",true);
-					$('.x-z em').css("color","#e41212");
-			        $('.x-add').css({'position':'absolute', 'color':'#FF0000','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
+					$('.x-z em').css("color","#fd8b07");
+			        $('.x-add').css({'position':'absolute', 'color':'#fd8b07','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
 			        $(this).fadeIn('fast').remove();
 			        var Num = parseInt($('.x-z em').text());
 			        Num++;
@@ -265,12 +265,12 @@ $(document).ready(function(){
 			        //alert(data.message);
         	   }else{
         		   msgbox('提示',data.message,'确认');
-        		   close();
+        		   
         	   }
            },
            error: function() {
                msgbox('提示','评论失败','确认');
-               close();
+               
            }
        });
 	 });
@@ -291,7 +291,7 @@ $(document).ready(function(){
 	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){
 			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
-			 close();
+			 
 			return;
 		}
 	 	var url="";
@@ -356,12 +356,12 @@ $(document).ready(function(){
 	 		    },
 	 		    error: function () {
 	 		       msgbox('提示','评论失败','确认');
-	 		      close();
+	 		      
 	 		    }
 	 		});
 	 	}else{
 	 		 msgbox('提示','评论不能为空','确认');
-	 		close();
+	 		
 	 		return;
 	 	}
 	 	$("#replaceinp").attr("placeholder","回复:");
@@ -439,6 +439,14 @@ function jump(nextNo) {
 	    	//eval('data=' + data);
 	    	PageState=data.content.PageState;
             var rows = data.content.reviewList;
+            
+            if(rows.length==0 && nextNo==1){
+            	$('#curr').text('目前没有评论信息');
+    	 		$('#nextBtn').attr('disabled', true);
+            }else if(!PageState){
+    	 		$('#nextBtn').hide();
+            }
+            
             if(rows.length > 0) {
             	for(var i=0;i<rows.length;i++) {
             		var row = rows[i];   
@@ -506,7 +514,7 @@ function jump(nextNo) {
         			}else{
             			div.find("img").click(function(){
           					 msgbox('提示',"您不能自己回复自己",'确认');
-          					close();
+          					
               			});
           			}
         			
@@ -516,26 +524,30 @@ function jump(nextNo) {
 	    },
 	    error: function () {
 	        msgbox('提示','获取下页评论内容失败','确认');
-	        close();
+	        
 	    }
 	});
 }
-function msgbox(title,content,btn){
-	 var shtml="<div class='tk'><div class='tcontent'>";
+function msgbox(title,content,btn,fun){
+	 $(".tk").remove();
+	 var tk=$("<div class='tk'></div>");
+	 var tcontent=$("<div class='tcontent'></div>");
+	 tk.append(tcontent);
 	 if(title!=""){
-	     shtml+="<p class='title'>"+title+"</p>";
+		 tcontent.append("<p class='title'>"+title+"</p>");
 	 }
-	 shtml+="<div class='thead'><p>"+content+"</p></div>";
-	 shtml += "<div class='tbtn'><a>"+btn+"</a></div>";
-	 shtml += "</div></div>";
-	 $("body").append(shtml);
+	 tcontent.append("<div class='thead'><p>"+content+"</p></div>");
+	 tcontent.append("<div class='tbtn'></div>");
+	 var tbtn = $("<div class='tbtn'></div>");
+	 tcontent.append(tbtn);
+	 var btnA = $("<a>"+btn+"</a>");
+	 tbtn.append(btnA);
+	 $("body").append(tk);
 	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
-}
-function close(){
-	$(".tbtn a").click(function(e) {
-     $(".tk").remove();
- });
-
+	 btnA.click(function(){
+		 $(".tk").remove();
+	 });
+	 btnA.click(fun);
 }
 
 </script>

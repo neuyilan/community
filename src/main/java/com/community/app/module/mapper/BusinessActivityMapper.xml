@@ -301,7 +301,13 @@
 			a.editor,
 			a.attributeValues,
 			a.voteType,
-			a.votes
+			a.votes,
+			a.couponName,
+			a.couponDesc,
+			a.couponImg,
+			a.couponNum,
+			a.couponValid
+			
 	</sql>
 	
 	<!-- 所有字段查询条件 -->

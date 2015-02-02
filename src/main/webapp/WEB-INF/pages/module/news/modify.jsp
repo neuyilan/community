@@ -221,7 +221,7 @@
                 <div class="options">
                     <p>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test='${businessNews.isRecommend==0}'>checked="checked"</c:if> >&nbsp;首页焦点图　　<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br></label>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test='${businessNews.isRecommend==1}'>checked="checked"</c:if> >&nbsp;首页新闻列表置顶<br><br></label>
+                        <%-- <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test='${businessNews.isRecommend==1}'>checked="checked"</c:if> >&nbsp;首页社区头条<br><br></label> --%>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="2" <c:if test='${businessNews.isRecommend==2}'>checked="checked"</c:if> >&nbsp;以上都不选<br></label>
                     </p>
                 </div>

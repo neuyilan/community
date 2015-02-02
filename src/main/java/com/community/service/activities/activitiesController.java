@@ -299,7 +299,7 @@ public class activitiesController {
 			mav.addObject("phpIp", phpIp);
 			String startTime = activity.getPublishDate() + " " + activity.getPublishTime() + ":00";
 			//开始结束时间计算
-			if(activity.getTypeId()==1 || activity.getTypeId()==3){
+			if(activity.getTypeId()==1 || activity.getTypeId()==3 || activity.getTypeId()==4){
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date ts = (Date) sdf.parse(startTime);
 				long time = ts.getTime() + 30*60*1000;
@@ -390,8 +390,19 @@ public class activitiesController {
 				BusinessActivityCouponQuery businessActivityCouponQuery = new BusinessActivityCouponQuery();
 				businessActivityCouponQuery.setActId(ID);
 				businessActivityCouponQuery.setState(0);
+				//统计剩余数量
 				int  count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
 				mav.addObject("count", count);
+				businessActivityCouponQuery.setUserId(new Integer(userId));
+				businessActivityCouponQuery.setState(null);
+				//是否参与活动
+				count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
+				if(count>0){
+					rank = 1;
+				}
+				
+				mav.addObject("couponDesc", activity.getCouponDesc());
+				mav.addObject("couponValid", activity.getCouponValid());
 			}else {
 				List<BusinessActivityParticipate> participateList = businessActivityParticipateService.findByMap(paramMap);
 				if(participateList.size() > 0) {//已参与活动
@@ -1384,7 +1395,7 @@ public class activitiesController {
 			//query.setActId(query.getID());
 			try{
 				BusinessActivityCouponQuery businessActivityCouponQuery = new BusinessActivityCouponQuery();
-				businessActivityCouponQuery.setActId(query.getID());
+				businessActivityCouponQuery.setActId(query.getActId());
 				businessActivityCouponQuery.setState(0);
 				//查看未领取优惠券数量
 				int count = businessActivityCouponService.selectCount(businessActivityCouponQuery);

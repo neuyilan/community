@@ -126,7 +126,7 @@
 			  	, business_user_resource bur
 			  	where bc.comId = bur.comId
 				<if test="userId != null and userId != ''" >
-					and bur.usreId = #{userId}
+					and bur.userId = #{userId}
 				</if>
 		</if>
 	</select>

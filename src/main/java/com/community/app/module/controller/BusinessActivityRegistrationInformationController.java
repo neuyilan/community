@@ -149,7 +149,7 @@ public class BusinessActivityRegistrationInformationController {
 	 * @return
 	 */
 	@RequestMapping(value = "save")
-	public void save(HttpServletRequest request, HttpServletResponse response,
+	public synchronized void save(HttpServletRequest request, HttpServletResponse response,
 			BusinessActivityRegistrationInformation query) {
 		String json = "";
 		try {

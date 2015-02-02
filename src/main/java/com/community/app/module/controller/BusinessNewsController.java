@@ -191,10 +191,10 @@ public class BusinessNewsController {
 				BusinessNews businessNews = (BusinessNews) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"newsId\":\"").append(businessNews.getNewsId()).append("\"").append(",")
-			    .append("\"title\":\"").append(businessNews.getTitle()).append("\"").append(",")
+			    .append("\"title\":\"").append(businessNews.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
 			    .append("\"content\":\"").append(businessNews.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
 			    .append("\"pageUrl\":\"").append(businessNews.getPageUrl()).append("\"").append(",")
-			    .append("\"brief\":\"").append(businessNews.getBrief()).append("\"").append(",")
+			    .append("\"brief\":\"").append(businessNews.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
 			    .append("\"subjectPic\":\"").append(businessNews.getSubjectPic()).append("\"").append(",")
 			    .append("\"newsType\":\"").append(businessNews.getNewsType()).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessNews.getPublisherId()).append("\"").append(",")
@@ -316,13 +316,13 @@ public class BusinessNewsController {
 		BusinessNews businessNews1 = businessNewsService.findById(Integer.parseInt(id));
 		String json = "";
 		try{
-			if(!oldnewsId.trim().equals("")) {
+			/*if(!oldnewsId.trim().equals("")) {
 				businessNews0.setNewsId(Integer.parseInt(oldnewsId));
 				businessNews0.setIsHot(0);
 				businessNews0.setHotTime(null);
 				businessNews0.setEditTime(new Timestamp(System.currentTimeMillis()));
 				businessNewsService.update(businessNews0);
-			} 
+			}*/ 
 			businessNews.setNewsId(Integer.parseInt(id));
 			businessNews.setIsHot(1);
 			businessNews.setHotTime(new Timestamp(System.currentTimeMillis()));

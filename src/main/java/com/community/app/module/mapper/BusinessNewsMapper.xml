@@ -314,6 +314,10 @@
 					<if test="tag != null and tag != ''" >
 				   		and n.tag like '%${tag}%'
 					</if>
+					<if test="publishScope != null and publishScope != ''" >
+				   		and s.comId=#{publishScope}
+					</if>
+					
 			</trim>
 		</where>
 	</sql>
@@ -350,8 +354,72 @@
 	
 		<!-- BusinessNews根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessNewsResult" parameterType="Object">
-		select <include refid="Base_Column_List" />  from business_news n
-		<!-- inner join business_user_resource res on res.comId = n.publishScope  -->
+		<!-- select <include refid="Base_Column_List" />  from business_news n
+		inner join business_user_resource res on res.comId = n.publishScope 
+		inner join business_news_scope scope on n.newsId = scope.newsId
+		inner join business_user_resource res on res.comId = scope.comId
+		<if test="timeScope != null and dateField == 'comments'" >
+			inner join business_news_comment c on c.newsId = n.newsId and 0 = DATEDIFF(now(), c.commentTime)
+		</if>
+		<include refid="Base_Where_Clause" />
+		group by n.newsId
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if> -->
+	    select 
+	    n.newsId,
+		n.title,
+		n.content,
+		n.pageUrl,
+		n.brief,
+		n.subjectPic,
+		n.appPic,
+		n.newsType,
+		n.tag,
+		n.publisherId,
+		n.publisherName,
+		n.publishTime,
+		n.comName,
+		n.state,
+		n.auditorId,
+		n.auditorName,
+		n.auditTime,
+		n.auditInfo,
+		n.visits,
+		n.comments,
+		n.supports,
+		n.publishScope,
+		n.setTime,
+		n.breakId,
+		case
+		WHEN n.hotTime  != ''  and n.hotTime = 
+		(select concat( max(hottime)) FROM
+			business_news  n
+			INNER JOIN business_news_scope scope ON n.newsId = scope.newsId
+			INNER JOIN business_user_resource res ON res.comId = scope.comId
+			WHERE 1=1
+			<if test="curUserId != null and curUserId != ''" >
+				and res.userId=#{curUserId} 
+			</if>
+			<if test="curComId != null and curComId != ''" >
+				and res.comId=#{curComId} 
+			</if>
+		) THEN '1'
+		else '0'
+		end
+		ishot ,
+		n.isAd,
+		n.createTime,
+		n.editTime,
+		n.editor,
+		n.isPush,
+		n.isRecommend,
+		n.hotTime,
+		n.isNickname
+	    from business_news n
 		inner join business_news_scope scope on n.newsId = scope.newsId
 		inner join business_user_resource res on res.comId = scope.comId
 		<if test="timeScope != null and dateField == 'comments'" >
@@ -380,7 +448,7 @@
 	
 	<!-- BusinessNews根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage_app" resultType="BusinessNews" parameterType="Object">
-		select <include refid="Base_Column_List1" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId  left join business_news_scope s on s.newsId = n.newsId and s.comId=#{publishScope}
+		select <include refid="Base_Column_List1" />,u.portrait,u.nickname,bu.nickname as buNickname,avatar from business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId  left join business_news_scope s on s.newsId = n.newsId 
 		<include refid="Base_Where_Clause1" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
@@ -392,7 +460,7 @@
 	
 	<!-- BusinessNews列表总数-->
 	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from  business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId  left join business_news_scope s on s.newsId = n.newsId and s.comId=#{publishScope}
+		select count(1) from  business_news n left join app_user u on u.userId=n.publisherId left join business_user bu on bu.userId=n.publisherId  left join business_news_scope s on s.newsId = n.newsId
 		<include refid="Base_Where_Clause1" />
 	</select>
 	

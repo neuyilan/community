@@ -68,9 +68,9 @@
             <div style=" overflow:hidden;"><img id="annoPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="annoPic" id="annoPic" value="">
             
-            <h2 class="relran" style="font-weight: bold;">APP首页小图<label for="appPic" class="error success"></label></h2>
+            <%-- <h2 class="relran" style="font-weight: bold;">APP首页小图<label for="appPic" class="error success"></label></h2>
             <div style=" overflow:hidden;"><img id="appPicBtn" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
-            <input type="hidden" name="appPic" id="appPic" value=""> 
+            <input type="hidden" name="appPic" id="appPic" value="">  --%>
 
             <input type="hidden" name="uploadField" id="uploadField" value="">
             
@@ -211,12 +211,12 @@
     	});
     	
     	//app小图
-    	$('#appPicBtn').click(function() {
+    	/* $('#appPicBtn').click(function() {
     		$('#picUploadLayer').fadeIn('slow');
     		//初始化上传
         	uploadInit('anno', 'appPic', '1', '1');
         	$('#uploadField').val('appPic');
-    	});    
+    	});     */
     	
 
     	//选择范围结点
@@ -352,9 +352,9 @@
                /*  annoPic: {
                     required: true
                 }, */
-                appPic: {
+                /* appPic: {
                     required: true
-                },
+                }, */
                 isPush: {
                     required: true
                 },
@@ -380,12 +380,12 @@
                  annoContent: {
                      required: "请输入公告内容"
                  },
-               /*   annoPic: {
+               	/*  annoPic: {
                  	required: "请选择公告列表大图"
                  }, */
-                 appPic: {
+                 /* appPic: {
                      required: "请选择APP首页小图"
-                 },
+                 }, */
                  isPush: {
                      required: "请选择是否推送"
                  },

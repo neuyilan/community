@@ -224,6 +224,19 @@ header.header{ height:43px; background:url(../images/border.gif) repeat-x bottom
 .xf-right i{ display:inline-block;}
 .rightgif{ width:10px; height:16px; background:url(../images/right.gif) center center no-repeat; background-size:10px 16px; -webkit-background-size:10px 16px;}
 
+/*订单列表*/
+.kj-search {margin: 8px 0; padding:0 10px; background-color:#fff;}
+.kj-search a {display: table; height: 100%;width: 100%; padding:15px 7px; border-bottom:1px solid #d8d8d7; box-sizing:border-box; -webkit-box-sizing:border-box;}
+.kj-search a:last-child{ border:none;}
+.tleft {display: table-cell;}
+.rightgif { background: url("../images/right.gif") no-repeat scroll right center / 10px 16px rgba(0, 0, 0, 0);height: 16px;padding-left: 18px;width: 10px;}
+.tleft {display: table-cell;}
+.kj-search div {vertical-align: middle;}
+.kj-simg {height: 26px;padding-right:7px;width: 26px;}
+.kj-simg img{ width:26px; height:26px;}
+.l-search{ color:#030303; padding-right:5px;}
+.l-from{ color:#424242; font-size:10px;}
+
 
 
 

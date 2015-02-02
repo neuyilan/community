@@ -81,8 +81,48 @@ public class ShopController {
 	
 	
 	/**
-	 * 用户查看商铺列表 for H5
+	 * 用户查看订单列表 for H5
 	 * @param shopType ,estateId,userId 
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getOrderListPage")
+	public ModelAndView getOrderListPage(HttpServletRequest request, HttpServletResponse response,BusinessShopQuery query) {
+		ModelAndView mav = new ModelAndView("/service/shop/orderList");
+		try{
+			
+			String estateId = request.getParameter("estateId");
+			String userId = request.getParameter("userId");
+			String typeId = request.getParameter("typeId");
+
+			List<BusinessShop> shopList = businessShopService.findAll();
+			BusinessShopType shopType = businessShopTypeService.findById(Integer.valueOf(typeId));
+			
+			if (StringUtils.isNotBlank(shopType.getTypeName()))
+				mav.addObject("typeName", shopType.getTypeName());
+			if (StringUtils.isNotBlank(estateId))
+				mav.addObject("estateId", estateId);
+			if (StringUtils.isNotBlank(userId))
+				mav.addObject("userId", userId);
+			if (StringUtils.isNotBlank(typeId))
+				mav.addObject("typeId", typeId);
+			
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+			mav.addObject("ctx", ctx);
+//			mav.addObject("shopList", shopList);
+			
+		}catch(Exception e){
+			GSLogger.error("进入shop列表页时发生错误：/service/shop/shopList", e);
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	
+	/**
+	 * 用户查看商铺列表 for H5
+	 * @param shopType ,estateId,userId ,
+	 * type=SL/MO  ShopList MyOrder
 	 * @return
 	 * json
 	 */
@@ -139,20 +179,103 @@ public class ShopController {
 			    		addCookie(response, "curUid",request.getParameter("userId"),Integer.MAX_VALUE);
 		    		}else if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "3".equals(rspJson.get("status").toString()))
 					{
-						
+						//
 					}
 				}
 	    		
 	    	}
 	    	
 			mav.addObject("ctx", ctx);
-			String goUrl = shop.getShopUrl()+bu54tk;
+			String goUrl = shop.getShopUrl();
+			if (shop.getShopUrl().indexOf("token")>0)
+				goUrl+=bu54tk;
 			mav.addObject("shopURL", goUrl); 
+			
 //			附近名师：http://5teacher.com/wap/search-teacher.html
 //		        名师推荐：http://5teacher.com/wap/do/weixin/appointTeacher/appoint/?fromid=3
 //			免费答疑：http://5teacher.com/wap/do/ask/list/?token=
 //			订单查询：http://5teacher.com/wap/do/weixin/order/list/?openId=
 			System.out.println(goUrl);
+			
+		}catch(Exception e){
+			GSLogger.error("进入shop列表页时发生错误：/service/shop/shopList", e);
+			e.printStackTrace();
+		}
+		return mav;
+	}
+	
+	
+	
+	@RequestMapping(value="myOrder")
+	public ModelAndView myOrder(HttpServletRequest request, HttpServletResponse response,BusinessShopQuery query) {
+		ModelAndView mav = new ModelAndView("/service/shop/shopIframe");
+		try{
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path;
+
+			String estateId = request.getParameter("estateId");
+			String userId = request.getParameter("userId");
+//			String typeId = request.getParameter("typeId");
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("estateId", estateId);
+			map.put("userId", userId);
+//			map.put("typeId", typeId);
+//			BusinessShop shop = businessShopService.findById(query.getShopId());
+			Map<String,Object> userInfo = businessShopService.findUserInfo(map); 
+			JSONObject json = JSONObject.fromObject(userInfo);
+			System.out.println(json); 
+
+	    	Cookie bu54token = getCookieByName(request, "bu54tk");
+	    	Cookie currUserId = getCookieByName(request, "curUid");
+	    	String bu54tk = "" ;
+	    	String curUid = "" ;
+
+	    	if (bu54token != null && currUserId != null && userId.equals( currUserId.getValue()) )
+ 	    	{
+	    		bu54tk = bu54token.getValue();
+	    		curUid = currUserId.getValue();
+	    	}
+	    	if (StringUtils.isBlank(bu54tk) || StringUtils.isBlank(curUid))
+	    	{
+	    		String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";			  
+		    	JSONObject rspJson = HttpReq.post(loginUrl, json);
+		    	System.out.println(rspJson);
+		    	//登陆 返回的status 1：登陆成功 2 用户不存在 3 密码不正确
+		    	if (rspJson != null)
+				{
+		    		if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "1".equals(rspJson.get("status").toString()))
+		    		{
+		    			System.out.println(rspJson.get("status"));
+						System.out.println(rspJson.get("token"));
+						addCookie(response,"bu54tk",rspJson.get("token").toString(), Integer.MAX_VALUE);
+			    		addCookie(response,"curUid",request.getParameter("userId"), Integer.MAX_VALUE);
+		    		}else if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "2".equals(rspJson.get("status").toString()))
+		    		{
+			    		String regUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/register";			  
+				    	JSONObject rspJsonReg = HttpReq.post(regUrl, json);
+		    			System.out.println(rspJsonReg.get("status"));
+						System.out.println(rspJsonReg.get("token"));
+						addCookie(response, "bu54tk",rspJson.get("token").toString(), Integer.MAX_VALUE);
+			    		addCookie(response, "curUid",request.getParameter("userId"),Integer.MAX_VALUE);
+		    		}else if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "3".equals(rspJson.get("status").toString()))
+					{
+						//
+					}
+				}
+	    		
+	    	}
+	    	
+			mav.addObject("ctx", ctx);
+//			mav.addObject("token", bu54tk);
+			
+			String goUrl = "http://wap.5teacher.com/testwap/do/weixin/order/list/?openId="+bu54tk;
+			mav.addObject("shopURL", goUrl);
+			System.out.println(goUrl+"    dddddddd");
+//			附近名师：http://5teacher.com/wap/search-teacher.html
+//		        名师推荐：http://5teacher.com/wap/do/weixin/appointTeacher/appoint/?fromid=3
+//			免费答疑：http://5teacher.com/wap/do/ask/list/?token=
+//			订单查询：http://5teacher.com/wap/do/weixin/order/list/?openId=
+//			System.out.println(goUrl);
 			
 		}catch(Exception e){
 			GSLogger.error("进入shop列表页时发生错误：/service/shop/shopList", e);

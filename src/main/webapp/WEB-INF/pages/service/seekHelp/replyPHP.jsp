@@ -21,9 +21,9 @@
 </div>
 	<div class="bl-winp hf-winp">
 		<div class="bl-ninp">
-			<textarea placeholder="请输入回复内容..." id="CommentStr"></textarea>
+			<textarea placeholder="请输入回复内容..." id="CommentStr" maxlength="500"></textarea>
 			<p class="bl-inpfont">
-				还可以输入<span>280</span>个汉字
+				还可以输入<span>500</span>个汉字
 			</p>
 		</div>
 	</div>
@@ -38,7 +38,8 @@ var artFlag=0;
 $(document).ready(function(){
 	 $('#send').click(function() {
 		 	var content = $('#CommentStr').val();
-		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+		 	//var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+={}':;,\t\s\[\].<>?~！@#￥%……&*（）——+{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
 				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
 				return;
@@ -94,7 +95,7 @@ $(document).ready(function(){
 		 });
 	
 	$("#CommentStr").keyup(function(){
-	     var length = 280;
+	     var length = 500;
 	     var content_len = $("#CommentStr").val().length;
 	     var in_len = length-content_len;    
 	     if(in_len >=0){

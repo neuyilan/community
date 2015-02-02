@@ -53,19 +53,6 @@
     </div>
 </div>
 
-<!--     <div class="kl-hfpage"> -->
-<!--         <header class="header"> -->
-<!--             <h1>回复</h1> -->
-<!--             <a class="a-back"></a> -->
-<!--             <a id="send" class="a-searchbtn radius10 a-hf">发 送</a> -->
-<!--         </header> -->
-<!--         <div class="bl-winp hf-winp"> -->
-<!--             <div class="bl-ninp"> -->
-<!--                 <textarea id="CommentStr" placeholder="请输入回复内容..." maxlength="280"></textarea> -->
-<!--                 <p class="bl-inpfont">还可以输入<span id="charNum">280</span>个汉字</p> -->
-<!--             </div> -->
-<!--         </div> -->
-<!--     </div> -->
 
 <form action="" id="frm" method="post" name="frm">
 	<input type="hidden" name="userId"   id="userId" value="${userId}"/>
@@ -145,30 +132,11 @@ $("#supTmp").val('${businessHelp.supports}');
 	 nickname = '匿名';
 }
  $(document).ready(function(){
-// 	 $("#content").click(function(){
-// 		 replyId = 0;//点击回复人id
-// 		 replyName = "";//点击回复人姓名
-// 		 replyType = 0;//点击回复人类型
-// 		 $("#replaceinp").attr("placeholder","回复:");
-// 	 });
+
 	 //点赞
 	 $('#supportsa').click(function(){
-		 
-		 if(userId==0){
-				if(window.confirm('请您填写相关信息。')){
-					 window.location.href='${phpIp}/wxokjia/reggoin.php';
-	                //alert("确定");
-	                return null;
-	             }else{
-	                //alert("取消");
-	                return null;
-	            }
-			}
-//		 	$('#supportsa').append('<em id="plusOne" class="x-add">+1</em>');  
 		    $('#supportsa').append('<em id="plusOne" class="x-add"></em>');
 		 	help_dianzhan();
-// 			if (dianZan != 0)
-// 				$('#plusOne').text('');
 			dianZan++;
 		    $('#supportsa').css("background-image","url(${ctx}/js/activity/images/zyellow.png)");
 		    $('#supports').css("color","#fd8b07");
@@ -181,7 +149,6 @@ $("#supTmp").val('${businessHelp.supports}');
 			$('#supportsa').css("background-image","url(${ctx}/js/activity/images/zgray.png)");
  			$('#supports').css("color","#000000");
 		   });
-		   
 	    });
 	 
 		//评论
@@ -277,15 +244,7 @@ $("#supTmp").val('${businessHelp.supports}');
 		    }  
 		  };
 		  
-		 //firefox下检测状态改变只能用oninput,且需要用addEventListener来注册事件。 
-// 		 if(/msie/i.test(navigator.userAgent))    //ie浏览器 
-// 		 {
-// 			 document.getElementById('replaceinp').onpropertychange=handle ;
-// 		 } 
-// 		 else 
-// 		 {//非ie浏览器，比如Firefox 
-// 		 	document.getElementById('comment').addEventListener("input",handle,false); 
-// 		 }
+
  });
  
 //当状态改变的时候执行的函数 
@@ -345,9 +304,7 @@ $("#supTmp").val('${businessHelp.supports}');
     });
 
  }
- 
- 
- 
+
 
 //获取下页评论内容
 function jump(nextNo) {
@@ -390,9 +347,7 @@ function jump(nextNo) {
 	       					}
 	       				}
                			newContent += '</p>  <div class="kl-user tleft"> <p class="kl-people">'+uname+'</p>';
-               			
-               			
-               			
+
                			if(row.replyId==0){
                    			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">'+row.content+'</span></span></p></div></div>';
             			}else{
@@ -458,6 +413,11 @@ function jump(nextNo) {
                 	    
                 	    
                 	}
+                	
+                	if(PageState == false) {
+                		$('.c-more a').text('亲已经到底了');
+                		$('.c-more a').attr('disabled', true);
+        		 	}
                 }
                 
 		    },

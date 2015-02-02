@@ -1,5 +1,6 @@
 package com.community.framework.utils;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItem;
@@ -205,7 +207,18 @@ public class Uploader {
 						//File file = new File(this.url);
 						File file = new File(tmpPicFile);
 						InputStream inputSteam=fileItem.getInputStream();
-						BufferedInputStream fis=new BufferedInputStream(inputSteam);
+						
+						
+				    	
+				    	String rotation = this.request.getParameter("rotation");
+				    	if (StringUtils.isNotBlank(rotation) && !"0".equals(rotation) )
+				    	{
+				    		int rota = Integer.valueOf(rotation);
+					    	BufferedImage imagebuff = ImageIO.read(inputSteam);  
+					    	inputSteam = image.rotateImg(imagebuff, rota, null);
+				    	}
+				    	
+				    	BufferedInputStream fis=new BufferedInputStream(inputSteam);
 					    FileOutputStream fos=new FileOutputStream(file);
 					    int f;
 					    while((f=fis.read())!=-1)

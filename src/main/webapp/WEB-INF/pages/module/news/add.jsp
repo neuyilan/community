@@ -237,8 +237,8 @@ label.error {
 							<label><input class="radiostyle" type="radio"
 								name="isRecommend" value="0">&nbsp;首页焦点图</label> <em
 								style="color: #000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br>
-							<br> <label><input class="radiostyle" type="radio"
-								name="isRecommend" value="1">&nbsp;首页新闻列表置顶<br> <br></label>
+							<br> <!-- <label><input class="radiostyle" type="radio"
+								name="isRecommend" value="1">&nbsp;首页社区头条<br> <br></label> -->
 							<label><input class="radiostyle" type="radio"
 								name="isRecommend" value="2" checked>&nbsp;以上都不选<br></label>
 						</p>
