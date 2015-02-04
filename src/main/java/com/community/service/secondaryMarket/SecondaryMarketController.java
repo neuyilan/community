@@ -635,16 +635,29 @@ public class SecondaryMarketController {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp");  
+			String phpIp = p.getProperty("phpIp"); 
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
 			query.setProductId(query.getID());
 			BaseBean baseBean = businessProductCommentService.findAllPage_app(query);
+			BusinessProduct businessProduct = businessProductService.findById_app(query.getID());
+			String appPic = "";
+			if(businessProduct.getPicUrl()!=null){
+				String[] pic = businessProduct.getPicUrl().split(",");
+				appPic = ip+pic[0];
+			}
+			
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+appPic+"\",";
+			json += "\"title\":\""+ip+businessProduct.getContent()+"\",";
+			json += "\"url\":\""+phpIp+"/tiaozao_info.php?ID="+query.getID()+"\",";
+
+			
 			json += "\"PageState\":";
 			if(baseBean.getCount()>query.getPage()*query.getRows()){
 				json += "true,";
@@ -986,7 +999,7 @@ public class SecondaryMarketController {
 			businessProductSupportQuery.setUserId(query.getUserId());
 			businessProductSupportQuery.setProductId(query.getID());
 			int count =businessProductSupportService.selectCount(businessProductSupportQuery);
-			if(count==0){
+			if(count==0 || query.getUserId()==0){
 				BusinessProductSupport businessProductSupport = new BusinessProductSupport();
 				businessProductSupport.setUserId(query.getUserId());
 				businessProductSupport.setProductId(query.getID());

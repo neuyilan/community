@@ -4370,7 +4370,7 @@ public class UserController {
 	}
 	
 	/**
-	 * 用户点击app焦点图
+	 * 用户随机昵称
 	 * 
 	 * @param userId
 	 *            ,sessionid,password
@@ -4403,7 +4403,7 @@ public class UserController {
 			}
 			json += "{";
 			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"保存成功\"";
+			json += "\"message\":\"保存成功\",";
 			json += "\"content\":{";
 			json += "\"nickname\":\""+nickname+"\"";
 			json += "}";

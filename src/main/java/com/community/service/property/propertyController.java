@@ -1212,7 +1212,8 @@ public class propertyController {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp"); 
+			String phpIp = p.getProperty("phpIp");  
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -1223,6 +1224,10 @@ public class propertyController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+ip+BusinessAnno.getAppPic()+"\",";
+			json += "\"title\":\""+ip+BusinessAnno.getAnnoTitle()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/wuye_info.php?ID="+query.getID()+"\",";
+			
 			json += "\"supports\":\""+BusinessAnno.getSupports()+"\",";
 			json += "\"comments\":\""+BusinessAnno.getComments()+"\",";
 			json += "\"PageState\":";
@@ -1567,7 +1572,7 @@ public class propertyController {
 			businessAnnoSupportQuery.setUserId(query.getUserId());
 			businessAnnoSupportQuery.setAnnoId(query.getID());
 			int count = businessAnnoSupportService.selectCount(businessAnnoSupportQuery);
-			if(count==0){
+			if(count==0 || query.getUserId()==0){
 				BusinessAnnoSupport businessAnnoSupport = new BusinessAnnoSupport();
 				businessAnnoSupport.setUserId(query.getUserId());
 				businessAnnoSupport.setAnnoId(query.getID());

@@ -580,6 +580,7 @@ public class StationController {
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");   
+			String phpIp = p.getProperty("phpIp"); 
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -590,6 +591,10 @@ public class StationController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+ip+BusinessAnno.getAppPic()+"\",";
+			json += "\"title\":\""+ip+BusinessAnno.getAnnoTitle()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/gonggao_info.php?ID=97"+query.getID()+"\",";
+
 			json += "\"supports\":\""+BusinessAnno.getSupports()+"\",";
 			json += "\"comments\":\""+BusinessAnno.getComments()+"\",";
 			json += "\"PageState\":";
@@ -932,7 +937,7 @@ public class StationController {
 			businessAnnoSupportQuery.setUserId(query.getUserId());
 			businessAnnoSupportQuery.setAnnoId(query.getID());
 			int count = businessAnnoSupportService.selectCount(businessAnnoSupportQuery);
-			if(count==0){
+			if(count==0 || query.getUserId()==0){
 				BusinessAnnoSupport businessAnnoSupport = new BusinessAnnoSupport();
 				businessAnnoSupport.setUserId(query.getUserId());
 				businessAnnoSupport.setAnnoId(query.getID());

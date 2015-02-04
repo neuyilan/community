@@ -27,11 +27,17 @@ img{ vertical-align:middle;}
 .x-djs{ background:#858585; border:1px solid #5b5959; cursor:default;}
 .x-qg{ background:#e42909; border:1px solid #bd1e03; display:none;}
 .x-pm{ background:#f9aa0c; border:1px solid #b97207; display:none;}
-.x-zs .x-z{ position:absolute; right:0px; top:4px;}
+.x-zs .x-z{ position:absolute; right:0px; top:12px;}
 .x-zs.x-z em{ margin-left:-6px; font-weight:normal;}
 .x-zs1{ text-align:center;}
 .x-zs1 .x-z a{ position:relative;}
-.x-zs1 .x-z img{ width:24px; height:30px;}
+.x-zs .x-z em{ font-size:13px; color:#7c7c7c;}
+
+.x-zs1 .x-z img {
+width: 19px;
+height: 19px;
+}
+
 .x-zs1 .x-z em{ vertical-align:middle;}
 .x-main .x-pl{ padding:0 10px 10px; margin-bottom:80px;}
 .x-pc{ margin:10px 0; font-size:11px; color:#030303;}

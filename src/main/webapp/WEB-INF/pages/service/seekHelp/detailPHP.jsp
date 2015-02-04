@@ -413,12 +413,15 @@ function jump(nextNo) {
                 	    
                 	    
                 	}
-                	
-                	if(PageState == false) {
-                		$('.c-more a').text('亲已经到底了');
-                		$('.c-more a').attr('disabled', true);
-        		 	}
                 }
+                if(PageState == false) {
+                	if(rows.length==0 && nextNo==1){
+                    	$('.c-more').text('目前没有评论信息');
+            	 		$('.c-more').attr('disabled', true);
+                    }else if(!PageState){
+            	 		$('.c-more').hide();
+                    }
+    		 	}
                 
 		    },
 		    error: function () {

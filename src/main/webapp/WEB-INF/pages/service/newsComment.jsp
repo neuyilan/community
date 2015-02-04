@@ -116,7 +116,7 @@
 
 		//点赞
 		 $('.x-z a').click(function(){
-			 if(userId==0){
+			 /*if(userId==0){
 					if(window.confirm('请您填写相关信息。')){
 						 window.location.href='${phpIp}/wxokjia/reggoin.php';
 		                //alert("确定");
@@ -125,7 +125,7 @@
 		                //alert("取消");
 		                return null;
 		            }
-				}
+				}*/
 		 	$.ajax({
 	           url: '${ctx}/service/commiunity/supportJournalism.json',
 	           cache: false,
@@ -139,15 +139,18 @@
 	           success: function (data) {
 	        	   //eval('data=' + data);
 	        	   if(data.errorCode == 200) {
+	        		    $('.x-z a').unbind("click");
+	        		    $('.x-z a').click(function(){
+	        		    	msgbox('提示','已赞过了，再赞他会骄傲的…','确认');
+	        		    });
 	        		    $('.x-z a').append('<em class="x-add">+1</em>');
 						$('.x-z img').attr("src","${ctx }/js/activity/images/ze.png");
-						$('.x-z img').attr("disabled",true);
 						$('.x-z em').css("color","#fd8b07");
 				        $('.x-add').css({'position':'absolute', 'color':'#fd8b07','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
 				        $(this).fadeIn('fast').remove();
-				        var Num = parseInt($('.x-z em').text());
-				        Num++;
-				        $('.x-z em').text(Num);
+				        //var Num = parseInt($('.x-z em').text());
+				        //Num++;
+				        $('.x-z em').text(data.content.supports);
 						$('.x-z img').attr("src","${ctx }/js/activity/images/zk.png");
 						$('.x-z em').css("color","#030303");
 				        });

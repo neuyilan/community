@@ -667,7 +667,8 @@ public class activitiesController {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp"); 
+			String phpIp = p.getProperty("phpIp");  
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -678,6 +679,10 @@ public class activitiesController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+ip+BusinessActivity.getAppPic()+"\",";
+			json += "\"title\":\""+ip+BusinessActivity.getActName()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/activity-info.php?ID="+query.getID()+"\",";
+	
 			json += "\"supports\":\""+BusinessActivity.getSupports()+"\",";
 			json += "\"comments\":\""+BusinessActivity.getComments()+"\",";
 			json += "\"PageState\":";
@@ -1018,7 +1023,7 @@ public class activitiesController {
 		try{
 			query.setActId(query.getID());
 			int count =businessActivitySupportService.selectCount(query);
-			if(count==0){
+			if(count==0 || query.getUserId()==0){
 				BusinessActivitySupport businessActivitySupport = new BusinessActivitySupport();
 				businessActivitySupport.setUserId(query.getUserId());
 				businessActivitySupport.setActId(query.getID());

@@ -1168,12 +1168,6 @@ public class StringUtil
     	return str;
     }
 	
-	public static void main(String[] args) {
-		
-		String str=StringUtil.createRandom(true, 6);
-		System.out.println(str);
-		
-	}
 	public static String createRandom(boolean numberFlag, int length){
 		  String retStr = "";
 		  String strTable = numberFlag ? "1234567890" : "1234567890abcdefghijkmnpqrstuvwxyz";
@@ -1199,6 +1193,13 @@ public class StringUtil
 		  return retStr;
 		 }
 	
-	
+	public static void main(String[] args) {
+		int a=0;
+		for (int i = 0; i < 10000; i++) {
+			a =(int)(Math.random()*100);
+			System.out.println(a);
+		}
+		
+	}
 
 }

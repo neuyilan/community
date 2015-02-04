@@ -288,7 +288,7 @@ $(document).ready(function(){
 	 });
 	//点赞
 	 $('.x-z a').click(function(){
-		 if(userId==0){
+		 /*if(userId==0){
 				if(window.confirm('点赞活动需要登录！！是否进去登录页？')){
 					 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
 	                //alert("确定");
@@ -297,7 +297,7 @@ $(document).ready(function(){
 	                //alert("取消");
 	                return null;
 	            }
-			}
+			}*/
 	 	$.ajax({
            url: '${ctx}/service/activities/supportActivities.json',
            cache: false,
@@ -311,9 +311,12 @@ $(document).ready(function(){
            success: function (data) {
         	   //eval('data=' + data);
         	   if(data.errorCode == 200) {
+        		   $('.x-z a').unbind("click");
+	       		    $('.x-z a').click(function(){
+	       		    	msgbox('提示','已赞过了，再赞他会骄傲的…','确认');
+	       		    });
         		   $('.x-z a').append('<em class="x-add">+1</em>');
 					$('.x-z img').attr("src","${ctx }/js/activity/images/ze.png");
-					$('.x-z img').attr("disabled",true);
 					$('.x-z em').css("color","#fd8b07");
 			        $('.x-add').css({'position':'absolute', 'color':'#fd8b07','left':'0px','top':'0px'}).animate({top:'-30px',left:'0px'},'slow',function(){
 			        $(this).fadeIn('fast').remove();

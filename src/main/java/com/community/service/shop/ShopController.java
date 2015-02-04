@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.ContextLoader;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.BusinessShop;
@@ -25,7 +26,8 @@ import com.community.app.module.service.BusinessShopService;
 import com.community.app.module.service.BusinessShopTypeService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessShopQuery;
-import com.community.framework.utils.HttpReq;
+import com.community.framework.utils.ClientCustomSSL;
+import com.community.framework.utils.DefaultConfig;
 
 
 @Controller
@@ -139,10 +141,10 @@ public class ShopController {
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("estateId", estateId);
 			map.put("userId", userId);
-//			map.put("typeId", typeId);
 			BusinessShop shop = businessShopService.findById(query.getShopId());
-			Map<String,Object> shopList = businessShopService.findUserInfo(map); 
-			JSONObject json = JSONObject.fromObject(shopList);
+			Map<String,Object> userInfo = businessShopService.findUserInfo(map); 
+			userInfo.put("authenticationString", DefaultConfig.getProperty("authenticationString"));
+			JSONObject json = JSONObject.fromObject(userInfo);
 			System.out.println(json); 
 
 	    	Cookie bu54token = getCookieByName(request, "bu54tk");
@@ -157,8 +159,9 @@ public class ShopController {
 	    	}
 	    	if (StringUtils.isBlank(bu54tk) || StringUtils.isBlank(curUid))
 	    	{
-	    		String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";			  
-		    	JSONObject rspJson = HttpReq.post(loginUrl, json);
+	    		String cerPath=ContextLoader.getCurrentWebApplicationContext().getServletContext().getRealPath(DefaultConfig.getProperty("cerPath"));
+	    		String loginUrl = DefaultConfig.getProperty("loginUrl");  
+		    	JSONObject rspJson = ClientCustomSSL.httpPost(cerPath, loginUrl, json);// HttpReq.post(loginUrl, json);
 		    	System.out.println(rspJson);
 		    	//登陆 返回的status 1：登陆成功 2 用户不存在 3 密码不正确
 		    	if (rspJson != null)
@@ -171,8 +174,8 @@ public class ShopController {
 			    		addCookie(response,"curUid",request.getParameter("userId"), Integer.MAX_VALUE);
 		    		}else if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "2".equals(rspJson.get("status").toString()))
 		    		{
-			    		String regUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/register";			  
-				    	JSONObject rspJsonReg = HttpReq.post(regUrl, json);
+			    		String regUrl = DefaultConfig.getProperty("regUrl");			  
+				    	JSONObject rspJsonReg = ClientCustomSSL.httpPost(cerPath, regUrl, json);//HttpReq.post(regUrl, json);
 		    			System.out.println(rspJsonReg.get("status"));
 						System.out.println(rspJsonReg.get("token"));
 						addCookie(response, "bu54tk",rspJson.get("token").toString(), Integer.MAX_VALUE);
@@ -190,11 +193,7 @@ public class ShopController {
 			if (shop.getShopUrl().indexOf("token")>0)
 				goUrl+=bu54tk;
 			mav.addObject("shopURL", goUrl); 
-			
-//			附近名师：http://5teacher.com/wap/search-teacher.html
-//		        名师推荐：http://5teacher.com/wap/do/weixin/appointTeacher/appoint/?fromid=3
-//			免费答疑：http://5teacher.com/wap/do/ask/list/?token=
-//			订单查询：http://5teacher.com/wap/do/weixin/order/list/?openId=
+
 			System.out.println(goUrl);
 			
 		}catch(Exception e){
@@ -222,6 +221,8 @@ public class ShopController {
 //			map.put("typeId", typeId);
 //			BusinessShop shop = businessShopService.findById(query.getShopId());
 			Map<String,Object> userInfo = businessShopService.findUserInfo(map); 
+			userInfo.put("authenticationString", DefaultConfig.getProperty("authenticationString"));
+
 			JSONObject json = JSONObject.fromObject(userInfo);
 			System.out.println(json); 
 
@@ -237,22 +238,24 @@ public class ShopController {
 	    	}
 	    	if (StringUtils.isBlank(bu54tk) || StringUtils.isBlank(curUid))
 	    	{
-	    		String loginUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/loginValidation";			  
-		    	JSONObject rspJson = HttpReq.post(loginUrl, json);
+	    		String cerPath=ContextLoader.getCurrentWebApplicationContext().getServletContext().getRealPath(DefaultConfig.getProperty("cerPath"));
+
+	    		String loginUrl = DefaultConfig.getProperty("loginUrl"); 			  
+		    	JSONObject rspJson = ClientCustomSSL.httpPost(cerPath, loginUrl, json);//HttpReq.post(loginUrl, json);
 		    	System.out.println(rspJson);
 		    	//登陆 返回的status 1：登陆成功 2 用户不存在 3 密码不正确
 		    	if (rspJson != null)
 				{
-		    		if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "1".equals(rspJson.get("status").toString()))
+		    		if (StringUtils.isNotBlank(String.valueOf(rspJson.get("status"))) &&  "1".equals(rspJson.get("status").toString()))
 		    		{
 		    			System.out.println(rspJson.get("status"));
 						System.out.println(rspJson.get("token"));
 						addCookie(response,"bu54tk",rspJson.get("token").toString(), Integer.MAX_VALUE);
 			    		addCookie(response,"curUid",request.getParameter("userId"), Integer.MAX_VALUE);
 		    		}else if (StringUtils.isNotBlank(rspJson.get("status").toString()) &&  "2".equals(rspJson.get("status").toString()))
-		    		{
-			    		String regUrl = "http://121.199.0.31:8080/bu54/ubus/services/thirdm/register";			  
-				    	JSONObject rspJsonReg = HttpReq.post(regUrl, json);
+		    		{;
+			    		String regUrl = DefaultConfig.getProperty("regUrl"); 			  
+				    	JSONObject rspJsonReg = ClientCustomSSL.httpPost(cerPath, regUrl, json);//HttpReq.post(loginUrl, json);
 		    			System.out.println(rspJsonReg.get("status"));
 						System.out.println(rspJsonReg.get("token"));
 						addCookie(response, "bu54tk",rspJson.get("token").toString(), Integer.MAX_VALUE);
@@ -267,15 +270,9 @@ public class ShopController {
 	    	
 			mav.addObject("ctx", ctx);
 //			mav.addObject("token", bu54tk);
-			
-			String goUrl = "http://wap.5teacher.com/testwap/do/weixin/order/list/?openId="+bu54tk;
+			String goUrl = "http://wx.5teacher.com/wap/do/weixin/order/list/?openId="+bu54tk;
 			mav.addObject("shopURL", goUrl);
-			System.out.println(goUrl+"    dddddddd");
-//			附近名师：http://5teacher.com/wap/search-teacher.html
-//		        名师推荐：http://5teacher.com/wap/do/weixin/appointTeacher/appoint/?fromid=3
-//			免费答疑：http://5teacher.com/wap/do/ask/list/?token=
-//			订单查询：http://5teacher.com/wap/do/weixin/order/list/?openId=
-//			System.out.println(goUrl);
+			System.out.println("跳转 URL =====> "+goUrl);
 			
 		}catch(Exception e){
 			GSLogger.error("进入shop列表页时发生错误：/service/shop/shopList", e);

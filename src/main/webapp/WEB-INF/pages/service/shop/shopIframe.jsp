@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>商铺iframe页</title>
+<title>商铺详情页</title>
 <link type="text/css" rel="stylesheet" href="${ctx }/js/activity/css/style.css"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 </head>

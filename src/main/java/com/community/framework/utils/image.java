@@ -2,21 +2,23 @@ package com.community.framework.utils;
 
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Transparency;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+import java.awt.Graphics2D;  
+import java.awt.Transparency;  
+import java.awt.geom.AffineTransform;  
+import java.awt.image.AffineTransformOp;  
+import java.awt.image.BufferedImage;  
+import java.io.ByteArrayInputStream;  
+import java.io.ByteArrayOutputStream;  
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
+import java.io.IOException;  
+import java.io.InputStream;  
+import java.util.Iterator;
+  
+import javax.imageio.ImageIO;  
+import javax.imageio.stream.ImageOutputStream;  
 
   
 public class image {  
@@ -80,14 +82,7 @@ public class image {
     
     public static void main(String[] args) throws FileNotFoundException, IOException {
     	 File jpegFile = new File("D:\\1422515944723.jpg");  
-//         Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);  
-//         Directory exif = metadata.getDirectory(ExifDirectory.class);  
-//         Iterator tags = exif.getTagIterator();  
-//         while (tags.hasNext()) {  
-//             Tag tag = (Tag)tags.next();  
-//             System.out.println(tag);  
-//         }      	
-//    	
+    	
     	String imgPath = "D:/1422515944723.jpg";
     	BufferedImage image = ImageIO.read(new FileInputStream(imgPath));  
     	InputStream inputStream = rotateImg(image,90,null);

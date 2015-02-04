@@ -523,17 +523,27 @@ public class seekHelpController {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp"); 
+			String phpIp = p.getProperty("phpIp");  
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
 			query.setHelp(query.getID());
 			BaseBean baseBean = businessHelpCommentService.findAllPage_app(query);
 			BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
+			String appPic = "";
+			if(businessHelp.getPics()!=null){
+				String[] pic = businessHelp.getPics().split(",");
+				appPic = ip+pic[0];
+			}
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+appPic+"\",";
+			json += "\"title\":\""+ip+businessHelp.getHelpContent()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/chat_info.php?ID="+query.getID()+"\",";
+			
 			json += "\"rowCount\":"+baseBean.getCount()+",";
 			json += "\"supports\":\""+businessHelp.getSupports()+"\",";
 			json += "\"comments\":\""+businessHelp.getComments()+"\",";
@@ -901,7 +911,7 @@ public class seekHelpController {
 			businessHelpSupportQuery.setUserId(query.getUserId());
 			businessHelpSupportQuery.setHelpId(query.getID());
 			int count =businessHelpSupportService.selectCount(businessHelpSupportQuery);
-			if(count==0){
+			if(count==0 || query.getUserId()==0){
 				BusinessHelpSupport businessHelpSupport = new BusinessHelpSupport();
 				businessHelpSupport.setUserId(query.getUserId());
 				businessHelpSupport.setHelpId(query.getID());

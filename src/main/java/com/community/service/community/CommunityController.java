@@ -746,7 +746,8 @@ public class CommunityController {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp");  
+			String phpIp = p.getProperty("phpIp");  
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -757,6 +758,10 @@ public class CommunityController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+ip+businessNews.getAppPic()+"\",";
+			json += "\"title\":\""+ip+businessNews.getTitle()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/news_info.php?ID="+query.getID()+"\",";
+			
 			json += "\"rowCount\":"+baseBean.getCount()+",";
 			json += "\"supports\":\""+businessNews.getSupports()+"\",";
 			json += "\"comments\":\""+businessNews.getComments()+"\",";
@@ -1101,7 +1106,7 @@ public class CommunityController {
 			businessNewsSupportQuery.setUserId(query.getUserId());
 			businessNewsSupportQuery.setNewsId(query.getID());
 			int count =businessNewsSupportService.selectCount(businessNewsSupportQuery);
-			if(count==0){
+			if(count==0 || query.getUserId()==0){
 				BusinessNewsSupport businessNewsSupport = new BusinessNewsSupport();
 				businessNewsSupport.setUserId(query.getUserId());
 				businessNewsSupport.setNewsId(query.getID());
