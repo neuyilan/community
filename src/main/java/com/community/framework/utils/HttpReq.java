@@ -146,7 +146,7 @@ public class HttpReq {
 
 	public static void main(String[] args) {
 
-		String url = "https://121.199.0.31/bu54/ubus/services/thirdm/loginValidation";
+		String url = "http://121.199.0.31/bu54/ubus/services/thirdm/loginValidation";
 		JSONObject params = new JSONObject();
 
 		params.put("primobile", "111111111112"); 
@@ -157,7 +157,8 @@ public class HttpReq {
 		params.put("authenticationString", "ebd5eb26df36b1545f1d0445f7f7d1f5");
 
 		System.out.println(params.toString());
-		JSONObject xx = httpsPost(url, params);
+//		JSONObject xx = httpsPost(url, params);
+		JSONObject xx = post(url, params);
 		System.out.println(xx);
 		if (xx != null) {
 			System.out.println(xx.get("status"));

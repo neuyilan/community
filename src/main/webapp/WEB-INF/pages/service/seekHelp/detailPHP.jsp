@@ -49,7 +49,7 @@
     </div>
 	</div>
     <div class="kl-bottom">
-        <a class="kl-wyhf"><span>我要回复</span></a>  
+        <a class="kl-wyhf"><span>我要评论</span></a>  
     </div>
 </div>
 

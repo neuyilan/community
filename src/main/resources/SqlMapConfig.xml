@@ -143,6 +143,7 @@
 		<typeAlias alias="BusinessActivityVoteOptions" type="com.community.app.module.bean.BusinessActivityVoteOptions"/>
 		<typeAlias alias="BusinessProductKeyword" type="com.community.app.module.bean.BusinessProductKeyword"/>
 		<typeAlias alias="ManageSendMsg" type="com.community.app.module.bean.ManageSendMsg"/>
+	    <typeAlias alias="BusinessToken" type="com.community.app.module.bean.BusinessToken"/>
 		
 		
 	</typeAliases>
@@ -281,5 +282,7 @@
 		<mapper resource="com/community/app/module/mapper/BusinessActivityVoteOptionsMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessProductKeywordMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/ManageSendMsgMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessTokenMapper.xml" />
+		
 	</mappers>
 </configuration>

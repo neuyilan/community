@@ -22,10 +22,10 @@
 </head>
 
 <body>
-    <header class="header">
-        <h1>${typeName}</h1>
-        <a class="a-back"></a>
-    </header>
+<!--     <header class="header"> -->
+<%--         <h1>${typeName}</h1> --%>
+<!--         <a class="a-back"></a> -->
+<!--     </header> -->
     <div class="jz-info">
     <form action="" id="frm" method="post" name="frm">
 	   	<input type="hidden" name="userId"   id="userId" value="${userId}"/>
@@ -37,7 +37,7 @@
             <li>
                  <a class="xf-detail l-detail" onclick="javascript:jump('${bean.shopId}');">
                      <div class="l-img">
-                         <img src="${bean.shopImg }"/> 
+                         <img src="${ctx }/${bean.shopImg }"/> 
                      </div>
                      <div class="l-info">
                          <p class="jz-cate">

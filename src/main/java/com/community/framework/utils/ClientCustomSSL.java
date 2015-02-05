@@ -54,7 +54,7 @@ public class ClientCustomSSL {
     	params.put("authenticationString",  "ebd5eb26df36b1545f1d0445f7f7d1f5");
     	
     	System.out.println(params.toString());
-		JSONObject xx = httpPost("",url,params);
+		JSONObject xx = httpPost("C:\\Users\\Administrator\\Desktop\\bu54.store",url,params);
 		System.out.println(xx);
 		if (xx != null)
 		{

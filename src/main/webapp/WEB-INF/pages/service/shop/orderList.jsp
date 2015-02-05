@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>我的订单列表</title>
+<title>我的订单</title>
 <link type="text/css" rel="stylesheet" href="${ctx }/js/activity/css/style.css"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <script type="text/javascript">
@@ -21,10 +21,10 @@
     </script>
 </head>
 <body>
-    <header class="header">
-        <h1>我的快件</h1>
-        <a class="a-back"></a>
-    </header>
+<!--     <header class="header"> -->
+<!--         <h1>我的快件</h1> -->
+<!--         <a class="a-back"></a> -->
+<!--     </header> -->
     <div class="kj-search kj-div">
     
     <form action="" id="frm" method="post" name="frm">
@@ -41,33 +41,33 @@
             </div>
             <i class="tleft rightgif"></i>
         </a>
-        <a href="#">
-            <div class="tleft kj-simg">
-                <img src="${ctx }/js/activity/images/fj.jpg"/>
-            </div>
-            <div class="tleft">
-                <span class="l-search">机票订单查询</span><span class="l-from">由去哪网提供</span>
-            </div>
-            <i class="tleft rightgif"></i>
-        </a>
-         <a href="#">
-            <div class="tleft kj-simg">
-                <img src="${ctx }/js/activity/images/jd.jpg"/>
-            </div>
-            <div class="tleft">
-                <span class="l-search">酒店订单查询</span><span class="l-from">由去哪网提供</span>
-            </div>
-            <i class="tleft rightgif"></i>
-        </a>
-         <a href="#">
-            <div class="tleft kj-simg">
-                <img src="${ctx }/js/activity/images/jz.jpg"/>
-            </div>
-            <div class="tleft">
-                <span class="l-search">家政订单查询</span><span class="l-from">由云家政提供</span>
-            </div>
-            <i class="tleft rightgif"></i>
-        </a>
+<!--         <a href="#"> -->
+<!--             <div class="tleft kj-simg"> -->
+<%--                 <img src="${ctx }/js/activity/images/fj.jpg"/> --%>
+<!--             </div> -->
+<!--             <div class="tleft"> -->
+<!--                 <span class="l-search">机票订单查询</span><span class="l-from">由去哪网提供</span> -->
+<!--             </div> -->
+<!--             <i class="tleft rightgif"></i> -->
+<!--         </a> -->
+<!--          <a href="#"> -->
+<!--             <div class="tleft kj-simg"> -->
+<%--                 <img src="${ctx }/js/activity/images/jd.jpg"/> --%>
+<!--             </div> -->
+<!--             <div class="tleft"> -->
+<!--                 <span class="l-search">酒店订单查询</span><span class="l-from">由去哪网提供</span> -->
+<!--             </div> -->
+<!--             <i class="tleft rightgif"></i> -->
+<!--         </a> -->
+<!--          <a href="#"> -->
+<!--             <div class="tleft kj-simg"> -->
+<%--                 <img src="${ctx }/js/activity/images/jz.jpg"/> --%>
+<!--             </div> -->
+<!--             <div class="tleft"> -->
+<!--                 <span class="l-search">家政订单查询</span><span class="l-from">由云家政提供</span> -->
+<!--             </div> -->
+<!--             <i class="tleft rightgif"></i> -->
+<!--         </a> -->
     </div>
 </body>
 </html>

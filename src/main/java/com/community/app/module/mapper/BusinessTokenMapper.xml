@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessTokenDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessTokenResult" type="BusinessToken">
+			<result column="userId" property="userId" />
+			<result column="token" property="token" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			userId,
+			token
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="userId != null " >
+				   		and userId = #{userId}
+					</if>
+					<if test="token != null and token != ''" >
+				   		and token = #{token}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessToken -->
+	<select id="findById"  resultMap="BusinessTokenResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_token where userId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessToken -->
+	<select id="findAll" resultMap="BusinessTokenResult">
+		select <include refid="Base_Column_List" /> from business_token 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessToken -->
+	<select id="findByMap" resultMap="BusinessTokenResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_token <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessToken -->
+	<select id="findByExample" resultMap="BusinessTokenResult" parameterType="com.community.app.module.vo.BusinessTokenQuery">
+		select <include refid="Base_Column_List" /> from business_token <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessToken根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessTokenResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_token  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessToken列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_token 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessToken保存数据 -->
+	<insert id="save" parameterType="BusinessToken">
+<!-- 		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="userId"> -->
+<!-- 			SELECT LAST_INSERT_ID() -->
+<!--   		</selectKey> -->
+		insert into business_token(
+		userId,
+		token
+		) values(
+				#{userId},
+				#{token}
+		)
+	</insert>
+	
+	<!-- BusinessToken修改数据 -->
+	<update id="update" parameterType="BusinessToken">
+		update business_token 
+		<set>
+			<if test="token != null and token != ''" >
+			token=#{token}
+			</if>
+		</set> 
+		where 
+		userId=#{userId}
+		
+	</update>
+	
+	<!-- BusinessToken删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_token where 
+		userId=#{userId}
+			</delete>
+	
+</mapper>
+	
