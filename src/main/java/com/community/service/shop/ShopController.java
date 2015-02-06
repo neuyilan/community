@@ -146,6 +146,7 @@ public class ShopController {
 			{
 				Map<String,Object> userInfo = businessShopService.findUserInfo(map); 
 				userInfo.put("authenticationString", DefaultConfig.getProperty("authenticationString"));
+				userInfo.put("from_id", DefaultConfig.getProperty("from_id"));
 				JSONObject json = JSONObject.fromObject(userInfo);
 				System.out.println("reqJson ===> "+ json);
 				String cerPath=ContextLoader.getCurrentWebApplicationContext().getServletContext().getRealPath(DefaultConfig.getProperty("cerPath"));
@@ -215,6 +216,8 @@ public class ShopController {
 			{
 				Map<String,Object> userInfo = businessShopService.findUserInfo(map); 
 				userInfo.put("authenticationString", DefaultConfig.getProperty("authenticationString"));
+				userInfo.put("from_id", DefaultConfig.getProperty("from_id"));
+
 				JSONObject json = JSONObject.fromObject(userInfo);
 				System.out.println("reqJson ===> "+ json);
 				String cerPath=ContextLoader.getCurrentWebApplicationContext().getServletContext().getRealPath(DefaultConfig.getProperty("cerPath"));

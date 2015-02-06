@@ -27,14 +27,14 @@
 <input type="hidden" name="partakeTimeSlotId" id="partakeTimeSlotId" value="${partakeTimeSlotId}" />
 <div id="bodyDiv" class="x-main">
 <div class="scroll">
-    <div class="x-total">
+    <div class="blockdiv">
         <div class="x-content">
             <div class="x-cx">
                <p>${actContent}</p>
             </div>
         </div>
     </div>
-    <div class="x-total x-hdcc">
+    <div class="blockdiv x-hdcc">
  			<c:if test="${fn:length(list)==1}">
                 <input type="hidden" name="timeSlotId" id="timeSlotId" value="${timeSlotId}" />
 			</c:if>
@@ -80,12 +80,12 @@
 	                	<span>查看我的报名信息</span>
 	                </a>
                     <span class="x-z">
-                        <a><img src="${ctx }/js/activity/images/zk.png" width="23" height="30"></a>
+                        <a><img src="${ctx }/js/activity/images/zk.png" width="19" height="19"></a>
                         <em>${supports}</em>
                     </span>
                </div>
            </div>
-    <div class="x-total x-pl">
+    <div class="blockdiv x-pl">
         <p class="x-pc">全部评论(<span id="commentsCount">${comments }</span>)</p>
         <div id="pos"></div>
         <a href="#pos" id="anchor_scroll"></a>
@@ -280,11 +280,12 @@ $(document).ready(function(){
 	                return null;
 	            }
 			}
+		var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
 	 	var content = $('#comment').val();
-	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+	 	content = content.replace(ze,'');
+	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){
 			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
-			 
 			return;
 		}
 	 	var url="";
@@ -335,17 +336,22 @@ $(document).ready(function(){
 	 		    	newContent+='</dd>'
 	 		    	newContent+='</dl>';
 	 				$('#comments').prepend(newContent);*/
-	 				$('#comment').val("");
-	 				$('#replaceinp').val("");
-	 				replyId = 0;//点击回复人id
-	 				replyName = "";//点击回复人姓名
-	 				replyType = 0;//点击回复人类型
-	 				$("#replaceinp").attr("placeholder","回复："+replyName);
-	 				$("#commentsCount").text(data.content.comments);
-	 				$('#comments').html("");
-	 				jump(1);
-	 				
-	 			 	document.getElementById("anchor_scroll").click();
+	 				if(data.errorCode == 200) {
+	 					$('#comment').val("");
+		 				$('#replaceinp').val("");
+		 				replyId = 0;//点击回复人id
+		 				replyName = "";//点击回复人姓名
+		 				replyType = 0;//点击回复人类型
+		 				$("#replaceinp").attr("placeholder","回复："+replyName);
+		 				$("#commentsCount").text(data.content.comments);
+		 				$('#comments').html("");
+		 				jump(1);
+		 				
+		 			 	document.getElementById("anchor_scroll").click();
+				        //alert(data.message);
+	        	   }else{
+	        		   msgbox('提示',data.message,'确认');
+	        	   }
 	 		    },
 	 		    error: function () {
 	 		       msgbox('提示','评论失败','确认');

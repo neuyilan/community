@@ -177,8 +177,10 @@
 		                return null;
 		            }
 				}
+			var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
 		 	var content = $('#comment').val();
-		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\r\n\s\[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+		 	content = content.replace(ze,'');
+		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
 				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
 				return;
@@ -231,17 +233,23 @@
 		 		    	newContent+='</dd>'
 		 		    	newContent+='</dl>';
 		 				$('#comments').prepend(newContent);*/
-		 				$('#comment').val("");
-		 				$('#replaceinp').val("");
-		 				replyId = 0;//点击回复人id
-		 				replyName = "";//点击回复人姓名
-		 				replyType = 0;//点击回复人类型
-		 				$("#replaceinp").attr("placeholder","回复："+replyName);
-		 				$("#commentsCount").text(data.content.comments);
-		 				$('#comments').html("");
-		 				jump(1);
+		 				if(data.errorCode == 200) {
+		 					$('#comment').val("");
+			 				$('#replaceinp').val("");
+			 				replyId = 0;//点击回复人id
+			 				replyName = "";//点击回复人姓名
+			 				replyType = 0;//点击回复人类型
+			 				$("#replaceinp").attr("placeholder","回复："+replyName);
+			 				$("#commentsCount").text(data.content.comments);
+			 				$('#comments').html("");
+			 				jump(1);
+			 				
+			 			 	document.getElementById("anchor_scroll").click();
+					        //alert(data.message);
+		        	   }else{
+		        		   msgbox('提示',data.message,'确认');
+		        	   }
 		 				
-		 			 	document.getElementById("anchor_scroll").click();
 		 		    },
 		 		    error: function () {
 		 		       msgbox('提示','评论失败','确认');

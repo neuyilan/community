@@ -21,6 +21,8 @@
     </div>
 <script src="${ctx }/js/activity/js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
+
+
 	$("#ffSubmit").click(function(){
 		var az=/^[0-9]{11}$/;
 		if($("#cellphone").val()!=undefined){
@@ -50,10 +52,9 @@
 	           success: function (data) {
 	        	   //eval('data=' + data);
 	        	   if(data.errorCode == 200) {
-	        		   msgbox('提示',data.message,'确定');
-	        		   
-
-	        		   self.location=document.referrer;
+	        		   msgbox('提示',data.message,'确定',function(){
+	        			   self.location='${ctx}/service/activities/getActivitiesDetailsById.json?ID=${actId}&userId=${userId}&tel=${tel}';
+	        		   });
 	        	   }else{
 	        		   msgbox('提示',data.message,'确定');
 	        		   
@@ -87,6 +88,7 @@
 	 });
 	 btnA.click(fun);
 }
+	
 
 </script>
 </body>

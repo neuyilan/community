@@ -37,7 +37,10 @@ $(function(){
 var artFlag=0;
 $(document).ready(function(){
 	 $('#send').click(function() {
-		 	var content = $('#CommentStr').val();
+		 	
+			var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
+			var content = $('#CommentStr').val();
+		 	content = content.replace(ze,'');
 		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 			if(!reg.test(content)){
 				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');

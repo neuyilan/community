@@ -21,10 +21,10 @@
     <script  type="text/javascript">
     var frameh;
     if (document.compatMode == "BackCompat") {
-        frameh = document.body.clientHeight-45;
+        frameh = document.body.clientHeight;
     }
     else {
-        frameh = document.documentElement.clientHeight-45;	
+        frameh = document.documentElement.clientHeight;	
     }
     /*设置iframe高度*/
     function iframeload(){

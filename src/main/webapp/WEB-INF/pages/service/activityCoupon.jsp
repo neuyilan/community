@@ -19,7 +19,7 @@
 </div>
 <div id="bodyDiv" class="x-main">
 <div class="scroll">
-    <div class="x-total">
+    <div class="blockdiv">
     	<div class="x-infor">
             <div class="x-head">
                 <p class="x-title"><span>${title}</span></p>
@@ -30,7 +30,6 @@
             <div class="x-cx">
                <p>${actContent}</p>
             </div>
-            <hr/>
              <p class="x-des">有效期：${couponValid}</p>
             <div class="x-zs">
             <input type="hidden" name="ID" id="ID" value="${ID }" />
@@ -56,7 +55,7 @@
                 
                 <!-- 点赞 -->
                 <span class="x-z">
-                    <a><img src="${ctx }/js/activity/images/zk.png"></a>
+                    <a><img src="${ctx }/js/activity/images/zk.png" width="19" height="19"></a>
                     <em>${supports}</em>
                 </span>
                 
@@ -76,7 +75,7 @@
         <div class="content">${couponDesc}</div>
     </div>
     
-    <div class="x-total x-pl">
+    <div class="blockdiv x-pl">
         <p class="x-pc">全部评论(<span id="commentsCount">${comments }</span>)</p>
         <div id="pos"></div>
         <a href="#pos" id="anchor_scroll"></a>
@@ -188,6 +187,16 @@ $(document).ready(function(){
 	
 	//查看排名
 	$("#seeRank").click(function(e) {
+		if(userId==0){
+			if(window.confirm('为了确保您正常参与活动，请您填写相关信息。')){
+				 window.location.href='${phpIp}/wxokjia/reggoin.php';
+                //alert("确定");
+                return null;
+             }else{
+                //alert("取消");
+                return null;
+            }
+		}
 		window.location.href='${ctx}/service/activities/ranking.json?userId='+userId+"&ID="+"${ID}&ranks=${ranks}";
      });
 	
@@ -265,11 +274,12 @@ $(document).ready(function(){
 	                return null;
 	            }
 			}
+		var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
 	 	var content = $('#comment').val();
-	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t\r\n\s\[\].<>?~！@#￥%……&*（）——+{}【】‘；：”“’。，、？～《》]+$/;
+	 	content = content.replace(ze,'');
+	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){
-			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确定');
-			 
+			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
 			return;
 		}
 	 	var url="";
@@ -320,17 +330,22 @@ $(document).ready(function(){
 	 		    	newContent+='</dd>'
 	 		    	newContent+='</dl>';
 	 				$('#comments').prepend(newContent);*/
-	 				$('#comment').val("");
-	 				$('#replaceinp').val("");
-	 				replyId = 0;//点击回复人id
-	 				replyName = "";//点击回复人姓名
-	 				replyType = 0;//点击回复人类型
-	 				$("#replaceinp").attr("placeholder","回复："+replyName);
-	 				$("#commentsCount").text(data.content.comments);
-	 				$('#comments').html("");
-	 				jump(1);
-	 				
-	 			 	document.getElementById("anchor_scroll").click();
+	 				if(data.errorCode == 200) {
+	 					$('#comment').val("");
+		 				$('#replaceinp').val("");
+		 				replyId = 0;//点击回复人id
+		 				replyName = "";//点击回复人姓名
+		 				replyType = 0;//点击回复人类型
+		 				$("#replaceinp").attr("placeholder","回复："+replyName);
+		 				$("#commentsCount").text(data.content.comments);
+		 				$('#comments').html("");
+		 				jump(1);
+		 				
+		 			 	document.getElementById("anchor_scroll").click();
+				        //alert(data.message);
+	        	   }else{
+	        		   msgbox('提示',data.message,'确认');
+	        	   }
 	 		    },
 	 		    error: function () {
 	 		       msgbox('提示','评论失败');
