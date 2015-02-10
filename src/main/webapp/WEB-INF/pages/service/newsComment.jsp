@@ -16,7 +16,7 @@
 <body>
 <div class="x-main">
 <div class="scroll">
-    <div class="x-news" id="content">
+    <div class="blockdiv" id="content">
         <div class="x-infor">
             <p class="x-xt"><img src="${publisherProtrait}"><span class="x-xdd">${publisherName}</span> <span class="x-xsj"><fmt:formatDate value="${publishTime }" pattern="yyyy-MM-dd HH:mm"/></span></p>
             <div class="x-head">
@@ -29,7 +29,6 @@
             <div class="x-cx">
                 ${newsContent}
             </div>
-            <hr/>
             <div class="x-zs1">
                 <span class="x-z">
                     <a><img src="${ctx }/js/activity/images/zk.png"></a>
@@ -42,7 +41,7 @@
             </div>
         </div>
     </div>
-    <div class="x-news x-pl">
+    <div class="blockdiv x-pl">
         <p class="x-pc">全部评论(<span id="commentsCount">${comments }</span>)</p>
         <div id="pos"></div>
         <a href="#pos" id="anchor_scroll"></a>
@@ -53,14 +52,14 @@
     </div>
     </div>
    <div class="x-inp">
-        <div>
-           <span>
+        <div class="tab">
+           <span class="tleft">
   			<div style=" position:relative;">
            <input type="text"   name="comment" class="x-inc" id="comment" style=" position:absolute;top:0px; left:0; z-index:2;">
-           <input type="text" placeholder="回复:" style="height: 32px; left: 0;padding-left: 40px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;" id="replaceinp">
+           <input type="text" placeholder="回复:" style="height: 33px; left: 0;padding-left: 8px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;box-sizing: border-box;-webkit-box-sizing: border-box;background:#eeeeee;border-radius:3px;" id="replaceinp">
  			 </div>
            </span>
-           <span><input id="commentBtn" type="button" value="发送"></span>
+           <span class="tleft"><input id="commentBtn" type="button" value=""></span>
         </div>
     </div>
 </div>
@@ -152,7 +151,7 @@
 				        //Num++;
 				        $('.x-z em').text(data.content.supports);
 						$('.x-z img').attr("src","${ctx }/js/activity/images/zk.png");
-						$('.x-z em').css("color","#030303");
+						$('.x-z em').css("color","#7c7c7c");
 				        });
 				        //alert(data.message);
 	        	   }else{

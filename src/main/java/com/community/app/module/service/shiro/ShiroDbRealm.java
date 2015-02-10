@@ -33,6 +33,7 @@ import com.community.app.module.bean.BusinessMenu;
 import com.community.app.module.bean.BusinessPosition;
 import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.bean.BusinessUserResource;
+import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ManageModule;
 import com.community.app.module.bean.ManageModulemenu;
 import com.community.app.module.bean.ManageUserFunction;
@@ -52,6 +53,7 @@ import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageModuleService;
 import com.community.app.module.service.ManageModulemenuService;
 import com.community.app.module.service.ManageUserFunctionService;
+import com.community.framework.utils.PickleMake;
 
 /**
  * 系统用户认证授权管理
@@ -95,15 +97,15 @@ public class ShiroDbRealm extends AuthorizingRealm{
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authToken;
-		Map<String, Object> paramMap = new HashMap();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("userEmail", token.getUsername());
 		//paramMap.put("userPassword", ShiroUtil.encrypt(token.getPassword().toString()));
 		paramMap.put("userPassword", String.copyValueOf(token.getPassword()));
 		try{
-			List userList = businessUserService.findByMap(paramMap);
+			List<BusinessUser> userList = businessUserService.findByMap(paramMap);
 			if(userList != null && userList.size() > 0) {
 				BusinessUser businessUser = (BusinessUser) userList.get(0);
-				BusinessPosition businessPosition = businessPositionService.findById(businessUser.getPositionId());
+//				BusinessPosition businessPosition = businessPositionService.findById(businessUser.getPositionId());
 				//返回shiro缓存的用户对象
 				//byte[] salt = Encodes.decodeHex(user.getSalt());
 				ShiroUser shiroUser = new ShiroUser();
@@ -122,7 +124,7 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				businessUser.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
 				businessUserService.update(businessUser);
 				//初始化用户菜单到shiro缓存中
-				List menuList = initUserMenu(businessUser.getUserId(), businessUser.getOrgType());
+				List<UserMenuBean> menuList = initUserMenu(businessUser.getUserId(), businessUser.getOrgType());
 				shiroUser.setMenuList(menuList);
 				//按用户类型初始化所需的业务切换关键信息 
 				//驿站 - 获取驿站(小区)列表
@@ -134,14 +136,17 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				RandomNumberGenerator rng = new SecureRandomNumberGenerator();
 				Object salt = rng.nextBytes();
 				
-				shiroUser.setComList(null);
-				shiroUser.setEstateBeanList(null);
-				shiroUser.setEstateList(null); 
-				shiroUser.setMenuList(null);
+				/* 
+				 * 深拷贝 shiroUser 对象，并清除 List 属性对象减小 header的 cookie 大小
+				 */
+				ShiroUser siroUsr = (ShiroUser)PickleMake.deepClone(shiroUser);
+				siroUsr.setComList(null);
+				siroUsr.setEstateBeanList(null);
+				siroUsr.setEstateList(null); 
+				siroUsr.setMenuList(null);
 				
 				SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
-						shiroUser, 
-						//ShiroUtil.encrypt(businessUser.getUserPassword()), 
+						siroUsr, 
 						businessUser.getUserPassword(),
 						ByteSource.Util.bytes(salt), 
 						getName());	
@@ -206,9 +211,9 @@ public class ShiroDbRealm extends AuthorizingRealm{
 	 * 组织物业小区列表
 	 * @param userResourceList
 	 */
-	private void initPropertyEstate(ShiroUser shiroUser, List userResourceList) {	
-		List estateList = new ArrayList();
-		Map paramMap = new HashMap();
+	private void initPropertyEstate(ShiroUser shiroUser, List<BusinessUserResource> userResourceList) {	
+		List<EstateBean> estateList = new ArrayList<EstateBean>();
+//		Map<String, Object> paramMap = new HashMap<String, Object>();
 		EstateBean estateBean = new EstateBean();
 		if(userResourceList != null && userResourceList.size() > 0) {
 			for(int i=0;i<userResourceList.size();i++){
@@ -261,9 +266,9 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				//运营模块角色
 				info.addRole(businessUser.getOrgType());
 				//获取运营模块ID
-				ManageModule manageModule = manageModuleService.findById(ModuleConst.OPERATION);
+//				ManageModule manageModule = manageModuleService.findById(ModuleConst.OPERATION);
 				//获取运营模块下的菜单
-				Map paramMap = new HashMap();
+				Map<String,Object> paramMap = new HashMap<String,Object>();
 				//paramMap.put("moduleId", manageModule.getModuleId());
 				//List modulemenuList = manageModulemenuService.findByMap(paramMap);
 				//获取运营模块下用户所拥有的功能权限
@@ -281,7 +286,7 @@ public class ShiroDbRealm extends AuthorizingRealm{
 					
 				}*/
 				paramMap.put("userId", businessUser.getUserId());
-				List userFunctionList = manageUserFunctionService.findByMap(paramMap);
+				List<ManageUserFunction> userFunctionList = manageUserFunctionService.findByMap(paramMap);
 				for(int j=0;j<userFunctionList.size();j++){
 					ManageUserFunction userFunction = (ManageUserFunction) userFunctionList.get(j);
 					info.addStringPermission(userFunction.getFunctionCode());
@@ -289,9 +294,9 @@ public class ShiroDbRealm extends AuthorizingRealm{
 			}else{//物业、驿站、社区报授权相应模块的权限
 				info.addRole(businessUser.getOrgType());
 				//获取对应模块下的所有菜单
-				Map paramMap = new HashMap();
+				Map<String, Object> paramMap = new HashMap<String, Object>();
 				paramMap.put("moduleId", ModuleConst.getModuleId(businessUser.getOrgType()));
-				List modulemenuList = manageModulemenuService.findByMap(paramMap);
+				List<ManageModulemenu> modulemenuList = manageModulemenuService.findByMap(paramMap);
 				//获取对应模块下用户所拥有的功能权限
 				for(int i=0;i<modulemenuList.size();i++) {
 			 		ManageModulemenu modulemenu = (ManageModulemenu) modulemenuList.get(i);
@@ -299,7 +304,7 @@ public class ShiroDbRealm extends AuthorizingRealm{
 					paramMap.put("moduleCode", businessUser.getOrgType());
 					paramMap.put("menuId", modulemenu.getMenuId());
 					paramMap.put("userId", businessUser.getUserId());
-					List userFunctionList = manageUserFunctionService.findByMap(paramMap);
+					List<ManageUserFunction> userFunctionList = manageUserFunctionService.findByMap(paramMap);
 					for(int j=0;j<userFunctionList.size();j++){
 						ManageUserFunction userFunction = (ManageUserFunction) userFunctionList.get(j);
 						info.addStringPermission(userFunction.getFunctionCode());
@@ -307,7 +312,7 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				}
 				
 				//初始化物业、驿站、社区报负责小区
-				Map param = new HashMap();
+				Map<String, Object> param = new HashMap<String, Object>();
 				if(ModuleConst.PROPERTY_CODE.equals(businessUser.getOrgType())) {//物业人员 获取小区ID 
 					param.put("proId", shiroUser.getOrgId());
 				}else if(ModuleConst.STATION_CODE.equals(businessUser.getOrgType())) {//驿站人员 获取小区ID 
@@ -315,11 +320,11 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				}else if(ModuleConst.COMMUNITY_CODE.equals(businessUser.getOrgType())) {//社区报人员 获取小区ID
 					param.put("comId", shiroUser.getOrgId());
 				}
-				List estateList = manageEstateService.findByMap(param);
+				List<ManageEstate> estateList = manageEstateService.findByMap(param);
 				if(estateList != null) {
 					shiroUser.setEstateList(estateList);
 				}else{
-					shiroUser.setEstateList(new ArrayList());
+					shiroUser.setEstateList(new ArrayList<ManageEstate>());
 				}
 				
 			}
@@ -339,13 +344,13 @@ public class ShiroDbRealm extends AuthorizingRealm{
 	
 	//按组织类型初始化用户菜单列表
 	private List<UserMenuBean> initUserMenu(Integer userId, String orgType) {
-		List<UserMenuBean> menuList = new ArrayList();
+		List<UserMenuBean> menuList = new ArrayList<UserMenuBean>();
 		//获取用户所有功能权限并组织出菜单
-		Map paramMap = new HashMap();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("moduleCode", orgType);
 		paramMap.put("userId", userId);
 		UserMenuBean userMenuBean = new UserMenuBean();
-		List userFunctionList = manageUserFunctionService.findByMap(paramMap);
+		List<ManageUserFunction> userFunctionList = manageUserFunctionService.findByMap(paramMap);
 		if(userFunctionList != null && userFunctionList.size() > 0) {
 			for(int i=0;i<userFunctionList.size();i++){
 				ManageUserFunction userFunction = (ManageUserFunction) userFunctionList.get(i);

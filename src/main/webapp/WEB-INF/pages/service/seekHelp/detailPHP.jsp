@@ -67,14 +67,10 @@
     <script>
         $(".kl-wyhf").click(function(e) {
         	if(userId==0){
-				if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
-					 window.location.href='${phpIp}/wxokjia/reggoin.php';
-	                //alert("确定");
-	                return null;
-	             }else{
-	                //alert("取消");
-	                return null;
-	            }
+				 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+				 	},'取消');
+				 	return;
 			}
 			$("#replyId").val(0);
 			$("#replyName").val("");
@@ -376,14 +372,10 @@ function jump(nextNo) {
 
                 			div.click(function(){
                 				if(userId==0){
-                					if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
-                						 window.location.href='${phpIp}/wxokjia/reggoin.php';
-                		                //alert("确定");
-                		                return null;
-                		             }else{
-                		                //alert("取消");
-                		                return null;
-                		            }
+                				 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+                				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+                				 	},'取消');
+                				 	return;
                 				}
                 				$('#replyId').val($(this).find("img").attr("replyId"));//点击回复人id
                 				$('#replyName').val($(this).find("img").attr("replyName"));//点击回复人姓名
@@ -394,14 +386,10 @@ function jump(nextNo) {
             			}else{
             				div.click(function(){
             				     if(userId==0){
-                					if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
-                						 window.location.href='${phpIp}/wxokjia/reggoin.php';
-                		                //alert("确定");
-                		                return null;
-                		             }else{
-                		                //alert("取消");
-                		                return null;
-                		            }
+            						 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+            						 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+            						 	},'取消');
+            						 	return;
                 				}
                 				$('#replyId').val(0);//点击回复人id
                 				$('#replyName').val("");//点击回复人姓名
@@ -430,7 +418,8 @@ function jump(nextNo) {
 		});
 }
 
-function msgbox(title,content,btn,fun){
+function msgbox(title,content,btn,fun,btn2){
+	 $(".tk").remove();
 	 var tk=$("<div class='tk'></div>");
 	 var tcontent=$("<div class='tcontent'></div>");
 	 tk.append(tcontent);
@@ -443,6 +432,13 @@ function msgbox(title,content,btn,fun){
 	 tcontent.append(tbtn);
 	 var btnA = $("<a>"+btn+"</a>");
 	 tbtn.append(btnA);
+	 if(btn2!=null && btn2!="" && btn2!=undefined){
+		 var btnB = $("<a style='margin-left:20px'>"+btn2+"</a>");
+		 tbtn.append(btnB);
+		 btnB.click(function(){
+			 $(".tk").remove();
+		 });
+	 }
 	 $("body").append(tk);
 	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
 	 btnA.click(function(){

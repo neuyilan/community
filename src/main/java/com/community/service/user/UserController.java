@@ -92,6 +92,7 @@ import com.community.app.module.vo.BusinessProductQuery;
 import com.community.app.module.vo.BusinessTelGroupQuery;
 import com.community.app.module.vo.BusinessTelQuery;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.StringUtil;
 import com.community.framework.utils.messagesUtil;
 import com.community.framework.utils.propertiesUtil;
@@ -367,7 +368,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -569,7 +570,7 @@ public class UserController {
 			        appVerifyService.delete(appVerifyQuery);
 					appVerifyService.save(appVerify);
 					// 发送短信
-					str="您已通过手机号"+query.getCellphone()+"快速注册成为“OK家”居民，初始密码为："+str+"立即下载OK家APP，享受小区生活服务：http://www.bqsqcm.com/community/download/index.html?id=18【OK家】";
+					str="您已通过手机号"+query.getCellphone()+"快速注册成为“OK家”居民，初始密码为："+str+"为了保证密码安全，请登录APP进行密码修改。立即下载OK家APP，享受小区生活服务：http://www.bqsqcm.com/community/download/index.html?id=18【OK家】";
 					String returnMessage = messagesUtil.returnMessageRrid(query.getCellphone(), str);
 					manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
 				}
@@ -594,7 +595,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -767,7 +768,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -819,7 +820,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -873,7 +874,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -931,7 +932,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1000,7 +1001,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1059,7 +1060,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1117,7 +1118,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1175,7 +1176,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1233,7 +1234,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1279,7 +1280,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1314,7 +1315,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1354,7 +1355,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1399,7 +1400,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1453,7 +1454,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1507,7 +1508,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1559,7 +1560,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1610,7 +1611,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1680,7 +1681,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2075,7 +2076,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2125,7 +2126,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2285,7 +2286,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2334,7 +2335,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2380,7 +2381,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2409,7 +2410,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2438,7 +2439,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2472,7 +2473,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2509,7 +2510,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2540,7 +2541,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2578,7 +2579,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2606,7 +2607,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2640,7 +2641,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2675,7 +2676,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2705,7 +2706,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2743,7 +2744,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2777,7 +2778,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2808,7 +2809,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2836,7 +2837,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2866,7 +2867,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2905,7 +2906,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 //			 TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2944,7 +2945,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -2983,7 +2984,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3022,7 +3023,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3061,7 +3062,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3100,7 +3101,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3139,7 +3140,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3164,7 +3165,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3207,7 +3208,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3247,7 +3248,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3292,7 +3293,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3511,7 +3512,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3587,7 +3588,7 @@ public class UserController {
 			businessNewsQuery.setIsHot(1);
 			BaseBean topBaseBean = businessNewsService.findAllPage_app(businessNewsQuery);
 
-			
+			//获取二手
 			BusinessProductQuery BusinessProductQuery = new BusinessProductQuery();
 			BusinessProductQuery.setRows(15);
 			BusinessProductQuery.setComId(query.getComId());
@@ -3595,12 +3596,13 @@ public class UserController {
 			BusinessProductQuery.setDealState(0);
 			BusinessProductQuery.setOrder("desc");
 			BusinessProductQuery.setSort("editTime");
-			//获取二手
 			BaseBean productBaseBean = businessProductService.findAllPage_app(BusinessProductQuery);
 			
+			//邻里求助
 			BusinessHelpQuery BusinessHelpQuery = new BusinessHelpQuery();
 			BusinessHelpQuery.setRows(15);
-			BusinessHelpQuery.setEstateId(query.getEstateId());
+			BusinessHelpQuery.setEstateId(null);
+			BusinessHelpQuery.setComId(query.getComId());
 			BusinessHelpQuery.setOrder("desc");
 			BusinessHelpQuery.setSort("editTime");
 			BaseBean helpBaseBean = businessHelpService.findAllPage_app(BusinessHelpQuery);
@@ -3655,14 +3657,31 @@ public class UserController {
 				json = json.substring(0, json.length()-1);
 			}
 			json += "],";
-			json += "\"news\":";
+			//以前版本参数需要删除
+			json += "\"news\":{\"ID\":\"0\",\"title\":\"过期参数赶紧删除\",\"time\":\"2014-2-6\",\"brief\":\"顾二赶紧删\",";
+			json +="\"pic\":\"\",";
+			json +="\"comments\":\"100\",";
+			json +="\"publisherId\":\"0\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
+			
+			json += "\"newsList\":[";
 			if (topBaseBean.getList().size()==0) {
 				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
 				json +="\"pic\":\"\",";
 				json +="\"comments\":\"\",";
 				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
+				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
+				json +="\"pic\":\"\",";
+				json +="\"comments\":\"\",";
+				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
+				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
+				json +="\"pic\":\"\",";
+				json +="\"comments\":\"\",";
+				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"}";
 			}else {
-				for(int i=0;i<1;i++) {
+				for(int i=0;i< topBaseBean.getList().size();i++) {
+					if (i==3) {
+						break;
+					}
 					BusinessNews businessNews = (BusinessNews) topBaseBean.getList().get(i);
 					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
 					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
@@ -3676,10 +3695,14 @@ public class UserController {
 				}
 			}
 			
+			if(topBaseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "],";
 			
 			json += "\"productList\":[";
 			for(int i=0;i<productBaseBean.getList().size();i++) {
-				if (i==4) {
+				if (i==10) {
 					break;
 				}
 				BusinessProduct businessProduct = (BusinessProduct) productBaseBean.getList().get(i);
@@ -3692,7 +3715,7 @@ public class UserController {
 					String[] pic = businessProduct.getPicUrl().split(",");
 					json += ip+pic[0];
 				}else {
-					json += ip+"/images/icon/qiugou.png";
+					json += ip+"/images/icon/qiugou2.png";
 				}
 				
 				json += "\"},";
@@ -3704,7 +3727,7 @@ public class UserController {
 			
 			json += "\"helpList\":[";
 			for(int i=0;i<helpBaseBean.getList().size();i++) {
-				if (i==2) {
+				if (i==10) {
 					break;
 				}
 				BusinessHelp businessHelp = (BusinessHelp) helpBaseBean.getList().get(i);
@@ -3750,7 +3773,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -3791,7 +3814,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4064,7 +4087,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4119,7 +4142,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -4419,7 +4442,7 @@ public class UserController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

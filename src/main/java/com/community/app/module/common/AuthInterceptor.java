@@ -33,7 +33,7 @@ public class AuthInterceptor implements HandlerInterceptor {
    
         if(currentUser.isAuthenticated()) {  
             //更好的实现方式的使用cookie  
-            return true; 
+            return true;  
         }else{
         	//request.getRequestDispatcher("/index/logout.do").forward(request, response);
         	//request.getRequestDispatcher("/WEB-INF/pages/login.jsp").forward(request, response);

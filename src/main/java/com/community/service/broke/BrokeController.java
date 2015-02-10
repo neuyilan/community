@@ -20,41 +20,22 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import java.util.Map;
-import com.community.app.module.vo.BaseBean;
 
-
-import com.community.app.module.vo.AppLatestNewsQuery;
-import com.community.app.module.vo.BusinessBreakCommentQuery;
-import com.community.app.module.vo.BusinessBreakQuery;
-import com.community.app.module.vo.BusinessMenuQuery;
-import com.community.app.module.vo.BusinessNewsQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppStatisticsClick;
-import com.community.app.module.bean.AppUserCellphone;
-import com.community.app.module.bean.BusinessActivityParticipate;
-import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessBreak;
-import com.community.app.module.bean.BusinessBreakAudio;
 import com.community.app.module.bean.BusinessBreakComment;
-import com.community.app.module.bean.BusinessMenu;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
@@ -62,11 +43,14 @@ import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessBreakCommentService;
 import com.community.app.module.service.BusinessBreakService;
-import com.community.app.module.service.BusinessMenuService;
 import com.community.app.module.service.BusinessNewsService;
-import com.community.app.module.vo.BusinessAnnoQuery;
+import com.community.app.module.vo.AppLatestNewsQuery;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessBreakCommentQuery;
+import com.community.app.module.vo.BusinessBreakQuery;
+import com.community.app.module.vo.BusinessNewsQuery;
 import com.community.framework.utils.DateUtil;
-import com.community.framework.utils.Uploader;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 
 
@@ -137,7 +121,7 @@ public class BrokeController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -196,7 +180,7 @@ public class BrokeController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -394,7 +378,7 @@ public class BrokeController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -517,7 +501,7 @@ public class BrokeController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -620,7 +604,7 @@ public class BrokeController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

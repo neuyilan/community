@@ -45,29 +45,29 @@ public class ClientCustomSSL {
 	public final static void main(String[] args) throws Exception {
 		
 //      String url = "https://121.199.0.31/bu54/ubus/services/thirdm/loginValidation";
-//		String url = "https://121.199.0.31/bu54/ubus/services/thirdm/loginValidation";
-		String url = "https://121.199.0.31/bu54/ubus/services/thirdm/totalThirdmOrder";
+		String url = "https://121.199.0.31/bu54/ubus/services/thirdm/loginValidation";
+//		String url = "https://121.199.0.31/bu54/ubus/services/thirdm/totalThirdmOrder";
 		
     	JSONObject params = new JSONObject();
     	
-//    	params.put("primobile",  "111111111112");
-//    	params.put("nickname",  "昵称1");
-//    	params.put("userid",  "222222222");
-//    	params.put("longitude",  "116.427355");
-//    	params.put("latitude",  "39.994155"); 	
-//    	params.put("authenticationString",  "acs135246");
+    	params.put("primobile",  "111111111112");
+    	params.put("nickname",  "昵称1");
+    	params.put("userid",  "222222222");
+    	params.put("longitude",  "116.427355");
+    	params.put("latitude",  "39.994155"); 	
+    	params.put("authentication",  "acs135246");
     	params.put("from_id",  "3");	
     	System.out.println(params.toString());
-	//	JSONObject xx = httpPost("C:\\Users\\Administrator\\Desktop\\bu54.store",url,params);
+		JSONObject xx = httpPost("C:\\Users\\Administrator\\Desktop\\bu54.store",url,params);
 //    	getOrderList("C:\\Users\\Administrator\\Desktop\\bu54.store",url,params);
-//		System.out.println(xx);
-//		if (xx != null)
-//		{
-//			System.out.println(xx.get("status"));
-//			System.out.println(xx.get("token"));
-//		}
-    	JSONArray xx = getOrderList("C:\\Users\\Administrator\\Desktop\\bu54.store",url,params);
-    	System.out.println(xx);
+		System.out.println(xx);
+		if (xx != null)
+		{
+			System.out.println(xx.get("status"));
+			System.out.println(xx.get("token"));
+		}
+//    	JSONArray xx = getOrderList("C:\\Users\\Administrator\\Desktop\\bu54.store",url,params);
+//    	System.out.println(xx);
 	}
 
 	public static JSONObject httpPost(String cerPath, String url, JSONObject json) {

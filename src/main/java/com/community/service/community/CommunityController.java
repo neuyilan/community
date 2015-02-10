@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -26,53 +25,29 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-
-
-import com.community.app.module.vo.BusinessImagesQuery;
-import com.community.app.module.vo.BusinessNewsCommentQuery;
-import com.community.app.module.vo.BusinessNewsQuery;
-import com.community.app.module.vo.BusinessNewsSupportQuery;
-import com.community.app.module.vo.BusinessNewspaperQuery;
-import com.community.app.module.vo.BusinessProductQuery;
-import com.community.app.module.vo.BusinessProductSupportQuery;
-import com.community.app.module.vo.ManageEstateQuery;
-import com.community.app.module.vo.ManageTagQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserNews;
-import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessCommunity;
-import com.community.app.module.bean.BusinessFeedbackComment;
 import com.community.app.module.bean.BusinessImages;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsComment;
 import com.community.app.module.bean.BusinessNewsSupport;
 import com.community.app.module.bean.BusinessNewspaper;
-import com.community.app.module.bean.BusinessProduct;
-import com.community.app.module.bean.BusinessProductComment;
-import com.community.app.module.bean.BusinessProductSupport;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ManageTag;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
-import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessImagesService;
 import com.community.app.module.service.BusinessNewsCommentService;
@@ -81,8 +56,16 @@ import com.community.app.module.service.BusinessNewsSupportService;
 import com.community.app.module.service.BusinessNewspaperService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageTagService;
-import com.community.app.module.vo.BusinessAnnoQuery;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessImagesQuery;
+import com.community.app.module.vo.BusinessNewsCommentQuery;
+import com.community.app.module.vo.BusinessNewsQuery;
+import com.community.app.module.vo.BusinessNewsSupportQuery;
+import com.community.app.module.vo.BusinessNewspaperQuery;
+import com.community.app.module.vo.ManageEstateQuery;
+import com.community.app.module.vo.ManageTagQuery;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 
@@ -171,7 +154,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -239,11 +222,19 @@ public class CommunityController {
 				} else {
 					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
 				}
+				if (manageEstate.getProId()==null) {
+					json += ",\"proId\":\"0\"";
+				} else {
+					json += ",\"proId\":\""+manageEstate.getProId()+"\"";
+				}
+				
 				if (manageEstate.getComId()==null) {
 					json += ",\"comId\":\"0\",\"comName\":\"\"},";
 				} else {
 					json += ",\"comId\":\""+manageEstate.getComId()+"\",\"comName\":\""+manageEstate.getComName()+"\"},";
-				}	
+				}
+				
+				
 			}
 			if(list.size() > 0) {
 				json = json.substring(0, json.length()-1);
@@ -264,7 +255,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -325,7 +316,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -486,7 +477,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -728,7 +719,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -759,7 +750,7 @@ public class CommunityController {
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
 			json += "\"appPic\":\""+ip+businessNews.getAppPic()+"\",";
-			json += "\"title\":\""+ip+businessNews.getTitle()+"\",";
+			json += "\"title\":\""+businessNews.getTitle()+"\",";
 			json += "\"url\":\""+phpIp+"/wxokjia/news_info.php?ID="+query.getID()+"\",";
 			
 			json += "\"rowCount\":"+baseBean.getCount()+",";
@@ -815,7 +806,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -833,7 +824,8 @@ public class CommunityController {
 		String json = "";
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			String ip = p.getProperty("imageIp"); 
+			String phpIp = p.getProperty("phpIp");  
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -852,6 +844,10 @@ public class CommunityController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+ip+businessNews.getAppPic()+"\",";
+			json += "\"title\":\""+businessNews.getTitle()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/news_info.php?ID="+query.getID()+"\",";
+			
 			json += "\"rowCount\":"+baseBean.getCount()+",";
 			json += "\"supports\":\""+businessNews.getSupports()+"\",";
 			json += "\"comments\":\""+businessNews.getComments()+"\",";
@@ -906,7 +902,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -967,7 +963,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1068,7 +1064,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1139,7 +1135,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1210,7 +1206,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1266,7 +1262,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1314,7 +1310,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1352,7 +1348,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1412,7 +1408,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1457,7 +1453,7 @@ public class CommunityController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

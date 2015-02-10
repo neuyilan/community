@@ -518,7 +518,7 @@ public class BusinessExp implements java.io.Serializable{
 	}
 	
 	public boolean equals(Object obj) {
-		if(obj instanceof BusinessExp == false) return false;
+		if(!(obj instanceof BusinessExp)) return false;
 		if(this == obj) return true;
 		BusinessExp other = (BusinessExp)obj;
 		return new EqualsBuilder()

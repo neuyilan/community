@@ -9,8 +9,6 @@ package com.community.service.verify;
  *
  */
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +25,7 @@ import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.AppVerifyService;
 import com.community.app.module.service.ManageSendMsgService;
 import com.community.app.module.vo.AppVerifyQuery;
-import com.community.framework.utils.MessageChannelClient;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.StringUtil;
 import com.community.framework.utils.messagesUtil;
 
@@ -139,7 +137,7 @@ public class VerifyController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -191,7 +189,7 @@ public class VerifyController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

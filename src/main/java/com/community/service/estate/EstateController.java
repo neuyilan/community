@@ -18,40 +18,28 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-
-
-import com.community.app.module.vo.AppEstateUserQuery;
-import com.community.app.module.vo.ManageBuildingQuery;
-import com.community.app.module.vo.ManageEstateQuery;
-import com.community.app.module.vo.ManageUnitQuery;
 import com.community.app.module.bean.AppEstateUser;
 import com.community.app.module.bean.AppUser;
-import com.community.app.module.bean.BusinessAnno;
-import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.ManageBuilding;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ManageUnit;
 import com.community.app.module.service.AppEstateUserService;
 import com.community.app.module.service.AppUserService;
-import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.ManageBuildingService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageUnitService;
-import com.community.app.module.vo.BusinessAnnoQuery;
+import com.community.app.module.vo.AppEstateUserQuery;
+import com.community.app.module.vo.ManageBuildingQuery;
+import com.community.app.module.vo.ManageEstateQuery;
+import com.community.app.module.vo.ManageUnitQuery;
+import com.community.framework.utils.JsonUtils;
 
 
 @Controller
@@ -107,6 +95,12 @@ public class EstateController {
 				} else {
 					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
 				}
+				if (manageEstate.getProId()==null) {
+					json += ",\"proId\":\"0\"";
+				} else {
+					json += ",\"proId\":\""+manageEstate.getProId()+"\"";
+				}
+				
 				if (manageEstate.getComId()==null) {
 					json += ",\"comId\":\"0\",\"comName\":\"\"},";
 				} else {
@@ -133,7 +127,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -202,11 +196,17 @@ public class EstateController {
 				} else {
 					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
 				}
+				if (manageEstate.getProId()==null) {
+					json += ",\"proId\":\"0\"";
+				} else {
+					json += ",\"proId\":\""+manageEstate.getProId()+"\"";
+				}
 				if (manageEstate.getComId()==null) {
 					json += ",\"comId\":\"0\",\"comName\":\"\"},";
 				} else {
 					json += ",\"comId\":\""+manageEstate.getComId()+"\",\"comName\":\""+manageEstate.getComName()+"\"},";
 				}	
+				
 				
 						
 			}
@@ -228,7 +228,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -284,7 +284,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -335,7 +335,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -385,7 +385,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -437,7 +437,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -488,7 +488,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -518,7 +518,7 @@ public class EstateController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

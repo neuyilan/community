@@ -48,6 +48,7 @@ import com.community.app.module.vo.BusinessHelpCommentQuery;
 import com.community.app.module.vo.BusinessHelpQuery;
 import com.community.app.module.vo.BusinessHelpSupportQuery;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 
@@ -165,7 +166,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -204,6 +205,7 @@ public class seekHelpController {
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("editTime");
+			query.setEstateId(null);
 			BaseBean baseBean = businessHelpService.findAllPage_app(query);
 			json += "{";
 			json += "\"errorCode\":\"200\",";
@@ -250,7 +252,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -350,7 +352,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -541,7 +543,7 @@ public class seekHelpController {
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
 			json += "\"appPic\":\""+appPic+"\",";
-			json += "\"title\":\""+ip+businessHelp.getHelpContent()+"\",";
+			json += "\"title\":\""+businessHelp.getHelpContent()+"\",";
 			json += "\"url\":\""+phpIp+"/wxokjia/chat_info.php?ID="+query.getID()+"\",";
 			
 			json += "\"rowCount\":"+baseBean.getCount()+",";
@@ -598,7 +600,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -617,6 +619,7 @@ public class seekHelpController {
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");   
+			String phpIp = p.getProperty("phpIp");  
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -626,10 +629,20 @@ public class seekHelpController {
 			BaseBean baseBean = businessHelpCommentService.findAllPage_app(query);
 			BusinessHelp businessHelp = businessHelpService.findById_app(query.getID());
 
+			String appPic = "";
+			if(businessHelp.getPics()!=null){
+				String[] pic = businessHelp.getPics().split(",");
+				appPic = ip+pic[0];
+			}
+			
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+appPic+"\",";
+			json += "\"title\":\""+businessHelp.getHelpContent()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/chat_info.php?ID="+query.getID()+"\",";
+			
 			json += "\"rowCount\":"+baseBean.getCount()+",";
 			json += "\"supports\":\""+businessHelp.getSupports()+"\",";
 			json += "\"comments\":\""+businessHelp.getComments()+"\",";
@@ -685,7 +698,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -763,7 +776,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -873,7 +886,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -944,7 +957,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1010,7 +1023,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1050,7 +1063,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1102,7 +1115,7 @@ public class seekHelpController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

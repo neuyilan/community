@@ -23,9 +23,6 @@ import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserNews;
-import com.community.app.module.bean.BusinessAnno;
-import com.community.app.module.bean.BusinessAnnoComment;
-import com.community.app.module.bean.BusinessAnnoSupport;
 import com.community.app.module.bean.BusinessChinmedichenacare;
 import com.community.app.module.bean.BusinessChinmedichenacareComment;
 import com.community.app.module.bean.BusinessChinmedichenacareSupport;
@@ -33,18 +30,15 @@ import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
-import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessChinmedichenacareCommentService;
 import com.community.app.module.service.BusinessChinmedichenacareService;
 import com.community.app.module.service.BusinessChinmedichenacareSupportService;
 import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessAnnoCommentQuery;
-import com.community.app.module.vo.BusinessAnnoQuery;
-import com.community.app.module.vo.BusinessAnnoSupportQuery;
 import com.community.app.module.vo.BusinessChinmedichenacareCommentQuery;
 import com.community.app.module.vo.BusinessChinmedichenacareQuery;
 import com.community.app.module.vo.BusinessChinmedichenacareSupportQuery;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 
@@ -125,7 +119,7 @@ public class chinmedichenacareController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -223,7 +217,7 @@ public class chinmedichenacareController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -314,7 +308,7 @@ public class chinmedichenacareController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -375,7 +369,7 @@ public class chinmedichenacareController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -476,7 +470,7 @@ public class chinmedichenacareController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -547,7 +541,7 @@ public class chinmedichenacareController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -141,14 +141,14 @@
     </div>
     </div>
     <div class="x-inp">
-       <div>
-           <span>
+        <div class="tab">
+           <span class="tleft">
   			<div style=" position:relative;">
            <input type="text"   name="comment" class="x-inc" id="comment" style=" position:absolute;top:0px; left:0; z-index:2;">
-           <input type="text" placeholder="回复:" style="height: 32px; left: 0;padding-left: 40px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;" id="replaceinp">
+           <input type="text" placeholder="回复:" style="height: 33px; left: 0;padding-left: 8px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;box-sizing: border-box;-webkit-box-sizing: border-box;background:#eeeeee;border-radius:3px;" id="replaceinp">
  			 </div>
            </span>
-           <span><input id="commentBtn" type="button" value="发送"></span>
+           <span class="tleft"><input id="commentBtn" type="button" value=""></span>
         </div>
     </div>
 </div>
@@ -324,7 +324,7 @@ $(document).ready(function(){
 			        Num++;
 			        $('.x-z em').text(Num);
 					$('.x-z img').attr("src","${ctx }/js/activity/images/zk.png");
-					$('.x-z em').css("color","#030303");
+					$('.x-z em').css("color","#7c7c7c");
 			        });
 			        //alert(data.message);
         	   }else{

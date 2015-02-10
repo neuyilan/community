@@ -15,48 +15,22 @@ package com.community.service.activities;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONObject;
-import net.sf.json.util.NewBeanInstanceStrategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-
-
-import com.community.app.module.vo.BusinessActivityCommentQuery;
-import com.community.app.module.vo.BusinessActivityCouponQuery;
-import com.community.app.module.vo.BusinessActivityParticipateQuery;
-import com.community.app.module.vo.BusinessActivityQuery;
-import com.community.app.module.vo.BusinessActivityRegistrationInformationQuery;
-import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
-import com.community.app.module.vo.BusinessActivitySupportQuery;
-import com.community.app.module.vo.BusinessActivityVoteInformationQuery;
-import com.community.app.module.vo.BusinessActivityVoteOptionsQuery;
-import com.community.app.module.vo.BusinessNewsCommentQuery;
-import com.community.app.module.vo.BusinessNewsSupportQuery;
-import com.community.app.module.vo.ManageEstateQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.bean.AppUser;
@@ -69,14 +43,6 @@ import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivitySupport;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
-import com.community.app.module.bean.BusinessAnno;
-import com.community.app.module.bean.BusinessCommunity;
-import com.community.app.module.bean.BusinessNews;
-import com.community.app.module.bean.BusinessNewsComment;
-import com.community.app.module.bean.BusinessNewsSupport;
-import com.community.app.module.bean.ManageEstate;
-import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.bean.index;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
@@ -90,13 +56,21 @@ import com.community.app.module.service.BusinessActivityService;
 import com.community.app.module.service.BusinessActivitySupportService;
 import com.community.app.module.service.BusinessActivityVoteInformationService;
 import com.community.app.module.service.BusinessActivityVoteOptionsService;
-import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageSendMsgService;
-import com.community.app.module.vo.BusinessAnnoQuery;
-import com.community.framework.utils.CommonUtils;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessActivityCommentQuery;
+import com.community.app.module.vo.BusinessActivityCouponQuery;
+import com.community.app.module.vo.BusinessActivityParticipateQuery;
+import com.community.app.module.vo.BusinessActivityQuery;
+import com.community.app.module.vo.BusinessActivityRegistrationInformationQuery;
+import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
+import com.community.app.module.vo.BusinessActivitySupportQuery;
+import com.community.app.module.vo.BusinessActivityVoteInformationQuery;
+import com.community.app.module.vo.BusinessActivityVoteOptionsQuery;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.messagesUtil;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.weather;
@@ -214,7 +188,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -469,7 +443,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -680,7 +654,7 @@ public class activitiesController {
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
 			json += "\"appPic\":\""+ip+BusinessActivity.getAppPic()+"\",";
-			json += "\"title\":\""+ip+BusinessActivity.getActName()+"\",";
+			json += "\"title\":\""+BusinessActivity.getActName()+"\",";
 			json += "\"url\":\""+phpIp+"/wxokjia/activity-info.php?ID="+query.getID()+"\",";
 	
 			json += "\"supports\":\""+BusinessActivity.getSupports()+"\",";
@@ -735,7 +709,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -754,6 +728,7 @@ public class activitiesController {
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");   
+			String phpIp = p.getProperty("phpIp");  
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -772,6 +747,10 @@ public class activitiesController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+ip+BusinessActivity.getAppPic()+"\",";
+			json += "\"title\":\""+BusinessActivity.getActName()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/activity-info.php?ID="+query.getID()+"\",";
+			
 			json += "\"supports\":\""+BusinessActivity.getSupports()+"\",";
 			json += "\"comments\":\""+BusinessActivity.getComments()+"\",";
 			json += "\"PageState\":";
@@ -825,7 +804,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -886,7 +865,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -987,7 +966,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1057,7 +1036,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1217,7 +1196,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1467,7 +1446,7 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

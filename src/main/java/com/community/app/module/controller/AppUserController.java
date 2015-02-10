@@ -66,7 +66,7 @@ public class AppUserController {
 			baseBean = appUserService.findAllPage(query);
 			baseBean.setRows(12);
 			mav = new ModelAndView("/module/appUser/list");
-			if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType()) && (shiroUser.getCurOrgType() == "" || ModuleConst.OPERATION_CODE.equals(shiroUser.getCurOrgType()))) {
+			if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType()) && ("".equals(shiroUser.getCurOrgType()) || ModuleConst.OPERATION_CODE.equals(shiroUser.getCurOrgType()))) {
 				comList = businessCommunityService.findAll();
 				mav.addObject("orgType", shiroUser.getOrgType());
 				mav.addObject("comList", comList);

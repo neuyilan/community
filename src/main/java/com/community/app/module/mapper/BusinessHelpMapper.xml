@@ -225,6 +225,10 @@
 					<if test="estateId != null and estateId != ''" >
 				   		and e.estateId = #{estateId}
 					</if>
+					
+					<if test="comId != null and comId != ''" >
+				   		and e.estateId IN (SELECT estateId FROM `manage_estate` WHERE comId=#{comId})
+					</if>
 			</trim>
 		</where>
 	</sql>

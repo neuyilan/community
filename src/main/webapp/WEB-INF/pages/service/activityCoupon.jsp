@@ -30,6 +30,8 @@
             <div class="x-cx">
                <p>${actContent}</p>
             </div>
+        </div>
+            <div class="x-btnlist">
              <p class="x-des">有效期：${couponValid}</p>
             <div class="x-zs">
             <input type="hidden" name="ID" id="ID" value="${ID }" />
@@ -81,19 +83,18 @@
         <a href="#pos" id="anchor_scroll"></a>
         <div id="comments">
         </div>
-        <hr style="border: 1px solid #e8e8e8; margin:10px -10px;">
         <a class="more" id="nextBtn"><span id="curr">点击获取更多</span></a>
     </div>
     </div>
     <div class="x-inp">
-       <div>
-           <span>
+        <div class="tab">
+           <span class="tleft">
   			<div style=" position:relative;">
            <input type="text"   name="comment" class="x-inc" id="comment" style=" position:absolute;top:0px; left:0; z-index:2;">
-           <input type="text" placeholder="回复:" style="height: 32px; left: 0;padding-left: 40px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;" id="replaceinp">
+           <input type="text" placeholder="回复:" style="height: 33px; left: 0;padding-left: 8px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;box-sizing: border-box;-webkit-box-sizing: border-box;background:#eeeeee;border-radius:3px;font-size:14px;" id="replaceinp">
  			 </div>
            </span>
-           <span><input id="commentBtn" type="button" value="发送"></span>
+           <span class="tleft"><input id="commentBtn" type="button" value=""></span>
         </div>
     </div>
 </div>
@@ -151,7 +152,7 @@ $(document).ready(function(){
 				//$(".x-djs").html("已结束")
 				$(".x-djs").css("display","block");//倒计时
 				$(".x-pm").css("display","none");//排名
-				$(".x-djs").html("抢光了");
+				$(".x-djs").html("已截止");
 			}else{//已投票
 				$(".x-djs").css("display","block");//倒计时
 				$(".x-pm").css("display","none");//排名
@@ -247,7 +248,7 @@ $(document).ready(function(){
 			        Num++;
 			        $('.x-z em').text(Num);
 					$('.x-z img').attr("src","${ctx }/js/activity/images/zk.png");
-					$('.x-z em').css("color","#030303");
+					$('.x-z em').css("color","#7c7c7c");
 			        });
 			        //alert(data.message);
         	   }else{
@@ -264,19 +265,19 @@ $(document).ready(function(){
 	
 	//评论
 	 $('#commentBtn').click(function() {
-		 if(userId==0){
-				if(window.confirm('评论活动需要登录！！是否进去登录页？')){
-					 window.location.href='http://10.1.17.210/wxokjia/reggoin.php';
-	                //alert("确定");
-	                return null;
-	             }else{
-	                //alert("取消");
-	                return null;
-	            }
-			}
+		if(userId==0){
+		 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+		 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+		 	},'取消');
+		 	return;
+		}
 		var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
 	 	var content = $('#comment').val();
 	 	content = content.replace(ze,'');
+	 	if(content.length==0){
+	 		msgbox('提示','您好像忘记说点什么了。','确认');
+			return;
+	 	}
 	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){
 			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
@@ -512,7 +513,7 @@ function jump(nextNo) {
 	    }
 	});
 }
-function msgbox(title,content,btn,fun){
+function msgbox(title,content,btn,fun,btn2){
 	 $(".tk").remove();
 	 var tk=$("<div class='tk'></div>");
 	 var tcontent=$("<div class='tcontent'></div>");
@@ -525,7 +526,16 @@ function msgbox(title,content,btn,fun){
 	 var tbtn = $("<div class='tbtn'></div>");
 	 tcontent.append(tbtn);
 	 var btnA = $("<a>"+btn+"</a>");
+	 
 	 tbtn.append(btnA);
+	 if(btn2!=null && btn2!="" && btn2!=undefined){
+		 var btnB = $("<a style='margin-left:20px'>"+btn2+"</a>");
+		 tbtn.append(btnB);
+		 btnB.click(function(){
+			 $(".tk").remove();
+		 });
+	 }
+	
 	 $("body").append(tk);
 	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
 	 btnA.click(function(){

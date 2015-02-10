@@ -62,7 +62,7 @@ public class MyTask {
         appUserService.pushWeather();
     }  
     
-    //@Scheduled(cron="0/5 * * * * ? ")  
+//	  @Scheduled(cron="0/5 * * * * ? ")  
 //    @Scheduled(cron="0 2 0 * * ? ")  
     public void taskGrabLimit(){  //0点2分抓取一次限行
         System.out.println(new Date());  

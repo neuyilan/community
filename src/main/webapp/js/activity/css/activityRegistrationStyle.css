@@ -18,16 +18,19 @@ img{ vertical-align:middle;}
 .x-xt .x-xdd{ padding-left:5px;}
 .x-xt .x-xsj{ position:absolute; right:0; top:10px;}
 
-.x-cx{ font-size:18px; line-height:26px; color:#595959;}
+.x-cx{ font-size:16px; line-height:24px; color:#595959;padding-bottom:15px;border-bottom:1px solid #e2e2e2;}
 .x-cx img{ width:100% !important; height:auto;}
 .x-cx p{ width:100% !important;}
+.x-content{ padding:10px 0 18px;}
+.content{padding-bottom:20px;}
+
 .x-content hr{ margin:20px -10px 4px -10px; border-top: 1px solid #e2e2e2;}
-.x-zs{ height:38px; position:relative; font-weight:bold;}
+.x-zs{ height:38px; position:relative; font-weight:bold;margin-top:13px}
 .x-btn{ display:block; width:56%; margin:0 auto; text-align:center; border-radius:6px; height:38px; line-height:38px; color:#fff;}
 .x-djs{ background:#858585; border:1px solid #5b5959; cursor:default;}
 .x-qg{ background:#e42909; border:1px solid #bd1e03; display:none;}
 .x-pm{ background:#f9aa0c; border:1px solid #b97207; display:none;}
-.x-zs .x-z{ position:absolute; right:0px; top:12px;}
+.x-zs .x-z{ position:absolute; right:6px; top:12px;}
 .x-zs.x-z em{ margin-left:-6px; font-weight:normal;}
 .x-zs1{ text-align:center;}
 .x-zs1 .x-z a{ position:relative;}
@@ -38,7 +41,7 @@ width: 19px;
 height: 19px;
 }
 
-.x-zs1 .x-z em{ vertical-align:middle;}
+.x-zs1 .x-z em{ vertical-align:middle;color:#7c7c7c}
 .x-main .x-pl{ padding:0 10px 10px; margin-bottom:80px;}
 .x-pc{ margin:10px 0; font-size:11px; color:#030303;}
 .s-clt {padding-top:10px;border-top: 1px solid #e2e2e2;position: relative;}
@@ -66,20 +69,21 @@ height: 19px;
 .s-clt .one {padding: 6px 2px 10px 2px;font-size:14px;color:#1f1f1f; line-height:20px;word-break:break-all}
 .more {color: #ababab;display: block;height: 20px;line-height: 20px;margin: 0 10px;text-align: center; font-size:12px;}
 
-.x-inp{ background:#fff; padding:10px; border-top:1px solid #9e9e9e; text-align:center; position:fixed; bottom:0; left:0; right:0;}
-.x-inp .x-inc{ width:100%; height:32px;border: 1px solid #adadad;border-radius: 6px; background:#efefef; background:url(../images/input.png) no-repeat 0px center; background-size:40px 24px; padding-left:40px; color:#282828; font-size:13px;}
+.x-inp{ background:#fff; padding:10px; border-top:1px solid #dedbdb; text-align:center; position:fixed; bottom:0; left:0; right:0;}
+.x-inp .x-inc{ width:100%; height:33px;border-radius: 3px; opacity:0.3; color:#282828; font-size:13px;box-sizing:border-box;  -webkit-box-sizing:border-box;padding:0 0 0 8px;}
 .x-inp div{ width:100%; display:table;}
-.x-inp div span{display:table-cell; height:32px;}
-.x-inp div span:nth-child(1){ padding-right:58px;}
-.x-inp div span:nth-child(2){ width:60px;}
-.x-inp input[type=button]{ height:32px; border-radius:6px; width:60px;margin-top:2px;}
+.x-inp div span{display:table-cell; height:33px;vertical-align:top;}
+.x-inp div span:nth-child(1){  padding-right:4px;}
+.x-inp div span:nth-child(2){ width:42px;}
+.x-inp input[type=button]{ height:33px; border-radius:3px; width:46px;background:url(../images/sent.png) no-repeat center center #f9c487; background-size:21px 20px; -webkit-background-size:21px 20px; box-sizing:border-box; -webkit-box-sizing:border-box;}
 
 /*20140823*/
 .scroll{ position:absolute; top:0; bottom:57px; left:0; right:0; overflow:auto;}
 .x-inp{ position:absolute; bottom:0; left:0; right:0;}
 .x-main .x-pl{ margin-bottom:20px;}
 
-
+.tab{display:table;}
+.tleft{display:table-cell}
 
 /*排行榜*/
 .sortb{ background:#fff;}
@@ -212,7 +216,7 @@ height: 19px;
 /*优惠券详情*/
 .blockdiv{ background-color:#fff; border-top:1px solid #cbcbcb; border-bottom:1px solid #cbcbcb; margin-top:7px; padding:0 16px;}
 .x-dtitle{ font-size:18px; padding:11px 0; border-bottom:1px solid #e2e2e2; margin-bottom:10px;}
-.x-des{ color:#f30d1a; margin:13px 0; font-size:18px; text-align: center;}
+.x-des{ color:#f30d1a; margin:13px 0 0; font-size:18px; text-align: center;}
 
 /*领取优惠券*/
 .lq-div{ padding:26px 24px 0;}

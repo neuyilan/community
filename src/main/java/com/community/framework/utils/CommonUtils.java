@@ -62,7 +62,9 @@ public class CommonUtils<CloseableHttpClient> {
     public static ShiroUser getUser() {
         //当前用户标识
         Subject currentUser = SecurityUtils.getSubject();
-        ShiroUser shiroUser = (ShiroUser)currentUser.getPrincipal();
+        
+
+        ShiroUser shiroUser = (ShiroUser)currentUser.getSession().getAttribute("shiroUser");//.getPrincipal();
         return shiroUser;
     }
     

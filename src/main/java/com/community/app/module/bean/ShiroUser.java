@@ -4,10 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.community.app.module.common.CommunityBean;
+import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.ModuleConst;
+import com.community.app.module.common.UserMenuBean;
 
 public class ShiroUser implements Serializable {
+	
 	private static final long serialVersionUID = -1373760761780840081L;
+	
 	private java.lang.Integer userId;
 	private java.lang.String userEmail;
 	private java.lang.String userName;
@@ -17,10 +22,10 @@ public class ShiroUser implements Serializable {
 	private String posName;
 	private String orgType;
 	private Integer orgId;
-	private List estateList = new ArrayList();//小区资源列表
-	private List estateBeanList = new ArrayList();//简版小区列表
-	private List menuList = new ArrayList();//菜单列表
-	private List comList = new ArrayList();//社区列表
+	private List<ManageEstate> estateList = new ArrayList<ManageEstate>();//小区资源列表
+	private List<EstateBean> estateBeanList = new ArrayList<EstateBean>();//简版小区列表
+	private List<UserMenuBean> menuList = new ArrayList<UserMenuBean>();//菜单列表
+	private List<CommunityBean> comList = new ArrayList<CommunityBean>();//社区列表
 	private String lastLoginTime;
 	private Integer curEstateId = 0; //当前小区ID，默认为0，代表没有当前小区ID
 	private String curEstateName = "全部小区"; //当期小区名称
@@ -94,38 +99,7 @@ public class ShiroUser implements Serializable {
 		this.curComId = curComId;
 	}
 
-	public List getEstateBeanList() {
-		return estateBeanList;
-	}
-
-	public void setEstateBeanList(List estateBeanList) {
-		this.estateBeanList = estateBeanList;
-	}
-
-	public List getComList() {
-		return comList;
-	}
-
-	public void setComList(List comList) {
-		this.comList = comList;
-	}
-
-	public List getMenuList() {
-		return menuList;
-	}
-
-	public void setMenuList(List menuList) {
-		this.menuList = menuList;
-	}
-
-	public List getEstateList() {
-		return estateList;
-	}
-
-	public void setEstateList(List estateList) {
-		this.estateList = estateList;
-	}
-
+	
 	public String getOrgType() {
 		return orgType;
 	}
@@ -214,6 +188,38 @@ public class ShiroUser implements Serializable {
 
 	public void setPosName(String posName) {
 		this.posName = posName;
+	}
+
+	public List<ManageEstate> getEstateList() {
+		return estateList;
+	}
+
+	public void setEstateList(List<ManageEstate> estateList) {
+		this.estateList = estateList;
+	}
+
+	public List<EstateBean> getEstateBeanList() {
+		return estateBeanList;
+	}
+
+	public void setEstateBeanList(List<EstateBean> estateBeanList) {
+		this.estateBeanList = estateBeanList;
+	}
+
+	public List<UserMenuBean> getMenuList() {
+		return menuList;
+	}
+
+	public void setMenuList(List<UserMenuBean> menuList) {
+		this.menuList = menuList;
+	}
+
+	public List<CommunityBean> getComList() {
+		return comList;
+	}
+
+	public void setComList(List<CommunityBean> comList) {
+		this.comList = comList;
 	}
 
 }

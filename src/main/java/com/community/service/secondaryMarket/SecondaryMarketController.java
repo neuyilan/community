@@ -14,43 +14,22 @@ package com.community.service.secondaryMarket;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-
-
-import com.community.app.module.vo.AppLatestNewsQuery;
-import com.community.app.module.vo.BusinessBreakQuery;
-import com.community.app.module.vo.BusinessNewsQuery;
-import com.community.app.module.vo.BusinessProductCommentQuery;
-import com.community.app.module.vo.BusinessProductQuery;
-import com.community.app.module.vo.BusinessProductSupportQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.bean.AppUserNews;
-import com.community.app.module.bean.BusinessAnno;
-import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessProduct;
 import com.community.app.module.bean.BusinessProductComment;
 import com.community.app.module.bean.BusinessProductKeyword;
@@ -59,14 +38,18 @@ import com.community.app.module.bean.BusinessProductType;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
-import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessProductCommentService;
 import com.community.app.module.service.BusinessProductKeywordService;
 import com.community.app.module.service.BusinessProductService;
 import com.community.app.module.service.BusinessProductSupportService;
 import com.community.app.module.service.BusinessProductTypeService;
-import com.community.app.module.vo.BusinessAnnoQuery;
+import com.community.app.module.vo.AppLatestNewsQuery;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessProductCommentQuery;
+import com.community.app.module.vo.BusinessProductQuery;
+import com.community.app.module.vo.BusinessProductSupportQuery;
 import com.community.framework.utils.DateUtil;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 
@@ -174,7 +157,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -229,7 +212,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -278,7 +261,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -329,7 +312,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -378,7 +361,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -428,7 +411,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -508,7 +491,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -600,7 +583,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -644,9 +627,11 @@ public class SecondaryMarketController {
 			BaseBean baseBean = businessProductCommentService.findAllPage_app(query);
 			BusinessProduct businessProduct = businessProductService.findById_app(query.getID());
 			String appPic = "";
-			if(businessProduct.getPicUrl()!=null){
+			if(businessProduct.getPicUrl()!=null && !"".equals(businessProduct.getPicUrl())){
 				String[] pic = businessProduct.getPicUrl().split(",");
 				appPic = ip+pic[0];
+			}else {
+				appPic = ip+"/images/icon/qiugou.png";
 			}
 			
 			json += "{";
@@ -654,8 +639,8 @@ public class SecondaryMarketController {
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
 			json += "\"appPic\":\""+appPic+"\",";
-			json += "\"title\":\""+ip+businessProduct.getContent()+"\",";
-			json += "\"url\":\""+phpIp+"/tiaozao_info.php?ID="+query.getID()+"\",";
+			json += "\"title\":\""+businessProduct.getContent()+"\",";
+			json += "\"url\":\""+phpIp+"/wxokjia/tiaozao_info.php?ID="+query.getID()+"\",";
 
 			
 			json += "\"PageState\":";
@@ -708,7 +693,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -727,6 +712,7 @@ public class SecondaryMarketController {
 		try{
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");   
+			String phpIp = p.getProperty("phpIp"); 
 			query.setRows(15);
 			query.setOrder("desc");
 			query.setSort("commentTime");
@@ -734,10 +720,24 @@ public class SecondaryMarketController {
 			query.setCommentorState(0);
 			query.setReplyState(0);
 			BaseBean baseBean = businessProductCommentService.findAllPage_app(query);
+			BusinessProduct businessProduct = businessProductService.findById_app(query.getID());
+			String appPic = "";
+			if(businessProduct.getPicUrl()!=null && !"".equals(businessProduct.getPicUrl())){
+				String[] pic = businessProduct.getPicUrl().split(",");
+				appPic = ip+pic[0];
+			}else {
+				appPic = ip+"/images/icon/qiugou.png";
+			}
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
+			json += "\"appPic\":\""+appPic+"\",";
+			json += "\"title\":\""+businessProduct.getContent()+"\",";
+			json += "\"url\":\""+phpIp+"/tiaozao_info.php?ID="+query.getID()+"\",";
+
+			
+			
 			json += "\"PageState\":";
 			if(baseBean.getCount()>query.getPage()*query.getRows()){
 				json += "true,";
@@ -789,7 +789,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -855,7 +855,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -961,7 +961,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1032,7 +1032,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1094,7 +1094,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1139,7 +1139,7 @@ public class SecondaryMarketController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

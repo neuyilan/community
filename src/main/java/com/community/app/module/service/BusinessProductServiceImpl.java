@@ -381,7 +381,7 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 			businessProduct.setDealState(0);
 			businessProduct.setEstateId(new Integer(param.get("estateId")));
 			businessProduct.setPrice(new Long(param.get("price")));
-			if (param.get("typeId")!=null && param.get("typeId")!="0") {
+			if (param.get("typeId")!=null && !"0".equals(param.get("typeId"))) {
 				businessProduct.setTypeId(new Integer(param.get("typeId")));
 				businessProduct.setTypeName(param.get("typeName"));
 			}else {
@@ -460,7 +460,7 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 				businessProduct.setIsEstateAgent(1);
 				businessProduct.setDealState(0);
 				businessProduct.setPrice(new Long(param.get("price")));
-				if (param.get("typeId")!=null && param.get("typeId")!="0") {
+				if (param.get("typeId")!=null && !"0".equals(param.get("typeId"))) {
 					businessProduct.setTypeId(new Integer(param.get("typeId")));
 					businessProduct.setTypeName(param.get("typeName"));
 				}else {
@@ -530,7 +530,7 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 			businessProduct.setDealState(0);
 			businessProduct.setEstateId(query.getEstateId());
 			businessProduct.setPrice(query.getPrice());
-			if (query.getTypeId()!=null && query.getTypeId().toString()!="0") {
+			if (query.getTypeId()!=null && !"0".equals(query.getTypeId().toString())) {
 				businessProduct.setTypeId(query.getTypeId());
 				businessProduct.setTypeName(query.getTypeName());
 			}else {
@@ -609,7 +609,7 @@ public class BusinessProductServiceImpl implements BusinessProductService {
 				businessProduct.setIsEstateAgent(1);
 				businessProduct.setDealState(0);
 				businessProduct.setPrice(query.getPrice());
-				if (query.getTypeId()!=null && query.getTypeId().toString()!="0") {
+				if (query.getTypeId()!=null && !"0".equals(query.getTypeId().toString())) {
 					businessProduct.setTypeId(query.getTypeId());
 					businessProduct.setTypeName(query.getTypeName());
 				}else {

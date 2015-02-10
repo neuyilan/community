@@ -51,7 +51,16 @@ public class BusinessHelpQuery extends BaseBean {
 	private String tel;
 	private String content;
 	private Integer isNickname ;
+	private Integer comId ;
 	
+	public Integer getComId() {
+		return comId;
+	}
+
+	public void setComId(Integer comId) {
+		this.comId = comId;
+	}
+
 	public Integer getIsNickname() {
 		return isNickname;
 	}

@@ -23,40 +23,25 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-
-
-import com.community.app.module.vo.BusinessBusQuery;
-import com.community.app.module.vo.BusinessBusStationQuery;
-import com.community.app.module.vo.BusinessLifePropQuery;
-import com.community.app.module.vo.BusinessTelQuery;
-import com.community.app.module.vo.ManageEstateQuery;
 import com.community.app.module.bean.AppStatisticsClick;
-import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessLifeProp;
-import com.community.app.module.bean.BusinessTel;
-import com.community.app.module.bean.BusinessTelGroup;
 import com.community.app.module.dao.BusinessLifePropDao;
 import com.community.app.module.service.AppStatisticsClickService;
-import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessBusService;
 import com.community.app.module.service.BusinessBusStationService;
 import com.community.app.module.service.ManageEstateService;
-import com.community.app.module.vo.BusinessAnnoQuery;
+import com.community.app.module.vo.BusinessBusQuery;
+import com.community.app.module.vo.BusinessBusStationQuery;
+import com.community.app.module.vo.BusinessLifePropQuery;
+import com.community.app.module.vo.ManageEstateQuery;
 import com.community.framework.utils.FileUtil;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 
 
@@ -201,7 +186,7 @@ public class ambitusController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -299,7 +284,7 @@ public class ambitusController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -337,7 +322,7 @@ public class ambitusController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(json.replace("\n", "\\n\\r").replace("\n\r", "\\n\\r"));
+			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

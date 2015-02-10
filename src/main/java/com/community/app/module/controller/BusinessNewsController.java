@@ -280,7 +280,7 @@ public class BusinessNewsController {
     public void findAllHotById(HttpServletResponse response, @RequestParam(value="id") String id) {
     	String json = "";
         try{
-        	int size = 1;  //最大置顶数
+        	int size = 3;  //最大置顶数
         	List<BusinessNews> list = businessNewsService.findAllHotById();
         	BusinessNews businessNews = businessNewsService.findById(Integer.parseInt(id));
         	

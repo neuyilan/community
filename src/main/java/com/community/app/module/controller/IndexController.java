@@ -662,9 +662,13 @@ public class IndexController {
 		String orgType = request.getParameter("orgType");
 		try {
 			ShiroUser shiroUser = CommonUtils.getUser();
+			ShiroUser siroUsrP = (ShiroUser)SecurityUtils.getSubject().getPrincipal();
 			//切换用户菜单到shiro缓存中
 			shiroUser.setCurEstateId(0);
 			shiroUser.setCurComId(0);
+			
+			siroUsrP.setCurEstateId(0);
+			siroUsrP.setCurComId(0);
 			List menuList = initUserMenu(shiroUser.getUserId(), orgType);
 			if(menuList.size() > 0) {
 				MenuComparator comparator=new MenuComparator();
@@ -672,14 +676,25 @@ public class IndexController {
 			}
 			shiroUser.setCurOrgType(orgType);
 			shiroUser.setMenuList(menuList);
+			
+			siroUsrP.setCurOrgType(orgType);
+			siroUsrP.setMenuList(menuList);
 			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {
 				shiroUser.setCurOrgTypeName(ModuleConst.PROPERTY_NAME);
+				
+				siroUsrP.setCurOrgTypeName(ModuleConst.PROPERTY_NAME);
 			}else if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {
 				shiroUser.setCurOrgTypeName(ModuleConst.COMMUNITY_NAME);
+				
+				siroUsrP.setCurOrgTypeName(ModuleConst.COMMUNITY_NAME);
 			}else if(ModuleConst.STATION_CODE.equals(orgType)) {
 				shiroUser.setCurOrgTypeName(ModuleConst.STATION_NAME);
+				
+				siroUsrP.setCurOrgTypeName(ModuleConst.STATION_NAME);
 			}else{
 				shiroUser.setCurOrgTypeName(ModuleConst.OPERATION_NAME);
+				
+				siroUsrP.setCurOrgTypeName(ModuleConst.OPERATION_NAME);
 			}
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
@@ -699,16 +714,26 @@ public class IndexController {
 		String jump = request.getParameter("jump");
 		try {
 			ShiroUser shiroUser = CommonUtils.getUser();
+			ShiroUser siroUsrP = (ShiroUser)SecurityUtils.getSubject().getPrincipal();
 			//切换小区ID到shiro缓存中
 			shiroUser.setCurEstateId(estateId);
 			shiroUser.setCurComId(0);
+			
+			siroUsrP.setCurEstateId(estateId);
+			siroUsrP.setCurComId(0);
 			if(estateId != null && estateId != 0) {
 				ManageEstate manageEstate = manageEstateService.findById(estateId);
 				shiroUser.setCurEstateName(manageEstate.getEstateName());
 				shiroUser.setCurStateId(manageEstate.getStationId());
+				
+				siroUsrP.setCurEstateName(manageEstate.getEstateName());
+				siroUsrP.setCurStateId(manageEstate.getStationId());
 			}else{
 				shiroUser.setCurEstateName("全部小区");
 				shiroUser.setCurStateId(0);
+				
+				siroUsrP.setCurEstateName("全部小区");
+				siroUsrP.setCurStateId(0);
 			}
 			
 		} catch (AuthenticationException e) {
@@ -729,14 +754,22 @@ public class IndexController {
 		String jump = request.getParameter("jump");
 		try {
 			ShiroUser shiroUser = CommonUtils.getUser();
+			ShiroUser siroUsrP = (ShiroUser)SecurityUtils.getSubject().getPrincipal();
 			//切换社区ID到shiro缓存中
 			shiroUser.setCurEstateId(0);
 			shiroUser.setCurComId(comId);
+			
+			siroUsrP.setCurEstateId(0);
+			siroUsrP.setCurComId(comId);
 			if(comId != null && comId != 0) {
 				BusinessCommunity businessCommunity = businessCommunityService.findById(comId);
 				shiroUser.setCurComName(businessCommunity.getComName());
+				
+				siroUsrP.setCurComName(businessCommunity.getComName());
 			}else{
 				shiroUser.setCurComName("全部社区");
+				
+				siroUsrP.setCurComName("全部社区");
 			}
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
