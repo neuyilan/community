@@ -3,15 +3,10 @@ package com.community.app.module.service;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
-
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
 import com.community.app.module.bean.BusinessProductKeyword;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessProductKeywordQuery;
+import com.community.framework.exception.ServiceException;
 
 
 public interface BusinessProductKeywordService {

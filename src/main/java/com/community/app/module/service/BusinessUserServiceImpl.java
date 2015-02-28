@@ -4,21 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.community.app.module.bean.MemberVO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.app.module.vo.BusinessUserQuery;
 import com.community.app.module.bean.BusinessUser;
+import com.community.app.module.bean.MemberVO;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.dao.BusinessUserDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessUserQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessUserService")
 @Transactional

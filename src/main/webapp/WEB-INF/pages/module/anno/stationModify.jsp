@@ -106,13 +106,13 @@
             <h2 class="relstatus" style="font-weight: bold;">发布状态<label for="publishState" class="error success"></label></h2>
             <div class="options">
                 <p>
-                <shiro:hasPermission name="anno_instant_publish">
+                <shiro:hasPermission name="station_anno_instant_publish">
                 <label>
                         <input class="radiostyle" type="radio" name="publishState" value="0" <c:if test="${businessAnno.publishState == 0 }"> checked </c:if> >
                         立即发布</label>
                     <br>
                     </shiro:hasPermission>
-                    <shiro:hasPermission name="anno_audting_anno">
+                    <shiro:hasPermission name="station_anno_audting_anno">
                     <br>
                     <label>
                         <input class="radiostyle" type="radio" name="publishState" value="1" <c:if test="${businessAnno.publishState == 1 }"> checked </c:if> >
@@ -318,7 +318,7 @@
                 
                 var isPush = document.getElementsByName("isPush");
             	if(isPush[0].checked) {
-                    window.location.href = '<%=ctx%>/business/businessAnno/list.do';
+                    window.location.href = '<%=ctx%>/business/businessAnno/stationList.do';
                     $('#ff').form('submit', {
                         success:function(data){
                             var data = eval('(' + data + ')');  // 改变json对象为javascript对象
@@ -330,7 +330,7 @@
                         success:function(data){
                             var data = eval('(' + data + ')');  // 改变json对象为javascript对象
                             alert(data.message);
-                            window.location.href = '<%=ctx%>/business/businessAnno/list.do';
+                            window.location.href = '<%=ctx%>/business/businessAnno/stationList.do';
                         }
                     });
             	}
@@ -356,10 +356,10 @@
                 },
                 /* annoPic: {
                     required: true
-                }, */
-               /* appPic: {
+                }, 
+               appPic: {
                     required: true
-                },  */
+                },*/ 
                 isPush: {
                     required: true
                 },
@@ -387,10 +387,10 @@
                  },
                  /* annoPic: {
                  	required: "请选择公告列表大图"
-                 }, */
-                 /* appPic: {
+                 }, 
+                 appPic: {
                      required: "请选择APP首页小图"
-                 }, */
+                 },*/
                  isPush: {
                      required: "请选择是否推送"
                  },

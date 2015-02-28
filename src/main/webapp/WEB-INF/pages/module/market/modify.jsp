@@ -181,7 +181,7 @@
             <input type="hidden" name="dealType" id="dealType"  value="${businessProduct.dealType }" /><%--发布类型--%>
             
             <h2 class="title">信息标题<label for="title" class="error success"></label></h2>
-            <input class="iptnewtit" type="text" name="title" id="title" placeholder='请输入新闻标题14字以内'  value="${businessProduct.title }"/>
+            <input class="iptnewtit" type="text" name="title" id="title" placeholder='请输入物品标题14字以内'  value="${businessProduct.title }"/>
             
             <h2 class="newscont">信息描述<label for="content" class="error success"></label></h2>
             <%--文本编辑器--%>

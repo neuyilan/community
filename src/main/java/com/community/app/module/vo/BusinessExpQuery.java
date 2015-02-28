@@ -1,15 +1,11 @@
 package com.community.app.module.vo;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import com.community.app.module.bean.BusinessExp;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessExpQuery extends BaseBean {
 	
@@ -89,7 +85,16 @@ public class BusinessExpQuery extends BaseBean {
 	private Integer phoneType;
 	private String expIds;
 	private String[] expIdArray;
+	private Integer curComId;
 	
+	public Integer getCurComId() {
+		return curComId;
+	}
+
+	public void setCurComId(Integer curComId) {
+		this.curComId = curComId;
+	}
+
 	public String[] getExpIdArray() {
 		return expIdArray;
 	}

@@ -5,9 +5,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import java.sql.Timestamp;
-import java.util.*;
-
 
 public class index implements java.io.Serializable{
 	

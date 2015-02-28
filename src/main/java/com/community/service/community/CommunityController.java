@@ -417,6 +417,7 @@ public class CommunityController {
 			query.setState(0);
 			query.setIsHot(1);
 			BaseBean topBaseBean = businessNewsService.findAllPage_app(query);
+			List<BusinessNews> topList = topBaseBean.getList();
 			query.setIsHot(0);
 			BaseBean baseBean = businessNewsService.findAllPage_app(query);
 			json += "{";
@@ -431,22 +432,39 @@ public class CommunityController {
 				json += "false,";
 			}
 			json += "\"list\":[";
-			for (int i = 0; i < topBaseBean.getList().size(); i++) {
-				BusinessNews businessNews = (BusinessNews) topBaseBean.getList().get(i);
-				json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
-				+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
-				json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
-				
-				json +="\"comments\":\""+businessNews.getComments()+"\",";
-				
-				if(businessNews.getNewsType()==1){
-					json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getNickname()+"\",\"avatar\":\""+ip+businessNews.getPortrait()+"\",\"type\":\"1\"},";
-				}else {
-					json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getBuNickname()+"\",\"avatar\":\""+ip+businessNews.getAvatar()+"\",\"type\":\"0\"},";
+			if (query.getPage()==1) {
+				for (int i = 0; i < topList.size(); i++) {
+					if (i==2) {
+						break;
+					}
+					BusinessNews businessNews = topList.get(i);
+					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
+					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
+					json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
+					
+					json +="\"comments\":\""+businessNews.getComments()+"\",";
+					
+					if(businessNews.getNewsType()==1){
+						json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getNickname()+"\",\"avatar\":\""+ip+businessNews.getPortrait()+"\",\"type\":\"1\"},";
+					}else {
+						json +="\"publisherId\":\""+businessNews.getPublisherId()+"\",\"publisherName\":\""+businessNews.getBuNickname()+"\",\"avatar\":\""+ip+businessNews.getAvatar()+"\",\"type\":\"0\"},";
+					}
 				}
 			}
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessNews businessNews = (BusinessNews) baseBean.getList().get(i);
+				if (topList!=null && topList.size()!=0) {
+					if(topList.size()==1){
+						if (topList.get(0).getNewsId().equals(businessNews.getNewsId())) {
+							continue;
+						}
+					}else {
+						if (topList.get(0).getNewsId().equals(businessNews.getNewsId()) || topList.get(1).getNewsId().equals(businessNews.getNewsId())) {
+							continue;
+						}
+					}
+				}
+				
 				json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
 				+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
 				json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
@@ -460,7 +478,7 @@ public class CommunityController {
 				}
 				
 			}
-			if(baseBean.getList().size() > 0 || topBaseBean.getList().size() > 0) {
+			if(baseBean.getList().size() > 0 || topList.size() > 0 && query.getPage()==1) {
 				json = json.substring(0, json.length()-1);
 			}
 			json += "]";
@@ -1180,23 +1198,23 @@ public class CommunityController {
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"圆圆\",";
 				json += "\"avatar\":\""+ip+"/images/icon/keke.jpg"+"\",";
-				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以拨打爆料热线：\",";
-				json += "\"tel\":\"13910830458\",";
-				json += "\"serviceTel\":\"53351216\"";
+				json += "\"brief\":\"小区是咱们大家的！告诉我们您的不满和建议，分享您身边的趣事，您的爆料将会有可能出现在我们的新闻报道中，甚至是北京青年报上，快来爆料吧！\",";
+				json += "\"tel\":\"\",";
+				json += "\"serviceTel\":\"\"";
 			}else if(comId.equals("11")){
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"北苑社长\",";
 				json += "\"avatar\":\""+ip+"/images/icon/keke.jpg"+"\",";
-				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以拨打爆料热线：\",";
-				json += "\"tel\":\"13910830458\",";
-				json += "\"serviceTel\":\"84999119\"";
-			}else if (comId.equals("12")) {
+				json += "\"brief\":\"小区是咱们大家的！告诉我们您的不满和建议，分享您身边的趣事，您的爆料将会有可能出现在我们的新闻报道中，甚至是北京青年报上，快来爆料吧！\",";
+				json += "\"tel\":\"\",";
+				json += "\"serviceTel\":\"\"";
+			}else{
 				json += "\"ID\":\"12\",";
 				json += "\"name\":\"天通苑社长\",";
-				json += "\"avatar\":\""+ip+"/images/	````````````````````````````````````````````````````````````````/keke.jpg"+"\",";
-				json += "\"brief\":\"非常感谢您给我们提供新闻线索！您可以把身边的故事告诉我们，我们会尽快与您取得联系。您可以拨打爆料热线：\",";
-				json += "\"tel\":\"13910830458\",";
-				json += "\"serviceTel\":\"80788388\"";
+				json += "\"avatar\":\""+ip+"/images/icon/keke.jpg"+"\",";
+				json += "\"brief\":\"小区是咱们大家的！告诉我们您的不满和建议，分享您身边的趣事，您的爆料将会有可能出现在我们的新闻报道中，甚至是北京青年报上，快来爆料吧！\",";
+				json += "\"tel\":\"\",";
+				json += "\"serviceTel\":\"\"";
 			}
 			json += "}";
 			json += "}";

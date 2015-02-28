@@ -5,23 +5,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 import net.sf.json.JSONArray;
-import net.sf.json.util.NewBeanInstanceStrategy;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.community.app.module.service.AppUserConfigService;
 
 public class weather {
 
@@ -277,6 +271,10 @@ public class weather {
 		   if(str.equals("100.0%")){
 			   str="100%";
 		   }
+		   if (number1==0||number2==0) {
+			   str="0%";
+		   }
+		   
 		   return str;
 		 
 		}

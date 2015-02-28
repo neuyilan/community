@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>新闻管理</title>
+        <title>新鲜事管理</title>
         <%@include file="/common/meta.jsp"%>
         <script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
         <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
@@ -21,7 +21,7 @@
             <div class="scroll">
 	        	<div class="scroll-box">
 	                <ul id="oneul">
-	                	<li id="state_" class="active navlist"><a href="javascript:;"><span>全部新闻</span><b class="donbut"><i></i></b></a>
+	                	<li id="state_" class="active navlist"><a href="javascript:;"><span>全部新鲜事</span><b class="donbut"><i></i></b></a>
 	                    	<input type="hidden" name="state" id="state" value="${state}" />
 	                    	<ul class="erjnav">
 	                            <li id="state_0"><a href="javascript:;">已发布</a></li>
@@ -77,7 +77,7 @@
 	                    <div class="relnews">
                             <img src="<%=ctx %>/images/icon/relnews.png" style="width:100%;" />
                         </div>
-	                	<span class="tittex">发布新闻</span>
+	                	<span class="tittex">发布新鲜事</span>
 	                </a>
 	            </div>
 	            </shiro:hasPermission>
@@ -132,22 +132,22 @@
 									<i class="help" id="block6" title="点赞量">${news.supports }</i>
 								</div>
 							</div>
-		                    <div class="text">${news.brief}</div>
+		                    <div class="text">${news.tag}</div>
 		                    <hr class="link">
 		                    <div class="operate">
 		                    	<shiro:hasPermission name="news_view_detail">
-		                    		<span class="see s-xw-yfb" title="查看新闻详情" onclick="checkNewsDetail('${news.newsId}');"></span>
+		                    		<span class="see s-xw-yfb" title="查看新鲜事详情" onclick="checkNewsDetail('${news.newsId}');"></span>
 		                    	</shiro:hasPermission>
 		                    	<shiro:hasPermission name="news_edit">
 		                    	<c:if test="${news.state != 0 }">
-									<span class="edit"  title="编辑新闻"  onclick="window.location.href='modify.do?newsId=${news.newsId}' "></span>
+									<span class="edit"  title="编辑新鲜事"  onclick="window.location.href='modify.do?newsId=${news.newsId}' "></span>
 								</c:if>
 								</shiro:hasPermission>
 		                    	<shiro:hasPermission name="news_delete">
-		                    		<span id="text1" class="del"  title="删除新闻"  onclick="deleteNews('${news.newsId}')"></span>
+		                    		<span id="text1" class="del"  title="删除新鲜事"  onclick="deleteNews('${news.newsId}')"></span>
 		                    	</shiro:hasPermission>
 		                    </div>
-		                	<c:if test="${news.isHot == 1}">
+		                	<c:if test="${news.hotTime1 != null}">
 		                    	<span class="gore goreblock"><img src="<%=ctx %>/images/icon/gore.png" width="31" height="31" /><i>顶</i></span>
 		                	</c:if>
 		                </a>
@@ -177,7 +177,7 @@
 	<div id="newsInfoLayer" class="busswi5 s-xw-bu">
         <div id="newsInfoBar" class="sidebar5 s-xw-si">
             <a id="close5" title="关闭" class="s-xw-cl" href="javascript:;" onclick="$('#newsInfoLayer').fadeOut('slow');"></a>
-            <h2 class="tit5">新闻信息<em>【<span id="showstate"></span>】</em></h2>
+            <h2 class="tit5">新鲜事信息<em>【<span id="showstate"></span>】</em></h2>
             <div id="wrapper-250">
                 <ul class="accordion5">
                     <li id="one5" class="files"><a href="#one"><lable id="title" style="color: #333;"></lable></a></li>
@@ -208,7 +208,7 @@
     <div id="newsInfoLayer1" class="busswi5 s-xw-bu">
         <div id="newsInfoBar1" class="sidebar5 s-xw-si">
             <a id="close5" title="关闭" class="s-xw-cl" href="javascript:;" onclick="$('#newsInfoLayer1').fadeOut('slow');"></a>
-            <h2 class="tit5">新闻内容<em>【<span id="showstate2"></span>】</em></h2>
+            <h2 class="tit5">新鲜事内容<em>【<span id="showstate2"></span>】</em></h2>
             <div id="wrapper-250">
                 <ul class="accordion5">
                     <li id="one5" class="files"><a href="#one"><lable id="title2" style="color: #333;"></lable></a></li>
@@ -299,7 +299,7 @@ function jump(pageNo) {
 	                + '<div class="manbox" style="margin-left:0;">'
 	                + '<a class="nopotr" href="javascript:window.location.href=\'<%=ctx %>/business/businessNews/add.do\';" style="cursor:pointer;">'
 	                + '<div class="relnews"><img src="<%=ctx %>/images/icon/relnews.png" style="width:100%;" /></div> '
-	                + '<span class="tittex">发布新闻</span>'              
+	                + '<span class="tittex">发布新鲜事</span>'              
 	                + '</a>'
 	                + '</div>';
 	            	$('.column').append(addHtml);
@@ -351,7 +351,7 @@ function jump(pageNo) {
 	                	
 	                	var edit = '';
 	                	if(row.state != 0){
-	                		edit = '<span class="edit" title="编辑新闻" onclick="window.location.href=\'modify.do?newsId='+row.newsId+'\' "></span>';
+	                		edit = '<span class="edit" title="编辑新鲜事" onclick="window.location.href=\'modify.do?newsId='+row.newsId+'\' "></span>';
 	                	}
 	                	var htmlDom = ''
 	              		+ '<div class="manbox"'
@@ -366,20 +366,20 @@ function jump(pageNo) {
 	                	+'<i class="'+((row.state ==0 && row.comments!=0)?'revlight':'rev')+'" '
 	                	+ 'title="评论量"  style="'+((row.state ==0 && row.comments!=0)?'cursor:pointer;':'')+'" '
 	                	+'onclick="'+((row.state ==0 && row.comments!=0)?'window.location.href=\'getNewsCommentList.do?newsId='+row.newsId+'\' ':'')+'">'+row.comments+'</i><i class="look" title="浏览量">'+row.visits+'</i><i class="help" id="block6" title="点赞量">'+row.supports+'</i></div></div>'
-	                	+ '<div class="text">'+row.brief +'</div>'
+	                	+ '<div class="text">'+row.tag +'</div>'
 	                	+ '<hr class="link">'
 	                	+ '<div class="operate">'
 	                	<shiro:hasPermission name="news_view_detail">
-			            + '<span class="see s-xw-yfb"  title="查看新闻详情" onclick="checkNewsDetail('+row.newsId+');"></span>'
+			            + '<span class="see s-xw-yfb"  title="查看新鲜事详情" onclick="checkNewsDetail('+row.newsId+');"></span>'
 			            </shiro:hasPermission>
 			            <shiro:hasPermission name="news_edit">
 			            + edit
 			            </shiro:hasPermission>
 			            <shiro:hasPermission name="news_delete">
-			            + '<span id="text1" class="del"  title="删除新闻" onclick="deleteNews('+row.newsId+')"></span>'
+			            + '<span id="text1" class="del"  title="删除新鲜事" onclick="deleteNews('+row.newsId+')"></span>'
 			            </shiro:hasPermission>
 			            + '</div>'
-	                	+ (row.isHot == 0 ? '':'<span class="gore goreblock"><img src="<%=ctx%>/images/icon/gore.png" width="31" height="31" /><i>顶</i></span>')
+	                	+ (row.hotTime1 == "null" ? '':'<span class="gore goreblock"><img src="<%=ctx%>/images/icon/gore.png" width="31" height="31" /><i>顶</i></span>')
 	                	+ '</a>'		                
 	                	+ '</div>';
 	                	$('.column').append(htmlDom);
@@ -426,9 +426,9 @@ function jump(pageNo) {
 	    });
 	}
 	
-	//删除新闻
+	//删除新鲜事
 	function deleteNews(newsId) {
-		var bool = window.confirm("您确定要删除该条新闻？");
+		var bool = window.confirm("您确定要删除该条新鲜事？");
 	    if(bool) {
 	        $.post("delete.do", {id : newsId}, function(data) {
 	        	eval("data = "+data);
@@ -443,11 +443,11 @@ function jump(pageNo) {
         $.post("findAllHotById.do", {id : newsId}, function(data) {
         	eval("data = "+data);
         	var bool ="";
-        	if(data.oldtitle == "") {
+        	//if(data.oldtitle == "") {
 	        	bool = window.confirm("您确认要置为社区头条：\n\""+data.title+"\"");
-        	} else {
-        		bool = window.confirm("您确认要置为社区头条：\n\""+data.title+"\"\n将替换掉\n\""+data.oldtitle+"\"");
-        	}
+	        	//} else {
+        		//bool = window.confirm("您确认要置为社区头条：\n\""+data.title+"\"\n将替换掉\n\""+data.oldtitle+"\"");
+        	//}
     	    if(bool) {
     	    	$.post("updateNewsHotState.do", {id : newsId,oldnewsId : data.oldnewsId}, function(data1) {
     	    		eval("data1 = "+data1);
@@ -458,9 +458,9 @@ function jump(pageNo) {
         });
 	}
 	
-	// 撤回发布该条新闻
+	// 撤回发布该条新鲜事
 	function cancelNewsPublishState(newsId) {
-		var bool = window.confirm("您确定撤回发布该条新闻？");
+		var bool = window.confirm("您确定撤回发布该条新鲜事？");
 	    if(bool) {
 	        $.post("cancelNewsPublishState.do", {id : newsId}, function(data) {
 	        	eval("data = "+data);
@@ -470,9 +470,9 @@ function jump(pageNo) {
 	    }
 	}
 	
-	// 立即发布该条新闻
+	// 立即发布该条新鲜事
 	function cnChangeNewsState(newsId) {
-		var bool = window.confirm("您确定立即发布该条新闻？");
+		var bool = window.confirm("您确定立即发布该条新鲜事？");
 	    if(bool) {
 	        $.post("updateNewsState.do", {id : newsId, auditInfo : ''}, function(data) {
 	        	eval("data = "+data);
@@ -482,9 +482,9 @@ function jump(pageNo) {
 	    }
 	}
 	
-	// 通过审核该条新闻
+	// 通过审核该条新鲜事
 	function auditPassNewsState(newsId) {
-		var bool = window.confirm("您确定该条新闻通过审核？");
+		var bool = window.confirm("您确定该条新鲜事通过审核？");
 	    if(bool) {
 	        $.post("updateNewsStatePassNews.do", {id : newsId}, function(data) {
 	        	eval("data = "+data);
@@ -494,13 +494,13 @@ function jump(pageNo) {
 	    }
 	}
 	
-	// 拒绝该条新闻
+	// 拒绝该条新鲜事
 	function jjChangeNewsState(newsId) {
 		$('#newsInfoLayer1').fadeIn("slow");
         
         $.post("getNewsDetail.do", {newsId : newsId}, function(data) {
         	eval("data = "+data);
-            $('#title2').html(data.title);	//新闻标题
+            $('#title2').html(data.title);	//新鲜事标题
             $('#newsType2').html(data.newsType== '0'?'官方':'爆料');	//类型
             $('#comName2').html(data.comName);	//所属社区
             $('#publisherName2').html(data.publisherName);	//发布人
@@ -545,7 +545,7 @@ function jump(pageNo) {
 		if(($('#auditInfo').val()).trim() == '') {
 			alert("请填写拒绝原因!");
 		} else {
-			var bool = window.confirm("您确定拒绝该条新闻？");
+			var bool = window.confirm("您确定拒绝该条新鲜事？");
 		    if(bool) {
 				$.post('updateNewsState.do', {
 		    		id : $('#newsId').val(),
@@ -564,8 +564,8 @@ function jump(pageNo) {
 		  	$('#newsInfoLayer').fadeIn("slow");
 	        $.post("getNewsDetail.do", {newsId : newsId}, function(data) {
 	        	eval("data = "+data);
-	            $('#title').html(data.title);	//新闻标题
-	            $('#content').html(data.content);	//新闻内容
+	            $('#title').html(data.title);	//新鲜事标题
+	            $('#content').html(data.content);	//新鲜事内容
 	            $('#newsType1').html(data.newsType== '0'?'官方':'爆料');	//类型
 	            $('#comName').html(data.comName);	//所属社区
 	            $('#publisherName').html(data.publisherName);	//发布人
@@ -576,7 +576,7 @@ function jump(pageNo) {
 	            $('#visits').html(data.visits);	//浏览量
 	            $('#supports').html(data.supports);	//支持量
 	            $('#auditInfo2').html("批注：" +data.auditInfo);	//审批原因
-	            $('#viewInter').html("预览地址：<%=ctx %>/service/commiunity<br>/getJournalismDetailsById.json?ID="+data.newsId+"&userId=161" );
+	            $('#viewInter').html("预览地址：<%=ctx %>/service/commiunity<br>/getJournalismDetailsById.json?ID="+data.newsId+"&userId=0" );
 	            //发布状态
 	            if(data.state == 0 ) {
 	            	$('#showstate').html("已发布");
@@ -588,22 +588,22 @@ function jump(pageNo) {
 		            		rightStr += "<input id=\"qrbut5\" title=\"置为社区头条\" type=\"submit\" value=\"设置为社区头条\" onclick=\"stickForm("+data.newsId+");\"/>";
 		            	</shiro:hasPermission>
 		            	<shiro:hasPermission name="news_withdrawn_news">
-		            		rightStr += "<input id=\"zsbut5\" title=\" 撤回发布该条新闻\" type=\"button\" value=\"撤回发布\" onclick=\"cancelNewsPublishState("+data.newsId+");\"/>";
+		            		rightStr += "<input id=\"zsbut5\" title=\" 撤回发布该条新鲜事\" type=\"button\" value=\"撤回发布\" onclick=\"cancelNewsPublishState("+data.newsId+");\"/>";
 		            	</shiro:hasPermission>
 		            	$('#ding').html(rightStr);
 	            	}else {
 	            		<shiro:hasPermission name="news_withdrawn_news">
-	            			$('#ding').html("<input class=\"s-xw-btn1\" title=\" 撤回发布该条新闻\" type=\"button\" value=\"撤回发布\" onclick=\"cancelNewsPublishState("+data.newsId+");\"/>");
+	            			$('#ding').html("<input class=\"s-xw-btn1\" title=\" 撤回发布该条新鲜事\" type=\"button\" value=\"撤回发布\" onclick=\"cancelNewsPublishState("+data.newsId+");\"/>");
 	            		</shiro:hasPermission>
 	            	}
 	            	$("#auditInfo1").css('display','none'); 
 			         $("#hr1").css('display','none'); 
 	            } else if(data.state == 1 ) {
 	            	$('#showstate').html("未发布");
-	            	// $('#ding').html("<input class=\"s-xw-btn2\" title=\"置顶该条新闻\" type=\"button\" value=\"设置为置顶\" />");
+	            	// $('#ding').html("<input class=\"s-xw-btn2\" title=\"置顶该条新鲜事\" type=\"button\" value=\"设置为置顶\" />");
 	            	$('#ding').html("");
 	            	<shiro:hasPermission name="news_edit">
-	            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑新闻\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?newsId="+data.newsId+"' \"/>");
+	            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑新鲜事\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?newsId="+data.newsId+"' \"/>");
 	            	</shiro:hasPermission>
 	            	$("#auditInfo1").css('display','none'); 
 			         $("#hr1").css('display','none'); 
@@ -611,7 +611,7 @@ function jump(pageNo) {
 	            	$('#showstate').html("待审核");
 	            	$('#ding').html("");
 	            	<shiro:hasPermission name="news_audit">
-	            	$('#ding').html("<input id=\"qrbut5\" title=\"审核通过该条新闻\" type=\"submit\" value=\"审核通过\" onclick=\"auditPassNewsState("+data.newsId+");\"/><input id=\"zsbut5\" title=\"拒绝该条新闻\" type=\"button\" value=\"拒绝\" onclick=\"jjChangeNewsState("+data.newsId+");\"/>");
+	            	$('#ding').html("<input id=\"qrbut5\" title=\"审核通过该条新鲜事\" type=\"submit\" value=\"审核通过\" onclick=\"auditPassNewsState("+data.newsId+");\"/><input id=\"zsbut5\" title=\"拒绝该条新鲜事\" type=\"button\" value=\"拒绝\" onclick=\"jjChangeNewsState("+data.newsId+");\"/>");
 	            	$("#auditInfo1").css('display','none'); 
 			        $("#hr1").css('display','none'); 
 			        </shiro:hasPermission>
@@ -619,7 +619,7 @@ function jump(pageNo) {
 	            	$('#showstate').html("未通过");
 	            	$('#ding').html("");
 	            	<shiro:hasPermission name="news_edit">
-	            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑新闻\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?newsId="+data.newsId+"' \"/>");
+	            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑新鲜事\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?newsId="+data.newsId+"' \"/>");
 	            	$("#auditInfo1").css('display','block'); 
 			         $("#hr1").css('display','block'); 
 			         </shiro:hasPermission>
@@ -627,7 +627,7 @@ function jump(pageNo) {
 	            	$('#showstate').html("已通过");
 	            	$('#ding').html("");
 	            	<shiro:hasPermission name="news_instant_publish">
-	            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"立即发布该条新闻\" type=\"submit\" value=\"立即发布\" onclick=\"cnChangeNewsState("+data.newsId+");\"/>");
+	            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"立即发布该条新鲜事\" type=\"submit\" value=\"立即发布\" onclick=\"cnChangeNewsState("+data.newsId+");\"/>");
 	            	$("#auditInfo1").css('display','none'); 
 			        $("#hr1").css('display','none'); 
 			        </shiro:hasPermission>

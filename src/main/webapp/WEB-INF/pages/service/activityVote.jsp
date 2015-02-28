@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/>
 <title>活动详情</title>
-<link href="${ctx }/js/activity/css/activityRegistrationStyle.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/js/activity/css/activityRegistrationStyle.css?t=20150211" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -43,7 +43,7 @@
     <div class="blockdiv x-tp">
      	<p class="tp-tit">距离投票结束时间：<br><span id="tpli_counter"></span></p>
      	<section class="tp-sort">
-     		<c:if test="${rank == 0}">
+     		<c:if test="${rank == 0 && state==0}">
 	        	<h1>最多可以选择<i>${votes }</i>项，投票后才可以看到结果</h1>
 	        	<ul class="tp-hh <c:if test="${voteType == 1}">tp-font</c:if><c:if test="${voteType == 2}">tp-photo</c:if>"> 
 		        	<c:forEach items="${list}" var="businessActivityVoteOptions" varStatus="status">
@@ -75,7 +75,7 @@
 		        	</c:forEach>
 	        	</ul>
 	        </c:if> 
-	        <c:if test="${rank != 0}">
+	        <c:if test="${rank != 0 || state==2}">
 	        	<h1 class="tp-center">这里是目前的投票结果</h1> 
                 <ul class="tp-result <c:if test="${voteType == 1}">tp-restit</c:if>">
                 	<c:forEach items="${list}" var="businessActivityVoteOptions" varStatus="status">
@@ -114,7 +114,7 @@
                 </ul>  
 	        </c:if>
         </section>
-                <div class="x-zs" style=" margin-top:10px;">
+                <div class="x-zs">
                     <a class="x-btn x-djs">
             			<span id="tpli_counter">报名已结束</span>
 	            	</a>
@@ -136,7 +136,6 @@
         <a href="#pos" id="anchor_scroll"></a>
         <div id="comments">
         </div>
-        <hr style="border: 1px solid #e8e8e8; margin:10px -10px;">
         <a class="more" id="nextBtn"><span id="curr">点击获取更多</span></a>
     </div>
     </div>
@@ -145,7 +144,7 @@
            <span class="tleft">
   			<div style=" position:relative;">
            <input type="text"   name="comment" class="x-inc" id="comment" style=" position:absolute;top:0px; left:0; z-index:2;">
-           <input type="text" placeholder="回复:" style="height: 33px; left: 0;padding-left: 8px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;box-sizing: border-box;-webkit-box-sizing: border-box;background:#eeeeee;border-radius:3px;" id="replaceinp">
+           <input type="text" placeholder="请输入您要评论的内容..." style="height: 33px; left: 0;padding-left: 8px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;box-sizing: border-box;-webkit-box-sizing: border-box;background:#eeeeee;border-radius:3px;font-size:14px;" id="replaceinp">
  			 </div>
            </span>
            <span class="tleft"><input id="commentBtn" type="button" value=""></span>
@@ -209,14 +208,12 @@ $(document).ready(function(){
 	//参加活动
 	$(".x-qg").click(function(e) {
 		if(userId==0){
-			if(window.confirm('为了确保您正常参与活动，请您填写相关信息。')){
-				 window.location.href='${phpIp}/wxokjia/reggoin.php';
-                //alert("确定");
-                return null;
-             }else{
-                //alert("取消");
-                return null;
-            }
+			if(userId==0){
+			 	msgbox('提示','为了确保您正常参与活动，请您填写相关信息。','确定',function(){
+			 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+			 	},'取消');
+			 	return;
+			}
 		}
 	     var optionsId = $("[name=optionsId]:checked"); 
 	     var ids="";
@@ -264,14 +261,12 @@ $(document).ready(function(){
 	//查看排名
 	$("#seeRank").click(function(e) {
 		if(userId==0){
-			if(window.confirm('参加活动需要登录！！是否进去登录页？')){
-				 window.location.href='${ctx}/service/user/loginIndex.json?type=4&ID=${actId}';
-                //alert("确定");
-                return null;
-             }else{
-                //alert("取消");
-                return null;
-            }
+			if(userId==0){
+			 	msgbox('提示','为了确保您正常参与活动，请您填写相关信息。','确定',function(){
+			 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+			 	},'取消');
+			 	return;
+			}
 		}
 		var timeSlotId = $("#partakeTimeSlotId").val(); 
 		window.location.href='${ctx}/service/activities/registrationInformation.json?ID=${actId}&userId=${userId}&tel=${tel}&timeSlotId='+timeSlotId;
@@ -284,7 +279,7 @@ $(document).ready(function(){
 		 replyId = 0;//点击回复人id
 		 replyName = "";//点击回复人姓名
 		 replyType = 0;//点击回复人类型
-		 $("#replaceinp").attr("placeholder","回复:");
+		 $("#replaceinp").attr("placeholder","请输入您要评论的内容...");
 	 });
 	//点赞
 	 $('.x-z a').click(function(){
@@ -342,18 +337,20 @@ $(document).ready(function(){
 	//评论
 	 $('#commentBtn').click(function() {
 		 if(userId==0){
-				if(window.confirm('为了确保您的信息正常发布，请您填写相关信息。')){
-					 window.location.href='${phpIp}/wxokjia/reggoin.php';
-	                //alert("确定");
-	                return null;
-	             }else{
-	                //alert("取消");
-	                return null;
-	            }
+				if(userId==0){
+				 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+				 	},'取消');
+				 	return;
+				}
 			}
 		var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
 	 	var content = $('#comment').val();
 	 	content = content.replace(ze,'');
+	 	if(content.length==0){
+	 		msgbox('提示','您好像忘记说点什么了。','确认');
+			return;
+	 	}
 	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
 		if(!reg.test(content)){
 			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
@@ -434,7 +431,7 @@ $(document).ready(function(){
 	 		
 	 		return;
 	 	}
-	 	$("#replaceinp").attr("placeholder","回复:");
+	 	$("#replaceinp").attr("placeholder","请输入您要评论的内容...");
 	 });
 	
 	$('#nextBtn').click(function() {
@@ -593,7 +590,7 @@ function jump(nextNo) {
             			div.find("dd").click(function(){
               				 replyId = 0;//点击回复人id
               				 replyName = "";//点击回复人姓名
-              				 $("#replaceinp").attr("placeholder","回复:");
+              				 $("#replaceinp").attr("placeholder","请输入您要评论的内容...");
               			 });
             			
         			}else{
@@ -613,7 +610,7 @@ function jump(nextNo) {
 	    }
 	});
 }
-function msgbox(title,content,btn,fun){
+function msgbox(title,content,btn,fun,btn2){
 	 $(".tk").remove();
 	 var tk=$("<div class='tk'></div>");
 	 var tcontent=$("<div class='tcontent'></div>");
@@ -626,7 +623,16 @@ function msgbox(title,content,btn,fun){
 	 var tbtn = $("<div class='tbtn'></div>");
 	 tcontent.append(tbtn);
 	 var btnA = $("<a>"+btn+"</a>");
+	 
 	 tbtn.append(btnA);
+	 if(btn2!=null && btn2!="" && btn2!=undefined){
+		 var btnB = $("<a style='margin-left:20px'>"+btn2+"</a>");
+		 tbtn.append(btnB);
+		 btnB.click(function(){
+			 $(".tk").remove();
+		 });
+	 }
+	
 	 $("body").append(tk);
 	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
 	 btnA.click(function(){

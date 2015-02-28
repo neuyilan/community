@@ -5,16 +5,11 @@ import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
-
-import com.community.app.module.bean.BusinessFeedback;
-import com.community.app.module.bean.BusinessFeedbackComment;
+import com.community.app.module.bean.BusinessRepair;
 import com.community.app.module.bean.MemberVO;
 import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessFeedbackQuery;
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
-import com.community.app.module.bean.BusinessRepair;
 import com.community.app.module.vo.BusinessRepairQuery;
+import com.community.framework.exception.ServiceException;
 
 
 public interface BusinessRepairService {

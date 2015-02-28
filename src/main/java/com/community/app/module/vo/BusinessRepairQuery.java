@@ -1,13 +1,12 @@
 package com.community.app.module.vo;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import java.sql.Timestamp;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.community.app.module.bean.BusinessRepair;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessRepairQuery extends BaseBean {
 	
@@ -57,7 +56,16 @@ public class BusinessRepairQuery extends BaseBean {
 	private String nickname;
 	private String tel;
 	private String realname;
+	private Integer curComId;
 	
+	public Integer getCurComId() {
+		return curComId;
+	}
+
+	public void setCurComId(Integer curComId) {
+		this.curComId = curComId;
+	}
+
 	public String getNickname() {
 		return nickname;
 	}

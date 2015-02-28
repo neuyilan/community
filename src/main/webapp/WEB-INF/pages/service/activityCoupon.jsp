@@ -9,7 +9,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,user-scalable=no"/>
 <title>OK家 ${title}</title>
-<link href="${ctx }/js/activity/css/activityRegistrationStyle.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/js/activity/css/activityRegistrationStyle.css?t=20150211" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -91,7 +91,7 @@
            <span class="tleft">
   			<div style=" position:relative;">
            <input type="text"   name="comment" class="x-inc" id="comment" style=" position:absolute;top:0px; left:0; z-index:2;">
-           <input type="text" placeholder="回复:" style="height: 33px; left: 0;padding-left: 8px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;box-sizing: border-box;-webkit-box-sizing: border-box;background:#eeeeee;border-radius:3px;font-size:14px;" id="replaceinp">
+           <input type="text" placeholder="请输入您要评论的内容..." style="height: 33px; left: 0;padding-left: 8px;position: absolute;top:0px;width: 100%;z-index: 1;border:none;padding-top:2px;box-sizing: border-box;-webkit-box-sizing: border-box;background:#eeeeee;border-radius:3px;font-size:14px;" id="replaceinp">
  			 </div>
            </span>
            <span class="tleft"><input id="commentBtn" type="button" value=""></span>
@@ -163,14 +163,11 @@ $(document).ready(function(){
 	//参加活动
 	$(".x-qg").click(function(e) {
 		if(userId==0){
-			if(window.confirm('为了确保您正常参与活动，请您填写相关信息。')){
-				 window.location.href='${phpIp}/wxokjia/reggoin.php';
-                //alert("确定");
-                return null;
-             }else{
-                //alert("取消");
-                return null;
-            }
+			msgbox('提示','为了确保您正常参与活动，请您填写相关信息。','确定',function(){
+		 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+		 	},'取消');
+		 	return;
+			
 		}
 		if(nickname1=="" || nickname1==" "){
 			 msgbox('提示','抱歉，您需要去“个人中心”给自己起个昵称再来抢哦！','确定');
@@ -189,14 +186,12 @@ $(document).ready(function(){
 	//查看排名
 	$("#seeRank").click(function(e) {
 		if(userId==0){
-			if(window.confirm('为了确保您正常参与活动，请您填写相关信息。')){
-				 window.location.href='${phpIp}/wxokjia/reggoin.php';
-                //alert("确定");
-                return null;
-             }else{
-                //alert("取消");
-                return null;
-            }
+			if(userId==0){
+			 	msgbox('提示','为了确保您正常参与活动，请您填写相关信息。','确定',function(){
+			 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+			 	},'取消');
+			 	return;
+			}
 		}
 		window.location.href='${ctx}/service/activities/ranking.json?userId='+userId+"&ID="+"${ID}&ranks=${ranks}";
      });
@@ -208,7 +203,7 @@ $(document).ready(function(){
 		 replyId = 0;//点击回复人id
 		 replyName = "";//点击回复人姓名
 		 replyType = 0;//点击回复人类型
-		 $("#replaceinp").attr("placeholder","回复:");
+		 $("#replaceinp").attr("placeholder","请输入您要评论的内容...");
 	 });
 	//点赞
 	 $('.x-z a').click(function(){
@@ -357,7 +352,7 @@ $(document).ready(function(){
 	 		 
 	 		return;
 	 	}
-	 	$("#replaceinp").attr("placeholder","回复:");
+	 	$("#replaceinp").attr("placeholder","请输入您要评论的内容...");
 	 });
 	
 	$('#nextBtn').click(function() {
@@ -493,7 +488,7 @@ function jump(nextNo) {
             			div.find("dd").click(function(){
               				 replyId = 0;//点击回复人id
               				 replyName = "";//点击回复人姓名
-              				 $("#replaceinp").attr("placeholder","回复:");
+              				 $("#replaceinp").attr("placeholder","请输入您要评论的内容...");
               			 });
             			
         			}else{

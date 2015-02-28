@@ -6,7 +6,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.community.app.module.bean.BusinessNews;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessNewsQuery extends BaseBean {
 	
@@ -67,6 +66,25 @@ public class BusinessNewsQuery extends BaseBean {
 	private String newsScopeInfo;
 	private String tag;
 	
+	private Integer curEstateId;
+	private java.sql.Timestamp hotTime1;
+	
+	public java.sql.Timestamp getHotTime1() {
+		return hotTime1;
+	}
+
+	public void setHotTime1(java.sql.Timestamp hotTime1) {
+		this.hotTime1 = hotTime1;
+	}
+
+	public Integer getCurEstateId() {
+		return curEstateId;
+	}
+
+	public void setCurEstateId(Integer curEstateId) {
+		this.curEstateId = curEstateId;
+	}
+
 	public String getTag() {
 		return tag;
 	}

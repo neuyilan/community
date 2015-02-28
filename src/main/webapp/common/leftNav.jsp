@@ -12,7 +12,7 @@
     <div class="navl">
         	<div class="logo"><img src="${ctx}/images/logo.png" style="width:100%;"></div>
         	<div class="msg">
-        		<%if(CommonUtils.getUser().getCurOrgType().equals("property") ||CommonUtils.getUser().getOrgType().equals("property") ) {%>
+        		<%-- <%if(CommonUtils.getUser().getCurOrgType().equals("property") ||CommonUtils.getUser().getOrgType().equals("property") ) {%>
         			物业管理
         			<br /><shiro:principal property="curEstateName"/>
         		<%} %>
@@ -28,11 +28,13 @@
         				&& (CommonUtils.getUser().getCurOrgType().equals("operation")
         				|| CommonUtils.getUser().getCurOrgType().equals(""))) {%>
         			运营管理
-        		<%} %>
+        		<%} %> --%>
+        		社区:<shiro:principal property="curComName"/><br />
+        		小区:<shiro:principal property="curEstateName"/>
         	</div>
         	<ul id="menuLi">
 	        	<li class="divider-vertical"></li>
-	        	<li class="selected"><a href="<%=ctx %>/index/main.do"><i class="caret nav-1"></i>首页</a></li>
+	        	<%-- <li class="selected"><a href="<%=ctx %>/index/main.do"><i class="caret nav-1"></i>首页</a></li> --%>
 	        	
 	        	<%
 	        		List menuList = CommonUtils.getUser().getMenuList();
@@ -41,7 +43,7 @@
 	        			UserMenuBean bean = (UserMenuBean)menuList.get(i);
 	        			%>
 	        				<li class="divider-vertical"></li>
-		            		<li class="selected"><a href="<%=ctx + bean.getMenuPath() %>"><i class="caret <%=bean.getIcon()%>"></i><%=bean.getMenuName() %></a></li>
+		            		<li class="selected"><a href="<%=ctx %>/index/menuChange.do?isCom=<%=bean.getIsCom() %>&isEstate=<%=bean.getIsEstate() %>&menuPath=<%=ctx + bean.getMenuPath() %>"><i class="caret <%=bean.getIcon()%>"></i><%=bean.getMenuName() %></a></li>
 	        			<%
 	        		}
 	        	%>
@@ -59,7 +61,7 @@
 	            
 	            <shiro:hasRole name="community">
 		        	<li class="divider-vertical"></li>
-		        	<li class="selected"><a href="<%=ctx %>/business/businessNews/list.do"><i class="caret nav-11"></i>新闻</a></li>
+		        	<li class="selected"><a href="<%=ctx %>/business/businessNews/list.do"><i class="caret nav-11"></i>新鲜事</a></li>
 	        	</shiro:hasRole>
 	        	
 	        	<shiro:hasRole name="community">
@@ -104,7 +106,7 @@
 	          	
 	        	<shiro:hasRole name="station">
 		        	<li class="divider-vertical"></li>
-		        	<li class="selected"><a href="<%=ctx %>/business/businessHelp/list.do"><i class="caret nav-4"></i>求助</a></li>
+		        	<li class="selected"><a href="<%=ctx %>/business/businessHelp/list.do"><i class="caret nav-4"></i>社区聊吧</a></li>
 	        	</shiro:hasRole>
 	        	
 	        	<shiro:hasAnyRoles name="operation, community">

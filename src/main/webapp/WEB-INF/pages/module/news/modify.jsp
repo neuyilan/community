@@ -4,12 +4,12 @@
   Date: 2014/7/25
   Time: 13:28
   To change this template use File | Settings | File Templates.
-  新闻
+  新鲜事
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>编辑新闻</title>
+    <title>编辑新鲜事</title>
     <%@include file="/common/meta.jsp"%>
     <%@include file="/common/editorJs.jsp"%>
     <link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
@@ -81,10 +81,10 @@
                         required: true,
                         maxlength: 28
                     },
-                    brief: {
+                    /* brief: {
                     	required: true,
                     	maxlength: 28
-                    },
+                    }, */
                     content: {
                         required: true
                     },
@@ -109,24 +109,24 @@
                 },
                 messages: {
                     title: {
-                        required: '请填写新闻标题！',
-                        maxlength: '新闻标题在28字以内'
+                        required: '请填写新鲜事标题！',
+                        maxlength: '新鲜事标题在28字以内'
                     },
-                    brief: {
-                    	required: '请输入新闻简介',
-                    	maxlength: '新闻简介在28字以内'
-                    },
+                    /*  brief: {
+                    	required: '请输入新鲜事简介',
+                    	maxlength: '新鲜事简介在28字以内'
+                    },  */
                     content: {
-                        required: '请填写新闻内容！'
+                        required: '请填写新鲜事内容！'
                     },
                    /*  subjectPic: {
                         required: '请选择列表页大图！'
                     },  */
                     newsScope: {
-                    	required: '请选择新闻范围'
+                    	required: '请选择新鲜事范围'
                     },
                     tag: {
-                    	required:  '请选择新闻标签'
+                    	required:  '请选择新鲜事标签'
                     },
                     appPic: {
                         required: '请选择APP首页小图！'
@@ -156,19 +156,19 @@
 <form id="ff" action="update.do" method="post" enctype="multipart/form-data">
     <div class="wrapper wranews">
         <div class="newsrel">
-            <div class="header-public"><span class="return" onclick="history.go(-1);"></span>编辑新闻</div>
+            <div class="header-public"><span class="return" onclick="history.go(-1);"></span>编辑新鲜事</div>
             <div class="cont-l">
                 <input type="hidden" name="newsId" id="newsId" value="${businessNews.newsId }">
                 <input type="hidden" name="newsType" id="newsType" value="${businessNews.newsType }">
                 <input type="hidden" name="breakId" id="breakId" value="${businessNews.breakId }">
-                <h2 class="relran">新闻标题<label for="title" class="error success"></label></h2>
-                <input class="iptnewtit" type="text" name="title" placeholder='请输入新闻标题28字以内' value="${businessNews.title }" />
+                <h2 class="relran">新鲜事标题<label for="title" class="error success"></label></h2>
+                <input class="iptnewtit" type="text" name="title" placeholder='请输入新鲜事标题28字以内' value="${businessNews.title }" />
                 
-                <h2 class="relran">新闻简介<label for="brief" class="error success"></label></h2>
-                <input class="iptnewtit" type="text" name="brief" id="brief" placeholder='请输入新闻简介28字以内' value="${businessNews.brief }" />
+                <%-- <h2 class="relran">新鲜事简介<label for="brief" class="error success"></label></h2>
+                <input class="iptnewtit" type="text" name="brief" id="brief" placeholder='请输入新鲜事简介28字以内' value="${businessNews.brief }" /> --%>
                 
                 
-                <h2 class="relran">新闻内容<label for="content" class="error success"></label></h2>
+                <h2 class="relran">新鲜事内容<label for="content" class="error success"></label></h2>
                 <%--文本编辑器--%>
                 <!--style给定宽度可以影响编辑器的最终宽度-->
                 <textarea id="content" name="content" type="text/plain" style="width:1024px;height:500px;">${businessNews.content }</textarea>
@@ -191,7 +191,7 @@
                 <div class="line2"></div>
                 
                 <h2 class="relran">
-					新闻标签<label for="tag" class="error success"></label>
+					新鲜事标签<label for="tag" class="error success"></label>
 				</h2>
 				<div style="position: relative;">
 					<span class="ranbut radiusbox" id="showTagLayer">点击选择标签</span> 
@@ -221,7 +221,7 @@
                 <div class="options">
                     <p>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test='${businessNews.isRecommend==0}'>checked="checked"</c:if> >&nbsp;首页焦点图　　<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br></label>
-                        <%-- <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test='${businessNews.isRecommend==1}'>checked="checked"</c:if> >&nbsp;首页社区头条<br><br></label> --%>
+                        <%-- <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test='${businessNews.isRecommend==1}'>checked="checked"</c:if> >&nbsp;首页新鲜事列表置顶<br><br></label> --%>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="2" <c:if test='${businessNews.isRecommend==2}'>checked="checked"</c:if> >&nbsp;以上都不选<br></label>
                     </p>
                 </div>
@@ -269,12 +269,12 @@
 </div>
 <!-- 展示范围选择结束 -->
 
-<!-- 新闻标签选择开始 -->
+<!-- 新鲜事标签选择开始 -->
 <div id="tagLayer" class="busswi3">
 	<div id="tagBar" class="sidebar3">
 		<form action="">
 			<a id="close3" href="javascript:;" onclick="cancleTag()"></a>
-			<h2 class="tit3">新闻标签选择</h2>
+			<h2 class="tit3">新鲜事标签选择</h2>
 			<hr class="link3">
 			<div id="wrapper-250">
 				<ul id="tagTree" style="font-size: 18px; margin-top: 10px;"></ul>
@@ -286,7 +286,7 @@
 		</form>
 	</div>
 </div>
-<!-- 新闻标签选择结束 -->
+<!-- 新鲜事标签选择结束 -->
 	
 </body>
 <%--初始化文本编辑器--%>
@@ -300,7 +300,7 @@
     	$('#isPush1').change(function(){
     		$.confirm({
     			'title'		: '选择推送重要提示',
-    			'message'	: '<font color="red"><b>请慎重选择推送！</b></font><br/>选择推送，会将此条新闻推送至<font color="red"><b>所有注册用户</b></font>手机桌面。<br/>如本篇新闻已进行过推送操作，<font color="red"><b>切勿再次推送！</b></font>否则会造成频繁推送！<br/>如确认推送，请选择【确定】，否则，请点击【取消】',
+    			'message'	: '<font color="red"><b>请慎重选择推送！</b></font><br/>选择推送，会将此条新鲜事推送至<font color="red"><b>所有注册用户</b></font>手机桌面。<br/>如本篇新鲜事已进行过推送操作，<font color="red"><b>切勿再次推送！</b></font>否则会造成频繁推送！<br/>如确认推送，请选择【确定】，否则，请点击【取消】',
     			'buttons'	: {
     				'确定'	: {
     					'class'	: 'blue',
@@ -396,7 +396,7 @@
             }
         });
 		
-     	// 显示选择新闻标签层
+     	// 显示选择新鲜事标签层
 	    $("#showTagLayer").click(function(){
 	   	        $("#tagLayer").fadeIn("slow");
 	   	        $.ajax({
@@ -432,7 +432,7 @@
             }
         });
 	    
-     // 选择新闻标签
+     // 选择新鲜事标签
         $('#tagOk').click(function() {
             var tagIds = '';
             var tagInfo = '';
@@ -466,7 +466,7 @@
             }
         });
       	
-        // 选择新闻标签
+        // 选择新鲜事标签
         $('#tagTree').tree({
             checkbox: true,
             onSelect: function(node){
@@ -483,7 +483,7 @@
  	    $("#scopeLayer").fadeOut("slow");
  	}
     
- 	 // 取消选择新闻标签
+ 	 // 取消选择新鲜事标签
  	function cancleTag() {
  	    $("#tagLayer").fadeOut("slow");
  	}

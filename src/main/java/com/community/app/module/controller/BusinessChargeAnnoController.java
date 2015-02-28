@@ -218,7 +218,7 @@ public class BusinessChargeAnnoController {
 		    businessChargeAnno.setAuditorId(0);
 		    businessChargeAnno.setAuditorName("");
 		    businessChargeAnno.setAuditTime(null);
-		    businessChargeAnno.setUsers(query.getUsers());
+		    businessChargeAnno.setUsers(query.getUsers() != null?query.getUsers():0);
 		    businessChargeAnno.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		    businessChargeAnno.setEditTime(new Timestamp(System.currentTimeMillis()));
 		    businessChargeAnno.setEditor("");

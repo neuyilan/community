@@ -16,6 +16,10 @@
 			<result column="code" property="code" />
 			<result column="selectedIcon" property="selectedIcon" />
 			<result column="unSelectedIcon" property="unSelectedIcon" />
+			
+			<result column="isCom" property="isCom" />
+			<result column="isEstate" property="isEstate" />
+			
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -31,7 +35,9 @@
 			leaf,
 			code,
 			selectedIcon,
-			unSelectedIcon
+			unSelectedIcon,
+			isCom,
+			isEstate
 	</sql>
 	
 	<!-- 所有字段查询条件 -->

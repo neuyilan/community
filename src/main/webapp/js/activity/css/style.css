@@ -62,10 +62,10 @@ height: 19px;
 .nine {display: block; color:#6d6d6d; font-size:12px;}
 .time{color:#6d6d6d; font-size:12px;}
 .s-clt .one {padding: 6px 2px 10px 2px;font-size:14px;color:#1f1f1f; line-height:20px;word-break:break-all}
-.more {color: #ababab;display: block;height: 20px;line-height: 20px;margin: 0 10px;text-align: center; font-size:12px;}
+.more {color: #ababab;display: block;height: 20px;line-height: 20px;text-align: center; font-size:12px;border-top: 1px solid #e2e2e2;padding:10px 0;}
 
 .x-inp{ background:#fff; padding:10px; border-top:1px solid #dedbdb; text-align:center; position:fixed; bottom:0; left:0; right:0;}
-.x-inp .x-inc{ width:100%; height:33px;border-radius: 3px; opacity:0.3; color:#282828; font-size:13px;box-sizing:border-box;  -webkit-box-sizing:border-box;padding:0 0 0 8px;}
+.x-inp .x-inc{ width:100%; height:33px;border-radius: 3px; opacity:0.3; color:#282828; font-size:14px;box-sizing:border-box;  -webkit-box-sizing:border-box;padding:0 0 0 8px;}
 .x-inp div{ width:100%; display:table;}
 .x-inp div span{display:table-cell; height:33px;vertical-align:top;}
 .x-inp div span:nth-child(1){  padding-right:4px;}
@@ -174,7 +174,13 @@ header.header{ height:43px; background:url(../images/border.gif) repeat-x bottom
 /*小区开聊详情*/
 .kl-total{ position:relative; height:100%;}
 .kl-scroll{bottom: 50px;left: 0;overflow: auto;position: absolute;right: 0;top: 0;}
-.kl-div {background-color: #fff;margin-top: 10px;padding: 0 16px;}
+.kl-div {
+background-color: #fff;
+border-bottom: 1px solid #e3e3e3;
+border-top: 1px solid #e3e3e3;
+margin-top: 10px;
+padding: 0 15px;
+}
 .kl-head {border-bottom: 1px solid #d8d8d7; font-size: 13px; padding: 6px 0;position: relative;}
 .kl-head img{ width:33px; height:33px; border-radius:33px; vertical-align:middle;}
 .kl-name{color:#424242; padding-left:4px;}
@@ -201,7 +207,7 @@ header.header{ height:43px; background:url(../images/border.gif) repeat-x bottom
 .c-more a{ font-size:14px; color:#999999;}
 .c-more i{ display:inline-block; height:3px;border-top:1px solid #f2f2f2; width:30%; line-height:18px;}
 .kl-bottom{ height:50px; border-top:1px solid #dedbdb; text-align:center; line-height:50px; background-color:#fff;bottom: 0;left: 0;position: absolute;right: 0;}
-.kl-bottom span{ width:56px; background:url(../images/write.png) left center no-repeat; background-size:22px 20px; -webkit-background-size:22px 20px; padding-left:28px; display:inline-block; color:#ff9600;font-weight:bold;}
+.kl-bottom span{ width:56px; background:url(../images/write.png) left center no-repeat; background-size:22px 20px; -webkit-background-size:22px 20px; padding-left:28px; display:inline-block; color:#ff9600;font-weight:bold}
 
 /*回复*/
 .kl-hfpage .header{ background:#fff; border-bottom:1px solid #d2d2d2;}
@@ -245,11 +251,14 @@ header.header{ height:43px; background:url(../images/border.gif) repeat-x bottom
 
 .blockdiv {
 background-color: #fff;
-border-top: 1px solid #c8c8c8;
-border-bottom: 1px solid #c8c8c8;
+border-top: 1px solid #e3e3e3;
+border-bottom: 1px solid #e3e3e3;
 margin-bottom: 10px;
 padding: 0 15px;
 }
+
+.blockdiv:first-child{border-top:none;}
+
 
 
 

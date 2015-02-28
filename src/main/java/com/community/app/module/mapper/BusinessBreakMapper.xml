@@ -114,6 +114,9 @@
 					<if test="curComId != null and curComId != 0" >
 						and res.comId=#{curComId} 
 					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+			   			and res.estateId = #{curEstateId}
+					</if>
 			</trim>
 		</where>
 	</sql>

@@ -90,7 +90,19 @@
 		<typeAlias alias="businessShop" type="com.community.app.module.bean.BusinessShop"/>
 		<typeAlias alias="businessShopType" type="com.community.app.module.bean.BusinessShopType"/>
 		
+		<typeAlias alias="BusinessRole" type="com.community.app.module.bean.BusinessRole"/>
+		<typeAlias alias="BusinessRoleMenu" type="com.community.app.module.bean.BusinessRoleMenu"/>
+		<typeAlias alias="BusinessRoleFunction" type="com.community.app.module.bean.BusinessRoleFunction"/>
+		<typeAlias alias="BusinessRoleGroup" type="com.community.app.module.bean.BusinessRoleGroup"/>
+		<typeAlias alias="BusinessUserCommunity" type="com.community.app.module.bean.BusinessUserCommunity"/>
 		
+		<typeAlias alias="BusinessRoleCommunity" type="com.community.app.module.bean.BusinessRoleCommunity"/>
+		<typeAlias alias="BusinessRoleEstate" type="com.community.app.module.bean.BusinessRoleEstate"/>
+		<typeAlias alias="BusinessRoleRefu" type="com.community.app.module.bean.BusinessRoleRefu"/>
+		<typeAlias alias="BusinessSpecialMenu" type="com.community.app.module.bean.BusinessSpecialMenu"/>
+		<typeAlias alias="BusinessSpecialFunction" type="com.community.app.module.bean.BusinessSpecialFunction"/>
+		
+		<typeAlias alias="BusinessUserRole" type="com.community.app.module.bean.BusinessUserRole"/>
 		
         <!-- service -->
 		<typeAlias alias="BusinessCommunity" type="com.community.app.module.bean.BusinessCommunity"/>
@@ -143,8 +155,8 @@
 		<typeAlias alias="BusinessActivityVoteOptions" type="com.community.app.module.bean.BusinessActivityVoteOptions"/>
 		<typeAlias alias="BusinessProductKeyword" type="com.community.app.module.bean.BusinessProductKeyword"/>
 		<typeAlias alias="ManageSendMsg" type="com.community.app.module.bean.ManageSendMsg"/>
-	    <typeAlias alias="BusinessToken" type="com.community.app.module.bean.BusinessToken"/>
 		
+		<typeAlias alias="BusinessToken" type="com.community.app.module.bean.BusinessToken"/>
 		
 	</typeAliases>
 	<!-- 这里交给sqlSessionFactory 的 mapperLocations属性去得到所有配置信息 -->
@@ -232,10 +244,21 @@
 		<mapper resource="com/community/app/module/mapper/BusinessStationMessageMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessActivityCouponMapper.xml" />
 		
-
 		<mapper resource="com/community/app/module/mapper/BusinessShopMapper.xml"/>
 		<mapper resource="com/community/app/module/mapper/BusinessShopTypeMapper.xml"/>
 		
+		<mapper resource="com/community/app/module/mapper/BusinessRoleMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessRoleMenuMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessRoleFunctionMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessRoleGroupMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessUserCommunityMapper.xml" />	
+		
+		<mapper resource="com/community/app/module/mapper/BusinessRoleCommunityMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessRoleEstateMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessRoleRefuMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessSpecialMenuMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessSpecialFunctionMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessUserRoleMapper.xml" />	
 		
         <!-- service -->
 		<mapper resource="com/community/app/module/mapper/AppUserMapper.xml" />
@@ -283,6 +306,5 @@
 		<mapper resource="com/community/app/module/mapper/BusinessProductKeywordMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/ManageSendMsgMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessTokenMapper.xml" />
-		
 	</mappers>
 </configuration>

@@ -30,7 +30,6 @@ import com.community.app.module.bean.BusinessHelpExpendestates;
 import com.community.app.module.bean.BusinessHelpPic;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessHelpCommentService;
 import com.community.app.module.service.BusinessHelpExpendestatesService;
@@ -68,11 +67,14 @@ public class BusinessHelpController {
 		BaseBean baseBean = new BaseBean();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}			
+			//}			
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
 			}
 			query.setSort("editTime");
 			query.setOrder("desc");
@@ -98,9 +100,12 @@ public class BusinessHelpController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}			
+			//}			
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
+			}
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
 			}
@@ -438,7 +443,7 @@ public class BusinessHelpController {
 			} else {
 				orgType = shiroUser.getCurOrgType();
 			}
-			if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站
+			//if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站
 				List comList = businessCommunityService.findAll();
 				JSONObject comObj = null;
 				Map paramMap = null;
@@ -465,7 +470,7 @@ public class BusinessHelpController {
 					comObj.put("children", estateArr);
 					comArr.add(comObj);
 				}
-			}
+			//}
 			jsonObj.put("success", true);
 			jsonObj.put("result", comArr);
 		}catch(Exception e){

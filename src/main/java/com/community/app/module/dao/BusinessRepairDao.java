@@ -3,14 +3,12 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
-
-import com.community.app.module.bean.MemberVO;
 import org.springframework.stereotype.Repository;
 
-import com.community.framework.exception.DaoException;
-
 import com.community.app.module.bean.BusinessRepair;
+import com.community.app.module.bean.MemberVO;
 import com.community.app.module.vo.BusinessRepairQuery;
+import com.community.framework.exception.DaoException;
 
 @Repository
 public interface BusinessRepairDao {

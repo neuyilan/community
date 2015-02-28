@@ -30,23 +30,22 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.community.app.module.bean.BusinessMenu;
-import com.community.app.module.bean.BusinessPosition;
+import com.community.app.module.bean.BusinessRoleFunction;
+import com.community.app.module.bean.BusinessRoleMenu;
 import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.bean.BusinessUserResource;
-import com.community.app.module.bean.ManageEstate;
-import com.community.app.module.bean.ManageModule;
-import com.community.app.module.bean.ManageModulemenu;
-import com.community.app.module.bean.ManageUserFunction;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.MenuComparator;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.common.UserMenuBean;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessMenuService;
 import com.community.app.module.service.BusinessPositionService;
+import com.community.app.module.service.BusinessRoleFunctionService;
+import com.community.app.module.service.BusinessRoleMenuService;
 import com.community.app.module.service.BusinessStationService;
+import com.community.app.module.service.BusinessUserCommunityService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.BusinessUserService;
 import com.community.app.module.service.ManageEstateService;
@@ -91,6 +90,16 @@ public class ShiroDbRealm extends AuthorizingRealm{
 	
 	@Autowired
 	protected BusinessCommunityService businessCommunityService;
+	
+	@Autowired
+	protected BusinessRoleMenuService businessRoleMenuService;
+	
+	@Autowired
+	protected BusinessRoleFunctionService businessRoleFunctionService;
+	
+	@Autowired
+	protected BusinessUserCommunityService businessUserCommunityService;
+	
 	/**
 	 * 认证回调函数,登录时调用.
 	 */
@@ -124,7 +133,8 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				businessUser.setLastLoginTime(new Timestamp(System.currentTimeMillis()));
 				businessUserService.update(businessUser);
 				//初始化用户菜单到shiro缓存中
-				List<UserMenuBean> menuList = initUserMenu(businessUser.getUserId(), businessUser.getOrgType());
+				//List menuList = initUserMenu(businessUser.getUserId(), businessUser.getOrgType());
+				List<UserMenuBean> menuList = initUserMenu(businessUser.getUserId());
 				shiroUser.setMenuList(menuList);
 				//按用户类型初始化所需的业务切换关键信息 
 				//驿站 - 获取驿站(小区)列表
@@ -144,6 +154,7 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				siroUsr.setEstateBeanList(null);
 				siroUsr.setEstateList(null); 
 				siroUsr.setMenuList(null);
+				siroUsr.setMemoryEstateBeanList(null);
 				
 				SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(
 						siroUsr, 
@@ -179,32 +190,117 @@ public class ShiroDbRealm extends AuthorizingRealm{
 		List<BusinessUserResource> userResourceList = businessUserResourceService.findByMap(paramMap);
 //		//测试
 //		shiroUser.setOrgType(ModuleConst.COMMUNITY_CODE);
-		if(shiroUser.getOrgType().equals(ModuleConst.STATION_CODE)) {//驿站
-			if(userResourceList != null) {
-				List<EstateBean> manageEstateList = manageEstateService.findByCon(paramMap);
-				shiroUser.setEstateBeanList(manageEstateList);
-			}
-		}else if(shiroUser.getOrgType().equals(ModuleConst.COMMUNITY_CODE)) {//社区
-			if(userResourceList != null) {
-				List<EstateBean> manageEstateList = manageEstateService.findByCon(paramMap);//小区列表
-				shiroUser.setEstateBeanList(manageEstateList);
-				List<CommunityBean> comList = businessCommunityService.findByCon(paramMap);//社区列表
-				shiroUser.setComList(comList);
-			}
-		}else if(shiroUser.getOrgType().equals(ModuleConst.PROPERTY_CODE)) {//物业 组织小区列表
-			if(userResourceList != null) {
-				initPropertyEstate(shiroUser, userResourceList);
-			}
-		}else{//运营组织所有社区列表，小区列表
-//			List<BusinessCommunity> comList = businessCommunityService.findAll();
-			paramMap.put("isRelated", "2"); //全查 非关联  <==> findAll
-			List<CommunityBean> comList = businessCommunityService.findByCon(paramMap);
-			shiroUser.setComList(comList);
-//			List<ManageEstate> estateList = manageEstateService.findAll();
-			paramMap.put("isRelated", "2"); //全查 非关联  <==> findAll
+		if(userResourceList != null) {
+//			List estateList = new ArrayList();//小区列表
+//			List comList = new ArrayList();//社区列表
+			
 			List<EstateBean> manageEstateList = manageEstateService.findByCon(paramMap);
 			shiroUser.setEstateBeanList(manageEstateList);
+			
+			List<CommunityBean> comList = businessCommunityService.findByCon(paramMap);//社区列表
+			shiroUser.setComList(comList);
+			
+//			for(int i=0;i<userResourceList.size();i++) {
+//				BusinessUserResource businessUserResource = (BusinessUserResource) userResourceList.get(i);
+//				if(businessUserResource.getEstateId() != null && businessUserResource.getEstateId() != 0) {
+//					ManageEstate manageEstate = manageEstateService.findById(businessUserResource.getEstateId());
+//					EstateBean estateBean = new EstateBean();
+//					estateBean.setEstateId(manageEstate.getEstateId());
+//					estateBean.setEstateName(manageEstate.getEstateName());
+//					estateBean.setComId(businessUserResource.getComId());
+//					shiroUser.getEstateBeanList().add(estateBean);
+//				}
+//				//组装社区列表
+//				boolean hasCom = false;
+//				for(int j=0;j<comList.size();j++) {
+//					CommunityBean communityBean = (CommunityBean) comList.get(j);
+//					if(businessUserResource.getComId() != null 
+//							&& (communityBean.getComId() == businessUserResource.getComId())) {
+//						hasCom = true;
+//					}
+//				}
+//				if(!hasCom) {
+//					CommunityBean communityBean = new CommunityBean();
+//					if(businessUserResource.getComId() != null && businessUserResource.getComId() != 0) {
+//						BusinessCommunity businessCommunity = businessCommunityService.findById(businessUserResource.getComId());
+//						communityBean.setComId(businessCommunity.getComId());
+//						communityBean.setComName(businessCommunity.getComName());
+//						comList.add(communityBean);
+//					}						
+//				}
+//			}
+			shiroUser.setComList(comList);
+			shiroUser.setMemoryEstateBeanList(shiroUser.getEstateBeanList()); //备份
+			//shiroUser.setEstateBeanList(new ArrayList());  //初始化未空
 		}
+			
+		//社区
+		/*List comList = new ArrayList();//社区列表
+		List userCommunityList = businessUserCommunityService.findByMap(paramMap);
+		CommunityBean communityBean = new CommunityBean();
+		for(int i=0;i<userCommunityList.size();i++) {
+			BusinessUserCommunity businessUserCommunity = (BusinessUserCommunity) userCommunityList.get(i);
+			communityBean.setComId(businessUserCommunity.getComId());
+			communityBean.setComName(businessUserCommunity.getComName());
+			comList.add(communityBean);		
+		}
+		shiroUser.setComList(comList);*/
+		//}else if(shiroUser.getOrgType().equals(ModuleConst.COMMUNITY_CODE)) {//社区
+			/*if(userResourceList != null) {
+				List estateList = new ArrayList();//小区列表
+				List comList = new ArrayList();//社区列表
+				for(int i=0;i<userResourceList.size();i++) {
+					BusinessUserResource businessUserResource = (BusinessUserResource) userResourceList.get(i);
+					if(businessUserResource.getEstateId() != null && businessUserResource.getEstateId() != 0) {
+						ManageEstate manageEstate = manageEstateService.findById(businessUserResource.getEstateId());
+						EstateBean estateBean = new EstateBean();
+						estateBean.setEstateId(manageEstate.getEstateId());
+						estateBean.setEstateName(manageEstate.getEstateName());
+						shiroUser.getEstateBeanList().add(estateBean);
+					}
+					//组装社区列表
+					boolean hasCom = false;
+					for(int j=0;j<comList.size();j++) {
+						CommunityBean communityBean = (CommunityBean) comList.get(j);
+						if(communityBean.getComId() == businessUserResource.getComId()) {
+							hasCom = true;
+						}
+					}
+					if(!hasCom) {
+						CommunityBean communityBean = new CommunityBean();
+						if(businessUserResource.getComId() != null && businessUserResource.getComId() != 0) {
+							BusinessCommunity businessCommunity = businessCommunityService.findById(businessUserResource.getComId());
+							communityBean.setComId(businessCommunity.getComId());
+							communityBean.setComName(businessCommunity.getComName());
+							comList.add(communityBean);
+						}						
+					}
+				}
+				shiroUser.setComList(comList);
+			}*/
+		//}else if(shiroUser.getOrgType().equals(ModuleConst.PROPERTY_CODE)) {//物业 组织小区列表
+			/*if(userResourceList != null) {
+				initPropertyEstate(shiroUser, userResourceList);
+			}*/
+		//}else{//运营组织所有社区列表，小区列表
+			/*List comList = businessCommunityService.findAll();
+			for(int i=0;i<comList.size();i++) {
+				BusinessCommunity businessCommunity = (BusinessCommunity) comList.get(i);
+				CommunityBean communityBean = new CommunityBean();
+				communityBean.setComId(businessCommunity.getComId());
+				communityBean.setComName(businessCommunity.getComName());
+				shiroUser.getComList().add(communityBean);
+			}
+			
+			List estateList = manageEstateService.findAll();
+			for(int i=0;i<estateList.size();i++) {
+				ManageEstate manageEstate = (ManageEstate) estateList.get(i);
+				EstateBean estateBean = new EstateBean();
+				estateBean.setEstateId(manageEstate.getEstateId());
+				estateBean.setEstateName(manageEstate.getEstateName());
+				shiroUser.getEstateBeanList().add(estateBean);
+			}*/
+		//}
 	}
 	
 	/**
@@ -260,74 +356,32 @@ public class ShiroDbRealm extends AuthorizingRealm{
 		//初始化授权集合
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			BusinessUser businessUser = businessUserService.findById(shiroUser.getUserId());
-			//初始化授权即模块-菜单-功能权限
-			//判断用户拥有哪个模块
-			if(ModuleConst.OPERATION_CODE.equals(businessUser.getOrgType())) { //运营的人员
-				//运营模块角色
-				info.addRole(businessUser.getOrgType());
-				//获取运营模块ID
-//				ManageModule manageModule = manageModuleService.findById(ModuleConst.OPERATION);
-				//获取运营模块下的菜单
-				Map<String,Object> paramMap = new HashMap<String,Object>();
-				//paramMap.put("moduleId", manageModule.getModuleId());
-				//List modulemenuList = manageModulemenuService.findByMap(paramMap);
-				//获取运营模块下用户所拥有的功能权限
-				/*for(int i=0;i<modulemenuList.size();i++) {
-					ManageModulemenu modulemenu = (ManageModulemenu) modulemenuList.get(i);
-					//获取用户的功能权限
-					paramMap.put("moduleCode", manageModule.getModuleCode());
-					paramMap.put("menuId", modulemenu.getMenuId());
-					paramMap.put("userId", businessUser.getUserId());
-					List userFunctionList = manageUserFunctionService.findByMap(paramMap);
-					for(int j=0;j<userFunctionList.size();j++){
-						ManageUserFunction userFunction = (ManageUserFunction) userFunctionList.get(j);
-						info.addStringPermission(userFunction.getFunctionCode());
-					}
-					
-				}*/
-				paramMap.put("userId", businessUser.getUserId());
-				List<ManageUserFunction> userFunctionList = manageUserFunctionService.findByMap(paramMap);
-				for(int j=0;j<userFunctionList.size();j++){
-					ManageUserFunction userFunction = (ManageUserFunction) userFunctionList.get(j);
-					info.addStringPermission(userFunction.getFunctionCode());
-				}
-			}else{//物业、驿站、社区报授权相应模块的权限
-				info.addRole(businessUser.getOrgType());
-				//获取对应模块下的所有菜单
-				Map<String, Object> paramMap = new HashMap<String, Object>();
-				paramMap.put("moduleId", ModuleConst.getModuleId(businessUser.getOrgType()));
-				List<ManageModulemenu> modulemenuList = manageModulemenuService.findByMap(paramMap);
-				//获取对应模块下用户所拥有的功能权限
-				for(int i=0;i<modulemenuList.size();i++) {
-			 		ManageModulemenu modulemenu = (ManageModulemenu) modulemenuList.get(i);
-					//获取用户的功能权限
-					paramMap.put("moduleCode", businessUser.getOrgType());
-					paramMap.put("menuId", modulemenu.getMenuId());
-					paramMap.put("userId", businessUser.getUserId());
-					List<ManageUserFunction> userFunctionList = manageUserFunctionService.findByMap(paramMap);
-					for(int j=0;j<userFunctionList.size();j++){
-						ManageUserFunction userFunction = (ManageUserFunction) userFunctionList.get(j);
-						info.addStringPermission(userFunction.getFunctionCode());
-					}
-				}
-				
+			
+		//info.addRole(businessUser.getOrgType());
+		//获取所有有效权限
+		List roleFunctionList = businessRoleFunctionService.findRoleFunctionList(businessUser.getUserId());
+		for(int j=0;j<roleFunctionList.size();j++){
+			BusinessRoleFunction roleFunction = (BusinessRoleFunction) roleFunctionList.get(j);
+			info.addStringPermission(roleFunction.getFunctionCode());
+		}
+			
+			/*if(!ModuleConst.OPERATION_CODE.equals(businessUser.getOrgType())) { //运营的人员
 				//初始化物业、驿站、社区报负责小区
-				Map<String, Object> param = new HashMap<String, Object>();
+				Map param = new HashMap();
 				if(ModuleConst.PROPERTY_CODE.equals(businessUser.getOrgType())) {//物业人员 获取小区ID 
 					param.put("proId", shiroUser.getOrgId());
 				}else if(ModuleConst.STATION_CODE.equals(businessUser.getOrgType())) {//驿站人员 获取小区ID 
 					param.put("stationId", shiroUser.getOrgId());
-				}else if(ModuleConst.COMMUNITY_CODE.equals(businessUser.getOrgType())) {//社区报人员 获取小区ID
+				}else if(ModuleConst.COMMUNITY_CODE.equals(businessUser.getOrgType())) {//物业、驿站、社区报授权相应模块的权限
 					param.put("comId", shiroUser.getOrgId());
 				}
-				List<ManageEstate> estateList = manageEstateService.findByMap(param);
+				List estateList = manageEstateService.findByMap(param);
 				if(estateList != null) {
 					shiroUser.setEstateList(estateList);
 				}else{
-					shiroUser.setEstateList(new ArrayList<ManageEstate>());
+					shiroUser.setEstateList(new ArrayList());
 				}
-				
-			}
+			}*/
 		
 		return info;
 	}
@@ -343,47 +397,27 @@ public class ShiroDbRealm extends AuthorizingRealm{
 	}*/
 	
 	//按组织类型初始化用户菜单列表
-	private List<UserMenuBean> initUserMenu(Integer userId, String orgType) {
-		List<UserMenuBean> menuList = new ArrayList<UserMenuBean>();
-		//获取用户所有功能权限并组织出菜单
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put("moduleCode", orgType);
-		paramMap.put("userId", userId);
+	private List<UserMenuBean> initUserMenu(Integer userId) {
+		List<UserMenuBean> menuList = new ArrayList();
 		UserMenuBean userMenuBean = new UserMenuBean();
-		List<ManageUserFunction> userFunctionList = manageUserFunctionService.findByMap(paramMap);
-		if(userFunctionList != null && userFunctionList.size() > 0) {
-			for(int i=0;i<userFunctionList.size();i++){
-				ManageUserFunction userFunction = (ManageUserFunction) userFunctionList.get(i);
-				if(menuList.size() > 0) {//已有菜单
-					boolean hasMenu = false;
-					for(int j=0;j<menuList.size();j++) {
-						userMenuBean = menuList.get(j);
-						if(userMenuBean.getMenuId() == userFunction.getMenuId()) {
-							hasMenu = true;
-						}
-					}
-					if(!hasMenu) {//还没有菜单
-						userMenuBean = new UserMenuBean();
-						userMenuBean.setMenuId(userFunction.getMenuId());
-						BusinessMenu businessMenu = businessMenuService.findById(userFunction.getMenuId());
-						userMenuBean.setMenuName(businessMenu.getName());
-						userMenuBean.setNo(businessMenu.getOrd());
-						userMenuBean.setIcon(businessMenu.getCode());
-						userMenuBean.setMenuPath(businessMenu.getUrl());
-						menuList.add(userMenuBean);
-					}
-				}else{//没有菜单
-					userMenuBean = new UserMenuBean();
-					userMenuBean.setMenuId(userFunction.getMenuId());
-					BusinessMenu businessMenu = businessMenuService.findById(userFunction.getMenuId());
-					userMenuBean.setMenuName(businessMenu.getName());
-					userMenuBean.setNo(businessMenu.getOrd());
-					userMenuBean.setIcon(businessMenu.getCode());
-					userMenuBean.setMenuPath(businessMenu.getUrl());
-					menuList.add(userMenuBean);
-				}
-			}
+		Map paramMap = new HashMap();
+		paramMap.put("userId", userId);
+		List roleMenuList = businessRoleMenuService.initMenuList(paramMap);
+		for(int i=0;i<roleMenuList.size();i++) {
+			BusinessRoleMenu roleMenu = (BusinessRoleMenu) roleMenuList.get(i);
+			userMenuBean = new UserMenuBean();
+			userMenuBean.setMenuId(roleMenu.getMenuId());
+			BusinessMenu businessMenu = businessMenuService.findById(roleMenu.getMenuId());
+			userMenuBean.setMenuName(businessMenu.getName());
+			userMenuBean.setNo(businessMenu.getOrd());
+			userMenuBean.setIcon(businessMenu.getCode());
+			userMenuBean.setMenuPath(businessMenu.getUrl());
+			userMenuBean.setIsCom(businessMenu.getIsCom());
+			userMenuBean.setIsEstate(businessMenu.getIsEstate());
+			
+			menuList.add(userMenuBean);
 		}
+		
 		if(menuList.size() > 0) {
 			MenuComparator comparator=new MenuComparator();
 			  Collections.sort(menuList, comparator);

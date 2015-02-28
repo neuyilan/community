@@ -1,7 +1,5 @@
 package com.community.app.module.service;
 
-import static com.community.framework.utils.CommonUtils.getUser;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,28 +7,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.community.app.module.bean.AppPushLog;
-import com.community.app.module.bean.AppUserConfig;
-import com.community.app.module.bean.MemberVO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.push.AppPushNotificationUtil;
-import com.community.app.module.vo.AppUserConfigQuery;
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.framework.utils.propertiesUtil;
-import com.community.app.module.vo.AppUserQuery;
+import com.community.app.module.bean.AppPushLog;
 import com.community.app.module.bean.AppUser;
-import com.community.app.module.common.ModuleConst;
+import com.community.app.module.bean.AppUserConfig;
+import com.community.app.module.bean.MemberVO;
 import com.community.app.module.dao.AppPushLogDao;
 import com.community.app.module.dao.AppUserConfigDao;
 import com.community.app.module.dao.AppUserDao;
+import com.community.app.module.push.AppPushNotificationUtil;
+import com.community.app.module.vo.AppUserConfigQuery;
+import com.community.app.module.vo.AppUserQuery;
+import com.community.app.module.vo.BaseBean;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
+import com.community.framework.utils.propertiesUtil;
 
 @Service("AppUserService")
 @Transactional

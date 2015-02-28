@@ -489,7 +489,7 @@
 	            $('#visits').html(data.visits);	//浏览量
 	            $('#supports').html(data.supports);	//支持量
 	            $('#auditInfo2').html("批注：" +data.auditInfo);	//审批原因
-	            $('#viewInter').html("预览地址：<%=ctx %>/service/healthydiet/<br>getDetailsById.json?ID="+data.healId+"&userId=161" );
+	            $('#viewInter').html("预览地址：<%=ctx %>/service/healthydiet/<br>getDetailsById.json?ID="+data.healId+"&userId=0" );
 	            //发布状态
 	            if(data.publishState == 0 ) {
 	            	$('#showstate').html("已发布");

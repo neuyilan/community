@@ -13,11 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.framework.utils.propertiesUtil;
-import com.community.app.module.vo.BusinessBreakQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessBreak;
 import com.community.app.module.bean.BusinessBreakAudio;
@@ -26,6 +21,11 @@ import com.community.app.module.dao.AppLatestNewsDao;
 import com.community.app.module.dao.BusinessBreakAudioDao;
 import com.community.app.module.dao.BusinessBreakDao;
 import com.community.app.module.dao.BusinessBreakPicDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessBreakQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
+import com.community.framework.utils.propertiesUtil;
 
 @Service("BusinessBreakService")
 @Transactional

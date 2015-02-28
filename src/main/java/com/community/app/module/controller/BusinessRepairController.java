@@ -4,20 +4,15 @@ import static com.community.framework.utils.CommonUtils.getUser;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.community.app.module.bean.AppLatestNews;
-import com.community.app.module.bean.AppUser;
-import com.community.app.module.bean.BusinessRepairComment;
-import com.community.app.module.bean.MemberVO;
-import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.service.AppLatestNewsService;
-import com.community.app.module.service.AppUserService;
-import com.community.app.module.service.BusinessRepairCommentService;
-import com.community.app.module.service.BusinessRepairReplyService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,12 +23,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.community.app.module.bean.AppLatestNews;
+import com.community.app.module.bean.AppUser;
+import com.community.app.module.bean.BusinessRepair;
+import com.community.app.module.bean.BusinessRepairComment;
+import com.community.app.module.bean.MemberVO;
+import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.dao.BusinessRepairCommentDao;
+import com.community.app.module.service.AppLatestNewsService;
+import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.BusinessRepairCommentService;
+import com.community.app.module.service.BusinessRepairReplyService;
+import com.community.app.module.service.BusinessRepairService;
 import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
-import com.community.app.module.bean.BusinessRepair;
-import com.community.app.module.common.ModuleConst;
-import com.community.app.module.dao.BusinessRepairCommentDao;
-import com.community.app.module.service.BusinessRepairService;
 import com.community.app.module.vo.BusinessRepairQuery;
 import com.community.framework.utils.CommonUtils;
 import com.community.framework.utils.propertiesUtil;
@@ -64,11 +67,14 @@ public class BusinessRepairController {
 		BaseBean baseBean = new BaseBean();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());
-			}			
+			//}			
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
 			}
 			query.setSort("editTime");
 			query.setOrder("desc");
@@ -195,11 +201,14 @@ public class BusinessRepairController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());
-			}			
+			//}			
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
 			}
 			query.setOrder("desc");
 			query.setRows(12);

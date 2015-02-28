@@ -481,9 +481,9 @@
 	            }
 	            
 	            if(data.annoType == 4){
-	            	$('#viewInter').html("预览地址：<%=ctx %>/service/station/<br>getStationDetailsById.json?ID="+annoId+"&userId=161" );
+	            	$('#viewInter').html("预览地址：<%=ctx %>/service/station/<br>getStationDetailsById.json?ID="+annoId+"&userId=0" );
 	            }else if(data.annoType == 0){
-					$('#viewInter').html("预览地址：<%=ctx %>/service/property/<br>getPopertyDetailsById.json?ID="+annoId+"&userId=161" );
+					$('#viewInter').html("预览地址：<%=ctx %>/service/property/<br>getPopertyDetailsById.json?ID="+annoId+"&userId=0" );
 	            } else {
 	            	$("#viewInter").css('display','none'); 
 			         $("#hr2").css('display','none'); 

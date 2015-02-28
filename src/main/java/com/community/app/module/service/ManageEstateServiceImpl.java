@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.app.module.vo.ManageEstateQuery;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.dao.ManageEstateDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.ManageEstateQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("ManageEstateService")
 @Transactional

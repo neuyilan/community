@@ -1,15 +1,15 @@
 package com.community.app.module.controller;
 
+import static com.community.framework.utils.CommonUtils.getUser;
+
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.community.app.module.bean.MemberVO;
-import com.community.app.module.service.AppUserService;
-import com.community.app.module.service.BusinessUserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +18,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import com.community.app.module.vo.BaseBean;
 
 import com.community.app.module.bean.BusinessUserPropertyCom;
+import com.community.app.module.bean.MemberVO;
+import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessUserPropertyComService;
+import com.community.app.module.service.BusinessUserService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessUserPropertyComQuery;
 import com.community.framework.utils.CommonUtils;
-
-import static com.community.framework.utils.CommonUtils.getUser;
 
 @Controller
 @RequestMapping("/business/businessUserPropertyCom")

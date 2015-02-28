@@ -1,19 +1,20 @@
 package com.community.app.module.controller;
 
+import static com.community.framework.utils.CommonUtils.getUser;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.community.app.module.bean.*;
-import com.community.app.module.common.ModuleConst;
-import com.community.app.module.push.AppPushNotificationUtil;
-import com.community.app.module.service.*;
-import com.community.app.module.service.BusinessStationService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,17 +24,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.community.app.module.bean.AppLatestNews;
+import com.community.app.module.bean.AppPushLog;
+import com.community.app.module.bean.AppUser;
+import com.community.app.module.bean.AppUserConfig;
+import com.community.app.module.bean.BusinessAddress;
+import com.community.app.module.bean.BusinessExp;
+import com.community.app.module.bean.BusinessExpBackresolve;
+import com.community.app.module.bean.BusinessExpFav;
+import com.community.app.module.bean.BusinessExpResolve;
+import com.community.app.module.bean.BusinessStation;
+import com.community.app.module.bean.BusinessUser;
+import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.bean.ManageExpressAll;
+import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.ModuleConst;
+import com.community.app.module.push.AppPushNotificationUtil;
+import com.community.app.module.service.AppLatestNewsService;
+import com.community.app.module.service.AppPushLogService;
+import com.community.app.module.service.AppUserConfigService;
+import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.BusinessAddressService;
+import com.community.app.module.service.BusinessExpBackresolveService;
+import com.community.app.module.service.BusinessExpFavService;
+import com.community.app.module.service.BusinessExpResolveService;
+import com.community.app.module.service.BusinessExpService;
+import com.community.app.module.service.BusinessStationService;
+import com.community.app.module.service.BusinessUserService;
+import com.community.app.module.service.ManageEstateService;
+import com.community.app.module.service.ManageExpressAllService;
+import com.community.app.module.service.ManageExpressService;
+import com.community.app.module.service.ManageSendMsgService;
 import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
-
-
 import com.community.app.module.vo.BusinessExpQuery;
 import com.community.framework.utils.CommonUtils;
 import com.community.framework.utils.MessageChannelClient;
 import com.community.framework.utils.StringUtil;
 import com.community.framework.utils.propertiesUtil;
-
-import static com.community.framework.utils.CommonUtils.getUser;
 
 @Controller
 @RequestMapping("/business/businessExp")
@@ -190,11 +218,14 @@ public class BusinessExpController {
         String expStateStr = reqeust.getParameter("expStateStr");
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}			
+			//}			
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
 			}
             query.setSort("expId");
             query.setOrder("desc");
@@ -291,9 +322,9 @@ public class BusinessExpController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}				
+			//}				
 			List<BusinessExp> expBean = businessExpService.findExcelAllExp(query);
 			
 			result.append("{\"total\":").append(expBean.size()).append(",")
@@ -370,11 +401,14 @@ public class BusinessExpController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}			
+			//}			
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
 			}
 			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
 				query.setSort(query.getOrderBy());

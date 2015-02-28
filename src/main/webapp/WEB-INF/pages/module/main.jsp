@@ -55,7 +55,7 @@
 
 			<div class="column">
 				<%-- <shiro:hasRole name="property"> --%>
-				<c:if test="${orgType == 'property'}">
+				<%-- <c:if test="${orgType == 'property'}"> --%>
 					<!-- 物业统计开始 -->
 					<shiro:hasPermission name="index_property_verified_resident">
 						<div class="column-box">
@@ -174,12 +174,12 @@
 
 						</div>
 					</shiro:hasPermission>
-				</c:if>
+				<%-- </c:if> --%>
 				<!-- 物业统计结束 -->
 				<%-- </shiro:hasRole> --%>
 
 				<%-- <shiro:hasRole name="station"> --%>
-				<c:if test="${orgType == 'station'}">
+				<%-- <c:if test="${orgType == 'station'}"> --%>
 					<!-- 驿站统计开始 -->
 					<shiro:hasPermission name="index_station_anno_comment">
 						<div class="column-box">
@@ -278,11 +278,11 @@
 					</shiro:hasPermission>
 
 					<!-- 驿站统计结束 -->
-				</c:if>
+				<%-- </c:if> --%>
 				<%-- </shiro:hasRole> --%>
 
 				<%-- <shiro:hasRole name="community"> --%>
-				<c:if test="${orgType == 'community'}">
+				<%-- <c:if test="${orgType == 'community'}"> --%>
 					<!-- 社区报开始 -->
 					<shiro:hasPermission name="index_com_news_comment">
 						<div class="column-box">
@@ -290,7 +290,7 @@
 							<a style="border-bottom: 5px solid #c68b1d;"
 								href="<%=ctx%>/business/businessNews/list.do?sort=comments&timeScope=0&dateField=comments">
 
-								<h4 class="title-msg">今日新闻评论</h4>
+								<h4 class="title-msg">今日新鲜事评论</h4>
 
 								<div class="icon-shop">
 									<img src="${ctx}/images/icon/yyxwpl.png" style="width: 100%">
@@ -328,7 +328,7 @@
 							<a style="border-bottom: 5px solid #c68b1d;"
 								href="<%=ctx%>/business/businessNews/list.do?state=2">
 
-								<h4 class="title-msg">待审核新闻</h4>
+								<h4 class="title-msg">待审核新鲜事</h4>
 
 								<div class="icon-shop">
 									<img src="${ctx}/images/icon/dshxw.png" style="width: 100%">
@@ -398,11 +398,11 @@
 					</shiro:hasPermission>
 
 					<!-- 社区报结束 -->
-				</c:if>
+				<%-- </c:if> --%>
 				<%-- </shiro:hasRole> --%>
 
 				<%-- <shiro:hasRole name="operation"> --%>
-				<c:if test="${orgType == 'operation'}">
+				<%-- <c:if test="${orgType == 'operation'}"> --%>
 					<!-- 运营开始 -->
 					<%-- <shiro:hasPermission name="index_operation_regist_resident">
 						<div class="column-box">
@@ -537,7 +537,7 @@
 						</div>
 					</shiro:hasPermission>
 					<!-- 运营结束 -->
-				</c:if>
+				<%-- </c:if> --%>
 				<%-- </shiro:hasRole> --%>
 
 			</div>

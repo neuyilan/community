@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>求助发布</title>
+    <title>社区聊吧发布</title>
     <%@include file="/common/meta.jsp"%>
     <%@include file="/common/editorJs.jsp"%>
     <script type="text/javascript" src="<%=ctx %>/js/jquery-easyui/jquery.easyui.min.js"></script>
@@ -73,7 +73,7 @@
                         required: '请选择范围！'
                     },
                     helpContent: {
-                        required: '请输入求助信息！'
+                        required: '请输入社区聊吧信息！'
                     }
                 }
             });
@@ -91,10 +91,10 @@
                         $('#nickname').text(data.nickname); //昵称
                         $('#address').text(data.estateName+data.buildingName+data.unitName+data.houseNo); //地址
                         /*设置隐藏域*/
-                        $('#helperId').val(data.userId);  //求助人ID
-                        $('#helperName').val(data.realname); //求助人姓名
-                        $('#estateId').val(data.estateId);  //求助人ID
-                        $('#estateName').val(data.estateName); //求助人姓名
+                        $('#helperId').val(data.userId);  //社区聊吧人ID
+                        $('#helperName').val(data.realname); //社区聊吧人姓名
+                        $('#estateId').val(data.estateId);  //社区聊吧人ID
+                        $('#estateName').val(data.estateName); //社区聊吧人姓名
                         $('#publisherShow').text(data.realname);
                     }else{
                     	alert('该电话用户不存在');
@@ -104,10 +104,10 @@
                         $('#nickname').text(''); //昵称
                         $('#address').text(''); //地址
                         /*设置隐藏域*/
-                        $('#helperId').val('');  //求助人ID
-                        $('#helperName').val(''); //求助人姓名
-                        $('#estateId').val('');  //求助人ID
-                        $('#estateName').val(''); //求助人姓名
+                        $('#helperId').val('');  //社区聊吧人ID
+                        $('#helperName').val(''); //社区聊吧人姓名
+                        $('#estateId').val('');  //社区聊吧人ID
+                        $('#estateName').val(''); //社区聊吧人姓名
                         $('#publisherShow').text('');
                     }
                 });
@@ -141,17 +141,17 @@
 <form id="ff" action="${ctx}/business/businessHelp/update.do" method="post">
     <div class="wrapper wranews">
         <div class="newsrel">
-            <div class="header-public"><span class="return" onclick="history.go(-1)"></span>求助发布</div>
+            <div class="header-public"><span class="return" onclick="history.go(-1)"></span>社区聊吧发布</div>
             <div class="cont-l">
                 <h2 class="title">绑定居民<label for="helperId" class="error success"></label></h2>
                 <span class="ranbut radiusbox" id="y-fbes-sjm">点击选择居民</span>
-                <input type="hidden" name="helperId" id="helperId" value="${businessHelp.helperId }"> <%--求助人ID--%>
-                <input type="hidden" name="helperName" id="helperName" value="${businessHelp.helperName }" > <%--求助人姓名--%>
-                <input type="hidden" name="estateName" id="estateName" value="${businessHelp.estateName }" > <%--求助小区--%>
-                <input type="hidden" name="estateId" id="estateId" value="${businessHelp.estateId }" > <%--求助小区ID--%>
+                <input type="hidden" name="helperId" id="helperId" value="${businessHelp.helperId }"> <%--社区聊吧人ID--%>
+                <input type="hidden" name="helperName" id="helperName" value="${businessHelp.helperName }" > <%--社区聊吧人姓名--%>
+                <input type="hidden" name="estateName" id="estateName" value="${businessHelp.estateName }" > <%--社区聊吧小区--%>
+                <input type="hidden" name="estateId" id="estateId" value="${businessHelp.estateId }" > <%--社区聊吧小区ID--%>
                 <span id="publisherShow"></span>
                 
-                <h2 class="title">求助范围<label for="scope" class="error success"></label></h2>
+                <h2 class="title">社区聊吧范围<label for="scope" class="error success"></label></h2>
                 <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span>
                 <input type="hidden" id="isExpend" name="isExpend" value="${businessHelp.isExpend }" />
                 <span id="scopeShow">
@@ -163,7 +163,7 @@
                 <c:if test="${businessHelp.isExpend == 1 }"></c:if>
                 </span>
                 
-                <h2 class="newscont">求助内容<label for="helpContent" class="error success"></label></h2>
+                <h2 class="newscont">社区聊吧内容<label for="helpContent" class="error success"></label></h2>
                 <textarea id="helpContent" name="helpContent" type="text/plain" style="width:1024px;height:150px;">${businessHelp.helpContent }</textarea>
                 
                 <div class="submtpres">

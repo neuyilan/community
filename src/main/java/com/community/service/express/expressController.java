@@ -499,7 +499,7 @@ public class expressController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(JsonUtils.stringToJson(json));
+			response.getWriter().write(json);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -558,7 +558,7 @@ public class expressController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(JsonUtils.stringToJson(json));
+			response.getWriter().write(json);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -608,6 +608,7 @@ public class expressController {
 				json += "\"content\":{";
 				json += "\"expressAd\":\""+list.get(0).getInfo()+"\",";
 				json += "\"attr\":\""+ip+list.get(0).getAddrUrl()+"\",";
+				json += "\"addrName\":\""+list.get(0).getAddrName()+"\",";
 				json += "\"tel\":\""+list.get(0).getStaTel()+"\",";
 				json += "\"staLongitude\":\""+list.get(0).getStaLongitude()+"\",";
 				json += "\"staLatitude\":\""+list.get(0).getStaLatitude()+"\"";
@@ -627,7 +628,7 @@ public class expressController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(JsonUtils.stringToJson(json));
+			response.getWriter().write(json);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -987,7 +988,7 @@ public class expressController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(JsonUtils.stringToJson(json));
+			response.getWriter().write(json);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1110,7 +1111,7 @@ public class expressController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(JsonUtils.stringToJson(json));
+			response.getWriter().write(json);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -16,12 +16,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import com.community.app.module.vo.BaseBean;
 
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessRepairComment;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.BusinessRepairCommentService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessRepairCommentQuery;
 
 @Controller

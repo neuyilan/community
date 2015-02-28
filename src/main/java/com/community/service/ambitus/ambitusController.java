@@ -30,7 +30,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.community.app.module.bean.AppStatisticsClick;
+import com.community.app.module.bean.BusinessLife;
 import com.community.app.module.bean.BusinessLifeProp;
+import com.community.app.module.dao.BusinessLifeDao;
 import com.community.app.module.dao.BusinessLifePropDao;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.BusinessBusService;
@@ -39,6 +41,7 @@ import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BusinessBusQuery;
 import com.community.app.module.vo.BusinessBusStationQuery;
 import com.community.app.module.vo.BusinessLifePropQuery;
+import com.community.app.module.vo.BusinessLifeQuery;
 import com.community.app.module.vo.ManageEstateQuery;
 import com.community.framework.utils.FileUtil;
 import com.community.framework.utils.JsonUtils;
@@ -57,6 +60,8 @@ public class ambitusController {
 	private BusinessBusService businessBusService;
 	@Autowired
 	private BusinessLifePropDao businessLifePropDao;
+	@Autowired
+	private BusinessLifeDao businessLifeDao;
 	@Autowired
 	private AppStatisticsClickService appStatisticsClickService;
 	
@@ -316,6 +321,70 @@ public class ambitusController {
 			json += "{";
 			json += "\"errorCode\":\"400\",";
 			json += "\"message\":\"获取失败\"";
+			json += "}";
+		}
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 新增小区周边
+	 * @param userId,sessionid
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="saveLife")
+	public void saveLife(HttpServletRequest request, HttpServletResponse response,BusinessLifeQuery query) {
+		String json = "";
+		try {
+			BusinessLifeQuery businessLifeQuery = new BusinessLifeQuery();
+			businessLifeQuery.setEstateLatitude(query.getEstateLatitude());
+			businessLifeQuery.setEstateLongitude(query.getEstateLongitude());
+			int count = businessLifeDao.selectCount(businessLifeQuery);
+			if(count==0){
+				Timestamp  ts=new Timestamp(new Date().getTime());
+				BusinessLife BusinessLife = new BusinessLife();
+				BusinessLife.setTypeId(query.getTypeId());
+				BusinessLife.setTypeName(query.getTypeName());
+				BusinessLife.setServiceName(query.getServiceName());
+				BusinessLife.setEstateLatitude(query.getEstateLatitude());
+				BusinessLife.setEstateLongitude(query.getEstateLongitude());
+				BusinessLife.setTel(query.getTel());
+				BusinessLife.setAddress(query.getAddress());
+				BusinessLife.setCreateTime(ts);
+				BusinessLife.setEditTime(ts);
+				BusinessLife.setPublishTime(ts);
+				BusinessLife.setEstateScope("");
+				BusinessLife.setContent("");
+				BusinessLife.setPublisherId(0);
+				BusinessLife.setPublisherName("");
+				BusinessLife.setVisits(0);
+				BusinessLife.setPulishState(0);
+				BusinessLife.setLink("");
+				BusinessLife.setEditor("");
+				businessLifeDao.save(BusinessLife);
+			}
+			
+			
+			
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"新增成功\"";
+			json += "}";
+			json += "}";
+		} catch (Exception e) {
+			e.printStackTrace();
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"新增失败\"";
 			json += "}";
 		}
 		

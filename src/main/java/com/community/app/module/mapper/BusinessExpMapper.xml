@@ -262,6 +262,9 @@
 					<if test="curEstateId != null and curEstateId != 0" >
 			   			and e.estateId = #{curEstateId}
 					</if>
+					<if test="curComId != null and curComId != ''" >
+						and res.comId=#{curComId} 
+					</if>
 					<if test="expStates != null and expStates != ''" >
 						and (
 						<foreach collection="expStates" item="eState" separator="OR">

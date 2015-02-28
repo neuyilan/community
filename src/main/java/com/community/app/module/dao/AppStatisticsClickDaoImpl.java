@@ -7,12 +7,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.vo.AppStatisticsClickQuery;

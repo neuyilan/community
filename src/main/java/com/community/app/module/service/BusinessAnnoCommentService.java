@@ -1,12 +1,12 @@
 package com.community.app.module.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.community.app.module.bean.BusinessAnnoComment;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessAnnoCommentQuery;
 import com.community.framework.exception.ServiceException;
-
-import java.util.List;
-import java.util.Map;
 
 
 public interface BusinessAnnoCommentService {

@@ -4,7 +4,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.community.app.module.bean.BusinessAnno;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessAnnoQuery extends BaseBean {
 	

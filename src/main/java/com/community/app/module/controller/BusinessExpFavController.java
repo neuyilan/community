@@ -1,5 +1,7 @@
 package com.community.app.module.controller;
 
+import static com.community.framework.utils.CommonUtils.getUser;
+
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -16,15 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import com.community.app.module.vo.BaseBean;
 
 import com.community.app.module.bean.BusinessExpFav;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.service.BusinessExpFavService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessExpFavQuery;
 import com.community.framework.utils.CommonUtils;
-
-import static com.community.framework.utils.CommonUtils.getUser;
 
 @Controller
 @RequestMapping("/business/businessExpFav")

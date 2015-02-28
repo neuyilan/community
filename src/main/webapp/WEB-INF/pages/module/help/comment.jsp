@@ -40,7 +40,7 @@
         }
        
         function delExpendestates(id) {
-            var flag = window.confirm("是否删除此社区开聊扩散信息！");
+            var flag = window.confirm("是否删除此社区聊吧扩散信息！");
             if(flag) {
                 $.getJSON('${ctx}/business/businessHelpExpendestates/delete.do', {id: id}, function(data) {
                     alert(data.message);
@@ -244,7 +244,7 @@
 <body style="background: #fff;">
 	<div class="wrapper" style="overflow:visible;">
 		<div class="header-public">
-			<span class="return" onclick="history.go(-1)"></span>社区开聊详情
+			<span class="return" onclick="history.go(-1)"></span>社区聊吧详情
 		</div>
 		<div class="review" style="top:57px;  position:relative;">
 			<div class="review-t">
@@ -254,7 +254,7 @@
 					昵　　称：<span class="user" style="font-size:16px; color:#000;">${businessHelp.nickname}</span><br> 
 					电	　　话：<span class="user" style="font-size:16px; color:#000;">${businessHelp.tel}</span><br> 
 					所属小区：<span class="com" style="font-size:16px; color:#000;">${businessHelp.estateName}</span><br>
-					社区开聊时间：<span class="com" style="font-size:16px; color:#000;"><time><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm" /></time></span>
+					社区聊吧时间：<span class="com" style="font-size:16px; color:#000;"><time><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm" /></time></span>
 					</div>
 					<p style="margin-top:40px;" class="newsdeta"></p>
 					<hr style=" background: #9e9e9e; border: none; height: 1px; margin: 18px 0 18px; width: 100%;" class="link">
@@ -346,7 +346,7 @@
 		</div>
 	</div>
 	
-	<!-- 社区开聊范围选择开始 -->
+	<!-- 社区聊吧范围选择开始 -->
 	<div id="scopeLayer" class="busswi3">
 		<div id="scopeBar" class="sidebar3">
 			<form action="">
@@ -363,7 +363,7 @@
 	        </form>
 	    </div>
 	</div>
-	<!-- 社区开聊范围选择结束 -->
+	<!-- 社区聊吧范围选择结束 -->
 	
 	<script type="text/javascript">
 	    function saveExpendEstates(helpId) {
@@ -412,7 +412,7 @@
 	 	}
 	 	
 		$(function() {
-			// 显示社区开聊范围层
+			// 显示社区聊吧范围层
 		    $("#showScopeLayer").click(function(){
 		   	        $("#scopeLayer").fadeIn("slow");
 		   	        //显示楼栋数结构
@@ -440,7 +440,7 @@
 		   	        });
 		   	 });
 			
-		    // 选择社区开聊范围结点
+		    // 选择社区聊吧范围结点
 	        $('#scopeTree').tree({
 	            checkbox: true,
 	            onSelect: function(node){

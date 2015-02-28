@@ -1,7 +1,11 @@
 package com.community.framework.utils.excel;
 
-import com.community.app.module.bean.BusinessCharger;
-import com.community.framework.utils.CommonUtils;
+import static com.community.framework.utils.CommonUtils.getCellValue;
+import static com.community.framework.utils.CommonUtils.getMergedRegionValue;
+import static com.community.framework.utils.CommonUtils.isMergedRegion;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -9,12 +13,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.community.framework.utils.CommonUtils.getCellValue;
-import static com.community.framework.utils.CommonUtils.getMergedRegionValue;
-import static com.community.framework.utils.CommonUtils.isMergedRegion;
+import com.community.app.module.bean.BusinessCharger;
+import com.community.framework.utils.CommonUtils;
 
 /**
  * Created by Administrator on 2014/7/16.

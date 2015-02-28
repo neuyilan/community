@@ -1,11 +1,11 @@
 package com.community.app.module.bean;
 
+import java.sql.Timestamp;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-
-import java.sql.Timestamp;
 
 @SuppressWarnings("serial")
 public class BusinessFeedback implements java.io.Serializable{

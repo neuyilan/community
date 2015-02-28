@@ -79,13 +79,13 @@
 		            <h2 class="relstatus" style="font-weight: bold;">发布状态<label for="publishState" class="error success"></label></h2>
 		            <div class="options">
 		                <p>
-		                <shiro:hasPermission name="anno_instant_publish">
+		                <shiro:hasPermission name="operation_anno_instant_publish">
 		                <label>
 		                        <input class="radiostyle" type="radio" name="publishState" value="0">
 		                        立即发布</label>
 		                    <br>
 		                </shiro:hasPermission>
-		                    <shiro:hasPermission name="anno_audting_anno">
+		                    <shiro:hasPermission name="operation_anno_audting_anno">
 		                    <br>
 		                    <label>
 		                        <input class="radiostyle" type="radio" name="publishState" value="1">
@@ -470,7 +470,7 @@
                 $('#qrbut').attr("disabled","disabled");
                 var isPush = document.getElementsByName("isPush");
             	if(isPush[0].checked) {
-                    window.location.href = '<%=ctx%>/business/businessAnno/list.do';
+                    window.location.href = '<%=ctx%>/business/businessAnno/operationList.do';
                     $('#ff').form('submit', {
                         success:function(data){
                             var data = eval('(' + data + ')');  // 改变json对象为javascript对象
@@ -482,7 +482,7 @@
                         success:function(data){
                             var data = eval('(' + data + ')');  // 改变json对象为javascript对象
                             alert(data.message);
-                            window.location.href = '<%=ctx%>/business/businessAnno/list.do';
+                            window.location.href = '<%=ctx%>/business/businessAnno/operationList.do';
                         }
                     });
             	}
@@ -521,11 +521,11 @@
             },
             messages: {
                 annoTitle: {
-                    required: "请输入新闻标题",
+                    required: "请输入公告标题",
                     maxlength: "公告标题最多24个字"
                 },
                 brief: {
-                    required: "请输入新闻简介",
+                    required: "请输入公告简介",
                     maxlength: "公告简介最多28个字"
                 },
                 annoType: {

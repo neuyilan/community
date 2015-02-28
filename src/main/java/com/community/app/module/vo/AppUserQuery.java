@@ -1,15 +1,11 @@
 package com.community.app.module.vo;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import java.sql.Timestamp;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-
 import com.community.app.module.bean.AppUser;
-import com.community.app.module.vo.BaseBean;
 
 public class AppUserQuery extends BaseBean {
 	
@@ -70,8 +66,17 @@ public class AppUserQuery extends BaseBean {
 	private Integer comId;
 	private String ids;
 	private String[] comIdArray;
+	private Integer curComId;
 	
-    public String[] getComIdArray() {
+    public Integer getCurComId() {
+		return curComId;
+	}
+
+	public void setCurComId(Integer curComId) {
+		this.curComId = curComId;
+	}
+
+	public String[] getComIdArray() {
 		return comIdArray;
 	}
 

@@ -4,14 +4,7 @@ package com.community.framework.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Properties;
-
-import org.apache.commons.lang.time.DateUtils;
 
 /**
  * properties工具类

@@ -53,12 +53,15 @@ public class AppUserController {
 		List comList = null;
 		ShiroUser shiroUser = CommonUtils.getUser();
 		try{
-			if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业人员访问 
+			//if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业人员访问 
 				query.setCurUserId(shiroUser.getUserId());
 				//query.setOrgType(ModuleConst.PROPERTY_CODE);
-			}//运营人员 看到全部小区
+			//}//运营人员 看到全部小区
 			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
 			}
 			query.setSort("registTime");
 			query.setOrder("desc");
@@ -93,12 +96,15 @@ public class AppUserController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业人员访问 
+			//if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业人员访问 
 				query.setCurUserId(shiroUser.getUserId());
 				//query.setOrgType(ModuleConst.PROPERTY_CODE);
-			}//运营人员 看到全部小区
+			//}//运营人员 看到全部小区
 			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
 			}
 			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
 				query.setSort(query.getOrderBy());

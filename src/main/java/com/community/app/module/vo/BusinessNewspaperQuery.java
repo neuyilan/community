@@ -4,7 +4,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.community.app.module.bean.BusinessNewspaper;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessNewspaperQuery extends BaseBean {
 	
@@ -24,7 +23,16 @@ public class BusinessNewspaperQuery extends BaseBean {
 	private String comNameScope;
 	private java.lang.Integer curUserId;
 	private java.lang.Integer curComId;
+	private Integer curEstateId;	
 	
+	public Integer getCurEstateId() {
+		return curEstateId;
+	}
+
+	public void setCurEstateId(Integer curEstateId) {
+		this.curEstateId = curEstateId;
+	}
+
 	public java.lang.Integer getCurUserId() {
 		return curUserId;
 	}

@@ -458,7 +458,7 @@
 	    }
 	}
 	
-	// 通过审核该条新闻
+	// 通过审核该条新鲜事
 	function auditPassNewsState(cmhcId) {
 		var bool = window.confirm("您确定该条中医养生通过审核？");
 	    if(bool) {
@@ -549,7 +549,7 @@
             $('#visits').html(data.visits);	//浏览量
             $('#supports').html(data.supports);	//支持量
             $('#auditInfo2').html("批注：" +data.auditInfo);	//审批原因
-            $('#viewInter').html("预览地址：<%=ctx %>/service/chinmedichenacare<br>/getDetailsById.json?ID="+data.cmhcId+"&userId=161" );
+            $('#viewInter').html("预览地址：<%=ctx %>/service/chinmedichenacare<br>/getDetailsById.json?ID="+data.cmhcId+"&userId=0" );
             //发布状态
             if(data.publishState == 0 ) {
             	$('#showstate').html("已发布");

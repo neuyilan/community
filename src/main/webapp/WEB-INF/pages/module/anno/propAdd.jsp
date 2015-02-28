@@ -71,13 +71,13 @@
             <h2 class="relstatus" style="font-weight: bold;">发布状态<label for="publishState" class="error success"></label></h2>
             <div class="options">
                 <p>
-                <shiro:hasPermission name="anno_instant_publish">
+                <shiro:hasPermission name="prop_anno_instant_publish">
                 <label>
                         <input class="radiostyle" type="radio" name="publishState" value="0">
                         立即发布</label>
                     <br>
                 </shiro:hasPermission>
-                    <shiro:hasPermission name="anno_audting_anno">
+                    <shiro:hasPermission name="prop_anno_audting_anno">
                     <br>
                     <label>
                         <input class="radiostyle" type="radio" name="publishState" value="1">
@@ -286,7 +286,7 @@
     		//初始化上传
         	uploadInit('anno', 'appPic', '1', '1');
         	$('#uploadField').val('appPic');
-    	});   */  	
+    	});     */	
     	
     	//选择范围结点
         $('#scopeTree').tree({
@@ -452,7 +452,7 @@
                         var data = eval('(' + data + ')');  // 改变json对象为javascript对象
                         if(data.success == 'true') {
                         	alert(data.message);
-                        	window.location.href = '<%=ctx%>/business/businessAnno/list.do';
+                        	window.location.href = '<%=ctx%>/business/businessAnno/propList.do';
                         }else{
                         	alert(data.message);
                         }
@@ -480,10 +480,10 @@
                 },
                 /* annoPic: {
                     required: true
-                }, */
-                /* appPic: {
+                }, 
+                appPic: {
                     required: true
-                }, */
+                },*/
                 publishState: {
                     required: true
                 },
@@ -514,10 +514,10 @@
                  },
                 /*  annoPic: {
                  	required: "请选择公告列表大图"
-                 }, */
-                 /* appPic: {
+                 }, 
+                 appPic: {
                      required: "请选择APP首页小图"
-                 }, */
+                 },*/
                  publishState: {
                     required: "请选择发布状态"
                  }/* ,

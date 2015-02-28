@@ -128,13 +128,16 @@
 					<if test="curEstateId != null and curEstateId != 0" >
 						and res.estateId=#{curEstateId} 
 					</if>
+					<if test="curComId != null and curComId != ''" >
+						and res.comId=#{curComId} 
+					</if>
 			</trim>
 		</where>
 	</sql>
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List1" >
-			h.helpId,
+			DISTINCT h.helpId,
 			h.helpTitle,
 			h.helperId,
 			h.helperName,
@@ -225,7 +228,6 @@
 					<if test="estateId != null and estateId != ''" >
 				   		and e.estateId = #{estateId}
 					</if>
-					
 					<if test="comId != null and comId != ''" >
 				   		and e.estateId IN (SELECT estateId FROM `manage_estate` WHERE comId=#{comId})
 					</if>
@@ -369,11 +371,11 @@
 	
 	<!-- 修改comments -->
 	<update id="updateComments" parameterType="BusinessHelpComment">
-	UPDATE business_help SET comments=comments+1 where helpId=#{help}
+	UPDATE business_help SET comments=comments+1,editTime=#{commentTime} where helpId=#{help}
 	</update>
 	<!--修改supports -->
 	<update id="updateSupports" parameterType="BusinessHelpSupport">
-	UPDATE business_help SET supports=supports+1 where helpId=#{helpId}
+	UPDATE business_help SET supports=supports+1,editTime=#{createTime} where helpId=#{helpId}
 	</update>
 	
 	<!--修改浏览量 -->

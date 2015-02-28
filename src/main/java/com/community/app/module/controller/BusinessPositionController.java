@@ -16,8 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessUserQuery;
 
 import com.community.app.module.bean.BusinessDepartment;
 import com.community.app.module.bean.BusinessPosition;
@@ -29,6 +27,7 @@ import com.community.app.module.service.BusinessPropertyService;
 import com.community.app.module.service.BusinessStationService;
 import com.community.app.module.service.BusinessUserService;
 import com.community.app.module.service.ManageOrgService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessPositionQuery;
 import com.community.framework.utils.CommonUtils;
 

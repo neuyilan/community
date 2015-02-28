@@ -27,8 +27,6 @@ import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessNewspaper;
 import com.community.app.module.bean.BusinessNewspaperScope;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.CommunityBean;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessNewspaperScopeService;
 import com.community.app.module.service.BusinessNewspaperService;
@@ -66,9 +64,12 @@ public class BusinessNewspaperController {
 			}
 			query.setOrder("desc");
 			query.setSort("editTime");
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
-			}
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}		
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setComId(shiroUser.getCurComId());
 				map.put("comId", shiroUser.getCurComId());
@@ -76,7 +77,7 @@ public class BusinessNewspaperController {
 			baseBean = businessNewspaperService.findAllPage(query);
 			
 			map.put("userId", shiroUser.getUserId());
-			map.put("orgType", shiroUser.getOrgType());
+			//map.put("orgType", shiroUser.getOrgType());
 			
 			list = businessCommunityService.findComsByUser(map);
 		}catch(Exception e){
@@ -106,8 +107,11 @@ public class BusinessNewspaperController {
 			} else {  
 				query.setRows(12);
 			}
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
 			}
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setComId(shiroUser.getCurComId());

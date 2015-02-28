@@ -1,12 +1,6 @@
 package com.community.framework.utils;
 
-import java.util.Calendar;  
-  
-import javax.servlet.http.HttpServletRequest;  
-import javax.servlet.http.HttpServletResponse;  
-  
-import org.springframework.web.servlet.ModelAndView;  
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;  
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 
 public class TimeInterceptor extends HandlerInterceptorAdapter {  

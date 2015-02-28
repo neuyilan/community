@@ -12,6 +12,7 @@
 			<result column="actScope" property="actScope" />
 			<result column="brief" property="brief" />
 			<result column="actPic" property="actPic" />
+			<result column="actPicNo" property="actPicNo" />
 			<result column="actLink" property="actLink" />
 			<result column="actManage" property="actManage" />
 			<result column="userType" property="userType" />
@@ -66,6 +67,7 @@
 			a.actScope,
 			a.brief,
 			a.actPic,
+			a.actPicNo,
 			a.actLink,
 			a.actManage,
 			a.userType,
@@ -135,6 +137,9 @@
 					</if>
 					<if test="actPic != null and actPic != ''" >
 				   		and a.actPic = #{actPic}
+					</if>
+					<if test="actPicNo != null and actPicNo != ''" >
+				   		and a.actPicNo = #{actPicNo}
 					</if>
 					<if test="actLink != null and actLink != ''" >
 				   		and a.actLink = #{actLink}
@@ -254,6 +259,9 @@
 					<if test="curComId != null and curComId != ''" >
 						and res.comId=#{curComId} 
 					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+			   			and res.estateId = #{curEstateId}
+					</if>
 					<if test="states != null and states != ''" >
 						and (
 						<foreach collection="states" item="aState" separator="OR">
@@ -275,6 +283,7 @@
 			a.actScope,
 			a.brief,
 			a.actPic,
+			a.actPicNo,
 			a.appPic,
 			a.actLink,
 			a.actManage,
@@ -521,6 +530,7 @@
 		actScope,
 		brief,
 		actPic,
+		actPicNo,
 		actLink,
 		actManage,
 		userType,
@@ -569,6 +579,7 @@
 		#{actScope},
 		#{brief},
 		#{actPic},
+		#{actPicNo},
 		#{actLink},
 		#{actManage},
 		#{userType},
@@ -636,6 +647,9 @@
 			</if>
 			<if test="actPic != null and actPic != ''" >
 			actPic=#{actPic},
+			</if>
+			<if test="actPicNo != null and actPicNo != ''" >
+			actPicNo=#{actPicNo},
 			</if>
 			<if test="actLink != null and actLink != ''" >
 			actLink=#{actLink},
@@ -785,12 +799,9 @@
 	UPDATE business_activity SET visits=visits+1 where actId=#{id}
 	</update>
 	
-	
 	<!-- BusinessActivity删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_activity where 
 		actId=#{actId}
-																																																													</delete>
-	
+	</delete>
 </mapper>
-	

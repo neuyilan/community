@@ -89,6 +89,7 @@
 	        </props>         
 	    </property>  
 	</bean>
+	<!-- Spring定时器注解开关-->
 	<task:annotation-driven/>  
 	<context:component-scan base-package="com.community.app.module.task.MyTask"></context:component-scan>  
 </beans>

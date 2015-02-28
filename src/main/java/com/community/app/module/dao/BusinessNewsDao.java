@@ -3,17 +3,12 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
-
 import org.springframework.stereotype.Repository;
 
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.index;
 import com.community.app.module.vo.BusinessNewsQuery;
+import com.community.framework.exception.DaoException;
 
 @Repository
 public interface BusinessNewsDao {

@@ -1,5 +1,7 @@
 package com.community.app.module.controller;
 
+import static com.community.framework.utils.CommonUtils.getUser;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -7,28 +9,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.community.app.module.bean.AppFocusScope;
-import com.community.app.module.bean.AppHomepage;
-import com.community.app.module.bean.AppHomepageScope;
-import com.community.app.module.bean.AppLatestNews;
-import com.community.app.module.bean.AppPushLog;
-import com.community.app.module.bean.AppUser;
-import com.community.app.module.bean.AppUserConfig;
-import com.community.app.module.bean.AppUserNews;
-import com.community.app.module.bean.BusinessAnnoScope;
-import com.community.app.module.bean.BusinessFocus;
-import com.community.app.module.bean.BusinessPosition;
-import com.community.app.module.bean.BusinessUserResource;
-import com.community.app.module.bean.ManageEstate;
-import com.community.app.module.bean.ShiroUser;
-import com.community.framework.utils.CommonUtils;
-import com.community.framework.utils.Uploader;
-import com.community.framework.utils.propertiesUtil;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -45,8 +28,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
+import com.community.app.module.bean.AppFocusScope;
+import com.community.app.module.bean.AppHomepage;
+import com.community.app.module.bean.AppHomepageScope;
+import com.community.app.module.bean.AppLatestNews;
+import com.community.app.module.bean.AppPushLog;
+import com.community.app.module.bean.AppUser;
+import com.community.app.module.bean.AppUserConfig;
+import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessAnno;
+import com.community.app.module.bean.BusinessAnnoScope;
+import com.community.app.module.bean.BusinessFocus;
+import com.community.app.module.bean.BusinessUserResource;
+import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.push.AppPushNotificationUtil;
@@ -66,9 +60,10 @@ import com.community.app.module.service.BusinessPositionService;
 import com.community.app.module.service.BusinessStationService;
 import com.community.app.module.service.ManageBuildingService;
 import com.community.app.module.service.ManageEstateService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessAnnoQuery;
-
-import static com.community.framework.utils.CommonUtils.*;
+import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.Uploader;
 
 @Controller
 @RequestMapping("/business/businessAnno")
@@ -108,31 +103,31 @@ public class BusinessAnnoController {
 	private AppUserConfigService appUserConfigService;
 	
 	/**
-	 * 进入管理页
+	 * 进入物业公告管理页
 	 * @return
 	 */
-	@RequestMapping(value="list")
-	public ModelAndView list(HttpServletRequest request, BusinessAnnoQuery query) {
+	@RequestMapping(value="propList")
+	public ModelAndView propList(HttpServletRequest request, BusinessAnnoQuery query) {
         BaseBean baseBean = new BaseBean();
         String orgType = "";
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
-				orgType = shiroUser.getCurOrgType();
-			}else{
-				orgType = shiroUser.getOrgType();
-			}
-			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
-				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+			//if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				//orgType = shiroUser.getCurOrgType();
+			//}else{
+				//orgType = shiroUser.getOrgType();
+			//}
+			//if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
+				//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
 					query.setCurUserId(shiroUser.getUserId());
-				}	
+				//}	
 				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 					query.setCurEstateId(shiroUser.getCurEstateId());
 				}
-				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				//query.setOrgType(ModuleConst.PROPERTY_CODE);
 				Integer[] types = {0,1};
 				query.setAnnoTypes(types);//0:物业通知类公告 1:物业信息传达类公告
-			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
+			/*}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
 				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
 					query.setCurUserId(shiroUser.getUserId());
 				}
@@ -147,13 +142,13 @@ public class BusinessAnnoController {
 				}
 				Integer[] types = {2,3};
 				query.setAnnoTypes(types);// 2:运营内容公告 3:运营外部公告
-			}
+			}*/
 			if((query.getSort() == null || "".equals(query.getSort())) && (query.getSort() == null || "".equals(query.getSort()))) {
 				query.setSort("editTime");
 			}			
 			query.setOrder("desc");
 			Subject currentUser = SecurityUtils.getSubject();  
-			if (currentUser.isPermitted("anno_add_anno")) {  //新增公告功能展示会影响分页
+			if (currentUser.isPermitted("prop_anno_add_anno")) {  //新增公告功能展示会影响分页
 				query.setRows(11);
 			} else {  
 				query.setRows(12);
@@ -161,10 +156,10 @@ public class BusinessAnnoController {
 			
 			baseBean = businessAnnoService.findAllPage(query);
 		}catch(Exception e){
-			GSLogger.error("进入businessAnno管理页时发生错误：/business/businessAnno/enter", e);
+			GSLogger.error("进入businessAnno管理页时发生错误：/business/businessAnno/propList", e);
 			e.printStackTrace();
 		}
-		ModelAndView mav = new ModelAndView("/module/anno/list");
+		ModelAndView mav = new ModelAndView("/module/anno/propList");
 		mav.addObject("baseBean", baseBean);
 		mav.addObject("pager", baseBean.getPager());
 		mav.addObject("publishState", query.getPublishState());
@@ -176,32 +171,32 @@ public class BusinessAnnoController {
 	
 	
 	/**
-	 * 列示或者查询所有数据
+	 * 列示或者查询所有物业公告数据
 	 * @return
 	 */
-	@RequestMapping(value="getPageList")
-	public void getPageList(BusinessAnnoQuery query, HttpServletResponse response) {
+	@RequestMapping(value="getPropPageList")
+	public void getPropPageList(BusinessAnnoQuery query, HttpServletResponse response) {
 		String json = "";
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
 			String orgType = "";
-			if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
 				orgType = shiroUser.getCurOrgType();
 			}else{
 				orgType = shiroUser.getOrgType();
-			}
-			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
-				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+			}*/
+			//if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
+				//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
 					query.setCurUserId(shiroUser.getUserId());
-				}
+				//}
 				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 					query.setCurEstateId(shiroUser.getCurEstateId());
 				}
-				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				//query.setOrgType(ModuleConst.PROPERTY_CODE);
 				Integer[] types = {0,1};
 				query.setAnnoTypes(types);//0:物业通知类公告 1:物业信息传达类公告
-			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
+			/*}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
 				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
 					query.setCurUserId(shiroUser.getUserId());
 				}
@@ -216,7 +211,7 @@ public class BusinessAnnoController {
 				}
 				Integer[] types = {2,3};
 				query.setAnnoTypes(types);// 2:运营内容公告 3:系统公告
-			}
+			}*/
 			query.setOrder("desc");
 			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
 				query.setSort(query.getOrderBy());
@@ -224,7 +219,7 @@ public class BusinessAnnoController {
 				query.setSort("editTime");
 			}
 			Subject currentUser = SecurityUtils.getSubject();  
-			if (currentUser.isPermitted("anno_add_anno")) {  //新增公告功能展示会影响分页
+			if (currentUser.isPermitted("prop_anno_add_anno")) {  //新增公告功能展示会影响分页
 				query.setRows(11);
 			} else {  
 				query.setRows(12);
@@ -289,12 +284,379 @@ public class BusinessAnnoController {
 		}
 	}
 	
+	
 	/**
-	 * 进入新增页
+	 * 进入驿站公告管理页
 	 * @return
 	 */
-	@RequestMapping(value="add")
-	public ModelAndView add(BusinessAnnoQuery query) {		
+	@RequestMapping(value="stationList")
+	public ModelAndView stationList(HttpServletRequest request, BusinessAnnoQuery query) {
+        BaseBean baseBean = new BaseBean();
+        String orgType = "";
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				orgType = shiroUser.getCurOrgType();
+			}else{
+				orgType = shiroUser.getOrgType();
+			}*/
+			/*if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				}	
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				Integer[] types = {0,1};
+				query.setAnnoTypes(types);//0:物业通知类公告 1:物业信息传达类公告
+*/			//}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
+				//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				//}
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				Integer[] types = {4};
+				query.setAnnoTypes(types);// 4:驿站公告
+			/*}if(ModuleConst.OPERATION_CODE.equals(orgType)) {//运营人员 设置公告类型
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				Integer[] types = {2,3};
+				query.setAnnoTypes(types);// 2:运营内容公告 3:运营外部公告
+			}*/
+			if((query.getSort() == null || "".equals(query.getSort())) && (query.getSort() == null || "".equals(query.getSort()))) {
+				query.setSort("editTime");
+			}			
+			query.setOrder("desc");
+			Subject currentUser = SecurityUtils.getSubject();  
+			if (currentUser.isPermitted("station_anno_add_anno")) {  //新增公告功能展示会影响分页
+				query.setRows(11);
+			} else {  
+				query.setRows(12);
+			}
+			
+			baseBean = businessAnnoService.findAllPage(query);
+		}catch(Exception e){
+			GSLogger.error("进入businessAnno管理页时发生错误：/business/businessAnno/stationList", e);
+			e.printStackTrace();
+		}
+		ModelAndView mav = new ModelAndView("/module/anno/stationList");
+		mav.addObject("baseBean", baseBean);
+		mav.addObject("pager", baseBean.getPager());
+		mav.addObject("publishState", query.getPublishState());
+		mav.addObject("sort", query.getSort());
+		mav.addObject("orgType", orgType);
+		mav.addObject("timeScope", query.getTimeScope());
+		return mav;
+	}
+	
+	
+	/**
+	 * 列示或者查询所有驿站公告数据
+	 * @return
+	 */
+	@RequestMapping(value="getStationPageList")
+	public void getStationPageList(BusinessAnnoQuery query, HttpServletResponse response) {
+		String json = "";
+		StringBuilder result = new StringBuilder();
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			String orgType = "";
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				orgType = shiroUser.getCurOrgType();
+			}else{
+				orgType = shiroUser.getOrgType();
+			}
+			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				}
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				Integer[] types = {0,1};
+				query.setAnnoTypes(types);//0:物业通知类公告 1:物业信息传达类公告
+			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
+			*/	//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				//}
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				Integer[] types = {4};
+				query.setAnnoTypes(types);// 4:驿站公告
+			/*}if(ModuleConst.OPERATION_CODE.equals(orgType)) {//运营人员 设置公告类型
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				Integer[] types = {2,3};
+				query.setAnnoTypes(types);// 2:运营内容公告 3:系统公告
+			}*/
+			query.setOrder("desc");
+			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
+				query.setSort(query.getOrderBy());
+			}else{
+				query.setSort("editTime");
+			}
+			Subject currentUser = SecurityUtils.getSubject();  
+			if (currentUser.isPermitted("station_anno_add_anno")) {  //新增公告功能展示会影响分页
+				query.setRows(11);
+			} else {  
+				query.setRows(12);
+			}
+			BaseBean baseBean = businessAnnoService.findAllPage(query);
+			//result.append("{\"total\":\"").append(baseBean.getCount()+"_"+baseBean.getPager().getPageCount()).append("\",");
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
+			.append("\"rows\":[");
+			for(int i=0;i<baseBean.getList().size();i++) {
+				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
+				result.append("{")
+			    .append("\"annoId\":\"").append(businessAnno.getAnnoId()).append("\"").append(",")
+			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle()).append("\"").append(",")
+			    .append("\"brief\":\"").append(businessAnno.getBrief()).append("\"").append(",")
+			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"annoType\":\"").append(businessAnno.getAnnoType()).append("\"").append(",")
+			    .append("\"annoScope\":\"").append(businessAnno.getAnnoScope()).append("\"").append(",")
+			    .append("\"annoScopeInfo\":\"").append(businessAnno.getAnnoScopeInfo()).append("\"").append(",")
+			    .append("\"annoPic\":\"").append(businessAnno.getAnnoPic()).append("\"").append(",")
+			    .append("\"userLevel\":\"").append(businessAnno.getUserLevel()).append("\"").append(",")
+			    .append("\"publisherId\":\"").append(businessAnno.getPublisherId()).append("\"").append(",")
+			    .append("\"publisherName\":\"").append(businessAnno.getPublisherName()).append("\"").append(",")
+			    .append("\"publishTime\":\"").append(businessAnno.getPublishTime()).append("\"").append(",")
+			    .append("\"publishState\":\"").append(businessAnno.getPublishState()).append("\"").append(",")
+			    .append("\"auditorId\":\"").append(businessAnno.getAuditorId()).append("\"").append(",")
+			    .append("\"auditorName\":\"").append(businessAnno.getAuditorName()).append("\"").append(",")
+			    .append("\"auditTime\":\"").append(businessAnno.getAuditTime()).append("\"").append(",")
+			    .append("\"setTime\":\"").append(businessAnno.getSetTime()).append("\"").append(",")
+			    .append("\"isPush\":\"").append(businessAnno.getIsPush()).append("\"").append(",")
+			    .append("\"isRecommend\":\"").append(businessAnno.getIsRecommend()).append("\"").append(",")
+			    .append("\"isImportant\":\"").append(businessAnno.getIsImportant()).append("\"").append(",")
+			    .append("\"isRemind\":\"").append(businessAnno.getIsRemind()).append("\"").append(",")
+			    .append("\"visits\":\"").append(businessAnno.getVisits()).append("\"").append(",")
+			    .append("\"supports\":\"").append(businessAnno.getSupports()).append("\"").append(",")
+			    .append("\"comments\":\"").append(businessAnno.getComments()).append("\"").append(",")
+			    .append("\"annoState\":\"").append(businessAnno.getAnnoState()).append("\"").append(",")
+			    .append("\"delMemo\":\"").append(businessAnno.getDelMemo()).append("\"").append(",")
+			    .append("\"createTime\":\"").append(businessAnno.getCreateTime()).append("\"").append(",")
+			    .append("\"editTime\":\"").append(businessAnno.getEditTime()).append("\"").append(",")
+			    .append("\"editor\":\"").append(businessAnno.getEditor()).append("\"")
+				.append("}").append(",");
+			}
+			json = result.toString();
+			if(baseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]}";
+			
+			response.setHeader("Cache-Control", "no-cache");
+			response.setCharacterEncoding("utf-8");
+			try {
+				response.getWriter().write(json);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			GSLogger.error("显示businessAnno列表时发生错误：/business/businessAnno/list", e);
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 进入运营公告管理页
+	 * @return
+	 */
+	@RequestMapping(value="operationList")
+	public ModelAndView operationList(HttpServletRequest request, BusinessAnnoQuery query) {
+        BaseBean baseBean = new BaseBean();
+        String orgType = "";
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				orgType = shiroUser.getCurOrgType();
+			}else{
+				orgType = shiroUser.getOrgType();
+			}
+			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				}	
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				Integer[] types = {0,1};
+				query.setAnnoTypes(types);//0:物业通知类公告 1:物业信息传达类公告
+			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				}
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				Integer[] types = {4};
+				query.setAnnoTypes(types);// 4:驿站公告
+			}if(ModuleConst.OPERATION_CODE.equals(orgType)) {//运营人员 设置公告类型
+			*/	//if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				//}
+				Integer[] types = {2,3};
+				query.setAnnoTypes(types);// 2:运营内容公告 3:运营外部公告
+			//}
+			if((query.getSort() == null || "".equals(query.getSort())) && (query.getSort() == null || "".equals(query.getSort()))) {
+				query.setSort("editTime");
+			}			
+			query.setOrder("desc");
+			Subject currentUser = SecurityUtils.getSubject();  
+			if (currentUser.isPermitted("operation_anno_add_anno")) {  //新增公告功能展示会影响分页
+				query.setRows(11);
+			} else {  
+				query.setRows(12);
+			}
+			
+			baseBean = businessAnnoService.findAllPage(query);
+		}catch(Exception e){
+			GSLogger.error("进入businessAnno管理页时发生错误：/business/businessAnno/operationList", e);
+			e.printStackTrace();
+		}
+		ModelAndView mav = new ModelAndView("/module/anno/operationList");
+		mav.addObject("baseBean", baseBean);
+		mav.addObject("pager", baseBean.getPager());
+		mav.addObject("publishState", query.getPublishState());
+		mav.addObject("sort", query.getSort());
+		//mav.addObject("orgType", orgType);
+		mav.addObject("timeScope", query.getTimeScope());
+		return mav;
+	}
+	
+	
+	/**
+	 * 列示或者查询所有运营公告数据
+	 * @return
+	 */
+	@RequestMapping(value="getOperationPageList")
+	public void getOperationPageList(BusinessAnnoQuery query, HttpServletResponse response) {
+		String json = "";
+		StringBuilder result = new StringBuilder();
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			String orgType = "";
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				orgType = shiroUser.getCurOrgType();
+			}else{
+				orgType = shiroUser.getOrgType();
+			}*/
+			/*if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 获取小区ID 设置公告类型
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				}
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				Integer[] types = {0,1};
+				query.setAnnoTypes(types);//0:物业通知类公告 1:物业信息传达类公告
+			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员 获取小区ID 设置公告类型
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { //当前访问人不是运营是物业
+					query.setCurUserId(shiroUser.getUserId());
+				}
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				Integer[] types = {4};
+				query.setAnnoTypes(types);// 4:驿站公告
+			}if(ModuleConst.OPERATION_CODE.equals(orgType)) {//运营人员 设置公告类型
+			*/	//if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				//}
+				Integer[] types = {2,3};
+				query.setAnnoTypes(types);// 2:运营内容公告 3:系统公告
+			//}
+			query.setOrder("desc");
+			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
+				query.setSort(query.getOrderBy());
+			}else{
+				query.setSort("editTime");
+			}
+			Subject currentUser = SecurityUtils.getSubject();  
+			if (currentUser.isPermitted("operation_anno_add_anno")) {  //新增公告功能展示会影响分页
+				query.setRows(11);
+			} else {  
+				query.setRows(12);
+			}
+			BaseBean baseBean = businessAnnoService.findAllPage(query);
+			//result.append("{\"total\":\"").append(baseBean.getCount()+"_"+baseBean.getPager().getPageCount()).append("\",");
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
+			.append("\"rows\":[");
+			for(int i=0;i<baseBean.getList().size();i++) {
+				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
+				result.append("{")
+			    .append("\"annoId\":\"").append(businessAnno.getAnnoId()).append("\"").append(",")
+			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle()).append("\"").append(",")
+			    .append("\"brief\":\"").append(businessAnno.getBrief()).append("\"").append(",")
+			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"annoType\":\"").append(businessAnno.getAnnoType()).append("\"").append(",")
+			    .append("\"annoScope\":\"").append(businessAnno.getAnnoScope()).append("\"").append(",")
+			    .append("\"annoScopeInfo\":\"").append(businessAnno.getAnnoScopeInfo()).append("\"").append(",")
+			    .append("\"annoPic\":\"").append(businessAnno.getAnnoPic()).append("\"").append(",")
+			    .append("\"userLevel\":\"").append(businessAnno.getUserLevel()).append("\"").append(",")
+			    .append("\"publisherId\":\"").append(businessAnno.getPublisherId()).append("\"").append(",")
+			    .append("\"publisherName\":\"").append(businessAnno.getPublisherName()).append("\"").append(",")
+			    .append("\"publishTime\":\"").append(businessAnno.getPublishTime()).append("\"").append(",")
+			    .append("\"publishState\":\"").append(businessAnno.getPublishState()).append("\"").append(",")
+			    .append("\"auditorId\":\"").append(businessAnno.getAuditorId()).append("\"").append(",")
+			    .append("\"auditorName\":\"").append(businessAnno.getAuditorName()).append("\"").append(",")
+			    .append("\"auditTime\":\"").append(businessAnno.getAuditTime()).append("\"").append(",")
+			    .append("\"setTime\":\"").append(businessAnno.getSetTime()).append("\"").append(",")
+			    .append("\"isPush\":\"").append(businessAnno.getIsPush()).append("\"").append(",")
+			    .append("\"isRecommend\":\"").append(businessAnno.getIsRecommend()).append("\"").append(",")
+			    .append("\"isImportant\":\"").append(businessAnno.getIsImportant()).append("\"").append(",")
+			    .append("\"isRemind\":\"").append(businessAnno.getIsRemind()).append("\"").append(",")
+			    .append("\"visits\":\"").append(businessAnno.getVisits()).append("\"").append(",")
+			    .append("\"supports\":\"").append(businessAnno.getSupports()).append("\"").append(",")
+			    .append("\"comments\":\"").append(businessAnno.getComments()).append("\"").append(",")
+			    .append("\"annoState\":\"").append(businessAnno.getAnnoState()).append("\"").append(",")
+			    .append("\"delMemo\":\"").append(businessAnno.getDelMemo()).append("\"").append(",")
+			    .append("\"createTime\":\"").append(businessAnno.getCreateTime()).append("\"").append(",")
+			    .append("\"editTime\":\"").append(businessAnno.getEditTime()).append("\"").append(",")
+			    .append("\"editor\":\"").append(businessAnno.getEditor()).append("\"")
+				.append("}").append(",");
+			}
+			json = result.toString();
+			if(baseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]}";
+			
+			response.setHeader("Cache-Control", "no-cache");
+			response.setCharacterEncoding("utf-8");
+			try {
+				response.getWriter().write(json);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			GSLogger.error("显示businessAnno列表时发生错误：/business/businessAnno/list", e);
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 进入物业公告新增页
+	 * @return
+	 */
+	@RequestMapping(value="propAdd")
+	public ModelAndView propAdd(BusinessAnnoQuery query) {		
 		ModelAndView mav = null;
 		try{
 		}catch(Exception e){
@@ -308,13 +670,71 @@ public class BusinessAnnoController {
 		} else {
 			orgType = shiroUser.getCurOrgType();
 		}
-		if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
+		//if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
 			mav = new ModelAndView("/module/anno/propAdd");
-		}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
-			mav = new ModelAndView("/module/anno/stationAdd");
-		}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
-			mav = new ModelAndView("/module/anno/operationAdd");
+		//}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
+			//mav = new ModelAndView("/module/anno/stationAdd");
+		//}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
+			//mav = new ModelAndView("/module/anno/operationAdd");
+		//}
+		return mav;
+	}
+	
+	/**
+	 * 进入驿站公告新增页
+	 * @return
+	 */
+	@RequestMapping(value="stationAdd")
+	public ModelAndView stationAdd(BusinessAnnoQuery query) {		
+		ModelAndView mav = null;
+		try{
+		}catch(Exception e){
+			GSLogger.error("进入businessAnno新增页时发生错误：/business/businessAnno/add", e);
+			e.printStackTrace();
 		}
+		ShiroUser shiroUser = CommonUtils.getUser();
+		String orgType = "";
+		if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			orgType = shiroUser.getOrgType();
+		} else {
+			orgType = shiroUser.getCurOrgType();
+		}
+		//if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
+			//mav = new ModelAndView("/module/anno/propAdd");
+		//}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
+			mav = new ModelAndView("/module/anno/stationAdd");
+		//}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
+			//mav = new ModelAndView("/module/anno/operationAdd");
+		//}
+		return mav;
+	}
+	
+	/**
+	 * 进入运营公告新增页
+	 * @return
+	 */
+	@RequestMapping(value="operationAdd")
+	public ModelAndView operationAdd(BusinessAnnoQuery query) {		
+		ModelAndView mav = null;
+		try{
+		}catch(Exception e){
+			GSLogger.error("进入businessAnno新增页时发生错误：/business/businessAnno/add", e);
+			e.printStackTrace();
+		}
+		ShiroUser shiroUser = CommonUtils.getUser();
+		//String orgType = "";
+		//if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			//orgType = shiroUser.getOrgType();
+		//} else {
+			//orgType = shiroUser.getCurOrgType();
+		//}
+		//if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
+			//mav = new ModelAndView("/module/anno/propAdd");
+		//}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
+			//mav = new ModelAndView("/module/anno/stationAdd");
+		//}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
+			mav = new ModelAndView("/module/anno/operationAdd");
+		//}
 		return mav;
 	}
 	
@@ -333,15 +753,15 @@ public class BusinessAnnoController {
 		try{
 			ShiroUser shiroUser = getUser();
 			// 获取用户所在物业管理的小区
-			// List estateList = shiroUser.getEstateList();
-			// ManageEstate manageEstate = (ManageEstate) estateList.get(0);
+			//List estateList = shiroUser.getEstateList();
+			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
             businessAnno.setPublisherName(username);
 		    businessAnno.setAnnoTitle(query.getAnnoTitle());
 		    businessAnno.setBrief(query.getBrief());
 		    businessAnno.setAnnoContent(query.getAnnoContent());
 		    businessAnno.setAnnoType(query.getAnnoType());
-		    // businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
+		    //businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
 		    businessAnno.setAnnoScope("0");
 		    businessAnno.setAnnoBuilding(query.getAnnoBuilding());
 		    businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
@@ -351,6 +771,7 @@ public class BusinessAnnoController {
 		    businessAnno.setPublishState(query.getPublishState());
 		    businessAnno.setSetTime(query.getSetTime());
 		    businessAnno.setIsImportant(query.getIsImportant()==null?0:query.getIsImportant());
+		    businessAnno.setIsPush(0);
 		    if(query.getSetTime() != null && !"".equals(query.getSetTime())) {
 		    	businessAnno.setIsRemind(1); // 需要提醒
 		    }
@@ -488,8 +909,8 @@ public class BusinessAnnoController {
 			businessAnno = businessAnnoService.findById(query.getAnnoId());
 			ShiroUser shiroUser = getUser();
 			//获取用户所在物业管理的小区
-			// List estateList = shiroUser.getEstateList();
-			// ManageEstate manageEstate = (ManageEstate) estateList.get(0);
+			//List estateList = shiroUser.getEstateList();
+			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(shiroUser.getUserId());
             businessAnno.setPublisherName(shiroUser.getUserName());
 		    businessAnno.setAnnoTitle(query.getAnnoTitle());
@@ -499,7 +920,7 @@ public class BusinessAnnoController {
 		    }
 		    businessAnno.setIsImportant(query.getIsImportant()==null?0:query.getIsImportant());
 		    businessAnno.setAnnoType(query.getAnnoType());
-		    // businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
+		    //businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
 		    businessAnno.setAnnoScope("0");
 		    businessAnno.setAnnoBuilding(query.getAnnoBuilding());
 		    businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
@@ -668,7 +1089,7 @@ public class BusinessAnnoController {
 		String json = "";
 		try{
 			ShiroUser shiroUser = getUser();
-			List estateList = shiroUser.getEstateList();
+			//List estateList = shiroUser.getEstateList();
 			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
             //businessAnno.setAnnoScope(String.valueOf(manageEstate.getEstateId()));
@@ -859,10 +1280,10 @@ public class BusinessAnnoController {
 		try{
 			businessAnno = businessAnnoService.findById(query.getAnnoId());
 			ShiroUser shiroUser = getUser();
-			// List estateList = shiroUser.getEstateList();
-			// ManageEstate manageEstate = (ManageEstate) estateList.get(0);
+			//List estateList = shiroUser.getEstateList();
+			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
-            // businessAnno.setAnnoScope(String.valueOf(manageEstate.getEstateId()));
+            //businessAnno.setAnnoScope(String.valueOf(manageEstate.getEstateId()));
             businessAnno.setAnnoScope("0");
             businessAnno.setAnnoBuilding(query.getAnnoBuilding());
             businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
@@ -1590,11 +2011,11 @@ public class BusinessAnnoController {
 	}
 	
 	/**
-	 * 进入修改页
+	 * 进入物业修改页
 	 * @return
 	 */
-	@RequestMapping(value="modify")
-	public ModelAndView modify(BusinessAnnoQuery query) {	
+	@RequestMapping(value="propModify")
+	public ModelAndView propModify(BusinessAnnoQuery query) {	
 		BusinessAnno businessAnno = null;
 		ModelAndView mav = new ModelAndView();
 		try{
@@ -1613,13 +2034,115 @@ public class BusinessAnnoController {
 			orgType = shiroUser.getCurOrgType();
 		}
 		
-		if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
+		//if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
 			mav = new ModelAndView("/module/anno/propModify");
-		}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
-			mav = new ModelAndView("/module/anno/stationModify");
-		}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
-			mav = new ModelAndView("/module/anno/operationModify");
+		//}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
+			//mav = new ModelAndView("/module/anno/stationModify");
+		//}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
+			//mav = new ModelAndView("/module/anno/operationModify");
+		//}
+		//保存公告范围
+		Map paramMap = new HashMap();
+		paramMap.put("annoId", businessAnno.getAnnoId());
+		List list = businessAnnoScopeService.findByMap(paramMap);
+		StringBuilder sb = new StringBuilder();
+		if(list.size() > 0){
+			for(int i=0;i<list.size();i++) {
+				BusinessAnnoScope businessAnnoScope = (BusinessAnnoScope) list.get(i);
+				if(businessAnno.getAnnoType() == 2) {//内部公告
+					sb.append(businessAnnoScope.getEstateId()+":"+businessAnnoScope.getEstateName()+":"+businessAnnoScope.getScopeType()+",");
+				}else{
+					sb.append(businessAnnoScope.getEstateId()+":"+businessAnnoScope.getEstateName()+",");
+				}
+			}
+			mav.addObject("scope", sb.toString().subSequence(0, sb.toString().length()-1));
 		}
+		mav.addObject("businessAnno", businessAnno);
+		return mav;
+	}
+	
+	/**
+	 * 进入驿站修改页
+	 * @return
+	 */
+	@RequestMapping(value="stationModify")
+	public ModelAndView stationModify(BusinessAnnoQuery query) {	
+		BusinessAnno businessAnno = null;
+		ModelAndView mav = new ModelAndView();
+		try{
+			businessAnno = businessAnnoService.findById(query.getAnnoId());
+            //businessAnno.setScope("-1"); //初始化范围
+		}catch(Exception e){
+			GSLogger.error("进入businessAnno修改页时发生错误：/business/businessAnno/modify", e);
+			e.printStackTrace();
+		}
+		
+		ShiroUser shiroUser = CommonUtils.getUser();
+		String orgType = "";
+		if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			orgType = shiroUser.getOrgType();
+		} else {
+			orgType = shiroUser.getCurOrgType();
+		}
+		
+		//if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
+			//mav = new ModelAndView("/module/anno/propModify");
+		//}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
+			mav = new ModelAndView("/module/anno/stationModify");
+		//}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
+			//mav = new ModelAndView("/module/anno/operationModify");
+		//}
+		//保存公告范围
+		Map paramMap = new HashMap();
+		paramMap.put("annoId", businessAnno.getAnnoId());
+		List list = businessAnnoScopeService.findByMap(paramMap);
+		StringBuilder sb = new StringBuilder();
+		if(list.size() > 0){
+			for(int i=0;i<list.size();i++) {
+				BusinessAnnoScope businessAnnoScope = (BusinessAnnoScope) list.get(i);
+				if(businessAnno.getAnnoType() == 2) {//内部公告
+					sb.append(businessAnnoScope.getEstateId()+":"+businessAnnoScope.getEstateName()+":"+businessAnnoScope.getScopeType()+",");
+				}else{
+					sb.append(businessAnnoScope.getEstateId()+":"+businessAnnoScope.getEstateName()+",");
+				}
+			}
+			mav.addObject("scope", sb.toString().subSequence(0, sb.toString().length()-1));
+		}
+		mav.addObject("businessAnno", businessAnno);
+		return mav;
+	}
+	
+	/**
+	 * 进入运营修改页
+	 * @return
+	 */
+	@RequestMapping(value="operationModify")
+	public ModelAndView operationModify(BusinessAnnoQuery query) {	
+		BusinessAnno businessAnno = null;
+		ModelAndView mav = new ModelAndView();
+		try{
+			businessAnno = businessAnnoService.findById(query.getAnnoId());
+            //businessAnno.setScope("-1"); //初始化范围
+		}catch(Exception e){
+			GSLogger.error("进入businessAnno修改页时发生错误：/business/businessAnno/modify", e);
+			e.printStackTrace();
+		}
+		
+		ShiroUser shiroUser = CommonUtils.getUser();
+		//String orgType = "";
+		//if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			//orgType = shiroUser.getOrgType();
+		//} else {
+			//orgType = shiroUser.getCurOrgType();
+		//}
+		
+		//if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
+			//mav = new ModelAndView("/module/anno/propModify");
+		//}else if(orgType.equals(ModuleConst.STATION_CODE)) {//驿站
+			//mav = new ModelAndView("/module/anno/stationModify");
+		//}if(orgType.equals(ModuleConst.OPERATION_CODE)) {//运营
+			mav = new ModelAndView("/module/anno/operationModify");
+		//}
 		//保存公告范围
 		Map paramMap = new HashMap();
 		paramMap.put("annoId", businessAnno.getAnnoId());

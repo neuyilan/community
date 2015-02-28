@@ -17,15 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessUserQuery;
 import com.community.app.module.bean.BusinessDepartment;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.BusinessDepartmentService;
 import com.community.app.module.service.BusinessPositionService;
 import com.community.app.module.service.BusinessUserService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessDepartmentQuery;
+import com.community.app.module.vo.BusinessUserQuery;
 import com.community.framework.utils.CommonUtils;
 
 @Controller
@@ -52,12 +51,12 @@ public class BusinessDepartmentController {
 		String orgType = "";
 		try{			
 			//query.setOrgId(shiroUser.getOrgId());
-			if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
 				orgType = shiroUser.getCurOrgType();
 			}else{
 				orgType = shiroUser.getOrgType();
 			}
-			query.setOrgType(orgType);
+			query.setOrgType(orgType);*/
 			//query.setUserId(shiroUser.getUserId());
 			query.setSort("depId");
 			query.setOrder("desc");
@@ -69,7 +68,7 @@ public class BusinessDepartmentController {
 			
 			//获取员工数
 			BusinessUserQuery userQuery = new BusinessUserQuery();
-			if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
+			/*if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
 				userQuery.setOrgType(shiroUser.getCurOrgType());
 				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 					userQuery.setCurEstateId(shiroUser.getCurEstateId());
@@ -87,6 +86,13 @@ public class BusinessDepartmentController {
 					}
 				}				
 				userQuery.setOrgType(shiroUser.getOrgType());
+			}*/
+			userQuery.setCurUserId(shiroUser.getUserId());
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				userQuery.setCurComId(shiroUser.getCurComId());
+			}
+			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+				userQuery.setCurEstateId(shiroUser.getCurEstateId());
 			}
 			//userQuery.setCurUserId(shiroUser.getUserId());
 			BaseBean bb = businessUserService.findAllPage(userQuery);
@@ -117,13 +123,13 @@ public class BusinessDepartmentController {
 		String orgType = "";
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
 				orgType = shiroUser.getCurOrgType();
 			}else{
 				orgType = shiroUser.getOrgType();
-			}
+			}*/
 			//query.setOrgId(shiroUser.getOrgId());
-			query.setOrgType(orgType);
+			//query.setOrgType(orgType);
 			//query.setUserId(shiroUser.getUserId());
 			query.setSort("depId");
 			query.setOrder("desc");

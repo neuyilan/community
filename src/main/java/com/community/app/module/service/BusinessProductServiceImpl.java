@@ -9,24 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.utils.propertiesUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BusinessProductQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessProduct;
 import com.community.app.module.bean.BusinessProductPic;
 import com.community.app.module.dao.AppLatestNewsDao;
 import com.community.app.module.dao.BusinessProductDao;
 import com.community.app.module.dao.BusinessProductPicDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessProductQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
+import com.community.framework.utils.propertiesUtil;
 
 @Service("BusinessProductService")
 @Transactional

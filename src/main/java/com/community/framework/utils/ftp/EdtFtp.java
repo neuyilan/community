@@ -1,11 +1,15 @@
 package com.community.framework.utils.ftp;
 
-import com.enterprisedt.net.ftp.*;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Properties;
+
+import com.enterprisedt.net.ftp.FTPConnectMode;
+import com.enterprisedt.net.ftp.FTPException;
+import com.enterprisedt.net.ftp.FTPFile;
+import com.enterprisedt.net.ftp.FileTransferClient;
+import com.enterprisedt.net.ftp.WriteMode;
 
 /**
  * Created with IntelliJ IDEA.

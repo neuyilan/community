@@ -3,18 +3,13 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
-import com.community.app.module.bean.MemberVO;
-
 import org.springframework.stereotype.Repository;
 
+import com.community.app.module.bean.AppUser;
+import com.community.app.module.bean.MemberVO;
+import com.community.app.module.vo.AppUserQuery;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
-import com.community.app.module.bean.AppUser;
-import com.community.app.module.vo.AppUserQuery;
 
 @Repository
 public interface AppUserDao {

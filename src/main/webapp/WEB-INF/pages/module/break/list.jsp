@@ -90,7 +90,7 @@
 								<c:if test="${breakInfo.state == 0 }"><span class="relsta cgreen"> 未回复</span></c:if>
 								<c:if test="${breakInfo.state == 1 }"><span class="relsta cred"> 已回复</span></c:if>
 								<div class="s-baoliao-tick">
-									<i class="baoliao-tick" >已被选用至新闻<span style="color: #3EAF0E;"> ${breakInfo.selectedNum} </span>次</i>
+									<i class="baoliao-tick" >已被选用至新鲜事<span style="color: #3EAF0E;"> ${breakInfo.selectedNum} </span>次</i>
 								</div>
 							</div>
 

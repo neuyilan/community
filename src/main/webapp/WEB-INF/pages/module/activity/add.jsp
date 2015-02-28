@@ -63,6 +63,11 @@
             <input type="hidden" name="actPic" id="actPic" value="">
             
             <div class="line2"></div>
+            <h2 class="relran" style="font-weight: bold;">活动列表结束大图<label for="actPicNo" class="error success"></label></h2>
+            <div id="divImg" style=" overflow:hidden;"><img id="actPicNoBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+            <input type="hidden" name="actPicNo" id="actPicNo" value="">
+            
+            <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">APP首页小图<label for="appPic" class="error success"></label></h2>
             <div id="divImg" style=" overflow:hidden;"><img id="appPicBtn" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
             <input type="hidden" name="appPic" id="appPic" value="">
@@ -763,6 +768,14 @@
         	$('#uploadField').val('actPic');
     	});
     	
+    	//活动列表结束图
+    	$('#actPicNoBtn').click(function() {
+    		$('#picUploadLayer').fadeIn('slow');
+    		//初始化上传
+        	uploadInit('activity', 'actPicNo', '1', '0');
+        	$('#uploadField').val('actPicNo');
+    	});
+    	
     	//APP小图
     	$('#appPicBtn').click(function() {
     		$('#picUploadLayer').fadeIn('slow');
@@ -961,7 +974,13 @@
                 typeId: {
                     required: true
                 },
+                actScope: {
+                    required: true
+                },
                 actPic: {
+                    required: true
+                },
+                actPicNo: {
                     required: true
                 },
                 appPic: {
@@ -1066,8 +1085,14 @@
                 typeId: {
                     required: '请选择活动类型！'
                 },
+                actScope: {
+                    required: '请选择活动类型！'
+                },
                 actPic: {
                     required: '请选择活动图片！'
+                },
+                actPicNo: {
+                    required: '请选择活动结束图片！'
                 },
                 appPic: {
                     required: '请选择APP首页图片！'

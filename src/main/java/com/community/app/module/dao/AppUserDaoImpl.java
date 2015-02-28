@@ -6,22 +6,17 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-
-
-
-
-import com.community.app.module.bean.AppEstateUser;
-import com.community.app.module.bean.MemberVO;
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.community.app.module.bean.AppEstateUser;
+import com.community.app.module.bean.AppUser;
+import com.community.app.module.bean.MemberVO;
+import com.community.app.module.vo.AppUserQuery;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
 import com.community.framework.utils.ZXingUtil;
-import com.community.app.module.bean.AppUser;
-import com.community.app.module.vo.AppUserQuery;
 
 @Repository("AppUserDao")
 @Transactional

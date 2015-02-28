@@ -3,6 +3,7 @@ package com.community.app.module.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.EstateBean;
@@ -24,6 +25,7 @@ public class ShiroUser implements Serializable {
 	private Integer orgId;
 	private List<ManageEstate> estateList = new ArrayList<ManageEstate>();//小区资源列表
 	private List<EstateBean> estateBeanList = new ArrayList<EstateBean>();//简版小区列表
+	private List memoryEstateBeanList = new ArrayList(); //缓存在内存中的小区列表,作为数据备份使用
 	private List<UserMenuBean> menuList = new ArrayList<UserMenuBean>();//菜单列表
 	private List<CommunityBean> comList = new ArrayList<CommunityBean>();//社区列表
 	private String lastLoginTime;
@@ -35,6 +37,43 @@ public class ShiroUser implements Serializable {
 	private String curOrgType = ""; //当前角色,这个只为运营角色切换业务时使用，通过这个属性访问相应的数据资源,如首页统计数据
 	private String curOrgTypeName = ModuleConst.OPERATION_NAME; //当前部门名称
 	
+	private Integer isCom = 0;   //是否显示社区切换 0：显示，1不显示
+	private Integer isEstate = 0;  //是否显示小区切换 0：显示，1：不显示
+	
+	private Integer isSpecial = 0; //是否特殊角色用户  0：否，1：是
+	
+	public List getMemoryEstateBeanList() {
+		return memoryEstateBeanList;
+	}
+
+	public void setMemoryEstateBeanList(List memoryEstateBeanList) {
+		this.memoryEstateBeanList = memoryEstateBeanList;
+	}
+
+	public Integer getIsCom() {
+		return isCom;
+	}
+
+	public void setIsCom(Integer isCom) {
+		this.isCom = isCom;
+	}
+
+	public Integer getIsEstate() {
+		return isEstate;
+	}
+
+	public void setIsEstate(Integer isEstate) {
+		this.isEstate = isEstate;
+	}
+
+	public Integer getIsSpecial() {
+		return isSpecial;
+	}
+
+	public void setIsSpecial(Integer isSpecial) {
+		this.isSpecial = isSpecial;
+	}
+
 	public String getCurOrgTypeName() {
 		return curOrgTypeName;
 	}
@@ -168,11 +207,11 @@ public class ShiroUser implements Serializable {
 	/**
 	 * 重载hashCode,只计算loginName;
 	 */
-	@Override
-	public int hashCode() {
-		//return Objects.hashCode(loginName);
-		return 0;
-	}
+//	@Override
+//	public int hashCode() {
+//		return Objects.hashCode(userName);
+//		//return 0;
+//	}
 
 	public Integer getPositionId() {
 		return positionId;
@@ -220,6 +259,32 @@ public class ShiroUser implements Serializable {
 
 	public void setComList(List<CommunityBean> comList) {
 		this.comList = comList;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((userName == null) ? 0 : userName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ShiroUser other = (ShiroUser) obj;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		return true;
 	}
 
 }

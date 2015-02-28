@@ -155,7 +155,7 @@ public class BusinessChargeAnno implements java.io.Serializable {
 	}
 
 	public java.lang.Integer getUsers() {
-		return this.users;
+		return this.users != null? this.users:0;
 	}
 
 	public void setCreateTime(java.sql.Timestamp value) {

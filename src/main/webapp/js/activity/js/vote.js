@@ -19,8 +19,8 @@
 		    downtime.target.html(downtime.format.replace("dd",day).replace("hh",hour).replace("mm",min).replace("ss",sec));
 		}
 		else if(now>downtime.start&&now<downtime.end){
-		    $(".x-djs").css("display","none");
-			$(".x-qg").css("display","block");
+		    //$(".x-djs").css("display","none");
+			//$(".x-qg").css("display","block");
 		}
 		else if(now>downtime.end){
 		    downtime.target.html("已结束");

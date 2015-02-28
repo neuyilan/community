@@ -28,7 +28,6 @@ import com.community.app.module.bean.BusinessFeedback;
 import com.community.app.module.bean.BusinessFeedbackComment;
 import com.community.app.module.bean.MemberVO;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessFeedbackCommentService;
@@ -59,31 +58,35 @@ public class BusinessFeedbackController {
 	private AppLatestNewsService appLatestNewsService;
 	
 	/**
-	 * 进入管理页
+	 * 进入物业投诉建议管理页
 	 * @return
 	 */
-	@RequestMapping(value="list")
-	public ModelAndView list(BusinessFeedbackQuery query) {	
+	@RequestMapping(value="propList")
+	public ModelAndView propList(BusinessFeedbackQuery query) {	
 		BaseBean baseBean = null;
 		String orgType = "";
 		ShiroUser shiroUser = CommonUtils.getUser();
 		try{			
-			if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
-				orgType = shiroUser.getCurOrgType();
-			}else{
-				orgType = shiroUser.getOrgType();
-			}
-			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 
-				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			//if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+			//	orgType = shiroUser.getCurOrgType();
+			//}else{
+			//	orgType = shiroUser.getOrgType();
+			//}
+			
+			//if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 
+				//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 					query.setCurUserId(shiroUser.getUserId());
-				}	
+				//}	
 				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 					query.setCurEstateId(shiroUser.getCurEstateId());
 				}
-				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+					query.setCurComId(shiroUser.getCurComId());
+				}
+				//query.setOrgType(ModuleConst.PROPERTY_CODE);
 				Integer[] types = {0,1};
 				query.setFbTypes(types);//0物业投诉,1物业建议
-			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员
+			/*}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员
 				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 					query.setCurUserId(shiroUser.getUserId());
 				}	
@@ -100,7 +103,7 @@ public class BusinessFeedbackController {
 				query.setOrgType(ModuleConst.OPERATION_CODE);
 				Integer[] types = {2};
 				query.setFbTypes(types);//2 运营
-			}
+			}*/
 			query.setSort("editTime");
 			query.setOrder("desc");
 			query.setRows(12);
@@ -109,23 +112,23 @@ public class BusinessFeedbackController {
 			GSLogger.error("进入businessFeedback管理页时发生错误：/business/businessFeedback/enter", e);
 			e.printStackTrace();
 		}
-		ModelAndView mav = new ModelAndView("/module/feedback/list");
+		ModelAndView mav = new ModelAndView("/module/feedback/propList");
 		baseBean.setRows(12);
 		mav.addObject("baseBean", baseBean);
 		mav.addObject("pager", baseBean.getPager());
 		mav.addObject("fbState", query.getFbState());
-		mav.addObject("orgType", orgType);
+		//mav.addObject("orgType", orgType);
 		mav.addObject("originOrgType", shiroUser.getOrgType());
 		return mav;
 	}
 
     /**
-     * 跳转到详情页
+     * 跳转到物业投诉详情页
      * @param query
      * @return
      */
-    @RequestMapping(value="getFeedDetails")
-    public ModelAndView getFeedDetails(HttpServletRequest request, BusinessFeedbackQuery query) {
+    @RequestMapping(value="getPropFeedDetails")
+    public ModelAndView getPropFeedDetails(HttpServletRequest request, BusinessFeedbackQuery query) {
         BusinessFeedback obj = new BusinessFeedback();
         MemberVO userVO = new MemberVO();
         List list = new ArrayList();
@@ -157,7 +160,7 @@ public class BusinessFeedbackController {
             GSLogger.error("进入businessFeedbackReply详情页页时发生错误：/business/businessFeedback/getFeedDetails", e);
             e.printStackTrace();
         }
-        ModelAndView mav = new ModelAndView("/module/feedback/details");
+        ModelAndView mav = new ModelAndView("/module/feedback/propDetails");
         mav.addObject("ip", ip);
         mav.addObject("obj", obj);
         mav.addObject("list", list);
@@ -165,6 +168,230 @@ public class BusinessFeedbackController {
         return mav;
     }
 
+    
+    /**
+	 * 进入驿站投诉建议管理页
+	 * @return
+	 */
+	@RequestMapping(value="stationList")
+	public ModelAndView stationList(BusinessFeedbackQuery query) {	
+		BaseBean baseBean = null;
+		String orgType = "";
+		ShiroUser shiroUser = CommonUtils.getUser();
+		try{			
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				orgType = shiroUser.getCurOrgType();
+			}else{
+				orgType = shiroUser.getOrgType();
+			}*/
+			/*if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+					query.setCurUserId(shiroUser.getUserId());
+				}	
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				Integer[] types = {0,1};
+				query.setFbTypes(types);//0物业投诉,1物业建议
+			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { */
+					query.setCurUserId(shiroUser.getUserId());
+				//}	
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+					query.setCurComId(shiroUser.getCurComId());
+				}
+				//query.setOrgType(ModuleConst.STATION_CODE);
+				Integer[] types = {3,4};
+				query.setFbTypes(types);//3驿站建议,4快递投诉
+			/*}if(ModuleConst.OPERATION_CODE.equals(orgType)) {//运营人员 
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.OPERATION_CODE);
+				Integer[] types = {2};
+				query.setFbTypes(types);//2 运营
+			}*/
+			query.setSort("editTime");
+			query.setOrder("desc");
+			query.setRows(12);
+			baseBean = businessFeedbackService.findAllPage(query);
+		}catch(Exception e){
+			GSLogger.error("进入businessFeedback管理页时发生错误：/business/businessFeedback/enter", e);
+			e.printStackTrace();
+		}
+		ModelAndView mav = new ModelAndView("/module/feedback/stationList");
+		baseBean.setRows(12);
+		mav.addObject("baseBean", baseBean);
+		mav.addObject("pager", baseBean.getPager());
+		mav.addObject("fbState", query.getFbState());
+		mav.addObject("orgType", orgType);
+		mav.addObject("originOrgType", shiroUser.getOrgType());
+		return mav;
+	}
+
+    /**
+     * 跳转到驿站投诉详情页
+     * @param query
+     * @return
+     */
+    @RequestMapping(value="getStationFeedDetails")
+    public ModelAndView getStationFeedDetails(HttpServletRequest request, BusinessFeedbackQuery query) {
+        BusinessFeedback obj = new BusinessFeedback();
+        MemberVO userVO = new MemberVO();
+        List list = new ArrayList();
+        Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
+		String isNew = request.getParameter("isNew");
+        try{
+            //查询详情信息
+            obj = businessFeedbackService.findById(query.getFeedbackId());
+            //获取app端用户信息
+//          userVO = appUserService.getAppUserInfo(query.getFberId());
+            Map<String, Object> con = new HashMap<String, Object>();
+            con.put("userId", query.getFberId());
+            con.put("estateId", query.getEstateId());
+            userVO = appUserService.findByCon(con);
+            
+            Map map = new HashMap();
+            map.put("feedbackId", query.getFeedbackId());
+            list = businessFeedbackCommentService.findByMap(map); //回复信息
+            //如果有新消息则删除消息
+            if(isNew != null && new Integer(isNew) == 1) {
+            	AppLatestNewsQuery newsQuery = new AppLatestNewsQuery();
+            	newsQuery.setTypeId(36);//反馈
+            	newsQuery.setSourceId(query.getFeedbackId());
+            	newsQuery.setTo(1);//居民向后台发送
+            	appLatestNewsService.deleteByCondition(newsQuery);
+            }
+        }catch(Exception e){
+            GSLogger.error("进入businessFeedbackReply详情页页时发生错误：/business/businessFeedback/getFeedDetails", e);
+            e.printStackTrace();
+        }
+        ModelAndView mav = new ModelAndView("/module/feedback/stationDetails");
+        mav.addObject("ip", ip);
+        mav.addObject("obj", obj);
+        mav.addObject("list", list);
+        mav.addObject("userVO", userVO);
+        return mav;
+    }
+    
+    
+    /**
+	 * 进入运营投诉建议管理页
+	 * @return
+	 */
+	@RequestMapping(value="operationList")
+	public ModelAndView operationList(BusinessFeedbackQuery query) {	
+		BaseBean baseBean = null;
+		String orgType = "";
+		ShiroUser shiroUser = CommonUtils.getUser();
+		try{			
+			/*if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				orgType = shiroUser.getCurOrgType();
+			}else{
+				orgType = shiroUser.getOrgType();
+			}*/
+			/*if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+					query.setCurUserId(shiroUser.getUserId());
+				}	
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.PROPERTY_CODE);
+				Integer[] types = {0,1};
+				query.setFbTypes(types);//0物业投诉,1物业建议
+			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员
+				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+					query.setCurUserId(shiroUser.getUserId());
+				}	
+				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+				query.setOrgType(ModuleConst.STATION_CODE);
+				Integer[] types = {3,4};
+				query.setFbTypes(types);//3驿站建议,4快递投诉
+			}if(ModuleConst.OPERATION_CODE.equals(orgType)) {//运营人员 
+			*/	if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
+			}
+				//query.setOrgType(ModuleConst.OPERATION_CODE);
+				Integer[] types = {2};
+				query.setFbTypes(types);//2 运营
+			//}
+			query.setSort("editTime");
+			query.setOrder("desc");
+			query.setRows(12);
+			baseBean = businessFeedbackService.findAllPage(query);
+		}catch(Exception e){
+			GSLogger.error("进入businessFeedback管理页时发生错误：/business/businessFeedback/enter", e);
+			e.printStackTrace();
+		}
+		ModelAndView mav = new ModelAndView("/module/feedback/operationList");
+		baseBean.setRows(12);
+		mav.addObject("baseBean", baseBean);
+		mav.addObject("pager", baseBean.getPager());
+		mav.addObject("fbState", query.getFbState());
+		mav.addObject("orgType", orgType);
+		mav.addObject("originOrgType", shiroUser.getOrgType());
+		return mav;
+	}
+
+    /**
+     * 跳转到详情页
+     * @param query
+     * @return
+     */
+    @RequestMapping(value="getOperationFeedDetails")
+    public ModelAndView getOperationFeedDetails(HttpServletRequest request, BusinessFeedbackQuery query) {
+        BusinessFeedback obj = new BusinessFeedback();
+        MemberVO userVO = new MemberVO();
+        List list = new ArrayList();
+        Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
+		String isNew = request.getParameter("isNew");
+        try{
+            //查询详情信息
+            obj = businessFeedbackService.findById(query.getFeedbackId());
+            //获取app端用户信息
+//          userVO = appUserService.getAppUserInfo(query.getFberId());
+            Map<String, Object> con = new HashMap<String, Object>();
+            con.put("userId", query.getFberId());
+            con.put("estateId", query.getEstateId());
+            userVO = appUserService.findByCon(con);
+            
+            Map map = new HashMap();
+            map.put("feedbackId", query.getFeedbackId());
+            list = businessFeedbackCommentService.findByMap(map); //回复信息
+            //如果有新消息则删除消息
+            if(isNew != null && new Integer(isNew) == 1) {
+            	AppLatestNewsQuery newsQuery = new AppLatestNewsQuery();
+            	newsQuery.setTypeId(36);//反馈
+            	newsQuery.setSourceId(query.getFeedbackId());
+            	newsQuery.setTo(1);//居民向后台发送
+            	appLatestNewsService.deleteByCondition(newsQuery);
+            }
+        }catch(Exception e){
+            GSLogger.error("进入businessFeedbackReply详情页页时发生错误：/business/businessFeedback/getFeedDetails", e);
+            e.printStackTrace();
+        }
+        ModelAndView mav = new ModelAndView("/module/feedback/operationDetails");
+        mav.addObject("ip", ip);
+        mav.addObject("obj", obj);
+        mav.addObject("list", list);
+        mav.addObject("userVO", userVO);
+        return mav;
+    }
+    
+    
+    
     /**
      * 用户反馈次数(包括物业投诉和建议)
      * @param query
@@ -235,49 +462,194 @@ public class BusinessFeedbackController {
     }
 
 	/**
-	 * 列示或者查询所有数据
+	 * 列示或者查询所有物业建议数据
 	 * @return
 	 */
-	@RequestMapping(value="getPageList")
-	public void getPageList(BusinessFeedbackQuery query, HttpServletResponse response) {
+	@RequestMapping(value="getPropPageList")
+	public void getPropPageList(BusinessFeedbackQuery query, HttpServletResponse response) {
 		String json = "";
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			String orgType = "";
-			if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
-				orgType = shiroUser.getCurOrgType();
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			query.setCurUserId(shiroUser.getUserId());
+		//}	
+		if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+			query.setCurEstateId(shiroUser.getCurEstateId());
+		}
+		if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+			query.setCurComId(shiroUser.getCurComId());
+		}
+		//query.setOrgType(ModuleConst.PROPERTY_CODE);
+		Integer[] types = {0,1};
+		query.setFbTypes(types);//0物业投诉,1物业建议
+			query.setOrder("desc");
+			query.setRows(12);
+			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
+				query.setSort(query.getOrderBy());
 			}else{
-				orgType = shiroUser.getOrgType();
+				query.setSort("editTime");
 			}
-			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {//物业人员 
-				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
-					query.setCurUserId(shiroUser.getUserId());
-				}	
-				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
-					query.setCurEstateId(shiroUser.getCurEstateId());
-				}
-				query.setOrgType(ModuleConst.PROPERTY_CODE);
-				Integer[] types = {0,1};
-				query.setFbTypes(types);//0物业投诉,1物业建议
-			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站人员
-				if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
-					query.setCurUserId(shiroUser.getUserId());
-				}	
-				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
-					query.setCurEstateId(shiroUser.getCurEstateId());
-				}
-				query.setOrgType(ModuleConst.STATION_CODE);
-				Integer[] types = {3,4};
-				query.setFbTypes(types);//3驿站建议,4快递投诉
-			}if(ModuleConst.OPERATION_CODE.equals(orgType)) {//运营人员 
-				if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
-					query.setCurEstateId(shiroUser.getCurEstateId());
-				}
-				query.setOrgType(ModuleConst.OPERATION_CODE);
-				Integer[] types = {2};
-				query.setFbTypes(types);//2 运营
+			BaseBean baseBean = businessFeedbackService.findAllPage(query);
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
+			.append("\"rows\":[");
+			for(int i=0;i<baseBean.getList().size();i++) {
+				BusinessFeedback businessFeedback = (BusinessFeedback) baseBean.getList().get(i);
+				result.append("{")
+			    .append("\"feedbackId\":\"").append(businessFeedback.getFeedbackId()).append("\"").append(",")
+			    .append("\"fbTitle\":\"").append(businessFeedback.getFbTitle()).append("\"").append(",")
+			    .append("\"fberId\":\"").append(businessFeedback.getFberId()).append("\"").append(",")
+			    .append("\"fberName\":\"").append(businessFeedback.getFberName()).append("\"").append(",")
+			    .append("\"fbTime\":\"").append(businessFeedback.getFbTime()).append("\"").append(",")
+			    .append("\"fbContent\":\"").append(businessFeedback.getFbContent()).append("\"").append(",")
+			    .append("\"fbType\":\"").append(businessFeedback.getFbType()).append("\"").append(",")
+			    .append("\"fbState\":\"").append(businessFeedback.getFbState()).append("\"").append(",")
+			    .append("\"fbReplies\":\"").append(businessFeedback.getFbReplies()).append("\"").append(",")
+			    .append("\"fbScore\":\"").append(businessFeedback.getFbScore()).append("\"").append(",")
+			    .append("\"newReplies\":\"").append(businessFeedback.getNewReplies()).append("\"").append(",")
+			    .append("\"receiverId\":\"").append(businessFeedback.getReceiverId()).append("\"").append(",")
+			    .append("\"receiverName\":\"").append(businessFeedback.getReceiverName()).append("\"").append(",")
+			    .append("\"receiveAvatar\":\"").append(businessFeedback.getReceiveAvatar()).append("\"").append(",")
+			    .append("\"receiveDate\":\"").append(businessFeedback.getReceiveDate()).append("\"").append(",")
+			    .append("\"createTime\":\"").append(businessFeedback.getCreateTime()).append("\"").append(",")
+			    .append("\"editTime\":\"").append(businessFeedback.getEditTime()).append("\"").append(",")
+			    
+			    .append("\"expCode\":\"").append(businessFeedback.getExpCode()).append("\"").append(",")
+                .append("\"estateId\":\"").append(businessFeedback.getEstateId()).append("\"").append(",")
+                .append("\"estateName\":\"").append(businessFeedback.getEstateName()).append("\"").append(",")
+                .append("\"portrait\":\"").append(businessFeedback.getPortrait()).append("\"").append(",")
+                .append("\"address\":\"").append(businessFeedback.getAddress()).append("\"").append(",")
+                .append("\"lastCommentTime\":\"").append(businessFeedback.getLastCommentTime()).append("\"").append(",")
+                .append("\"newsCount\":\"").append(businessFeedback.getNewsCount()).append("\"").append(",")
+			    .append("\"editor\":\"").append(businessFeedback.getEditor()).append("\"")
+				.append("}").append(",");
 			}
+			json = result.toString();
+			if(baseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]}";
+			
+			response.setHeader("Cache-Control", "no-cache");
+			response.setCharacterEncoding("utf-8");
+			try {
+				response.getWriter().write(json);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			GSLogger.error("显示businessFeedback列表时发生错误：/business/businessFeedback/list", e);
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 列示或者查询所有驿站数据
+	 * @return
+	 */
+	@RequestMapping(value="getStationPageList")
+	public void getStationPageList(BusinessFeedbackQuery query, HttpServletResponse response) {
+		String json = "";
+		StringBuilder result = new StringBuilder();
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			query.setCurUserId(shiroUser.getUserId());
+			//}	
+			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
+			}
+			//query.setOrgType(ModuleConst.STATION_CODE);
+			Integer[] types = {3,4};
+			query.setFbTypes(types);//3驿站建议,4快递投诉
+			query.setOrder("desc");
+			query.setRows(12);
+			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
+				query.setSort(query.getOrderBy());
+			}else{
+				query.setSort("editTime");
+			}
+			BaseBean baseBean = businessFeedbackService.findAllPage(query);
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
+			.append("\"rows\":[");
+			for(int i=0;i<baseBean.getList().size();i++) {
+				BusinessFeedback businessFeedback = (BusinessFeedback) baseBean.getList().get(i);
+				result.append("{")
+			    .append("\"feedbackId\":\"").append(businessFeedback.getFeedbackId()).append("\"").append(",")
+			    .append("\"fbTitle\":\"").append(businessFeedback.getFbTitle()).append("\"").append(",")
+			    .append("\"fberId\":\"").append(businessFeedback.getFberId()).append("\"").append(",")
+			    .append("\"fberName\":\"").append(businessFeedback.getFberName()).append("\"").append(",")
+			    .append("\"fbTime\":\"").append(businessFeedback.getFbTime()).append("\"").append(",")
+			    .append("\"fbContent\":\"").append(businessFeedback.getFbContent()).append("\"").append(",")
+			    .append("\"fbType\":\"").append(businessFeedback.getFbType()).append("\"").append(",")
+			    .append("\"fbState\":\"").append(businessFeedback.getFbState()).append("\"").append(",")
+			    .append("\"fbReplies\":\"").append(businessFeedback.getFbReplies()).append("\"").append(",")
+			    .append("\"fbScore\":\"").append(businessFeedback.getFbScore()).append("\"").append(",")
+			    .append("\"newReplies\":\"").append(businessFeedback.getNewReplies()).append("\"").append(",")
+			    .append("\"receiverId\":\"").append(businessFeedback.getReceiverId()).append("\"").append(",")
+			    .append("\"receiverName\":\"").append(businessFeedback.getReceiverName()).append("\"").append(",")
+			    .append("\"receiveAvatar\":\"").append(businessFeedback.getReceiveAvatar()).append("\"").append(",")
+			    .append("\"receiveDate\":\"").append(businessFeedback.getReceiveDate()).append("\"").append(",")
+			    .append("\"createTime\":\"").append(businessFeedback.getCreateTime()).append("\"").append(",")
+			    .append("\"editTime\":\"").append(businessFeedback.getEditTime()).append("\"").append(",")
+			    
+			    .append("\"expCode\":\"").append(businessFeedback.getExpCode()).append("\"").append(",")
+                .append("\"estateId\":\"").append(businessFeedback.getEstateId()).append("\"").append(",")
+                .append("\"estateName\":\"").append(businessFeedback.getEstateName()).append("\"").append(",")
+                .append("\"portrait\":\"").append(businessFeedback.getPortrait()).append("\"").append(",")
+                .append("\"address\":\"").append(businessFeedback.getAddress()).append("\"").append(",")
+                .append("\"lastCommentTime\":\"").append(businessFeedback.getLastCommentTime()).append("\"").append(",")
+                .append("\"newsCount\":\"").append(businessFeedback.getNewsCount()).append("\"").append(",")
+			    .append("\"editor\":\"").append(businessFeedback.getEditor()).append("\"")
+				.append("}").append(",");
+			}
+			json = result.toString();
+			if(baseBean.getList().size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]}";
+			
+			response.setHeader("Cache-Control", "no-cache");
+			response.setCharacterEncoding("utf-8");
+			try {
+				response.getWriter().write(json);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			GSLogger.error("显示businessFeedback列表时发生错误：/business/businessFeedback/list", e);
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 列示或者查询所有运营建议数据
+	 * @return
+	 */
+	@RequestMapping(value="getOperationPageList")
+	public void getOperationPageList(BusinessFeedbackQuery query, HttpServletResponse response) {
+		String json = "";
+		StringBuilder result = new StringBuilder();
+		try{
+			ShiroUser shiroUser = CommonUtils.getUser();
+			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
+			}
+			//query.setOrgType(ModuleConst.OPERATION_CODE);
+			Integer[] types = {2};
+			query.setFbTypes(types);//2 运营
 			query.setOrder("desc");
 			query.setRows(12);
 			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {

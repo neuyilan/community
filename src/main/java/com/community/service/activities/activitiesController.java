@@ -153,23 +153,53 @@ public class activitiesController {
 				BusinessActivity businessActivity = (BusinessActivity) topBaseBean.getList().get(i);
 				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName()+"\",\"time\":\""
 						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief()+"\",";
-				if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
-					json +="\"pic\":\"\",";
-				}else{
-					json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
+				if(businessActivity.getState()==2){
+					if("".equals(businessActivity.getActPicNo()) || businessActivity.getActPicNo()==null  || businessActivity.getActPicNo().indexOf("/images/icon/")>=0){
+						json +="\"pic\":\"\",";
+					}else{
+						json +="\"pic\":\""+ip+businessActivity.getActPicNo()+"\",";
+					}
+				}else {
+					if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
+						json +="\"pic\":\"\",";
+					}else{
+						json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
+					}
 				}
-				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\"},";
+				if (businessActivity.getTypeId()==1 || businessActivity.getTypeId()==4) {
+					String startTime = businessActivity.getPublishDate() + " " + businessActivity.getPublishTime() + ":00";
+					//开始结束时间计算
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date ts = (Date) sdf.parse(startTime);
+					long time = ts.getTime() + 30*60*1000;
+					//long time = ts.getTime() + 1*60*1000;
+					String endTime = sdf.format(new Date(time));
+					json +="\"startTime\":\""+startTime.replace("-", "/")+"\",";
+					json +="\"endTime\":\""+endTime.replace("-", "/")+"\",";
+				}else {
+					json +="\"startTime\":\""+businessActivity.getStartTime()+"\",";
+					json +="\"endTime\":\""+businessActivity.getEndTime()+"\",";
+				}
+				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\"},";
 			}
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessActivity businessActivity = (BusinessActivity) baseBean.getList().get(i);
 				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName()+"\",\"time\":\""
 						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief()+"\",";
-				if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
-					json +="\"pic\":\"\",";
-				}else{
-					json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
+				if(businessActivity.getState()==2){
+					if("".equals(businessActivity.getActPicNo()) || businessActivity.getActPicNo()==null  || businessActivity.getActPicNo().indexOf("/images/icon/")>=0){
+						json +="\"pic\":\"\",";
+					}else{
+						json +="\"pic\":\""+ip+businessActivity.getActPicNo()+"\",";
+					}
+				}else {
+					if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
+						json +="\"pic\":\"\",";
+					}else{
+						json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
+					}
 				}
-				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\"},";
+				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\"},";
 			}
 			if(baseBean.getList().size() > 0 || topBaseBean.getList().size() > 0) {
 				json = json.substring(0, json.length()-1);
@@ -648,7 +678,7 @@ public class activitiesController {
 			query.setSort("commentTime");
 			query.setActId(query.getID());
 			BaseBean baseBean = businessActivityCommentService.findAllPage_app(query);
-			BusinessActivity BusinessActivity = businessActivityService.findById_app(query.getID());
+			BusinessActivity BusinessActivity = businessActivityService.findById(query.getID());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
@@ -736,7 +766,7 @@ public class activitiesController {
 			query.setCommentorState(0);
 			query.setReplyState(0);
 			BaseBean baseBean = businessActivityCommentService.findAllPage_app(query);
-			BusinessActivity BusinessActivity = businessActivityService.findById_app(query.getID());
+			BusinessActivity BusinessActivity = businessActivityService.findById(query.getID());
 			AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setUserId(query.getUserId());
 			appLatestNews.setTypeId(8);
@@ -839,7 +869,7 @@ public class activitiesController {
 				businessActivityComment.setReplyName("");
 			}
 			businessActivityCommentService.save(businessActivityComment);
-			BusinessActivity BusinessActivity = businessActivityService.findById_app(query.getID());
+			BusinessActivity BusinessActivity = businessActivityService.findById(query.getID());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"评论成功\",";
@@ -917,7 +947,7 @@ public class activitiesController {
 				businessActivityComment.setReplyName("");
 			}
 			businessActivityCommentService.save(businessActivityComment);
-			BusinessActivity BusinessActivity = businessActivityService.findById_app(query.getID());
+			BusinessActivity BusinessActivity = businessActivityService.findById(query.getID());
 			if(!(businessActivityComment.getReplyState()==1)){
 				AppUserNews appUserNews = new AppUserNews();
 				appUserNews.setUserId(query.getReplyId());

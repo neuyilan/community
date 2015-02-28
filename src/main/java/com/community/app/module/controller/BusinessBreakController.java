@@ -29,8 +29,6 @@ import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsScope;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.CommunityBean;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.BusinessBreakAudioService;
 import com.community.app.module.service.BusinessBreakCommentService;
@@ -79,9 +77,12 @@ public class BusinessBreakController {
 		BaseBean baseBean = new BaseBean();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
-			}
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}		
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
 			}
@@ -110,9 +111,12 @@ public class BusinessBreakController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
-			}
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}	
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
 			}

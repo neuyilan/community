@@ -1089,7 +1089,7 @@ public class propertyController {
 			query.setSort("commentTime");
 			query.setAnnoId(query.getID());
 			BaseBean baseBean = businessAnnoCommentService.findAllPage_app(query);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
@@ -1178,7 +1178,7 @@ public class propertyController {
 			query.setReplyState(0);
 			query.setRepliedState(0);
 			BaseBean baseBean = businessAnnoCommentService.findAllPage_app(query);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			
 			AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setUserId(query.getUserId());
@@ -1281,7 +1281,7 @@ public class propertyController {
 			businessAnnoComment.setCommentorState(0);//居民
 			businessAnnoComment.setRepliedState(0);
 			businessAnnoCommentService.save(businessAnnoComment);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"评论成功\",";
@@ -1359,7 +1359,7 @@ public class propertyController {
 			businessAnnoComment.setCommentorState(0);//居民
 			businessAnnoComment.setRepliedState(query.getReplyType());
 			businessAnnoCommentService.save(businessAnnoComment);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			if(!(businessAnnoComment.getRepliedState()==1)){
 				AppUserNews appUserNews = new AppUserNews();
 				appUserNews.setUserId(query.getReplyId());

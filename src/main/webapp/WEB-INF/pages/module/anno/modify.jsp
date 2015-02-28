@@ -101,7 +101,7 @@
             <div class="header-public"><span class="return" onclick="history.go(-1)"></span>公告发布</div>
             <div class="cont-l">
                 <h2 class="title">公告标题</h2>
-                <form:input path="annoTitle" class="iptnewtit" type="text" placeholder='请输入新闻标题20字以内' />
+                <form:input path="annoTitle" class="iptnewtit" type="text" placeholder='请输入公告标题20字以内' />
                 <h2 class="relran">公告范围</h2>
                 <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span>
                 <input type="hidden" id="scope" name="scope" value="" />

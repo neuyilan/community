@@ -25,7 +25,8 @@ public class MyFilter implements Filter {
 			FilterChain arg2) throws IOException, ServletException {
 		arg0.setCharacterEncoding("utf-8");
 		HttpServletRequest request = (HttpServletRequest)arg0 ;
-
+		
+		 
 		   Enumeration<?> names = request.getHeaderNames();  
 	        StringBuilder sb = new StringBuilder("headerInfo---");  
 	        while(names.hasMoreElements()) {  
@@ -37,9 +38,10 @@ public class MyFilter implements Filter {
 	            }  
 	            sb.append("\n");  
 	        }  
+	        System.out.println("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓filter↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓"); 
+	        System.err.print("URL ===> "+request.getRequestURL()+"?"+request.getQueryString());
 	        System.out.println(sb.toString());  
-		
-		System.out.println("-----------filter---------------"); 
+	        System.out.println("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑filter↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑\n");
 		arg2.doFilter(arg0, arg1);
 
 	}

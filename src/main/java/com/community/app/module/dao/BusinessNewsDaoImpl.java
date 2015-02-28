@@ -5,12 +5,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-
-
-
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.index;
 import com.community.app.module.vo.BusinessNewsQuery;
+import com.community.framework.exception.DaoException;
 
 @Repository("BusinessNewsDao")
 @Transactional

@@ -12,16 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.app.module.vo.BusinessFamilyMemberQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessFamilyMember;
 import com.community.app.module.dao.AppLatestNewsDao;
 import com.community.app.module.dao.AppUserNewsDao;
 import com.community.app.module.dao.BusinessFamilyMemberDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessFamilyMemberQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessFamilyMemberService")
 @Transactional

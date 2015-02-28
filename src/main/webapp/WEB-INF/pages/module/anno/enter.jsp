@@ -21,7 +21,7 @@
 
                     <ul id="oneuldown">
 
-                        <li class="active"><a href="javascript:;">全部新闻:<span class="current">267条</span><b class="donbut"><i></i></b></a>
+                        <li class="active"><a href="javascript:;">全部公告:<span class="current">267条</span><b class="donbut"><i></i></b></a>
 
                             <ul>
 

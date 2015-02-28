@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.app.module.vo.BusinessHealthydietCommentQuery;
-import com.community.app.module.bean.BusinessChinmedichenacareComment;
 import com.community.app.module.bean.BusinessHealthydietComment;
 import com.community.app.module.dao.BusinessHealthydietCommentDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessHealthydietCommentQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessHealthydietCommentService")
 @Transactional

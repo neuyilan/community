@@ -4,7 +4,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.community.app.module.bean.BusinessFocus;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessFocusQuery extends BaseBean {
 	
@@ -37,6 +36,15 @@ public class BusinessFocusQuery extends BaseBean {
 	private String keyWord;
 	private Integer curComId;
 	private Integer curUserId;
+	private Integer curEstateId;
+
+	public Integer getCurEstateId() {
+		return curEstateId;
+	}
+
+	public void setCurEstateId(Integer curEstateId) {
+		this.curEstateId = curEstateId;
+	}
 
 	public BusinessFocusQuery(BusinessFocus businessFocus) {
 		this.focusId = businessFocus.getFocusId();

@@ -218,7 +218,7 @@
    <!-- 按Map对象条件查询所有ManageEstate (关联BUSINESS_USER_RESOURCE 查询) -->
 	<select id="findByCon" resultMap="EstateBeanResult" parameterType="java.util.Map">
 		SELECT
-	 		distinct me.estateId,me.estateName
+	 		distinct me.estateId,me.estateName,me.comId
 		FROM
 	 		manage_estate me
 	 	<if test="isRelated != null and isRelated != '' and isRelated == 1" >
@@ -232,7 +232,7 @@
 	
 	<!-- 按Map对象条件查询所有ManageEstate -->
 	<select id="search" resultType="ManageEstate" parameterType="com.community.app.module.vo.ManageEstateQuery">
-		select e.estateId,e.estateName,e.proId,com.comName,com.comName,s.staName,s.stationId,com.comId from manage_estate e inner join  business_community com on  e.comId=com.comId left join business_station s on  e.stationId=s.stationId where  estateName like '%${keyword}%'
+		select e.estateId,e.estateName,e.proId,e.estateLatitude,e.estateLongitude,com.comName,com.comName,s.staName,s.stationId,com.comId from manage_estate e inner join  business_community com on  e.comId=com.comId left join business_station s on  e.stationId=s.stationId where  estateName like '%${keyword}%'
 	</select>
 	
 	<!-- 按VO对象条件查询所有ManageEstate -->

@@ -34,7 +34,6 @@ import com.community.app.module.bean.BusinessProduct;
 import com.community.app.module.bean.BusinessProductPic;
 import com.community.app.module.bean.BusinessProductType;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.push.AppPushNotificationUtil;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppPushLogService;
@@ -85,11 +84,11 @@ public class BusinessProductController {
 		BaseBean baseBean = new BaseBean();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}		
-			query.setOrgType(shiroUser.getOrgType());
-			query.setCurOrgType(shiroUser.getCurOrgType());
+			//}		
+			//query.setOrgType(shiroUser.getOrgType());
+			//query.setCurOrgType(shiroUser.getCurOrgType());
 			
 			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
 				query.setCurEstateId(shiroUser.getCurEstateId());
@@ -127,11 +126,11 @@ public class BusinessProductController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());//社区和驿站根据小区范围数据范围不同
-			}	
-			query.setOrgType(shiroUser.getOrgType());
-			query.setCurOrgType(shiroUser.getCurOrgType());
+			//}	
+			//query.setOrgType(shiroUser.getOrgType());
+			//query.setCurOrgType(shiroUser.getCurOrgType());
 			
 			if(shiroUser.getCurEstateId() != null) {
 				query.setCurEstateId(shiroUser.getCurEstateId());

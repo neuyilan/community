@@ -25,14 +25,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.AppFocusScope;
-import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFocus;
-import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppFocusScopeService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessFocusService;
+import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessFocusQuery;
@@ -50,6 +51,8 @@ public class BusinessFocusController {
 	private ManageEstateService manageEstateService;
 	@Autowired
 	private AppFocusScopeService appFocusScopeService;
+	@Autowired
+	private BusinessUserResourceService businessUserResourceService;
 	
 	/**
 	 * 进入管理页
@@ -63,9 +66,12 @@ public class BusinessFocusController {
 			query.setOrder("desc");
 			
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {
+			//if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());
-			}			
+			//}			
+				if(shiroUser.getCurEstateId() != null) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}	
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
 			}
@@ -107,9 +113,12 @@ public class BusinessFocusController {
 			query.setOrder("desc");
 
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {
+			//if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {
 				query.setCurUserId(shiroUser.getUserId());
-			}	
+			//}	
+				if(shiroUser.getCurEstateId() != null) {
+					query.setCurEstateId(shiroUser.getCurEstateId());
+				}	
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
 			}
@@ -185,29 +194,32 @@ public class BusinessFocusController {
 			// if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {//驿站
 			// List comList = businessCommunityService.findAll();
 			Map map = new HashMap();
-			map.put("userId", shiroUser.getUserId());
-			map.put("orgType", shiroUser.getOrgType());
-			map.put("comId", shiroUser.getCurComId());
+			//map.put("userId", shiroUser.getUserId());
+			//map.put("orgType", shiroUser.getOrgType());
+			//map.put("comId", shiroUser.getCurComId());
 			
-			List comList = businessCommunityService.findComsByUser(map);
-			
+			//List comList = businessCommunityService.findComsByUser(map);
+			List comList = shiroUser.getComList();
 			JSONObject comObj = null;
 			Map paramMap = null;
 			for(int i=0;i<comList.size();i++) {
-				BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
 				paramMap = new HashMap();
 				paramMap.put("comId", community.getComId());
-				List estateList = manageEstateService.findByMap(paramMap); 
+				paramMap.put("userId", shiroUser.getUserId());
+				//List estateList = manageEstateService.findByMap(paramMap);
+				List estateList = businessUserResourceService.findByMap(paramMap);
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
 					comObj.put("text", community.getComName());
 					JSONArray estateArr = new JSONArray();
 					for(int j=0;j<estateList.size();j++) {
-						ManageEstate estate = (ManageEstate) estateList.get(j);
+						BusinessUserResource businessUserResource = (BusinessUserResource) estateList.get(j);
 						JSONObject estateObj = new JSONObject();
-						estateObj.put("id", "estate_"+estate.getEstateId());
-						estateObj.put("text", estate.getEstateName());
+						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
+						estateObj.put("text", businessUserResource.getEstateName());
 						estateObj.put("checkbox", true);
 						estateObj.put("state", "close");
 						estateArr.add(estateObj);

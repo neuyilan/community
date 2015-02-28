@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessHealthydietCommentQuery;
 import com.community.app.module.bean.AppHomepage;
 import com.community.app.module.bean.BusinessHealthydiet;
 import com.community.app.module.bean.ShiroUser;
@@ -33,6 +31,8 @@ import com.community.app.module.service.AppHomepageScopeService;
 import com.community.app.module.service.AppHomepageService;
 import com.community.app.module.service.BusinessHealthydietCommentService;
 import com.community.app.module.service.BusinessHealthydietService;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessHealthydietCommentQuery;
 import com.community.app.module.vo.BusinessHealthydietQuery;
 import com.community.framework.utils.CommonUtils;
 

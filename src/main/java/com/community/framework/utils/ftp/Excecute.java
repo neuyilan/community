@@ -1,8 +1,8 @@
 package com.community.framework.utils.ftp;
 
-import com.enterprisedt.net.ftp.FTPException;
-
 import java.io.IOException;
+
+import com.enterprisedt.net.ftp.FTPException;
 
 /**
  * Created with IntelliJ IDEA.

@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>社区开聊管理</title>
+	<title>社区聊吧管理</title>
 	<%@include file="/common/meta.jsp"%>
     <script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
     <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
@@ -17,7 +17,7 @@
 			});
 	
             function delHelp(id) {
-                var flag = window.confirm("是否删除此社区开聊信息！");
+                var flag = window.confirm("是否删除此社区聊吧信息！");
                 if(flag) {
                     $.getJSON('${ctx}/business/businessHelp/delete.do', {id: id}, function(data) {
                         alert(data.message);
@@ -40,7 +40,7 @@
 			<div class="scroll">
 				<div class="scroll-box">
 					<ul id="oneul">
-						<li id="state_" class="active navlist"><a href="javascript:;"><span>全部社区开聊</span><b class="donbut"><i></i></b></a>
+						<li id="state_" class="active navlist"><a href="javascript:;"><span>全部社区聊吧</span><b class="donbut"><i></i></b></a>
 	                    	<input type="hidden" name="state" id="state" value="" />
 	                    	<ul class="erjnav">
 	                            <li id="state_0"><a href="javascript:;">未回复</a></li>
@@ -87,7 +87,7 @@
 	                    <div class="relnews">
                             <img src="<%=ctx %>/images/icon/relnews.png" style="width:100%;" />
                         </div>
-	                	<span class="tittex">发布社区开聊</span>
+	                	<span class="tittex">发布社区聊吧</span>
 	                </a>
 	            </div> --%>
             	
@@ -135,10 +135,10 @@
 		                    <hr class="link y-qz-hr">
 							<div class="operate">
 								<shiro:hasPermission name="help_view_detail">
-									<span class="see" id="block5"  title="查看社区开聊详情"  onclick="javascript: window.location.href='getHelpCommentList.do?helpId=${help.helpId }'"></span>
+									<span class="see" id="block5"  title="查看社区聊吧详情"  onclick="javascript: window.location.href='getHelpCommentList.do?helpId=${help.helpId }'"></span>
 								</shiro:hasPermission>
 								<shiro:hasPermission name="help_delete">
-									<span id="text1" class="del" title="删除社区开聊" onclick="delHelp('${help.helpId}');"></span>
+									<span id="text1" class="del" title="删除社区聊吧" onclick="delHelp('${help.helpId}');"></span>
 		                    	</shiro:hasPermission>
 		                    </div>
 		                </a>
@@ -225,7 +225,7 @@
 					+ '<div class="manbox" style="margin-left:0;">'
 					+ '<a class="nopotr" href="javascript:window.location.href=\'<%=ctx %>/business/businessHelp/add.do\';" style="cursor:pointer;">'
 					+ '<div class="relnews"><img src="<%=ctx %>/images/icon/relnews.png" style="width:100%;" /></div>'
-					+ '<span class="tittex">发布社区开聊</span>'
+					+ '<span class="tittex">发布社区聊吧</span>'
 					+ '</a></div>';
 					$('.column').append(addHtml);
 				} --%>
@@ -290,10 +290,10 @@
 									+'<hr class="link y-qz-hr">'
 									+'<div class="operate">'
 									<shiro:hasPermission name="help_view_detail">
-									+'<span class="see" id="block5" title="查看社区开聊详情"  onclick="window.location.href=\'getHelpCommentList.do?helpId='+row.helpId+'\'"></span>'
+									+'<span class="see" id="block5" title="查看社区聊吧详情"  onclick="window.location.href=\'getHelpCommentList.do?helpId='+row.helpId+'\'"></span>'
 									</shiro:hasPermission>
 									<shiro:hasPermission name="help_delete">
-									+'<span id="text1" class="del" title="删除社区开聊" onclick="delHelp('+row.helpId+');"></span>'
+									+'<span id="text1" class="del" title="删除社区聊吧" onclick="delHelp('+row.helpId+');"></span>'
 									</shiro:hasPermission>
 									+'</div>'
 									+'</a>'

@@ -1,22 +1,13 @@
 package com.community.app.module.service;
 
-import static com.community.framework.utils.CommonUtils.getUser;
-
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import com.community.app.module.push.AppPushNotificationUtil;
-import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessActivityScopeQuery;
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -26,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BusinessActivityQuery;
 import com.community.app.module.bean.AppHomepage;
 import com.community.app.module.bean.AppHomepageScope;
 import com.community.app.module.bean.AppPushLog;
@@ -37,6 +27,12 @@ import com.community.app.module.dao.AppPushLogDao;
 import com.community.app.module.dao.AppUserDao;
 import com.community.app.module.dao.BusinessActivityDao;
 import com.community.app.module.dao.BusinessActivityScopeDao;
+import com.community.app.module.push.AppPushNotificationUtil;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessActivityQuery;
+import com.community.app.module.vo.BusinessActivityScopeQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessActivityService")
 @Transactional
@@ -317,6 +313,12 @@ public class BusinessActivityServiceImpl implements BusinessActivityService {
 					BusinessActivity businessActiv = new BusinessActivity();
 					businessActiv.setActId(businessActivity.getActId());
 					businessActiv.setState(0);
+					businessActivityDao.update(businessActiv);
+				}
+				if(businessActivity.getState()==0 && businessActivity.getTypeId()==3 &&  date.getTime()>=ts.getTime()) {
+					BusinessActivity businessActiv = new BusinessActivity();
+					businessActiv.setActId(businessActivity.getActId());
+					businessActiv.setState(2);
 					businessActivityDao.update(businessActiv);
 				}
 			}

@@ -44,7 +44,6 @@ import com.community.app.module.bean.BusinessNewsScope;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ManageTag;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.push.AppPushNotificationUtil;
 import com.community.app.module.service.AppFocusScopeService;
 import com.community.app.module.service.AppHomepageScopeService;
@@ -119,9 +118,12 @@ public class BusinessNewsController {
 		BaseBean baseBean = new BaseBean();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
-			}
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}	
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
 			}
@@ -162,9 +164,12 @@ public class BusinessNewsController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
-			}
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
+			}		
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
 			}
@@ -198,6 +203,7 @@ public class BusinessNewsController {
 			    .append("\"subjectPic\":\"").append(businessNews.getSubjectPic()).append("\"").append(",")
 			    .append("\"newsType\":\"").append(businessNews.getNewsType()).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessNews.getPublisherId()).append("\"").append(",")
+			    .append("\"tag\":\"").append(businessNews.getTag()).append("\"").append(",")
 			    .append("\"publisherName\":\"").append(businessNews.getPublisherName()).append("\"").append(",")
 			    .append("\"publishTime\":\"").append(businessNews.getPublishTime()).append("\"").append(",")
 			    .append("\"comName\":\"").append(businessNews.getComName()).append("\"").append(",")
@@ -215,6 +221,7 @@ public class BusinessNewsController {
 			    .append("\"isAd\":\"").append(businessNews.getIsAd()).append("\"").append(",")
 			    .append("\"createTime\":\"").append(businessNews.getCreateTime()).append("\"").append(",")
 			    .append("\"editTime\":\"").append(businessNews.getEditTime()).append("\"").append(",")
+			    .append("\"hotTime1\":\"").append(businessNews.getHotTime1()).append("\"").append(",")
 			    .append("\"editor\":\"").append(businessNews.getEditor()).append("\"").append(",")
 			    .append("\"isPush\":\"").append(businessNews.getIsPush()).append("\"").append(",")
 			    .append("\"isRecommend\":\"").append(businessNews.getIsRecommend()).append("\"")
@@ -322,7 +329,7 @@ public class BusinessNewsController {
 				businessNews0.setHotTime(null);
 				businessNews0.setEditTime(new Timestamp(System.currentTimeMillis()));
 				businessNewsService.update(businessNews0);
-			}*/ 
+			} */
 			businessNews.setNewsId(Integer.parseInt(id));
 			businessNews.setIsHot(1);
 			businessNews.setHotTime(new Timestamp(System.currentTimeMillis()));
@@ -583,8 +590,8 @@ public class BusinessNewsController {
 			}
 			
 			//发布新闻
-			if(query.getIsRecommend() != null && businessNews.getState() == 0) {
-				if(query.getIsRecommend() == 0) {
+			if(businessNews.getIsRecommend() != null && businessNews.getState() == 0) {
+				if(businessNews.getIsRecommend() == 0) {
 					StringBuilder sb = new StringBuilder();
 					BusinessFocus businessFocus = new BusinessFocus();
 					businessFocus.setTitle(businessNews.getTitle());
@@ -597,13 +604,19 @@ public class BusinessNewsController {
 				    businessFocus.setAuditInfo("");
 				    
 				    Map paramMap = new HashMap();
-				    paramMap.put("comId", businessNews.getPublishScope());
-				    List estateList = manageEstateService.findByMap(paramMap);
-				    for(int j=0;j<estateList.size();j++) {
-						ManageEstate manageEstate = (ManageEstate) estateList.get(j);
-						sb.append(manageEstate.getEstateName()).append(",");
-					}
-				    
+				    paramMap.put("newsId", businessNews.getNewsId());
+				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
+
+				    for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	List estateList = manageEstateService.findByMap(paramMap);
+				    	for(int j=0;j<estateList.size();j++) {
+							ManageEstate manageEstate = (ManageEstate) estateList.get(j);
+							sb.append(manageEstate.getEstateName()).append(",");
+						}
+				    }
 				    businessFocus.setFocusScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
 				    businessFocus.setVisits(0);
 				    businessFocus.setSupports(0);
@@ -612,14 +625,20 @@ public class BusinessNewsController {
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
 					
-					AppFocusScope appFocusScope = new AppFocusScope();
-					for(int j=0;j<estateList.size();j++) {
-						  ManageEstate manageEstate = (ManageEstate) estateList.get(j);
-						  appFocusScope.setFocusId(businessFocus.getFocusId());
-						  appFocusScope.setEstateId(manageEstate.getEstateId());
-						  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
-						  appFocusScopeService.save(appFocusScope);
-					}
+					for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	List estateList = manageEstateService.findByMap(paramMap);
+				    	AppFocusScope appFocusScope = new AppFocusScope();
+						for(int j=0;j<estateList.size();j++) {
+							  ManageEstate manageEstate = (ManageEstate) estateList.get(j);
+							  appFocusScope.setFocusId(businessFocus.getFocusId());
+							  appFocusScope.setEstateId(manageEstate.getEstateId());
+							  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+							  appFocusScopeService.save(appFocusScope);
+						}
+				    }
 				} 
 			}
 			if(businessNews.getState() == 0){
@@ -1076,6 +1095,22 @@ public class BusinessNewsController {
 				    businessFocus.setAuditInfo("");
 				    
 				    Map paramMap = new HashMap();
+				    paramMap.put("newsId", businessNews.getNewsId());
+				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
+
+				    for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	List estateList = manageEstateService.findByMap(paramMap);
+				    	for(int j=0;j<estateList.size();j++) {
+							ManageEstate manageEstate = (ManageEstate) estateList.get(j);
+							sb.append(manageEstate.getEstateName()).append(",");
+						}
+				    }
+				    businessFocus.setFocusScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
+				    
+				   /* Map paramMap = new HashMap();
 				    paramMap.put("comId", businessNews.getPublishScope());
 				    List estateList = manageEstateService.findByMap(paramMap);
 				    for(int j=0;j<estateList.size();j++) {
@@ -1084,21 +1119,27 @@ public class BusinessNewsController {
 					}
 				    
 				    businessFocus.setFocusScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
-				    businessFocus.setVisits(0);
+*/				    businessFocus.setVisits(0);
 				    businessFocus.setSupports(0);
 				    businessFocus.setSelectorId(getUser().getUserId());
 				    businessFocus.setSelectorName(getUser().getUserName());
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
 					
-					AppFocusScope appFocusScope = new AppFocusScope();
-					for(int j=0;j<estateList.size();j++) {
-						  ManageEstate manageEstate = (ManageEstate) estateList.get(j);
-						  appFocusScope.setFocusId(businessFocus.getFocusId());
-						  appFocusScope.setEstateId(manageEstate.getEstateId());
-						  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
-						  appFocusScopeService.save(appFocusScope);
-					}
+					for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	List estateList = manageEstateService.findByMap(paramMap);
+				    	AppFocusScope appFocusScope = new AppFocusScope();
+						for(int j=0;j<estateList.size();j++) {
+							  ManageEstate manageEstate = (ManageEstate) estateList.get(j);
+							  appFocusScope.setFocusId(businessFocus.getFocusId());
+							  appFocusScope.setEstateId(manageEstate.getEstateId());
+							  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+							  appFocusScopeService.save(appFocusScope);
+						}
+				    }
 				}
 
 			}
@@ -1280,13 +1321,13 @@ public class BusinessNewsController {
 						businessNewsService.delete(new Integer(ids[i]));
 					}
 				}else{
+					BusinessNews businessNews = businessNewsService.findById(Integer.parseInt(id));
 					Boolean  result = businessNewsService.delete(new Integer(id));
 					if(result) {
-						BusinessNews businessNews = businessNewsService.findById(Integer.parseInt(id));
 						businessNewsScopeService.deleteScopeByNews(new Integer(id));
 						Map paramMap = new HashMap();
 						paramMap.put("id", Integer.parseInt(id));
-						if(businessNews.getNewsType() == 1){
+						if(businessNews.getNewsType() == 1 || businessNews.getNewsType() == 2){
 							paramMap.put("type", 5);
 						} else{
 							paramMap.put("type", 0);

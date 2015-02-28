@@ -43,6 +43,7 @@ public class BusinessNews implements java.io.Serializable{
 	private String portrait;
 	private Integer breakId;
 	private java.sql.Timestamp hotTime;
+	private java.sql.Timestamp hotTime1;
 	private String nickname;
 	private String buNickname;
 	private String avatar;
@@ -50,6 +51,14 @@ public class BusinessNews implements java.io.Serializable{
 	private Integer isNickname;
 	private String tag;
 	
+	public java.sql.Timestamp getHotTime1() {
+		return hotTime1;
+	}
+
+	public void setHotTime1(java.sql.Timestamp hotTime1) {
+		this.hotTime1 = hotTime1;
+	}
+
 	public String getTag() {
 		return tag;
 	}

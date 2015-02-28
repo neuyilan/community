@@ -148,7 +148,7 @@
                  <input type="hidden" name="uploadField" id="uploadField" value="" >
                                 
 				<div class="line2"></div>
-                <h2 class="relstatus">推荐到首页新闻列表<label for="isRecommend" class="error success"></label></h2>
+                <h2 class="relstatus">推荐到首页社区头条<label for="isRecommend" class="error success"></label></h2>
                 <div class="options">
                     <p>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="0" checked> 否</label><br><br>

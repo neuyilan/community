@@ -2,32 +2,23 @@ package com.community.app.module.dao;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-
-
-
-
-
-
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.community.app.module.bean.BusinessFamily;
+import com.community.app.module.bean.BusinessFamilyMember;
+import com.community.app.module.vo.BusinessFamilyQuery;
 import com.community.framework.exception.DaoException;
 import com.community.framework.exception.ServiceException;
 import com.community.framework.utils.StringUtil;
 import com.community.framework.utils.ZXingUtil;
-import com.community.app.module.bean.BusinessFamily;
-import com.community.app.module.bean.BusinessFamilyMember;
-import com.community.app.module.vo.BusinessFamilyMemberQuery;
-import com.community.app.module.vo.BusinessFamilyQuery;
 
 @Repository("BusinessFamilyDao")
 @Transactional

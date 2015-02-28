@@ -6,7 +6,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.community.app.module.bean.BusinessBreak;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessBreakQuery extends BaseBean {
 
@@ -50,6 +49,16 @@ public class BusinessBreakQuery extends BaseBean {
 	private String curOrgType;//当前部门类型
 	private Integer curComId;//当前社区ID
 	
+	private Integer curEstateId;
+	
+	public Integer getCurEstateId() {
+		return curEstateId;
+	}
+
+	public void setCurEstateId(Integer curEstateId) {
+		this.curEstateId = curEstateId;
+	}
+
 	public Integer getIsNickname() {
 		return isNickname;
 	}

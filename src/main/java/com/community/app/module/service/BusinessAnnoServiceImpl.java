@@ -10,14 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.index;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.dao.BusinessAnnoDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessAnnoQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessAnnoService")
 @Transactional
@@ -165,17 +164,17 @@ public class BusinessAnnoServiceImpl implements BusinessAnnoService {
 		int count=0;
 		BaseBean baseBean = new BaseBean();
 		try {
-			if(query.getOrgType() != null 
-					&& !"".equals(query.getOrgType())
-					&& query.getOrgType().equals(ModuleConst.PROPERTY_CODE)) {
-				count=businessAnnoDao.selectCountByProperty(query);
-				query.setCount(list.size());
-				list=businessAnnoDao.findAllPageByProperty(query);
-			}else{
+			//if(query.getOrgType() != null 
+					//&& !"".equals(query.getOrgType())
+					//&& query.getOrgType().equals(ModuleConst.PROPERTY_CODE)) {
+				//count=businessAnnoDao.selectCountByProperty(query);
+				//query.setCount(list.size());
+				//list=businessAnnoDao.findAllPageByProperty(query);
+			//}else{
 				count=businessAnnoDao.selectCount(query);	
 				query.setCount(list.size());
 				list=businessAnnoDao.findAllPage(query);
-			}
+			//}
 			
 		} catch (DaoException e) {
 			logger.debug("BusinessAnnoServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);

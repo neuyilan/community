@@ -28,6 +28,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessMenu;
@@ -37,6 +38,7 @@ import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ManageModule;
 import com.community.app.module.bean.ManageUserFunction;
 import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.MenuComparator;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.common.UserMenuBean;
@@ -122,115 +124,116 @@ public class IndexController {
 		}
 		
 		//按角色分别统计数据
-		String orgType = "";
+		/*String orgType = "";
 		if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
 			orgType = shiroUser.getCurOrgType();
 		}else{
 			orgType = shiroUser.getOrgType();
-		}
+		}*/
 		
 		//非运营人员可以带ID查看相关数据
 		String userCondition = "";
-		if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+		
+//		if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 			userCondition = " and res.userId = " + shiroUser.getUserId();
-		}
+//		}
 		
 		//物业
-		if(ModuleConst.PROPERTY_CODE.equals(orgType)) {
+		//if(ModuleConst.PROPERTY_CODE.equals(orgType)) {
 			if (currentUser.isPermitted("index_property_verified_resident")) {
 				//验证居民
-				int verifiedResidents = businessUserService.countBySql(
-						"select count(distinct(u.userId)) FROM app_user u inner JOIN  app_estate_user b ON  u.userId = b.userId inner join business_user_resource res on res.estateId = b.estateId where u.`type` = 1 " + userCondition + estateCondition);
+				int verifiedResidents = 0;/*businessUserService.countBySql(
+						"select count(distinct(u.userId)) FROM app_user u inner JOIN  app_estate_user b ON  u.userId = b.userId inner join business_user_resource res on res.estateId = b.estateId where u.`type` = 1 " + userCondition + estateCondition);*/
 				modelView.addObject("verifiedResidents", verifiedResidents);	
 			}
 			
 			if (currentUser.isPermitted("index_property_today_registed")) {
 				//物业当日注册居民
-				int propertyRegistedResidentsOnDay = businessUserService.countBySql(
-						"select count(distinct(u.userId)) FROM app_user u inner JOIN  app_estate_user b ON  u.userId = b.userId inner join business_user_resource res on res.estateId = b.estateId where 0 = DATEDIFF(now(), u.registTime) " + userCondition + estateCondition);
+				int propertyRegistedResidentsOnDay = 0;/* businessUserService.countBySql(
+						"select count(distinct(u.userId)) FROM app_user u inner JOIN  app_estate_user b ON  u.userId = b.userId inner join business_user_resource res on res.estateId = b.estateId where 0 = DATEDIFF(now(), u.registTime) " + userCondition + estateCondition);*/
 				modelView.addObject("propertyRegistedResidentsOnDay", propertyRegistedResidentsOnDay);	
 			}
 			
 			if (currentUser.isPermitted("index_property_today_verified")) {
 				//物业当日验证居民
-				int propertyVerifiedResidentsOnDay = businessUserService.countBySql(
-						"select count(distinct(u.userId)) FROM app_user u inner JOIN  app_estate_user b ON  u.userId = b.userId inner join business_user_resource res on res.estateId = b.estateId where u.type = 1 and 0 = DATEDIFF(now(), u.verifyTime) " + userCondition + estateCondition);
+				int propertyVerifiedResidentsOnDay = 0; /*businessUserService.countBySql(
+						"select count(distinct(u.userId)) FROM app_user u inner JOIN  app_estate_user b ON  u.userId = b.userId inner join business_user_resource res on res.estateId = b.estateId where u.type = 1 and 0 = DATEDIFF(now(), u.verifyTime) " + userCondition + estateCondition);*/
 				modelView.addObject("propertyVerifiedResidentsOnDay", propertyVerifiedResidentsOnDay);	
 			}
 			
 			if (currentUser.isPermitted("index_property_unrepair_handler")) {
 				//未报修处理
-				int unresolvedRepair = businessUserService.countBySql("select count(distinct(re.repairId)) from business_repair re inner join business_user_resource res on res.estateId = re.estateId WHERE re.repairState = 0 " + userCondition + estateCondition);
+				int unresolvedRepair = 0;/* businessUserService.countBySql("select count(distinct(re.repairId)) from business_repair re inner join business_user_resource res on res.estateId = re.estateId WHERE re.repairState = 0 " + userCondition + estateCondition);*/
 				modelView.addObject("unresolvedRepair", unresolvedRepair);	
 			}
 			
 			if (currentUser.isPermitted("index_property_unreply_feedback")) {
 				//未回复反馈
-				int unreplied = businessUserService.countBySql("select count(distinct(fb.feedbackId)) from business_feedback fb left join app_user u on fb.fberId = u.userId inner join business_user_resource res on res.estateId = fb.estateId WHERE (fb.fbType=0 or fb.fbType=1) and fb.fbState = 0 " + userCondition + estateCondition);
+				int unreplied = 0; /*businessUserService.countBySql("select count(distinct(fb.feedbackId)) from business_feedback fb left join app_user u on fb.fberId = u.userId inner join business_user_resource res on res.estateId = fb.estateId WHERE (fb.fbType=0 or fb.fbType=1) and fb.fbState = 0 " + userCondition + estateCondition);*/
 				modelView.addObject("unreplied", unreplied);	
 			}
 			
 			if (currentUser.isPermitted("index_property_anno_comment")) {
 				//今日公告评论数量
-				int propCommentedAnno = businessUserService.countBySql("select count(distinct(c.commentId)) as count from business_anno_comment c inner join business_anno a on c.annoId = a.annoId inner join business_anno_scope sc on sc.annoId = a.annoId inner join business_user_resource res on res.estateId = sc.estateId where 0 = DATEDIFF(now(), c.commentTime) and (a.annoType = 0 or a.annoType = 1 ) " + userCondition + estateCondition);
+				int propCommentedAnno = 0; /*businessUserService.countBySql("select count(distinct(c.commentId)) as count from business_anno_comment c inner join business_anno a on c.annoId = a.annoId inner join business_anno_scope sc on sc.annoId = a.annoId inner join business_user_resource res on res.estateId = sc.estateId where 0 = DATEDIFF(now(), c.commentTime) and (a.annoType = 0 or a.annoType = 1 ) " + userCondition + estateCondition);*/
 				modelView.addObject("propCommentedAnno", propCommentedAnno);	
 			}
 			
-		}
-		else
+		//}
+		//else
 		//驿站
-		if(ModuleConst.STATION_CODE.equals(orgType)) {
+		//if(ModuleConst.STATION_CODE.equals(orgType)) {
 			if (currentUser.isPermitted("index_station_anno_comment")) {
 				//公告评论数量
-				int stationCommentedAnno = businessUserService.countBySql("select count(distinct(c.commentId)) as count from business_anno_comment c inner join business_anno a on c.annoId = a.annoId inner join business_anno_scope sc on sc.annoId = a.annoId inner join business_user_resource res on res.estateId = sc.estateId where a.annoType = 4 " + userCondition + estateCondition);
+				int stationCommentedAnno = 0; /*businessUserService.countBySql("select count(distinct(c.commentId)) as count from business_anno_comment c inner join business_anno a on c.annoId = a.annoId inner join business_anno_scope sc on sc.annoId = a.annoId inner join business_user_resource res on res.estateId = sc.estateId where a.annoType = 4 " + userCondition + estateCondition);*/
 				modelView.addObject("stationCommentedAnno", stationCommentedAnno);
 			}
 			
 			if (currentUser.isPermitted("index_station_unsolved_express")) {
 				//未处理快递服务
-				int unresolvedExp = businessUserService.countBySql("select count(distinct(e.expId)) from business_exp e inner join business_station s on s.stationId = e.stationId inner join manage_estate es on es.stationId = s.stationId inner join business_user_resource res on res.estateId = es.estateId WHERE (e.expState = 0) " + userCondition + estateCondition);
+				int unresolvedExp = 0; /*businessUserService.countBySql("select count(distinct(e.expId)) from business_exp e inner join business_station s on s.stationId = e.stationId inner join manage_estate es on es.stationId = s.stationId inner join business_user_resource res on res.estateId = es.estateId WHERE (e.expState = 0) " + userCondition + estateCondition);*/
 				modelView.addObject("unresolvedExp", unresolvedExp);
 			}
 			
 			if (currentUser.isPermitted("index_station_unreply_help")) {
 				//未回复求助信息
-				int unrepliedHelp = businessUserService.countBySql("select count(distinct(h.helpId)) from business_help h left join app_user u on u.userId=h.helperId inner join business_user_resource res on res.estateId = h.estateId WHERE h.state = 0 " + userCondition + estateCondition);
+				int unrepliedHelp = 0; /*businessUserService.countBySql("select count(distinct(h.helpId)) from business_help h left join app_user u on u.userId=h.helperId inner join business_user_resource res on res.estateId = h.estateId WHERE h.state = 0 " + userCondition + estateCondition);*/
 				modelView.addObject("unrepliedHelp", unrepliedHelp);
 			}
 			
 			if (currentUser.isPermitted("index_station_going_activity")) {
 				//进行中的活动
-				int gointActivity = businessUserService.countBySql("select count(distinct(a.actId)) from business_activity a inner join business_activity_scope s on s.actId = a.actId inner join business_user_resource res on res.estateId = s.estateId WHERE (a.state = 0 or a.state = 1) " + userCondition + estateCondition);
+				int gointActivity = 0; /*businessUserService.countBySql("select count(distinct(a.actId)) from business_activity a inner join business_activity_scope s on s.actId = a.actId inner join business_user_resource res on res.estateId = s.estateId WHERE (a.state = 0 or a.state = 1) " + userCondition + estateCondition);*/
 				modelView.addObject("gointActivity", gointActivity);	
 			}
 			
 			if (currentUser.isPermitted("index_station_unsolved_feedback")) {
 				//未处理居民反馈
-				int unresolvedFeedback = businessUserService.countBySql("select count(distinct(fb.feedbackId)) from business_feedback fb left join app_user u on fb.fberId = u.userId inner join business_user_resource res on res.estateId = fb.estateId WHERE (fb.fbType=3 or fb.fbType=4) and  fb.fbState = 0 " + userCondition + estateCondition);
+				int unresolvedFeedback = 0; /* businessUserService.countBySql("select count(distinct(fb.feedbackId)) from business_feedback fb left join app_user u on fb.fberId = u.userId inner join business_user_resource res on res.estateId = fb.estateId WHERE (fb.fbType=3 or fb.fbType=4) and  fb.fbState = 0 " + userCondition + estateCondition);*/
 				modelView.addObject("unresolvedFeedback", unresolvedFeedback);
 			}
 			
 			
-		}
-		else
+		//}
+		//else
 		//社区报
-		if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {
+		//if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {
 			
 			if (currentUser.isPermitted("index_com_news_comment")) {
 				//今日新闻评论
-				int commentsNews = businessUserService.countBySql("select count(distinct(c.commentId)) from business_news_comment c inner join business_news n on c.newsId = n.newsId inner join business_news_scope scope on n.newsId = scope.newsId inner join business_user_resource res on res.comId = scope.comId where 0 = DATEDIFF(now(), c.commentTime) " + userCondition + communityCondition);
+				int commentsNews = 0 ; /* businessUserService.countBySql("select count(distinct(c.commentId)) from business_news_comment c inner join business_news n on c.newsId = n.newsId inner join business_news_scope scope on n.newsId = scope.newsId inner join business_user_resource res on res.comId = scope.comId where 0 = DATEDIFF(now(), c.commentTime) " + userCondition + communityCondition);*/
 				modelView.addObject("commentsNews", commentsNews);	
 			}
 			
 			if (currentUser.isPermitted("index_com_unsolved_break")) {
 				//未处理网友爆料
-				int unresolvedBreak = businessUserService.countBySql("select count(distinct(b.breakId)) from business_break b inner join business_user_resource res on res.comId = b.comId WHERE b.state = 0 " + userCondition + communityCondition);
+				int unresolvedBreak = 0; /* businessUserService.countBySql("select count(distinct(b.breakId)) from business_break b inner join business_user_resource res on res.comId = b.comId WHERE b.state = 0 " + userCondition + communityCondition);*/
 				modelView.addObject("unresolvedBreak", unresolvedBreak);
 			}
 			
 			if (currentUser.isPermitted("index_com_auding_news")) {
 				//待审核新闻
-				int auditingNews = businessUserService.countBySql("select count(distinct(n.newsId)) from business_news n inner join business_news_scope scope on n.newsId = scope.newsId inner join business_user_resource res on res.comId = scope.comId WHERE n.state = 2 " + userCondition + communityCondition);
+				int auditingNews = 0; /*businessUserService.countBySql("select count(distinct(n.newsId)) from business_news n inner join business_news_scope scope on n.newsId = scope.newsId inner join business_user_resource res on res.comId = scope.comId WHERE n.state = 2 " + userCondition + communityCondition);*/
 				modelView.addObject("auditingNews", auditingNews);
 			}
 			
@@ -242,50 +245,50 @@ public class IndexController {
 			
 			if (currentUser.isPermitted("index_com_goting_activity")) {
 				//进行中的活动
-				int comGoingActivity = businessUserService.countBySql("select count(distinct(a.actId)) from business_activity a inner join business_activity_scope s on s.actId = a.actId inner join business_user_resource res on res.estateId = s.estateId WHERE (a.state = 0 or a.state = 1)  " + userCondition + communityCondition);
+				int comGoingActivity = 0; /* businessUserService.countBySql("select count(distinct(a.actId)) from business_activity a inner join business_activity_scope s on s.actId = a.actId inner join business_user_resource res on res.estateId = s.estateId WHERE (a.state = 0 or a.state = 1)  " + userCondition + communityCondition);*/
 				modelView.addObject("comGoingActivity", comGoingActivity);	
 			}
 			
 			if (currentUser.isPermitted("index_station_audting_market")) {
 				//待审核二手信息
-				int auditingMarket = businessUserService.countBySql("select count(distinct(p.productId)) from business_product p inner join business_user_resource res on res.estateId = p.estateId WHERE p.dealState = 1 " + userCondition + estateCondition);
+				int auditingMarket = 0; /*businessUserService.countBySql("select count(distinct(p.productId)) from business_product p inner join business_user_resource res on res.estateId = p.estateId WHERE p.dealState = 1 " + userCondition + estateCondition);*/
 				modelView.addObject("auditingMarket", auditingMarket);	
 			}
 			
-		}
-		else
+		//}
+		//else
 		//运营
-		if(ModuleConst.OPERATION_CODE.equals(orgType)) {
+		//if(ModuleConst.OPERATION_CODE.equals(orgType)) {
 			
 			if (currentUser.isPermitted("index_operation_regist_resident")) {
 				//已有注册居民
-				int regisitedResident = businessUserService.countBySql("select count(1) as count from app_user u where u.type = 1 ");
+				int regisitedResident = 0; /* businessUserService.countBySql("select count(1) as count from app_user u where u.type = 1 ");*/
 				modelView.addObject("regisitedResident", regisitedResident);	
 			}
 			
 			if (currentUser.isPermitted("index_operation_today_registed")) {
 				//当日注册居民
-				int operationRegistedResidentsOnDay = businessUserService.countBySql(
-						"select count(1) as count from app_user u where 0 = DATEDIFF(now(), u.registTime) ");
+				int operationRegistedResidentsOnDay = 0;/* businessUserService.countBySql(
+						"select count(1) as count from app_user u where 0 = DATEDIFF(now(), u.registTime) ");*/
 				modelView.addObject("operationRegistedResidentsOnDay", operationRegistedResidentsOnDay);	
 			}
 
 			if (currentUser.isPermitted("index_operation_today_verified")) {
 				//当日验证居民
-				int operationVerifiedResidentsOnDay = businessUserService.countBySql(
-						"select count(1) as count from app_user u where u.type = 1 and 0 = DATEDIFF(now(), u.verifyTime) ");
+				int operationVerifiedResidentsOnDay = 0; /* businessUserService.countBySql(
+						"select count(1) as count from app_user u where u.type = 1 and 0 = DATEDIFF(now(), u.verifyTime) ");*/
 				modelView.addObject("operationVerifiedResidentsOnDay", operationVerifiedResidentsOnDay);	
 			}
 			
 			if (currentUser.isPermitted("index_operation_unreply_feedback")) {
 				//未回复居民反馈
-				int unrepliedFeedback = businessUserService.countBySql("select count(1) as count from business_feedback f where f.fbType=2 and  f.fbState = 0");
+				int unrepliedFeedback = 0;/* businessUserService.countBySql("select count(1) as count from business_feedback f where f.fbType=2 and  f.fbState = 0");*/
 				modelView.addObject("unrepliedFeedback", unrepliedFeedback);	
 			}
 			
 			if (currentUser.isPermitted("index_operation_auditing_anno")) {
 				//待审核公告信息
-				int audtingAnno = businessUserService.countBySql("select count(distinct(anno.annoId)) as annoCount from business_anno anno inner join business_anno_scope scope on anno.annoId = scope.annoId inner join business_user_resource res on res.estateId = scope.estateId WHERE anno.publishState = 2 and ( anno.annoType = 2 OR anno.annoType = 3 )");
+				int audtingAnno = 0; /*businessUserService.countBySql("select count(distinct(anno.annoId)) as annoCount from business_anno anno inner join business_anno_scope scope on anno.annoId = scope.annoId inner join business_user_resource res on res.estateId = scope.estateId WHERE anno.publishState = 2 and ( anno.annoType = 2 OR anno.annoType = 3 )");*/
 				modelView.addObject("audtingAnno", audtingAnno);
 			}
 			
@@ -294,28 +297,30 @@ public class IndexController {
 			
 			if (currentUser.isPermitted("index_operation_publishing_focus")) {
 				//待发布焦点图
-				int auditFocus = businessUserService.countBySql("select count(distinct(f.focusId)) as annoCount from business_focus f inner join app_focus_scope scope on scope.focusId = f.focusId inner join business_user_resource res on res.estateId = scope.estateId where f.state = 1");
+				int auditFocus = 0 ; // businessUserService.countBySql("select count(distinct(f.focusId)) as annoCount from business_focus f inner join app_focus_scope scope on scope.focusId = f.focusId inner join business_user_resource res on res.estateId = scope.estateId where f.state = 1");
 				modelView.addObject("auditFocus", auditFocus);	
 			}
 			
-		}
+		//}
 		
 		//获取公告
 		BusinessAnnoQuery annoQuery = new BusinessAnnoQuery();
 		annoQuery.setAnnoType(2);//内部公告
-		if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区类型
-			annoQuery.setScopeType(1);
-		}else if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {//驿站类型
-			annoQuery.setScopeType(2);
-		}else if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业类型
-			annoQuery.setScopeType(3);
-		}//运营不分类型
+		//if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区类型
+		//	annoQuery.setScopeType(1);
+		//}else if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {//驿站类型
+		//	annoQuery.setScopeType(2);
+		//}else if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业类型
+		//	annoQuery.setScopeType(3);
+		//}//运营不分类型
 		annoQuery.setSort("annoId");
 		annoQuery.setOrder("desc");
 		annoQuery.setRows(1);
 		BaseBean baseBean = businessAnnoService.findAllPageForIndex(annoQuery);//获取首页公告列表
 		modelView.addObject("annoList", baseBean.getList());
-		modelView.addObject("orgType", orgType);
+		modelView.addObject("isCom", shiroUser.getIsCom());
+		modelView.addObject("isEstate", shiroUser.getIsEstate());
+		//modelView.addObject("orgType", orgType);
 		return modelView;
 	}
 	
@@ -371,27 +376,32 @@ public class IndexController {
 			session.setAttribute("shiroUser", CommonUtils.getUser());*/
 			
 			//判断用户拥有哪个模块，如果是多个自动展示运营模块
-			ShiroUser shiroUser = (ShiroUser)currentUser.getPrincipal();
+			/*ShiroUser shiroUser = (ShiroUser)currentUser.getPrincipal();
 			BusinessUser businessUser = businessUserService.findById(shiroUser.getUserId());
 			//判断用户拥有哪个模块，如果是多个自动展示运营模块
-			String modules = businessUser.getModules();
+			//String modules = businessUser.getModules();
 			List<BusinessMenu> menuList = new ArrayList<BusinessMenu>();
-			if(modules.indexOf(',') > -1) { //有多个模块，必定是运营的人员
+			//if(modules.indexOf(',') > -1) { //有多个模块，必定是运营的人员
 				//获取运营模块ID
-				ManageModule manageModule = manageModuleService.findById(ModuleConst.OPERATION);
+				//ManageModule manageModule = manageModuleService.findById(ModuleConst.OPERATION);
 				//获取运营模块下的菜单	
-				menuList = businessMenuService.findMenuByModuleId(manageModule.getModuleId());		
-			}else{//只有一个，就授权相应模块的权限
+				//menuList = businessMenuService.findMenuByModuleId(manageModule.getModuleId());		
+			//}else{//只有一个，就授权相应模块的权限
 				//获取对应模块下的所有菜单
-				menuList = businessMenuService.findMenuByModuleId(ModuleConst.getModuleId(modules));				
-			}
+				//menuList = businessMenuService.findMenuByModuleId(ModuleConst.getModuleId(modules));				
+			//}
 			
-			modelView.addObject("menuList", menuList); //绑定菜单数据集合
+			//modelView.addObject("menuList", menuList); //绑定菜单数据集合
 			modelView.addObject("userName", businessUser.getUserName());//姓名
 			//职位
-			BusinessPosition businessPosition = businessPositionService.findById(businessUser.getPositionId());
-			modelView.addObject("depName", businessPosition.getDepName());
-			modelView.addObject("positionName", businessPosition.getPositionName());
+			if(businessUser.getPositionId() != null && businessUser.getPositionId() != 0) {
+				BusinessPosition businessPosition = businessPositionService.findById(businessUser.getPositionId());
+				modelView.addObject("depName", businessPosition.getDepName());
+				modelView.addObject("positionName", businessPosition.getPositionName());
+			}else{
+				modelView.addObject("depName", "");
+				modelView.addObject("positionName", "");
+			}			
 			modelView.addObject("lastLoginTime", businessUser.getLastLoginTime());
 			
 			//切换小区搜索条件
@@ -406,21 +416,21 @@ public class IndexController {
 			}
 			
 			//按角色分别统计数据
-			String orgType = "";
-			if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
-				orgType = shiroUser.getCurOrgType();
-			}else{
-				orgType = shiroUser.getOrgType();
-			}
+			//String orgType = "";
+			//if(shiroUser.getCurOrgType() != null && !"".equals(shiroUser.getCurOrgType())) {
+				//orgType = shiroUser.getCurOrgType();
+			//}else{
+				//orgType = shiroUser.getOrgType();
+			//}
 			
 			//非运营人员可以带ID查看相关数据
 			String userCondition = "";
-			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
+			//if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 				userCondition = " and res.userId = " + shiroUser.getUserId();
-			}
+			//}
 			
 			//物业
-			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {
+			//if(ModuleConst.PROPERTY_CODE.equals(orgType)) {
 				if (currentUser.isPermitted("index_property_verified_resident")) {
 					//验证居民
 					int verifiedResidents = businessUserService.countBySql(
@@ -460,10 +470,10 @@ public class IndexController {
 					modelView.addObject("propCommentedAnno", propCommentedAnno);	
 				}
 				
-			}
-			else
+			//}
+			//else
 			//驿站
-			if(ModuleConst.STATION_CODE.equals(orgType)) {
+			//if(ModuleConst.STATION_CODE.equals(orgType)) {
 				if (currentUser.isPermitted("index_station_anno_comment")) {
 					//公告评论数量
 					int stationCommentedAnno = businessUserService.countBySql("select count(distinct(c.commentId)) as count from business_anno_comment c inner join business_anno a on c.annoId = a.annoId inner join business_anno_scope sc on sc.annoId = a.annoId inner join business_user_resource res on res.estateId = sc.estateId where a.annoType = 4 " + userCondition + estateCondition);
@@ -495,10 +505,10 @@ public class IndexController {
 				}
 				
 				
-			}
-			else
+			//}
+			//else
 			//社区报
-			if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {
+			//if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {
 				
 				if (currentUser.isPermitted("index_com_news_comment")) {
 					//今日已有新闻评论
@@ -518,11 +528,11 @@ public class IndexController {
 					modelView.addObject("auditingNews", auditingNews);
 				}
 				
-				/*if (currentUser.isPermitted("index_property_verified_resident")) {
+				if (currentUser.isPermitted("index_property_verified_resident")) {
 					//待审核位置
 					int auditingLife = businessUserService.countBySql("select count(1) as count from business_life l where l.pulishState = 1 ");
 					modelView.addObject("auditingLife", auditingLife);
-				}*/
+				}
 				
 				if (currentUser.isPermitted("index_com_goting_activity")) {
 					//进行中的活动
@@ -536,10 +546,10 @@ public class IndexController {
 					modelView.addObject("auditingMarket", auditingMarket);	
 				}
 				
-			}
-			else
+			//}
+			//else
 			//运营
-			if(ModuleConst.OPERATION_CODE.equals(orgType)) {
+			//if(ModuleConst.OPERATION_CODE.equals(orgType)) {
 				
 				if (currentUser.isPermitted("index_operation_regist_resident")) {
 					//已有注册居民
@@ -582,26 +592,29 @@ public class IndexController {
 					modelView.addObject("auditFocus", auditFocus);	
 				}
 				
-			}
+			//}
 			
 			//获取公告
 			BusinessAnnoQuery annoQuery = new BusinessAnnoQuery();
 			annoQuery.setAnnoType(2);//内部公告
-			if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区类型
-				annoQuery.setScopeType(1);
-			}else if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {//驿站类型
-				annoQuery.setScopeType(2);
-			}else if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业类型
-				annoQuery.setScopeType(3);
-			}//运营不分类型
+			//if(ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区类型
+				//annoQuery.setScopeType(1);
+			//}else if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())) {//驿站类型
+				//annoQuery.setScopeType(2);
+			//}else if(ModuleConst.PROPERTY_CODE.equals(shiroUser.getOrgType())) {//物业类型
+				//annoQuery.setScopeType(3);
+			//}//运营不分类型
 			annoQuery.setSort("annoId");
 			annoQuery.setOrder("desc");
 			annoQuery.setRows(1);
 			BaseBean baseBean = businessAnnoService.findAllPageForIndex(annoQuery);//获取首页公告列表
 			modelView.addObject("annoList", baseBean.getList());
-			modelView.addObject("orgType", orgType);
+			//modelView.addObject("orgType", orgType);
+			*/
+			modelView.setViewName("redirect:/index/main.do");
 			
-			modelView.setViewName("/module/main");
+			//modelView.addObject("isCom", shiroUser.getIsCom());
+			//modelView.addObject("isEstate", shiroUser.getIsEstate());
 						
 		}else{
 			modelView.addObject("message", "抱歉，您不是我们的有效用户!");
@@ -659,7 +672,6 @@ public class IndexController {
 	 */
 	@RequestMapping("/businessChange")
 	public ModelAndView businessChange(HttpServletRequest request) {
-		String orgType = request.getParameter("orgType");
 		try {
 			ShiroUser shiroUser = CommonUtils.getUser();
 			ShiroUser siroUsrP = (ShiroUser)SecurityUtils.getSubject().getPrincipal();
@@ -669,33 +681,22 @@ public class IndexController {
 			
 			siroUsrP.setCurEstateId(0);
 			siroUsrP.setCurComId(0);
-			List menuList = initUserMenu(shiroUser.getUserId(), orgType);
+			List menuList = initUserMenu(shiroUser.getUserId());
 			if(menuList.size() > 0) {
 				MenuComparator comparator=new MenuComparator();
 				Collections.sort(menuList, comparator);
 			}
-			shiroUser.setCurOrgType(orgType);
-			shiroUser.setMenuList(menuList);
-			
-			siroUsrP.setCurOrgType(orgType);
-			siroUsrP.setMenuList(menuList);
-			if(ModuleConst.PROPERTY_CODE.equals(orgType)) {
+			//shiroUser.setCurOrgType(orgType);
+			//shiroUser.setMenuList(menuList);
+			/*if(ModuleConst.PROPERTY_CODE.equals(orgType)) {
 				shiroUser.setCurOrgTypeName(ModuleConst.PROPERTY_NAME);
-				
-				siroUsrP.setCurOrgTypeName(ModuleConst.PROPERTY_NAME);
 			}else if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {
 				shiroUser.setCurOrgTypeName(ModuleConst.COMMUNITY_NAME);
-				
-				siroUsrP.setCurOrgTypeName(ModuleConst.COMMUNITY_NAME);
 			}else if(ModuleConst.STATION_CODE.equals(orgType)) {
 				shiroUser.setCurOrgTypeName(ModuleConst.STATION_NAME);
-				
-				siroUsrP.setCurOrgTypeName(ModuleConst.STATION_NAME);
 			}else{
 				shiroUser.setCurOrgTypeName(ModuleConst.OPERATION_NAME);
-				
-				siroUsrP.setCurOrgTypeName(ModuleConst.OPERATION_NAME);
-			}
+			}*/
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
 		}
@@ -723,11 +724,22 @@ public class IndexController {
 			siroUsrP.setCurComId(0);
 			if(estateId != null && estateId != 0) {
 				ManageEstate manageEstate = manageEstateService.findById(estateId);
+				BusinessCommunity com = businessCommunityService.findById(manageEstate.getComId());
+				String curComName = "";
+				if (com != null)
+					curComName = com.getComName();
+				
 				shiroUser.setCurEstateName(manageEstate.getEstateName());
 				shiroUser.setCurStateId(manageEstate.getStationId());
+				shiroUser.setCurComId(manageEstate.getComId());
+				shiroUser.setCurComName(curComName);
+				
 				
 				siroUsrP.setCurEstateName(manageEstate.getEstateName());
 				siroUsrP.setCurStateId(manageEstate.getStationId());
+				siroUsrP.setCurComId(manageEstate.getComId());
+				siroUsrP.setCurComName(curComName);
+				
 			}else{
 				shiroUser.setCurEstateName("全部小区");
 				shiroUser.setCurStateId(0);
@@ -757,19 +769,32 @@ public class IndexController {
 			ShiroUser siroUsrP = (ShiroUser)SecurityUtils.getSubject().getPrincipal();
 			//切换社区ID到shiro缓存中
 			shiroUser.setCurEstateId(0);
+			shiroUser.setCurEstateName("全部小区");
 			shiroUser.setCurComId(comId);
 			
 			siroUsrP.setCurEstateId(0);
+			siroUsrP.setCurEstateName("全部小区");
 			siroUsrP.setCurComId(comId);
 			if(comId != null && comId != 0) {
 				BusinessCommunity businessCommunity = businessCommunityService.findById(comId);
 				shiroUser.setCurComName(businessCommunity.getComName());
 				
 				siroUsrP.setCurComName(businessCommunity.getComName());
+				//切换社区关联的小区
+				List<EstateBean> tempList = shiroUser.getMemoryEstateBeanList();
+				List estateBeanListByCom = new ArrayList();
+				for(EstateBean esteteBean : tempList) {
+					if(esteteBean.getComId() == comId) {
+						estateBeanListByCom.add(esteteBean);
+					}
+				}
+				shiroUser.setEstateBeanList(estateBeanListByCom);
 			}else{
 				shiroUser.setCurComName("全部社区");
 				
 				siroUsrP.setCurComName("全部社区");
+				//切换小区为全部小区
+				shiroUser.setEstateBeanList(shiroUser.getMemoryEstateBeanList());
 			}
 		} catch (AuthenticationException e) {
 			e.printStackTrace();
@@ -780,11 +805,10 @@ public class IndexController {
 	}
 	
 	//按组织类型初始化用户菜单列表
-	private List<UserMenuBean> initUserMenu(Integer userId, String orgType) {
+	private List<UserMenuBean> initUserMenu(Integer userId) {
 		List<UserMenuBean> menuList = new ArrayList();
 		//获取用户所有功能权限并组织出菜单
 		Map paramMap = new HashMap();
-		paramMap.put("moduleCode", orgType);
 		paramMap.put("userId", userId);
 		UserMenuBean userMenuBean = new UserMenuBean();
 		List userFunctionList = manageUserFunctionService.findByMap(paramMap);
@@ -807,6 +831,9 @@ public class IndexController {
 						userMenuBean.setNo(businessMenu.getOrd());
 						userMenuBean.setIcon(businessMenu.getCode());
 						userMenuBean.setMenuPath(businessMenu.getUrl());
+						userMenuBean.setIsCom(businessMenu.getIsCom());
+						userMenuBean.setIsEstate(businessMenu.getIsEstate());
+						
 						menuList.add(userMenuBean);
 					}
 				}else{//没有菜单
@@ -817,6 +844,7 @@ public class IndexController {
 					userMenuBean.setNo(businessMenu.getOrd());
 					userMenuBean.setIcon(businessMenu.getCode());
 					userMenuBean.setMenuPath(businessMenu.getUrl());
+					userMenuBean.setIsCom(businessMenu.getIsCom());
 					menuList.add(userMenuBean);
 				}
 			}
@@ -887,5 +915,32 @@ public class IndexController {
 	public ModelAndView unauthorized(HttpServletRequest request,HttpServletResponse response){
 		ModelAndView mav = new ModelAndView("/common/unauthorized");
 		return mav;
+	}
+	
+	/**
+	 * 菜单切换时获取这个菜单是否要显示社区后者小区，初始化在内存
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping("/menuChange")
+	public ModelAndView menuChange(HttpServletRequest request,HttpServletResponse response){
+		
+		ShiroUser shiroUser = CommonUtils.getUser();
+		ShiroUser siroUsrP = (ShiroUser)SecurityUtils.getSubject().getPrincipal();
+		
+		String isCom = request.getParameter("isCom");
+		String isEstate = request.getParameter("isEstate");
+		//初始化到缓存
+		shiroUser.setIsCom(new Integer(isCom));
+		shiroUser.setIsEstate(new Integer(isEstate));
+		
+		siroUsrP.setIsCom(new Integer(isCom));
+		siroUsrP.setIsEstate(new Integer(isEstate));
+		
+		String menuPath = request.getParameter("menuPath");
+		ModelAndView mav = new ModelAndView(new RedirectView(menuPath));
+		return mav;
+		
 	}
 }

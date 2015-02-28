@@ -3,16 +3,11 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
 import org.springframework.stereotype.Repository;
-
-import com.community.framework.exception.DaoException;
 
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.vo.AppLatestNewsQuery;
+import com.community.framework.exception.DaoException;
 
 @Repository
 public interface AppLatestNewsDao {

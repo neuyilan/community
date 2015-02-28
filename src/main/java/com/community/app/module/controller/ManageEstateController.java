@@ -21,11 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-
-
 import com.community.app.module.bean.BusinessCommunity;
-import com.community.app.module.bean.BusinessProduct;
 import com.community.app.module.bean.BusinessProperty;
 import com.community.app.module.bean.BusinessStation;
 import com.community.app.module.bean.ManageEstate;
@@ -33,6 +29,7 @@ import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessPropertyService;
 import com.community.app.module.service.BusinessStationService;
 import com.community.app.module.service.ManageEstateService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.ManageEstateQuery;
 
 @Controller

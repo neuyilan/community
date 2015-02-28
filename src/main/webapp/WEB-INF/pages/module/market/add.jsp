@@ -64,11 +64,11 @@
 	                    },
 	                    typeId: {
 	                        required: true
-	                    },
+	                    },/* 
 	                    title: {
 	                        required: true,
 	                        maxlength: 32
-	                    },
+	                    }, */
 	                    content: {
 	                        required: true
 	                    }, 
@@ -92,11 +92,11 @@
 	                    },
 	                    typeId: {
 	                        required: '请选择出售商品分类！'
-	                    },
+	                    },/* 
 	                    title: {
 	                        required: '请填写跳蚤标题！',
 	                        maxlength: '请输入物品名称32个字以内'
-	                    },
+	                    }, */
 	                    content: {
 	                        required: '请填写物品描述！'
 	                    },

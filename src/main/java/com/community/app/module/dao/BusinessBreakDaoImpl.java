@@ -5,17 +5,14 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-
-
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
 import com.community.app.module.bean.BusinessBreak;
 import com.community.app.module.vo.BusinessBreakQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Repository("BusinessBreakDao")
 @Transactional

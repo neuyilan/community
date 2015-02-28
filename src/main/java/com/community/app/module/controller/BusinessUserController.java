@@ -1,5 +1,7 @@
 package com.community.app.module.controller;
 
+import static com.community.framework.utils.CommonUtils.getUser;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -12,12 +14,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.community.app.module.bean.*;
-import com.community.app.module.service.*;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -28,14 +28,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessDepartmentQuery;
+import com.community.app.module.bean.BusinessCommunity;
+import com.community.app.module.bean.BusinessDepartment;
+import com.community.app.module.bean.BusinessMenu;
+import com.community.app.module.bean.BusinessPosition;
+import com.community.app.module.bean.BusinessUser;
+import com.community.app.module.bean.BusinessUserResource;
+import com.community.app.module.bean.BusinessUserRole;
+import com.community.app.module.bean.ManageBuilding;
+import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.bean.ManageFunction;
+import com.community.app.module.bean.ManageModule;
+import com.community.app.module.bean.ManageUnit;
+import com.community.app.module.bean.ManageUserFunction;
+import com.community.app.module.bean.MemberVO;
+import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.ModuleConst;
+import com.community.app.module.service.BusinessCommunityService;
+import com.community.app.module.service.BusinessDepartmentService;
+import com.community.app.module.service.BusinessMenuService;
+import com.community.app.module.service.BusinessPositionService;
+import com.community.app.module.service.BusinessUserResourceService;
+import com.community.app.module.service.BusinessUserRoleService;
+import com.community.app.module.service.BusinessUserService;
+import com.community.app.module.service.ManageBuildingService;
+import com.community.app.module.service.ManageEstateService;
+import com.community.app.module.service.ManageFunctionService;
+import com.community.app.module.service.ManageModuleService;
+import com.community.app.module.service.ManageUnitService;
+import com.community.app.module.service.ManageUserFunctionService;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessDepartmentQuery;
 import com.community.app.module.vo.BusinessUserQuery;
 import com.community.framework.utils.CommonUtils;
-
-import static com.community.framework.utils.CommonUtils.getUser;
 
 @Controller
 @RequestMapping("/business/businessUser")
@@ -65,6 +92,10 @@ public class BusinessUserController {
     private BusinessUserResourceService businessUserResourceService;
     @Autowired
     private BusinessCommunityService businessCommunityService;
+    
+    @Autowired
+    private BusinessUserRoleService businessUserRoleService;
+    
 	/**
 	 * 进入管理页
 	 * @return
@@ -85,7 +116,7 @@ public class BusinessUserController {
 			}
 			//按机构类型查看各机构下的员工信息
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
+			/*if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
 				query.setOrgType(shiroUser.getCurOrgType());
 				if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 					query.setCurComId(shiroUser.getCurComId());
@@ -106,6 +137,13 @@ public class BusinessUserController {
 					}
 				}				
 				query.setOrgType(shiroUser.getOrgType());
+			}*/
+			query.setCurUserId(shiroUser.getUserId());
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
+			}
+			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
 			}
 			baseBean = businessUserService.findAllPage(query);
 			//获取员工数
@@ -113,7 +151,7 @@ public class BusinessUserController {
 			
 			//获取部门数
 			BusinessDepartmentQuery departmentQuery = new BusinessDepartmentQuery();
-			departmentQuery.setOrgType(shiroUser.getOrgType());
+			//departmentQuery.setOrgType(shiroUser.getOrgType());
 			departments = businessDepartmentService.selectCount(departmentQuery);
 			
 		}catch(Exception e){
@@ -281,7 +319,7 @@ public class BusinessUserController {
 			}
 			//按机构类型查看各机构下的员工信息
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
+			/*if(!"".equals(shiroUser.getCurOrgType())) {//当前选择了部门，运营人员可以看到某部门内所有员工
 				query.setOrgType(shiroUser.getCurOrgType());
 				if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 					query.setCurComId(shiroUser.getCurComId());
@@ -302,6 +340,13 @@ public class BusinessUserController {
 					}
 				}				
 				query.setOrgType(shiroUser.getOrgType());
+			}*/
+			query.setCurUserId(shiroUser.getUserId());
+			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
+				query.setCurComId(shiroUser.getCurComId());
+			}
+			if(shiroUser.getCurEstateId() != null && shiroUser.getCurEstateId() != 0) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
 			}
 			
             BaseBean baseBean = businessUserService.findAllPage(query);
@@ -372,17 +417,18 @@ public class BusinessUserController {
 	@RequestMapping(value="add")
 	public ModelAndView add(BusinessUserQuery query) {	
 		ModelAndView mav = null;
-		String orgType = "";
+		//String orgType = "";
+		List userRoleList = new ArrayList();
 		try{
 			//当前用户标识
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
+			/*if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
 				orgType = shiroUser.getOrgType();
 			} else {
 				orgType = shiroUser.getCurOrgType();
-			}
+			}*/
 			
-			if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
+			/*if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业去物业添加页面 范围需要到楼栋
 				mav = new ModelAndView("/module/businessUser/propertyAdd");
 			}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站去驿站的增加页面 范围需要到小区
 				mav = new ModelAndView("/module/businessUser/stationAdd");
@@ -390,13 +436,18 @@ public class BusinessUserController {
 				mav = new ModelAndView("/module/businessUser/communityAdd");
 			}else{//运营去运营的增加页面，只添加运营下的用户
 				mav = new ModelAndView("/module/businessUser/operationAdd");
-			}
+			}*/
+			Map paramMap = new HashMap();
+			paramMap.put("userId", shiroUser.getUserId());
+			userRoleList = businessUserRoleService.findByMap(paramMap);
+			mav = new ModelAndView("/module/businessUser/propertyAdd");
 			mav.addObject("positionId", shiroUser.getPositionId());
+			mav.addObject("userRoleList", userRoleList);
 		}catch(Exception e){
 			GSLogger.error("进入businessUser新增页时发生错误：/business/businessUser/add", e);
 			e.printStackTrace();
 		}
-		mav.addObject("orgType", orgType);
+		//mav.addObject("orgType", orgType);
 		return mav;
 	}
 	
@@ -423,13 +474,13 @@ public class BusinessUserController {
 		}
         ModelAndView mav = new ModelAndView();
         ShiroUser shiroUser = CommonUtils.getUser();
-		String orgType = "";
+		/*String orgType = "";
 		if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
 			orgType = shiroUser.getOrgType();
 		} else {
 			orgType = shiroUser.getCurOrgType();
-		}
-		if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
+		}*/
+		/*if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
 			mav = new ModelAndView("/module/businessUser/propertyModify");
 		}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站
 			mav = new ModelAndView("/module/businessUser/stationModify");
@@ -445,7 +496,8 @@ public class BusinessUserController {
 			 mav.addObject("comList", comList);
 		}else{//运营
 			mav = new ModelAndView("/module/businessUser/operationModify");
-		}
+		}*/
+        mav = new ModelAndView("/module/businessUser/propertyModify");
         mav.addObject("businessUser", businessUser);
         mav.addObject("resourceList", list);
 		return mav;
@@ -464,7 +516,7 @@ public class BusinessUserController {
 		try{
             //查询登录用户信息
             BusinessUser curUser = businessUserService.findById(getUser().getUserId());
-            String orgType = curUser.getOrgType();
+            //String orgType = curUser.getOrgType();
             String modules = curUser.getModules();
 
             businessUser.setUserName(query.getUserName());
@@ -502,7 +554,7 @@ public class BusinessUserController {
 		    businessUser.setModules(modules);
 		    businessUser.setIsCharge(query.getIsCharge());
 		    businessUser.setOrgId(getUser().getOrgId());
-            businessUser.setOrgType(orgType);
+            //businessUser.setOrgType(orgType);
             //保存职务 positionId
             BusinessPosition businessPosition = businessPositionService.findById(query.getPositionId());
             businessUser.setPositionId(businessPosition.getPositionId());
@@ -514,7 +566,14 @@ public class BusinessUserController {
             //保存所有权限 manage_user_functon
             String right = query.getRights();
             String[] rights = right.split("\\,");
-            for(String functionId : rights) {
+            for(String roleId : rights) {
+                BusinessUserRole businessUserRole = new BusinessUserRole();
+                businessUserRole.setUserId(businessUser.getUserId());
+                businessUserRole.setRoleId(new Integer(roleId));
+                
+                businessUserRoleService.save(businessUserRole);
+            }
+            /*for(String functionId : rights) {
                 ManageUserFunction manageUserFunction = new ManageUserFunction();
                 manageUserFunction.setUserId(businessUser.getUserId());
                 manageUserFunction.setFunctionId(new Integer(functionId));
@@ -522,7 +581,7 @@ public class BusinessUserController {
                 ManageFunction manageFunction = manageFunctionService.findById(new Integer(functionId));
                 int menuId = manageFunction.getMenuId();
                 manageUserFunction.setMenuId(menuId);
-                manageUserFunction.setModuleCode(orgType);
+                //manageUserFunction.setModuleCode(orgType);
                 manageUserFunction.setCreateTime(ts);
                 manageUserFunction.setEditTime(ts);
                 manageUserFunction.setEditor(getUser().getUserName());
@@ -530,7 +589,7 @@ public class BusinessUserController {
                 manageUserFunction.setFunctionCode(manageFunction.getFunctionCode());
 
                 manageUserFunctionService.save(manageUserFunction);
-            }
+            }*/
             //保存范围 business_user_resource
             //可取到 小区 楼栋和单元
 
@@ -568,8 +627,10 @@ public class BusinessUserController {
                 businessUserResource.setUserId(businessUser.getUserId());
                 if(!"".equals(estateId)) {
                     businessUserResource.setEstateId(Integer.parseInt(estateId));
-                }
-                businessUserResource.setEstateName(estateName);
+                    ManageEstate estate = manageEstateService.findById(Integer.parseInt(estateId));
+                    businessUserResource.setComId(estate.getComId());
+                    businessUserResource.setEstateName(estateName);
+                }                
                 if(!"".equals(buildingId)) {
                     businessUserResource.setBuildingId(Integer.parseInt(buildingId));
                 }
@@ -649,7 +710,7 @@ public class BusinessUserController {
             Timestamp  ts=new Timestamp(new Date().getTime());
             businessUser.setEditTime(ts);
             businessUser.setOrgId(getUser().getOrgId());
-            businessUser.setOrgType(getUser().getOrgType());
+            //businessUser.setOrgType(getUser().getOrgType());
             BusinessPosition businessPosition = businessPositionService.findById(query.getPositionId());
             businessUser.setPositionId(businessPosition.getPositionId());
             businessUser.setPosName(businessPosition.getPositionName()); //职位名称
@@ -666,11 +727,26 @@ public class BusinessUserController {
             //保存所有权限 manage_user_functon
             
             if(right != null && !"-1".equals(right)) {
+            	
                 //删除旧权限
-                manageUserFunctionService.deleteByUserId(businessUser.getUserId());
+                //manageUserFunctionService.deleteByUserId(businessUser.getUserId());
+            	Map map = new HashMap();
+            	map.put("userId", businessUser.getUserId());
+            	List<BusinessUserRole> businessUserRoleList = businessUserRoleService.findByMap(map);
+            	for(BusinessUserRole businessUserRole: businessUserRoleList) {
+            		businessUserRoleService.delete(businessUserRole.getUsroId());
+            	}
+            	
                 //添加新权限
                 String[] rights = right.split("\\,");
-                for(String functionId : rights) {
+                for(String roleId : rights) {
+                    BusinessUserRole businessUserRole = new BusinessUserRole();
+                    businessUserRole.setUserId(businessUser.getUserId());
+                    businessUserRole.setRoleId(new Integer(roleId));
+                    
+                    businessUserRoleService.save(businessUserRole);
+                }
+                /*for(String functionId : rights) {
                     ManageUserFunction manageUserFunction = new ManageUserFunction();
                     manageUserFunction.setUserId(businessUser.getUserId());
                     manageUserFunction.setFunctionId(new Integer(functionId));
@@ -685,7 +761,7 @@ public class BusinessUserController {
                     manageUserFunction.setEditTime(ts);
                     manageUserFunction.setEditor(getUser().getUserName());
                     manageUserFunctionService.save(manageUserFunction);
-                }
+                }*/
             }
 
             String scopeString = query.getScope();
@@ -727,8 +803,10 @@ public class BusinessUserController {
                     businessUserResource.setUserId(businessUser.getUserId());
                     if(!"".equals(estateId)) {
                         businessUserResource.setEstateId(Integer.parseInt(estateId));
-                    }
-                    businessUserResource.setEstateName(estateName);
+                        ManageEstate estate = manageEstateService.findById(Integer.parseInt(estateId));
+                        businessUserResource.setComId(estate.getComId());
+                        businessUserResource.setEstateName(estateName);
+                    }  
                     if(!"".equals(buildingId)) {
                         businessUserResource.setBuildingId(Integer.parseInt(buildingId));
                     }
@@ -851,23 +929,25 @@ public class BusinessUserController {
                 String unitName = "";
                 String[] attrs = row.split("\\&");
                 for(String attr : attrs) {
-                    String[] values = attr.split("\\|");
-                    String param_id = ((values[0]).split("\\_"))[1]; //id
-                    String param_name = values[1];                    //name
-                    //小区
-                    if(attr.indexOf("estate") == 0) {
-                        estateId = param_id; //小区ID
-                        estateName = param_name; //小区名称
-                    }
-                    //楼栋
-                    else if(attr.indexOf("building") == 0) {
-                        buildingId = param_id;
-                        buildingName = param_name;
-                    }
-                    //单元
-                    else if(attr.indexOf("unit") == 0) {
-                        unitId = param_id;
-                        unitName = param_name;
+                    if(StringUtils.isNotBlank(attr)) {
+                        String[] values = attr.split("\\|");
+                        String param_id = ((values[0]).split("\\_"))[1]; //id
+                        String param_name = values[1];                    //name
+                        //小区
+                        if(attr.indexOf("estate") == 0) {
+                            estateId = param_id; //小区ID
+                            estateName = param_name; //小区名称
+                        }
+                        //楼栋
+                        else if(attr.indexOf("building") == 0) {
+                            buildingId = param_id;
+                            buildingName = param_name;
+                        }
+                        //单元
+                        else if(attr.indexOf("unit") == 0) {
+                            unitId = param_id;
+                            unitName = param_name;
+                        }
                     }
                 }
                 BusinessUserResource businessUserResource = new BusinessUserResource();
@@ -2267,6 +2347,138 @@ public class BusinessUserController {
 		}
 	}
 	
+	/**
+	 * 获取某用户所属结构下的角色列表
+	 * @param response
+	 */
+	@RequestMapping(value="getRolesByUser")
+	public void getRolesByUser(HttpServletResponse response) {
+		JSONObject roleObj = new JSONObject();
+		JSONArray roleArr = new JSONArray();
+		try{
+			ShiroUser shiroUser = getUser();
+			Map paramMap = new HashMap();
+			
+			paramMap.put("userId", shiroUser.getUserId());
+			List userRoleList = businessUserRoleService.findByMap(paramMap);
+			roleArr = getRoleTreeArray(userRoleList);
+			/*if(userRoleList != null && userRoleList.size() > 0 ) {
+				BusinessUserRole userRole = (BusinessUserRole) userRoleList.get(0);
+				roleObj = new JSONObject();
+				roleObj.put("id", "role_"+module.getModuleId());
+				roleObj.put("text", module.getModuleName());
+				//obj.put("iconCls", "icon-save");
+				moduleObj.put("state", "open");
+				//moduleObj.put("children", getFunctionTreeArray(module.getModuleId()));
+				moduleObj.put("children", getOwnFunctionTreeArray(module.getModuleId()));
+				moduleArr.add(moduleObj);
+			}*/
+			//jsonObj.put("success", true);
+			//jsonObj.put("result", arr);
+		}catch(Exception e){
+			//jsonObj.put("success", false);
+			//jsonObj.put("message", "获取失败");
+			GSLogger.error("删除BusinessUser时发生错误：/business/businessUser/delete", e);
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(roleArr.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 按模块ID查询并组织某个员工拥有得功能权限数组
+	 * @param moduleId
+	 * @return
+	 */
+	private JSONArray getRoleTreeArray(List userRoleList) {
+		JSONArray roleArr = new JSONArray();
+		JSONObject roleObj = null;
+		Map menuMap = new HashMap();
+		//拼装 菜单-功能 权限结构
+		for(int i=0;i<userRoleList.size();i++) {
+			BusinessUserRole role = (BusinessUserRole) userRoleList.get(i);
+			if(roleArr.size() > 0) {//已有结点
+				boolean hasGroup = false;
+				for(int j=0;j<roleArr.size();j++) {//遍历数组
+					JSONObject groupObject = roleArr.getJSONObject(j);
+					if(groupObject.get("id").equals("group_"+role.getGroupId())) {//如果已存在该菜单结点
+						hasGroup = true;
+						JSONArray funArray = null;
+						//查看该菜单下的childrne数组是否存在，如果存在则加入功能权限结点，如果不存在则创建数组再加入结点
+						boolean hasRole = false;
+						if(groupObject.get("children") != null) {
+							funArray = (JSONArray) groupObject.get("children");
+							for(int k=0;k<funArray.size();k++) {
+								JSONObject funObj = funArray.getJSONObject(k);
+								if(funObj.get("id").equals("role_"+role.getRoleId())) {
+									hasRole = true;
+								}
+							}
+						}else{
+							funArray = new JSONArray();
+							groupObject.put("children", funArray);
+						}
+						if(!hasRole) {
+							roleObj = new JSONObject();
+							roleObj.put("id", "role_"+role.getRoleId());
+							roleObj.put("text", role.getRoleName());
+							//obj.put("iconCls", "icon-save");
+							//roleObj.put("state", "closed");
+							funArray.add(roleObj);
+						}
+					}
+				}
+				if(!hasGroup) {
+					//如果不存在该菜单结点，则创建新菜单结点
+					//并创建功能数组并将功能加入该数组放到菜单结点中
+					//并加入到最终的菜单数组中
+					JSONObject groupObj = new JSONObject();
+					groupObj.put("id", "group_"+role.getGroupId());
+					groupObj.put("text", role.getGroupName());
+					//obj.put("iconCls", "icon-save");
+					groupObj.put("state", "open");
+					//创建功能数组
+					JSONArray functionArray = new JSONArray();
+					roleObj = new JSONObject();
+					roleObj.put("id", "role_"+role.getRoleId());
+					roleObj.put("text", role.getRoleName());
+					//obj.put("iconCls", "icon-save");
+					//roleObj.put("state", "closed");
+					functionArray.add(roleObj);
+					//放入菜单对象
+					groupObj.put("children", functionArray);
+					//把菜单放入菜单对象
+					roleArr.add(groupObj);
+				}
+			}else{//没有结点
+				JSONObject groupObj = new JSONObject();
+				groupObj.put("id", "group_"+role.getGroupId());
+				groupObj.put("text", role.getGroupName());
+				//obj.put("iconCls", "icon-save");
+				groupObj.put("state", "open");
+				//创建功能数组
+				JSONArray groupArray = new JSONArray();
+				roleObj = new JSONObject();
+				roleObj.put("id", "role_"+role.getRoleId());
+				roleObj.put("text", role.getRoleName());
+				//obj.put("iconCls", "icon-save");
+				//roleObj.put("state", "closed");
+				groupArray.add(roleObj);
+				//放入菜单对象
+				groupObj.put("children", groupArray);
+				//把菜单放入菜单对象
+				roleArr.add(groupObj);
+			}
+		}
+		return roleArr;
+	}
+	
 
 	/**
 	 * 按模块ID查询并组织某个员工拥有得功能权限数组
@@ -2520,22 +2732,37 @@ public class BusinessUserController {
 			ShiroUser shiroUser = CommonUtils.getUser();
 			//获取该用户负责的多社区范围
 			Map map = new HashMap();
-			map.put("userId", shiroUser.getUserId());
-			map.put("orgType", shiroUser.getOrgType());
-			map.put("comId", shiroUser.getCurComId());
-			List comList = businessCommunityService.findComsByUser(map);
+			//map.put("userId", shiroUser.getUserId());
+			//map.put("orgType", shiroUser.getOrgType());
+			//map.put("comId", shiroUser.getCurComId());
 			
+			//List comList = businessCommunityService.findComsByUser(map);
+			List comList = shiroUser.getComList();
 			JSONObject comObj = null;
 			Map paramMap = null;
 			for(int i=0;i<comList.size();i++) {
-				BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
 				paramMap = new HashMap();
 				paramMap.put("comId", community.getComId());
-				List estateList = manageEstateService.findByMap(paramMap); 
+				paramMap.put("userId", shiroUser.getUserId());
+				//List estateList = manageEstateService.findByMap(paramMap);
+				List estateList = businessUserResourceService.findByMap(paramMap);
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
 					comObj.put("text", community.getComName());
+					JSONArray estateArr = new JSONArray();
+					for(int j=0;j<estateList.size();j++) {
+						BusinessUserResource businessUserResource = (BusinessUserResource) estateList.get(j);
+						JSONObject estateObj = new JSONObject();
+						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
+						estateObj.put("text", businessUserResource.getEstateName());
+						estateObj.put("checkbox", true);
+						estateObj.put("state", "close");
+						estateArr.add(estateObj);
+					}
+					comObj.put("children", estateArr);
 					comArr.add(comObj);
 				}				
 			}

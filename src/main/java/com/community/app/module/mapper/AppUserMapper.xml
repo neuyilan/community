@@ -213,6 +213,9 @@
 				<if test="curUserId != null and curUserId != 0" >
 			   		and res.userId = #{curUserId}
 				</if>
+				<if test="curComId != null and curComId != ''" >
+					and res.comId=#{curComId} 
+				</if>
                 
             </trim>
         </where>

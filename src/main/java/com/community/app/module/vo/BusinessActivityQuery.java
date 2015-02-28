@@ -4,7 +4,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
 import com.community.app.module.bean.BusinessActivity;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessActivityQuery extends BaseBean {
 
@@ -16,6 +15,7 @@ public class BusinessActivityQuery extends BaseBean {
 	private String actScope;
 	private String brief;
 	private String actPic;
+	private String actPicNo;
 	private String actLink;
 	private String actManage;
 	private Integer userType;
@@ -75,7 +75,8 @@ public class BusinessActivityQuery extends BaseBean {
 	private Integer votes;
 	private String content;
 	private String image;
-
+	private Integer curEstateId;
+	
 	private String couponName;
 	private String couponDesc;
 	private String couponImg;
@@ -86,6 +87,22 @@ public class BusinessActivityQuery extends BaseBean {
 	private String reportExcel;
 	private String cellphone;
 	
+	public Integer getCurEstateId() {
+		return curEstateId;
+	}
+
+	public void setCurEstateId(Integer curEstateId) {
+		this.curEstateId = curEstateId;
+	}
+
+	public String getActPicNo() {
+		return actPicNo;
+	}
+
+	public void setActPicNo(String actPicNo) {
+		this.actPicNo = actPicNo;
+	}
+
 	public String getCellphone() {
 		return cellphone;
 	}

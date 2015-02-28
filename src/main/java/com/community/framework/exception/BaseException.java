@@ -3,7 +3,6 @@ package com.community.framework.exception;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.lang.Throwable;
 
 /**
  *系统基准异常类 

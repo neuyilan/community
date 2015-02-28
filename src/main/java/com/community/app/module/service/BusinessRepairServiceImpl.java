@@ -8,28 +8,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.community.app.module.bean.AppLatestNews;
-import com.community.app.module.bean.BusinessRepairAudio;
-import com.community.app.module.bean.BusinessRepairComment;
-import com.community.app.module.bean.BusinessRepairPic;
-import com.community.app.module.bean.MemberVO;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.exception.DaoException;
-import com.community.app.module.vo.BusinessRepairQuery;
+import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessRepair;
+import com.community.app.module.bean.BusinessRepairAudio;
+import com.community.app.module.bean.BusinessRepairComment;
+import com.community.app.module.bean.BusinessRepairPic;
+import com.community.app.module.bean.MemberVO;
 import com.community.app.module.dao.AppLatestNewsDao;
 import com.community.app.module.dao.BusinessRepairAudioDao;
 import com.community.app.module.dao.BusinessRepairCommentDao;
 import com.community.app.module.dao.BusinessRepairDao;
 import com.community.app.module.dao.BusinessRepairPicDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessRepairQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessRepairService")
 @Transactional

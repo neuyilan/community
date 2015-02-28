@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>添加物业员工信息</title>
+	<title>添加员工信息</title>
 	<%@include file="/common/meta.jsp"%>
 	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/style.css" >
 	<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/adaptive-2.css" >
@@ -20,7 +20,7 @@
 <div class="wrapper wranews">
     <div class="newsrel">
         <form id="addForm" method="post" action="<%=ctx %>/business/businessUser/saveProperty.do">
-    	<div class="header-public"><span class="return" onclick="history.go(-1)"></span>添加物业员工信息</div>
+    	<div class="header-public"><span class="return" onclick="history.go(-1)"></span>添加员工信息</div>
         <input type="hidden" name="orgType" id="orgType" value="${orgType }" />
         <div class="cont-l">
         	<h2 class="relran">公司邮箱<font color="red">*</font><label for="userEmail" class="error success"></label></h2>
@@ -265,12 +265,6 @@
             var estateName = '';
     		var scopeNodes = $('#scopeTree').tree('getChecked');
     		if(scopeNodes != null && scopeNodes.length > 0) {//选择了范围
-    			var orgType = $('#orgType').val();
-    			if(orgType == 'property') {//物业的选择
-    				
-    			}else{//社区报和驿站的选择
-    				
-    			}
      			for(var i=0;i<scopeNodes.length;i++) {
     				var node = scopeNodes[i];
     				scopeIds += node.id + ',';
@@ -323,8 +317,9 @@
     	//选择权限
     	function selectRight() {
     		var rightNodes = $('#rightTree').tree('getChecked');
+    		var roleStr = '';
     		if(rightNodes != null && rightNodes.length > 0) {
-    			moduleShow = new Array();
+    		    moduleShow = new Array();
     	    	menuShow = new Array();
     	    	functionShow = new Array();
     			var rightStr = '';
@@ -333,14 +328,15 @@
     			for(var i=0;i<rightNodes.length;i++) {
     				var rightNode = rightNodes[i];
     				//获取所属模块ID
-                    var moduleid = getNodeRoot(rightNode);
-                    modulAry.push(moduleid);
+                    //var menuid = getNodeRoot(rightNode);
+                    //modulAry.push(menuid);
                     //获取所属模块ID
                     var idArr = rightNode.id.split('_');
-        			if(idArr[0] == 'function') {
+        			if(idArr[0] == 'role') {
         				right += idArr[1] + ',';
+                        roleStr += rightNode.text + '&nbsp;&nbsp;';
         				//构建展示集合
-                        assemble(rightNode);        			
+                        //assemble(rightNode);        			
         			}
     			}
     			if(right != '') {
@@ -351,8 +347,11 @@
                     $('#modules').val(uniqueAry(modulAry));
                     //$('#rightShow').html('权限已设置');
                     //展示权限功能集合
-                    $('#rightsInfo').val(showRights());
-                    $('#rightShow').html(showRights());
+                    //$('#rightsInfo').val(showRights());
+                    //$('#rightShow').html(showRights());
+                    $('#rightsInfo').val(roleStr);
+                    $('#rightShow').html(roleStr);
+                    
     			}
 				$("#rightLayer").fadeOut("slow");
     		}else{
@@ -377,7 +376,7 @@
     				hasModule = true;break;
     			}
     		}
-    		if(!hasModule) {moduleShow.push(moduleNode.id+'|'+moduleNode.text);}
+    		//if(!hasModule) {moduleShow.push(moduleNode.id+'|'+moduleNode.text);}
     		for(var i=0;i<menuShow.length;i++) {
     			//是否已有菜单判断
     			var showArr = menuShow[i].split('|');
@@ -387,7 +386,8 @@
     			}
     		}
     		if(!hasMenu) {
-    			menuShow.push(moduleNode.id+','+menuNode.id+'|'+menuNode.text);
+    			//menuShow.push(moduleNode.id+','+menuNode.id+'|'+menuNode.text);
+    			menuShow.push(','+menuNode.id+'|'+menuNode.text);
     		}
     		for(var i=0;i<functionShow.length;i++) {
     			//是否已有功能判断
@@ -406,7 +406,7 @@
     		var showStr = '';
     		for(var i=0;i<moduleShow.length;i++) {//模块展示
     			var moduleId = (moduleShow[i].split('|'))[0];
-    			showStr += '模块：'+(moduleShow[i].split('|'))[1]+'<br />';
+    			showStr += '组：'+(moduleShow[i].split('|'))[1]+'<br />';
     			//菜单遍历展示
     			
     			for(var j=0;j<menuShow.length;j++) {//菜单展示
@@ -583,7 +583,7 @@
         		$("#scopeBar").css("height",$(document.body).outerHeight(true)-40+'px');
         		//显示楼栋列表
         		$.ajax({
-                    url: '<%=path %>/business/businessUser/getBuildingsByUser.do',
+                    url: '<%=path %>/business/businessUser/getComsScopeTree.do',
                     dataType: 'json',
                     cache: false,
                     success: function (data) {
@@ -617,7 +617,7 @@
         		$("#rightBar").css("height",$(document.body).outerHeight(true)-40+'px');
         		//显示权限列表
         		$.ajax({
-                    url: '<%=path %>/business/businessUser/getRightsByUser.do',
+                    url: '<%=path %>/business/businessUser/getRolesByUser.do',
                     dataType: 'json',
                     cache: false,
                     success: function (data) {
@@ -627,7 +627,7 @@
                     error: function () {
                     	//$('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
                     }
-                });
+               });
             });
 	      
 	      

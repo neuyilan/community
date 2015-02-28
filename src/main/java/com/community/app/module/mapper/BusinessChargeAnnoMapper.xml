@@ -93,7 +93,7 @@
 					<if test="auditTime != null and auditTime != ''" >
 				   		and a.auditTime = #{auditTime}
 					</if>
-					<if test="users != null and users != ''" >
+					<if test="users != null" >
 				   		and a.users = #{users}
 					</if>
 					<if test="auditInfo != null and auditInfo != ''" >

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.community.app.module.vo.BaseBean;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessActivity;
@@ -25,6 +24,7 @@ import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.BusinessActivityCommentService;
 import com.community.app.module.service.BusinessActivityService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityCommentQuery;
 import com.community.framework.utils.CommonUtils;
 

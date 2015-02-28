@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import com.community.app.module.vo.BaseBean;
 
 import com.community.app.module.bean.AppHomepage;
 import com.community.app.module.service.AppHomepageService;
 import com.community.app.module.vo.AppHomepageQuery;
+import com.community.app.module.vo.BaseBean;
 
 @Controller
 @RequestMapping("/app/appHomepage")

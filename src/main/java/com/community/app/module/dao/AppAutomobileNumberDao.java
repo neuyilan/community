@@ -3,12 +3,7 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
 import org.springframework.stereotype.Repository;
-
 
 import com.community.app.module.bean.AppAutomobileNumber;
 import com.community.app.module.vo.AppAutomobileNumberQuery;

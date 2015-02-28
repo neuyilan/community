@@ -1,12 +1,11 @@
 package com.community.app.module.vo;
 
+import java.util.Map;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import java.util.Map;
-
 import com.community.app.module.bean.BusinessProduct;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessProductQuery extends BaseBean {
 	

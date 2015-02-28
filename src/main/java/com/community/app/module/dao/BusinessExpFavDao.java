@@ -3,11 +3,11 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Repository;
 
 import com.community.app.module.bean.BusinessExpFav;
 import com.community.app.module.vo.BusinessExpFavQuery;
 import com.community.framework.exception.DaoException;
-import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BusinessExpFavDao {

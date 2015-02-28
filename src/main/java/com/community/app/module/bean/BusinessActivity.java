@@ -19,6 +19,7 @@ public class BusinessActivity implements java.io.Serializable {
 	private String actScope;
 	private String brief;
 	private String actPic;
+	private String actPicNo;
 	private String actLink;
 	private String actManage;
 	private Integer userType;
@@ -69,6 +70,14 @@ public class BusinessActivity implements java.io.Serializable {
 	private String couponValid;
 	private String reportExcel;
 	
+	public String getActPicNo() {
+		return actPicNo;
+	}
+
+	public void setActPicNo(String actPicNo) {
+		this.actPicNo = actPicNo;
+	}
+
 	public String getReportExcel() {
 		return reportExcel;
 	}

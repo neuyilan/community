@@ -9,7 +9,21 @@ public class UserMenuBean  implements Serializable, Comparable<UserMenuBean> {
 	private String menuPath; //菜单地址
 	private Integer no; // 序号
 	private String icon; // 菜单图标css
+	private Integer isCom; //是否展示社区切换
+	private Integer isEstate; //是否展示小区切换
 	
+	public Integer getIsCom() {
+		return isCom;
+	}
+	public void setIsCom(Integer isCom) {
+		this.isCom = isCom;
+	}
+	public Integer getIsEstate() {
+		return isEstate;
+	}
+	public void setIsEstate(Integer isEstate) {
+		this.isEstate = isEstate;
+	}
 	public String getIcon() {
 		return icon;
 	}

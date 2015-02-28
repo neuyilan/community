@@ -4,13 +4,6 @@ package com.community.framework.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.sql.Timestamp;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
-import org.apache.commons.lang.time.DateUtils;
 
 /**
  * 短信工具类

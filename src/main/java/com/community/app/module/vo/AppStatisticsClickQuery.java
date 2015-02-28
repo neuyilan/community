@@ -2,14 +2,10 @@ package com.community.app.module.vo;
 
 
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-import java.io.Serializable;
 import com.community.app.module.bean.AppStatisticsClick;
-import com.community.app.module.vo.BaseBean;
 
 public class AppStatisticsClickQuery extends BaseBean {
 	

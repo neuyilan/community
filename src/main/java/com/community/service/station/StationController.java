@@ -26,12 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.beans.factory.support.PropertiesBeanDefinitionReader;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -44,13 +39,8 @@ import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessAnnoComment;
 import com.community.app.module.bean.BusinessAnnoSupport;
 import com.community.app.module.bean.BusinessFeedback;
-import com.community.app.module.bean.BusinessProduct;
-import com.community.app.module.bean.BusinessProductComment;
-import com.community.app.module.bean.BusinessPropertyMaterial;
 import com.community.app.module.bean.BusinessStation;
 import com.community.app.module.bean.BusinessStationMessage;
-import com.community.app.module.bean.BusinessTel;
-import com.community.app.module.bean.BusinessTelGroup;
 import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
@@ -72,7 +62,6 @@ import com.community.app.module.vo.BusinessAnnoSupportQuery;
 import com.community.app.module.vo.BusinessFeedbackQuery;
 import com.community.app.module.vo.BusinessStationMessageQuery;
 import com.community.app.module.vo.BusinessStationServiceQuery;
-import com.community.app.module.vo.BusinessTelQuery;
 import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
@@ -133,6 +122,7 @@ public class StationController {
 			json += "\"name\":\""+businessStation.getStaName()+"\",";
 			json += "\"tel\":\""+businessStation.getStaTel()+"\",";
 			json += "\"addr\":\""+ip+businessStation.getAddrUrl()+"\",";
+			json += "\"addrName\":\""+businessStation.getAddrName()+"\",";
 			json += "\"staLongitude\":\""+businessStation.getStaLongitude()+"\",";
 			json += "\"staLatitude\":\""+businessStation.getStaLatitude()+"\",";
 			json += "\"staBrief\":\""+businessStation.getStaBrief()+"\",";
@@ -170,24 +160,22 @@ public class StationController {
 			businessAnnoQuery.setAnnoType(0);
 			businessAnnoQuery.setPublishState(0);
 			BaseBean baseBean = businessAnnoService.findAllPage_app(businessAnnoQuery);
-			json += "\"notice\":";
+			json += "\"notice\":{";
 			for(int i=0;i<baseBean.getList().size();i++) {
 				if (i==1) {
 					break;
 				}
 				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
-				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle()+"\",\"time\":\""
+				json += "\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle()+"\",\"time\":\""
 				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief()+"\",";
 				if("".equals(businessAnno.getAnnoPic()) || businessAnno.getAnnoPic()==null  || businessAnno.getAnnoPic().indexOf("/images/icon/")>=0){
 					json +="\"pic\":\"\",";
 				}else{
 					json +="\"pic\":\""+ip+businessAnno.getAnnoPic()+"\",";
 				}
-				json += "\"publisherId\":\""+businessAnno.getPublisherId()+"\",\"publisherName\":\""+businessAnno.getNickname()+"\",\"avatar\":\""+ip+businessAnno.getPortrait()+"\"},";
+				json += "\"publisherId\":\""+businessAnno.getPublisherId()+"\",\"publisherName\":\""+businessAnno.getNickname()+"\",\"avatar\":\""+ip+businessAnno.getPortrait()+"\"";
 			}
-			if(baseBean.getList().size() > 0) {
-				json = json.substring(0, json.length()-1);
-			}
+			json += "}";
 			json += "}";
 			json += "}";
 		}catch(Exception e){
@@ -587,7 +575,7 @@ public class StationController {
 			query.setSort("commentTime");
 			query.setAnnoId(query.getID());
 			BaseBean baseBean = businessAnnoCommentService.findAllPage_app(query);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
@@ -675,7 +663,7 @@ public class StationController {
 			query.setCommentorState(0);
 			query.setReplyState(0);
 			BaseBean baseBean = businessAnnoCommentService.findAllPage_app(query);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setUserId(query.getUserId());
 			appLatestNews.setTypeId(8);
@@ -777,7 +765,7 @@ public class StationController {
 			businessAnnoComment.setCommentorState(0);//居民
 			businessAnnoComment.setRepliedState(0);
 			businessAnnoCommentService.save(businessAnnoComment);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"评论成功\",";
@@ -855,7 +843,7 @@ public class StationController {
 			businessAnnoComment.setCommentorState(0);//居民
 			businessAnnoComment.setRepliedState(query.getReplyType());
 			businessAnnoCommentService.save(businessAnnoComment);
-			BusinessAnno BusinessAnno = businessAnnoService.findById_app(query.getID());
+			BusinessAnno BusinessAnno = businessAnnoService.findById(query.getID());
 			if(!(businessAnnoComment.getRepliedState()==1)){
 				AppUserNews appUserNews = new AppUserNews();
 				appUserNews.setUserId(query.getReplyId());
@@ -1086,7 +1074,7 @@ public class StationController {
 				json += "\"ID\":\"10\",";
 				json += "\"name\":\"金亮\",";
 				json += "\"avatar\":\""+ip+"/images/kefu.jpg"+"\",";
-				json += "\"brief\":\"您好：我是OK家的客服“小欧”您的声音是我们成长的动力，我们一直在努力...\",";
+				json += "\"brief\":\"您好：我是OK家的客服“小欧”您的建议是我们成长的动力，我们一直在努力...\",";
 				json += "\"tel\":\"18600510615\",";
 				json += "\"serviceTel\":\"31213454\"";
 			}else{

@@ -1,12 +1,15 @@
 package com.community.framework.utils.excel;
 
-import com.community.framework.utils.CommonUtils;
+import static com.community.framework.utils.CommonUtils.getCellValue;
+import static com.community.framework.utils.CommonUtils.getJSONString;
+import static com.community.framework.utils.CommonUtils.isMobileNO;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import static com.community.framework.utils.CommonUtils.*;
+import com.community.framework.utils.CommonUtils;
 
 /**
  * Created by Administrator on 2014/7/16.

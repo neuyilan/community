@@ -1,13 +1,12 @@
 package com.community.app.module.vo;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import java.sql.Timestamp;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.community.app.module.bean.BusinessFeedback;
-import com.community.app.module.vo.BaseBean;
 
 public class BusinessFeedbackQuery extends BaseBean {
 	
@@ -61,6 +60,17 @@ public class BusinessFeedbackQuery extends BaseBean {
 	private String orgType;
 	private Integer[] fbTypes;
 	
+	private Integer curComId;
+	
+	
+	public Integer getCurComId() {
+		return curComId;
+	}
+
+	public void setCurComId(Integer curComId) {
+		this.curComId = curComId;
+	}
+
 	public Integer getCurUserId() {
 		return curUserId;
 	}

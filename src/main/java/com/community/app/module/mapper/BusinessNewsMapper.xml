@@ -39,6 +39,7 @@
 			<result column="hotTime" property="hotTime" />
 			<result column="isNickname" property="isNickname" />
 			<result column="tag" property="tag" />
+			<result column="hotTime1" property="hotTime1" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -191,6 +192,9 @@
 					<if test="curComId != null and curComId != ''" >
 						and res.comId=#{curComId} 
 					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+			   			and res.estateId = #{curEstateId}
+					</if>
 			</trim>
 		</where>
 	</sql>
@@ -317,7 +321,6 @@
 					<if test="publishScope != null and publishScope != ''" >
 				   		and s.comId=#{publishScope}
 					</if>
-					
 			</trim>
 		</where>
 	</sql>
@@ -394,23 +397,7 @@
 		n.publishScope,
 		n.setTime,
 		n.breakId,
-		case
-		WHEN n.hotTime  != ''  and n.hotTime = 
-		(select concat( max(hottime)) FROM
-			business_news  n
-			INNER JOIN business_news_scope scope ON n.newsId = scope.newsId
-			INNER JOIN business_user_resource res ON res.comId = scope.comId
-			WHERE 1=1
-			<if test="curUserId != null and curUserId != ''" >
-				and res.userId=#{curUserId} 
-			</if>
-			<if test="curComId != null and curComId != ''" >
-				and res.comId=#{curComId} 
-			</if>
-		) THEN '1'
-		else '0'
-		end
-		ishot ,
+		n.ishot ,
 		n.isAd,
 		n.createTime,
 		n.editTime,
@@ -418,10 +405,29 @@
 		n.isPush,
 		n.isRecommend,
 		n.hotTime,
-		n.isNickname
+		n.isNickname,
+		tmp.hottime as hotTime1
 	    from business_news n
 		inner join business_news_scope scope on n.newsId = scope.newsId
 		inner join business_user_resource res on res.comId = scope.comId
+		LEFT JOIN (
+			SELECT hottime,n.newsid 
+			FROM
+				business_news n
+			INNER JOIN business_news_scope scope ON n.newsId = scope.newsId
+			INNER JOIN business_user_resource res ON res.comId = scope.comId
+			WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And res.userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And res.comId=#{curComId} 
+				</if>
+			GROUP BY hottime,n.newsid
+			ORDER BY isHot DESC, hottime DESC 
+			LIMIT 0,3
+		) tmp
+		ON tmp.newsid = n.newsId
 		<if test="timeScope != null and dateField == 'comments'" >
 			inner join business_news_comment c on c.newsId = n.newsId and 0 = DATEDIFF(now(), c.commentTime)
 		</if>

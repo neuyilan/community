@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>发布社区开聊信息</title>
+    <title>发布社区聊吧信息</title>
     <%@include file="/common/meta.jsp"%>
     <%@include file="/common/editorJs.jsp"%>
     <script type="text/javascript" src="<%=ctx %>/js/jquery-easyui/jquery.easyui.min.js"></script>
@@ -70,10 +70,10 @@
                         required: '请选择居民！'
                     },
                     isExpend: {
-                        required: '请选择社区开聊范围！'
+                        required: '请选择社区聊吧范围！'
                     },
                     helpContent: {
-                        required: '请输入社区开聊信息！'
+                        required: '请输入社区聊吧信息！'
                     }
                 }
             });
@@ -93,27 +93,27 @@
     <div class="wrapper wranews">
         <div class="newsrel">
         <form id="ff" action="${ctx}/business/businessHelp/save.do" method="post">
-            <div class="header-public"><span class="return" onclick="history.go(-1)"></span>社区开聊发布</div>
+            <div class="header-public"><span class="return" onclick="history.go(-1)"></span>社区聊吧发布</div>
             <div class="cont-l">                
                 <h2 class="relran y-fbes-bdr">绑定居民<label for="helperId" class="error success"></label></h2>
 	            <div style="position:relative;">
 	            	<span class="ranbut radiusbox" id="showPeopleLayer">点击选择居民</span>
 	            	<lable style="position: absolute; top: 10px; left: 160px;" id="publisherShow"></lable>
 	            </div>
-			    <input type="hidden" class="iptnewtit" name="helperId" id="helperId"> <%--社区开聊人ID--%>
-                <input type="hidden" class="iptnewtit" name="helperName" id="helperName"> <%--社区开聊人姓名--%>
-                <input type="hidden" class="iptnewtit" name="estateName" id="estateName"> <%--社区开聊小区--%>
-                <input type="hidden" class="iptnewtit" name="estateId" id="estateId"> <%--社区开聊小区ID--%>      
+			    <input type="hidden" class="iptnewtit" name="helperId" id="helperId"> <%--社区聊吧人ID--%>
+                <input type="hidden" class="iptnewtit" name="helperName" id="helperName"> <%--社区聊吧人姓名--%>
+                <input type="hidden" class="iptnewtit" name="estateName" id="estateName"> <%--社区聊吧小区--%>
+                <input type="hidden" class="iptnewtit" name="estateId" id="estateId"> <%--社区聊吧小区ID--%>      
 			                    
-                <h2 class="relran y-fbes-bdr">社区开聊范围<label for="isExpend" class="error success"></label></h2>
+                <h2 class="relran y-fbes-bdr">社区聊吧范围<label for="isExpend" class="error success"></label></h2>
 	            <div style="position:relative;">
-	            	<span class="ranbut radiusbox" id="showScopeLayer">点击选择社区开聊范围</span>
+	            	<span class="ranbut radiusbox" id="showScopeLayer">点击选择社区聊吧范围</span>
 	            	<lable style="position: absolute; top: 10px; left: 160px;" id="scopeShow"></lable>
 	            	<lable style="position: absolute; top: 10px; left: 160px;" id="estatesShow"></lable>
 	            </div>
 			    <input type="hidden" class="iptnewtit" name="isExpend" id="isExpend"> 
                 
-                <h2 class="newscont">社区开聊内容<label for="helpContent" class="error success"></label></h2>
+                <h2 class="newscont">社区聊吧内容<label for="helpContent" class="error success"></label></h2>
                 <textarea id="helpContent" name="helpContent" type="text/plain" style="width:1024px;height:150px;"></textarea>
                 
                 <div class="submtpres">
@@ -155,11 +155,11 @@
 </div>
 <!-- 居民选择结束 -->            
 
-<!-- 社区开聊范围选择开始 -->
+<!-- 社区聊吧范围选择开始 -->
 <div id="scopeLayer" class="busswi y-fbes-jm">
 	<div id="scopeBar" class="sidebar y-fbes-jms">
     	<a id="y-fbes-close" class="close" href="javascript:;" onclick="$('#scopeLayer').fadeOut('slow');"></a>
-    	<h2 class="tit">社区开聊范围选择</h2>
+    	<h2 class="tit">社区聊吧范围选择</h2>
         <div id="wrapper-250">
 	          <ul class="accordion5">
                 <li id="one2" class="files">
@@ -179,7 +179,7 @@
         </div>
     </div>
 </div>
-<!-- 社区开聊范围选择结束 -->
+<!-- 社区聊吧范围选择结束 -->
 	
 <%--初始化文本编辑器--%>
 <script type="text/javascript">
@@ -306,7 +306,7 @@
       		$("#peopleLayer").fadeIn("slow");
         });
     	
-        //选择社区开聊范围结点
+        //选择社区聊吧范围结点
         $('#scopeTree').tree({
             checkbox: true,
             onSelect: function(node){
@@ -344,7 +344,7 @@
             });
         });
     	
-	    //显示社区开聊范围层
+	    //显示社区聊吧范围层
 	    $("#showScopeLayer").click(function(){
 	   	        $("#scopeLayer").fadeIn("slow");
 	   	        //显示楼栋数结构
@@ -370,7 +370,7 @@
 	   	        });
 	   	 });
 		
-	    //选择社区开聊范围
+	    //选择社区聊吧范围
 	    $('#scopeOk').click(function() {
     		if($('input[name="isExpendSel"]:checked').val() == 0){
     			$("#scopeLayer").fadeOut("slow");
@@ -399,14 +399,14 @@
     	            
     	            $("#scopeLayer").fadeOut("slow");
     	        }else{
-    	            alert('请选择社区开聊范围');
+    	            alert('请选择社区聊吧范围');
     	        }
     		} else {
-    			alert('请选择社区开聊范围');
+    			alert('请选择社区聊吧范围');
     		}
 	    });
 		
-	    //取消选择社区开聊范围
+	    //取消选择社区聊吧范围
 	    $('#scopeCancel').click(function() {
 	        $("#scopeLayer").fadeOut("slow");
 	    });

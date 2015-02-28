@@ -1,22 +1,18 @@
 package com.community.app.module.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 
-
-
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
-
 import com.community.app.module.bean.BusinessMenu;
 import com.community.app.module.vo.BusinessMenuQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Repository("BusinessMenuDao")
 @Transactional

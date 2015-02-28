@@ -9,20 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.utils.propertiesUtil;
-import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import com.community.app.module.vo.BusinessHelpQuery;
 import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessHelp;
 import com.community.app.module.bean.BusinessHelpAudio;
@@ -31,6 +23,12 @@ import com.community.app.module.dao.AppLatestNewsDao;
 import com.community.app.module.dao.BusinessHelpAudioDao;
 import com.community.app.module.dao.BusinessHelpDao;
 import com.community.app.module.dao.BusinessHelpPicDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessHelpQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
+import com.community.framework.utils.propertiesUtil;
+import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 
 @Service("BusinessHelpService")
 @Transactional
@@ -435,5 +433,4 @@ public class BusinessHelpServiceImpl implements BusinessHelpService {
 			e.printStackTrace();
 		}
 	}
-	
 }

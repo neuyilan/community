@@ -1,7 +1,5 @@
 package com.community.app.module.service;
 
-import static com.community.framework.utils.CommonUtils.getUser;
-
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,32 +8,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.community.app.module.vo.BaseBean;
-import com.community.app.module.vo.BusinessProductQuery;
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
-import com.community.framework.utils.CommonUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.vo.BusinessNewsQuery;
 import com.community.app.module.bean.AppHomepage;
 import com.community.app.module.bean.AppHomepageScope;
-import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsScope;
-import com.community.app.module.bean.BusinessProduct;
-import com.community.app.module.bean.BusinessProductPic;
-import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.bean.index;
 import com.community.app.module.dao.AppHomepageDao;
 import com.community.app.module.dao.AppHomepageScopeDao;
 import com.community.app.module.dao.BusinessNewsDao;
 import com.community.app.module.dao.BusinessNewsScopeDao;
+import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessNewsQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Service("BusinessNewsService")
 @Transactional

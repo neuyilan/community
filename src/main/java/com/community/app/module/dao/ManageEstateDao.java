@@ -3,21 +3,13 @@ package com.community.app.module.dao;
 import java.util.List;
 import java.util.Map;
 
-
-
-
-
-
-
-
-
 import org.springframework.stereotype.Repository;
 
-import com.community.framework.exception.DaoException;
-import com.community.framework.exception.ServiceException;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.vo.ManageEstateQuery;
+import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Repository
 public interface ManageEstateDao {

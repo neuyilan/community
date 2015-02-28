@@ -625,7 +625,7 @@ public class SecondaryMarketController {
 			query.setSort("commentTime");
 			query.setProductId(query.getID());
 			BaseBean baseBean = businessProductCommentService.findAllPage_app(query);
-			BusinessProduct businessProduct = businessProductService.findById_app(query.getID());
+			BusinessProduct businessProduct = businessProductService.findById(query.getID());
 			String appPic = "";
 			if(businessProduct.getPicUrl()!=null && !"".equals(businessProduct.getPicUrl())){
 				String[] pic = businessProduct.getPicUrl().split(",");
@@ -720,7 +720,7 @@ public class SecondaryMarketController {
 			query.setCommentorState(0);
 			query.setReplyState(0);
 			BaseBean baseBean = businessProductCommentService.findAllPage_app(query);
-			BusinessProduct businessProduct = businessProductService.findById_app(query.getID());
+			BusinessProduct businessProduct = businessProductService.findById(query.getID());
 			String appPic = "";
 			if(businessProduct.getPicUrl()!=null && !"".equals(businessProduct.getPicUrl())){
 				String[] pic = businessProduct.getPicUrl().split(",");
@@ -825,7 +825,7 @@ public class SecondaryMarketController {
 				businessProductComment.setReplyName(query.getReplyName());
 			}
 			businessProductCommentService.save(businessProductComment);
-			BusinessProduct businessProduct = businessProductService.findById_app(query.getID());
+			BusinessProduct businessProduct = businessProductService.findById(query.getID());
 			AppLatestNews appLatestNews = new AppLatestNews();
 			appLatestNews.setSourceId(query.getID());
 			appLatestNews.setTo(0);

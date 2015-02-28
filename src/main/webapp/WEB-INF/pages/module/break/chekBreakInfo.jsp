@@ -4,12 +4,12 @@
   Date: 2014/7/25
   Time: 13:28
   To change this template use File | Settings | File Templates.
-  新闻爆料
+  爆料
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
 	<head>
-		<title>新闻爆料</title>
+		<title>爆料</title>
 		<%@include file="/common/meta.jsp"%>
 		<script type="text/javascript" src="<%=ctx%>/js/jquery-easyui/jquery.easyui.min.js"></script>
 		<script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
@@ -33,9 +33,9 @@
 				$(".exp-l").css("min-height",$("body").height()+"px");
 			});
 			
-			// 爆料选为置新闻
+			// 爆料选为置新鲜事
 			function selectSave(breakId) {
-				var bool = window.confirm("您确定要将该条爆料置为新闻？");
+				var bool = window.confirm("您确定要将该条爆料置为新鲜事？");
 			    if(bool) {
 			        $.post("selectSave.do", {id : breakId}, function(data) {
           			 	var data = eval('(' + data + ')');  // 改变json对象为javascript对象
@@ -68,8 +68,8 @@
 	<body style="background: #f1f1f1;">
 		<div class="wrapper" style="overflow:visible;">
 			<div class="expdet">
-				<%-- <div class="header-public"><span class="return" onclick="window.location.href = '<%=ctx%>/business/businessBreak/list.do';"></span>新闻爆料</div> --%>
-				<div class="header-public"><span class="return" onclick="history.go(-1)"></span>新闻爆料</div>
+				<%-- <div class="header-public"><span class="return" onclick="window.location.href = '<%=ctx%>/business/businessBreak/list.do';"></span>爆料</div> --%>
+				<div class="header-public"><span class="return" onclick="history.go(-1)"></span>爆料</div>
 				<div class="exp-cont">
 					<div class="exp-l">
 						<div class="exp-l-top">
@@ -87,8 +87,8 @@
 								<div class="cost">
 									<h2 class="s-bl-xq">已被选用: <span class="s-bl-wxy">${businessBreak.selectedNum}</span></h2>
 									<shiro:hasPermission name="break_select_news">
-									<input id="sign" type="button"  value="选用至新闻列表" onclick="selectSave(${businessBreak.breakId})" title=" 爆料选用后，请进入新闻管理中，进行编辑后才会进行发布。"/><br>
-									<em style="color:#e7402f;"> 爆料选用后，请进入新闻管理中，进行编辑后才会进行发布。</em>
+									<input id="sign" type="button"  value="选用至新鲜事列表" onclick="selectSave(${businessBreak.breakId})" title=" 爆料选用后，请进入新鲜事管理中，进行编辑后才会进行发布。"/><br>
+									<em style="color:#e7402f;"> 爆料选用后，请进入新鲜事管理中，进行编辑后才会进行发布。</em>
 									</shiro:hasPermission>
 								</div>
 							</div>
@@ -130,7 +130,7 @@
 		                             		 <td>选用人：${businessBreakSelect.selectorName} </td>
 		                             		 <c:if test="${businessBreakSelect.newsState==0}">
 			                             		 <td>|</td>
-			                             		 <td>新闻：${businessBreakSelect.title}</td>
+			                             		 <td>新鲜事：${businessBreakSelect.title}</td>
 		                             		 </c:if>
 		                             	</tr>
 		                        	</c:forEach>

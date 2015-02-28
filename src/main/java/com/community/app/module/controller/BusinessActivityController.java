@@ -64,12 +64,11 @@ import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivityScope;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
-import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFocus;
-import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.ExportUtil;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.push.AppPushNotificationUtil;
 import com.community.app.module.service.AppFocusScopeService;
 import com.community.app.module.service.AppHomepageScopeService;
@@ -88,6 +87,7 @@ import com.community.app.module.service.BusinessActivityVoteInformationService;
 import com.community.app.module.service.BusinessActivityVoteOptionsService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessFocusService;
+import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityCommentQuery;
@@ -138,6 +138,8 @@ public class BusinessActivityController {
 	@Autowired
 	private BusinessActivityVoteInformationService businessActivityVoteInformationService;
 	@Autowired
+	private BusinessUserResourceService businessUserResourceService;
+	@Autowired
 	private BusinessActivityCouponService businessActivityCouponService;
 	
 	/**
@@ -150,9 +152,12 @@ public class BusinessActivityController {
 		String stateStr = request.getParameter("stateStr");
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())
-					|| ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区和驿站根据小区范围数据范围不同
+			//if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())
+					//|| ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区和驿站根据小区范围数据范围不同
 				query.setCurUserId(shiroUser.getUserId());
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
 			}
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
@@ -190,9 +195,12 @@ public class BusinessActivityController {
 		StringBuilder result = new StringBuilder();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())
-					|| ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区和驿站根据小区范围数据范围不同
+			//if(ModuleConst.STATION_CODE.equals(shiroUser.getOrgType())
+					//|| ModuleConst.COMMUNITY_CODE.equals(shiroUser.getOrgType())) {//社区和驿站根据小区范围数据范围不同
 				query.setCurUserId(shiroUser.getUserId());
+			//}
+			if(shiroUser.getCurEstateId() != null) {
+				query.setCurEstateId(shiroUser.getCurEstateId());
 			}
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
@@ -225,6 +233,7 @@ public class BusinessActivityController {
 			    .append("\"actScope\":\"").append(businessActivity.getActScope()).append("\"").append(",")
 			    .append("\"brief\":\"").append(businessActivity.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
 			    .append("\"actPic\":\"").append(businessActivity.getActPic()).append("\"").append(",")
+			    .append("\"actPicNo\":\"").append(businessActivity.getActPicNo()).append("\"").append(",")
 			    .append("\"actLink\":\"").append(businessActivity.getActLink()).append("\"").append(",")
 			    .append("\"actManage\":\"").append(businessActivity.getActManage()).append("\"").append(",")
 			    .append("\"userType\":\"").append(businessActivity.getUserType()).append("\"").append(",")
@@ -308,6 +317,7 @@ public class BusinessActivityController {
 		    businessActivity.setActContent(query.getActContent());
 		    businessActivity.setBrief(query.getBrief());
 		    businessActivity.setActPic(query.getActPic());
+		    businessActivity.setActPicNo(query.getActPicNo());
 		    businessActivity.setAppPic(query.getAppPic());
 		    businessActivity.setUserType(query.getUserType());
 		    businessActivity.setPublisherId(getUser().getUserId()); //发布人ID
@@ -678,6 +688,7 @@ public class BusinessActivityController {
 		    businessActivity.setActContent(query.getActContent());
 		    businessActivity.setBrief(query.getBrief());
 		    businessActivity.setActPic(query.getActPic());
+		    businessActivity.setActPicNo(query.getActPicNo());
 		    if(query.getActPic() != null && !"".equals(query.getActPic())) {
 		    	File file = new File(businessActivity.getActPic());
 		    	file.delete();
@@ -1084,28 +1095,33 @@ public class BusinessActivityController {
 			// List comList = businessCommunityService.findAll();
 			//获取该用户负责的多社区范围
 			Map map = new HashMap();
-			map.put("userId", shiroUser.getUserId());
-			map.put("orgType", shiroUser.getOrgType());
-			map.put("comId", shiroUser.getCurComId());
+			//map.put("userId", shiroUser.getUserId());
+			//map.put("orgType", shiroUser.getOrgType());
+			//map.put("comId", shiroUser.getCurComId());
 			
-			List comList = businessCommunityService.findComsByUser(map);
+			//List comList = businessCommunityService.findComsByUser(map);
+			List comList = shiroUser.getComList();
 			JSONObject comObj = null;
 			Map paramMap = null;
 			for(int i=0;i<comList.size();i++) {
-				BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
 				paramMap = new HashMap();
+				paramMap = new HashMap();
 				paramMap.put("comId", community.getComId());
-				List estateList = manageEstateService.findByMap(paramMap); 
+				paramMap.put("userId", shiroUser.getUserId());
+				//List estateList = manageEstateService.findByMap(paramMap); 
+				List estateList = businessUserResourceService.findByMap(paramMap);
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
 					comObj.put("text", community.getComName());
 					JSONArray estateArr = new JSONArray();
 					for(int j=0;j<estateList.size();j++) {
-						ManageEstate estate = (ManageEstate) estateList.get(j);
+						BusinessUserResource businessUserResource = (BusinessUserResource) estateList.get(j);
 						JSONObject estateObj = new JSONObject();
-						estateObj.put("id", "estate_"+estate.getEstateId());
-						estateObj.put("text", estate.getEstateName());
+						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
+						estateObj.put("text", businessUserResource.getEstateName());
 						estateObj.put("checkbox", true);
 						estateObj.put("state", "close");
 						estateArr.add(estateObj);
@@ -1147,6 +1163,7 @@ public class BusinessActivityController {
 		    .append("\"actScope\":\"").append(businessActivity.getActScope()).append("\"").append(",")
 		    .append("\"brief\":\"").append(businessActivity.getBrief()).append("\"").append(",")
 		    .append("\"actPic\":\"").append(businessActivity.getActPic()).append("\"").append(",")
+		    .append("\"actPicNo\":\"").append(businessActivity.getActPicNo()).append("\"").append(",")
 		    .append("\"actLink\":\"").append(businessActivity.getActLink()).append("\"").append(",")
 		    .append("\"actManage\":\"").append(businessActivity.getActManage()).append("\"").append(",")
 		    .append("\"userType\":\"").append(businessActivity.getUserType()).append("\"").append(",")

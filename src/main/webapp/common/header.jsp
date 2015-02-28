@@ -2,7 +2,11 @@
 <%@ page import="com.community.framework.utils.CommonUtils" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.community.app.module.common.*" %>
+<%@ page import="com.community.app.module.bean.ShiroUser" %>
 
+<%
+//ShiroUser shiroUser = CommonUtils.getUser();
+%>
 <html>
 <head>
     <title>导航菜单</title>
@@ -17,22 +21,27 @@
 	<div class="submenu">
           <span class="rfloat">
 				<!-- <shiro:hasRole name="operation"> -->
-				<%if(CommonUtils.getUser().getOrgType().equals("operation")) {%>
+				<%-- <%if(CommonUtils.getUser().getOrgType().equals("operation")) {%>
 					<a href="javascript:;" onclick="$('#bizChgLayer').fadeIn('slow');">业务切换</a>
-				<%} %>
+				<%} %> --%>
 				<!-- </shiro:hasRole> -->
-				<%if(CommonUtils.getUser().getCurOrgType().equals("property") ||CommonUtils.getUser().getOrgType().equals("property") ) {%>
+				<%-- <%if(CommonUtils.getUser().getCurOrgType().equals("property") ||CommonUtils.getUser().getOrgType().equals("property") ) {%> --%>
+	        		<%if(shiroUser.getIsEstate() == 0) {%>
 	        		<a href="javascript:;" onclick="$('#estateChgLayer').fadeIn('slow');">小区切换</a>
-	        	<%} %>	
+	        		<%} %>
+	        		<%if(shiroUser.getIsCom() == 0) {%>
+	        		<a href="javascript:;" onclick="$('#communityChgLayer').fadeIn('slow');">社区切换</a>
+	        		<%} %>
+	        	<%-- <%} %>	 --%>
 	        	<!-- <shiro:hasAnyRoles name="community, operation"> -->
-	        	<%if(CommonUtils.getUser().getCurOrgType().equals("community") ||CommonUtils.getUser().getOrgType().equals("community") ) {%>
-	        		<a  href="javascript:;" onclick="$('#communityChgLayer').fadeIn('slow');">社区切换</a>
-	        	<%} %>	
+	        	<%-- <%if(CommonUtils.getUser().getCurOrgType().equals("community") ||CommonUtils.getUser().getOrgType().equals("community") ) {%> --%>
+	        		
+	        	<%-- <%} %>	 --%>
 	        	<!-- </shiro:hasAnyRoles> -->
 	        	<!-- <shiro:hasAnyRoles name="station, operation"> -->
-	        	<%if(CommonUtils.getUser().getCurOrgType().equals("station") ||CommonUtils.getUser().getOrgType().equals("station") ) {%>
+	        	<%-- <%if(CommonUtils.getUser().getCurOrgType().equals("station") ||CommonUtils.getUser().getOrgType().equals("station") ) {%>
 	        		<a href="javascript:;" onclick="$('#stationChgLayer').fadeIn('slow');">驿站切换</a>
-	        	<%} %>	
+	        	<%} %> --%>	
 	        	<!-- </shiro:hasAnyRoles> -->
 	        	<a href="javascript:;" id="showCountLayer">账号管理</a>
 		  </span>
@@ -59,7 +68,7 @@
 
 <!-- <shiro:hasRole name="operation"> -->
 <!-- 业务切换开始 -->
-<%if(CommonUtils.getUser().getOrgType().equals("operation")) {%>
+<%-- <%if(CommonUtils.getUser().getOrgType().equals("operation")) {%>
 <div id="bizChgLayer" class="busswi y-fbes-jm">
 	<div  id="bizChgBar"  class="sidebar y-fbes-jms" style="width:300px;">
     	<a class="close" href="javascript:;" onclick="$('#bizChgLayer').fadeOut('slow');"></a>
@@ -82,13 +91,12 @@
         </div>
     </div>
 </div>
-<%} %>
+<%} %> --%>
 <!-- 业务切换结束 -->
 <!-- </shiro:hasRole> -->
 
-<!-- <shiro:hasAnyRoles name="community, operation"> -->
 <!-- 社区切换开始 -->
-<%if(CommonUtils.getUser().getCurOrgType().equals("community") ||CommonUtils.getUser().getOrgType().equals("community") ) {%>
+
 <div id="communityChgLayer" class="busswi y-fbes-jm">
 	<div  id="communityChgBar"  class="sidebar y-fbes-jms" style="width:300px;">
     	<a class="close" href="javascript:;" onclick="$('#communityChgLayer').fadeOut('slow');"></a>
@@ -113,13 +121,13 @@
         </div>
     </div>
 </div>
-<%} %>
+
 <!-- 社区切换结束 -->
-<!-- </shiro:hasAnyRoles> -->
+
 
 <!-- <shiro:hasAnyRoles name="station, operation"> -->
 <!-- 驿站切换开始 -->
-<%if(CommonUtils.getUser().getCurOrgType().equals("station") ||CommonUtils.getUser().getOrgType().equals("station") ) {%>
+<%-- <%if(CommonUtils.getUser().getCurOrgType().equals("station") ||CommonUtils.getUser().getOrgType().equals("station") ) {%>
 <div id="stationChgLayer" class="busswi y-fbes-jm">
 	<div  id="stationChgBar"  class="sidebar y-fbes-jms" style="width:300px;">
     	<a class="close" href="javascript:;" onclick="$('#stationChgLayer').fadeOut('slow');"></a>
@@ -144,12 +152,12 @@
         </div>
     </div>
 </div>
-<%} %>
+<%} %> --%>
 <!-- 驿站切换结束 -->
 <!-- </shiro:hasAnyRoles> -->
 
 <!-- 小区切换开始 -->
-<%if(CommonUtils.getUser().getCurOrgType().equals("property") ||CommonUtils.getUser().getOrgType().equals("property") ) {%>
+<%-- <%if(CommonUtils.getUser().getCurOrgType().equals("property") ||CommonUtils.getUser().getOrgType().equals("property") ) {%> --%>
 <div id="estateChgLayer" class="busswi y-fbes-jm">
 	<div  id="estateChgBar"  class="sidebar y-fbes-jms" style="width:300px;">
     	<a class="close" href="javascript:;" onclick="$('#estateChgLayer').fadeOut('slow');"></a>
@@ -174,7 +182,7 @@
         </div>
     </div>
 </div>
-<%} %>
+<%-- <%} %> --%>
 <!-- 小区切换结束 -->
 
 </body>
