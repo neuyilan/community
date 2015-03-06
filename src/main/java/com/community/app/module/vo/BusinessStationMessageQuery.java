@@ -26,6 +26,24 @@ public class BusinessStationMessageQuery extends BaseBean {
 	private String curOrgType;		//当前部门类型
 	private java.lang.Integer ID;
 	private java.lang.Integer userId;
+	private java.lang.String staName;
+	private java.lang.Integer comId;
+
+	public java.lang.Integer getComId() {
+		return comId;
+	}
+
+	public void setComId(java.lang.Integer comId) {
+		this.comId = comId;
+	}
+
+	public java.lang.String getStaName() {
+		return staName;
+	}
+
+	public void setStaName(java.lang.String staName) {
+		this.staName = staName;
+	}
 
 	public java.lang.Integer getID() {
 		return ID;
@@ -55,6 +73,7 @@ public class BusinessStationMessageQuery extends BaseBean {
 		this.commentorState = businessStationMessage.getCommentorState();
 		this.replyState = businessStationMessage.getReplyState();
 		this.estateId = businessStationMessage.getEstateId();
+		this.staName = businessStationMessage.getStaName();
 	}
 
 	public BusinessStationMessageQuery() {

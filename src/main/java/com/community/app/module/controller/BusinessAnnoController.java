@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.community.app.module.bean.AppFocusAdScope;
 import com.community.app.module.bean.AppFocusScope;
 import com.community.app.module.bean.AppHomepage;
 import com.community.app.module.bean.AppHomepageScope;
@@ -39,12 +40,13 @@ import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessAnnoScope;
 import com.community.app.module.bean.BusinessFocus;
+import com.community.app.module.bean.BusinessFocusAd;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
-import com.community.app.module.common.EstateBean;
-import com.community.app.module.common.ModuleConst;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.push.AppPushNotificationUtil;
 import com.community.app.module.service.AppEstateUserService;
+import com.community.app.module.service.AppFocusAdScopeService;
 import com.community.app.module.service.AppFocusScopeService;
 import com.community.app.module.service.AppHomepageScopeService;
 import com.community.app.module.service.AppHomepageService;
@@ -55,9 +57,11 @@ import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessAnnoScopeService;
 import com.community.app.module.service.BusinessAnnoService;
+import com.community.app.module.service.BusinessFocusAdService;
 import com.community.app.module.service.BusinessFocusService;
 import com.community.app.module.service.BusinessPositionService;
 import com.community.app.module.service.BusinessStationService;
+import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageBuildingService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
@@ -82,6 +86,8 @@ public class BusinessAnnoController {
 	@Autowired
 	private BusinessFocusService businessFocusService;
 	@Autowired
+	private BusinessFocusAdService businessFocusAdService;
+	@Autowired
 	private AppEstateUserService appEstateUserService;
 	@Autowired
 	private AppHomepageService appHomepageService;
@@ -96,11 +102,15 @@ public class BusinessAnnoController {
 	@Autowired
 	private AppFocusScopeService appFocusScopeService;
 	@Autowired
+	private AppFocusAdScopeService appFocusAdScopeService;
+	@Autowired
 	private AppUserNewsService appUserNewsService;
 	@Autowired
 	private AppLatestNewsService appLatestNewsService;
 	@Autowired
 	private AppUserConfigService appUserConfigService;
+    @Autowired
+    private BusinessUserResourceService businessUserResourceService;
 	
 	/**
 	 * 进入物业公告管理页
@@ -234,9 +244,9 @@ public class BusinessAnnoController {
 				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"annoId\":\"").append(businessAnno.getAnnoId()).append("\"").append(",")
-			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle()).append("\"").append(",")
-			    .append("\"brief\":\"").append(businessAnno.getBrief()).append("\"").append(",")
-			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"brief\":\"").append(businessAnno.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"annoType\":\"").append(businessAnno.getAnnoType()).append("\"").append(",")
 			    .append("\"annoScope\":\"").append(businessAnno.getAnnoScope()).append("\"").append(",")
 			    .append("\"annoScopeInfo\":\"").append(businessAnno.getAnnoScopeInfo()).append("\"").append(",")
@@ -283,7 +293,6 @@ public class BusinessAnnoController {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	/**
 	 * 进入驿站公告管理页
@@ -417,9 +426,9 @@ public class BusinessAnnoController {
 				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"annoId\":\"").append(businessAnno.getAnnoId()).append("\"").append(",")
-			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle()).append("\"").append(",")
-			    .append("\"brief\":\"").append(businessAnno.getBrief()).append("\"").append(",")
-			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"brief\":\"").append(businessAnno.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"annoType\":\"").append(businessAnno.getAnnoType()).append("\"").append(",")
 			    .append("\"annoScope\":\"").append(businessAnno.getAnnoScope()).append("\"").append(",")
 			    .append("\"annoScopeInfo\":\"").append(businessAnno.getAnnoScopeInfo()).append("\"").append(",")
@@ -600,9 +609,9 @@ public class BusinessAnnoController {
 				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"annoId\":\"").append(businessAnno.getAnnoId()).append("\"").append(",")
-			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle()).append("\"").append(",")
-			    .append("\"brief\":\"").append(businessAnno.getBrief()).append("\"").append(",")
-			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"annoTitle\":\"").append(businessAnno.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"brief\":\"").append(businessAnno.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"annoContent\":\"").append(businessAnno.getAnnoContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"annoType\":\"").append(businessAnno.getAnnoType()).append("\"").append(",")
 			    .append("\"annoScope\":\"").append(businessAnno.getAnnoScope()).append("\"").append(",")
 			    .append("\"annoScopeInfo\":\"").append(businessAnno.getAnnoScopeInfo()).append("\"").append(",")
@@ -757,8 +766,8 @@ public class BusinessAnnoController {
 			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
             businessAnno.setPublisherName(username);
-		    businessAnno.setAnnoTitle(query.getAnnoTitle());
-		    businessAnno.setBrief(query.getBrief());
+		    businessAnno.setAnnoTitle(query.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
+		    businessAnno.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessAnno.setAnnoContent(query.getAnnoContent());
 		    businessAnno.setAnnoType(query.getAnnoType());
 		    //businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
@@ -913,8 +922,8 @@ public class BusinessAnnoController {
 			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(shiroUser.getUserId());
             businessAnno.setPublisherName(shiroUser.getUserName());
-		    businessAnno.setAnnoTitle(query.getAnnoTitle());
-		    businessAnno.setBrief(query.getBrief());
+		    businessAnno.setAnnoTitle(query.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
+		    businessAnno.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    if(query.getAnnoContent() != null && !"".equals(query.getAnnoContent())) {
 		    	businessAnno.setAnnoContent(query.getAnnoContent());
 		    }
@@ -1097,8 +1106,8 @@ public class BusinessAnnoController {
             businessAnno.setAnnoBuilding(query.getAnnoBuilding());
             businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
             businessAnno.setPublisherName(username);
-		    businessAnno.setAnnoTitle(query.getAnnoTitle());
-		    businessAnno.setBrief(query.getBrief());
+		    businessAnno.setAnnoTitle(query.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
+		    businessAnno.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessAnno.setAnnoContent(query.getAnnoContent());
 		    businessAnno.setAnnoType(4);//驿站公告
 		    //businessAnno.setAnnoScopeInfo(manageEstate.getEstateName());
@@ -1169,6 +1178,33 @@ public class BusinessAnnoController {
 						  appFocusScope.setEstateId(new Integer(scope[0]));
 						  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
 						  appFocusScopeService.save(appFocusScope);
+					}
+				} else if(query.getIsRecommend() == 2) {
+					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
+					businessFocusAd.setTitle(businessAnno.getAnnoTitle());
+				    businessFocusAd.setState(2);   // 待审核
+				    businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocusAd.setPageUrl("");
+				    businessFocusAd.setSourceId(businessAnno.getAnnoId());
+				    businessFocusAd.setSourceType(2);	// 来源类型
+				    businessFocusAd.setIshtml(0);  // 静态
+				    businessFocusAd.setAuditInfo("");
+				    businessFocusAd.setFocusAdScope(businessAnno.getAnnoScopeInfo());  //展示范围
+				    businessFocusAd.setVisits(0);
+				    businessFocusAd.setSupports(0);
+				    businessFocusAd.setSelectorId(shiroUser.getUserId());
+				    businessFocusAd.setSelectorName(shiroUser.getUserName());
+				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
+				    
+					businessFocusAdService.save(businessFocusAd);
+					
+					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
+					for(int i=0; i<annoScopes.length; i++) {
+						  String[] scope = annoScopes[i].split(":");
+						  appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
+						  appFocusAdScope.setEstateId(new Integer(scope[0]));
+						  appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+						  appFocusAdScopeService.save(appFocusAdScope);
 					}
 				} 
 				
@@ -1288,8 +1324,8 @@ public class BusinessAnnoController {
             businessAnno.setAnnoBuilding(query.getAnnoBuilding());
             businessAnno.setAnnoScopeInfo(query.getAnnoScopeInfo());
             businessAnno.setPublisherName(username);
-		    businessAnno.setAnnoTitle(query.getAnnoTitle());
-		    businessAnno.setBrief(query.getBrief());
+		    businessAnno.setAnnoTitle(query.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
+		    businessAnno.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessAnno.setAnnoContent(query.getAnnoContent());
 		    //businessAnno.setAnnoType(4);//驿站公告
 		    //businessAnno.setAnnoScopeInfo(manageEstate.getEstateName());
@@ -1383,6 +1419,33 @@ public class BusinessAnnoController {
 						  appFocusScope.setEstateId(new Integer(scope[0]));
 						  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
 						  appFocusScopeService.save(appFocusScope);
+					}
+				} else if(query.getIsRecommend() == 2) {
+					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
+					businessFocusAd.setTitle(businessAnno.getAnnoTitle());
+				    businessFocusAd.setState(2);   // 待审核
+				    businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocusAd.setPageUrl("");
+				    businessFocusAd.setSourceId(businessAnno.getAnnoId());
+				    businessFocusAd.setSourceType(2);	// 来源类型
+				    businessFocusAd.setIshtml(0);  // 静态
+				    businessFocusAd.setAuditInfo("");
+				    businessFocusAd.setFocusAdScope(businessAnno.getAnnoScopeInfo());  //展示范围
+				    businessFocusAd.setVisits(0);
+				    businessFocusAd.setSupports(0);
+				    businessFocusAd.setSelectorId(shiroUser.getUserId());
+				    businessFocusAd.setSelectorName(shiroUser.getUserName());
+				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
+				    
+					businessFocusAdService.save(businessFocusAd);
+					
+					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
+					for(int i=0; i<annoScopes.length; i++) {
+						  String[] scope = annoScopes[i].split(":");
+						  appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
+						  appFocusAdScope.setEstateId(new Integer(scope[0]));
+						  appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+						  appFocusAdScopeService.save(appFocusAdScope);
 					}
 				} 
 			}
@@ -1504,8 +1567,8 @@ public class BusinessAnnoController {
 			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
             businessAnno.setPublisherName(username);
-		    businessAnno.setAnnoTitle(query.getAnnoTitle());
-		    businessAnno.setBrief(query.getBrief());
+		    businessAnno.setAnnoTitle(query.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
+		    businessAnno.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessAnno.setAnnoContent(query.getAnnoContent());
 		    businessAnno.setAnnoType(query.getAnnoType());
 		    //businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
@@ -1712,8 +1775,8 @@ public class BusinessAnnoController {
 			//ManageEstate manageEstate = (ManageEstate) estateList.get(0);
             businessAnno.setPublisherId(userid);
             businessAnno.setPublisherName(username);
-		    businessAnno.setAnnoTitle(query.getAnnoTitle());
-		    businessAnno.setBrief(query.getBrief());
+		    businessAnno.setAnnoTitle(query.getAnnoTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
+		    businessAnno.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessAnno.setAnnoContent(query.getAnnoContent());
 		    businessAnno.setAnnoType(query.getAnnoType());
 		    //businessAnno.setAnnoScope(manageEstate.getEstateId().toString());
@@ -1913,9 +1976,51 @@ public class BusinessAnnoController {
 	@RequestMapping(value="getBuildingsByUser")
 	public void getBuildingsByUser(HttpServletResponse response) {
 		JSONObject jsonObj = new JSONObject();
-		JSONArray arr = new JSONArray();
+		JSONArray comArr = new JSONArray();
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
+			//获取该用户负责的多社区范围
+			Map map = new HashMap();
+			//map.put("userId", shiroUser.getUserId());
+			//map.put("orgType", shiroUser.getOrgType());
+			//map.put("comId", shiroUser.getCurComId());
+			
+			//List comList = businessCommunityService.findComsByUser(map);
+			List comList = shiroUser.getComList();
+			JSONObject comObj = null;
+			Map paramMap = null;
+			for(int i=0;i<comList.size();i++) {
+				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				CommunityBean community = (CommunityBean) comList.get(i);
+				comObj = new JSONObject();
+				paramMap = new HashMap();
+				paramMap.put("comId", community.getComId());
+				paramMap.put("userId", shiroUser.getUserId());
+				//List estateList = manageEstateService.findByMap(paramMap);
+				List estateList = businessUserResourceService.findByMap(paramMap);
+				if(estateList.size() > 0){
+					comObj.put("id", "com_"+community.getComId());
+					comObj.put("text", community.getComName());
+					JSONArray estateArr = new JSONArray();
+					for(int j=0;j<estateList.size();j++) {
+						BusinessUserResource businessUserResource = (BusinessUserResource) estateList.get(j);
+						JSONObject estateObj = new JSONObject();
+						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
+						estateObj.put("text", businessUserResource.getEstateName());
+						estateObj.put("checkbox", true);
+						estateObj.put("state", "close");
+						estateArr.add(estateObj);
+					}
+					comObj.put("children", estateArr);
+					comObj.put("state", "closed");
+					comArr.add(comObj);
+				}				
+			}
+			// }
+			jsonObj.put("success", true);
+			jsonObj.put("result", comArr);
+			
+			/*ShiroUser shiroUser = CommonUtils.getUser();
 			// BusinessPosition businessPosition = businessPositionService.findById(shiroUser.getPositionId());
 			String orgType = "";
 			if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
@@ -1927,9 +2032,9 @@ public class BusinessAnnoController {
 			//判断是哪种结构并获取该结构下的小区列表
 			//获取用户所在物业的小区
 			List estateList = null;
-			JSONObject estateObj = null;
+			JSONObject estateObj = null;*/
 			//Map paramMap = new HashMap();
-			if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {//社区
+			/*if(ModuleConst.COMMUNITY_CODE.equals(orgType)) {//社区
 				//paramMap.put("comId", businessPosition.getOrgId());
 				estateList = shiroUser.getEstateBeanList();
 				for(int i=0;i<estateList.size();i++) {
@@ -1952,7 +2057,7 @@ public class BusinessAnnoController {
 					estateObj.put("text", estate.getEstateName());
 					estateObj.put("checkbox", true);
 					estateObj.put("state", "close");
-					/*paramMap = new HashMap();
+					paramMap = new HashMap();
 					paramMap.put("estateId", estate.getEstateId());
 					List buildingList = manageBuildingService.findByMap(paramMap);
 					JSONArray buildingArr = new JSONArray();
@@ -1963,7 +2068,7 @@ public class BusinessAnnoController {
 						buildingObj.put("text", manageBuilding.getBuildingName());
 						buildingArr.add(buildingObj);
 					}
-					estateObj.put("children", buildingArr);*/
+					estateObj.put("children", buildingArr);
 					arr.add(estateObj);
 				}
 			}else if(ModuleConst.STATION_CODE.equals(orgType)) {//驿站
@@ -1976,7 +2081,7 @@ public class BusinessAnnoController {
 					estateObj.put("id", "eatate_"+estate.getEstateId());
 					estateObj.put("text", estate.getEstateName());
 					estateObj.put("state", "close");
-					/*paramMap = new HashMap();
+					paramMap = new HashMap();
 					paramMap.put("estateId", estate.getEstateId());
 					List buildingList = manageBuildingService.findByMap(paramMap);
 					JSONArray buildingArr = new JSONArray();
@@ -1987,13 +2092,25 @@ public class BusinessAnnoController {
 						buildingObj.put("text", manageBuilding.getBuildingName());
 						buildingArr.add(buildingObj);
 					}
-					estateObj.put("children", buildingArr);*/
+					estateObj.put("children", buildingArr);
 					arr.add(estateObj);
 				}
-			}
+			}*/
 		
+			/*estateList = shiroUser.getEstateBeanList();
+			for(int i=0;i<estateList.size();i++) {
+				EstateBean estate = (EstateBean) estateList.get(i);
+				estateObj = new JSONObject();
+				estateObj.put("id", "eatate_"+estate.getEstateId());
+				estateObj.put("text", estate.getEstateName());
+				estateObj.put("checkbox", true);
+				//obj.put("state", "close");
+				arr.add(estateObj);
+			}
+			
 			jsonObj.put("success", true);
-			jsonObj.put("result", arr);
+			jsonObj.put("result", arr);*/
+			
 		}catch(Exception e){
 			jsonObj.put("success", false);
 			jsonObj.put("message", "获取失败");
@@ -2284,10 +2401,48 @@ public class BusinessAnnoController {
 							paramMap.put("type", 1);
 						}
 						List<AppHomepage> list = appHomepageService.findByMap(paramMap);
-						AppHomepage AppHomepage = (AppHomepage)list.get(0);
 						if(list.size() == 1) {
+							AppHomepage AppHomepage = (AppHomepage)list.get(0);
 							appHomepageService.delete(AppHomepage);
 							appHomepageScopeService.delete(AppHomepage.getHomePageId());
+						}
+						
+						if(businessAnno.getIsRecommend() != null) {
+							if(businessAnno.getIsRecommend() == 1) {
+								paramMap = new HashMap();
+								paramMap.put("sourceId", Integer.parseInt(id));
+								List<BusinessFocus> focusList = businessFocusService.findByMap(paramMap);
+								if(focusList.size() == 1) {
+									BusinessFocus businessFocus = focusList.get(0);
+									businessFocusService.delete(businessFocus.getFocusId());
+									
+									// 删除展示范围
+									paramMap = new HashMap();
+									paramMap.put("focusId", businessFocus.getFocusId());
+									List scopeList = appFocusScopeService.findByMap(paramMap);
+									for(int i=0;i<scopeList.size();i++){
+										AppFocusScope appFocusScope = (AppFocusScope) scopeList.get(i);
+										appFocusScopeService.delete(appFocusScope.getScopeId());
+									}
+								}
+							} else if(businessAnno.getIsRecommend() == 2) {
+								paramMap = new HashMap();
+								paramMap.put("sourceId", Integer.parseInt(id));
+								List<BusinessFocusAd> focusAdList = businessFocusAdService.findByMap(paramMap);
+								if(focusAdList.size() == 1) {
+									BusinessFocusAd businessFocusAd = focusAdList.get(0);
+									businessFocusAdService.delete(businessFocusAd.getFocusAdId());
+									
+									// 删除展示范围
+									paramMap = new HashMap();
+									paramMap.put("focusAdId", businessFocusAd.getFocusAdId());
+									List scopeList = appFocusAdScopeService.findByMap(paramMap);
+									for(int i=0;i<scopeList.size();i++){
+										AppFocusAdScope appFocusAdScope = (AppFocusAdScope) scopeList.get(i);
+										appFocusAdScopeService.delete(appFocusAdScope.getScopeId());
+									}
+								}
+							}
 						}
 					}
 				}
@@ -2439,6 +2594,44 @@ public class BusinessAnnoController {
 					appHomepageService.delete(AppHomepage);
 					appHomepageScopeService.delete(AppHomepage.getHomePageId());
 				}
+				
+				if(businessAnno.getIsRecommend() != null) {
+					if(businessAnno.getIsRecommend() == 1) {
+						paramMap = new HashMap();
+						paramMap.put("sourceId", annoId);
+						List<BusinessFocus> focusList = businessFocusService.findByMap(paramMap);
+						if(focusList.size() == 1) {
+							BusinessFocus businessFocus = focusList.get(0);
+							businessFocusService.delete(businessFocus.getFocusId());
+							
+							// 删除展示范围
+							paramMap = new HashMap();
+							paramMap.put("focusId", businessFocus.getFocusId());
+							List scopeList = appFocusScopeService.findByMap(paramMap);
+							for(int i=0;i<scopeList.size();i++){
+								AppFocusScope appFocusScope = (AppFocusScope) scopeList.get(i);
+								appFocusScopeService.delete(appFocusScope.getScopeId());
+							}
+						}
+					} else if(businessAnno.getIsRecommend() == 2) {
+						paramMap = new HashMap();
+						paramMap.put("sourceId", annoId);
+						List<BusinessFocusAd> focusAdList = businessFocusAdService.findByMap(paramMap);
+						if(focusAdList.size() == 1) {
+							BusinessFocusAd businessFocusAd = focusAdList.get(0);
+							businessFocusAdService.delete(businessFocusAd.getFocusAdId());
+							
+							// 删除展示范围
+							paramMap = new HashMap();
+							paramMap.put("focusAdId", businessFocusAd.getFocusAdId());
+							List scopeList = appFocusAdScopeService.findByMap(paramMap);
+							for(int i=0;i<scopeList.size();i++){
+								AppFocusAdScope appFocusAdScope = (AppFocusAdScope) scopeList.get(i);
+								appFocusAdScopeService.delete(appFocusAdScope.getScopeId());
+							}
+						}
+					}
+				}
 			}
 			
 			json = "{\"success\":\"true\",\"message\":\"撤回发布成功\"}";
@@ -2505,6 +2698,35 @@ public class BusinessAnnoController {
 						  appFocusScope.setEstateId(new Integer(scope[0]));
 						  appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
 						  appFocusScopeService.save(appFocusScope);
+					}
+				} else if(businessAnno.getIsRecommend() == 2) {
+					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
+					businessFocusAd.setTitle(businessAnno.getAnnoTitle());
+				    businessFocusAd.setState(2);   // 待审核
+				    businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocusAd.setPageUrl("");
+				    businessFocusAd.setSourceId(businessAnno.getAnnoId());
+				    businessFocusAd.setSourceType(2);	// 来源类型
+				    businessFocusAd.setIshtml(0);  // 静态
+				    businessFocusAd.setAuditInfo("");
+				    businessFocusAd.setFocusAdScope(businessAnno.getAnnoScopeInfo());  //展示范围
+				    businessFocusAd.setVisits(0);
+				    businessFocusAd.setSupports(0);
+				    businessFocusAd.setSelectorId(getUser().getUserId());
+				    businessFocusAd.setSelectorName(getUser().getUserName());
+				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
+				    
+					businessFocusAdService.save(businessFocusAd);
+					
+					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
+					String annoSope = businessAnno.getAnnoBuilding();
+					String[] annoScopes = annoSope.split(",");
+					for(int i=0; i<annoScopes.length; i++) {
+						  String[] scope = annoScopes[i].split(":");
+						  appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
+						  appFocusAdScope.setEstateId(new Integer(scope[0]));
+						  appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+						  appFocusAdScopeService.save(appFocusAdScope);
 					}
 				}
 			}
@@ -2590,52 +2812,54 @@ public class BusinessAnnoController {
 			}
 			
 			//重要通知向小区内的所有居民发送公告
-			if(businessAnno.getPublishState() == 0 && businessAnno.getIsPush() == 1) {//可推送
-				Map paramMap = new HashMap();
-				paramMap.put("annoId", businessAnno.getAnnoId());
-				List annoScopeList = businessAnnoScopeService.findByMap(paramMap);
-				String ids = "";
-				for(int i=0;i<annoScopeList.size();i++) {
-					BusinessAnnoScope businessAnnoScope = (BusinessAnnoScope) annoScopeList.get(i);
-					Integer estateId = businessAnnoScope.getEstateId();
-					ids +="'"+estateId+"',"; 
-				}
-				
-					//查询该小区下的userId, baiduId, channelId
-					List appUserList = appUserService.findUserPushIds(ids);
-					AppPushLog appPushLog = new AppPushLog();
-					String title = "OK家";
-					String description = "【系统消息】有一条来自OK家的最新通知，看看发生了什么？";
+			if(businessAnno.getIsPush() != null) {
+				if(businessAnno.getPublishState() == 0 && businessAnno.getIsPush() == 1) {//可推送
+					Map paramMap = new HashMap();
+					paramMap.put("annoId", businessAnno.getAnnoId());
+					List annoScopeList = businessAnnoScopeService.findByMap(paramMap);
+					String ids = "";
+					for(int i=0;i<annoScopeList.size();i++) {
+						BusinessAnnoScope businessAnnoScope = (BusinessAnnoScope) annoScopeList.get(i);
+						Integer estateId = businessAnnoScope.getEstateId();
+						ids +="'"+estateId+"',"; 
+					}
 					
-					paramMap = new HashMap();
-					paramMap.put("messageType", 14);
-					paramMap.put("ID", businessAnno.getAnnoId());
-					
-					for(int j=0;j<appUserList.size();j++) {
-						AppUser appUser = (AppUser) appUserList.get(j);
-						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-							//物业通知(通过PC后台，"重要通知")
-							Integer success = AppPushNotificationUtil.pushNotification(
-									title, 
-									description, 
-									appUser.getDeviceType(),
-									Long.valueOf(appUser.getChannelId()).longValue(), 
-									appUser.getBaiduId(),
-									paramMap
-									);
-							//记录推送日志
-							appPushLog.setUserId(appUser.getUserId());
-						    appPushLog.setUserName(appUser.getRealname());
-						    appPushLog.setBaiduId(appUser.getBaiduId());
-						    appPushLog.setChannelId(appUser.getChannelId());
-						    appPushLog.setTitle(title);
-						    appPushLog.setDescription(description);
-						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-						    appPushLog.setSendState(success);
-						    appPushLog.setSenderId(getUser().getUserId());
-						    appPushLog.setSenderName(getUser().getUserName());
-							appPushLogService.save(appPushLog);
-						}							
+						//查询该小区下的userId, baiduId, channelId
+						List appUserList = appUserService.findUserPushIds(ids);
+						AppPushLog appPushLog = new AppPushLog();
+						String title = "OK家";
+						String description = "【系统消息】有一条来自OK家的最新通知，看看发生了什么？";
+						
+						paramMap = new HashMap();
+						paramMap.put("messageType", 14);
+						paramMap.put("ID", businessAnno.getAnnoId());
+						
+						for(int j=0;j<appUserList.size();j++) {
+							AppUser appUser = (AppUser) appUserList.get(j);
+							if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+								//物业通知(通过PC后台，"重要通知")
+								Integer success = AppPushNotificationUtil.pushNotification(
+										title, 
+										description, 
+										appUser.getDeviceType(),
+										Long.valueOf(appUser.getChannelId()).longValue(), 
+										appUser.getBaiduId(),
+										paramMap
+										);
+								//记录推送日志
+								appPushLog.setUserId(appUser.getUserId());
+							    appPushLog.setUserName(appUser.getRealname());
+							    appPushLog.setBaiduId(appUser.getBaiduId());
+							    appPushLog.setChannelId(appUser.getChannelId());
+							    appPushLog.setTitle(title);
+							    appPushLog.setDescription(description);
+							    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+							    appPushLog.setSendState(success);
+							    appPushLog.setSenderId(getUser().getUserId());
+							    appPushLog.setSenderName(getUser().getUserName());
+								appPushLogService.save(appPushLog);
+							}							
+					}
 				}
 			}
 			

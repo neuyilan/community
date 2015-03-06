@@ -140,9 +140,9 @@ public class BusinessFocusController {
 				BusinessFocus businessFocus = (BusinessFocus) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"focusId\":\"").append(businessFocus.getFocusId()).append("\"").append(",")
-			    .append("\"title\":\"").append(businessFocus.getTitle()).append("\"").append(",")
+			    .append("\"title\":\"").append(businessFocus.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"content\":\"").append(businessFocus.getContent().replace("\"", "\\\"")).append("\"").append(",")
-			    .append("\"picUrl\":\"").append(businessFocus.getPicUrl()).append("\"").append(",")
+			    .append("\"picUrl\":\"").append(businessFocus.getPicUrl().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"sourceType\":\"").append(businessFocus.getSourceType()).append("\"").append(",")
 			    .append("\"sourceId\":\"").append(businessFocus.getSourceId()).append("\"").append(",")
 			    .append("\"selectTime\":\"").append(businessFocus.getSelectTime()).append("\"").append(",")
@@ -225,6 +225,7 @@ public class BusinessFocusController {
 						estateArr.add(estateObj);
 					}
 					comObj.put("children", estateArr);
+					comObj.put("state", "closed");
 					comArr.add(comObj);
 				}				
 			}
@@ -381,7 +382,7 @@ public class BusinessFocusController {
 	    ShiroUser shiroUser = CommonUtils.getUser();
 		String json = "";
 		try{
-		    businessFocus.setTitle(query.getTitle());
+		    businessFocus.setTitle(query.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessFocus.setPicUrl(query.getPicUrl());
 		    businessFocus.setState(query.getState());  
 		    businessFocus.setPageUrl(query.getPageUrl());
@@ -475,7 +476,7 @@ public class BusinessFocusController {
 		try{
 		    ShiroUser shiroUser = CommonUtils.getUser();
 		    businessFocus = businessFocusService.findById(query.getFocusId());
-		    businessFocus.setTitle(query.getTitle());
+		    businessFocus.setTitle(query.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessFocus.setPicUrl(query.getPicUrl());
 		    businessFocus.setPageUrl(query.getPageUrl());
 		    businessFocus.setState(query.getState());  
@@ -540,6 +541,13 @@ public class BusinessFocusController {
 					}
 				}else{
 					businessFocusService.delete(new Integer(id));
+					Map paramMap = new HashMap();
+					paramMap.put("focusId", new Integer(id));
+					List scopeList = appFocusScopeService.findByMap(paramMap);
+					for(int i=0;i<scopeList.size();i++){
+						AppFocusScope appFocusScope = (AppFocusScope) scopeList.get(i);
+						appFocusScopeService.delete(appFocusScope.getScopeId());
+					}
 				}
 			}
 			

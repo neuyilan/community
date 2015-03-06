@@ -43,7 +43,7 @@
 								<li id="timeScope_scope"><a href="javascript:;">选择时间范围</a></li>
 							</ul>
 						</li>
-						<c:if test="${orgType =='operation' }">
+						<%-- <c:if test="${orgType =='operation' }">
 							<li id="comId_" class="navlist"><a href="javascript:;"><span>所有社区</span><b class="donbut"><i></i></b></a> 
 								<input type="hidden" name="comId" id="comId" value="" /> 
 								<ul class="erjnav">
@@ -57,7 +57,7 @@
 								<input type="hidden" name="estateId" id="estateId" value="" /> 
 								<ul id="estateUL" class="erjnav"></ul>
 							</li>	
-						</c:if>					
+						</c:if> --%>					
 					</ul>
 					<p id="rowCount" style="float: left; line-height: 52px; color: #cc2510; font-weight: bold; margin-left: 20px;">共${pager.rowCount }条</p>
 				</div>

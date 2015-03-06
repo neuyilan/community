@@ -197,6 +197,13 @@
 						and res.userId=#{curUserId} 
 					</if>
 					<if test="curEstateId != null and curEstateId != ''" >
+						and res.estateId=#{curEstateId} 
+					</if>
+					<if test="curComId != null and curComId != ''" >
+						and res.comId=#{curComId} 
+					</if>
+					<!-- 
+					<if test="curEstateId != null and curEstateId != ''" >
 						<if test="orgType !='operation'" >
 							and res.estateId=#{curEstateId} 
 						</if>
@@ -212,6 +219,7 @@
 							and res.comId=#{curComId} 
 						</if>
 					</if>
+					-->
 			</trim>
 		</where>
 	</sql>

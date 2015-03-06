@@ -124,7 +124,7 @@
                             <div class="other-r">
                             	<c:choose>
 							       <c:when test="${anno.comments != 0 && anno.publishState == 0}">
-							            <i class="revlight" title="评论量" style="cursor:pointer;" onclick="window.location.href='${ctx}/business/businessAnnoComment/stationList.do?annoId=${anno.annoId}' ">${anno.comments }</i>
+							            <i class="revlight" title="评论量" style="cursor:pointer;" onclick="window.location.href='${ctx}/business/businessAnnoComment/list.do?annoId=${anno.annoId}' ">${anno.comments }</i>
 							       </c:when>
 							       <c:otherwise>
 							              <i class="rev" title="评论量">${anno.comments }</i>
@@ -442,7 +442,7 @@
     }
   
     function jumpComment(annoId) {
-    	window.location.href = '<%=ctx %>/business/businessAnnoComment/stationList.do?annoId='+annoId;
+    	window.location.href = '<%=ctx %>/business/businessAnnoComment/list.do?annoId='+annoId;
     }
     
     //查看公告信息

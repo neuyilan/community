@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessFocusAdDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessFocusAdResult" type="BusinessFocusAd">
+			<result column="focusAdId" property="focusAdId" />
+			<result column="title" property="title" />
+			<result column="content" property="content" />
+			<result column="picUrl" property="picUrl" />
+			<result column="sourceType" property="sourceType" />
+			<result column="sourceId" property="sourceId" />
+			<result column="selectTime" property="selectTime" />
+			<result column="state" property="state" />
+			<result column="pageUrl" property="pageUrl" />
+			<result column="selectorId" property="selectorId" />
+			<result column="selectorName" property="selectorName" />
+			<result column="auditorId" property="auditorId" />
+			<result column="auditTime" property="auditTime" />
+			<result column="auditorName" property="auditorName" />
+			<result column="auditInfo" property="auditInfo" />
+			<result column="startTime" property="startTime" />
+			<result column="endTime" property="endTime" />
+			<result column="visits" property="visits" />
+			<result column="supports" property="supports" />
+			<result column="ishtml" property="ishtml" />
+			<result column="focusAdScope" property="focusAdScope" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			distinct(f.focusAdId),
+			f.title,
+			f.content,
+			f.picUrl,
+			f.sourceType,
+			f.sourceId,
+			f.selectTime,
+			f.state,
+			f.pageUrl,
+			f.selectorId,
+			f.selectorName,
+			f.auditorId,
+			f.auditTime,
+			f.auditorName,
+			f.auditInfo,
+			f.startTime,
+			f.endTime,
+			f.visits,
+			f.supports,
+			f.ishtml,
+			f.focusAdScope
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="focusAdId != null" >
+				   		and f.focusAdId = #{focusAdId}
+					</if>
+					<if test="title != null and title != ''" >
+				   		and f.title = #{title}
+					</if>
+					<if test="content != null and content != ''" >
+				   		and f.content = #{content}
+					</if>
+					<if test="picUrl != null and picUrl != ''" >
+				   		and f.picUrl = #{picUrl}
+					</if>
+					<if test="sourceType != null and sourceType != ''" >
+				   		and f.sourceType = #{sourceType}
+					</if>
+					<if test="sourceId != null and sourceId != ''" >
+				   		and f.sourceId = #{sourceId}
+					</if>
+					<if test="selectTime != null and selectTime != ''" >
+				   		and f.selectTime = #{selectTime}
+					</if>
+					<if test="state != null and state != ''" >
+				   		and f.state = #{state}
+					</if>
+					<if test="pageUrl != null and pageUrl != ''" >
+				   		and f.pageUrl = #{pageUrl}
+					</if>
+					<if test="selectorId != null and selectorId != ''" >
+				   		and f.selectorId = #{selectorId}
+					</if>
+					<if test="selectorName != null and selectorName != ''" >
+				   		and f.selectorName = #{selectorName}
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and f.auditorId = #{auditorId}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and f.auditTime = #{auditTime}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and f.auditorName = #{auditorName}
+					</if>
+					<if test="auditInfo != null and auditInfo != ''" >
+				   		and f.auditInfo = #{auditInfo}
+					</if>
+					<!-- <if test="startTime != null and startTime != ''" >
+				   		and f.startTime = #{startTime}
+					</if>
+					<if test="endTime != null and endTime != ''" >
+				   		and f.endTime = #{endTime}
+					</if> -->
+					<if test="visits != null and visits != ''" >
+				   		and f.visits = #{visits}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and f.supports = #{supports}
+					</if>
+					<if test="ishtml != null and ishtml != ''" >
+				   		and f.ishtml = #{ishtml}
+					</if>
+					<if test="focusAdScope != null and focusAdScope != ''" >
+				   		and f.focusAdScope = #{focusAdScope}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), f.selectTime)
+		      		</if>
+		      		<if test="startTime !=null and startTime != '' and endTime !=null and endTime != '' " >
+		      			and date(f.selectTime) between '${startTime}' and '${endTime}'
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and (f.title like '%${keyWord}%' or f.selectorName like '%${keyWord}%')
+					</if>
+					<if test="curUserId != null and curUserId != ''" >
+						and res.userId=#{curUserId} 
+					</if>
+					<if test="curComId != null and curComId != ''" >
+						and res.comId=#{curComId} 
+					</if>
+					<if test="curEstateId != null and curEstateId != 0" >
+			   			and res.estateId = #{curEstateId}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			f.focusAdId,
+			f.title,
+			f.content,
+			f.picUrl,
+			f.sourceType,
+			f.sourceId,
+			f.selectTime,
+			f.state,
+			f.pageUrl,
+			f.selectorId,
+			f.selectorName,
+			f.auditorId,
+			f.auditTime,
+			f.auditorName,
+			f.startTime,
+			f.endTime,
+			f.visits,
+			f.supports,
+			f.ishtml
+	</sql>
+	
+	<!-- 根据id查询 BusinessFocusAd -->
+	<select id="findById"  resultMap="BusinessFocusAdResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_focus_ad f where f.focusAdId = #{id}
+	</select>
+	
+	<!-- 根据id查询 BusinessFocus -->
+	<select id="findById_app"  resultType="BusinessFocus" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List_app" /> from app_focus_ad_scope s inner join  business_focus_ad f on f.focusAdId=s.focusAdId where  s.estateId=#{id} and state=0 order by selectTime desc
+	</select>
+	
+	<!-- 无条件查询所有BusinessFocusAd -->
+	<select id="findAll" resultMap="BusinessFocusAdResult">
+		select <include refid="Base_Column_List" /> from business_focus_ad f
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessFocusAd -->
+	<select id="findByMap" resultMap="BusinessFocusAdResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_focus_ad f <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessFocusAd -->
+	<select id="findByExample" resultMap="BusinessFocusAdResult" parameterType="com.community.app.module.vo.BusinessFocusAdQuery">
+		select <include refid="Base_Column_List" /> from business_focus_ad f <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFocusAd根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessFocusAdResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_focus_ad f 
+		inner join app_focus_ad_scope scope on f.focusAdId = scope.focusAdId
+		<if test="curUserId != null and curUserId != ''" >
+		INNER JOIN manage_estate e ON e.estateId = scope.estateId
+		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
+		<if test="curUserId == null" >
+		INNER JOIN business_user_resource res ON res.estateId = scope.estateId
+		</if>
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessFocusAd列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(distinct(f.focusAdId)) as annoCount from business_focus_ad f
+		inner join app_focus_ad_scope scope on scope.focusAdId = f.focusAdId
+		<if test="curUserId != null and curUserId != ''" >
+		INNER JOIN manage_estate e ON e.estateId = scope.estateId
+		INNER JOIN business_user_resource res ON res.comId = e.comId
+		</if>
+		<if test="curUserId == null" >
+		INNER JOIN business_user_resource res ON res.estateId = scope.estateId
+		</if>
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessFocusAd保存数据 -->
+	<insert id="save" parameterType="BusinessFocusAd">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="focusAdId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_focus_ad(
+		title,
+		content,
+		picUrl,
+		sourceType,
+		sourceId,
+		selectTime,
+		state,
+		pageUrl,
+		selectorId,
+		selectorName,
+		auditorId,
+		auditTime,
+		auditorName,
+		auditInfo,
+		startTime,
+		endTime,
+		visits,
+		supports,
+		ishtml,
+		focusAdScope
+		) values(
+		#{title},
+		#{content},
+		#{picUrl},
+		#{sourceType},
+		#{sourceId},
+		#{selectTime},
+		#{state},
+		#{pageUrl},
+		#{selectorId},
+		#{selectorName},
+		#{auditorId},
+		#{auditTime},
+		#{auditorName},
+		#{auditInfo},
+		#{startTime},
+		#{endTime},
+		#{visits},
+		#{supports},
+		#{ishtml},
+		#{focusAdScope}
+		)
+	</insert>
+	
+	<!-- BusinessFocusAd修改数据 -->
+	<update id="update" parameterType="BusinessFocusAd">
+		update business_focus_ad 
+		<set>
+			<if test="title != null and title != ''" >
+			title=#{title},
+			</if>
+			<if test="content != null and content != ''" >
+			content=#{content},
+			</if>
+			<if test="picUrl != null and picUrl != ''" >
+			picUrl=#{picUrl},
+			</if>
+			<if test="sourceType != null and sourceType != ''" >
+			sourceType=#{sourceType},
+			</if>
+			<if test="sourceId != null and sourceId != ''" >
+			sourceId=#{sourceId},
+			</if>
+			<if test="selectTime != null and selectTime != ''" >
+			selectTime=#{selectTime},
+			</if>
+			<if test="state != null" >
+			state=#{state},
+			</if>
+			<if test="pageUrl != null and pageUrl != ''" >
+			pageUrl=#{pageUrl},
+			</if>
+			<if test="selectorId != null and selectorId != ''" >
+			selectorId=#{selectorId},
+			</if>
+			<if test="selectorName != null and selectorName != ''" >
+			selectorName=#{selectorName},
+			</if>
+			<if test="auditorId != null and auditorId != ''" >
+			auditorId=#{auditorId},
+			</if>
+			<if test="auditTime != null and auditTime != ''" >
+			auditTime=#{auditTime},
+			</if>
+			<if test="auditorName != null and auditorName != ''" >
+			auditorName=#{auditorName},
+			</if>
+			<if test="auditInfo != null and auditInfo != ''" >
+			auditInfo=#{auditInfo},
+			</if>
+			<if test="startTime != null and startTime != ''" >
+			startTime=#{startTime},
+			</if>
+			<if test="endTime != null and endTime != ''" >
+			endTime=#{endTime},
+			</if>
+			<if test="visits != null and visits != ''" >
+			visits=#{visits},
+			</if>
+			<if test="supports != null and supports != ''" >
+			supports=#{supports},
+			</if>
+			<if test="ishtml != null and ishtml != ''" >
+			ishtml=#{ishtml},
+			</if>
+			<if test="focusAdScope != null and focusAdScope != ''" >
+			focusAdScope=#{focusAdScope}
+			</if>
+		</set> 
+		where 
+		focusAdId=#{focusAdId}
+	</update>
+	
+	<!--修改浏览量 -->
+	<update id="updateVisits" parameterType="java.lang.Integer">
+	UPDATE business_focus_ad SET visits=visits+1 where focusAdId=#{id}
+	</update>
+	
+	<!-- BusinessFocusAd删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_focus_ad where 
+		focusAdId=#{focusAdId}
+	</delete>
+</mapper>

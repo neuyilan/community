@@ -58,6 +58,14 @@ public interface BusinessStationMessageService {
 	//public List<BusinessStationMessage> findByExample(final BusinessStationMessageQuery query, final Integer limit) throws ServiceException;	
 
 	/**
+	 * 根据用户查询所管理的小区所对应的驿站
+	 * @param paramMap
+	 * @return
+	 * @throws ServiceException
+	 */
+	public List<BusinessStationMessage> findByStationId(final Map<String, Object> paramMap) throws ServiceException;
+	
+	/**
 	 * 根据搜索条件，搜索分页数据
 	 * @param query
 	 * @param pageData

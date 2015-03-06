@@ -2,6 +2,10 @@ package com.community.app.module.controller;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 import com.community.app.module.bean.BusinessStationMessage;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.ModuleConst;
+import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessStationMessageService;
+import com.community.app.module.service.BusinessStationService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessStationMessageQuery;
 import com.community.framework.utils.CommonUtils;
@@ -28,6 +34,10 @@ public class BusinessStationMessageController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessStationMessageController.class);
 	@Autowired
 	private BusinessStationMessageService businessStationMessageService;
+	@Autowired
+	private BusinessStationService businessStationService;
+	@Autowired
+	private BusinessCommunityService businessCommunityService;
 	
 	/**
 	 * 进入管理页
@@ -36,8 +46,12 @@ public class BusinessStationMessageController {
 	@RequestMapping(value="list")
 	public ModelAndView list(BusinessStationMessageQuery query) {		
 		BaseBean baseBean = new BaseBean();
+		List<BusinessStationMessage> stationList = new ArrayList<BusinessStationMessage>() ;
+		List comList = null;
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
+			comList = shiroUser.getComList();
+			
 			if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) { 
 				query.setCurUserId(shiroUser.getUserId());
 			}
@@ -45,17 +59,64 @@ public class BusinessStationMessageController {
 			query.setOrder("desc");
 			query.setSort("commentTime");
 			baseBean = businessStationMessageService.findAllPage(query);
-			
+			Map paramMap = new HashMap();
+			paramMap.put("comId", 0);
+			paramMap.put("userId", shiroUser.getUserId());
+			stationList = businessStationMessageService.findByStationId(paramMap);
 		}catch(Exception e){
 			GSLogger.error("进入businessStationMessage管理页时发生错误：/module/stationMessage/list", e);
 			e.printStackTrace();
 		}
 		ModelAndView mav = new ModelAndView("/module/stationMessage/list");
 		mav.addObject("baseBean", baseBean);
+		mav.addObject("comList", comList);
+		mav.addObject("stationList", stationList);
 		mav.addObject("pager", baseBean.getPager());
 		mav.addObject("curEstateId", CommonUtils.getUser().getCurEstateId());
 		mav.addObject("curStateId", CommonUtils.getUser().getCurStateId());
 		return mav;
+	}
+	
+	/**
+	 * 列示或者查询所有数据
+	 * @return
+	 */
+	@RequestMapping(value="findByStationId")
+	public void findByStationId(BusinessStationMessageQuery query, HttpServletResponse response) {
+		String json = "";
+		StringBuilder result = new StringBuilder();
+		ShiroUser shiroUser = CommonUtils.getUser();
+		try{
+			Map paramMap = new HashMap();
+			paramMap.put("comId",  query.getComId());
+			paramMap.put("userId", shiroUser.getUserId());
+			List<BusinessStationMessage> baseBean = businessStationMessageService.findByStationId(paramMap);
+			result.append("{\"total\":").append(baseBean.size()).append(",")
+			.append("\"rows\":[");
+			for(int i=0;i<baseBean.size();i++) {
+				BusinessStationMessage businessStationMessage = (BusinessStationMessage) baseBean.get(i);
+				result.append("{")
+			    .append("\"stationId\":\"").append(businessStationMessage.getStationId()).append("\"").append(",")
+			    .append("\"staName\":\"").append(businessStationMessage.getStaName()).append("\"")
+				.append("}").append(",");
+			}
+			json = result.toString();
+			if(baseBean.size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
+			json += "]}";
+			
+			response.setHeader("Cache-Control", "no-cache");
+			response.setCharacterEncoding("utf-8");
+			try {
+				response.getWriter().write(json);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}catch(Exception e){
+			GSLogger.error("进入businessStationMessage管理页时发生错误：/module/stationMessage/list", e);
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -87,6 +148,7 @@ public class BusinessStationMessageController {
 				result.append("{")
 			    .append("\"commentId\":\"").append(businessStationMessage.getCommentId()).append("\"").append(",")
 			    .append("\"stationId\":\"").append(businessStationMessage.getStationId()).append("\"").append(",")
+			    .append("\"staName\":\"").append(businessStationMessage.getStaName()).append("\"").append(",")
 			    .append("\"estateId\":\"").append(businessStationMessage.getEstateId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessStationMessage.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessStationMessage.getCommentorName()).append("\"").append(",")
@@ -144,7 +206,8 @@ public class BusinessStationMessageController {
 		String json = "";
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-		    businessStationMessage.setStationId(shiroUser.getCurStateId());
+		    businessStationMessage.setStationId(query.getStationId());
+		    businessStationMessage.setStaName((businessStationService.findById(query.getStationId())).getStaName());
 		    businessStationMessage.setEstateId(shiroUser.getCurEstateId());
 		    businessStationMessage.setCommentorId(shiroUser.getUserId());
 		    businessStationMessage.setCommentorName(shiroUser.getNickName());
@@ -204,6 +267,7 @@ public class BusinessStationMessageController {
 		try{
 		    businessStationMessage = businessStationMessageService.findById(query.getCommentId());
 		    businessStationMessage.setStationId(query.getStationId());
+		    businessStationMessage.setStaName((businessStationService.findById(query.getStationId())).getStaName());
 		    businessStationMessage.setCommentorId(query.getCommentorId());
 		    businessStationMessage.setCommentorName(query.getCommentorName());
 		    businessStationMessage.setContent(query.getContent());

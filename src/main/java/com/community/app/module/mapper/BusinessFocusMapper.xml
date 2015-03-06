@@ -163,7 +163,7 @@
 	
 	<!-- 根据id查询 BusinessFocus -->
 	<select id="findById_app"  resultType="BusinessFocus" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List_app" /> from app_focus_scope s left join  business_focus f on f.focusId=s.focusId where  s.estateId=#{id} and state=0 order by selectTime desc
+		select <include refid="Base_Column_List_app" /> from app_focus_scope s inner join  business_focus f on f.focusId=s.focusId where  s.estateId=#{id} and state=0 order by selectTime desc limit 0,10 
 	</select>
 	
 	<!-- 无条件查询所有BusinessFocus -->

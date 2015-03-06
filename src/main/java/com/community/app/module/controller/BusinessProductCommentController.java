@@ -81,7 +81,7 @@ public class BusinessProductCommentController {
 			    .append("\"productId\":\"").append(businessProductComment.getProductId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessProductComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentor\":\"").append(businessProductComment.getCommentor()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessProductComment.getContent()).append("\"").append(",")
+			    .append("\"content\":\"").append(businessProductComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessProductComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessProductComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessProductComment.getReplyName()).append("\"").append(",")

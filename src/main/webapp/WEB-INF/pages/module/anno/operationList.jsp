@@ -125,7 +125,7 @@
                             <div class="other-r">
                             	<c:choose>
 							       <c:when test="${anno.comments != 0 && anno.publishState == 0}">
-							            <i class="revlight" title="评论量" style="cursor:pointer;" onclick="window.location.href='${ctx}/business/businessAnnoComment/operationList.do?annoId=${anno.annoId}' ">${anno.comments }</i>
+							            <i class="revlight" title="评论量" style="cursor:pointer;" onclick="window.location.href='${ctx}/business/businessAnnoComment/list.do?annoId=${anno.annoId}' ">${anno.comments }</i>
 							       </c:when>
 							       <c:otherwise>
 							              <i class="rev" title="评论量">${anno.comments }</i>
@@ -348,7 +348,7 @@
                     	}
                         var commentsView = '';
                     	if(row.comments != 0) {
-                    		commentsView = '<i class="revlight" title="评论量" onclick="jumpComment('+row.annoId+')" style="cursor: pointer">'+row.comments+'</i>';
+                    		commentsView = '<i class="revlight" title="评论量" onclick="'+row.annoId+')" style="cursor: pointer">'+row.comments+'</i>';
                     	}else{
                     		commentsView = '<i class="rev" title="评论量">'+row.comments+'</i>';
                     	}
@@ -443,7 +443,7 @@
     }
   
     function jumpComment(annoId) {
-    	window.location.href = '<%=ctx %>/business/businessAnnoComment/operationList.do?annoId='+annoId;
+    	window.location.href = '<%=ctx %>/business/businessAnnoComment/list.do?annoId='+annoId;
     }
     
     //查看公告信息

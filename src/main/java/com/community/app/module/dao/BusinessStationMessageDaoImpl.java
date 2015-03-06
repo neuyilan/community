@@ -84,6 +84,17 @@ public class BusinessStationMessageDaoImpl implements BusinessStationMessageDao 
 	}*/
 	
 	/**
+	 * 根据用户查询所管理的小区所对应的驿站
+	 * @param paramMap
+	 * @return
+	 * @throws DaoException
+	 */
+	public List<BusinessStationMessage> findByStationId(final Map<String, Object> paramMap) throws DaoException {
+		List<BusinessStationMessage> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessStationMessageDao.findByStationId", paramMap);
+		return list;
+	}
+	
+	/**
 	 * 根据搜索条件，搜索分页数据
 	 * @param query
 	 * @param pageData

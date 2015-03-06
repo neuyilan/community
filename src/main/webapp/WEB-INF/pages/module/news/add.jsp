@@ -177,7 +177,7 @@ label.error {
 					<textarea id="content" name="content" type="text/plain" style="width: 1024px; height: 500px;"></textarea>
 
 					<%-- <h2 class="relran">列表页大图<label for="subjectPic" class="error success"></label></h2>
-                <div style=" overflow:hidden;"><img id="subjectPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+                <div style=" overflow:hidden;"><img id="subjectPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
                 <input type="hidden" name="subjectPic" id="subjectPic" value="" > --%>
 					<%--头像--%>
 
@@ -234,13 +234,12 @@ label.error {
 					</h2>
 					<div class="options">
 						<p>
-							<label><input class="radiostyle" type="radio"
-								name="isRecommend" value="0">&nbsp;首页焦点图</label> <em
-								style="color: #000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br>
-							<br><!--  <label><input class="radiostyle" type="radio"
-								name="isRecommend" value="1">&nbsp;首页新鲜事列表置顶<br> <br></label> -->
-							<label><input class="radiostyle" type="radio"
-								name="isRecommend" value="2" checked>&nbsp;以上都不选<br></label>
+							<label><input class="radiostyle" type="radio" name="isRecommend" value="0">&nbsp;首页焦点图</label> 
+							<em style="color: #000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
+							<label><input class="radiostyle" type="radio" name="isRecommend" value="3">&nbsp;首页广告焦点图</label> 
+							<em style="color: #000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
+							<!--  <label><input class="radiostyle" type="radio" name="isRecommend" value="1">&nbsp;首页新鲜事列表置顶</label><br> <br> -->
+							<label><input class="radiostyle" type="radio" name="isRecommend" value="2" checked>&nbsp;以上都不选</label><br>
 						</p>
 					</div>
 

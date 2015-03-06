@@ -224,7 +224,7 @@
 	 	<if test="isRelated != null and isRelated != '' and isRelated == 1" >
 		 		, business_user_resource bur
 		  		where me.estateId = bur.estateId
-	  		<if test="userId != null and userId != ''" >
+	  		<if test="userId != null" >
 				and bur.userId = #{userId}
 			</if>
 		</if>

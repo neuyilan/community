@@ -53,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.community.app.module.bean.AppFocusAdScope;
 import com.community.app.module.bean.AppFocusScope;
 import com.community.app.module.bean.AppHomepage;
 import com.community.app.module.bean.AppHomepageScope;
@@ -65,11 +66,13 @@ import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivityScope;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
 import com.community.app.module.bean.BusinessFocus;
+import com.community.app.module.bean.BusinessFocusAd;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.CommunityBean;
 import com.community.app.module.common.ExportUtil;
 import com.community.app.module.push.AppPushNotificationUtil;
+import com.community.app.module.service.AppFocusAdScopeService;
 import com.community.app.module.service.AppFocusScopeService;
 import com.community.app.module.service.AppHomepageScopeService;
 import com.community.app.module.service.AppHomepageService;
@@ -86,6 +89,7 @@ import com.community.app.module.service.BusinessActivityTypeService;
 import com.community.app.module.service.BusinessActivityVoteInformationService;
 import com.community.app.module.service.BusinessActivityVoteOptionsService;
 import com.community.app.module.service.BusinessCommunityService;
+import com.community.app.module.service.BusinessFocusAdService;
 import com.community.app.module.service.BusinessFocusService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
@@ -114,6 +118,8 @@ public class BusinessActivityController {
     @Autowired
     private BusinessFocusService businessFocusService;
     @Autowired
+	private BusinessFocusAdService businessFocusAdService;
+    @Autowired
     private AppHomepageService appHomepageService;
     @Autowired
     private BusinessActivityParticipateService businessActivityParticipateService;
@@ -127,6 +133,8 @@ public class BusinessActivityController {
 	private AppPushLogService appPushLogService;
 	@Autowired
 	private AppFocusScopeService appFocusScopeService;
+	@Autowired
+	private AppFocusAdScopeService appFocusAdScopeService;
 	@Autowired
 	private BusinessActivityRegistrationTimeslotService businessActivityRegistrationTimeslotService;
 	@Autowired
@@ -227,11 +235,11 @@ public class BusinessActivityController {
 				result.append("{")
 			    .append("\"actId\":\"").append(businessActivity.getActId()).append("\"").append(",")
 			    .append("\"typeId\":\"").append(businessActivity.getTypeId()).append("\"").append(",")
-			    .append("\"actName\":\"").append(businessActivity.getActName().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
-			    .append("\"actContent\":\"").append(businessActivity.getActContent().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"actName\":\"").append(businessActivity.getActName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"actContent\":\"").append(businessActivity.getActContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"typeName\":\"").append(businessActivity.getTypeName()).append("\"").append(",")
 			    .append("\"actScope\":\"").append(businessActivity.getActScope()).append("\"").append(",")
-			    .append("\"brief\":\"").append(businessActivity.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"brief\":\"").append(businessActivity.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"actPic\":\"").append(businessActivity.getActPic()).append("\"").append(",")
 			    .append("\"actPicNo\":\"").append(businessActivity.getActPicNo()).append("\"").append(",")
 			    .append("\"actLink\":\"").append(businessActivity.getActLink()).append("\"").append(",")
@@ -313,9 +321,9 @@ public class BusinessActivityController {
 		try{
 		    businessActivity.setTypeId(query.getTypeId());
 	    	businessActivity.setTypeName(query.getTypeName());
-		    businessActivity.setActName(query.getActName());
+		    businessActivity.setActName(query.getActName().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessActivity.setActContent(query.getActContent());
-		    businessActivity.setBrief(query.getBrief());
+		    businessActivity.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessActivity.setActPic(query.getActPic());
 		    businessActivity.setActPicNo(query.getActPicNo());
 		    businessActivity.setAppPic(query.getAppPic());
@@ -334,7 +342,7 @@ public class BusinessActivityController {
 		    // 活动结束时间
 		    if(query.getEndTime() != null && !"".equals(query.getEditTime1()) && (query.getTypeId() == 2 || query.getTypeId() == 3)) {
 		    	 businessActivity.setStartTime(sdf.format(new Date()));
-				 businessActivity.setEndTime(query.getEndTime());
+				 businessActivity.setEndTime(sdf.format(sdf.parse(query.getEndTime())));
 				 SimpleDateFormat sfDate = new SimpleDateFormat("yyyy-MM-dd");
 				 SimpleDateFormat sfTime = new SimpleDateFormat("HH:mm");
 				 Date date = sdf.parse(query.getEndTime());
@@ -361,6 +369,12 @@ public class BusinessActivityController {
 			    businessActivity.setPublishDate(timeArr[0]);
 			    businessActivity.setPublishTime(timeArr[1]);
 			    businessActivity.setRank(query.getRank());
+			    
+			    businessActivity.setStartTime(planTime);
+			    Date date = sdf.parse(planTime);
+				Date dt = new Date(date.getTime()+1800000);
+				businessActivity.setEndTime(sdf.format(dt));
+				 
 	        } else if(query.getTypeId() == 2) {
 	        	String arr[] = request.getParameterValues("attributeValues");
 		        if(arr.length > 0){
@@ -382,6 +396,12 @@ public class BusinessActivityController {
 			    String[] timeArr = planTime.split(" ");
 			    businessActivity.setPublishDate(timeArr[0]);
 			    businessActivity.setPublishTime(timeArr[1]);
+			    
+			    businessActivity.setStartTime(planTime);
+			    Date date = sdf.parse(planTime);
+				Date dt = new Date(date.getTime()+1800000);
+				businessActivity.setEndTime(sdf.format(dt));
+				
 	        	businessActivity.setCouponName(query.getCouponName());
 	        	businessActivity.setCouponDesc(query.getCouponDesc());
 	        	businessActivity.setCouponImg(query.getCouponImg());
@@ -533,7 +553,34 @@ public class BusinessActivityController {
 		            	appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		            	appFocusScopeService.save(appFocusScope);
 		            }
-            	}
+            	} else if(query.getRecommend() == 3) {
+            		BusinessFocusAd businessFocusAd = new BusinessFocusAd();
+					businessFocusAd.setTitle(businessActivity.getActName());
+					businessFocusAd.setContent(businessActivity.getActContent());
+				    businessFocusAd.setState(2);   // 待审核
+				    businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    businessFocusAd.setPageUrl("");
+				    businessFocusAd.setSourceId(businessActivity.getActId());
+				    businessFocusAd.setSourceType(1);	// 来源类型
+				    businessFocusAd.setIshtml(0);  // 静态
+				    businessFocusAd.setAuditInfo("");
+				    businessFocusAd.setFocusAdScope(businessActivity.getActScope());  //展示范围
+				    businessFocusAd.setVisits(0);
+				    businessFocusAd.setSupports(0);
+				    businessFocusAd.setSelectorId(getUser().getUserId());
+				    businessFocusAd.setSelectorName(getUser().getUserName());
+				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
+					businessFocusAdService.save(businessFocusAd);
+					
+					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
+					for(int i=0;i<estateArr.length;i++) {
+		            	String[] estate = estateArr[i].split(":");
+		            	appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
+		            	appFocusAdScope.setEstateId(new Integer(estate[0]));
+		            	appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		            	appFocusAdScopeService.save(appFocusAdScope);
+		            }
+				}
             }
             
             if(query.getState()== 1 || query.getState() == 0) {//推荐到首页新闻列表置顶
@@ -682,11 +729,11 @@ public class BusinessActivityController {
 		String json = "";
 		try{
 		    businessActivity = businessActivityService.findById(query.getActId());
-		    businessActivity.setActName(query.getActName());
+		    businessActivity.setActName(query.getActName().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessActivity.setTypeId(query.getTypeId());
 		    businessActivity.setTypeName(query.getTypeName());
 		    businessActivity.setActContent(query.getActContent());
-		    businessActivity.setBrief(query.getBrief());
+		    businessActivity.setBrief(query.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessActivity.setActPic(query.getActPic());
 		    businessActivity.setActPicNo(query.getActPicNo());
 		    if(query.getActPic() != null && !"".equals(query.getActPic())) {
@@ -722,7 +769,7 @@ public class BusinessActivityController {
 
 			if(query.getEndTime() != null && !"".equals(query.getEditTime1()) && (query.getTypeId() == 2 || query.getTypeId() == 3)) {
 		    	 businessActivity.setStartTime(sdf.format(new Date()));
-				 businessActivity.setEndTime(query.getEndTime()); 
+				 businessActivity.setEndTime(sdf.format(sdf.parse(query.getEndTime()))); 
 				 SimpleDateFormat sfDate = new SimpleDateFormat("yyyy-MM-dd");
 				 SimpleDateFormat sfTime = new SimpleDateFormat("HH:mm");
 				 Date date = sdf.parse(query.getEndTime());
@@ -753,6 +800,12 @@ public class BusinessActivityController {
 			    String[] timeArr = planTime.split(" ");
 			    businessActivity.setPublishDate(timeArr[0]);
 			    businessActivity.setPublishTime(timeArr[1]);
+			    
+			    businessActivity.setStartTime(planTime);
+			    Date date = sdf.parse(planTime);
+				Date dt = new Date(date.getTime()+1800000);
+				businessActivity.setEndTime(sdf.format(dt));
+				
 			    businessActivity.setRank(query.getRank());
 	        } else if(query.getTypeId() == 2) {
 	        	String arr[] = request.getParameterValues("attributeValues");
@@ -776,6 +829,11 @@ public class BusinessActivityController {
 			    businessActivity.setPublishDate(timeArr[0]);
 			    businessActivity.setPublishTime(timeArr[1]);
 			    
+			    businessActivity.setStartTime(planTime);
+			    Date date = sdf.parse(planTime);
+				Date dt = new Date(date.getTime()+1800000);
+				businessActivity.setEndTime(sdf.format(dt));
+				
 	        	businessActivity.setCouponName(query.getCouponName());
 	        	businessActivity.setCouponDesc(query.getCouponDesc());
 	        	businessActivity.setCouponImg(query.getCouponImg());
@@ -944,6 +1002,33 @@ public class BusinessActivityController {
 		            	appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		            	appFocusScopeService.save(appFocusScope);
 		            }
+            	} else if( query.getRecommend() == 3) { 
+            		BusinessFocusAd businessFocusAd = new BusinessFocusAd();
+					businessFocusAd.setTitle(businessActivity.getActName());
+					businessFocusAd.setContent(businessActivity.getActContent());
+				    businessFocusAd.setState(2);   // 待审核
+				    businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    businessFocusAd.setPageUrl("");
+				    businessFocusAd.setSourceId(businessActivity.getActId());
+				    businessFocusAd.setSourceType(1);	// 来源类型
+				    businessFocusAd.setIshtml(0);  // 静态
+				    businessFocusAd.setAuditInfo("");
+				    businessFocusAd.setFocusAdScope(businessActivity.getActScope());  //展示范围
+				    businessFocusAd.setVisits(0);
+				    businessFocusAd.setSupports(0);
+				    businessFocusAd.setSelectorId(getUser().getUserId());
+				    businessFocusAd.setSelectorName(getUser().getUserName());
+				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
+					businessFocusAdService.save(businessFocusAd);
+					
+					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
+					for(int i=0;i<estateArr.length;i++) {
+		            	String[] estate = estateArr[i].split(":");
+		            	appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
+		            	appFocusAdScope.setEstateId(new Integer(estate[0]));
+		            	appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		            	appFocusAdScopeService.save(appFocusAdScope);
+		            }
             	}  
             }
             
@@ -1049,6 +1134,7 @@ public class BusinessActivityController {
 						businessActivityService.delete(new Integer(ids[i]));
 					}
 				}else{
+					BusinessActivity businessActivity = businessActivityService.findById(Integer.parseInt(id));
 					Boolean  result = businessActivityService.delete(new Integer(id));
 					if(result) {
 						businessActivityScopeService.delete(new Integer(id));
@@ -1060,6 +1146,44 @@ public class BusinessActivityController {
 							AppHomepage AppHomepage = (AppHomepage)list.get(0);
 							appHomepageService.delete(AppHomepage);
 							appHomepageScopeService.delete(AppHomepage.getHomePageId());
+						}
+						
+						if(businessActivity.getRecommend() != null) {
+							if(businessActivity.getRecommend() == 0) {
+								paramMap = new HashMap();
+								paramMap.put("sourceId", Integer.parseInt(id));
+								List<BusinessFocus> focusList = businessFocusService.findByMap(paramMap);
+								if(focusList.size() == 1) {
+									BusinessFocus businessFocus = focusList.get(0);
+									businessFocusService.delete(businessFocus.getFocusId());
+									
+									// 删除展示范围
+									paramMap = new HashMap();
+									paramMap.put("focusId", businessFocus.getFocusId());
+									List scopeList = appFocusScopeService.findByMap(paramMap);
+									for(int i=0;i<scopeList.size();i++){
+										AppFocusScope appFocusScope = (AppFocusScope) scopeList.get(i);
+										appFocusScopeService.delete(appFocusScope.getScopeId());
+									}
+								}
+							} else if(businessActivity.getRecommend() == 3) {
+								paramMap = new HashMap();
+								paramMap.put("sourceId", Integer.parseInt(id));
+								List<BusinessFocusAd> focusAdList = businessFocusAdService.findByMap(paramMap);
+								if(focusAdList.size() == 1) {
+									BusinessFocusAd businessFocusAd = focusAdList.get(0);
+									businessFocusAdService.delete(businessFocusAd.getFocusAdId());
+									
+									// 删除展示范围
+									paramMap = new HashMap();
+									paramMap.put("focusAdId", businessFocusAd.getFocusAdId());
+									List scopeList = appFocusAdScopeService.findByMap(paramMap);
+									for(int i=0;i<scopeList.size();i++){
+										AppFocusAdScope appFocusAdScope = (AppFocusAdScope) scopeList.get(i);
+										appFocusAdScopeService.delete(appFocusAdScope.getScopeId());
+									}
+								}
+							}
 						}
 					}
 				}
@@ -1127,6 +1251,7 @@ public class BusinessActivityController {
 						estateArr.add(estateObj);
 					}
 					comObj.put("children", estateArr);
+					comObj.put("state", "closed");
 					comArr.add(comObj);
 				}				
 			}
@@ -1227,6 +1352,44 @@ public class BusinessActivityController {
 						appHomepageService.delete(AppHomepage);
 						appHomepageScopeService.delete(AppHomepage.getHomePageId());
 					}
+					
+					if(businessActivity.getRecommend() != null) {
+						if(businessActivity.getRecommend() == 0) {
+							paramMap = new HashMap();
+							paramMap.put("sourceId", actId);
+							List<BusinessFocus> focusList = businessFocusService.findByMap(paramMap);
+							if(focusList.size() == 1) {
+								BusinessFocus businessFocus = focusList.get(0);
+								businessFocusService.delete(businessFocus.getFocusId());
+								
+								// 删除展示范围
+								paramMap = new HashMap();
+								paramMap.put("focusId", businessFocus.getFocusId());
+								List scopeList = appFocusScopeService.findByMap(paramMap);
+								for(int i=0;i<scopeList.size();i++){
+									AppFocusScope appFocusScope = (AppFocusScope) scopeList.get(i);
+									appFocusScopeService.delete(appFocusScope.getScopeId());
+								}
+							}
+						} else if(businessActivity.getRecommend() == 3) {
+							paramMap = new HashMap();
+							paramMap.put("sourceId", actId);
+							List<BusinessFocusAd> focusAdList = businessFocusAdService.findByMap(paramMap);
+							if(focusAdList.size() == 1) {
+								BusinessFocusAd businessFocusAd = focusAdList.get(0);
+								businessFocusAdService.delete(businessFocusAd.getFocusAdId());
+								
+								// 删除展示范围
+								paramMap = new HashMap();
+								paramMap.put("focusAdId", businessFocusAd.getFocusAdId());
+								List scopeList = appFocusAdScopeService.findByMap(paramMap);
+								for(int i=0;i<scopeList.size();i++){
+									AppFocusAdScope appFocusAdScope = (AppFocusAdScope) scopeList.get(i);
+									appFocusAdScopeService.delete(appFocusAdScope.getScopeId());
+								}
+							}
+						}
+					}
 				}
 				
 				json = "{\"success\":\"true\",\"message\":\"撤回发布成功\"}";
@@ -1297,6 +1460,36 @@ public class BusinessActivityController {
 		            	appFocusScope.setEstateId(scope.getEstateId());
 		            	appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
 		            	appFocusScopeService.save(appFocusScope);
+	    			}
+            	} else if(businessActivity.getRecommend() == 3) { 
+            		BusinessFocusAd businessFocusAd = new BusinessFocusAd();
+					businessFocusAd.setTitle(businessActivity.getActName());
+					businessFocusAd.setContent(businessActivity.getActContent());
+				    businessFocusAd.setState(2);   // 待审核
+				    businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    businessFocusAd.setPageUrl("");
+				    businessFocusAd.setSourceId(businessActivity.getActId());
+				    businessFocusAd.setSourceType(1);	// 来源类型
+				    businessFocusAd.setIshtml(0);  // 静态
+				    businessFocusAd.setAuditInfo("");
+				    businessFocusAd.setFocusAdScope(businessActivity.getActScope());  //展示范围
+				    businessFocusAd.setVisits(0);
+				    businessFocusAd.setSupports(0);
+				    businessFocusAd.setSelectorId(getUser().getUserId());
+				    businessFocusAd.setSelectorName(getUser().getUserName());
+				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
+					businessFocusAdService.save(businessFocusAd);
+					
+					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
+	    			Map paramMap = new HashMap();
+	    			paramMap.put("actId", businessActivity.getActId());
+	    			List scopeList = businessActivityScopeService.findByMap(paramMap);
+	    			for(int i=0;i<scopeList.size();i++) {
+	    				BusinessActivityScope scope = (BusinessActivityScope) scopeList.get(i);
+	    				appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
+	    				appFocusAdScope.setEstateId(scope.getEstateId());
+	    				appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+		            	appFocusAdScopeService.save(appFocusAdScope);
 	    			}
             	}
             }

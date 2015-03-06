@@ -277,7 +277,7 @@
             } else if(data.state == 2 ) {
             	$('#showstate').html("待审核");
             	<shiro:hasPermission name="focus_audit">
-            	$('#ding').html("<input id=\"qrbut5\" title=\"立即发布该条焦点图\" type=\"submit\" value=\"立即发布\" onclick=\"cnChangeFocusState("+data.focusId+");\"/><input id=\"zsbut5\" title=\"拒绝该条焦点图\" type=\"button\" value=\"拒绝\" onclick=\"jjChangeFocusState("+data.focusId+");\"/>");
+            	$('#ding').html("<input id=\"qrbut5\" title=\"立即发布该条焦点图\" type=\"submit\" value=\"立即发布\" onclick=\"cnChangeFocusState("+data.focusId+",'"+data.picUrl+"');\"/><input id=\"zsbut5\" title=\"拒绝该条焦点图\" type=\"button\" value=\"拒绝\" onclick=\"jjChangeFocusState("+data.focusId+");\"/>");
             	</shiro:hasPermission>
             	$("#auditInfo1").css('display','none'); 
 		        $("#hr1").css('display','none'); 
@@ -305,15 +305,19 @@
 	}
  	
 	// 立即发布该条焦点图
-	function cnChangeFocusState(focusId) {
-		var bool = window.confirm("您确定立即发布该条焦点图？");
-	    if(bool) {
-	        $.post("updateFocusState.do", {id : focusId, auditInfo : ''}, function(data) {
-	        	eval("data = "+data);
-    			alert(data.message);
-	            window.location.reload();
-	        });
-	    }
+	function cnChangeFocusState(focusId, pageUrl) {
+		if(pageUrl != "" && pageUrl != "/images/icon/tp01.jpg") {
+			var bool = window.confirm("您确定立即发布该条焦点图？");
+		    if(bool) {
+		        $.post("updateFocusState.do", {id : focusId, auditInfo : ''}, function(data) {
+		        	eval("data = "+data);
+	    			alert(data.message);
+		            window.location.reload();
+		        });
+		    }
+    	} else {
+			alert("请先编辑此焦点图并上传焦点图图片！");
+		}
 	}
 	
 	// 拒绝该条焦点图

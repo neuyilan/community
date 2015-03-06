@@ -64,7 +64,7 @@ public class BusinessHelpReplayController {
 			    .append("\"helpId\":\"").append(businessHelpReplay.getHelpId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessHelpReplay.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessHelpReplay.getCommentorName()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessHelpReplay.getComment()).append("\"").append(",")
+			    .append("\"comment\":\"").append(businessHelpReplay.getComment().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessHelpReplay.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessHelpReplay.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessHelpReplay.getReplyName()).append("\"")

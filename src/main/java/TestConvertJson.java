@@ -1,5 +1,6 @@
 import org.json.JSONObject;
 
+import com.alibaba.fastjson.JSON;
 import com.community.framework.utils.JsonUtils;
 
 
@@ -7,7 +8,16 @@ import com.community.framework.utils.JsonUtils;
 
 
 public class TestConvertJson {
+	
+//	JSON.toJSONString(object);
+	
+	
 	public static void main(String[] args) {
+		String a= "aaa\"aaaa";
+		System.out.println(a);
+		System.out.println(JSON.toJSONString(a));
+		JSONObject obj = new JSONObject();
+		/*
 		 //定义JSON字符串
 	     String jsonStr = "{\"id\": 2," + 
 	             " \"title\": \"json title\", " + 
@@ -27,7 +37,7 @@ public class TestConvertJson {
 //	     System.out.println(aa);
 //	     jo.put("xx", aa);
 //	     System.out.println(jo.toString());
-	     
+	 */    
 	}
 	
 	public static StringBuffer string2Json(String s) {       

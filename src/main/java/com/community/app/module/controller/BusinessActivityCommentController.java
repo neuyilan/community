@@ -80,7 +80,7 @@ public class BusinessActivityCommentController {
 			    .append("\"commentId\":\"").append(businessActivityComment.getCommentId()).append("\"").append(",")
 			    .append("\"actId\":\"").append(businessActivityComment.getActId()).append("\"").append(",")
 			    .append("\"commentor\":\"").append(businessActivityComment.getCommentor()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessActivityComment.getContent()).append("\"").append(",")
+			    .append("\"content\":\"").append(businessActivityComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessActivityComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessActivityComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessActivityComment.getReplyName()).append("\"").append(",")

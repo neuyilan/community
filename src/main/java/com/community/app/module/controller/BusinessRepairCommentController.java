@@ -69,7 +69,7 @@ public class BusinessRepairCommentController {
 			    .append("\"commentorId\":\"").append(businessRepairComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessRepairComment.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessRepairComment.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessRepairComment.getComment()).append("\"").append(",")
+			    .append("\"comment\":\"").append(businessRepairComment.getComment().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessRepairComment.getCommentTime()).append("\"").append(",")
 			    .append("\"contentType\":\"").append(businessRepairComment.getContentType()).append("\"").append(",")
 			    .append("\"videoSize\":\"").append(businessRepairComment.getVideoSize()).append("\"").append(",")

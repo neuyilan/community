@@ -58,6 +58,14 @@ public interface BusinessStationMessageDao {
 	//public List<BusinessStationMessage> findByExample(final BusinessStationMessageQuery query, final Integer limit) throws DaoException;	
 
 	/**
+	 * 根据用户查询所管理的小区所对应的驿站
+	 * @param paramMap
+	 * @return
+	 * @throws DaoException
+	 */
+	public List<BusinessStationMessage> findByStationId(final Map<String, Object> paramMap) throws DaoException;
+	
+	/**
 	 * 根据搜索条件，搜索分页数据
 	 * @param query
 	 * @param pageData

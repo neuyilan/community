@@ -26,7 +26,15 @@ public class BusinessStationMessage implements java.io.Serializable {
 	private java.lang.String portrait;
 	private String buNickname;
 	private String avatar;
+	private java.lang.String staName;
 
+	public java.lang.String getStaName() {
+		return staName;
+	}
+
+	public void setStaName(java.lang.String staName) {
+		this.staName = staName;
+	}
 
 	public java.lang.String getNickname() {
 		return nickname;

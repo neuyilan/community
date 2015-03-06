@@ -94,6 +94,8 @@
 		if(field==="comId"){
 			 $('#estateUL').prev().val("");
 		     $('#estateUL').prev().prev().find('span').text("所有小区");
+		     $('#stationUL').prev().val("");
+		     $('#stationUL').prev().prev().find('span').text("所有驿站");
 		}
 		
 		//if(idKey != '') {//选中一项

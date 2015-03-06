@@ -174,7 +174,7 @@
                 <textarea id="content" name="content" type="text/plain" style="width:1024px;height:500px;">${businessNews.content }</textarea>
                 
                 <%-- <h2 class="relran">列表页大图<label for="subjectPic" class="error success"></label></h2>
-                <div style=" overflow:hidden;"><img id="subjectPicBtn" src="<%=ctx %><c:choose><c:when test="${businessNews.subjectPic==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessNews.subjectPic}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+                <div style=" overflow:hidden;"><img id="subjectPicBtn" src="<%=ctx %><c:choose><c:when test="${businessNews.subjectPic==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessNews.subjectPic}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
                 <input type="hidden" name="subjectPic" id="subjectPic" value="${businessNews.subjectPic}" /> --%> <%--头像--%>
                 
                  <h2 class="relran" >展示范围<label for="newsScope" class="error success"></label></h2>
@@ -220,9 +220,12 @@
                 <h2 class="relstatus">推荐到焦点图<label for="isRecommend" class="error success"></label></h2>
                 <div class="options">
                     <p>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test='${businessNews.isRecommend==0}'>checked="checked"</c:if> >&nbsp;首页焦点图　　<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br></label>
+                        <label><input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test='${businessNews.isRecommend==0}'>checked="checked"</c:if> >&nbsp;首页焦点图</label>
+                        <em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
+                        <label><input class="radiostyle" type="radio" name="isRecommend" value="3" <c:if test='${businessNews.isRecommend==3}'>checked="checked"</c:if> >&nbsp;首页广告焦点图</label>
+                        <em style="color:#000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
                         <%-- <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test='${businessNews.isRecommend==1}'>checked="checked"</c:if> >&nbsp;首页新鲜事列表置顶<br><br></label> --%>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="2" <c:if test='${businessNews.isRecommend==2}'>checked="checked"</c:if> >&nbsp;以上都不选<br></label>
+                        <label><input class="radiostyle" type="radio" name="isRecommend" value="2" <c:if test='${businessNews.isRecommend==2}'>checked="checked"</c:if> >&nbsp;以上都不选</label><br>
                     </p>
                 </div>
                 

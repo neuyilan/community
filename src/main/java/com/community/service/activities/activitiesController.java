@@ -199,6 +199,22 @@ public class activitiesController {
 						json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
 					}
 				}
+				
+				if (businessActivity.getTypeId()==1 || businessActivity.getTypeId()==4) {
+					String startTime = businessActivity.getPublishDate() + " " + businessActivity.getPublishTime() + ":00";
+					//开始结束时间计算
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date ts = (Date) sdf.parse(startTime);
+					long time = ts.getTime() + 30*60*1000;
+					//long time = ts.getTime() + 1*60*1000;
+					String endTime = sdf.format(new Date(time));
+					json +="\"startTime\":\""+startTime.replace("-", "/")+"\",";
+					json +="\"endTime\":\""+endTime.replace("-", "/")+"\",";
+				}else {
+					json +="\"startTime\":\""+businessActivity.getStartTime()+"\",";
+					json +="\"endTime\":\""+businessActivity.getEndTime()+"\",";
+				}
+				
 				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\"},";
 			}
 			if(baseBean.getList().size() > 0 || topBaseBean.getList().size() > 0) {

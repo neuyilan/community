@@ -120,8 +120,8 @@
 	            </div> 
                  
                 <h2 class="relstatus" style="font-weight: bold;">焦点图<label for="picUrl" class="error success"></label></h2>
-                <div style=" overflow:hidden;"><img id="picUrlBtn" src="<%=ctx %><c:choose><c:when test="${businessFocus.picUrl==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessFocus.picUrl}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
-                <input type="hidden" name="picUrl" id="picUrl"  value="${businessFocus.picUrl}">
+                <div style=" overflow:hidden;"><img id="picUrlBtn" src="<%=ctx %><c:choose><c:when test="${businessFocus.picUrl=='' && businessFocus.picUrl=='/images/icon/tp01.jpg'}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessFocus.picUrl}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+                <input type="hidden" name="picUrl" id="picUrl"  value="${businessFocus.picUrl=='/images/icon/tp01.jpg'?'':businessFocus.picUrl}">
                 <input type="hidden" name="uploadField" id="uploadField" value="" >
                   
                 <c:if test="${businessFocus.ishtml==1}">   
@@ -132,12 +132,12 @@
                 <div class="options">
                     <p>
                         <shiro:hasPermission name="focus_instant_publish">
-                        <input class="radiostyle" type="radio" name="state" value="0" <c:if test='${businessFocus.state==0}'> checked </c:if> >立即发布<br><br>
+                        <label><input class="radiostyle" type="radio" name="state" value="0" <c:if test='${businessFocus.state==0}'> checked </c:if> >&nbsp;立即发布<br><br></label>
                      	</shiro:hasPermission>
                      	<shiro:hasPermission name="focus_wait_publish">
-                     	<input class="radiostyle" type="radio" name="state" value="1" <c:if test='${businessFocus.state==1}'> checked </c:if> >暂缓发布<br><br>
+                     	<label><input class="radiostyle" type="radio" name="state" value="1" <c:if test='${businessFocus.state==1}'> checked </c:if> >&nbsp;暂缓发布<br><br></label>
                        	</shiro:hasPermission>
-                       	<input class="radiostyle" type="radio" name="state" value="2" <c:if test='${businessFocus.state==2}'> checked </c:if> >待审核<br><br>
+                       	<label><input class="radiostyle" type="radio" name="state" value="2" <c:if test='${businessFocus.state==2}'> checked </c:if> >&nbsp;待审核<br><br></label>
                     </p>
                 </div>
                 

@@ -44,8 +44,8 @@
             <h2 class="relstatus">性别<label for="sex" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input type="radio" name="sex"  class="radiostyle" id="sex1" value="0" <c:if test="${businessUser.sex == 0 }"> checked </c:if> />男 <br><br>
-            	      <input type="radio" name="sex" class="radiostyle"  id="sex2" value="1" <c:if test="${businessUser.sex == 1 }"> checked </c:if> />女<br>
+            	      <label><input type="radio" name="sex"  class="radiostyle" id="sex1" value="0" <c:if test="${businessUser.sex == 0 }"> checked </c:if> />&nbsp;男 <br><br></label>
+            	      <label><input type="radio" name="sex" class="radiostyle"  id="sex2" value="1" <c:if test="${businessUser.sex == 1 }"> checked </c:if> />&nbsp;女<br></label>
           	      </p>
             </div>
             <div class="line2"></div>
@@ -57,8 +57,8 @@
             <h2 class="relstatus">婚姻状况<label for="isMarriage" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input type="radio" name="isMarriage" class="radiostyle" id="isMarriage1" value="0" <c:if test="${businessUser.isMarriage == 0 }"> checked </c:if> />已婚 <br><br>
-            	      <input type="radio"  name="isMarriage" class="radiostyle" id="isMarriage2" value="1" <c:if test="${businessUser.isMarriage == 1 }"> checked </c:if> />未婚<br>
+            	      <label><input type="radio" name="isMarriage" class="radiostyle" id="isMarriage1" value="0" <c:if test="${businessUser.isMarriage == 0 }"> checked </c:if> />&nbsp;已婚 <br><br></label>
+            	      <label><input type="radio"  name="isMarriage" class="radiostyle" id="isMarriage2" value="1" <c:if test="${businessUser.isMarriage == 1 }"> checked </c:if> />&nbsp;未婚<br></label>
           	      </p>
             </div>
             <div class="line2"></div>
@@ -119,23 +119,31 @@
            <h2 class="newscont">交流话术<font color="red">*</font><label for="comWord" class="error success"></label></h2>
             <textarea class="newtext" id="comWord" name="comWord" placeholder="">${businessUser.comWord }</textarea>
            
+           <h2 class="relstatus">驿站女孩<font color="red">*</font><label for="isGirl" class="error success"></label></h2>
+            <div class="options">
+            	  <p>
+            	      <label><input class="radiostyle" type="radio" id="isGirl1" name="isGirl" value="0" <c:if test="${businessUser.isGirl == 0 }"> checked </c:if> >&nbsp;否<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="isGirl2" name="isGirl" value="1" <c:if test="${businessUser.isGirl == 1 }"> checked </c:if> >&nbsp;是<br></label>
+          	      </p>
+            </div> 
+            
            <h2 class="relstatus">物业管家<font color="red">*</font><label for="isManager" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input class="radiostyle" type="radio" id="isManager1" name="isManager" value="0" <c:if test="${businessUser.isManager == 0 }"> checked </c:if> >否<br><br>
-            	      <input class="radiostyle" type="radio" id="isManager2" name="isManager" value="1" <c:if test="${businessUser.isManager == 1 }"> checked </c:if> >是<br>
+            	      <label><input class="radiostyle" type="radio" id="isManager1" name="isManager" value="0" <c:if test="${businessUser.isManager == 0 }"> checked </c:if> >&nbsp;否<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="isManager2" name="isManager" value="1" <c:if test="${businessUser.isManager == 1 }"> checked </c:if> >&nbsp;是<br></label>
           	      </p>
             </div> 
             
             <div class="line2"></div>
-            
-            <h2 class="relstatus">员工状态<font color="red">*</font><label for="state" class="error success"></label>
+            <h2 class="relstatus">员工状态<font color="red">*</font><label for="state" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input type="radio" name="state" class="radiostyle" id="state1" value="0" <c:if test="${businessUser.state == 0 }"> checked </c:if> />启用<br><br>
-            	      <input type="radio" name="state"  class="radiostyle"  id="state2" value="1" <c:if test="${businessUser.state == 1 }"> checked </c:if> />停用<br>
+            	      <label><input class="radiostyle" type="radio" id="state1" name=state value="0" <c:if test="${businessUser.state == 0 }"> checked </c:if> >&nbsp;启用<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="state2" name="state" value="1" <c:if test="${businessUser.state == 1 }"> checked </c:if> >&nbsp;停用<br></label>
           	      </p>
             </div>
+            
             <div class="submtpres">
                 <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm();"/>
             </div>

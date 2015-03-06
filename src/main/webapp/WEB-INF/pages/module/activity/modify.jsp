@@ -39,8 +39,8 @@
             
             <h2 class="relstatus">活动类型<label for="typeId" class="error success"></label></h2>
             <!-- <span class="ranbut radiusbox" id="typeLayerShow">点击选择类型</span> -->
-            <label><input class="radiostyle2" type="radio" id="typeId" name="typeId" value="1" <c:if test='${businessActivity.typeId == 1}'> checked </c:if> > 定时抢</label>　
-            <label><input class="radiostyle2" type="radio" name="typeId" value="2"  <c:if test='${businessActivity.typeId == 2}'> checked </c:if>> 报名活动</label>　
+            <label><input class="radiostyle2" type="radio" id="typeId" name="typeId" value="1" <c:if test='${businessActivity.typeId == 1}'> checked </c:if> >&nbsp;定时抢</label>　
+            <label><input class="radiostyle2" type="radio" name="typeId" value="2"  <c:if test='${businessActivity.typeId == 2}'> checked </c:if>>&nbsp;报名活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="3"  <c:if test='${businessActivity.typeId == 3}'> checked </c:if>>&nbsp;投票活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="4"  <c:if test='${businessActivity.typeId == 4}'> checked </c:if>>&nbsp;优惠活动</label>
             <input type="hidden" id="typeName" name="typeName" value="${businessActivity.typeName }" >
@@ -62,12 +62,12 @@
             
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动列表大图<label for="actPic" class="error success"></label></h2>
-            <div id="divImg" style=" overflow:hidden;"><img id="actPicBtn" src="<%=ctx %><c:choose><c:when test="${businessActivity.actPic==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessActivity.actPic}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+            <div id="divImg" style=" overflow:hidden;"><img id="actPicBtn" src="<%=ctx %><c:choose><c:when test="${businessActivity.actPic==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessActivity.actPic}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="actPic" id="actPic" value="${businessActivity.actPic }"> 
             
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动列表结束大图<label for="actPicNo" class="error success"></label></h2>
-            <div id="divImg" style=" overflow:hidden;"><img id="actPicNoBtn" src="<%=ctx %><c:choose><c:when test="${businessActivity.actPicNo==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessActivity.actPicNo}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+            <div id="divImg" style=" overflow:hidden;"><img id="actPicNoBtn" src="<%=ctx %><c:choose><c:when test="${businessActivity.actPicNo==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessActivity.actPicNo}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="actPicNo" id="actPicNo" value="${businessActivity.actPicNo}">
             
             <div class="line2"></div>
@@ -106,11 +106,11 @@
                 <p>
                     <label>
                         <input class="radiostyle" type="radio" name="isComment" value="0" <c:if test='${businessActivity.isComment == 0}'> checked </c:if> >
-                        所有时段</label>
+                        &nbsp;所有时段</label>
                     <br><br>
                     <label>
                         <input class="radiostyle" type="radio" name="isComment" value="1" <c:if test='${businessActivity.isComment == 1}'> checked </c:if> >
-                        活动结束后</label>
+                        &nbsp;活动结束后</label>
                     <br>
                 </p>
             </div>
@@ -137,11 +137,11 @@
                 <p>
                     <label>
                         <input id="isPush1" class="radiostyle" type="radio" name="isPush" value="1">
-                        是</label>
+                        &nbsp;是</label>
                     　　<em style="color:#e7402f;">选择推送后，将通过系统推送至手机用户，非重要信息请勿选择</em><br><br>
                     <label>
                         <input class="radiostyle" type="radio" name="isPush" value="0" checked>
-                        否</label>
+                        &nbsp;否</label>
                     <br>
                 </p>
             </div>
@@ -150,17 +150,12 @@
             <h2 class="relstatus">推荐到</h2>
             <div class="options">
                 <p>
-                    <label>
-                        <input class="radiostyle" type="radio" name="recommend" value="0" <c:if test='${businessActivity.recommend == 0}'> checked </c:if> >
-                        首页焦点图</label>
-                    　　<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-                    <%-- <label>
-                        <input class="radiostyle" type="radio" name="recommend" value="1" <c:if test='${businessActivity.recommend == 1}'> checked </c:if> >
-                        首页新闻列表置顶</label>
-                    <br><br> --%>
-                    <label>
-                        <input class="radiostyle" type="radio" name="recommend" value="2" <c:if test='${businessActivity.recommend == 2}'> checked </c:if>>以上都不选
-                    </label><br>
+                    <label><input class="radiostyle" type="radio" name="recommend" value="0" <c:if test='${businessActivity.recommend == 0}'> checked </c:if> >&nbsp;首页焦点图</label>
+                    　　			<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
+                    <label><input class="radiostyle" type="radio" name="recommend" value="3" <c:if test='${businessActivity.recommend == 3}'> checked </c:if> >&nbsp;首页广告焦点图</label>
+                    　　			<em style="color:#000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
+                    <%-- <label><input class="radiostyle" type="radio" name="recommend" value="1" <c:if test='${businessActivity.recommend == 1}'> checked </c:if> >&nbsp;首页新闻列表置顶</label><br><br> --%>
+                    <label><input class="radiostyle" type="radio" name="recommend" value="2" <c:if test='${businessActivity.recommend == 2}'> checked </c:if>>&nbsp;以上都不选</label><br>
                 </p>
             </div>
             
@@ -169,8 +164,8 @@
             <div class="options">
                 <p>
                 	<input type="hidden" id="isTimingPush" value="${businessActivity.isTimingPush}"/>
-                    <label><input class="radiostyle" type="radio" name="isTimingPush" value="1"  onclick="isTimePash(1)"<c:if test='${businessActivity.isTimingPush == 1}'> checked </c:if>> 是</label><br><br>
-                    <label><input class="radiostyle" type="radio" name="isTimingPush" value="0" onclick="isTimePash(0)" <c:if test='${businessActivity.isTimingPush == 0}'> checked </c:if>> 否</label><br>
+                    <label><input class="radiostyle" type="radio" name="isTimingPush" value="1"  onclick="isTimePash(1)"<c:if test='${businessActivity.isTimingPush == 1}'> checked </c:if>>&nbsp;是</label><br><br>
+                    <label><input class="radiostyle" type="radio" name="isTimingPush" value="0" onclick="isTimePash(0)" <c:if test='${businessActivity.isTimingPush == 0}'> checked </c:if>>&nbsp;否</label><br>
                 </p>
             </div>
 			
@@ -188,13 +183,13 @@
             <div class="options">
                 <p>
                 	<shiro:hasPermission name="activity_instant_publish">
-                    <label><input class="radiostyle" type="radio" name="state" value="1" <c:if test='${businessActivity.state == 1}'> checked </c:if> >立即发布</label><br>
+                    <label><input class="radiostyle" type="radio" name="state" value="1" <c:if test='${businessActivity.state == 1}'> checked </c:if> >&nbsp;立即发布</label><br>
                     </shiro:hasPermission><br>
-                    <label><input class="radiostyle" type="radio" name="state" value="6" <c:if test='${businessActivity.state == 6}'> checked </c:if> >定时发布</label><br><br>
+                    <label><input class="radiostyle" type="radio" name="state" value="6" <c:if test='${businessActivity.state == 6}'> checked </c:if> >&nbsp;定时发布</label><br><br>
                     <shiro:hasPermission name="activity_waiting_publish">
-                    <label><input class="radiostyle" type="radio" name="state" value="5" <c:if test='${businessActivity.state == 5}'> checked </c:if> >暂缓发布</label><br>
+                    <label><input class="radiostyle" type="radio" name="state" value="5" <c:if test='${businessActivity.state == 5}'> checked </c:if> >&nbsp;暂缓发布</label><br>
                     </shiro:hasPermission><br>
-                    <label><input class="radiostyle" type="radio" name="state" value="3" <c:if test='${businessActivity.state == 3}'> checked </c:if> >待审核</label><br><br>
+                    <label><input class="radiostyle" type="radio" name="state" value="3" <c:if test='${businessActivity.state == 3}'> checked </c:if> >&nbsp;待审核</label><br><br>
                 </p>
             </div>
             <div id="timingPublicLabel"></div>
@@ -506,7 +501,7 @@
 	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9" <c:if test="${fn:contains(iscontain, \'9\')}">checked</c:if> /> 小区</label>'
 	            
 	 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
-	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" value="${businessActivity.endTime}"/>';
+	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" value="${businessActivity.endTime}"/>';
 	 			$("#bmhdId").append(htmlDom);
 	 			$("#rankId").empty("");
 	 			$("#yhqId").empty();
@@ -555,7 +550,7 @@
 	    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" value="${businessActivity.votes}"/>个 投票项目</label>'
 	    		+'<div class="line2"></div>'
 	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
-	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" value="${businessActivity.endTime}"/>';
+	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" value="${businessActivity.endTime}"/>';
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();
 	 			$("#yhqId").empty();
@@ -710,7 +705,7 @@
               
    			+'<div class="line2"></div>'
    			+'<h2 class="relran" style="font-weight: bold;">优惠券图片<label for="couponImg" class="error success"></label></h2>'
-   			+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}${businessActivity.couponImg}" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
+   			+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}${businessActivity.couponImg}" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
    			+'<input type="hidden" name="couponImg" id="couponImg" value="${businessActivity.couponImg}">'
               
    			+'<div class="line2"></div>'
@@ -814,7 +809,7 @@
 		 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 小区</label>'
 		            
 		 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
-		 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
+		 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" />';
 		 			$("#bmhdId").append(htmlDom);
 		 			$("#rankId").empty("");
 		 			$("#yhqId").empty();
@@ -863,7 +858,7 @@
 	    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" />个 投票项目</label>'
 	    		+'<div class="line2"></div>'
 	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
-	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm:ss\'})" style="width:240px" />';
+	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" />';
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();
 	 			$("#yhqId").empty();
@@ -957,7 +952,7 @@
             
 				+'<div class="line2"></div>'
 				+'<h2 class="relran">优惠券图片<label for="couponImg" class="error success"></label></h2>'
-				+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
+				+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
 				+'<input type="hidden" name="couponImg" id="couponImg" value="">'
             
 				+'<div class="line2"></div>'

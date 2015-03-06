@@ -119,6 +119,7 @@
 								<c:if test="${news.state == 2 }"><span class="relsta cyellow">待审核</span></c:if>
 								<c:if test="${news.state == 3 }"><span class="relsta cred">未通过</span></c:if>
 								<c:if test="${news.state == 4 }"><span class="relsta cblue">已通过</span></c:if>
+								<c:if test="${news.isPush == 1 }"><span class="relsta cred" style="margin-left:10px;">已推送</span></c:if>
 								<div class="other-r">
 									<c:choose>
 									       <c:when test="${news.state == 0 && news.comments!=0}">
@@ -342,6 +343,10 @@ function jump(pageNo) {
 			            }else if(row.state == 4) {
 			            	state = '<span class="relsta cblue">已通过</span>';
 			            }
+	                	var push = '';
+	                	if(row.isPush == 1) {
+	                		push += '<span class="relsta cred" style="margin-left:10px;">已推送</span>';
+			            }
 	                	var newsType = '';
 	                	if(row.newsType == 0) {
 	                		newsType = '官方';
@@ -362,7 +367,7 @@ function jump(pageNo) {
 	                	+ '<time>'+(row.publishTime != '' ? row.publishTime.substring(0, 16) : '')+'</time>'
 	                	+ '<hr class="link">'
 	                	+ '<h2 class="title">'+row.title+'</h2>'
-	                	+ '<div class="state">'+state+'<div class="other-r">'
+	                	+ '<div class="state">'+state+push+'<div class="other-r">'
 	                	+'<i class="'+((row.state ==0 && row.comments!=0)?'revlight':'rev')+'" '
 	                	+ 'title="评论量"  style="'+((row.state ==0 && row.comments!=0)?'cursor:pointer;':'')+'" '
 	                	+'onclick="'+((row.state ==0 && row.comments!=0)?'window.location.href=\'getNewsCommentList.do?newsId='+row.newsId+'\' ':'')+'">'+row.comments+'</i><i class="look" title="浏览量">'+row.visits+'</i><i class="help" id="block6" title="点赞量">'+row.supports+'</i></div></div>'

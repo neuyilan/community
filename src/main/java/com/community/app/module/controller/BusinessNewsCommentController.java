@@ -75,7 +75,7 @@ public class BusinessNewsCommentController {
 			    .append("\"newsId\":\"").append(businessNewsComment.getNewsId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessNewsComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessNewsComment.getCommentorName()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessNewsComment.getContent()).append("\"").append(",")
+			    .append("\"content\":\"").append(businessNewsComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessNewsComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessNewsComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessNewsComment.getReplyName()).append("\"")

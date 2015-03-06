@@ -145,8 +145,9 @@ public class BusinessHelpCommentServiceImpl implements BusinessHelpCommentServic
 		int count=0;
 		BaseBean baseBean = new BaseBean();
 		try {
-			list=businessHelpCommentDao.findAllPage(query);
 			count=businessHelpCommentDao.selectCount(query);
+			query.setCount(count);
+			list=businessHelpCommentDao.findAllPage(query);
 		} catch (DaoException e) {
 			logger.debug("BusinessHelpCommentServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
 			e.printStackTrace();

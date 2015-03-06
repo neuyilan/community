@@ -24,13 +24,18 @@ import org.springframework.web.servlet.ModelAndView;
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessProperty;
 import com.community.app.module.bean.BusinessStation;
+import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ManageEstate;
+import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessPropertyService;
 import com.community.app.module.service.BusinessStationService;
+import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.ManageEstateQuery;
+import com.community.framework.utils.CommonUtils;
 
 @Controller
 @RequestMapping("/manage/manageEstate")
@@ -44,6 +49,8 @@ public class ManageEstateController {
 	private BusinessStationService businessStationService;
 	@Autowired
 	private BusinessPropertyService businessPropertyService;
+	@Autowired
+	private BusinessUserResourceService businessUserResourceService;
 	
 	/**
 	 * 进入管理页
@@ -311,9 +318,53 @@ public class ManageEstateController {
 	@RequestMapping(value="getAllEstateTree")
 	public void getAllEstateTree(HttpServletResponse response) {
 		JSONObject jsonObj = new JSONObject();
-		JSONArray arr = new JSONArray();
+		JSONArray comArr = new JSONArray();
 		try{
-			List comList = businessCommunityService.findAll();
+			ShiroUser shiroUser = CommonUtils.getUser();
+			// if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {//驿站
+			// List comList = businessCommunityService.findAll();
+			//获取该用户负责的多社区范围
+			Map map = new HashMap();
+			//map.put("userId", shiroUser.getUserId());
+			//map.put("orgType", shiroUser.getOrgType());
+			//map.put("comId", shiroUser.getCurComId());
+			
+			//List comList = businessCommunityService.findComsByUser(map);
+			List comList = shiroUser.getComList();
+			JSONObject comObj = null;
+			Map paramMap = null;
+			for(int i=0;i<comList.size();i++) {
+				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				CommunityBean community = (CommunityBean) comList.get(i);
+				comObj = new JSONObject();
+				paramMap = new HashMap();
+				paramMap = new HashMap();
+				paramMap.put("comId", community.getComId());
+				paramMap.put("userId", shiroUser.getUserId());
+				//List estateList = manageEstateService.findByMap(paramMap); 
+				List estateList = businessUserResourceService.findByMap(paramMap);
+				if(estateList.size() > 0){
+					comObj.put("id", "com_"+community.getComId());
+					comObj.put("text", community.getComName());
+					JSONArray estateArr = new JSONArray();
+					for(int j=0;j<estateList.size();j++) {
+						BusinessUserResource businessUserResource = (BusinessUserResource) estateList.get(j);
+						JSONObject estateObj = new JSONObject();
+						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
+						estateObj.put("text", businessUserResource.getEstateName());
+						estateObj.put("checkbox", true);
+						estateObj.put("state", "close");
+						estateArr.add(estateObj);
+					}
+					comObj.put("children", estateArr);
+					comObj.put("state", "closed");
+					comArr.add(comObj);
+				}				
+			}
+			// }
+			jsonObj.put("success", true);
+			jsonObj.put("result", comArr);
+			/* List comList = businessCommunityService.findAll();
 			JSONObject comObj = null;
 			JSONArray comArr = new JSONArray();
 			Map paramMap = new HashMap();
@@ -340,7 +391,7 @@ public class ManageEstateController {
 			}
 			
 			jsonObj.put("success", true);
-			jsonObj.put("result", comArr);
+			jsonObj.put("result", comArr);*/
 		}catch(Exception e){
 			jsonObj.put("success", false);
 			jsonObj.put("message", "获取失败");
@@ -430,6 +481,7 @@ public class ManageEstateController {
 				estateArr.add(estateObj);
 			}
 			comObj.put("children", estateArr);
+			comObj.put("state", "closed");
 			comArr.add(comObj);
 		}
 		

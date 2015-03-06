@@ -99,7 +99,7 @@ public class BusinessAnnoCommentController {
 			    .append("\"commentorId\":\"").append(businessAnnoComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessAnnoComment.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessAnnoComment.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessAnnoComment.getComment()).append("\"").append(",")
+			    .append("\"comment\":\"").append(businessAnnoComment.getComment().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    
 			    .append("\"commentorState\":\"").append(businessAnnoComment.getCommentorState()).append("\"").append(",")
 			    .append("\"repliedState\":\"").append(businessAnnoComment.getRepliedState()).append("\"").append(",")

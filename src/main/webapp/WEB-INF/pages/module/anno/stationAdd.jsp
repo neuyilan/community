@@ -65,7 +65,7 @@
             <input type="hidden" name="annoContent" id="annoContent" value="">
             
             <h2 class="relran" style="font-weight: bold;">公告列表大图<label for="annoPic" class="error success"></label></h2>
-            <div style=" overflow:hidden;"><img id="annoPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+            <div style=" overflow:hidden;"><img id="annoPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="annoPic" id="annoPic" value="">
             
             <%-- <h2 class="relran" style="font-weight: bold;">APP首页小图<label for="appPic" class="error success"></label></h2>
@@ -80,11 +80,11 @@
                 <p>
                     <label>
                          <input class="radiostyle" type="radio" name="isPush" value="1" id="isPush_1" >
-                       		 是</label>
+                       		 &nbsp;是</label>
                     　　<em style="color:#e7402f;">选择推送后，将通过系统推送至手机用户，非重要信息请勿选择</em><br><br>
                     <label>
                         <input class="radiostyle" type="radio" name="isPush" value="0" id="isPush_0" checked >
-                        	否</label>
+                        	&nbsp;否</label>
                     <br>
                 </p>
             </div>
@@ -93,14 +93,11 @@
             <h2 class="relstatus" style="font-weight: bold;">推荐到焦点图<label for="isRecommend" class="error success"></label></h2>
             <div class="options">
                 <p>
-                    <label>
-                        <input class="radiostyle" type="radio" name="isRecommend" value="1" id="isRecommend_1">
-                       		 是</label>
-                    　　<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-                    <label>
-                        <input class="radiostyle" type="radio" name="isRecommend" value="0" id="isRecommend_0" checked >
-                        	否</label>
-                    <br>
+                    <label><input class="radiostyle" type="radio" name="isRecommend" value="1" id="isRecommend_1">&nbsp;首页焦点图</label>
+                    <em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
+                    <label><input class="radiostyle" type="radio" name="isRecommend" value="2" id="isRecommend_2">&nbsp;首页广告焦点图</label>
+                    <em style="color:#000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
+                    <label><input class="radiostyle" type="radio" name="isRecommend" value="0" id="isRecommend_0" checked >&nbsp;以上都不选</label><br>
                 </p>
             </div>
             
@@ -111,20 +108,20 @@
                 <shiro:hasPermission name="station_anno_instant_publish">
                 <label>
                         <input class="radiostyle" type="radio" name="publishState" value="0">
-                        立即发布</label>
+                        &nbsp;立即发布</label>
                     <br>
                 </shiro:hasPermission>
                     <shiro:hasPermission name="station_anno_audting_anno">
                     <br>
                     <label>
                         <input class="radiostyle" type="radio" name="publishState" value="1">
-                        暂缓发布</label>
+                        &nbsp;暂缓发布</label>
                     <br>
                     </shiro:hasPermission>
                     <br>
                     <label>
                         <input class="radiostyle" type="radio" name="publishState" value="2">
-                        待审核</label>
+                        &nbsp;待审核</label>
                     <br>
                 </p>
             </div>
@@ -275,8 +272,10 @@
                     var node = scopeNodes[i];
                     var idArr = node.id.split('_');
                     var typeid = idArr[0];
-                    scopeIds += idArr[1] + ':' + node.text + ',';
-                    scopeInfo += node.text + ',';
+                    if(typeid == 'estate') {
+                    	scopeIds += idArr[1] + ':' + node.text + ',';
+                        scopeInfo += node.text + ',';
+                    }
                 }
                 if(scopeIds != '') {
                     if(scopeIds.indexOf(',') > -1) {

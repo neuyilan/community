@@ -6,6 +6,7 @@
 	<resultMap id="BusinessStationMessageResult" type="BusinessStationMessage">
 			<result column="commentId" property="commentId" />
 			<result column="stationId" property="stationId" />
+			<result column="staName" property="staName" />
 			<result column="estateId" property="estateId" />
 			<result column="commentorId" property="commentorId" />
 			<result column="commentorName" property="commentorName" />
@@ -21,6 +22,7 @@
 	<sql id="Base_Column_List" >
 			commentId,
 			stationId,
+			staName,
 			estateId,
 			commentorId,
 			commentorName,
@@ -36,13 +38,16 @@
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-				<if test="commentId != null and commentId != ''" >
+				<if test="commentId != null" >
 			   		and commentId = #{commentId}
 				</if>
-				<if test="stationId != null and stationId != ''" >
+				<if test="stationId != null" >
 			   		and stationId = #{stationId}
 				</if>
-				<if test="estateId != null and estateId != ''" >
+				<if test="staName != null and staName != ''" >
+			   		and staName = #{staName}
+				</if>
+				<if test="estateId != null" >
 			   		and estateId = #{estateId}
 				</if>
 				<if test="commentorId != null and commentorId != ''" >
@@ -86,6 +91,7 @@
 	<sql id="Base_Column_List_app" >
 			m.commentId,
 			m.stationId,
+			m.staName
 			m.estateId,
 			m.commentorId,
 			m.commentorName,
@@ -158,6 +164,20 @@
 		select <include refid="Base_Column_List" /> from business_station_message <include refid="Base_Where_Clause" />
 	</select>
 	
+	<!-- 根据用户查询所管理的小区所对应的驿站 -->
+	<select id="findByStationId"  resultMap="BusinessStationMessageResult" parameterType="java.util.Map">
+		SELECT DISTINCT bs.stationId, bs.staName
+		FROM manage_estate me
+		INNER JOIN business_user_resource bur ON me.estateId = bur.estateId
+		INNER JOIN business_community bc ON bc.comId = me.comId
+		INNER JOIN business_station bs ON bs.stationId = me.stationId
+		AND me.stationId != 0
+		AND bur.userId =#{userId}
+		<if test="comId != 0" >
+		AND bc.comId=#{comId}
+		</if>
+	</select>
+	
 	<!-- BusinessStationMessage根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessStationMessageResult" parameterType="Object">
 		select <include refid="Base_Column_List" /> from business_station_message  
@@ -202,6 +222,7 @@
 		insert into business_station_message(
 		
 		stationId,
+		staName,
 		estateId,
 		commentorId,
 		commentorName,
@@ -213,6 +234,7 @@
 		replyState
 		) values(
 		#{stationId},
+		#{staName},
 		#{estateId},
 		#{commentorId},
 		#{commentorName},
@@ -229,8 +251,11 @@
 	<update id="update" parameterType="BusinessStationMessage">
 		update business_station_message 
 		<set>
-			<if test="stationId != null and stationId != ''" >
+			<if test="stationId != null" >
 			stationId=#{stationId},
+			</if>
+			<if test="staName != null and staName != ''" >
+			staName=#{staName},
 			</if>
 			<if test="estateId != null and estateId != ''" >
 			estateId=#{estateId},

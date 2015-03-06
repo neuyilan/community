@@ -21,6 +21,27 @@
             <div class="scroll">
 	        	<div class="scroll-box">
 	                <ul id="oneul">
+	                	<li id="comId_" class="active navlist"><a href="javascript:;"><span>所有社区</span><b class="donbut"><i></i></b></a> 
+	                    	<input type="hidden" name="comId" id="comId" value="" />
+	                    	<ul class="erjnav">
+	                            <c:forEach items="${comList}" var="comBean" varStatus="key">
+	                            	<li id="comId_${comBean.comId}"><a href="javascript:;">${comBean.comName}</a></li>
+								</c:forEach>
+	                        </ul>
+	                    </li>
+	                    <li id="stationId_" class="navlist"><a href="javascript:;"><span>所有驿站</span><b class="donbut"><i></i></b></a> 
+							<input type="hidden" name="stationId" id="stationId" value="" /> 
+							<ul id="stationUL" class="erjnav"></ul>
+						</li>
+	                	<%-- <li id="stationId_" class="active navlist"><a href="javascript:;"><span>所有驿站</span><b class="donbut"><i></i></b></a>
+	                    	<input type="hidden" name="stationId" id="stationId" value="" />
+	                    	<ul class="erjnav">
+	                            <c:forEach items="${stationList}" var="stationBean" varStatus="key">
+	                            	<li id="stationId_${stationBean.stationId}"><a href="javascript:;">${stationBean.staName}</a></li>
+								</c:forEach>
+	                        </ul>
+	                    </li> --%>
+	                    
 	                    <li id="timeScope_" class="navlist"><a href="javascript:;"><span>所有时间范围</span><b class="donbut"><i></i></b></a>
                     		<input type="hidden" name="timeScope" id="timeScope" value="" />
                     		<input type="hidden" name="startTime" id="startTime" value="" />
@@ -52,6 +73,7 @@
 									<time>
 										<fmt:formatDate value="${bean.commentTime}" pattern="yyyy-MM-dd HH:mm" />
 									</time>
+									<span class="aut">&nbsp;&nbsp;&nbsp; 【${bean.staName==''?"老数据问题":bean.staName}】</span>
 									<div class="no-float"></div>
 									<p class="text">${bean.content}</p>
 								</div>
@@ -88,12 +110,23 @@
     <div id="msgInfoLayer" class="busswi5 s-xw-bu">
 		<div id="msgInfoBar" class="sidebar5 s-xw-si">
 			<a id="close5" title="关闭" class="s-xw-cl" href="javascript:;" onclick="$('#msgInfoLayer').fadeOut('slow');"></a>
+							
             <h2 class="tit5">留言内容</h2>
 			<div id="wrapper-250">
 				<ul class="accordion5">
 		            <div class="link5"></div>
 					<ul class="sub-menu5 s-xw-xx">
-		                <li><div class="s-xw-con"><textarea class="iptnewtit" id="content" name="content" style="width:435px;height:200px; font-size:14px; padding-top:5px; padding-left:5px;" placeholder="请输入留言内容" ></textarea></div></li>
+		                <li><div class="s-xw-con"><textarea class="iptnewtit" id="content" name="content" style="width:435px;height:200px; font-size:14px; padding-top:5px; padding-left:5px;" placeholder="请输入留言内容" ></textarea>
+		                <br>
+		                <h2 class="relstatus">驿站范围</h2>
+						<select id="stationId1" name="stationId1" style="margin-top:10px; width: 250px; height: 40px; font-size: 16px; color: #2a2a2a;">
+							<option value="0">-----请选择发布驿站-----</option>
+							<c:forEach items="${stationList}" var="stationBean" varStatus="key">
+								<option value="${stationBean.stationId}">${stationBean.staName}</option>
+							</c:forEach>
+						</select>
+		                </div>
+		                </li>
 	              	</ul>
                 </ul>
             </div>
@@ -132,19 +165,23 @@
 	});
 	
 	function jumpUrl() {
-		if(parseInt('${curEstateId}') == 0) {
-			alert("请先切换到小区");return;
-		} else if(parseInt('${curStateId}') == 0) {
+		/*if(parseInt('${curStateId}') == 0) {
+			alert("请先切换到某个服务驿站发布留言！");return;
+		}  else if(parseInt('${curStateId}') == 0) {
    			alert("请选择有服务驿站的小区");return;
-   		} else{
-			$('#msgInfoLayer').fadeIn('slow');
-		}
+   		}  else{
+   			$('#msgInfoLayer').fadeIn('slow');
+   		}*/
+		$('#msgInfoLayer').fadeIn('slow');
+		
 	}
 	
 	//获取多参数
 	function getParams() {
 		var keyWord = $("input[name='keyWord']").val();
 		var params = {
+				comId:$("#comId").val(),
+				stationId:$('#stationId').val(),
 				timeScope: $('#timeScope').val(),
 				startTime: $('#startTime').val(),
 				endTime: $('#endTime').val(), 
@@ -195,6 +232,7 @@
 	                		+'<div class="textinfo">'
 	                		+'<span class="aut">'+(row.commentorName==""||row.commentorName=='null'?"匿名":row.commentorName) +'</span>'
 	                		+'<time>'+(row.commentTime != null ? row.commentTime.substring(0, 16) : '')+'</time>'
+	                		+'<span class="aut">&nbsp;&nbsp;&nbsp; 【'+(row.staName==""?"老数据问题":row.staName) +'】</span>'
 	                		+'<div class="no-float"></div>'
 	                		+'<p class="text">'+row.content+'</p>'
 	                		+'</div>'
@@ -211,6 +249,44 @@
 	            	$('#commentDiv').html('很抱歉，没有相关记录。');
 	            }
 	            $('#commentDiv').append('<div class="no-float"></div>');;
+	            
+	         	// 获取社区下对于的所有小区
+            	$('.erjnav').eq(1).html('');
+            	var comId = $("#comId").val();
+            	$.ajax({
+					type: 'post',
+			        url: '<%=path %>/business/businessStationMessage/findByStationId.do',
+			        dataType: 'json',
+			        data: {comId : comId},
+			 		cache: false,
+			        success: function (data) {
+			            var rows = data.rows;
+	                	var stationId = $("#stationId").val();
+		            	var htmlDom = "";
+	                	if(stationId != "") {
+		                	htmlDom = '<li id="stationId_"><a href="javascript:;">所有驿站</a></li>';
+		                	$('.erjnav').eq(1).append(htmlDom);
+	                	}
+	                	
+			            if(rows.length > 0 && comId != "") {
+			            	for(var i=0;i<rows.length;i++) {
+			                	var row = rows[i];  
+			                	if(row.stationId != stationId) {
+				                	htmlDom = '<li id="stationId_'+row.stationId+'"><a href="javascript:;">'+row.staName+'</a></li>';
+				                	$('.erjnav').eq(1).append(htmlDom);
+			                	}
+			            	}
+			            	$('#oneul').find('.erjnav:eq(1)>li').each(function(index, obj) {
+								bindClick($(obj));
+							});
+			            }else {
+			            	$('.erjnav').eq(1).html('');
+			            }
+			        },
+			        error: function () {
+			        	$('.erjnav:eq(1)').html('很抱歉，加载驿站内容出错，我们及时修改问题。');
+			        }
+			    });
 	            
 	            var vis = $("#pageUl li:not(#pageUl :first,#pageUl :last):visible");//显示的数量
                	var liCount = '';  
@@ -274,9 +350,11 @@
 			alert("请填写留言内容!");
 		} else if($('#content').val().length > 500) {
 			alert("留言内容不能大于500字!");
+		} else if($('#stationId1').val() == 0) {
+			alert("请选择驿站范围！");
 		}else {
 			$('#qrbut7').attr("disabled","disabled");
-			$.post('save.do', {content:$('#content').val()}, 
+			$.post('save.do', {content:$('#content').val(), stationId:$('#stationId1').val()}, 
     		function(data) {
     			eval("data = "+data);
     			alert(data.message);

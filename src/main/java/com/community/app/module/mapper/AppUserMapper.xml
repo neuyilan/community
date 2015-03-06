@@ -256,8 +256,8 @@
 	<!-- AppUser根据搜索条件，搜索分页数据  针对物业  -->
 	<select id="findAllPageByProperty" resultMap="AppUserResult" parameterType="Object">
 		select <include refid="Base_Column_List" /> from app_user u
-		inner join app_estate_user aeu on aeu.userId = u.userId
-		inner join business_user_resource res on res.estateId = aeu.estateId 
+		<!-- inner join app_estate_user aeu on aeu.userId = u.userId -->
+		inner join business_user_resource res on res.estateId = u.estateId 
 		<include refid="Base_Where_Clause" />
 		group by u.userId
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -287,8 +287,8 @@
 	<!-- AppUser列表总数 针对物业 -->
 	<select id="selectCountByProperty" resultType="java.lang.Integer"  parameterType="Object">
 		select count(1) from (select count(distinct(u.userId)) from app_user u
-		inner join app_estate_user aeu on aeu.userId = u.userId
-		inner join business_user_resource res on res.estateId = aeu.estateId
+		<!-- inner join app_estate_user aeu on aeu.userId = u.userId -->
+		inner join business_user_resource res on res.estateId = u.estateId
 		<include refid="Base_Where_Clause" />
 		group by u.userId
 		) as cc

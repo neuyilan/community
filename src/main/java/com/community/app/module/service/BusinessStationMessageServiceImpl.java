@@ -133,6 +133,24 @@ public class BusinessStationMessageServiceImpl implements BusinessStationMessage
 	}*/
 	
 	/**
+	 * 查询单个BusinessStationMessage
+	 * @param userId
+	 * @return
+	 * @throws ServiceException
+	 */
+	@Transactional(readOnly = true)
+	public List<BusinessStationMessage> findByStationId(final Map<String, Object> paramMap) throws ServiceException {
+		List<BusinessStationMessage> list = new ArrayList<BusinessStationMessage>() ;
+		try {
+			list = businessStationMessageDao.findByStationId(paramMap);
+		} catch (DaoException e) {
+			logger.debug("BusinessStationMessageServiceImpl findByStationId()：查询单个BusinessStationMessage发生错误！", e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	/**
 	 * 根据搜索条件，搜索分页数据
 	 * @param query
 	 * @param pageData

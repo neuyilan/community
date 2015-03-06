@@ -160,12 +160,12 @@ public class BusinessProductController {
 				BusinessProduct businessProduct = (BusinessProduct) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"productId\":\"").append(businessProduct.getProductId()).append("\"").append(",")
-			    .append("\"productName\":\"").append(businessProduct.getProductName()).append("\"").append(",")
+			    .append("\"productName\":\"").append(businessProduct.getProductName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessProduct.getPublisherId()).append("\"").append(",")
-			    .append("\"publisherName\":\"").append(businessProduct.getPublisherName()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessProduct.getContent().replaceAll("(\r?\n()+)", "")).append("\"").append(",")
-			    .append("\"title\":\"").append(businessProduct.getTitle()).append("\"").append(",")
-			    .append("\"contactName\":\"").append(businessProduct.getContactName()).append("\"").append(",")
+			    .append("\"publisherName\":\"").append(businessProduct.getPublisherName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"content\":\"").append(businessProduct.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"title\":\"").append(businessProduct.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"contactName\":\"").append(businessProduct.getContactName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"contactTel\":\"").append(businessProduct.getContactTel()).append("\"").append(",")
 			    .append("\"contactQq\":\"").append(businessProduct.getContactQq()).append("\"").append(",")
 			    .append("\"typeId\":\"").append(businessProduct.getTypeId()).append("\"").append(",")
@@ -536,7 +536,7 @@ public class BusinessProductController {
 		    businessProduct.setProductName(query.getProductName());
 		    businessProduct.setPublisherId(query.getPublisherId());
 		    businessProduct.setPublisherName(query.getPublisherName());
-		    businessProduct.setContent(query.getContent());
+		    businessProduct.setContent(query.getContent().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessProduct.setTitle(query.getTitle());
 		    businessProduct.setContactName(query.getContactName());
 		    businessProduct.setContactTel(query.getContactTel());
@@ -631,7 +631,7 @@ public class BusinessProductController {
 		    businessProduct.setProductName(query.getProductName());
 		    businessProduct.setPublisherId(query.getPublisherId());
 		    businessProduct.setPublisherName(query.getPublisherName());
-		    businessProduct.setContent(query.getContent());
+		    businessProduct.setContent(query.getContent().replaceAll("(\r?\n()+)", "").replace("\"", ""));
 		    businessProduct.setTitle(query.getTitle());
 		    businessProduct.setContactName(query.getContactName());
 		    businessProduct.setContactTel(query.getContactTel());

@@ -11,13 +11,10 @@
 <head>
 <title>评论详情</title>
 <%@include file="/common/meta.jsp"%>
+<script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
 <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
-<script src="<%=ctx%>/js/jquery-ui/jquery-ui-1.10.4.custom.min.js" type="text/javascript" ></script>
-<script src="<%=ctx%>/js/jquery-ui/jquery.ui.datepicker-zh-CN.js" type="text/javascript" ></script>
-<script src="<%=ctx %>/js/jquery.validate.min.js" type="text/javascript" ></script>
-<link rel="stylesheet" type="text/css" href="${ctx}/css/easyui/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="<%=ctx %>/css/easyui/themes/icon.css">
-<script type="text/javascript" src="${ctx}/js/jquery-easyui/jquery.easyui.min.js"></script>
+<script src="<%=ctx%>/js/jquery-ui/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+<script src="<%=ctx%>/js/jquery-ui/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
 <script type="text/javascript">
 		$(function () {
 		    $(document).keyup(function(event){
@@ -180,7 +177,7 @@
                     }else{
                     	$('#commentDiv').html('很抱歉，没有相关记录。');
                     }
-                    $('#commentDiv').append('<div class="no-float"></div>');
+$('#commentDiv').append('<div class="no-float"></div>');
                     
                     var vis = $("#pageUl li:not(#pageUl :first,#pageUl :last):visible");//显示的数量
                    	var liCount = '';  
@@ -192,16 +189,16 @@
                     		}
                     	}
                     	if(flag){
-                    		liCount = liCount + '<li><a   href="javascript:jump('+pageno+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
+                    		liCount = liCount + '<li><a   href="javascript:jump('+pageno+','+data.pageSize+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
                     	}else{
-                    		liCount = liCount + '<li style="display:none";><a  href="javascript:jump('+pageno+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
+                    		liCount = liCount + '<li style="display:none";><a  href="javascript:jump('+pageno+','+data.pageSize+');"><span id="page_'+pageno+'">'+pageno+'</span></a></li>';
                     	}
                     	
                     }
                     var boolnext = '';
-                    if((data.pageId)>=(data.pageCount)) { boolnext='#'; }else { boolnext='javascript:next();'; }
+                    if((data.pageId)>=(data.pageCount)) { boolnext='#'; }else { boolnext='javascript:next('+data.pageSize+');'; }
                     var boolprev = '';
-                    if((data.pageId)<=1) { boolprev='#'; }else { boolprev='javascript:prev();';  }
+                    if((data.pageId)<=1) { boolprev='#'; }else { boolprev='javascript:prev('+data.pageSize+');';  }
     	           	var pageDom = ''
     	           		+ '<div class="pagec"><ul id="pageUl">'
     	           		+ '<li><a id="arrow-l" class="arrow" href="'+boolprev+'"></a></li>'
@@ -218,7 +215,7 @@
             });
         }
         
-        //上一页
+      //上一页
         function prev(pageSize) {
         	var currNo = $('#curr').first().text();
         	var prevNo = parseInt(currNo) - 1;
@@ -237,7 +234,7 @@
         		nextNo = pageCount;
         	}
         	jump(nextNo, pageSize);
-        }       
+        }
     </script>
 </head>
 

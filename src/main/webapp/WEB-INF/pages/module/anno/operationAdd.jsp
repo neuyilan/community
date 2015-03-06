@@ -283,9 +283,35 @@
     	
       	//显示范围层
         $("#showScopeLayer").click(function(){
-        	var annoType = $('#annoType').val();
-        	if(annoType == '' || annoType == null) {alert('请先选择公告类型');return;}
-        	if(annoType == 2) {//内部公告
+        	/* var annoType = $('#annoType').val();
+        	if(annoType == '' || annoType == null) {alert('请先选择公告类型');return;} */
+        	
+        	$("#scopeLayer").fadeIn("slow");
+            $("#scopeLayer").css("height",$(document.body).outerHeight(true)+'px');
+            $("#scopeBar").css("height",$(document.body).outerHeight(true)-40+'px');
+            //显示小区结构
+            $.ajax({
+                url: '${ctx}/manage/manageEstate/getAllEstateTree.do',
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                     
+                    if(data.success == true){
+                        var rows = data.result;
+                        if(rows.length > 0) {
+                            $('#scopeTree').tree('loadData', data.result);
+                        }else{
+                            $('.accordion2').html('很抱歉，没有相关记录。');
+                        }
+                    }else{
+                        $('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
+                    }
+                },
+                error: function () {
+                    $('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
+                }
+            });
+        	/* if(annoType == 2) {//内部公告
         		$("#innerScopeLayer").fadeIn("slow");
                 $("#innerScopeLayer").css("height",$(document.body).outerHeight(true)+'px');
                 $("#innerScopeBar").css("height",$(document.body).outerHeight(true)-40+'px');
@@ -337,7 +363,7 @@
                         $('.accordion2').html('很抱歉，加载内容出错，我们及时修改问题。');
                     }
                 });
-        	}
+        	} */
         });
     	
     	//用户级别选择

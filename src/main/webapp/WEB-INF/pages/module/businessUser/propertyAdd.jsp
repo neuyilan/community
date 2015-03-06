@@ -44,8 +44,8 @@
             <h2 class="relstatus">性别<label for="sex" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input class="radiostyle" type="radio" id="sex1" name="sex" value="0" checked > 男<br><br>
-            	      <input class="radiostyle" type="radio" id="sex2" name="sex" value="1">女<br>
+            	      <label><input class="radiostyle" type="radio" id="sex1" name="sex" value="0" checked >&nbsp;男<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="sex2" name="sex" value="1">&nbsp;女<br></label>
           	      </p>
             </div>
             <div class="line2"></div>
@@ -57,8 +57,8 @@
             <h2 class="relstatus">婚姻状况<label for="isMarriage" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input class="radiostyle" type="radio" id="isMarriage1" name="isMarriage" value="0">已婚<br><br>
-            	      <input class="radiostyle" type="radio" id="isMarriage2" name="isMarriage" value="1" checked >未婚<br>
+            	      <label><input class="radiostyle" type="radio" id="isMarriage1" name="isMarriage" value="0">&nbsp;已婚<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="isMarriage2" name="isMarriage" value="1" checked >&nbsp;未婚<br></label>
           	      </p>
             </div>
             <div class="line2"></div>
@@ -112,12 +112,19 @@
             <h2 class="newscont">交流话术<font color="red">*</font><label for="comWord" class="error success"></label></h2>
             <textarea class="newtext" id="comWord" name="comWord" placeholder=""></textarea>
             
+            <h2 class="relstatus">驿站女孩<font color="red">*</font><label for="isGirl" class="error success"></label></h2>
+            <div class="options">
+            	  <p>
+            	      <label><input class="radiostyle" type="radio" id="isGirl1" name="isGirl" value="0" checked >&nbsp;否<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="isGirl2" name="isGirl" value="1">&nbsp;是<br></label>
+          	      </p>
+            </div> 
            
            	<h2 class="relstatus">物业管家<font color="red">*</font><label for="isManager" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input class="radiostyle" type="radio" id="isManager1" name="isManager" value="0" checked >否<br><br>
-            	      <input class="radiostyle" type="radio" id="isManager2" name="isManager" value="1">是<br>
+            	      <label><input class="radiostyle" type="radio" id="isManager1" name="isManager" value="0" checked >&nbsp;否<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="isManager2" name="isManager" value="1">&nbsp;是<br></label>
           	      </p>
             </div> 
                       
@@ -126,8 +133,8 @@
             <h2 class="relstatus">员工状态<font color="red">*</font><label for="state" class="error success"></label></h2>
             <div class="options">
             	  <p>
-            	      <input class="radiostyle" type="radio" id="state1" name=state value="0" checked >启用<br><br>
-            	      <input class="radiostyle" type="radio" id="state2" name="state" value="1" >停用<br>
+            	      <label><input class="radiostyle" type="radio" id="state1" name=state value="0" checked >&nbsp;启用<br><br></label>
+            	      <label><input class="radiostyle" type="radio" id="state2" name="state" value="1" >&nbsp;停用<br></label>
           	      </p>
             </div>
             

@@ -468,6 +468,7 @@ public class BusinessHelpController {
 						}
 					}
 					comObj.put("children", estateArr);
+					comObj.put("state", "closed");
 					comArr.add(comObj);
 				}
 			//}

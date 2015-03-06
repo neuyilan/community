@@ -112,7 +112,7 @@
 	            </div>
 		            
                 <h2 class="relstatus" style="font-weight: bold;">焦点图<label for="picUrl" class="error success"></label></h2>
-                <div style=" overflow:hidden;"><img id="picUrlBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+                <div style=" overflow:hidden;"><img id="picUrlBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
                 <input type="hidden" name="picUrl" id="picUrl">
                 <input type="hidden" name="uploadField" id="uploadField" value="" >
                 
@@ -123,12 +123,12 @@
                 <div class="options">
                     <p>
                     	<shiro:hasPermission name="focus_instant_publish">
-                        <input class="radiostyle" type="radio" name="state" value="0">立即发布<br><br>
+                        <label><input class="radiostyle" type="radio" name="state" value="0">&nbsp;立即发布<br><br></label>
                         </shiro:hasPermission>
                         <shiro:hasPermission name="focus_wait_publish">
-                        <input class="radiostyle" type="radio" name="state" value="1">暂缓发布<br><br>
+                        <label><input class="radiostyle" type="radio" name="state" value="1">&nbsp;暂缓发布<br><br></label>
                         </shiro:hasPermission>
-                        <input class="radiostyle" type="radio" name="state" value="2"  checked>待审核<br><br>
+                    	<label><input class="radiostyle" type="radio" name="state" value="2" checked>&nbsp;待审核<br><br></label>
                     </p>
                 </div>
                 

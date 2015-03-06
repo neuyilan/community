@@ -40,8 +40,10 @@
         <typeAlias alias="BusinessActivity" type="com.community.app.module.bean.BusinessActivity"/>
         <typeAlias alias="BusinessStation" type="com.community.app.module.bean.BusinessStation"/>
         <typeAlias alias="BusinessFocus" type="com.community.app.module.bean.BusinessFocus"/>
+        <typeAlias alias="BusinessFocusAd" type="com.community.app.module.bean.BusinessFocusAd"/>
         <typeAlias alias="BusinessAnnoScope" type="com.community.app.module.bean.BusinessAnnoScope"/>
 		<typeAlias alias="AppFocusScope" type="com.community.app.module.bean.AppFocusScope"/>
+		<typeAlias alias="AppFocusAdScope" type="com.community.app.module.bean.AppFocusAdScope"/>
 		
         <typeAlias alias="BusinessActivityComment" type="com.community.app.module.bean.BusinessActivityComment"/>
         <typeAlias alias="BusinessActivityMessage" type="com.community.app.module.bean.BusinessActivityMessage"/>
@@ -196,6 +198,7 @@
         <mapper resource="com/community/app/module/mapper/BusinessActivityMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessAnnoScopeMapper.xml" />
         <mapper resource="com/community/app/module/mapper/AppFocusScopeMapper.xml" />
+        <mapper resource="com/community/app/module/mapper/AppFocusAdScopeMapper.xml" />
         
         <mapper resource="com/community/app/module/mapper/BusinessActivityCommentMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessActivityMessageMapper.xml" />
@@ -232,6 +235,7 @@
         <mapper resource="com/community/app/module/mapper/BusinessTelGroupMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessStationMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessFocusMapper.xml" />
+        <mapper resource="com/community/app/module/mapper/BusinessFocusAdMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessAddressMapper.xml" />	
 		<mapper resource="com/community/app/module/mapper/BusinessImagesMapper.xml" />	
 		<mapper resource="com/community/app/module/mapper/BusinessActivityRegistrationTimeslotMapper.xml" />	

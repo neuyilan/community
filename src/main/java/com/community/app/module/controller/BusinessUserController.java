@@ -545,7 +545,7 @@ public class BusinessUserController {
             businessUser.setNickname(query.getNickname());
             businessUser.setAvatar((query.getAvatar()==null || query.getAvatar().equals(""))?"/images/icon/pic02.jpg":query.getAvatar());  //头像
             businessUser.setIsManager(query.getIsManager());
-            businessUser.setIsGirl(0);
+            businessUser.setIsGirl(query.getIsGirl());
             businessUser.setState(query.getState());
             Timestamp  ts=new Timestamp(new Date().getTime());
             businessUser.setCreateTime(ts);
@@ -705,7 +705,7 @@ public class BusinessUserController {
             businessUser.setNickname(query.getNickname());
             //businessUser.setAvatar(query.getAvatar()); 
             businessUser.setIsManager(query.getIsManager());
-            //businessUser.setIsGirl(query.getIsGirl());
+            businessUser.setIsGirl(query.getIsGirl());
             businessUser.setState(query.getState());
             Timestamp  ts=new Timestamp(new Date().getTime());
             businessUser.setEditTime(ts);
@@ -2080,6 +2080,7 @@ public class BusinessUserController {
 								estateArr.add(estateObj);
 							}
 							comObj.put("children", estateArr);
+							comObj.put("state", "closed");
 							arr.add(comObj);
 						}				
 					}
@@ -2123,6 +2124,7 @@ public class BusinessUserController {
 								}
 							}
 							comObj.put("children", estateArr);
+							comObj.put("state", "closed");
 							arr.add(comObj);
 						}				
 					}
@@ -2763,6 +2765,7 @@ public class BusinessUserController {
 						estateArr.add(estateObj);
 					}
 					comObj.put("children", estateArr);
+					comObj.put("state", "closed");
 					comArr.add(comObj);
 				}				
 			}

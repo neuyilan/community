@@ -188,7 +188,7 @@ height: 19px;
 .tp-hh section{ padding:0 10px 0 40px;}
 .tp-sort section h2{ font-size:18px; font-weight:normal; color:#696969;}
 .tp-sort section p{ margin:5px 0 0 0;}
-.tp-sort section img{ width:182px; height:auto;}
+.tp-sort section img{ height:149px;width:182px; height:auto;}
 .tp-hh .hh-active{ background-color:#d1edcc;}
 
 .tp-center{ text-align:center; line-height:32px;}

@@ -171,7 +171,20 @@
 								</div>
 							</div>
 	                		<img class="y-hdgl-img" src="<%=ctx %>${act.actPic}" style="height: 100px; "/>
-		                    <p class="y-hdgl-dzinfor"><span>活动截止时间：${act.publishDate }&nbsp;&nbsp;${act.publishTime }</span></p>
+		                    <%-- <p class="y-hdgl-dzinfor"><span>活动截止时间：${act.publishDate }&nbsp;&nbsp;${act.publishTime }</span></p> --%>
+		                    
+		                    <p class="y-hdgl-dzinfor">
+		                    	<span>活动截止时间：
+		                    		<c:choose>
+										<c:when test="${fn:length(act.endTime) > 17}">
+											<c:out value="${fn:substring(act.endTime, 0, 16)}" />
+										</c:when>
+										<c:otherwise>
+											<c:out value="${act.endTime}" />
+										</c:otherwise>
+									</c:choose>
+		                    	</span>
+		                    </p>
 		                    <hr class="link">
 			                    
 		                    <div class="operate">
@@ -299,7 +312,8 @@
 	  	  async: false,
 	  	  success: function(data) {
 	      		$('#actName').text(data.actName);
-      			$('#actTime').text(data.publishDate+' '+data.publishTime);
+      			// $('#actTime').text(data.publishDate+' '+data.publishTime);
+      			$('#actTime').text((data.endTime != '' && data.endTime != "null" ? data.endTime.substring(0, 16) : ''));
 	            $('#actContent').html(data.actContent);
 	            $('#actScope').text(data.actScope);
 	            $('#editor').text(data.editor);
@@ -307,7 +321,7 @@
 	            $('#typeName').text(data.typeName);
 	            $('#auditorName').text(data.auditorName != "null" ? data.auditorName : '');
 	            $('#auditTime').text(data.auditTime != "null" ? data.auditTime.substring(0, 16) : '');
-	            if(data.refuseMemo != 'null' &&  data.state == 4) {
+	            if(data.refuseMemo != "null" &&  data.state == 4) {
 	            	 $('#auditInfo2').html("批注：" +data.refuseMemo);	//审批原因
 	            } else {
 	            	$("#auditInfo1").css('display','none'); 
@@ -532,7 +546,8 @@
 	                	+'</div>'
 	                	+ '<img class="y-hdgl-img" src="<%=ctx%>'+row.actPic+'" style="height: 100px; "/>'
                     	+ '<p class="y-hdgl-dzinfor">'
-                    	+ '<span>活动截止时间：'+row.publishDate+'&nbsp;&nbsp;'+row.publishTime+' </span></p>'
+                    	//+ '<span>活动截止时间：'+row.publishDate+'&nbsp;&nbsp;'+row.publishTime+' </span></p>'
+                    	+ '<span>活动截止时间：'+(row.endTime != '' && row.endTime != "null" ? row.endTime.substring(0, 16) : '')+' </span></p>'
                     	+ '<hr class="link">'
                     	+ '<div class="operate">'
                     	<shiro:hasPermission name="activity_view_detail">
