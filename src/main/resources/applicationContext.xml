@@ -78,7 +78,9 @@
   	<!-- 注册 applicationContext 为 AXIS2 -->
     <bean id="applicationContext" class="org.apache.axis2.extensions.spring.receivers.ApplicationContextHolder" />
     <!-- WS Bean 注册 start -->
-    <bean id="qHActivitySer" class="com.community.ws.QH.QHIFServer.QHActivitySer"></bean>
+    <bean id="qNHActivitySer" class="com.community.ws.QNH.QNHIFServerSer.QNHActivitySer"></bean>
+    <bean id="uploadFileSer" class="com.community.ws.QNH.QNHIFServerSer.UploadFileSer"></bean>
+    
      <!-- WS Bean 注册 end -->
      
     <!-- 配置freeMarker的模板路径 -->  

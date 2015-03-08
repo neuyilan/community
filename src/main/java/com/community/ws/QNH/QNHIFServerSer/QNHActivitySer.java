@@ -1,4 +1,4 @@
-package com.community.ws.QH.QHIFServer;
+package com.community.ws.QNH.QNHIFServerSer;
 
 import java.util.List;
 
@@ -7,13 +7,9 @@ import com.community.app.module.bean.BusinessHelp;
 import com.community.app.module.service.BusinessHelpService;
 
 
-public class QHActivitySer {
+public class QNHActivitySer {
 	@Autowired
 	BusinessHelpService businessHelpService ;
-	
-//	private static ApplicationContext ctx;
-//	 MessageContext msgCtx = MessageContext
-//	org.apache.axis2.context.MessageContext
 	
 	public String addActivity(String reqStr)
 	{
@@ -21,7 +17,7 @@ public class QHActivitySer {
 		for(BusinessHelp bh : aa)
 			System.out.println(bh.getHelpId());
 		System.out.println(reqStr); 
-		return "";
+		return "终于成功了";
 	}
 
 	

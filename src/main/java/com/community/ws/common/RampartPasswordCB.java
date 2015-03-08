@@ -1,11 +1,11 @@
 package com.community.ws.common;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.UnsupportedCallbackException;
+
 import org.apache.ws.security.WSPasswordCallback;
 
 public class RampartPasswordCB implements CallbackHandler {
@@ -15,10 +15,10 @@ public class RampartPasswordCB implements CallbackHandler {
 			WSPasswordCallback pwcb = (WSPasswordCallback) callbacks[i];
 			String id = pwcb.getIdentifier();
 			System.out.println("id====" + id);
-			if ("QnhClient".equals(id)) {
-				pwcb.setPassword("111111");
-			} else if ("QnhServer".equals(id)) {
-				pwcb.setPassword("22222");
+			if ("okser".equals(id)) {
+				pwcb.setPassword("okser123s");
+			} else if ("okcli".equals(id)) {
+				pwcb.setPassword("okcli123s");
 			} else {
 				System.out.println("Your are not a authorized user");
 				throw new UnsupportedCallbackException(callbacks[i],

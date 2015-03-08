@@ -1,41 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<service name="QHActivitySer">
+<service name="UploadFileSer">
 	<description>
-		QHActivity Server
+		Upload file to OKJIA
 	</description>
 	<!-- 通过ServiceObjectSupplier参数指定SpringServletContextObjectSupplier类来获得Spring的ApplicationContext对象 -->
 	<parameter name="load-on-startup">true</parameter>
 	<parameter name="ServiceObjectSupplier">
-		<!-- com.community.ws.common.MyServiceObjectSupplier  locked="false" -->
+		<!-- com.community.ws.common.MyServiceObjectSupplier locked="false" -->
 		org.apache.axis2.extensions.spring.receivers.SpringAppContextAwareObjectSupplier
-		<!-- QHActivitySer businessHelpService -->
 	</parameter>
-	<!-- <parameter name="ServiceClass"> -->
-	<!-- com.community.ws.QH.QHIFServer.QHActivitySer -->
-	<!-- </parameter> -->
-	<parameter name="SpringBeanName">qHActivitySer</parameter>
-	<operation name="addActivity">
+	<parameter name="SpringBeanName">uploadFileSer</parameter>
+	
+	<operation name="uploadFile">
 		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
 	</operation>
-	
-<!-- 	<module ref="rampart" /> -->
+	<operation name="downloadFile">
+			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
+	</operation>
+	<module ref="rampart" />
 <!-- 	<parameter name="InflowSecurity"> -->
 <!-- 		<action> -->
 <!-- 			<items>Encrypt</items> -->
-<!-- 			<passwordCallbackClass>com.community.ws.common.RampartPasswordCB -->
-<!-- 			</passwordCallbackClass> -->
-<!-- 			<decryptionPropFile>service.properties</decryptionPropFile> -->
+<!-- 			<passwordCallbackClass>com.community.ws.common.RampartPasswordCB</passwordCallbackClass> -->
+<!-- 			<decryptionPropFile>ws/service.properties</decryptionPropFile> -->
 <!-- 		</action> -->
 <!-- 	</parameter> -->
 <!-- 	<parameter name="OutflowSecurity"> -->
 <!-- 		<action> -->
 <!-- 			<items>Encrypt</items> -->
-<!-- 			<encryptionUser>shnlap93client</encryptionUser> -->
+<!-- 			<encryptionUser>okcli</encryptionUser> -->
 <!-- 			<passwordCallbackClass>com.community.ws.common.RampartPasswordCB -->
 <!-- 			</passwordCallbackClass> -->
-<!-- 			<encryptionPropFile>service.properties</encryptionPropFile> -->
+<!-- 			<encryptionPropFile>ws/service.properties</encryptionPropFile> -->
 <!-- 		</action> -->
 <!-- 	</parameter> -->
 
-
 </service>
+ 
