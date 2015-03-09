@@ -59,12 +59,12 @@
             
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动列表大图<label for="actPic" class="error success"></label></h2>
-            <div id="divImg" style=" overflow:hidden;"><img id="actPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+            <div id="divImg" style=" overflow:hidden;"><img id="actPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="actPic" id="actPic" value="">
             
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动列表结束大图<label for="actPicNo" class="error success"></label></h2>
-            <div id="divImg" style=" overflow:hidden;"><img id="actPicNoBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+            <div id="divImg" style=" overflow:hidden;"><img id="actPicNoBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="actPicNo" id="actPicNo" value="">
             
             <div class="line2"></div>
@@ -650,7 +650,7 @@
             
 				+'<div class="line2"></div>'
 				+'<h2 class="relran" style="font-weight: bold;">优惠券图片<label for="couponImg" class="error success"></label></h2>'
-				+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
+				+'<div id="divImg" style=" overflow:hidden;"><img id="couponImgBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>'
 				+'<input type="hidden" name="couponImg" id="couponImg" value="">'
             
 				+'<div class="line2"></div>'

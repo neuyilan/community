@@ -353,7 +353,7 @@ public class BusinessNewsServiceImpl implements BusinessNewsService {
 	        }
 			
 			BusinessNews businessNews = new BusinessNews();
-			businessNews.setTitle(param.get("title"));//标题
+			businessNews.setTitle(param.get("title").replace("\"", ""));//标题
 			businessNews.setTag(param.get("tag"));
 		    businessNews.setContent(content);//内容
 		    businessNews.setPageUrl("");//页面静态地址

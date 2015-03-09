@@ -91,7 +91,7 @@
 	<sql id="Base_Column_List_app" >
 			m.commentId,
 			m.stationId,
-			m.staName
+			m.staName,
 			m.estateId,
 			m.commentorId,
 			m.commentorName,

@@ -45,6 +45,7 @@ import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessChinmedichenacare;
 import com.community.app.module.bean.BusinessExp;
 import com.community.app.module.bean.BusinessFocus;
+import com.community.app.module.bean.BusinessFocusAd;
 import com.community.app.module.bean.BusinessHealthydiet;
 import com.community.app.module.bean.BusinessHelp;
 import com.community.app.module.bean.BusinessNews;
@@ -66,6 +67,7 @@ import com.community.app.module.service.BusinessActivityService;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessChinmedichenacareService;
 import com.community.app.module.service.BusinessExpService;
+import com.community.app.module.service.BusinessFocusAdService;
 import com.community.app.module.service.BusinessFocusService;
 import com.community.app.module.service.BusinessHealthydietService;
 import com.community.app.module.service.BusinessHelpService;
@@ -133,6 +135,9 @@ public class UserController {
 	
 	@Autowired
 	private BusinessFocusService businessFocusService;
+	
+	@Autowired
+	private BusinessFocusAdService businessFocusAdService;
 	
 	@Autowired
 	private AppUserNewsService appUserNewsService;
@@ -649,6 +654,7 @@ public class UserController {
 				json += "\"nickname\":\""+MemberVO.getNickname()+"\",";
 				json += "\"signatrue\":\""+MemberVO.getSignature()+"\",";
 				json += "\"tel\":\""+query.getCellphone()+"\",";
+				json += "\"isQNH\":\""+MemberVO.getIsQNH()+"\",";
 				json += "\"sex\":\""+MemberVO.getSex()+"\",";
 				json += "\"birthday\":\"";
 				if(MemberVO.getBirthday()!=null){
@@ -3577,6 +3583,8 @@ public class UserController {
 			query.setOrder("desc");
 			query.setSort("publishTime");
 			List<BusinessFocus> list = businessFocusService.findById_app(query.getEstateId());
+			List<BusinessFocusAd> adList = businessFocusAdService.findById_app(query.getEstateId());
+
 			query.setTop(1);
 			//获取最新
 			BusinessNewsQuery businessNewsQuery = new BusinessNewsQuery();
@@ -3614,8 +3622,53 @@ public class UserController {
 			json += "\"expState\":\""+expState+"\",";
 			json += "\"expId\":\""+expId+"\",";
 			json += "\"adList\":[";
+			for (int i=0;i<adList.size();i++) {
+				if (i==1) {
+					break;
+				}
+				BusinessFocusAd BusinessFocusAd = adList.get(i);
+				if(BusinessFocusAd.getSourceType()==0){
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					if(BusinessFocusAd.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";
+				}else if (BusinessFocusAd.getSourceType()==1){
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					if(BusinessFocusAd.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";
+				}else if (BusinessFocusAd.getSourceType()==2){
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					if(BusinessFocusAd.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";
+				}else{
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					if(BusinessFocusAd.getIshtml()==1){
+						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
+					}else{
+						json +="\"url\":\"\"";
+					}
+					json +="},";	
+				}
+			}
+			int flag = 4;
+			if (adList.size() > 0) {
+				flag = 3;
+			}
+			
 			for (int i=0;i<list.size();i++) {
-				if (i==4) {
+				
+				if (i==flag) {
 					break;
 				}
 				BusinessFocus BusinessFocus = list.get(i);
@@ -3653,7 +3706,7 @@ public class UserController {
 					json +="},";	
 				}
 			}
-			if(list.size() > 0) {
+			if(list.size() > 0 || adList.size() > 0) {
 				json = json.substring(0, json.length()-1);
 			}
 			json += "],";

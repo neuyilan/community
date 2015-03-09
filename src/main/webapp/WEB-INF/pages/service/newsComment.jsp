@@ -164,103 +164,9 @@
 		 });
 		
 		//评论
-		 $('#commentBtn').click(function() {
-			if(userId==0){
-				if(userId==0){
-					 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
-					 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
-					 	},'取消');
-					 	return;
-				}
-			}
-			var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
-		 	var content = $('#comment').val();
-		 	content = content.replace(ze,'');
-		 	if(content.length==0){
-		 		msgbox('提示','您好像忘记说点什么了。','确认');
-				return;
-		 	}
-		 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
-			if(!reg.test(content)){
-				 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
-				return;
-			}
-		 	var url="";
-		 	if(replyId==0){
-		 		url = '${ctx}/service/commiunity/saveJournalismReview.json';
-		 	}else{
-		 		url = '${ctx}/service/commiunity/saveJournalismReply.json';
-		 	}
-		 	if(content != '') {
-		 		$.ajax({
-		 		    url: url,
-		 		    cache: false,
-		 		    data: {
-		 		    	ID: '${newsId}',
-			           	sessionid: '${sessionid}', 
-			           	userId: '${userId}',
-			           	replyId:replyId ,
-			           	replyName:replyName,
-		 		    	content: content,
-		 		    	replyType:replyType
-		 		    },
-		 		    type: 'post',
-		            dataType: 'json',
-		 		    success: function (data) {
-		 		    	//alert('评论成功');
-		 		    	//eval('data=' + data);
-		 		    	//$('#comment').attr('disabled', true);
-		 		    	/*var newContent = '';
-		 		    	newContent+= '<dl class="s-clt">';
-		 		    	newContent+= '<dt>';
-		 		    	newContent+='<a href="#" class="pto"><img src="'+protrait+'"></a>';
-		 		    	newContent+= '</dt>';
-		 		    	newContent+= '<dd>';
-		 		    	newContent+= '<div class="info">';
-		 		    	newContent+= '<span class="nine">'+nickname+'</span>';
-		 		    	newContent+= '<span class="time">'+(data.content.commentTime != '' ? data.content.commentTime.substring(0, 16) : '')+'</span>'
-		 		    	newContent+= '</div>'
-		 		    	if(replyId==0){
-		 		    		newContent+= '<div class="one">'+data.content.content+'</div>'
-		 		    	}else{
-		 		    		if(replyType==1){
-		 		    			newContent+= '<div class="one">'+ '<span <span>回复</sapn>' +'<span>'+replyName+'(官方):</span>' +data.content.content+'</div>'
-		 		    		}else{
-		 		    			newContent+= '<div class="one">'+ '<span <span>回复</sapn>' +'<span>'+replyName+':</span>' +data.content.content+'</div>'
-		 		    		}
-		 		    		
-		 		    	}
-		 		    	newContent+='</dd>'
-		 		    	newContent+='</dl>';
-		 				$('#comments').prepend(newContent);*/
-		 				if(data.errorCode == 200) {
-		 					$('#comment').val("");
-			 				$('#replaceinp').val("");
-			 				replyId = 0;//点击回复人id
-			 				replyName = "";//点击回复人姓名
-			 				replyType = 0;//点击回复人类型
-			 				$("#replaceinp").attr("placeholder","回复："+replyName);
-			 				$("#commentsCount").text(data.content.comments);
-			 				$('#comments').html("");
-			 				jump(1);
-			 				
-			 			 	document.getElementById("anchor_scroll").click();
-					        //alert(data.message);
-		        	   }else{
-		        		   msgbox('提示',data.message,'确认');
-		        	   }
-		 				
-		 		    },
-		 		    error: function () {
-		 		       msgbox('提示','评论失败','确认');
-		 		    }
-		 		});
-		 	}else{
-		 		 msgbox('提示','评论不能为空','确认');
-		 		return;
-		 	}
-		 	$("#replaceinp").attr("placeholder","请输入您要评论的内容...");
-		 });
+		 $('#commentBtn').click(function(){
+	 		comment();
+	 	});
 		
 		$('#nextBtn').click(function() {
 		 	if(PageState) {
@@ -307,7 +213,108 @@
 
 	
  } 
-
+function comment(){
+		if(userId==0){
+			if(userId==0){
+				 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+				 	},'取消');
+				 	return;
+			}
+		}
+		var ze = /(^\s*)|(\s*$)|(")|(\n)/g;
+	 	var content = $('#comment').val();
+	 	content = content.replace(ze,'');
+	 	if(content.length==0){
+	 		msgbox('提示','您好像忘记说点什么了。','确认');
+			return;
+	 	}
+	 	var reg=/^[\w\u4e00-\u9fa5`~!@#$%^&*()+=|{}':;,\t \[\].<>?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？～《》]+$/;
+		if(!reg.test(content)){
+			 msgbox('提示','不支持表情图片，您只能输入文字、数字、英文','确认');
+			return;
+		}
+	 	var url="";
+	 	if(replyId==0){
+	 		url = '${ctx}/service/commiunity/saveJournalismReview.json';
+	 	}else{
+	 		url = '${ctx}/service/commiunity/saveJournalismReply.json';
+	 	}
+	 	if(content != '') {
+	 		$('#commentBtn').unbind("click");
+	 		$.ajax({
+	 		    url: url,
+	 		    cache: false,
+	 		    data: {
+	 		    	ID: '${newsId}',
+		           	sessionid: '${sessionid}', 
+		           	userId: '${userId}',
+		           	replyId:replyId ,
+		           	replyName:replyName,
+	 		    	content: content,
+	 		    	replyType:replyType
+	 		    },
+	 		    type: 'post',
+	            dataType: 'json',
+	 		    success: function (data) {
+	 		    	//alert('评论成功');
+	 		    	//eval('data=' + data);
+	 		    	//$('#comment').attr('disabled', true);
+	 		    	/*var newContent = '';
+	 		    	newContent+= '<dl class="s-clt">';
+	 		    	newContent+= '<dt>';
+	 		    	newContent+='<a href="#" class="pto"><img src="'+protrait+'"></a>';
+	 		    	newContent+= '</dt>';
+	 		    	newContent+= '<dd>';
+	 		    	newContent+= '<div class="info">';
+	 		    	newContent+= '<span class="nine">'+nickname+'</span>';
+	 		    	newContent+= '<span class="time">'+(data.content.commentTime != '' ? data.content.commentTime.substring(0, 16) : '')+'</span>'
+	 		    	newContent+= '</div>'
+	 		    	if(replyId==0){
+	 		    		newContent+= '<div class="one">'+data.content.content+'</div>'
+	 		    	}else{
+	 		    		if(replyType==1){
+	 		    			newContent+= '<div class="one">'+ '<span <span>回复</sapn>' +'<span>'+replyName+'(官方):</span>' +data.content.content+'</div>'
+	 		    		}else{
+	 		    			newContent+= '<div class="one">'+ '<span <span>回复</sapn>' +'<span>'+replyName+':</span>' +data.content.content+'</div>'
+	 		    		}
+	 		    		
+	 		    	}
+	 		    	newContent+='</dd>'
+	 		    	newContent+='</dl>';
+	 				$('#comments').prepend(newContent);*/
+	 				if(data.errorCode == 200) {
+	 					$('#comment').val("");
+		 				$('#replaceinp').val("");
+		 				replyId = 0;//点击回复人id
+		 				replyName = "";//点击回复人姓名
+		 				replyType = 0;//点击回复人类型
+		 				$("#replaceinp").attr("placeholder","回复："+replyName);
+		 				$("#commentsCount").text(data.content.comments);
+		 				$('#comments').html("");
+		 				jump(1);
+		 				
+		 			 	document.getElementById("anchor_scroll").click();
+				        //alert(data.message);
+	        	   }else{
+	        		   msgbox('提示',data.message,'确认');
+	        	   }
+	 				 $('#commentBtn').click(function(){
+	 					comment();
+	 				 });
+	 				
+	 				
+	 		    },
+	 		    error: function () {
+	 		       msgbox('提示','评论失败','确认');
+	 		    }
+	 		});
+	 	}else{
+	 		 msgbox('提示','评论不能为空','确认');
+	 		return;
+	 	}
+	 	$("#replaceinp").attr("placeholder","请输入您要评论的内容...");
+}
  
 //获取下页评论内容
 function jump(nextNo) {

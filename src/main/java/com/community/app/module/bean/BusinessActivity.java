@@ -69,7 +69,43 @@ public class BusinessActivity implements java.io.Serializable {
 	private String couponEndDate;
 	private String couponValid;
 	private String reportExcel;
+	private String QNHActId;
+	private String QNHName;
+	private String QNHId;
+	private Integer isQNH;
 	
+	public String getQNHActId() {
+		return QNHActId;
+	}
+
+	public void setQNHActId(String qNHActId) {
+		QNHActId = qNHActId;
+	}
+
+	public String getQNHName() {
+		return QNHName;
+	}
+
+	public void setQNHName(String qNHName) {
+		QNHName = qNHName;
+	}
+
+	public String getQNHId() {
+		return QNHId;
+	}
+
+	public void setQNHId(String qNHId) {
+		QNHId = qNHId;
+	}
+
+	public Integer getIsQNH() {
+		return isQNH;
+	}
+
+	public void setIsQNH(Integer isQNH) {
+		this.isQNH = isQNH;
+	}
+
 	public String getActPicNo() {
 		return actPicNo;
 	}

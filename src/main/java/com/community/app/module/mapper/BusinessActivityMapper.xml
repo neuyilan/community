@@ -55,6 +55,11 @@
 			<result column="couponNum" property="couponNum" />
 			<result column="couponValid" property="couponValid" />
 			<result column="reportExcel" property="reportExcel" />
+			
+			<result column="QNHActId" property="QNHActId" />
+			<result column="QNHName" property="QNHName" />
+			<result column="QNHId" property="QNHId" />
+			<result column="isQNH" property="isQNH" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -253,7 +258,7 @@
 					<if test="type == 1" >
 				   		and a.state = '0' or a.state = '1'
 					</if>
-					<if test="curUserId != null and curUserId != ''" >
+					<!-- <if test="curUserId != null and curUserId != ''" >
 						and res.userId=#{curUserId} 
 					</if>
 					<if test="curComId != null and curComId != ''" >
@@ -261,7 +266,7 @@
 					</if>
 					<if test="curEstateId != null and curEstateId != 0" >
 			   			and res.estateId = #{curEstateId}
-					</if>
+					</if> -->
 					<if test="states != null and states != ''" >
 						and (
 						<foreach collection="states" item="aState" separator="OR">
@@ -315,7 +320,11 @@
 			a.couponDesc,
 			a.couponImg,
 			a.couponNum,
-			a.couponValid
+			a.couponValid,
+			a.QNHActId,
+			a.QNHName,
+			a.QNHId,
+			a.isQNH
 			
 	</sql>
 	
@@ -430,8 +439,12 @@
 				   		and a.isImportant = #{isImportant}
 					</if>
 					<if test="statetype==1" >
-				   		and a.state=0 and  a.isImportant = #{isImportant} or a.state=1 and  a.isImportant = #{isImportant} or a.state=2 and  a.isImportant = #{isImportant}
+				   		and a.state=0 and  a.isImportant = #{isImportant} or a.state=1 and  a.isImportant = #{isImportant}  or a.state=2 and  a.isImportant = #{isImportant} 
 					</if>
+					<if test="statetype==2" >
+				   		and a.state=0 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH} or a.state=1 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH} or a.state=2 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH}
+					</if>
+					
 			</trim>
 		</where>
 	</sql>
@@ -467,10 +480,38 @@
 		INNER JOIN business_activity_scope s ON s.actId = a.actId
 		<if test="curUserId != null and curUserId != ''" >
 		INNER JOIN manage_estate e ON e.estateId = s.estateId
-		INNER JOIN business_user_resource res ON res.comId = e.comId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.comId = e.comId
 		</if>
 		<if test="curUserId == null" >
-		INNER JOIN business_user_resource res ON res.estateId = s.estateId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.estateId = s.estateId
 		</if>
 		<include refid="Base_Where_Clause" />
 		group by a.actId
@@ -488,10 +529,38 @@
 		INNER JOIN business_activity_scope s ON s.actId = a.actId
 		<if test="curUserId != null and curUserId != ''" >
 		INNER JOIN manage_estate e ON e.estateId = s.estateId
-		INNER JOIN business_user_resource res ON res.comId = e.comId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.comId = e.comId
 		</if>
 		<if test="curUserId == null" >
-		INNER JOIN business_user_resource res ON res.estateId = s.estateId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.estateId = s.estateId
 		</if>
 		<include refid="Base_Where_Clause" />
 	</select>

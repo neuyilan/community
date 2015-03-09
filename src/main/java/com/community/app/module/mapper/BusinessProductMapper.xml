@@ -193,7 +193,7 @@
 				   		and (p.title like '%${keyWord}%' or p.content like '%${keyWord}%' or p.publisherName like '%${keyWord}%')
 					</if>
 					
-					<if test="curUserId != null and curUserId != ''" >
+					<!-- <if test="curUserId != null and curUserId != ''" >
 						and res.userId=#{curUserId} 
 					</if>
 					<if test="curEstateId != null and curEstateId != ''" >
@@ -201,7 +201,7 @@
 					</if>
 					<if test="curComId != null and curComId != ''" >
 						and res.comId=#{curComId} 
-					</if>
+					</if> -->
 					<!-- 
 					<if test="curEstateId != null and curEstateId != ''" >
 						<if test="orgType !='operation'" >
@@ -395,14 +395,42 @@
 			<if test="curUserId != null and curUserId != ''" >
 			<!-- inner join business_user_resource res on res.estateId = p.estateId -->
 			INNER JOIN manage_estate e ON e.estateId = p.estateId
-			INNER JOIN business_user_resource res ON res.comId = e.comId
+			INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.comId = e.comId
 			</if>
 			<if test="orgType =='operation' and curOrgType =='community'">
 			INNER JOIN manage_estate e ON e.estateId = p.estateId
 			</if>
 		</if>
 		<if test="orgType =='station'" >
-			INNER JOIN business_user_resource res ON res.estateId = p.estateId
+			INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.estateId = p.estateId
 		</if>
 		left join app_latest_news news on news.sourceId = p.productId and news.typeId=39 and news.to=1
 		<include refid="Base_Where_Clause" />
@@ -436,14 +464,42 @@
 			<if test="curUserId != null and curUserId != ''" >
 			<!-- inner join business_user_resource res on res.estateId = p.estateId -->
 			INNER JOIN manage_estate e ON e.estateId = p.estateId
-			INNER JOIN business_user_resource res ON res.comId = e.comId
+			INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.comId = e.comId
 			</if>
 			<if test="orgType =='operation' and curOrgType =='community'">
 			INNER JOIN manage_estate e ON e.estateId = p.estateId
 			</if>
 		</if>
 		<if test="orgType =='station'" >
-			INNER JOIN business_user_resource res ON res.estateId = p.estateId
+			INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res ON res.estateId = p.estateId
 		</if>
 		<include refid="Base_Where_Clause" />
 	</select>

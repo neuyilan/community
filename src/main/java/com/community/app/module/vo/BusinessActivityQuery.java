@@ -86,7 +86,25 @@ public class BusinessActivityQuery extends BaseBean {
 	private String couponValid;
 	private String reportExcel;
 	private String cellphone;
+	private String QNHActId;
+	private Integer isQNH;
 	
+	public Integer getIsQNH() {
+		return isQNH;
+	}
+
+	public void setIsQNH(Integer isQNH) {
+		this.isQNH = isQNH;
+	}
+
+	public String getQNHActId() {
+		return QNHActId;
+	}
+
+	public void setQNHActId(String qNHActId) {
+		QNHActId = qNHActId;
+	}
+
 	public Integer getCurEstateId() {
 		return curEstateId;
 	}

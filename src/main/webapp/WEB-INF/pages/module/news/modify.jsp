@@ -174,7 +174,7 @@
                 <textarea id="content" name="content" type="text/plain" style="width:1024px;height:500px;">${businessNews.content }</textarea>
                 
                 <%-- <h2 class="relran">列表页大图<label for="subjectPic" class="error success"></label></h2>
-                <div style=" overflow:hidden;"><img id="subjectPicBtn" src="<%=ctx %><c:choose><c:when test="${businessNews.subjectPic==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessNews.subjectPic}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+                <div style=" overflow:hidden;"><img id="subjectPicBtn" src="<%=ctx %><c:choose><c:when test="${businessNews.subjectPic==''}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessNews.subjectPic}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
                 <input type="hidden" name="subjectPic" id="subjectPic" value="${businessNews.subjectPic}" /> --%> <%--头像--%>
                 
                  <h2 class="relran" >展示范围<label for="newsScope" class="error success"></label></h2>

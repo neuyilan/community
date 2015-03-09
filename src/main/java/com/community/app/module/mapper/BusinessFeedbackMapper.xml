@@ -146,7 +146,7 @@
 	      		<if test="keyWord != null and keyWord != ''" >
 			   		and (fb.fbContent like '%${keyWord}%' or u.tel like '%${keyWord}%' or u.nickname like '%${keyWord}%' or u.realname like '%${keyWord}%' or fb.receiverName like '%${keyWord}%' or fb.fberName like '%${keyWord}%')
 				</if>
-				<if test="curUserId != null and curUserId != 0" >
+				<!-- <if test="curUserId != null and curUserId != 0" >
 			   		and res.userId = #{curUserId}
 				</if>
 				<if test="curEstateId != null and curEstateId != 0" >
@@ -154,7 +154,7 @@
 				</if>
 				<if test="curComId != null and curComId != ''" >
 					and res.comId=#{curComId} 
-				</if>
+				</if> -->
 					<if test="fbTypes != null" >
 						and (
 						<foreach collection="fbTypes" item="ft" separator="OR">
@@ -294,7 +294,19 @@
 		select <include refid="Base_Column_List" />, u.tel, u.realname,u.nickname, e.expCode, count(news.newsId) as newsCount from business_feedback fb 
 			left join app_user u on fb.fberId = u.userId
 			left join business_exp e on fb.expId = e.expId
-			inner join business_user_resource res on res.estateId = fb.estateId
+			inner join (SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)res on res.estateId = fb.estateId
 			left join app_latest_news news on news.sourceId = fb.feedbackId and news.typeId=36 and news.to=1 
 		<include refid="Base_Where_Clause" />
 		group by fb.feedbackId
@@ -315,7 +327,19 @@
 		select <include refid="Base_Column_List" />,e.expCode, count(news.newsId) as newsCount from business_feedback fb 
 			left join app_user u on fb.fberId = u.userId
 			left join business_exp e on fb.expId = e.expId
-			inner join business_user_resource res on res.estateId = fb.estateId
+			inner join (SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)res on res.estateId = fb.estateId
 			left join app_latest_news news on news.sourceId = fb.feedbackId and news.typeId=36 and news.to=1 
 		<include refid="Base_Where_Clause" />
 		group by fb.feedbackId
@@ -335,7 +359,19 @@
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(distinct(fb.feedbackId)) from business_feedback  fb 
  			left join app_user u on fb.fberId = u.userId
- 			inner join business_user_resource res on res.estateId = fb.estateId
+ 			inner join (SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)res on res.estateId = fb.estateId
 		<include refid="Base_Where_Clause" />
 	</select>
 	
@@ -343,7 +379,19 @@
 	<select id="selectCountByProperty" resultType="java.lang.Integer"  parameterType="Object">
 		select count(distinct(fb.feedbackId)) from business_feedback  fb 
  			left join app_user u on fb.fberId = u.userId
- 			inner join business_user_resource res on res.estateId = fb.estateId
+ 			inner join (SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)res on res.estateId = fb.estateId
 		<include refid="Base_Where_Clause" />
 	</select>
 	

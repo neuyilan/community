@@ -85,7 +85,27 @@ public class MemberVO {
     private String estateLongitude;//小区经度
     private String estateLatitude;//小区纬度
     
-    public Integer getIsDoor() {
+    private Integer isQNH;            //0不是青年汇用户1是青年汇用户
+    private Integer age;            //年龄
+    
+    
+    public Integer getIsQNH() {
+		return isQNH;
+	}
+
+	public void setIsQNH(Integer isQNH) {
+		this.isQNH = isQNH;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Integer getIsDoor() {
 		return isDoor;
 	}
 

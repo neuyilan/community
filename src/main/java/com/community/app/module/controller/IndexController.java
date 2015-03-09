@@ -32,15 +32,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessMenu;
-import com.community.app.module.bean.BusinessPosition;
-import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.bean.ManageEstate;
-import com.community.app.module.bean.ManageModule;
 import com.community.app.module.bean.ManageUserFunction;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.EstateBean;
 import com.community.app.module.common.MenuComparator;
-import com.community.app.module.common.ModuleConst;
 import com.community.app.module.common.UserMenuBean;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessCommunityService;
@@ -133,7 +129,6 @@ public class IndexController {
 		
 		//非运营人员可以带ID查看相关数据
 		String userCondition = "";
-		
 //		if(!ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {
 			userCondition = " and res.userId = " + shiroUser.getUserId();
 //		}

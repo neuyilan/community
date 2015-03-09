@@ -418,7 +418,7 @@ public class CommunityController {
 			query.setIsHot(1);
 			BaseBean topBaseBean = businessNewsService.findAllPage_app(query);
 			List<BusinessNews> topList = topBaseBean.getList();
-			query.setIsHot(0);
+			query.setIsHot(null);
 			BaseBean baseBean = businessNewsService.findAllPage_app(query);
 			json += "{";
 			json += "\"errorCode\":\"200\",";

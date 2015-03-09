@@ -47,6 +47,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessHelpCommentQuery;
 import com.community.app.module.vo.BusinessHelpQuery;
 import com.community.app.module.vo.BusinessHelpSupportQuery;
+import com.community.app.module.vo.BusinessStationMessageQuery;
 import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
@@ -232,7 +233,10 @@ public class seekHelpController {
 				}
 				json += "\"avatar\":\""+ip+businessHelp.getPortrait()+"\",";
 				json += "\"supports\":\""+businessHelp.getSupports()+"\",";
-				json += "\"comments\":\""+businessHelp.getComments()+"\"";
+				json += "\"comments\":\""+businessHelp.getComments()+"\",";
+				json += "\"estateName\":\""+businessHelp.getEstateName()+"\",";
+				json += "\"typeId\":\""+businessHelp.getTypeId()+"\",";
+				json += "\"typeName\":\""+businessHelp.getTypeName()+"\"";
 				json += "},";
 			}
 			if(baseBean.getList().size() > 0) {
@@ -1135,6 +1139,48 @@ public class seekHelpController {
 			appStatisticsClick.setTypeName("发布邻里求助");
 			appStatisticsClickService.save(appStatisticsClick);
 		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户获取聊吧类型
+	 * @param userId,sessionid,advinceId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getTypeList")
+	public void getStaList (HttpServletRequest request, HttpServletResponse response,BusinessStationMessageQuery query) {
+		String json = "";
+		try {
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"执行成功\",";
+			json += "\"content\":{";
+			json += "\"list\":[";
+			json += "{\"typeId\":\"1\",\"typeName\":\"求职招聘\",\"typeImage\":\"116.jpg\"},";
+			json += "{\"typeId\":\"2\",\"typeName\":\"亲子\",\"typeImage\":\"116.jpg\"},";
+			json += "{\"typeId\":\"3\",\"typeName\":\"七嘴八舌\",\"typeImage\":\"116.jpg\"},";
+			json += "{\"typeId\":\"4\",\"typeName\":\"青年汇\",\"typeImage\":\"116.jpg\"},";
+			json += "{\"typeId\":\"5\",\"typeName\":\"房屋租赁\",\"typeImage\":\"116.jpg\"}";
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"修改失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

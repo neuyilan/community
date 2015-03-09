@@ -141,7 +141,7 @@
 		 });
 		
 		//评论
-		 $('#commentBtn').click(function() {
+		 $('#commentBtn').click(function comment() {
 			 if(userId==0){
 				 if(userId==0){
 					 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
@@ -169,6 +169,7 @@
 		 		url = '${ctx}/service/property/savePropertyReply.json';
 		 	}
 		 	if(content != '') {
+		 		$('#commentBtn').unbind("click");
 		 		$.ajax({
 		 		    url: url,
 		 		    cache: false,
@@ -226,11 +227,15 @@
 		        	   }else{
 		        		   msgbox('提示',data.message,'确认');
 		        	   }
+		 				$('#commentBtn').click(function(){
+		 					comment();
+		 				 });
 		 		    },
 		 		    error: function () {
 		 		       msgbox('提示','评论失败','确认');
 		 		      
 		 		    }
+		 		   
 		 		});
 		 	}else{
 		 		 msgbox('提示','评论不能为空','确认');

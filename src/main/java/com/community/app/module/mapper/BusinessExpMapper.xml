@@ -256,7 +256,7 @@
 					<if test="taskUpdateState==1" >
 				   		and e.expType='0' and e.expState='1' or e.expType='0' and e.expState='3' or e.expType='0' and e.expState='4' or e.expType='0' and e.expState='5' or e.expType='0' and e.expState='8'
 					</if>
-					<if test="curUserId != null and curUserId != 0" >
+					<!-- <if test="curUserId != null and curUserId != 0" >
 			   			and res.userId = #{curUserId}
 					</if>
 					<if test="curEstateId != null and curEstateId != 0" >
@@ -264,7 +264,7 @@
 					</if>
 					<if test="curComId != null and curComId != ''" >
 						and res.comId=#{curComId} 
-					</if>
+					</if> -->
 					<if test="expStates != null and expStates != ''" >
 						and (
 						<foreach collection="expStates" item="eState" separator="OR">
@@ -432,12 +432,15 @@
 				<if test="taskUpdateState==1" >
 			   		and e.expType='0' and e.expState='1' or e.expType='0' and e.expState='3' or e.expType='0' and e.expState='4' or e.expType='0' and e.expState='5' or e.expType='0' and e.expState='8'
 				</if>
-				<if test="curUserId != null and curUserId != 0" >
+				<!-- <if test="curUserId != null and curUserId != 0" >
 		   			and res.userId = #{curUserId}
 				</if>
 				<if test="curEstateId != null and curEstateId != 0" >
 		   			and e.estateId = #{curEstateId}
 				</if>
+				<if test="curComId != null and curComId != ''" >
+					and res.comId=#{curComId} 
+				</if> -->
 				<if test="expStates != null and expStates != ''" >
 					and (
 					<foreach collection="expStates" item="eState" separator="OR">
@@ -695,7 +698,20 @@
 		inner join business_station s on s.stationId = e.stationId
 		inner join manage_estate es on es.stationId = s.stationId
 		<if test="curUserId != null and curUserId != 0" >
-		inner join business_user_resource res on res.estateId = es.estateId
+		inner join (
+				SELECT DISTINCT estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			) res on res.estateId = es.estateId
 		</if>
 		<include refid="Base_Where_Clause_Excel" /> 
 		group by e.expId
@@ -710,7 +726,20 @@
 		inner join business_station s on s.stationId = e.stationId
 		inner join manage_estate es on es.stationId = s.stationId
 		<if test="curUserId != null and curUserId != 0" >
-		inner join business_user_resource res on res.estateId = es.estateId
+		inner join (
+				SELECT DISTINCT estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			) res on res.estateId = es.estateId
 		</if>
 		<include refid="Base_Where_Clause_Excel" /> 
 		ORDER BY e.expcompanyId
@@ -723,7 +752,20 @@
 		inner join business_station s on s.stationId = e.stationId
 		inner join manage_estate es on es.stationId = s.stationId
 		<if test="curUserId != null and curUserId != 0" >
-		inner join business_user_resource res on res.estateId = es.estateId
+		inner join (
+				SELECT DISTINCT estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)res on res.estateId = es.estateId
 		</if>
 		left join app_latest_news news on news.sourceId = e.expId and news.typeId=38 and news.to=1 
 		<if test="expState == 10">
@@ -745,7 +787,20 @@
 		inner join business_station s on s.stationId = e.stationId
 		inner join manage_estate es on es.stationId = s.stationId
 		<if test="curUserId != null and curUserId != 0" >
-		inner join business_user_resource res on res.estateId = es.estateId
+		inner join (
+				SELECT DISTINCT estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)res on res.estateId = es.estateId
 		</if>
 		<if test="expState == 10">
 		inner join business_feedback f on f.fbType = 4 and f.expId = e.expId

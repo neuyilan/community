@@ -135,7 +135,7 @@ public class SensitiveWordInit {
 		InputStreamReader read = new InputStreamReader(new FileInputStream(file),"utf-8");
 		try {
 			if(file.isFile() && file.exists()){      //文件流是否存在
-				set = new HashSet<String>();
+				set = new HashSet<String>(); 
 				BufferedReader bufferedReader = new BufferedReader(read);
 				String txt = null;
 				while((txt = bufferedReader.readLine()) != null){    //读取文件，将文件内容放入到set中

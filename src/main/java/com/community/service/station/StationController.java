@@ -147,7 +147,7 @@ public class StationController {
 			for (BusinessUser businessUser : businessUserList) {
 				json += "{\"ID\":\""+businessUser.getUserId()+"\",\"age\":\""+businessUser.getAge()+"\",\"name\":\""+businessUser.getNickname()+"\",\"avatar\":\""+ip+businessUser.getAvatar()+"\",\"tel\":\""+businessUser.getStationtel()+"\",\"userBrief\":\""+businessUser.getComWord()+"\"},";
 			}
-			if(list.size() > 0) {
+			if(businessUserList.size() > 0) {
 				json = json.substring(0, json.length()-1);
 			}
 			json += "],";
@@ -1470,6 +1470,45 @@ public class StationController {
 			json += "}";
 			e.printStackTrace();
 		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 根据APP传回的用户当前坐标搜索附近的驿站列表并返回
+	 * @param userId,sessionid,advinceId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getStaList")
+	public void getStaList (HttpServletRequest request, HttpServletResponse response,BusinessStationMessageQuery query) {
+		String json = "";
+		try {
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"执行成功\",";
+			json += "\"content\":{";
+			json += "\"list\":[";
+			json += "{\"stationId\":\"1\",\"staName\":\"罗马家园\",\"longitude\":\"116.521723\",\"latitude\":\"39.931284\",\"estateId\":\"11\",\"addr\":\"朝阳区18路18\"},";
+			json += "{\"stationId\":\"1\",\"staName\":\"罗马家园\",\"longitude\":\"116.521723\",\"latitude\":\"39.931284\",\"estateId\":\"11\",\"addr\":\"朝阳区18路18\"}";
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"修改失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {

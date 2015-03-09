@@ -207,7 +207,7 @@
                     and u.estateName = #{estateName}
                 </if>
                 
-                <if test="curEstateId != null and curEstateId != 0" >
+                <!-- <if test="curEstateId != null and curEstateId != 0" >
 			   		and res.estateId = #{curEstateId}
 				</if>
 				<if test="curUserId != null and curUserId != 0" >
@@ -215,7 +215,7 @@
 				</if>
 				<if test="curComId != null and curComId != ''" >
 					and res.comId=#{curComId} 
-				</if>
+				</if> -->
                 
             </trim>
         </where>
@@ -257,7 +257,21 @@
 	<select id="findAllPageByProperty" resultMap="AppUserResult" parameterType="Object">
 		select <include refid="Base_Column_List" /> from app_user u
 		<!-- inner join app_estate_user aeu on aeu.userId = u.userId -->
-		inner join business_user_resource res on res.estateId = u.estateId 
+		inner join (
+				SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res on res.estateId = u.estateId 
 		<include refid="Base_Where_Clause" />
 		group by u.userId
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -288,7 +302,21 @@
 	<select id="selectCountByProperty" resultType="java.lang.Integer"  parameterType="Object">
 		select count(1) from (select count(distinct(u.userId)) from app_user u
 		<!-- inner join app_estate_user aeu on aeu.userId = u.userId -->
-		inner join business_user_resource res on res.estateId = u.estateId
+		inner join (
+				SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res on res.estateId = u.estateId
 		<include refid="Base_Where_Clause" />
 		group by u.userId
 		) as cc
@@ -646,6 +674,8 @@
         a.userId,
         a.realname,
         a.nickname,
+        a.isQNH,
+        a.age,
         a.tel,
         a.sex,
         a.birthday,

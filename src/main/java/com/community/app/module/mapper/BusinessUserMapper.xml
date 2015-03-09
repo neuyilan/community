@@ -189,7 +189,7 @@
                 <if test="comWord != null and comWord != ''" >
                     and u.comWord = #{comWord}
                 </if>
-                <if test="curUserId != null and curUserId != 0" >
+                <!-- <if test="curUserId != null and curUserId != 0" >
                     and are.userId = #{curUserId}
                 </if>
                 <if test="curEstateId != null and curEstateId != 0" >
@@ -197,7 +197,7 @@
                 </if>
                 <if test="curComId != null and curComId != ''" >
 					and are.comId=#{curComId} 
-				</if>
+				</if> -->
 				<if test="keyWord != null and keyWord != ''" >
 			   		and (u.userEmail like '%${keyWord}%' or u.userName like '%${keyWord}%' or u.userTel like '%${keyWord}%') 
 				</if>
@@ -249,7 +249,19 @@
         inner join business_position p on p.positionId = u.positionId
         <!-- inner join business_department d on d.depId = u.depId -->
         inner join business_user_resource ure on ure.userId = u.userId
-		inner join business_user_resource are on are.estateId = ure.estateId
+		inner join (SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)are on are.estateId = ure.estateId
         <include refid="Base_Where_Clause" />
         group by u.userId
         <if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -265,7 +277,19 @@
         select count(distinct(u.userId)) from business_user u
         <!-- inner join business_department d on d.depId = u.depId -->
         inner join business_user_resource ure on ure.userId = u.userId
-		inner join business_user_resource are on are.estateId = ure.estateId
+		inner join (SELECT distinct estateId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)are on are.estateId = ure.estateId
         <include refid="Base_Where_Clause" />
     </select>
     
@@ -297,7 +321,19 @@
         inner join business_position p on p.positionId = u.positionId
         <!-- inner join business_department d on d.depId = u.depId -->
         inner join business_user_resource ure on ure.userId = u.userId
-		inner join business_user_resource are on are.comId = ure.comId
+		inner join (SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)are on are.comId = ure.comId
         <include refid="Base_Where_Clause" />
         group by u.userId
         <if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -318,7 +354,19 @@
         select count(distinct(u.userId)) from business_user u
         <!-- inner join business_department d on d.depId = u.depId -->
         inner join business_user_resource ure on ure.userId = u.userId
-		inner join business_user_resource are on are.comId = ure.comId
+		inner join (SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			)are on are.comId = ure.comId
         <include refid="Base_Where_Clause" />
     </select>
 

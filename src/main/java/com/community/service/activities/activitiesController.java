@@ -126,9 +126,16 @@ public class activitiesController {
 	public void findByActivities  (HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
 		String json = "";
 		try{
+			if (query.getType()!=null && query.getType()==2) {
+				query.setStatetype(2);
+				query.setIsQNH(1);
+			}else {
+				query.setStatetype(1);
+			}
+			query.setType(null);
+			
 			Properties p = propertiesUtil.getProperties("config.properties");
 			String ip = p.getProperty("imageIp");  
-			query.setStatetype(1);
 			query.setSort("editTime");
 			query.setOrder("desc");
 			query.setRows(15);
@@ -180,7 +187,13 @@ public class activitiesController {
 					json +="\"startTime\":\""+businessActivity.getStartTime()+"\",";
 					json +="\"endTime\":\""+businessActivity.getEndTime()+"\",";
 				}
-				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\"},";
+				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\",";
+				if (businessActivity.getIsQNH()==0) {
+					json +="\"qnh\":\"\"";
+				}else {
+					json +="\"qnh\":\""+businessActivity.getQNHName()+"\"";
+				}
+				json +="},";
 			}
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessActivity businessActivity = (BusinessActivity) baseBean.getList().get(i);
@@ -214,8 +227,13 @@ public class activitiesController {
 					json +="\"startTime\":\""+businessActivity.getStartTime()+"\",";
 					json +="\"endTime\":\""+businessActivity.getEndTime()+"\",";
 				}
-				
-				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\"},";
+				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\",";
+				if (businessActivity.getIsQNH()==0) {
+					json +="\"qnh\":\"\"";
+				}else {
+					json +="\"qnh\":\""+businessActivity.getQNHName()+"\"";
+				}
+				json +="},";
 			}
 			if(baseBean.getList().size() > 0 || topBaseBean.getList().size() > 0) {
 				json = json.substring(0, json.length()-1);

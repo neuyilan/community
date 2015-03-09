@@ -335,6 +335,17 @@ public class BusinessHelpServiceImpl implements BusinessHelpService {
 			businessHelp.setIsExpend(new Integer(param.get("isExpend")));
 			businessHelp.setEstateId(new Integer(param.get("estateId")));
 			businessHelp.setIsNickname(new Integer(param.get("isNickname")));
+			if (param.get("typeId")==null) {
+				businessHelp.setTypeId(0);
+			}else {
+				businessHelp.setTypeId(new Integer(param.get("typeId")));
+			}
+			if (param.get("typeName")==null) {
+				businessHelp.setTypeName("");
+			}else {
+				businessHelp.setTypeName(param.get("typeName"));
+			}
+			businessHelp.setTypeName(param.get("typeName"));
 			BusinessHelp businessHelp1 = businessHelpDao.save(businessHelp);
 			
 			Collection<String> c = image.keySet();
@@ -402,6 +413,16 @@ public class BusinessHelpServiceImpl implements BusinessHelpService {
 			businessHelp.setIsExpend(query.getIsExpend());
 			businessHelp.setEstateId(query.getEstateId());
 			businessHelp.setIsNickname(query.getIsNickname());
+			if(query.getTypeId()==null){
+				businessHelp.setTypeId(0);
+			}else {
+				businessHelp.setTypeId(query.getTypeId());
+			}
+			if (query.getTypeName()==null) {
+				businessHelp.setTypeName("");
+			}else {
+				businessHelp.setTypeName(query.getTypeName());
+			}
 			BusinessHelp businessHelp1 = businessHelpDao.save(businessHelp);
 			
 			String [] images = query.getImages();

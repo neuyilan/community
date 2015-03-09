@@ -108,7 +108,7 @@
 					<if test="keyWord != null and keyWord != ''" >
 				   		and (b.breakContent like '%${keyWord}%' or b.breakerName like '%${keyWord}%' or u.tel like '%${keyWord}%')
 					</if>
-					<if test="curUserId != null and curUserId != 0" >
+					<!-- <if test="curUserId != null and curUserId != 0" >
 						and res.userId=#{curUserId} 
 					</if>
 					<if test="curComId != null and curComId != 0" >
@@ -116,7 +116,7 @@
 					</if>
 					<if test="curEstateId != null and curEstateId != 0" >
 			   			and res.estateId = #{curEstateId}
-					</if>
+					</if> -->
 			</trim>
 		</where>
 	</sql>
@@ -157,7 +157,21 @@
 		from business_break b 
 		left join app_user u on b.breakerId=u.userId left 
 		join business_break_pic p on b.breakId=p.breakId
-		inner join business_user_resource res on res.comId = b.comId
+		inner join (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)res on res.comId = b.comId
 		left join app_latest_news news on news.sourceId = b.breakId and news.typeId=40 and news.to=1 
 		<include refid="Base_Where_Clause" /> 
 		GROUP BY b.breakId 
@@ -173,7 +187,21 @@
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">		
 		select count(distinct(b.breakId)) from business_break b
 		left join app_user u on b.breakerId = u.userId 
-		inner join business_user_resource res on res.comId = b.comId
+		inner join (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			) res on res.comId = b.comId
 		<include refid="Base_Where_Clause" />
 	</select>
 	

@@ -52,7 +52,26 @@ public class BusinessHelpQuery extends BaseBean {
 	private Integer isNickname ;
 	private Integer comId ;
 	private Integer curComId;
+	private String typeName;
+	private Integer typeId ;
+	
 		
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public Integer getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+
 	public Integer getCurComId() {
 		return curComId;
 	}

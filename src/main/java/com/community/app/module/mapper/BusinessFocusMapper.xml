@@ -120,7 +120,7 @@
 		      		<if test="keyWord != null and keyWord != ''" >
 				   		and (f.title like '%${keyWord}%' or f.selectorName like '%${keyWord}%')
 					</if>
-					<if test="curUserId != null and curUserId != ''" >
+					<!-- <if test="curUserId != null and curUserId != ''" >
 						and res.userId=#{curUserId} 
 					</if>
 					<if test="curComId != null and curComId != ''" >
@@ -128,7 +128,7 @@
 					</if>
 					<if test="curEstateId != null and curEstateId != 0" >
 			   			and res.estateId = #{curEstateId}
-					</if>
+					</if> -->
 			</trim>
 		</where>
 	</sql>
@@ -187,10 +187,38 @@
 		inner join app_focus_scope scope on f.focusId = scope.focusId
 		<if test="curUserId != null and curUserId != ''" >
 		INNER JOIN manage_estate e ON e.estateId = scope.estateId
-		INNER JOIN business_user_resource res ON res.comId = e.comId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)  res ON res.comId = e.comId
 		</if>
 		<if test="curUserId == null" >
-		INNER JOIN business_user_resource res ON res.estateId = scope.estateId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)  res ON res.estateId = scope.estateId
 		</if>
 		<include refid="Base_Where_Clause" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -207,10 +235,38 @@
 		inner join app_focus_scope scope on scope.focusId = f.focusId
 		<if test="curUserId != null and curUserId != ''" >
 		INNER JOIN manage_estate e ON e.estateId = scope.estateId
-		INNER JOIN business_user_resource res ON res.comId = e.comId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)  res ON res.comId = e.comId
 		</if>
 		<if test="curUserId == null" >
-		INNER JOIN business_user_resource res ON res.estateId = scope.estateId
+		INNER JOIN (
+				SELECT distinct comId 
+				FROM business_user_resource 
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+					
+			)  res ON res.estateId = scope.estateId
 		</if>
 		<include refid="Base_Where_Clause" />
 	</select>

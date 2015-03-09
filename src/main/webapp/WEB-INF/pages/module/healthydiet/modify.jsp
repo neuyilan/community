@@ -138,7 +138,7 @@
                 <input class="iptnewtit" type="text" name="label" id="label" placeholder='请输入标签' value="${businessHealthydiet.label }" />
                  --%><%-- 
                 <h2 class="relran">中医养生缩略图<label for="cmhcPic" class="error success"></label></h2>
-                <div style=" overflow:hidden;"><img id="cmhcPicBtn" src="${ctx}/${businessHealthydiet.cmhcPic }" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
+                <div style=" overflow:hidden;"><img id="cmhcPicBtn" src="${ctx}/${businessHealthydiet.cmhcPic }" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
                 <input type="hidden" name="cmhcPic" id="cmhcPic" value="${businessHealthydiet.cmhcPic }" >
                  --%>
                  <h2 class="relran">标签<label for="label" class="error success"></label></h2>
