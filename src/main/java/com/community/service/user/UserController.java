@@ -3796,7 +3796,9 @@ public class UserController {
 				}
 				json += "\"avatar\":\""+ip+businessHelp.getPortrait()+"\",";
 				json += "\"supports\":\""+businessHelp.getSupports()+"\",";
-				json += "\"comments\":\""+businessHelp.getComments()+"\"";
+				json += "\"comments\":\""+businessHelp.getComments()+"\",";
+				json += "\"typeId\":\""+businessHelp.getTypeId()+"\",";
+				json += "\"typeName\":\""+businessHelp.getTypeName()+"\"";
 				json += "},";
 			}
 			if(helpBaseBean.getList().size() > 0) {

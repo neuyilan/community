@@ -391,7 +391,7 @@ public class BusinessNewsServiceImpl implements BusinessNewsService {
 			businessNewsScopeDao.save(scope);
 			
 			//保存到首页
-			AppHomepage appHomepage = new AppHomepage();
+			/*AppHomepage appHomepage = new AppHomepage();
 			appHomepage.setId(businessNews.getNewsId());//新闻id
 			appHomepage.setTitle(businessNews.getTitle());//新闻标题
 			appHomepage.setBrief(businessNews.getBrief());//新闻简介
@@ -405,7 +405,7 @@ public class BusinessNewsServiceImpl implements BusinessNewsService {
 			appHomepageScope.setId(new Integer(param.get("comId")));//社区id
 			appHomepageScope.setHomePageId(appHomepage.getHomePageId());//首页列表id
 			appHomepageScope.setCreateTime(ts);//创建时间
-			appHomepageScopeDao.save(appHomepageScope);
+			appHomepageScopeDao.save(appHomepageScope);*/
 		    
 		} catch (DaoException e) {
 			logger.debug("BusinessProductServiceImpl addProduct()：新增商品发生错误！", e);

@@ -531,7 +531,8 @@ public class BusinessActivityController {
 					businessFocus.setTitle(businessActivity.getActName());
 					businessFocus.setContent(businessActivity.getActContent());
 				    businessFocus.setState(2);   // 待审核
-				    businessFocus.setPicUrl(businessActivity.getActPic());
+				    // businessFocus.setPicUrl(businessActivity.getActPic());
+				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocus.setPageUrl("");
 				    businessFocus.setSourceId(businessActivity.getActId());
 				    businessFocus.setSourceType(1);	// 来源类型
@@ -558,7 +559,8 @@ public class BusinessActivityController {
 					businessFocusAd.setTitle(businessActivity.getActName());
 					businessFocusAd.setContent(businessActivity.getActContent());
 				    businessFocusAd.setState(2);   // 待审核
-				    businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    // businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocusAd.setPageUrl("");
 				    businessFocusAd.setSourceId(businessActivity.getActId());
 				    businessFocusAd.setSourceType(1);	// 来源类型
@@ -980,7 +982,8 @@ public class BusinessActivityController {
 					businessFocus.setTitle(businessActivity.getActName());
 					businessFocus.setContent(businessActivity.getActContent());
 				    businessFocus.setState(2);   // 待审核
-				    businessFocus.setPicUrl(businessActivity.getActPic());
+				    // businessFocus.setPicUrl(businessActivity.getActPic());
+				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocus.setPageUrl("");
 				    businessFocus.setSourceId(businessActivity.getActId());
 				    businessFocus.setSourceType(1);	// 来源类型
@@ -1007,7 +1010,8 @@ public class BusinessActivityController {
 					businessFocusAd.setTitle(businessActivity.getActName());
 					businessFocusAd.setContent(businessActivity.getActContent());
 				    businessFocusAd.setState(2);   // 待审核
-				    businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    // businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocusAd.setPageUrl("");
 				    businessFocusAd.setSourceId(businessActivity.getActId());
 				    businessFocusAd.setSourceType(1);	// 来源类型
@@ -1436,7 +1440,8 @@ public class BusinessActivityController {
 					businessFocus.setTitle(businessActivity.getActName());
 					businessFocus.setContent(businessActivity.getActContent());
 				    businessFocus.setState(2);   // 待审核
-				    businessFocus.setPicUrl(businessActivity.getActPic());
+				    // businessFocus.setPicUrl(businessActivity.getActPic());
+				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocus.setPageUrl("");
 				    businessFocus.setSourceId(businessActivity.getActId());
 				    businessFocus.setSourceType(1);	// 来源类型
@@ -1466,7 +1471,8 @@ public class BusinessActivityController {
 					businessFocusAd.setTitle(businessActivity.getActName());
 					businessFocusAd.setContent(businessActivity.getActContent());
 				    businessFocusAd.setState(2);   // 待审核
-				    businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    // businessFocusAd.setPicUrl(businessActivity.getActPic());
+				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocusAd.setPageUrl("");
 				    businessFocusAd.setSourceId(businessActivity.getActId());
 				    businessFocusAd.setSourceType(1);	// 来源类型

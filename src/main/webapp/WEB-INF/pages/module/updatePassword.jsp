@@ -40,27 +40,66 @@
             		label.html("<span style=\"color:green\">填写正确！</span>").addClass("success");
             	},
         		rules: {
+        			oldpassword: {
+        				required: true,
+        				regexPassword: true,
+        				remote: {
+       	                    type: "post",
+       	                    url: "<%=path %>/index/getCurrUserOldPassword.do",
+       	                    data: {
+       	                    	oldpassword: function() {
+       	                            return $("#oldpassword").val();
+       	                        }
+       	                    }
+       	                }
+        			},
         			newpassword: {
         				required: true,
-       					minlength: 6
+        				regexPassword: true,
+       					same:true
         			},
         			valipassword: {
-       					required: true,
-       					minlength: 6
+        				required: true, 
+        				rangelength: [6, 8], 
+        				equalTo: "#newpassword"
        				}
         		},
         		messages: {
+        			oldpassword: {
+        				required: "请输入原密码",
+        				regexPassword: '原密码只能输入数字和字母，长度应为6~8位!',  
+        				remote: "原密码不正确，请重新输入！"
+        			},
         			newpassword: {
         				required: "请输入新密码",
-       					minlength: "新密码最少为6位"
+        				regexPassword: '新密码只能输入数字和字母，长度应为6~8位!',  
+       					same:'新密码不能与老密码一样'
         			},
         			valipassword: {
        					required: "请输入确认密码",
-       					minlength: "确认密码最少为6位"
+                        rangelength: "确认密码应为6~8位",  
+                        equalTo: "两次输入密码不一致"  
        				}
         		}
         	});
 	    });
+	    
+	    function same(pwd) {  
+            var oldPwd = $("#oldpassword").val();  
+            if (oldPwd == pwd)  
+                return false;  
+            else  
+                return true;  
+        }  
+	    
+	    jQuery.validator.addMethod("same", function(value, element) {  
+            return this.optional(element) || same(value);  
+        }, "新密码不能与老密码重复");
+	    
+	    jQuery.validator.addMethod("regexPassword", function(value, element) {  
+	        // return this.optional(element) || /^(?=^.{6,8}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[a-z]).*$/.test(value);
+	    	return this.optional(element) || /^(?=^.{6,8}$)([a-zA-Z0-9]+)$/.test(value);  
+	    }, "只能输入数字和字母(字符A-Z, a-z, 0-9)");
 	    
 	    function submitForm() {
 	    	$('#updateForm').submit();
@@ -75,10 +114,9 @@
 				<div class="cont-l_1" id="cont-l_1" style="position:relative; top:57px;">
 					<h2 class="title" id="jg">修改密码</h2>
 					<div class="line3"></div>
-					<div class="ip_1"><input class="iptnewtit" type="password" id="newpassword"  name="newpassword" placeholder='请输入您的新密码' /><label for="newpassword" class="error success" style=" display:block; float:right; margin-top:68px"></label></div>
-					<br>
-					<div class="ip_1"><input class="iptnewtit y-x-xmm" type="password" id="valipassword" name="valipassword" placeholder='请再次输入您的新密码' /><label for="valipassword" class="error success" style=" display:block; float:right; margin-top:40px"
-					></label></div>
+					<div><input class="updatePwd y-x-xmm" type="password" id="oldpassword"  name="oldpassword" placeholder='请输入您的原密码' /><label for="oldpassword" class="error success">系统初始设置原密码为六个1!</label></div>
+					<div><input class="updatePwd y-x-xmm" type="password" id="newpassword"  name="newpassword" placeholder='请输入您的新密码' /><label for="newpassword" class="error success">新密码只能输入数字和字母，长度应为6~8位!</label></div>
+					<div><input class="updatePwd y-x-xmm" type="password" id="valipassword" name="valipassword" placeholder='请再次输入您的新密码' /><label for="valipassword" class="error success">确认密码需与新密码一致！</label></div>
 					<div class="no-float"></div>
 					<div class="submtpres" id="submtpres_1">
 						<input class="y-x-qrxg" type="button" name="" value="确认修改" onclick="submitForm();"/>

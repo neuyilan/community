@@ -22,7 +22,6 @@ public class OnlineRegActSer {
 		
 		JSONObject  json = new JSONObject();
 		
-		
 		//{"QNHActId":"5","cellphone":"23"};
 		JSONObject reqJson  = JSONObject.fromObject(reqStr);
 		reqJson.get("QNHActId");
@@ -32,7 +31,7 @@ public class OnlineRegActSer {
 			json.element("errorCode", 400);
 			json.element("message", "报名失败/手机号未注册");
 		}else
-		{	
+		{
 			json.element("errorCode", 200);
 			json.element("message", "报名成功");
 		}

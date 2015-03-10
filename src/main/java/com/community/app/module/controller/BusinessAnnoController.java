@@ -1156,7 +1156,8 @@ public class BusinessAnnoController {
 					BusinessFocus businessFocus = new BusinessFocus();
 					businessFocus.setTitle(businessAnno.getAnnoTitle());
 				    businessFocus.setState(2);   // 待审核
-				    businessFocus.setPicUrl(businessAnno.getAnnoPic());
+				    // businessFocus.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocus.setPageUrl("");
 				    businessFocus.setSourceId(businessAnno.getAnnoId());
 				    businessFocus.setSourceType(2);	// 来源类型
@@ -1183,7 +1184,8 @@ public class BusinessAnnoController {
 					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
 					businessFocusAd.setTitle(businessAnno.getAnnoTitle());
 				    businessFocusAd.setState(2);   // 待审核
-				    businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    // businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocusAd.setPageUrl("");
 				    businessFocusAd.setSourceId(businessAnno.getAnnoId());
 				    businessFocusAd.setSourceType(2);	// 来源类型
@@ -1397,7 +1399,8 @@ public class BusinessAnnoController {
 					BusinessFocus businessFocus = new BusinessFocus();
 					businessFocus.setTitle(businessAnno.getAnnoTitle());
 				    businessFocus.setState(2);   // 待审核
-				    businessFocus.setPicUrl(businessAnno.getAnnoPic());
+				    // businessFocus.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocus.setPageUrl("");
 				    businessFocus.setSourceId(businessAnno.getAnnoId());
 				    businessFocus.setSourceType(2);	// 来源类型
@@ -1424,7 +1427,8 @@ public class BusinessAnnoController {
 					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
 					businessFocusAd.setTitle(businessAnno.getAnnoTitle());
 				    businessFocusAd.setState(2);   // 待审核
-				    businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    // businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocusAd.setPageUrl("");
 				    businessFocusAd.setSourceId(businessAnno.getAnnoId());
 				    businessFocusAd.setSourceType(2);	// 来源类型
@@ -2674,7 +2678,8 @@ public class BusinessAnnoController {
 					BusinessFocus businessFocus = new BusinessFocus();
 					businessFocus.setTitle(businessAnno.getAnnoTitle());
 				    businessFocus.setState(2);   // 待审核
-				    businessFocus.setPicUrl(businessAnno.getAnnoPic());
+				    // businessFocus.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocus.setPageUrl("");
 				    businessFocus.setSourceId(businessAnno.getAnnoId());
 				    businessFocus.setSourceType(2);	// 来源类型
@@ -2703,7 +2708,8 @@ public class BusinessAnnoController {
 					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
 					businessFocusAd.setTitle(businessAnno.getAnnoTitle());
 				    businessFocusAd.setState(2);   // 待审核
-				    businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    // businessFocusAd.setPicUrl(businessAnno.getAnnoPic());
+				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
 				    businessFocusAd.setPageUrl("");
 				    businessFocusAd.setSourceId(businessAnno.getAnnoId());
 				    businessFocusAd.setSourceType(2);	// 来源类型

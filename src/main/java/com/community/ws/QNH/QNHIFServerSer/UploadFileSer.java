@@ -26,7 +26,7 @@ public class UploadFileSer {
      */  
     public String uploadFile(String fileName,DataHandler dataHandler)  
     {
-    	/*压缩图片对方实现 */
+    	
     	JSONObject retJson = new JSONObject();
         OutputStream os = null; 
         retJson.element("errorCode", 200);
@@ -80,6 +80,7 @@ public class UploadFileSer {
         }  
         if ("200".equals(String.valueOf(retJson.get("errorCode"))))
         {
+        	/*压缩图片对方实现 */
         	System.out.println("tmp"+File.separator);
         	String realPath = tmpfile.getPath().replaceAll("tmp", ""); 
         	File dstFile = new File(realPath); 

@@ -207,10 +207,22 @@ public class EstateController {
 					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
 				}
 				if (manageEstate.getProId()==null) {
-					json += ",\"proId\":\"0\"";
+					json += ",\"proId\":\"0\",";
 				} else {
-					json += ",\"proId\":\""+manageEstate.getProId()+"\"";
+					json += ",\"proId\":\""+manageEstate.getProId()+"\",";
 				}
+				
+				if (manageEstate.getEstateLatitude() == null) {
+					json += "\"estateLatitude\":\"\",";
+				} else {
+					json += "\"estateLatitude\":\""+manageEstate.getEstateLatitude()+"\",";
+				}
+				if (manageEstate.getEstateLongitude() == null) {
+					json += "\"estateLongitude\":\"\"";
+				} else {
+					json += "\"estateLongitude\":\""+manageEstate.getEstateLongitude()+"\"";
+				}
+				
 				if (manageEstate.getComId()==null) {
 					json += ",\"comId\":\"0\",\"comName\":\"\"},";
 				} else {

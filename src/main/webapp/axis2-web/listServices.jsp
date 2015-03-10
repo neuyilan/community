@@ -36,8 +36,8 @@
 </head>
 
 <body>
-<jsp:include page="include/header.inc" />
-<jsp:include page="include/link-footer.jsp" />
+<%-- <jsp:include page="include/header.inc" /> --%>
+<%-- <jsp:include page="include/link-footer.jsp" /> --%>
 <h1>Available services</h1>
 <% String prefix = request.getAttribute("frontendHostUrl") + (String)request.getSession().getAttribute(Constants.SERVICE_PATH) + "/";
 %>
@@ -126,6 +126,6 @@
 %> No services listed! Try hitting refresh. <%
     }
 %>
-<jsp:include page="include/footer.inc" />
+<%-- <jsp:include page="include/footer.inc" /> --%>
 </body>
 </html>

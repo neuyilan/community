@@ -32,6 +32,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessMenu;
+import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.bean.ManageUserFunction;
 import com.community.app.module.bean.ShiroUser;
@@ -904,6 +905,34 @@ public class IndexController {
 		ModelAndView mav = new ModelAndView("/module/updatePassword");
 		mav.addObject("userId", shiroUser.getUserId());
 		return mav;
+	}
+	
+	/**
+	 * 检查原密码填写是否正确
+	 * @param request
+	 * @param businessActivityQuery
+	 * @return
+	 */
+	@RequestMapping(value="getCurrUserOldPassword")
+	public void getCurrUserOldPassword(HttpServletRequest request, HttpServletResponse response) {
+		
+		String json = "";
+		response.setContentType("text/html");
+        try {
+        	if(request.getParameter("oldpassword") != null && !"undefined".equals(request.getParameter("oldpassword"))) {
+        		ShiroUser shiroUser = CommonUtils.getUser();
+        		BusinessUser businessUser = businessUserService.findById(shiroUser.getUserId());
+        		if(businessUser != null) {
+            		String oldpassword =request.getParameter("oldpassword");
+            		json =(!businessUser.getUserPassword().equals(oldpassword)) ? "false" : "true";
+        		}
+        	} else {
+        		json = "true";
+        	}
+			response.getWriter().write(json);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@RequestMapping("/unauthorized")

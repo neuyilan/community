@@ -237,7 +237,7 @@
 	
 	<!-- 按VO对象条件查询所有ManageEstate -->
 	<select id="findByExample" resultType="ManageEstate" parameterType="com.community.app.module.vo.ManageEstateQuery">
-		select e.estateId,e.estateName,e.proId,com.comName,com.comName,s.staName,s.stationId,com.comId from manage_estate e inner join  business_community com on  e.comId=com.comId left join business_station s on  e.stationId=s.stationId where  1=1 <include refid="Base_Where_Clause_e" /> 
+		select e.estateId,e.estateName,e.proId,e.estateLatitude,e.estateLongitude,com.comName,com.comName,s.staName,s.stationId,com.comId from manage_estate e inner join  business_community com on  e.comId=com.comId left join business_station s on  e.stationId=s.stationId where  1=1 <include refid="Base_Where_Clause_e" /> 
 	</select>
 	
 	<!-- ManageEstate根据搜索条件，搜索分页数据 -->

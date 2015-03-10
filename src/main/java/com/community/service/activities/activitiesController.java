@@ -189,9 +189,19 @@ public class activitiesController {
 				}
 				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\",";
 				if (businessActivity.getIsQNH()==0) {
-					json +="\"qnh\":\"\"";
+					json +="\"qnh\":\"\",";
 				}else {
-					json +="\"qnh\":\""+businessActivity.getQNHName()+"\"";
+					json +="\"qnh\":\""+businessActivity.getQNHName()+"\",";
+				}
+				
+				if (businessActivity.getTypeId()==1 || businessActivity.getTypeId()==4) {
+					json +="\"typeName\":\"限时抢\"";
+				}else if (businessActivity.getTypeId()==2) {
+					json +="\"typeName\":\"报名\"";
+				}else if (businessActivity.getTypeId()==3) {
+					json +="\"typeName\":\"投票\"";
+				}else {
+					json +="\"typeName\":\"\"";
 				}
 				json +="},";
 			}
@@ -229,10 +239,21 @@ public class activitiesController {
 				}
 				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\",";
 				if (businessActivity.getIsQNH()==0) {
-					json +="\"qnh\":\"\"";
+					json +="\"qnh\":\"\",";
 				}else {
-					json +="\"qnh\":\""+businessActivity.getQNHName()+"\"";
+					json +="\"qnh\":\""+businessActivity.getQNHName()+"\",";
 				}
+				
+				if (businessActivity.getTypeId()==1 || businessActivity.getTypeId()==4) {
+					json +="\"typeName\":\"限时抢\"";
+				}else if (businessActivity.getTypeId()==2) {
+					json +="\"typeName\":\"报名\"";
+				}else if (businessActivity.getTypeId()==3) {
+					json +="\"typeName\":\"投票\"";
+				}else {
+					json +="\"typeName\":\"\"";
+				}
+				
 				json +="},";
 			}
 			if(baseBean.getList().size() > 0 || topBaseBean.getList().size() > 0) {
@@ -1504,6 +1525,42 @@ public class activitiesController {
 				json += "}";
 				e.printStackTrace();
 			}
+		}
+		
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户参与活动
+	 * @param comId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="signInQNH")
+	public synchronized  void signInQNH(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"签到成功\",";
+			json += "\"content\":{\"count\":\"1\"}";
+			json += "}";
+			
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"参与失败\"";
+			json += "}";
+			e.printStackTrace();
 		}
 		
 		

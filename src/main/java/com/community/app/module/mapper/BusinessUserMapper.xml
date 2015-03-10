@@ -214,13 +214,13 @@
      <!-- 根据id查询 BusinessUser -->
     <select id="findByStationGril"  resultType="BusinessUser" parameterType="java.lang.Integer">
     SELECT u.userId,u.comWord,u.age,u.nickname,u.avatar,u.userTel,u.userBrief,s.staTel AS stationtel,s.staName AS stationName
- FROM business_user u LEFT JOIN  business_user_resource r ON u.`userId`=r.`userId` LEFT JOIN `manage_estate` e ON e.`estateId` = r.`estateId` LEFT JOIN `business_station` s ON s.`stationId` =e.`stationId`  WHERE s.`stationId`=#{id} and u.orgType='station' AND isGirl=1  GROUP BY u.userId  
+ FROM business_user u LEFT JOIN  business_user_resource r ON u.`userId`=r.`userId` LEFT JOIN `manage_estate` e ON e.`estateId` = r.`estateId` LEFT JOIN `business_station` s ON s.`stationId` =e.`stationId`  WHERE s.`stationId`=#{id}  AND isGirl=1  GROUP BY u.userId  
     </select>
     
      <!-- 根据id查询 BusinessUser -->
     <select id="findByStationAll"  resultType="BusinessUser" parameterType="java.lang.Integer">
       SELECT u.userId,u.age,u.nickname,u.avatar,u.userTel,u.userBrief,s.staTel AS stationtel,s.staName AS stationName
- FROM business_user u LEFT JOIN  business_user_resource r ON u.`userId`=r.`userId` LEFT JOIN `manage_estate` e ON e.`estateId` = r.`estateId` LEFT JOIN `business_station` s ON s.`stationId` =e.`stationId`  WHERE s.`stationId`=#{id} and  u.orgType='station' GROUP BY u.userId
+ FROM business_user u LEFT JOIN  business_user_resource r ON u.`userId`=r.`userId` LEFT JOIN `manage_estate` e ON e.`estateId` = r.`estateId` LEFT JOIN `business_station` s ON s.`stationId` =e.`stationId`  WHERE s.`stationId`=#{id} GROUP BY u.userId
     </select>
     
       <!-- 根据id查询 BusinessUser -->

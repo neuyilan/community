@@ -144,10 +144,12 @@ public class seekHelpController {
 					}
 				}
 				if (flag) {
-					json += ",\"status\":true";
+					json += ",\"status\":true,";
 				}else {
-					json += ",\"status\":false";
+					json += ",\"status\":false,";
 				}
+				json += "\"typeId\":\""+businessHelp.getTypeId()+"\",";
+				json += "\"typeName\":\""+businessHelp.getTypeName()+"\"";
 				json += "},";
 			}
 			if(baseBean.getList().size() > 0) {

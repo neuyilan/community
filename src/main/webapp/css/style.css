@@ -1027,12 +1027,12 @@ input{ border:0; border:none; background:none;}
 .sidebar12 .submtpres{ margin-top:25px;}
 
 .iptnewtit11{width:300px; height:43px; padding:0 10px; font-size:12px; color:#717171; box-shadow:0px 2px 3px #ccc inset; border:1px solid #adadad; margin-top:15px; border-radius:4px; margin-left:22px;}
-#cont-l_1{ width:849px; height:341px; border:1px solid #ccc; border-radius:10px; margin-top:80px; position:absolute; left:50%; margin-left:-423px;}
+#cont-l_1{ width:849px; border:1px solid #ccc; border-radius:10px; margin-top:80px; position:absolute; left:50%; margin-left:-423px;}
 #jg{ text-align:center; font-size:23px; margin:20px 0 20px 0;}
 .line3{width:96%; margin:0 auto; border:0; border:none; border:solid 1px #f4f4f4; }
 
 .newsrel .cont-l_1 .iptnewtit{width:557px; height:43px; padding:0 10px; font-size:12px; color:#717171; box-shadow:0px 2px 3px #ccc inset; border:1px solid #adadad; margin-top:15px; border-radius:4px; margin-left:122px; margin-top:55px; float:left;}
-#submtpres_1{ margin:28px 0 0 269px; overflow:hidden;}
+#submtpres_1{ margin:28px 0 28px 269px; overflow:hidden;}
 #qrbut_1{width:278px; height:44px; color:#fff; font-size:16px; border-radius:4px; background:#01b61b; float:left; margin-left:20px; cursor:pointer;}
 #qrbut_1:hover{ background:#03b71a;}
 .ip_1{float:left;}
@@ -1136,6 +1136,7 @@ input{ border:0; border:none; background:none;}
 .wrapper .navl .y-title{ font-size:18px;}
 
 /*修改密码*/
+.updatePwd{width:500px; height:43px; padding:0 10px; font-size:12px; color:#717171; box-shadow:0px 2px 3px #ccc inset; border:1px solid #adadad; margin-top:15px; border-radius:4px; margin-left:22px;}
 .newsrel .cont-l_1 .y-x-xmm{ margin-top:28px;}
 .y-x-qrxg{ background:#01B61B;border-radius: 4px;color: #FFFFFF;cursor: pointer;font-size: 16px;height: 44px;margin-left: 20px;
 width: 278px;}

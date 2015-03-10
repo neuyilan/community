@@ -223,9 +223,20 @@ public class CommunityController {
 					json += "\"stationId\":\""+manageEstate.getStationId()+"\",\"staName\":\""+manageEstate.getStaName()+"\"";
 				}
 				if (manageEstate.getProId()==null) {
-					json += ",\"proId\":\"0\"";
+					json += ",\"proId\":\"0\",";
 				} else {
-					json += ",\"proId\":\""+manageEstate.getProId()+"\"";
+					json += ",\"proId\":\""+manageEstate.getProId()+"\",";
+				}
+				
+				if (manageEstate.getEstateLatitude() == null) {
+					json += "\"estateLatitude\":\"\",";
+				} else {
+					json += "\"estateLatitude\":\""+manageEstate.getEstateLatitude()+"\",";
+				}
+				if (manageEstate.getEstateLongitude() == null) {
+					json += "\"estateLongitude\":\"\"";
+				} else {
+					json += "\"estateLongitude\":\""+manageEstate.getEstateLongitude()+"\"";
 				}
 				
 				if (manageEstate.getComId()==null) {
@@ -1362,6 +1373,7 @@ public class CommunityController {
 			json += "\"message\":\"发布失败\"";
 			json += "}";
 			e.printStackTrace();
+			GSLogger.debug("手机发布新闻发生错误", e);
 		}	
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
