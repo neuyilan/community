@@ -1,4 +1,4 @@
-package com.community.ws.QNH.QNHIFServerSer;
+package com.community.ws.QNH.QNHIFServer;
 
 
 import net.sf.json.JSONObject;

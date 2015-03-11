@@ -1,4 +1,4 @@
-package com.community.ws.QNH.QNHIFServerSer;
+package com.community.ws.QNH.QNHIFServer;
 
 import net.sf.json.JSONObject;
 
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessHelpService;
 
-public class OnlineRegActSer {
+public class QNHOnlineRegActSer {
 	@Autowired
 	BusinessHelpService businessHelpService ;
 	@Autowired

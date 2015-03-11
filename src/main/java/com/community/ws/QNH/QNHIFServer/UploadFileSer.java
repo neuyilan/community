@@ -1,4 +1,4 @@
-package com.community.ws.QNH.QNHIFServerSer;
+package com.community.ws.QNH.QNHIFServer;
 
 import java.io.File;
 import java.io.FileOutputStream;
