@@ -28,7 +28,16 @@ public class BusinessStation implements java.io.Serializable{
 	private String staCode;
 	private String addrName;
 	private String addrUrl;
+	private Integer estateId;
 
+
+	public Integer getEstateId() {
+		return estateId;
+	}
+
+	public void setEstateId(Integer estateId) {
+		this.estateId = estateId;
+	}
 
 	public String getAddrName() {
 		return addrName;

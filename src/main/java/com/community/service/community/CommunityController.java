@@ -449,8 +449,8 @@ public class CommunityController {
 						break;
 					}
 					BusinessNews businessNews = topList.get(i);
-					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
-					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
+					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle().replace("\\", "\\\\")+"\",\"time\":\""
+					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief().replace("\\", "\\\\")+"\",";
 					json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
 					
 					json +="\"comments\":\""+businessNews.getComments()+"\",";
@@ -476,8 +476,8 @@ public class CommunityController {
 					}
 				}
 				
-				json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
-				+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
+				json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle().replace("\\", "\\\\")+"\",\"time\":\""
+				+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief().replace("\\", "\\\\")+"\",";
 				json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
 				
 				json +="\"comments\":\""+businessNews.getComments()+"\",";

@@ -748,7 +748,7 @@
 	
 	<!-- BusinessExp根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessExpResult" parameterType="Object">
-		select <include refid="Base_Column_List" /> , count(news.newsId) as newsCount from business_exp e
+		<!-- select <include refid="Base_Column_List" /> , count(news.newsId) as newsCount from business_exp e
 		inner join business_station s on s.stationId = e.stationId
 		inner join manage_estate es on es.stationId = s.stationId
 		<if test="curUserId != null and curUserId != 0" >
@@ -778,12 +778,79 @@
 	    </if>
 	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
 	    ${pager.mysqlQueryCondition}
+	    </if> -->
+	    
+	    SELECT <include refid="Base_Column_List" />,IFNULL(news.sourceId ,0) as newsCount 
+	    FROM business_exp e 
+	    INNER JOIN ( 
+	    	SELECT DISTINCT stationId 
+	    	FROM manage_estate es
+	    	INNER JOIN (
+	    		SELECT DISTINCT estateId 
+    			FROM business_user_resource 
+    			WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+	    		) bur ON bur.estateId = es.estateId 
+	    			WHERE stationId != 0 ) res ON e.stationId  = res.stationId
+		LEFT JOIN (
+			SELECT DISTINCT sourceId 
+			FROM app_latest_news s 
+			WHERE  s.typeId = 38 AND  s.TO = 1 AND sourceId !='') news ON news.sourceId = e.expId
+		<if test="expState == 10">
+		inner join business_feedback f on f.fbType = 4 and f.expId = e.expId
+		</if>
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
 	    </if>
 	</select>
 	
 	<!-- BusinessExp列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(1) from (select count(e.expId) from business_exp e
+		INNER JOIN (
+			SELECT DISTINCT
+				stationId
+			FROM
+				manage_estate es
+			INNER JOIN (
+				SELECT DISTINCT
+					estateId
+				FROM
+					business_user_resource
+				WHERE 1 = 1
+				<if test="curUserId != null and curUserId != ''" >
+					And userId=#{curUserId} 
+				</if>
+				<if test="curComId != null and curComId != ''" >
+					And comId=#{curComId} 
+				</if>
+				<if test="curEstateId != null and curEstateId != 0" >
+		   			and estateId = #{curEstateId}
+				</if>
+			) bur ON bur.estateId = es.estateId
+			WHERE
+				stationId != 0
+		) res ON e.stationId = res.stationId
+		<if test="expState == 10">
+		inner join business_feedback f on f.fbType = 4 and f.expId = e.expId
+		</if>
+		<include refid="Base_Where_Clause" />
+		group by e.expId
+		) as cc
+		
+		<!-- select count(1) from (select count(e.expId) from business_exp e
 		inner join business_station s on s.stationId = e.stationId
 		inner join manage_estate es on es.stationId = s.stationId
 		<if test="curUserId != null and curUserId != 0" >
@@ -807,7 +874,7 @@
 		</if>
 		<include refid="Base_Where_Clause" />
 		group by e.expId
-		) as cc
+		) as cc -->
 	</select>
 	
 	<!-- BusinessExp根据搜索条件，搜索分页数据 -->

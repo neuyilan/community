@@ -299,6 +299,14 @@ public class AppEstateUserServiceImpl implements AppEstateUserService {
 					appEstateUser.setCreateTime(ts);
 					appEstateUser.setEditTime(ts);
 					appEstateUserDao.save(appEstateUser);
+					query.setEstateId(query.getCurrestateId());
+					List<AppEstateUser> list1 = appEstateUserDao.findByUserId(query);
+					AppUser appUser = new AppUser();
+					appUser.setUserId(query.getUserId());
+					appUser.setEstateId(list1.get(0).getEstateId());
+					appUser.setEstateName(list1.get(0).getEstateName());
+					appUser.setEditTime(ts);
+					appUserDao.update(appUser);
 					json += "{";
 					json += "\"errorCode\":\"200\",";
 					json += "\"message\":\"变更成功\"";

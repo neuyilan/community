@@ -125,7 +125,7 @@ public class SecondaryMarketController {
 					flag1=true;
 				}
 				json += "{\"ID\":\""+businessProduct.getProductId()+"\",\"time\":\""
-				+DateUtil.getInterval(businessProduct.getEditTime()).substring(0, DateUtil.getInterval(businessProduct.getEditTime()).indexOf(" "))+"\",\"brief\":\""+businessProduct.getContent()+"\",\"type\":\""+businessProduct.getDealType()+"\","+
+				+DateUtil.getInterval(businessProduct.getEditTime()).substring(0, DateUtil.getInterval(businessProduct.getEditTime()).indexOf(" "))+"\",\"brief\":\""+businessProduct.getContent().replace("\\", "\\\\")+"\",\"type\":\""+businessProduct.getDealType()+"\","+
 						"\"price\":\""+businessProduct.getPrice()+"\",\"remarks\":\""+businessProduct.getRemarks()+"\",\"typeId\":\""+businessProduct.getTypeId()+"\",\"typeName\":\""+businessProduct.getTypeName()+"\",\"visits\":\""+businessProduct.getVisits()+"\",\"dealState\":\""+businessProduct.getDealState()+"";
 				boolean  flag = false ; //二手列表状态
 				for (AppLatestNews appLatestNews2 : list) {
@@ -461,8 +461,8 @@ public class SecondaryMarketController {
 			json += "\"list\":[";
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessProduct businessProduct = (BusinessProduct) baseBean.getList().get(i);
-				json += "{\"ID\":\""+businessProduct.getProductId()+"\",\"title\":\""+businessProduct.getTitle()+"\",\"time\":\""
-				+DateUtil.getInterval(businessProduct.getEditTime()).substring(0, DateUtil.getInterval(businessProduct.getEditTime()).indexOf(" "))+"\",\"brief\":\""+businessProduct.getContent()+"\",\"publisherId\":\""+businessProduct.getPublisherId()+"\","
+				json += "{\"ID\":\""+businessProduct.getProductId()+"\",\"title\":\""+businessProduct.getTitle().replace("\\", "\\\\")+"\",\"time\":\""
+				+DateUtil.getInterval(businessProduct.getEditTime()).substring(0, DateUtil.getInterval(businessProduct.getEditTime()).indexOf(" "))+"\",\"brief\":\""+businessProduct.getContent().replace("\\", "\\\\")+"\",\"publisherId\":\""+businessProduct.getPublisherId()+"\","
 						+"\"publisherName\":\""+businessProduct.getPublisherName()+"\",\"avatar\":\""+ip+businessProduct.getPortrait()+"\","
 						+"\"addr\":\""+businessProduct.getEstateScope()+"\",\"type\":\""+businessProduct.getDealType()+"\",\"OnSale\":\""+businessProduct.getIsEstateAgent()+
 						"\",\"price\":\""+businessProduct.getPrice()+"\",\"pic\":\"";
@@ -540,8 +540,8 @@ public class SecondaryMarketController {
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
-			json += "\"ID\":\""+businessProduct.getProductId()+"\",\"title\":\""+businessProduct.getTitle()+"\",\"time\":\""
-			+DateUtil.getInterval(businessProduct.getEditTime())+"\",\"content\":\""+businessProduct.getContent()+"\",\"publisherId\":\""+businessProduct.getPublisherId()+"\","
+			json += "\"ID\":\""+businessProduct.getProductId()+"\",\"title\":\""+businessProduct.getTitle().replace("\\", "\\\\")+"\",\"time\":\""
+			+DateUtil.getInterval(businessProduct.getEditTime())+"\",\"content\":\""+businessProduct.getContent().replace("\\", "\\\\")+"\",\"publisherId\":\""+businessProduct.getPublisherId()+"\","
 					+"\"publisherName\":\""+businessProduct.getNickname()+"\",\"avatar\":\""+ip+businessProduct.getPortrait()+"\","
 					+ "\"addr\":\""+businessProduct.getEstateScope()+"\",\"type\":\""+businessProduct.getDealType()+"\",\"OnSale\":\""+businessProduct.getIsEstateAgent()+
 					"\",\"price\":\""+businessProduct.getPrice()+"\",\"supports\":\""+businessProduct.getSupports()+"\",\"comments\":\""+businessProduct.getComments()+"\",";

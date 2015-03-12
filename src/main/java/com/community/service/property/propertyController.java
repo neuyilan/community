@@ -784,8 +784,8 @@ public class propertyController {
 			json += "\"list\":[";
 			for(int i=0;i<topBaseBean.getList().size();i++) {
 				BusinessAnno businessAnno = (BusinessAnno) topBaseBean.getList().get(i);
-				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle()+"\",\"time\":\""
-				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief()+"\",";
+				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle().replace("\\", "\\\\")+"\",\"time\":\""
+				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief().replace("\\", "\\\\")+"\",";
 				if("".equals(businessAnno.getAnnoPic()) || businessAnno.getAnnoPic()==null  || businessAnno.getAnnoPic().indexOf("/images/icon/")>=0){
 					json +="\"pic\":\"\",";
 				}else{
@@ -795,8 +795,8 @@ public class propertyController {
 			}
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
-				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle()+"\",\"time\":\""
-				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief()+"\",";
+				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle().replace("\\", "\\\\")+"\",\"time\":\""
+				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief().replace("\\", "\\\\")+"\",";
 				if("".equals(businessAnno.getAnnoPic()) || businessAnno.getAnnoPic()==null  || businessAnno.getAnnoPic().indexOf("/images/icon/")>=0){
 					json +="\"pic\":\"\",";
 				}else{

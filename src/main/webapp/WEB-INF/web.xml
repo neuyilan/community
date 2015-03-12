@@ -90,7 +90,7 @@
   </servlet-mapping>
   <!-- PHP图片servlet结束 -->
   
-  <!-- axis2 start -->
+    <!-- axis2 start -->
   	<servlet>
 		<servlet-name>AxisServlet</servlet-name>
 		<servlet-class>org.apache.axis2.transport.http.AxisServlet</servlet-class>
@@ -113,7 +113,8 @@
 		<servlet-name>AxisServlet</servlet-name>
 		<url-pattern>/services/*</url-pattern>
 	</servlet-mapping>
-  <!-- axis2 end -->
+    <!-- axis2 end -->
+
     <!-- Spring encoding filter -->  
     <!-- <filter>  
         <filter-name>encodingFilter</filter-name>  

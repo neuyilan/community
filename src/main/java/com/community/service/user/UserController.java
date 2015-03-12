@@ -3628,7 +3628,7 @@ public class UserController {
 				}
 				BusinessFocusAd BusinessFocusAd = adList.get(i);
 				if(BusinessFocusAd.getSourceType()==0){
-					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocusAd.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
 					if(BusinessFocusAd.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
 					}else{
@@ -3636,7 +3636,7 @@ public class UserController {
 					}
 					json +="},";
 				}else if (BusinessFocusAd.getSourceType()==1){
-					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocusAd.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
 					if(BusinessFocusAd.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
 					}else{
@@ -3644,7 +3644,7 @@ public class UserController {
 					}
 					json +="},";
 				}else if (BusinessFocusAd.getSourceType()==2){
-					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocusAd.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
 					if(BusinessFocusAd.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
 					}else{
@@ -3652,7 +3652,7 @@ public class UserController {
 					}
 					json +="},";
 				}else{
-					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocusAd.getTitle()+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocusAd.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocusAd.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocusAd.getSourceId()+"\",\"focusId\":\""+BusinessFocusAd.getFocusAdId()+"\",";
 					if(BusinessFocusAd.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocusAd.getPageUrl()+"\"";
 					}else{
@@ -3673,7 +3673,7 @@ public class UserController {
 				}
 				BusinessFocus BusinessFocus = list.get(i);
 				if(BusinessFocus.getSourceType()==0){
-					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30002\",\"title\":\""+BusinessFocus.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
@@ -3681,7 +3681,7 @@ public class UserController {
 					}
 					json +="},";
 				}else if (BusinessFocus.getSourceType()==1){
-					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30005\",\"title\":\""+BusinessFocus.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
@@ -3689,7 +3689,7 @@ public class UserController {
 					}
 					json +="},";
 				}else if (BusinessFocus.getSourceType()==2){
-					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30003\",\"title\":\""+BusinessFocus.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
@@ -3697,7 +3697,7 @@ public class UserController {
 					}
 					json +="},";
 				}else{
-					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocus.getTitle()+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
+					json += "{\"pic\":\""+ip+BusinessFocus.getPicUrl()+"\",\"serviceCode\":\"30004\",\"title\":\""+BusinessFocus.getTitle().replace("\\", "\\\\")+"\",\"ID\":\""+BusinessFocus.getSourceId()+"\",\"focusId\":\""+BusinessFocus.getFocusId()+"\",";
 					if(BusinessFocus.getIshtml()==1){
 						json +="\"url\":\""+BusinessFocus.getPageUrl()+"\"";
 					}else{
@@ -3718,26 +3718,26 @@ public class UserController {
 			
 			json += "\"newsList\":[";
 			if (topBaseBean.getList().size()==0) {
-				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
-				json +="\"pic\":\"\",";
-				json +="\"comments\":\"\",";
-				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
-				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
-				json +="\"pic\":\"\",";
-				json +="\"comments\":\"\",";
-				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
-				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
-				json +="\"pic\":\"\",";
-				json +="\"comments\":\"\",";
-				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"}";
+//				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
+//				json +="\"pic\":\"\",";
+//				json +="\"comments\":\"\",";
+//				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
+//				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
+//				json +="\"pic\":\"\",";
+//				json +="\"comments\":\"\",";
+//				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"},";
+//				json += "{\"ID\":\"\",\"title\":\"\",\"time\":\"\",\"brief\":\"\",";
+//				json +="\"pic\":\"\",";
+//				json +="\"comments\":\"\",";
+//				json +="\"publisherId\":\"\",\"publisherName\":\"\",\"avatar\":\"\",\"type\":\"0\"}";
 			}else {
 				for(int i=0;i< topBaseBean.getList().size();i++) {
 					if (i==3) {
 						break;
 					}
 					BusinessNews businessNews = (BusinessNews) topBaseBean.getList().get(i);
-					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle()+"\",\"time\":\""
-					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief()+"\",";
+					json += "{\"ID\":\""+businessNews.getNewsId()+"\",\"title\":\""+businessNews.getTitle().replace("\\", "\\\\")+"\",\"time\":\""
+					+DateUtil.getInterval(businessNews.getPublishTime())+"\",\"brief\":\""+businessNews.getBrief().replace("\\", "\\\\")+"\",";
 					json +="\"pic\":\""+ip+businessNews.getAppPic()+"\",";
 					json +="\"comments\":\""+businessNews.getComments()+"\",";
 					if(businessNews.getNewsType()==1){
@@ -3759,8 +3759,8 @@ public class UserController {
 					break;
 				}
 				BusinessProduct businessProduct = (BusinessProduct) productBaseBean.getList().get(i);
-				json += "{\"ID\":\""+businessProduct.getProductId()+"\",\"title\":\""+businessProduct.getTitle()+"\",\"time\":\""
-				+DateUtil.getInterval(businessProduct.getEditTime()).substring(0, DateUtil.getInterval(businessProduct.getEditTime()).indexOf(" "))+"\",\"brief\":\""+businessProduct.getContent()+"\",\"publisherId\":\""+businessProduct.getPublisherId()+"\","
+				json += "{\"ID\":\""+businessProduct.getProductId()+"\",\"title\":\""+businessProduct.getTitle().replace("\\", "\\\\")+"\",\"time\":\""
+				+DateUtil.getInterval(businessProduct.getEditTime()).substring(0, DateUtil.getInterval(businessProduct.getEditTime()).indexOf(" "))+"\",\"brief\":\""+businessProduct.getContent().replace("\\", "\\\\")+"\",\"publisherId\":\""+businessProduct.getPublisherId()+"\","
 						+"\"publisherName\":\""+businessProduct.getPublisherName()+"\",\"avatar\":\""+ip+businessProduct.getPortrait()+"\","
 						+"\"addr\":\""+businessProduct.getEstateScope()+"\",\"type\":\""+businessProduct.getDealType()+"\",\"OnSale\":\""+businessProduct.getIsEstateAgent()+
 						"\",\"price\":\""+businessProduct.getPrice()+"\",\"pic\":\"";
@@ -3787,7 +3787,7 @@ public class UserController {
 				json += "{";
 				json += "\"ID\":\""+businessHelp.getHelpId()+"\",";
 				json += "\"time\":\""+DateUtil.getInterval(businessHelp.getHelpTime())+"\",";
-				json += "\"brief\":\""+businessHelp.getHelpContent()+"\",";
+				json += "\"brief\":\""+businessHelp.getHelpContent().replace("\\", "\\\\")+"\",";
 				json += "\"publisherId\":\""+businessHelp.getNickname()+"\",";
 				if(businessHelp.getIsNickname()==1){
 					json += "\"publisherName\":\"小区居民\",";

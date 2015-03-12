@@ -73,6 +73,17 @@ public class BusinessStationDaoImpl implements BusinessStationDao {
 	}
 	
 	/**
+	 * 按VO对象条件查询所有BusinessStation
+	 * @param entity
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<BusinessStation> findByExample_app(final BusinessStationQuery query) throws DaoException {
+		List<BusinessStation> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessStationDao.findByExample_app", query);
+		return list;
+	}
+	
+	/**
 	 * 按VO对象条件查询所有BusinessStation-限制返回条数
 	 * @param entity
 	 * @return

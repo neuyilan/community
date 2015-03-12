@@ -61,6 +61,7 @@ import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.app.module.vo.BusinessAnnoSupportQuery;
 import com.community.app.module.vo.BusinessFeedbackQuery;
 import com.community.app.module.vo.BusinessStationMessageQuery;
+import com.community.app.module.vo.BusinessStationQuery;
 import com.community.app.module.vo.BusinessStationServiceQuery;
 import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.JsonUtils;
@@ -465,8 +466,8 @@ public class StationController {
 			json += "\"list\":[";
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessAnno businessAnno = (BusinessAnno) baseBean.getList().get(i);
-				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle()+"\",\"time\":\""
-				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief()+"\",";
+				json += "{\"ID\":\""+businessAnno.getAnnoId()+"\",\"title\":\""+businessAnno.getAnnoTitle().replace("\\", "\\\\")+"\",\"time\":\""
+				+DateUtil.getInterval(businessAnno.getPublishTime())+"\",\"brief\":\""+businessAnno.getBrief().replace("\\", "\\\\")+"\",";
 				if("".equals(businessAnno.getAnnoPic()) || businessAnno.getAnnoPic()==null  || businessAnno.getAnnoPic().indexOf("/images/icon/")>=0){
 					json +="\"pic\":\"\",";
 				}else{
@@ -1487,16 +1488,23 @@ public class StationController {
 	 * json
 	 */
 	@RequestMapping(value="getStaList")
-	public void getStaList (HttpServletRequest request, HttpServletResponse response,BusinessStationMessageQuery query) {
+	public void getStaList (HttpServletRequest request, HttpServletResponse response,BusinessStationQuery query) {
 		String json = "";
 		try {
+			query.setStaLongitude(query.getLongitude());
+			query.setStaLatitude(query.getLatitude());
+			List<BusinessStation> list = businessStationService.findByExample_app(query);
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"执行成功\",";
 			json += "\"content\":{";
 			json += "\"list\":[";
-			json += "{\"stationId\":\"1\",\"staName\":\"罗马家园\",\"longitude\":\"116.521723\",\"latitude\":\"39.931284\",\"estateId\":\"11\",\"addr\":\"朝阳区18路18\"},";
-			json += "{\"stationId\":\"1\",\"staName\":\"罗马家园\",\"longitude\":\"116.521723\",\"latitude\":\"39.931284\",\"estateId\":\"11\",\"addr\":\"朝阳区18路18\"}";
+			for (BusinessStation businessStation : list) {
+				json += "{\"stationId\":\""+businessStation.getStationId()+"\",\"staName\":\""+businessStation.getStaName()+"\",\"longitude\":\""+businessStation.getStaLongitude()+"\",\"latitude\":\""+businessStation.getStaLatitude()+"\",\"estateId\":\""+businessStation.getEstateId()+"\",\"addr\":\""+businessStation.getAddrName()+"\"},";
+			}
+			if(list.size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
 			json += "]";
 			json += "}";
 			json += "}";

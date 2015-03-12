@@ -39,6 +39,7 @@ import com.community.app.module.bean.BusinessActivity;
 import com.community.app.module.bean.BusinessActivityComment;
 import com.community.app.module.bean.BusinessActivityCoupon;
 import com.community.app.module.bean.BusinessActivityParticipate;
+import com.community.app.module.bean.BusinessActivityQnhInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivitySupport;
@@ -50,6 +51,7 @@ import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessActivityCommentService;
 import com.community.app.module.service.BusinessActivityCouponService;
 import com.community.app.module.service.BusinessActivityParticipateService;
+import com.community.app.module.service.BusinessActivityQnhInformationService;
 import com.community.app.module.service.BusinessActivityRegistrationInformationService;
 import com.community.app.module.service.BusinessActivityRegistrationTimeslotService;
 import com.community.app.module.service.BusinessActivityService;
@@ -63,6 +65,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityCommentQuery;
 import com.community.app.module.vo.BusinessActivityCouponQuery;
 import com.community.app.module.vo.BusinessActivityParticipateQuery;
+import com.community.app.module.vo.BusinessActivityQnhInformationQuery;
 import com.community.app.module.vo.BusinessActivityQuery;
 import com.community.app.module.vo.BusinessActivityRegistrationInformationQuery;
 import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
@@ -113,6 +116,9 @@ public class activitiesController {
 	private BusinessActivityCouponService businessActivityCouponService;
 	@Autowired
 	private ManageSendMsgService manageSendMsgService;
+	@Autowired
+	private BusinessActivityQnhInformationService businessActivityQnhInformationService;
+	
 	
 	
 	
@@ -158,8 +164,8 @@ public class activitiesController {
 			json += "\"list\":[";
 			for(int i=0;i<topBaseBean.getList().size();i++) {
 				BusinessActivity businessActivity = (BusinessActivity) topBaseBean.getList().get(i);
-				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName()+"\",\"time\":\""
-						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief()+"\",";
+				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName().replace("\\", "\\\\")+"\",\"time\":\""
+						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief().replace("\\", "\\\\")+"\",";
 				if(businessActivity.getState()==2){
 					if("".equals(businessActivity.getActPicNo()) || businessActivity.getActPicNo()==null  || businessActivity.getActPicNo().indexOf("/images/icon/")>=0){
 						json +="\"pic\":\"\",";
@@ -207,8 +213,8 @@ public class activitiesController {
 			}
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessActivity businessActivity = (BusinessActivity) baseBean.getList().get(i);
-				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName()+"\",\"time\":\""
-						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief()+"\",";
+				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName().replace("\\", "\\\\")+"\",\"time\":\""
+						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief().replace("\\", "\\\\")+"\",";
 				if(businessActivity.getState()==2){
 					if("".equals(businessActivity.getActPicNo()) || businessActivity.getActPicNo()==null  || businessActivity.getActPicNo().indexOf("/images/icon/")>=0){
 						json +="\"pic\":\"\",";
@@ -325,6 +331,8 @@ public class activitiesController {
 				mav = new ModelAndView("/service/activityVote");
 			}else if (activity.getTypeId()==4) {
 				mav = new ModelAndView("/service/activityCoupon");
+			}else if (activity.getTypeId()==5) {
+				mav = new ModelAndView("/service/activityQnhRegistration");
 			}
 			
 			//Integer userId = 1;
@@ -462,6 +470,18 @@ public class activitiesController {
 				
 				mav.addObject("couponDesc", activity.getCouponDesc());
 				mav.addObject("couponValid", activity.getCouponValid());
+			}else if(activity.getTypeId()==5){
+				
+				mav.addObject("tel", request.getParameter("tel"));
+				BusinessActivityQnhInformationQuery businessActivityQnhInformationQuery = new BusinessActivityQnhInformationQuery();
+				businessActivityQnhInformationQuery.setActId(ID);
+				businessActivityQnhInformationQuery.setUserId(new Integer(userId));
+				List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
+				
+				if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
+					rank = 1;
+				}
+				
 			}else {
 				List<BusinessActivityParticipate> participateList = businessActivityParticipateService.findByMap(paramMap);
 				if(participateList.size() > 0) {//已参与活动
@@ -1573,4 +1593,134 @@ public class activitiesController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 跳转至报名表单页
+	 * @param tel,userId,actId,timeSlotId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="qnhRegistrationIndex")
+	public ModelAndView qnhRegistrationIndex(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		ModelAndView mav = new ModelAndView("/service/qnhRegistrationIndex");
+		Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
+		try{
+			//获取活动信息
+			BusinessActivity activity = businessActivityService.findById_app(query.getID());
+			AppUser appUser = appUserService.findById(query.getUserId());
+			String protrait = ip+appUser.getPortrait();
+//			for (BusinessActivityParticipateQuery businessActivityParticipateQuery : list) {
+//				json += "{\"ID\":\""+businessActivityParticipateQuery.getUserId()+"\",\"name\":\""+businessActivityParticipateQuery.getUserName()+"\",";
+//				json += "\"ranking\":\""+businessActivityParticipateQuery.getRank()+"\",";
+//				if(businessActivityParticipateQuery.getUserId().equals(query.getUserId())){
+//					json += "\"type\":\"0\",\"portrait\":\""+appUser.getPortrait()+"\"},";
+//				}else{
+//					json += "\"type\":\"1\"},";
+//				}
+//			
+//			}
+			String path = request.getContextPath();
+			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+			mav.addObject("ctx", ctx);
+			mav.addObject("title", activity.getActName());
+			mav.addObject("time", activity.getPublishTime());
+			mav.addObject("userId", appUser.getUserId());
+			mav.addObject("nickname", appUser.getNickname());
+			mav.addObject("realname", appUser.getRealname());
+			mav.addObject("tel", query.getTel());
+			mav.addObject("protrait", protrait);
+			mav.addObject("ID", query.getID());
+			mav.addObject("timeSlotId", query.getTimeSlotId());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		try{
+			Timestamp  ts=new Timestamp(new Date().getTime());
+			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
+			appStatisticsClick.setCreateTime(ts);
+			appStatisticsClick.setEditTime(ts);
+			if(null==query.getUserId()){
+				appStatisticsClick.setUserId(0);
+			}else{
+				appStatisticsClick.setUserId(query.getUserId());
+			}
+			appStatisticsClick.setType(28);
+			appStatisticsClick.setTypeName("获取活动排名");
+			appStatisticsClickService.save(appStatisticsClick);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return mav;	
+	}
+	
+	/**
+	 * 用户参与活动
+	 * @param comId
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="savebusinessActivityQnhInformation")
+	public synchronized  void savebusinessActivityQnhInformation(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
+		String json = "";
+		if(query.getUserId()==null){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"用户错误\"";
+			json += "}";
+		}else{
+			//query.setActId(query.getID());
+			try{
+				BusinessActivityQnhInformationQuery businessActivityQnhInformationQuery = new BusinessActivityQnhInformationQuery();
+				businessActivityQnhInformationQuery.setActId(query.getActId());
+				businessActivityQnhInformationQuery.setUserId(query.getUserId());
+				List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
+				
+				if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
+					json = "";
+					json += "{";
+					json += "\"errorCode\":\"400\",";
+					json += "\"message\":\"您已经参与活动！不能重复参与！\"";
+					json += "}";
+				}else {
+					Timestamp  ts=new Timestamp(new Date().getTime());
+					BusinessActivityQnhInformation businessActivityQnhInformation = new BusinessActivityQnhInformation();
+					businessActivityQnhInformation.setActId(query.getActId());
+					businessActivityQnhInformation.setUserId(query.getUserId());
+					businessActivityQnhInformation.setState(0);
+					businessActivityQnhInformation.setRealname(query.getRealname());
+					businessActivityQnhInformation.setCreateTime(ts);
+					businessActivityQnhInformation.setEditTime(ts);
+					businessActivityQnhInformation.setEditor("");
+					businessActivityQnhInformationService.save(businessActivityQnhInformation);
+					json += "{";
+					json += "\"errorCode\":\"200\",";
+					json += "\"message\":\"参与成功\"";
+					json += "}";
+				}
+			}catch(Exception e){
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"参与失败\"";
+				json += "}";
+				e.printStackTrace();
+			}
+		}
+		
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }

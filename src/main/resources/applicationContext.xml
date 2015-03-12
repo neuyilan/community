@@ -80,7 +80,7 @@
     <!-- WS Bean 注册 start -->
     <bean id="qNHActivitySer" class="com.community.ws.QNH.QNHIFServer.QNHActivitySer"></bean>
     <bean id="uploadFileSer" class="com.community.ws.QNH.QNHIFServer.UploadFileSer"></bean>
-    <bean id="qNHOnlineRegActSer" class="com.community.ws.QNH.QNHIFServer.QNHOnlineRegActSer"></bean>
+    <bean id="qNHOfflineRegActSer" class="com.community.ws.QNH.QNHIFServer.QNHOfflineRegActSer"></bean>
      <!-- WS Bean 注册 end -->
      
     <!-- 配置freeMarker的模板路径 -->  

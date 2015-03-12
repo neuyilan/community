@@ -115,6 +115,24 @@ public class BusinessStationServiceImpl implements BusinessStationService {
 	}
 	
 	/**
+	 * 按VO对象条件查询所有BusinessStation
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@Transactional(readOnly = true)
+	public List<BusinessStation> findByExample_app(final BusinessStationQuery query) throws ServiceException {
+		List<BusinessStation> list = new ArrayList<BusinessStation>() ;
+		try {
+			list=businessStationDao.findByExample_app(query);
+		} catch (DaoException e) {
+			logger.debug("BusinessStationServiceImpl findByExample()：按VO对象条件查询所有BusinessStation发生错误！", e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	/**
 	 * 按VO对象条件查询所有BusinessStation-限制返回条数
 	 * @param query
 	 * @return

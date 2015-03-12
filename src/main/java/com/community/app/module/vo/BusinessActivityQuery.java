@@ -88,7 +88,16 @@ public class BusinessActivityQuery extends BaseBean {
 	private String cellphone;
 	private String QNHActId;
 	private Integer isQNH;
+	private String realname;
 	
+	public String getRealname() {
+		return realname;
+	}
+
+	public void setRealname(String realname) {
+		this.realname = realname;
+	}
+
 	public Integer getIsQNH() {
 		return isQNH;
 	}

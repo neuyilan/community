@@ -126,6 +126,7 @@ public class ShiroDbRealm extends AuthorizingRealm{
 				shiroUser.setPosName(businessUser.getPosName());
 				shiroUser.setNickName(businessUser.getNickname());
 				shiroUser.setOrgId(businessUser.getOrgId());
+				shiroUser.setAvatar(businessUser.getAvatar());
 				shiroUser.setOrgType(businessUser.getOrgType());
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");				
 				shiroUser.setLastLoginTime(sdf.format(businessUser.getLastLoginTime()));

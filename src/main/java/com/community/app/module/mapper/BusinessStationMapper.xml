@@ -76,10 +76,12 @@
 				   		and staIcon = #{staIcon}
 					</if>
 					<if test="staLongitude != null and staLongitude != ''" >
-				   		and staLongitude = #{staLongitude}
+				   		and staLongitude BETWEEN #{staLongitude}-0.0045
+				   		AND #{staLongitude}+0.0045
 					</if>
 					<if test="staLatitude != null and staLatitude != ''" >
-				   		and staLatitude = #{staLatitude}
+				   		and staLatitude BETWEEN #{staLatitude}-0.0045
+				   		AND #{staLatitude}+0.0045
 					</if>
 					<if test="crateTime != null and crateTime != ''" >
 				   		and crateTime = #{crateTime}
@@ -92,6 +94,82 @@
 					</if>
 					<if test="staCode != null and staCode != ''" >
 				   		and staCode = #{staCode}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List_app" >
+			s.stationId,
+			s.orgId,
+			s.staName,
+			s.staBrief,
+			s.staService,
+			s.staTel,
+			s.staEmail,
+			s.staWeixin,
+			s.staIcon,
+			s.staLongitude,
+			s.staLatitude,
+			s.crateTime,
+			s.editTime,
+			s.editor,
+			s.staCode,
+			s.addrName,
+			s.addrUrl
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="stationId != null and stationId != ''" >
+				   		and s.stationId = #{stationId}
+					</if>
+					<if test="orgId != null and orgId != ''" >
+				   		and s.orgId = #{orgId}
+					</if>
+					<if test="staName != null and staName != ''" >
+				   		and s.staName = #{staName}
+					</if>
+					<if test="staBrief != null and staBrief != ''" >
+				   		and s.staBrief = #{staBrief}
+					</if>
+					<if test="staService != null and staService != ''" >
+				   		and s.staService = #{staService}
+					</if>
+					<if test="staTel != null and staTel != ''" >
+				   		and s.staTel = #{staTel}
+					</if>
+					<if test="staEmail != null and staEmail != ''" >
+				   		and s.staEmail = #{staEmail}
+					</if>
+					<if test="staWeixin != null and staWeixin != ''" >
+				   		and s.staWeixin = #{staWeixin}
+					</if>
+					<if test="staIcon != null and staIcon != ''" >
+				   		and s.staIcon = #{staIcon}
+					</if>
+					<if test="staLongitude != null and staLongitude != ''" >
+				   		and s.staLongitude BETWEEN #{staLongitude}-0.0135
+				   		AND #{staLongitude}+0.0135
+					</if>
+					<if test="staLatitude != null and staLatitude != ''" >
+				   		and s.staLatitude BETWEEN #{staLatitude}-0.0135
+				   		AND #{staLatitude}+0.0135
+					</if>
+					<if test="crateTime != null and crateTime != ''" >
+				   		and s.crateTime = #{crateTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and s.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and s.editor = #{editor}
+					</if>
+					<if test="staCode != null and staCode != ''" >
+				   		and s.staCode = #{staCode}
 					</if>
 			</trim>
 		</where>
@@ -115,6 +193,11 @@
 	<!-- 按VO对象条件查询所有BusinessStation -->
 	<select id="findByExample" resultMap="BusinessStationResult" parameterType="com.community.app.module.vo.BusinessStationQuery">
 		select <include refid="Base_Column_List" /> from business_station <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessStation -->
+	<select id="findByExample_app" resultMap="BusinessStationResult" parameterType="com.community.app.module.vo.BusinessStationQuery">
+		select <include refid="Base_Column_List_app" />,e.estateId from business_station s inner join manage_estate e on e.stationId=s.stationId  <include refid="Base_Where_Clause_app" />
 	</select>
 	
 	<!-- BusinessStation根据搜索条件，搜索分页数据 -->

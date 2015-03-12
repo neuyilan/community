@@ -48,6 +48,14 @@ public interface BusinessStationService {
 	 * @throws ServiceException
 	 */	
 	public List<BusinessStation> findByExample(final BusinessStationQuery query) throws ServiceException;	
+	
+	/**
+	 * 按VO对象条件查询所有BusinessStation
+	 * @param entity
+	 * @return
+	 * @throws ServiceException
+	 */	
+	public List<BusinessStation> findByExample_app(final BusinessStationQuery query) throws ServiceException;	
 
 	/**
 	 * 按VO对象条件查询所有BusinessStation-限制返回条数

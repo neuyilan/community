@@ -5,7 +5,7 @@
 <%@ page import="com.community.app.module.bean.ShiroUser" %>
 
 <%
-//ShiroUser shiroUser = CommonUtils.getUser();
+	// ShiroUser shiroUser = CommonUtils.getUser();
 %>
 <html>
 <head>
@@ -54,14 +54,22 @@
         <h2 class="tit3">账号操作</h2>
         <!--<hr class="link3">-->
         <div>
-            <ul class="accordion3">
-                <li id="one2" class="files">
-                    <a href="<%=ctx %>/index/getBusinessUserInfo.do">修改密码</a>
-                </li>
-                <li id="one2" class="files">
-                    <shiro:user><a href="<%=ctx %>/index/logout.do">退出登录</a></shiro:user>
-                </li>
-            </ul>
+        	<span style="margin-left:15px;">
+            	<img alt="修改头像" src="<%=ctx %><%=shiroUser.getAvatar() %>" width="100" height="100"/>
+            </span>
+            <span>
+	            <ul class="accordion3">
+	            	<li id="one2" class="files">
+	                    <a href="<%=ctx %>/business/businessUser/modifySelfInfo.do?userId=<%=shiroUser.getUserId() %>">修改资料</a>
+	                </li>
+	                <li id="one2" class="files">
+	                    <a href="<%=ctx %>/index/getBusinessUserInfo.do">修改密码</a>
+	                </li>
+	                <li id="one2" class="files">
+	                    <shiro:user><a href="<%=ctx %>/index/logout.do">退出登录</a></shiro:user>
+	                </li>
+	            </ul>
+            </span>
         </div>
     </div>
 </div>

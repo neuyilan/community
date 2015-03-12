@@ -485,6 +485,11 @@ public class EstateController {
 				appEstateUser.setCreateTime(ts);
 				appEstateUser.setEditTime(ts);
 				appEstateUserService.save(appEstateUser);
+				AppUser appUser = new AppUser();
+				appUser.setUserId(query.getUserId());
+				appUser.setEstateId(query.getEstateId());
+				appUser.setEditTime(ts);
+				appUserService.update(appUser);
 				json += "{";
 				json += "\"errorCode\":\"200\",";
 				json += "\"message\":\"添加成功\"";

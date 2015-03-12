@@ -33,6 +33,8 @@ import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessHelp;
 import com.community.app.module.bean.BusinessHelpComment;
 import com.community.app.module.bean.BusinessHelpSupport;
+import com.community.app.module.bean.BusinessHelpType;
+import com.community.app.module.bean.BusinessProductType;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppPushLogService;
 import com.community.app.module.service.AppStatisticsClickService;
@@ -42,6 +44,7 @@ import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessHelpCommentService;
 import com.community.app.module.service.BusinessHelpService;
 import com.community.app.module.service.BusinessHelpSupportService;
+import com.community.app.module.service.BusinessHelpTypeService;
 import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessHelpCommentQuery;
@@ -76,6 +79,9 @@ public class seekHelpController {
 	private AppUserConfigService appUserConfigService;
 	@Autowired
 	private AppStatisticsClickService appStatisticsClickService;
+	@Autowired
+	private BusinessHelpTypeService businessHelpTypeService;
+	
 	
 	
 	
@@ -127,7 +133,7 @@ public class seekHelpController {
 				json += "{";
 				json += "\"ID\":\""+businessHelp.getHelpId()+"\",";
 				json += "\"time\":\""+DateUtil.getInterval(businessHelp.getHelpTime())+"\",";
-				json += "\"brief\":\""+businessHelp.getHelpContent()+"\",";
+				json += "\"brief\":\""+businessHelp.getHelpContent().replace("\\", "\\\\")+"\",";
 				json += "\"publisherId\":\""+businessHelp.getHelperId()+"\",";
 				if(businessHelp.getIsNickname()==1){
 					json += "\"publisherName\":\"小区居民\",";
@@ -226,7 +232,7 @@ public class seekHelpController {
 				json += "{";
 				json += "\"ID\":\""+businessHelp.getHelpId()+"\",";
 				json += "\"time\":\""+DateUtil.getInterval(businessHelp.getHelpTime())+"\",";
-				json += "\"brief\":\""+businessHelp.getHelpContent()+"\",";
+				json += "\"brief\":\""+businessHelp.getHelpContent().replace("\\", "\\\\")+"\",";
 				json += "\"publisherId\":\""+businessHelp.getNickname()+"\",";
 				if(businessHelp.getIsNickname()==1){
 					json += "\"publisherName\":\"小区居民\",";
@@ -319,7 +325,7 @@ public class seekHelpController {
 					json += "\"publisherName\":\""+businessHelp.getHelperName()+"\",";
 				}
 				json += "\"avatar\":\""+ip+businessHelp.getPortrait()+"\",";
-				json += "\"content\":\""+businessHelp.getHelpContent()+"\",";
+				json += "\"content\":\""+businessHelp.getHelpContent().replace("\\", "\\\\")+"\",";
 				json += "\"pics\":[";
 				if(businessHelp.getPics()!=null){
 					String[] pic = businessHelp.getPics().split(",");
@@ -1155,16 +1161,21 @@ public class seekHelpController {
 	public void getStaList (HttpServletRequest request, HttpServletResponse response,BusinessStationMessageQuery query) {
 		String json = "";
 		try {
+			
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+			List<BusinessHelpType> list = businessHelpTypeService.findAll();
 			json += "{";
 			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"执行成功\",";
+			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
 			json += "\"list\":[";
-			json += "{\"typeId\":\"1\",\"typeName\":\"求职招聘\",\"typeImage\":\"116.jpg\"},";
-			json += "{\"typeId\":\"2\",\"typeName\":\"亲子\",\"typeImage\":\"116.jpg\"},";
-			json += "{\"typeId\":\"3\",\"typeName\":\"七嘴八舌\",\"typeImage\":\"116.jpg\"},";
-			json += "{\"typeId\":\"4\",\"typeName\":\"青年汇\",\"typeImage\":\"116.jpg\"},";
-			json += "{\"typeId\":\"5\",\"typeName\":\"房屋租赁\",\"typeImage\":\"116.jpg\"}";
+			for (BusinessHelpType businessHelpType : list) {
+				json += "{\"typeId\":\""+businessHelpType.getTypeId()+"\",\"typeName\":\""+businessHelpType.getTypeName()+"\",\"typeImage\":\""+ip+businessHelpType.getTypeImage()+"\"},";
+			}
+			if(list.size() > 0) {
+				json = json.substring(0, json.length()-1);
+			}
 			json += "]";
 			json += "}";
 			json += "}";

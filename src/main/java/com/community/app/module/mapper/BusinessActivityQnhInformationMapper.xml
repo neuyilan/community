@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActivityQnhInformationDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActivityQnhInformationResult" type="BusinessActivityQnhInformation">
+			<result column="informationId" property="informationId" />
+			<result column="userId" property="userId" />
+			<result column="actId" property="actId" />
+			<result column="realname" property="realname" />
+			<result column="createTime" property="createTime" />
+			<result column="editTime" property="editTime" />
+			<result column="editor" property="editor" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			informationId,
+			userId,
+			actId,
+			realname,
+			createTime,
+			editTime,
+			editor
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="informationId != null and informationId != ''" >
+				   		and informationId = #{informationId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="realname != null and realname != ''" >
+				   		and realname = #{realname}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and editor = #{editor}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActivityQnhInformation -->
+	<select id="findById"  resultMap="BusinessActivityQnhInformationResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_activity_qnh_information where informationId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActivityQnhInformation -->
+	<select id="findAll" resultMap="BusinessActivityQnhInformationResult">
+		select <include refid="Base_Column_List" /> from business_activity_qnh_information 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActivityQnhInformation -->
+	<select id="findByMap" resultMap="BusinessActivityQnhInformationResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_activity_qnh_information <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActivityQnhInformation -->
+	<select id="findByExample" resultMap="BusinessActivityQnhInformationResult" parameterType="com.community.app.module.vo.BusinessActivityQnhInformationQuery">
+		select <include refid="Base_Column_List" /> from business_activity_qnh_information <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityQnhInformation根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActivityQnhInformationResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_activity_qnh_information  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActivityQnhInformation列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_qnh_information 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActivityQnhInformation保存数据 -->
+	<insert id="save" parameterType="BusinessActivityQnhInformation">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="informationId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_activity_qnh_information(
+		
+		userId,
+		actId,
+		realname,
+		state,
+		createTime,
+		editTime,
+		editor
+		) values(
+				#{userId},
+		#{actId},
+		#{realname},
+		#{state},
+		#{createTime},
+		#{editTime},
+		#{editor}
+		)
+	</insert>
+	
+	<!-- BusinessActivityQnhInformation修改数据 -->
+	<update id="update" parameterType="BusinessActivityQnhInformation">
+		update business_activity_qnh_information 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="realname != null and realname != ''" >
+			realname=#{realname},
+			</if>
+			<if test="createTime != null and createTime != ''" >
+			createTime=#{createTime},
+			</if>
+			<if test="editTime != null and editTime != ''" >
+			editTime=#{editTime},
+			</if>
+			<if test="editor != null and editor != ''" >
+			editor=#{editor}
+			</if>
+		</set> 
+		where 
+		informationId=#{informationId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessActivityQnhInformation删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_activity_qnh_information where 
+		informationId=#{informationId}
+													</delete>
+	
+</mapper>
+	

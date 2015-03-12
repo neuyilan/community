@@ -504,6 +504,70 @@ public class BusinessUserController {
 	}
 	
 	/**
+	 * 进入修改个人信息页
+	 * @return
+	 */
+	@RequestMapping(value="modifySelfInfo")
+	public ModelAndView modifySelfInfo(BusinessUserQuery query) {	
+		BusinessUser businessUser=new BusinessUser();
+		try{
+			businessUser = businessUserService.findById(query.getUserId()); //个人基础信息
+		}catch(Exception e){
+			GSLogger.error("进入businessUser修改页时发生错误：/business/businessUser/updateOneSelfInfo", e);
+			e.printStackTrace();
+		}
+        ModelAndView mav = new ModelAndView();
+        
+        mav = new ModelAndView("/module/businessUser/updateOneSelfInfo");
+        mav.addObject("businessUser", businessUser);
+		return mav;
+	}
+	
+	/**
+	 * 更新个人信息对象
+	 * @param request
+	 * @param businessUser
+	 * @return
+	 */
+	@RequestMapping(value="updateSelfInfo")
+	public void updateSelfInfo(HttpServletRequest request, HttpServletResponse response, BusinessUserQuery query) {
+		String json = "";
+		try{
+            //查询登录用户信息
+            BusinessUser businessUser = businessUserService.findById(query.getUserId());
+            businessUser.setUserName(query.getUserName());
+            businessUser.setUserTel(query.getUserTel());
+            businessUser.setFromAddress(query.getFromAddress());
+            businessUser.setHomeAddress(query.getHomeAddress());
+            businessUser.setSex(query.getSex());
+            businessUser.setAge(query.getAge());
+            businessUser.setIsMarriage(query.getIsMarriage());
+            businessUser.setHometown(query.getHometown());
+            businessUser.setNation(query.getNation());
+            businessUser.setNickname(query.getNickname());
+            businessUser.setUserBrief(query.getUserBrief());
+            businessUser.setComWord(query.getComWord());
+            businessUser.setEditTime(new Timestamp(System.currentTimeMillis()));
+            businessUser.setEditor(getUser().getUserName());
+            
+			businessUserService.update(businessUser);
+			json = "{\"success\":\"true\",\"message\":\"修改个人信息成功\"}";
+		} catch(Exception e) {
+			json = "{\"success\":\"false\",\"message\":\"修改个人信息失败\"}";
+			GSLogger.error("编辑businessUser信息时发生错误：/business/businessUser/updateSelfInfo", e);
+			e.printStackTrace();
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(json);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 保存物业，驿站对象
 	 * @param request
 	 * @param query

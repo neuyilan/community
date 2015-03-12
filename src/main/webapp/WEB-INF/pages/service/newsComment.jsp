@@ -257,6 +257,9 @@ function comment(){
 	 		    type: 'post',
 	            dataType: 'json',
 	 		    success: function (data) {
+	 		    	$('#commentBtn').click(function(){
+	 					comment();
+	 				 });
 	 		    	//alert('评论成功');
 	 		    	//eval('data=' + data);
 	 		    	//$('#comment').attr('disabled', true);
@@ -299,11 +302,6 @@ function comment(){
 	        	   }else{
 	        		   msgbox('提示',data.message,'确认');
 	        	   }
-	 				 $('#commentBtn').click(function(){
-	 					comment();
-	 				 });
-	 				
-	 				
 	 		    },
 	 		    error: function () {
 	 		       msgbox('提示','评论失败','确认');

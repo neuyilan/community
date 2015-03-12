@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessHelpService;
 
-public class QNHOnlineRegActSer {
+public class QNHOfflineRegActSer {
 	@Autowired
 	BusinessHelpService businessHelpService ;
 	@Autowired

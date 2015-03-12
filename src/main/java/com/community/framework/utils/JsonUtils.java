@@ -37,9 +37,6 @@ public class JsonUtils {
 			case '\t':
 				sb.append("\\t");
 				break;
-			case '/':
-				sb.append("\\/");
-				break;
 			default:
 				if (ch >= '\u0000' && ch <= '\u001F') {
 					String ss = Integer.toHexString(ch);
