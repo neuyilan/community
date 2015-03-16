@@ -76,7 +76,10 @@
 				<c:forEach items="${baseBean.list }" var="breakInfo" varStatus="key">
 					<div class="manbox" <c:if test="${key.index % 3 == 0}" >style="margin-left:0;"</c:if>>
 						<a class="nopotr2 s-baoliao-no" href="javascript:;" style="height:296px;"> 
-							<time><fmt:formatDate value="${breakInfo.breakTime }" pattern="yyyy-MM-dd HH:mm"/></time>
+							<div class="info">
+			                    <span>爆料时间：<time><fmt:formatDate value="${breakInfo.breakTime }" pattern="yyyy-MM-dd HH:mm"/></time></span>
+								<span class="s-xw-sq">所属社区：${breakInfo.comName }</span>
+							</div>
 							<hr class="link">
 							<h2 class="title_h">
 								<span class="poht">
@@ -217,8 +220,11 @@
     		            }
                     	var htmlDom = ''
                     	+ '<div class="manbox" '+styleStr+'>'
-                    	+ '<a class="nopotr2 s-baoliao-no" href="javascript:;"  style="height:296px;">'                 
-                    	+ '<time>'+(row.breakTime != '' ? row.breakTime.substring(0, 16) : '')+'</time>'
+                    	+ '<a class="nopotr2 s-baoliao-no" href="javascript:;"  style="height:296px;">' 
+                    	+ '<div class="info">'
+                    	+ '<span>爆料时间：<time>'+(row.breakTime != '' ? row.breakTime.substring(0, 16) : '')+'</time></span>'
+                    	+ '<span class="s-xw-sq">所属社区：'+row.comName+'</span>'
+                    	+ '</div>'
                     	+ '<hr class="link">'
                     	+ '<h2 class="title_h"><span class="poht"><img style="width:100%;" src="<%=ctx %>'+row.portrait+'"></span><em style="font-style:normal; line-height:31px;">'+row.breakerName+'</em><br> <strong style="font-weight:normal; font-size:14px;">'+row.address+'</strong></h2>'
                     	+ '<div class="state">'+state+ '<div class="s-baoliao-tick"><i class="baoliao-tick" >'+row.selectedNum+'</i></div></div>'

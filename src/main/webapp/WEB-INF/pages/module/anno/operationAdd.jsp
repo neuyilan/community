@@ -45,7 +45,7 @@
 		            </div>
 		            <div class="line2"></div>
 		            
-		            <h2 class="relran" style="font-weight: bold;">公告范围<label for="scope" class="error success"></label></h2>
+		            <h2 class="relran" style="font-weight: bold;">公告展示范围<label for="scope" class="error success"></label></h2>
 		            <div style="position:relative;">
 			            <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span><em>可根据小区进行公告展示范围限定</em>
 			            <input type="hidden" id="scope" name="scope" value="" />
@@ -134,11 +134,11 @@
 </div>
 <!-- 公告类型选择结束 -->
 
-<!-- 系统公告范围选择开始 -->
+<!-- 系统公告展示范围选择开始 -->
 <div id="scopeLayer" class="busswi y-fbes-jm">
 	<div id="scopeBar" class="sidebar y-fbes-jms">
     	<a id="y-fbes-close" class="close" href="javascript:;" onclick="$('#scopeLayer').fadeOut('slow');"></a>
-    	<h2 class="tit">系统公告范围选择</h2>
+    	<h2 class="tit">系统公告展示范围选择</h2>
         <div id="wrapper-250">
 	          <ul id="scopeTree" style="font-size: 18px;"></ul>
         </div>
@@ -148,13 +148,13 @@
         </div>
     </div>
 </div>
-<!-- 系统公告范围选择结束 -->
+<!-- 系统公告展示范围选择结束 -->
 
-<!-- 内部公告范围选择开始 -->
+<!-- 内部公告展示范围选择开始 -->
 <div id="innerScopeLayer" class="busswi y-fbes-jm">
 	<div id="innerScopeBar" class="sidebar y-fbes-jms">
     	<a id="closeInnerScope" class="close" href="javascript:;" onclick="$('#innerScopeLayer').fadeOut('slow');"></a>
-    	<h2 class="tit">内部公告范围选择</h2>
+    	<h2 class="tit">内部公告展示范围选择</h2>
         <div id="wrapper-250">
 	          <ul id="departmentScopeTree" style="font-size: 18px;"></ul>
         </div>
@@ -164,7 +164,7 @@
         </div>
     </div>
 </div>
-<!-- 内部公告范围选择结束 -->
+<!-- 内部公告展示范围选择结束 -->
 
 <!-- 用户级别选择开始 -->
 <div id="userLevelLayer" class="busswi y-fbes-jm">
@@ -400,7 +400,7 @@
             }
         });
 
-        //选择系统公告范围
+        //选择系统公告展示范围
         $('#scopeOk').click(function() {
             var scopeIds = '';
             var scopeAry = [];
@@ -435,12 +435,12 @@
             }
         });
 
-        //取消选择系统公告范围
+        //取消选择系统公告展示范围
         $('#scopeCancel').click(function() {
             $("#scopeLayer").fadeOut("slow");
         });
 
-        //选择内部公告范围
+        //选择内部公告展示范围
         $('#innerScopeOk').click(function() {
             var scopeIds = '';
             var scopeAry = [];
@@ -474,7 +474,7 @@
             }
         });
 
-        //取消选择内部公告范围
+        //取消选择内部公告展示范围
         $('#innerScopeCancel').click(function() {
             $("#innerScopeLayer").fadeOut("slow");
         });
@@ -558,7 +558,7 @@
                     required: '请选择公告类型'
                 },
                 scope: {
-                    required: '请选择公告范围'
+                    required: '请选择公告展示范围'
                 },
                 /* userLevel: {
                     required: '请选择用户级别'

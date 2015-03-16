@@ -36,7 +36,7 @@
             <h2 class="brief" style="font-weight: bold;">公告简介<label for="brief" class="error success"></label></h2>
             <input class="iptnewtit" type="text" name="brief" id="brief" placeholder='请输入简介28字以内' value="${businessAnno.brief }" />
                         
-            <h2 class="relran" style="font-weight: bold;">公告范围<label for="annoBuilding" class="error success"></label></h2>
+            <h2 class="relran" style="font-weight: bold;">公告展示范围<label for="annoBuilding" class="error success"></label></h2>
             <div style="position:relative;">
 	            <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span><em>可根据小区进行公告展示范围限定</em>
             	<input type="hidden" id="scope" name="scope" value="${scope}" />
@@ -128,7 +128,7 @@
 <div id="scopeLayer" class="busswi y-fbes-jm">
 	<div id="scopeBar" class="sidebar y-fbes-jms">
     	<a id="y-fbes-close" class="close" href="javascript:;" onclick="$('#scopeLayer').fadeOut('slow');"></a>
-    	<h2 class="tit">公告范围选择</h2>
+    	<h2 class="tit">公告展示范围选择</h2>
         <div id="wrapper-250">
 	          <ul id="scopeTree" style="font-size: 18px;"></ul>
         </div>

@@ -120,7 +120,7 @@ label.error {
                     	required:  '请选择新鲜事标签'
                     },
                     appPic: {
-                        required: '请选择APP首页小图！'
+                        required: '请选择分享展示图！'
                     },
                     isPush: {
                         required: '请选择是否推送！'
@@ -203,8 +203,7 @@ label.error {
 					</div>
 					<div class="line2"></div>
 					
-					<h2 class="relran">
-						APP首页小图<label for="appPic" class="error success"></label>
+					<h2 class="relran">分享展示图<span style="font-weight:normal;font-size: 16px;">【用于微信分享时使用！】</span><label for="appPic" class="error success"></label>
 					</h2>
 					<div style="overflow: hidden;">
 						<img id="appPicBtn" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float: left; padding-right: 10px;">
@@ -235,9 +234,9 @@ label.error {
 					<div class="options">
 						<p>
 							<label><input class="radiostyle" type="radio" name="isRecommend" value="0">&nbsp;首页焦点图</label> 
-							<em style="color: #000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-							<label><input class="radiostyle" type="radio" name="isRecommend" value="3">&nbsp;首页广告焦点图</label> 
-							<em style="color: #000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
+							<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理中进行焦点图制作上传，审核通过后发布至焦点图位置</em><br><br>
+							<label><input class="radiostyle" type="radio" name="isRecommend" value="3">&nbsp;首页全网焦点图</label> 
+							<em style="color: #000;">　将推送至全网焦点图管理列表，在全网焦点图管理中进行全网焦点图制作上传，审核通过后发布至全网焦点图位置</em><br><br>
 							<!--  <label><input class="radiostyle" type="radio" name="isRecommend" value="1">&nbsp;首页新鲜事列表置顶</label><br> <br> -->
 							<label><input class="radiostyle" type="radio" name="isRecommend" value="2" checked>&nbsp;以上都不选</label><br>
 						</p>

@@ -47,7 +47,7 @@
             <h2 class="brief" style="font-weight: bold;">公告简介<label for="brief" class="error success"></label></h2>
             <input class="iptnewtit" type="text" name="brief" id="brief" placeholder='请输入简介28字以内' value="${businessAnno.brief }" />
             
-            <h2 class="relran" style="font-weight: bold;">公告范围<label for="annoBuilding" class="error success"></label></h2>
+            <h2 class="relran" style="font-weight: bold;">公告展示范围<label for="annoBuilding" class="error success"></label></h2>
             <div style="position:relative;">
 	            <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span><em>可根据小区进行公告展示范围限定</em>
             	<input type="hidden" id="scope" name="scope" value="${scope}" />
@@ -92,9 +92,9 @@
             <div class="options">
                 <p>
                     <label><input class="radiostyle" type="radio" name="isRecommend" value="1" id="isRecommend_1" <c:if test="${businessAnno.isRecommend == 1 }"> checked </c:if> >&nbsp;首页焦点图</label>　　
-                    <em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-                    <label><input class="radiostyle" type="radio" name="isRecommend" value="2" id="isRecommend_2" <c:if test="${businessAnno.isRecommend == 2 }"> checked </c:if> >&nbsp;首页广告焦点图</label>　　
-                    <em style="color:#000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
+                    <em style="color:#000;">将推送至焦点图管理列表，在焦点图管理中进行焦点图制作上传，审核通过后发布至焦点图位置</em><br><br>
+                    <label><input class="radiostyle" type="radio" name="isRecommend" value="2" id="isRecommend_2" <c:if test="${businessAnno.isRecommend == 2 }"> checked </c:if> >&nbsp;首页全网焦点图</label>　　
+                    <em style="color: #000;">　将推送至全网焦点图管理列表，在全网焦点图管理中进行全网焦点图制作上传，审核通过后发布至全网焦点图位置</em><br><br>
                     <label><input class="radiostyle" type="radio" name="isRecommend" value="0" id="isRecommend_0" <c:if test="${businessAnno.isRecommend == 0 }"> checked </c:if> >&nbsp;以上都不选</label><br>
                 </p>
             </div>
@@ -135,7 +135,7 @@
 <div id="scopeLayer" class="busswi y-fbes-jm">
 	<div id="scopeBar" class="sidebar y-fbes-jms">
     	<a id="y-fbes-close" class="close" href="javascript:;" onclick="$('#scopeLayer').fadeOut('slow');"></a>
-    	<h2 class="tit">公告范围选择</h2>
+    	<h2 class="tit">公告展示范围选择</h2>
         <div id="wrapper-250">
 	          <ul id="scopeTree" style="font-size: 18px;"></ul>
         </div>

@@ -29,6 +29,7 @@
 	                            <li id="state_2"><a href="javascript:;">待审核</a></li>
 	                            <li id="state_3"><a href="javascript:;">未通过</a></li>
 	                            <li id="state_4"><a href="javascript:;">已通过</a></li>
+	                            <li id="state_5"><a href="javascript:;">已撤回</a></li>
 	                        </ul>
 	                    </li>
 	                    
@@ -119,6 +120,7 @@
 								<c:if test="${news.state == 2 }"><span class="relsta cyellow">待审核</span></c:if>
 								<c:if test="${news.state == 3 }"><span class="relsta cred">未通过</span></c:if>
 								<c:if test="${news.state == 4 }"><span class="relsta cblue">已通过</span></c:if>
+								<c:if test="${news.state == 5 }"><span class="relsta cyellow">已撤回</span></c:if>
 								<c:if test="${news.isPush == 1 }"><span class="relsta cred" style="margin-left:10px;">已推送</span></c:if>
 								<div class="other-r">
 									<c:choose>
@@ -186,7 +188,7 @@
                     <ul class="sub-menu5 s-xw-xx">
 		                <li><span class="xxl">类型：<lable id="newsType1"></lable></span><span class="xxr">所属社区：<lable id="comName"></lable></span></li>
 		                <li><span class="xxl">发布人：<lable id="publisherName"></lable></span><span class="xxr">发布时间：<lable id="publishTime"></lable></span></li>
-		                <li><span class="xxl">审核人：<lable id="auditorName"></lable></span><span class="xxr">审核时间：<lable id="auditTime"></lable></span></li>
+		                <lable id="alldata"></lable>
 		                 <div class="s-xw-ic"><i class="rev"><lable id="comments"></lable></i><i class="look"><lable id="visits"></lable></i><i id="block6" class="help"><lable id="supports"></lable></i></div>
 		                <div class="link5"></div>
 		                 <li id="auditInfo1" style="color: #cc2510; margin:17px 0 10px 0; display:none;"><lable id="auditInfo2"></lable></li>
@@ -342,6 +344,8 @@ function jump(pageNo) {
 			            	state = '<span class="relsta cred">未通过</span>';
 			            }else if(row.state == 4) {
 			            	state = '<span class="relsta cblue">已通过</span>';
+			            }else if(row.state == 5) {
+			            	state = '<span class="relsta cyellow">已撤回</span>';
 			            }
 	                	var push = '';
 	                	if(row.isPush == 1) {
@@ -522,6 +526,8 @@ function jump(pageNo) {
             	$('#showstate2').html("未通过");
             }else if(data.state == 4 ) {
             	$('#showstate2').html("已通过");
+            }else if(data.state == 5 ) {
+            	$('#showstate2').html("已撤回");
             }
          });
 	}
@@ -566,6 +572,7 @@ function jump(pageNo) {
     }
 	
 	 function checkNewsDetail(newsId) {
+		 //<li><span class="xxl">审核人：<lable id="auditorName"></lable></span><span class="xxr">审核时间：<lable id="auditTime"></lable></span></li>
 		  	$('#newsInfoLayer').fadeIn("slow");
 	        $.post("getNewsDetail.do", {newsId : newsId}, function(data) {
 	        	eval("data = "+data);
@@ -582,6 +589,21 @@ function jump(pageNo) {
 	            $('#supports').html(data.supports);	//支持量
 	            $('#auditInfo2').html("批注：" +data.auditInfo);	//审批原因
 	            $('#viewInter').html("预览地址：<%=ctx %>/service/commiunity<br>/getJournalismDetailsById.json?ID="+data.newsId+"&userId=0" );
+	            var concatStr = "";
+	            if(data.editTime != null) {
+	            	concatStr+="<li><span class=\"xxl\">编辑人："+data.editor+"</span><span class=\"xxr\">编辑时间："+new Date(data.editTime.time).format('yyyy-MM-dd hh:mm')+"</span></li>";
+	            }
+	            if(data.auditTime != null) {
+	            	concatStr+="<li><span class=\"xxl\">审核人："+data.auditorName+"</span><span class=\"xxr\">审核时间："+new Date(data.auditTime.time).format('yyyy-MM-dd hh:mm')+"</span></li>";
+	            }
+				if(data.cancleTime != null) {
+	            	concatStr+="<li><span class=\"xxl\">撤回人："+data.cancler+"</span><span class=\"xxr\">撤回时间："+new Date(data.cancleTime.time).format('yyyy-MM-dd hh:mm')+"</span></li>";
+	            }
+				if(data.hotTime != null) {
+	            	concatStr+="<li><span class=\"xxl\">置顶人："+data.hoter+"</span><span class=\"xxr\">置顶时间："+new Date(data.hotTime.time).format('yyyy-MM-dd hh:mm')+"</span></li>";
+	            } 
+	            $(alldata).html(concatStr);
+	            
 	            //发布状态
 	            if(data.state == 0 ) {
 	            	$('#showstate').html("已发布");
@@ -636,6 +658,14 @@ function jump(pageNo) {
 	            	$("#auditInfo1").css('display','none'); 
 			        $("#hr1").css('display','none'); 
 			        </shiro:hasPermission>
+	            }else if(data.state == 5 ) {
+	            	$('#showstate').html("已撤回");
+	            	$('#ding').html("");
+	            	<shiro:hasPermission name="news_edit">
+	            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑新鲜事\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?newsId="+data.newsId+"' \"/>");
+	            	</shiro:hasPermission>
+	            	$("#auditInfo1").css('display','none'); 
+			         $("#hr1").css('display','none'); 
 	            }
 	        });
 	    }

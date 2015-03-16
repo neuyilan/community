@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>广告焦点图管理</title>
+        <title>全网焦点图管理</title>
         <%@include file="/common/meta.jsp"%>
         <script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
         <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
@@ -20,7 +20,7 @@
             <div class="scroll">
 	        	<div class="scroll-box">
 	                <ul id="oneul">
-	                	<li id="state_" class="active navlist"><a href="javascript:;"><span>全部广告焦点图</span><b class="donbut"><i></i></b></a>
+	                	<li id="state_" class="active navlist"><a href="javascript:;"><span>全部全网焦点图</span><b class="donbut"><i></i></b></a>
 	                    	<input type="hidden" name="state" id="state" value="${state }" />
 	                    	<ul>
 	                            <li id="state_0"><a href="javascript:;">已发布</a></li>
@@ -63,7 +63,7 @@
 		                    <div class="relnews">
 	                            <img src="<%=ctx %>/images/icon/relnews.png" style="width:100%;" />
 	                        </div>
-		                	<span class="tittex">发布广告焦点图</span>
+		                	<span class="tittex">发布全网焦点图</span>
 		                </a>
 		            </div>
 	            </shiro:hasPermission>
@@ -107,13 +107,13 @@
 		                    <hr class="link">
                     		<div class="operate">
                     			<shiro:hasPermission name="focus_ad_view_detail">
-                    				<span class="see s-xw-yfb" title="查看广告焦点图详情" onclick="checkFocusAdDetail('${focusAd.focusAdId}');"></span>
+                    				<span class="see s-xw-yfb" title="查看全网焦点图详情" onclick="checkFocusAdDetail('${focusAd.focusAdId}');"></span>
 								</shiro:hasPermission>
 								<shiro:hasPermission name="focus_ad_edit">
-									<span class="edit" title="编辑广告焦点图" onclick="editFocusAdId('${focusAd.focusAdId}');"></span>
+									<span class="edit" title="编辑全网焦点图" onclick="editFocusAdId('${focusAd.focusAdId}');"></span>
 								</shiro:hasPermission>
 								<shiro:hasPermission name="focus_ad_delete">
-									<span id="text1" class="del"  title="删除广告焦点图" onclick="delFocusAd('${focusAd.focusAdId}');"></span>
+									<span id="text1" class="del"  title="删除全网焦点图" onclick="delFocusAd('${focusAd.focusAdId}');"></span>
                     			</shiro:hasPermission>
                     		</div>
                 		</a>
@@ -142,7 +142,7 @@
     <div id="focusAdInfoLayer" class="busswi5 s-xw-bu">
 	    <div id="focusAdInfoBar" class="sidebar5 s-xw-si">
 	        <a id="close5" title="关闭" class="s-xw-cl" href="javascript:;" onclick="$('#focusAdInfoLayer').fadeOut('slow');"></a>
-	        <h2 class="tit5">广告焦点图内容<em>【<span id="showstate"></span>】</em></h2>
+	        <h2 class="tit5">全网焦点图内容<em>【<span id="showstate"></span>】</em></h2>
 	        
 	        <div id="wrapper-250">
 	            <ul class="accordion5">
@@ -159,7 +159,7 @@
 	              		<li>
 		                	<div class="s-xw-con">
 		                		<lable id=picUrl></lable><br>
-		                		<span >广告焦点图链接地址： </span>
+		                		<span >全网焦点图链接地址： </span>
 		                		<div><lable id="pageUrl"></lable></div>
 		                	</div>
 		                </li>
@@ -178,7 +178,7 @@
 	<div id="focusAdInfoLayer1" class="busswi5 s-xw-bu">
         <div id="focusAdInfoBar1" class="sidebar5 s-xw-si">
             <a id="close5" title="关闭" class="s-xw-cl" href="javascript:;" onclick="$('#focusAdInfoLayer1').fadeOut('slow');"></a>
-            <h2 class="tit5">广告焦点图内容<em>【<span id="showstate2"></span>】</em></h2>
+            <h2 class="tit5">全网焦点图内容<em>【<span id="showstate2"></span>】</em></h2>
             <div id="wrapper-250">
                 <ul class="accordion5">
                     <li id="one5" class="files"><a href="#one"><lable id="title2" style="color: #333;"></lable></a></li>
@@ -226,7 +226,7 @@
 	});
 
 	function delFocusAd(id) {
-	    var flag = window.confirm("是否删除该广告焦点图！");
+	    var flag = window.confirm("是否删除该全网焦点图！");
 	    if(flag) {
 	        $.post('${ctx}/business/businessFocusAd/delete.do', {id : id}, function(data) {
  	        	eval("data = "+data);
@@ -245,8 +245,8 @@
 	  	$('#focusAdInfoLayer').fadeIn("slow");
         $.post("getFocusAdDetail.do", {focusAdId : focusAdId}, function(data) {
         	eval("data = "+data);
-            $('#title').html(data.title);	//广告焦点图标题
-            $('#selectorName').html(data.selectorName);		//广告焦点图选用人
+            $('#title').html(data.title);	//全网焦点图标题
+            $('#selectorName').html(data.selectorName);		//全网焦点图选用人
             $('#selectTime').html(new Date(data.selectTime.time).format('yyyy-MM-dd hh:mm'));	//选用日期
             $('#auditorName').html(data.auditorName);		//审批人
             $('#auditTime').html(data.auditTime== null?'':new Date(data.auditTime.time).format('yyyy-MM-dd hh:mm'));	//审批日期
@@ -255,36 +255,36 @@
             };
             $('#focusAdScope1').html((data.focusAdScope).replaceAll(",", " | "));		//选用范围
             $('#visits').html(data.visits);		//浏览量
-            $('#picUrl').html('<img src="<%=ctx %>'+data.picUrl+'" style="width:100%;" />');		//广告焦点图片
+            $('#picUrl').html('<img src="<%=ctx %>'+data.picUrl+'" style="width:100%;" />');		//全网焦点图片
             $('#pageUrl').html('<a href="'+data.pageUrl+'" target="_blank">'+data.pageUrl+'</a>');		//内容链接
             $('#auditInfo2').html("批注：" +data.auditInfo);	//审批原因 
                         
-            //广告焦点图状态
+            //全网焦点图状态
             if(data.state == 0 ) {
             	$('#showstate').html("已发布");
             	<shiro:hasPermission name="focus_ad_takeoff">
-            	$('#ding').html("<input class=\"s-xw-btn1\" title=\" 撤回发布该条广告焦点图\" type=\"button\" value=\"撤回发布\" onclick=\"cancelFocusAdPublishState("+data.focusAdId+");\"/>");
+            	$('#ding').html("<input class=\"s-xw-btn1\" title=\" 撤回发布该条全网焦点图\" type=\"button\" value=\"撤回发布\" onclick=\"cancelFocusAdPublishState("+data.focusAdId+");\"/>");
             	</shiro:hasPermission>
             	$("#auditInfo1").css('display','none'); 
 		        $("#hr1").css('display','none'); 
             } else if(data.state == 1 ) {
             	$('#showstate').html("待发布");
             	<shiro:hasPermission name="focus_ad_edit">
-            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑广告焦点图\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?focusAdId="+data.focusAdId+"' \"/>");
+            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑全网焦点图\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?focusAdId="+data.focusAdId+"' \"/>");
             	</shiro:hasPermission>
             	$("#auditInfo1").css('display','none'); 
 		        $("#hr1").css('display','none'); 
             } else if(data.state == 2 ) {
             	$('#showstate').html("待审核");
             	<shiro:hasPermission name="focus_ad_audit">
-            	$('#ding').html("<input id=\"qrbut5\" title=\"立即发布该条广告焦点图\" type=\"submit\" value=\"立即发布\" onclick=\"cnChangeFocusAdState("+data.focusAdId+",'"+data.picUrl+"');\"/><input id=\"zsbut5\" title=\"拒绝该条广告焦点图\" type=\"button\" value=\"拒绝\" onclick=\"jjChangeFocusAdState("+data.focusAdId+");\"/>");
+            	$('#ding').html("<input id=\"qrbut5\" title=\"立即发布该条全网焦点图\" type=\"submit\" value=\"立即发布\" onclick=\"cnChangeFocusAdState("+data.focusAdId+",'"+data.picUrl+"');\"/><input id=\"zsbut5\" title=\"拒绝该条全网焦点图\" type=\"button\" value=\"拒绝\" onclick=\"jjChangeFocusAdState("+data.focusAdId+");\"/>");
             	</shiro:hasPermission>
             	$("#auditInfo1").css('display','none'); 
 		        $("#hr1").css('display','none'); 
             } else if(data.state == 3 ) {
             	$('#showstate').html("未通过");
             	<shiro:hasPermission name="focus_ad_edit">
-            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑广告焦点图\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?focusAdId="+data.focusAdId+"' \"/>");
+            	$('#ding').html("<input class=\"s-xw-btn1\" title=\"编辑全网焦点图\" type=\"button\" value=\"编辑\" onclick=\"window.location.href='modify.do?focusAdId="+data.focusAdId+"' \"/>");
             	</shiro:hasPermission>
             	$("#auditInfo1").css('display','block'); 
 		        $("#hr1").css('display','block'); 
@@ -292,9 +292,9 @@
         });
     }
 	
- 	// 撤回发布该条广告焦点图
+ 	// 撤回发布该条全网焦点图
 	function cancelFocusAdPublishState(focusAdId) {
-		var bool = window.confirm("您确定撤回发布该条广告焦点图？");
+		var bool = window.confirm("您确定撤回发布该条全网焦点图？");
 	    if(bool) {
 	        $.post("cancelFocusAdPublishState.do", {id : focusAdId}, function(data) {
 	        	eval("data = "+data);
@@ -304,10 +304,10 @@
 	    }
 	}
  	
-	// 立即发布该条广告焦点图
+	// 立即发布该条全网焦点图
 	function cnChangeFocusAdState(focusAdId, pageUrl) {
 		if(pageUrl != "" && pageUrl != "/images/icon/tp01.jpg") {
-			var bool = window.confirm("您确定立即发布该条广告焦点图？");
+			var bool = window.confirm("您确定立即发布该条全网焦点图？");
 		    if(bool) {
 		        $.post("updateFocusAdState.do", {id : focusAdId, auditInfo : ''}, function(data) {
 		        	eval("data = "+data);
@@ -316,18 +316,18 @@
 		        });
 		    }
     	} else {
-			alert("请先编辑此广告焦点图并上传广告焦点图图片！");
+			alert("请先编辑此全网焦点图并上传全网焦点图图片！");
 		}
 	}
 	
-	// 拒绝该条广告焦点图
+	// 拒绝该条全网焦点图
 	function jjChangeFocusAdState(focusAdId) {
 		$('#focusAdInfoLayer1').fadeIn("slow");
         
         $.post("getFocusAdDetail.do", {focusAdId : focusAdId}, function(data) {
         	eval("data = "+data);
-        	$('#title2').html(data.title);	//广告焦点图标题
-            $('#selectorName2').html(data.selectorName);		//广告焦点图选用人
+        	$('#title2').html(data.title);	//全网焦点图标题
+            $('#selectorName2').html(data.selectorName);		//全网焦点图选用人
             $('#selectTime2').html(new Date(data.selectTime.time).format('yyyy-MM-dd hh:mm'));	//选用日期
             String.prototype.replaceAll  = function(s1,s2){    
                 return this.replace(new RegExp(s1,"gm"),s2);    
@@ -351,7 +351,7 @@
 		if(($('#auditInfo').val()).trim() == '') {
 			alert("请填写拒绝原因!");
 		} else {
-			var bool = window.confirm("您确定拒绝该条广告焦点图？");
+			var bool = window.confirm("您确定拒绝该条全网焦点图？");
 		    if(bool) {
 				$.post('updateFocusAdState.do', {
 		    		id : $('#focusAdId').val(),
@@ -429,7 +429,7 @@
 	                        + '<div class="manbox" style="margin-left:0;">'
 	                        + '<a class="nopotr2 s-baoliao-no" onclick="javascript:window.location.href=\'<%=ctx %>/business/businessFocusAd/add.do\';" style="cursor:pointer; height:326px;">'
 	                        + '<div class="relnews"><img src="<%=ctx %>/images/icon/relnews.png" style="width:100%;" /></div>'
-	                        + '<span class="tittex">发布广告焦点图</span>'
+	                        + '<span class="tittex">发布全网焦点图</span>'
 	                        + '</a>'
 	                        + '</div>';
 	                       	$('.column').append(addHtml);
@@ -478,13 +478,13 @@
                     	+ '<hr class="link">'
                     	+ '<div class="operate">'
                     	<shiro:hasPermission name="focus_ad_view_detail">
-                    	+ '<span class="see s-jdt-yfb" title="查看广告焦点图详情" onclick="checkFocusAdDetail('+row.focusAdId+');"></span>'
+                    	+ '<span class="see s-jdt-yfb" title="查看全网焦点图详情" onclick="checkFocusAdDetail('+row.focusAdId+');"></span>'
                     	</shiro:hasPermission>
                     	<shiro:hasPermission name="focus_ad_edit">
-                    	+ '<span class="edit" title="编辑广告焦点图" onclick="editFocusAdId('+row.focusAdId+');"></span>'
+                    	+ '<span class="edit" title="编辑全网焦点图" onclick="editFocusAdId('+row.focusAdId+');"></span>'
                     	</shiro:hasPermission>
                     	<shiro:hasPermission name="focus_ad_delete">
-                    	+ '<span id="text1" class="del"  title="删除广告焦点图" onclick="delFocusAd('+row.focusAdId+');"></span>'
+                    	+ '<span id="text1" class="del"  title="删除全网焦点图" onclick="delFocusAd('+row.focusAdId+');"></span>'
                     	</shiro:hasPermission>
                     	+ '</div>'
                     	+ '</a>'

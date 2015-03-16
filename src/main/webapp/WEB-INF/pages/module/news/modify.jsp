@@ -129,7 +129,7 @@
                     	required:  '请选择新鲜事标签'
                     },
                     appPic: {
-                        required: '请选择APP首页小图！'
+                        required: '请选择分享展示图！'
                     },
                     isPush: {
                         required: '请选择是否推送！'
@@ -201,7 +201,7 @@
 				</div>
 				<div class="line2"></div>
 					
-                <h2 class="relran">APP首页小图<label for="appPic" class="error success"></label></h2>
+                <h2 class="relran">分享展示图<span style="font-weight:normal;font-size: 16px;">【用于微信分享时使用！】</span><label for="appPic" class="error success"></label></h2>
                 <div style=" overflow:hidden;"><img id="appPicBtn" src="<%=ctx %><c:choose><c:when test="${businessNews.appPic==''}">/images/icon/add.jpg</c:when><c:otherwise>${businessNews.appPic}</c:otherwise></c:choose>" width="100" height="100"  style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
                 <input type="hidden" name="appPic" id="appPic" value="${businessNews.appPic}" > <%--头像--%>
                 
@@ -221,9 +221,9 @@
                 <div class="options">
                     <p>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test='${businessNews.isRecommend==0}'>checked="checked"</c:if> >&nbsp;首页焦点图</label>
-                        <em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="3" <c:if test='${businessNews.isRecommend==3}'>checked="checked"</c:if> >&nbsp;首页广告焦点图</label>
-                        <em style="color:#000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
+                        <em style="color:#000;">将推送至焦点图管理列表，在焦点图管理中进行焦点图制作上传，审核通过后发布至焦点图位置</em><br><br>
+                        <label><input class="radiostyle" type="radio" name="isRecommend" value="3" <c:if test='${businessNews.isRecommend==3}'>checked="checked"</c:if> >&nbsp;首页全网焦点图</label>
+                        <em style="color: #000;">　将推送至全网焦点图管理列表，在全网焦点图管理中进行全网焦点图制作上传，审核通过后发布至全网焦点图位置</em><br><br>
                         <%-- <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test='${businessNews.isRecommend==1}'>checked="checked"</c:if> >&nbsp;首页新鲜事列表置顶<br><br></label> --%>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="2" <c:if test='${businessNews.isRecommend==2}'>checked="checked"</c:if> >&nbsp;以上都不选</label><br>
                     </p>

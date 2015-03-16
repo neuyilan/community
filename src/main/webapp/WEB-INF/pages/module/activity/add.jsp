@@ -39,18 +39,18 @@
             <label><input class="radiostyle2" type="radio"name="typeId" value="1" checked >&nbsp;定时抢</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="2"  >&nbsp;报名活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="3"  >&nbsp;投票活动</label>　
-            <label><input class="radiostyle2" type="radio" name="typeId" value="4"  >&nbsp;优惠活动</label>
+            <label><input class="radiostyle2" type="radio" name="typeId" value="4"  >&nbsp;抢优惠券</label>
             <input type="hidden" id="typeName" name="typeName" value="" >
             
             <!-- 报名活动 -->
             <div id="bmhdId"></div>
             <!-- 投票活动 -->
 	        <div id="tphdId"></div>
-            <!-- 优惠活动-->
+            <!-- 抢优惠券-->
             <div id="yhqId"></div>
             
             <div class="line2"></div>
-            <h2 class="relran" style="font-weight: bold;">活动范围<label for="actScope" class="error success"></label></h2>
+            <h2 class="relran" style="font-weight: bold;">活动展示范围<label for="actScope" class="error success"></label></h2>
             <div style="position:relative;">
 	            <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span> 　　<br><em>可根据小区进行活动参与范围限定</em>
             	<input type="hidden" id="actScope" name="actScope" value=""/>
@@ -62,13 +62,13 @@
             <div id="divImg" style=" overflow:hidden;"><img id="actPicBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
             <input type="hidden" name="actPic" id="actPic" value="">
             
-            <div class="line2"></div>
+            <%-- <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动列表结束大图<label for="actPicNo" class="error success"></label></h2>
             <div id="divImg" style=" overflow:hidden;"><img id="actPicNoBtn" src="${ctx}/images/icon/tp01.jpg" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽600PX、高250PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
-            <input type="hidden" name="actPicNo" id="actPicNo" value="">
+            <input type="hidden" name="actPicNo" id="actPicNo" value=""> --%>
             
             <div class="line2"></div>
-            <h2 class="relran" style="font-weight: bold;">APP首页小图<label for="appPic" class="error success"></label></h2>
+            <h2 class="relran" style="font-weight: bold;">分享展示图<span style="font-weight:normal;font-size: 16px;">【用于微信分享时使用！】</span><label for="appPic" class="error success"></label></h2>
             <div id="divImg" style=" overflow:hidden;"><img id="appPicBtn" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
             <input type="hidden" name="appPic" id="appPic" value="">
             <input type="hidden" name="uploadField" id="uploadField" value="">
@@ -79,7 +79,7 @@
             <script type="text/plain" id="actEditor" style="width:840px;height:240px;"></script>
             <input type="hidden" name="actContent" id="actContent">
 			
-            <!-- 优惠活动--活动时间设置-->
+            <!-- 抢优惠券--活动时间设置-->
             <div id="yhqAvtiveTime"></div>
             
             <%--<h2 class="newscont">活动周期</h2>
@@ -137,9 +137,9 @@
             <div class="options">
                 <p>
                     <label><input class="radiostyle" type="radio" name="recommend" value="0">&nbsp;首页焦点图</label>
-                    　　			<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理审核通过后发布至焦点图位置</em><br><br>
-                    <label><input class="radiostyle" type="radio" name="recommend" value="3">&nbsp;首页广告焦点图</label> 
-					<em style="color: #000;">将推送至广告焦点图管理列表，在广告焦点图管理审核通过后发布至广告焦点图位置</em><br><br>
+                    　　			<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理中进行焦点图制作上传，审核通过后发布至焦点图位置</em><br><br>
+                    <label><input class="radiostyle" type="radio" name="recommend" value="3">&nbsp;首页全网焦点图</label> 
+					<em style="color: #000;">　将推送至全网焦点图管理列表，在全网焦点图管理中进行全网焦点图制作上传，审核通过后发布至全网焦点图位置</em><br><br>
                    	<!--<label><input class="radiostyle" type="radio" name="recommend" value="1">&nbsp;首页新闻列表置顶</label><br><br> -->
                     <label><input class="radiostyle" type="radio" name="recommend" value="2" checked>&nbsp;以上都不选</label><br>
                 </p>
@@ -213,7 +213,7 @@
 <div id="scopeLayer" class="busswi y-fbes-jm">
 	<div id="scopeBar" class="sidebar y-fbes-jms">
     	<a id="y-fbes-close" class="close" title="关闭" href="javascript:;" onclick="$('#scopeLayer').fadeOut('slow');"></a>
-    	<h2 class="tit">活动范围选择</h2>
+    	<h2 class="tit">活动展示范围选择</h2>
         <div id="wrapper-250">
 	          <ul id="scopeTree" style="font-size: 18px;"></ul>
         </div>
@@ -235,8 +235,9 @@
           <li id="one4" class="files">
             <span class="add4"></span>
             <a href="#one" id="btnUploadImg2">点击浏览上传</a>
-            <%-- <a style="margin-left:30px; color:#E94D2F; text-decoration:underline;" href="<%=ctx%>/common/charge_template.xls">下载EXCEL模板</a> --%>
+            <a style="margin-left:30px; color:#E94D2F; text-decoration:underline;" href="<%=ctx%>/common/couponCode_template.xlsx">下载EXCEL模板</a>
           </li>
+          <li><span style="margin-left:6px; font-weight:normal;font-size: 12px;">下载优惠劵模板（请根据格式进行填写后，进行上传）</span></li>
           <li class="sub-menu4"></li> 
         </ul>          
       </div>  
@@ -451,7 +452,7 @@
 			if ($typeId == 2) {
 				var htmlDom=''
 				+'<div class="line2"></div>'
-				+'<h2 class="relstatus">活动次数<label for="times" class="error success"></label></h2>'
+				+'<h2 class="relstatus">活动场次<label for="times" class="error success"></label></h2>'
 				+'<label><input id="times0" class="radiostyle2" type="radio" name="times" value="0" checked >&nbsp;单次</label>　　'　　
 				+'<label><input class="radiostyle2" type="radio" name="times" value="1"  >&nbsp;多次</label><br><br>'
 				+'<div id="timesDiv">'
@@ -461,7 +462,7 @@
 				+'</span>'
 				+'</div>'
 				+'<input class="timeBtn" type="button" name="timesBtn" value="增加一次" style="display:none;" />'
-				+'<h2 class="relstatus">报名表单字段<label for="attributeValues" class="error success"></label></h2>'
+				+'<h2 class="relstatus">报名表单字段<span style="font-weight:normal;font-size: 16px;">【如需增加报名字段请联系移动互联网事业部！】</span><label for="attributeValues" class="error success"></label></h2>'
 	 			+'<label><input id="attributeValues1" type="checkbox" name="attributeValues" value="1"/> 昵称</label>　　　　　　'
 	 			+'<label><input id="attributeValues2" type="checkbox" name="attributeValues" value="2"/> 真实姓名</label>　　　　　　'
 	 			+'<label><input id="attributeValues3" type="checkbox" name="attributeValues" value="3"/> 联系电话</label><br><br>'
@@ -470,7 +471,7 @@
 	 			+'<label><input id="attributeValues6" type="checkbox" name="attributeValues" value="6"/> 职业</label><br><br>'
 	 			+'<label><input id="attributeValues7" type="checkbox" name="attributeValues" value="7"/> 身份证号</label>　　　　'
 	 			+'<label><input id="attributeValues8" type="checkbox" name="attributeValues" value="8"/> Email</label>　　　　		　　　'
-	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 小区</label>'
+	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 详细地址</label>'
 	            
 	 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" />';
@@ -482,7 +483,7 @@
 				$("#typeName").val("报名活动");
 				$("input[name='state']:eq(0)").val("0");
 				
-				// 报名活动--活动次数
+				// 报名活动--活动场次
 				$("input[name='times']").change(function(){
 					var $times = $("input[name='times']:checked").val();
 					if($times == 0) {
@@ -499,7 +500,7 @@
 					}
 				});
 				
-				// 增加/删除活动次数--多次
+				// 增加/删除活动场次--多次
 			    $("input[name='timesBtn']").click(function() {
 			    	var htmlDom = ''
 			    	+'<span>'
@@ -545,8 +546,8 @@
 	    		+'<label><input class="radiostyle2" type="radio" name="voteType" value="3"  >&nbsp;混合</label>'
 	    		+'<div id="voteTypeDiv"></div>'
 	    		+'<div class="line2"></div>'
-	    		+'<h2 class="relran">可投票数<label for="votes" class="error success"></label></h2>'
-	    		+'　　　<label>每人可选择<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" placeholder="可投票数" />个 投票项目</label>'
+	    		+'<h2 class="relran">单个用户可投票数量<label for="votes" class="error success"></label></h2>'
+	    		+'　　　<label>限定每个人可对<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" />个项目，进行投票</label>'
 	    		+'<div class="line2"></div>'
 	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" />';
@@ -663,7 +664,7 @@
 				+'<input class="iptnewtit" type="text" id="couponNum" name="couponNum" placeholder="请输入优惠券数量" style="width:200px;"/>&nbsp;&nbsp;张'
 				
 				+'<div class="line2"></div>'
-				+'<h2 class="relran">导入优惠券<label for="reportExcel" class="error success"></label></h2>'
+				+'<h2 class="relran">导入优惠券号码<label for="reportExcel" class="error success"></label></h2>'
 				+'<div style="position:relative;">'
 				+'<span class="ranbut radiusbox" onclick="$(\'.busswi4\').fadeIn(\'slow\');">点击选择上传</span>'
 				+'<lable style="position: absolute; top: 10px; left: 160px;" id="reportExcel2"></lable>'
@@ -682,7 +683,7 @@
 				$("#rankId").empty();
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
-	    		$("#typeName").val("优惠活动");
+	    		$("#typeName").val("抢优惠券");
 				$("input[name='state']:eq(0)").val("1");
 				$("#yhqId").append(htmlDom);
 				$("#yhqAvtiveTime").append(htmlDom1);
@@ -764,12 +765,12 @@
     	});
     	
     	//活动列表结束图
-    	$('#actPicNoBtn').click(function() {
+    	/* $('#actPicNoBtn').click(function() {
     		$('#picUploadLayer').fadeIn('slow');
     		//初始化上传
         	uploadInit('activity', 'actPicNo', '1', '0');
         	$('#uploadField').val('actPicNo');
-    	});
+    	}); */
     	
     	//APP小图
     	$('#appPicBtn').click(function() {
@@ -975,9 +976,9 @@
                 actPic: {
                     required: true
                 },
-                actPicNo: {
+                /* actPicNo: {
                     required: true
-                },
+                }, */
                 appPic: {
                     required: true
                 },
@@ -1010,7 +1011,8 @@
                     required: true
                 },
                 number: {
-                    required: true
+                    required: true,
+                    digits: true
                 },
                 endTime: {
                     required: true,
@@ -1035,7 +1037,8 @@
                     digits: true
                 },
                 content: {
-                    required: true
+                    required: true,
+                    maxlength : 64
                 },
                 image: {
                     required: true
@@ -1086,11 +1089,11 @@
                 actPic: {
                     required: '请选择活动图片！'
                 },
-                actPicNo: {
+                /* actPicNo: {
                     required: '请选择活动结束图片！'
-                },
+                }, */
                 appPic: {
-                    required: '请选择APP首页图片！'
+                    required: '请选择分享展示图！'
                 },
                 actContent: {
                     required: '请填写活动内容！'
@@ -1115,13 +1118,14 @@
                     required: '请选择报名表单字段！'
                 },
                 times: {
-                    required: '请选择活动次数！'
+                    required: '请选择活动场次！'
                 },
                 timeSlotName1: {
                     required: '请选择报名活动时间！'
                 },
                 number: {
-                    required: '请输入人数限定！'
+                    required: '请输入人数限定！',
+                    digits: '人数限定必须为数字' 
                 },
                 endTime: {
                     required:  '请选择报名截至日期！',
@@ -1131,11 +1135,12 @@
                     required: '请选择投票类型！'
                 },
                 votes: {
-                    required:  '请输入可投票数！',
-                    digits: '可投票数必须为数字' 
+                    required:  '请输入单个用户可投票数量！',
+                    digits: '单个用户可投票数量必须为数字' 
                 },
                 content: {
-                    required:  '请输入投票类型文字描述！'
+                    required:  '请输入投票类型文字描述！',
+                    maxlength: '投票类型文字描述为64字以内'
                 },
                 image: {
                     required:  '请上传投票类型图片！'

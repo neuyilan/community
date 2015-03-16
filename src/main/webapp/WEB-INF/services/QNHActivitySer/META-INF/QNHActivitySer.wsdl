@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://QNHIFServer.QNH.ws.community.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://QNHIFServer.QNH.ws.community.com">
+    <wsdl:documentation>QNHActivitySer</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://QNHIFServer.QNH.ws.community.com">
+            <xs:element name="addActivity">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="reqStr" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addActivityResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="addActivityRequest">
+        <wsdl:part name="parameters" element="ns:addActivity"/>
+    </wsdl:message>
+    <wsdl:message name="addActivityResponse">
+        <wsdl:part name="parameters" element="ns:addActivityResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="QNHActivitySerPortType">
+        <wsdl:operation name="addActivity">
+            <wsdl:input message="ns:addActivityRequest" wsaw:Action="urn:addActivity"/>
+            <wsdl:output message="ns:addActivityResponse" wsaw:Action="urn:addActivityResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="QNHActivitySerSoap11Binding" type="ns:QNHActivitySerPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addActivity">
+            <soap:operation soapAction="urn:addActivity" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="QNHActivitySerSoap12Binding" type="ns:QNHActivitySerPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addActivity">
+            <soap12:operation soapAction="urn:addActivity" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="QNHActivitySerHttpBinding" type="ns:QNHActivitySerPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="addActivity">
+            <http:operation location="QNHActivitySer/addActivity"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="addActivity"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="addActivity"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="QNHActivitySer">
+        <wsdl:port name="QNHActivitySerHttpSoap11Endpoint" binding="ns:QNHActivitySerSoap11Binding">
+            <soap:address location="http://localhost:8080/community/services/QNHActivitySer.QNHActivitySerHttpSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="QNHActivitySerHttpSoap12Endpoint" binding="ns:QNHActivitySerSoap12Binding">
+            <soap12:address location="http://localhost:8080/community/services/QNHActivitySer.QNHActivitySerHttpSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="QNHActivitySerHttpEndpoint" binding="ns:QNHActivitySerHttpBinding">
+            <http:address location="http://localhost:8080/community/services/QNHActivitySer.QNHActivitySerHttpEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
