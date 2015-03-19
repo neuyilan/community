@@ -27,6 +27,7 @@ import com.community.app.module.service.BusinessProductCommentService;
 import com.community.app.module.service.BusinessProductService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessProductCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessProductComment")
@@ -81,7 +82,7 @@ public class BusinessProductCommentController {
 			    .append("\"productId\":\"").append(businessProductComment.getProductId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessProductComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentor\":\"").append(businessProductComment.getCommentor()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessProductComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessProductComment.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessProductComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessProductComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessProductComment.getReplyName()).append("\"").append(",")

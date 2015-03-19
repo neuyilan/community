@@ -16,6 +16,7 @@ public class BusinessBreakQuery extends BaseBean {
 	private java.sql.Timestamp breakTime;
 	private java.lang.Integer breakType;
 	private java.lang.String comId;
+	private java.lang.String comName;
 	private java.lang.Integer state;
 	private java.lang.Integer isUsed;
 	private java.lang.Integer selectedNum;
@@ -51,6 +52,14 @@ public class BusinessBreakQuery extends BaseBean {
 	
 	private Integer curEstateId;
 	
+	public java.lang.String getComName() {
+		return comName;
+	}
+
+	public void setComName(java.lang.String comName) {
+		this.comName = comName;
+	}
+
 	public Integer getCurEstateId() {
 		return curEstateId;
 	}

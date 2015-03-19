@@ -67,6 +67,7 @@ import com.community.app.module.bean.BusinessActivityScope;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessFocusAd;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.CommunityBean;
@@ -91,6 +92,7 @@ import com.community.app.module.service.BusinessActivityVoteOptionsService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessFocusAdService;
 import com.community.app.module.service.BusinessFocusService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
@@ -102,6 +104,7 @@ import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
 import com.community.app.module.vo.BusinessActivityVoteInformationQuery;
 import com.community.app.module.vo.BusinessActivityVoteOptionsQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessActivity")
@@ -149,6 +152,8 @@ public class BusinessActivityController {
 	private BusinessUserResourceService businessUserResourceService;
 	@Autowired
 	private BusinessActivityCouponService businessActivityCouponService;
+	@Autowired
+	private BusinessOpertaionService businessOpertaionService;
 	
 	/**
 	 * 进入管理页
@@ -235,11 +240,13 @@ public class BusinessActivityController {
 				result.append("{")
 			    .append("\"actId\":\"").append(businessActivity.getActId()).append("\"").append(",")
 			    .append("\"typeId\":\"").append(businessActivity.getTypeId()).append("\"").append(",")
-			    .append("\"actName\":\"").append(businessActivity.getActName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
-			    .append("\"actContent\":\"").append(businessActivity.getActContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"actName\":\"").append(JsonUtils.stringToJson(businessActivity.getActName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
+			    //.append("\"actContent\":\"").append(businessActivity.getActContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"actContent\":\"").append("").append("\"").append(",")
 			    .append("\"typeName\":\"").append(businessActivity.getTypeName()).append("\"").append(",")
 			    .append("\"actScope\":\"").append(businessActivity.getActScope()).append("\"").append(",")
-			    .append("\"brief\":\"").append(businessActivity.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    //.append("\"brief\":\"").append(businessActivity.getBrief().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"brief\":\"").append("").append("\"").append(",")
 			    .append("\"actPic\":\"").append(businessActivity.getActPic()).append("\"").append(",")
 			    .append("\"actPicNo\":\"").append(businessActivity.getActPicNo()).append("\"").append(",")
 			    .append("\"actLink\":\"").append(businessActivity.getActLink()).append("\"").append(",")
@@ -421,6 +428,17 @@ public class BusinessActivityController {
 	        }
             businessActivityService.save(businessActivity);
             
+            String state = "";
+            if(businessActivity.getState() == 1) {
+				state = "已发布";
+			} else if(businessActivity.getState() == 3) {
+				state = "待审核";
+			} else if(businessActivity.getState() == 5) {
+				state = "未发布";
+			} else if(businessActivity.getState() == 6) {
+				state = "定时发布";
+			}
+			
             if(query.getTypeId() == 2) {
             	if(request.getParameterValues("timeSlotName1") != null && request.getParameterValues("number") != null) {
     	            String timeSlotName[] = request.getParameterValues("timeSlotName1");
@@ -545,6 +563,7 @@ public class BusinessActivityController {
 				    businessFocus.setSelectorName(getUser().getUserName());
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
+					state = "已发布-推荐到焦点图";
 					
 					AppFocusScope appFocusScope = new AppFocusScope();
 					for(int i=0;i<estateArr.length;i++) {
@@ -573,6 +592,7 @@ public class BusinessActivityController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
+					state = "已发布-推荐到全网焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
 					for(int i=0;i<estateArr.length;i++) {
@@ -653,8 +673,25 @@ public class BusinessActivityController {
 						appPushLogService.save(appPushLog);
 					}
 				}
+				if(businessActivity.getRecommend() == 0) {
+					state = "已发布-已推送-推荐到焦点图";
+				} else if(businessActivity.getRecommend() == 3) {
+					state = "已发布-已推送-推荐到全网焦点图";
+				} else {
+					state = "已发布-已推送";
+				} 
 			}
-            
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"active", 
+					"active_save", 
+					businessActivity.getActId(), 
+					businessActivity.getActName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			//保存成功
 			json = "{\"success\":\"true\",\"message\":\"保存成功\"}";
 		} catch(Exception e) {
@@ -853,6 +890,17 @@ public class BusinessActivityController {
 	        }
             businessActivityService.update(businessActivity);
             
+            String state = "";
+            if(businessActivity.getState() == 1) {
+				state = "已发布";
+			} else if(businessActivity.getState() == 3) {
+				state = "待审核";
+			} else if(businessActivity.getState() == 5) {
+				state = "未发布";
+			} else if(businessActivity.getState() == 6) {
+				state = "定时发布";
+			}
+			
             if(query.getTypeId() == 2) {
             	boolean flag = businessActivityRegistrationTimeslotService.delete(businessActivity.getActId());
             	if(flag) {
@@ -996,6 +1044,7 @@ public class BusinessActivityController {
 				    businessFocus.setSelectorName(getUser().getUserName());
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
+					state = "已发布-推荐到焦点图";
 					
 					AppFocusScope appFocusScope = new AppFocusScope();
 					for(int i=0;i<estateArr.length;i++) {
@@ -1024,6 +1073,7 @@ public class BusinessActivityController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
+					state = "已发布-推荐到全网焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
 					for(int i=0;i<estateArr.length;i++) {
@@ -1057,7 +1107,7 @@ public class BusinessActivityController {
                 }
         	}
             
-          //执行推送接口
+            //执行推送接口
 			//活动向小区内的所有居民发送通知
 			if(businessActivity.getIsPush() != null && businessActivity.getIsPush() == 1  && (businessActivity.getState() == 0 || businessActivity.getState() == 1)) {//可推送
 				String ids = "";
@@ -1072,40 +1122,57 @@ public class BusinessActivityController {
 				
 				//查询该小区下的userId, baiduId, channelId
 				List appUserList = appUserService.findUserPushIds(ids);
-					AppPushLog appPushLog = new AppPushLog();
-					String title = "OK家";
-					String description = "【活动】"+businessActivity.getActName();	
-					
-					Map paramMap = new HashMap();
-					paramMap.put("messageType", 9);
-					paramMap.put("ID", businessActivity.getActId());
-					
-					for(int j=0;j<appUserList.size();j++) {
-						AppUser appUser = (AppUser) appUserList.get(j);
-						if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
-							Integer success = AppPushNotificationUtil.pushNotification(
-									title, 
-									description, 
-									appUser.getDeviceType(),
-									Long.valueOf(appUser.getChannelId()).longValue(), 
-									appUser.getBaiduId(),
-									paramMap
-									);
-							//记录推送日志
-							appPushLog.setUserId(appUser.getUserId());
-						    appPushLog.setUserName(appUser.getRealname());
-						    appPushLog.setBaiduId(appUser.getBaiduId());
-						    appPushLog.setChannelId(appUser.getChannelId());
-						    appPushLog.setTitle(title);
-						    appPushLog.setDescription(description);
-						    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
-						    appPushLog.setSendState(success);
-						    appPushLog.setSenderId(getUser().getUserId());
-						    appPushLog.setSenderName(getUser().getUserName());
-							appPushLogService.save(appPushLog);
-						}
+				AppPushLog appPushLog = new AppPushLog();
+				String title = "OK家";
+				String description = "【活动】"+businessActivity.getActName();	
+				
+				Map paramMap = new HashMap();
+				paramMap.put("messageType", 9);
+				paramMap.put("ID", businessActivity.getActId());
+				
+				for(int j=0;j<appUserList.size();j++) {
+					AppUser appUser = (AppUser) appUserList.get(j);
+					if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+						Integer success = AppPushNotificationUtil.pushNotification(
+								title, 
+								description, 
+								appUser.getDeviceType(),
+								Long.valueOf(appUser.getChannelId()).longValue(), 
+								appUser.getBaiduId(),
+								paramMap
+								);
+						//记录推送日志
+						appPushLog.setUserId(appUser.getUserId());
+					    appPushLog.setUserName(appUser.getRealname());
+					    appPushLog.setBaiduId(appUser.getBaiduId());
+					    appPushLog.setChannelId(appUser.getChannelId());
+					    appPushLog.setTitle(title);
+					    appPushLog.setDescription(description);
+					    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+					    appPushLog.setSendState(success);
+					    appPushLog.setSenderId(getUser().getUserId());
+					    appPushLog.setSenderName(getUser().getUserName());
+						appPushLogService.save(appPushLog);
 					}
+				}
+				if(businessActivity.getRecommend() == 0) {
+					state = "已发布-已推送-推荐到焦点图";
+				} else if(businessActivity.getRecommend() == 3) {
+					state = "已发布-已推送-推荐到全网焦点图";
+				} else {
+					state = "已发布-已推送";
+				} 
 			}
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"active", 
+					"active_edit", 
+					businessActivity.getActId(), 
+					businessActivity.getActName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			json = "{\"success\":\"true\",\"message\":\"编辑成功\"}";
 		} catch(Exception e) {
@@ -1128,7 +1195,7 @@ public class BusinessActivityController {
 	 * @return
 	 */
 	@RequestMapping(value="delete")
-	public void delete(@RequestParam(value="id") String id, HttpServletResponse response) {
+	public void delete(@RequestParam(value="id") String id, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try{
 			if(id != null) {
@@ -1141,6 +1208,19 @@ public class BusinessActivityController {
 					BusinessActivity businessActivity = businessActivityService.findById(Integer.parseInt(id));
 					Boolean  result = businessActivityService.delete(new Integer(id));
 					if(result) {
+						
+						String state = "已删除";
+						BusinessOpertaion entity = new BusinessOpertaion(
+								getUser().getUserId(), 
+								getUser().getUserName(), 
+								"active", 
+								"active_delete", 
+								businessActivity.getActId(), 
+								businessActivity.getActName(), 
+								state,
+								request.getRemoteAddr());
+						businessOpertaionService.save(entity);
+						
 						businessActivityScopeService.delete(new Integer(id));
 						Map paramMap = new HashMap();
 						paramMap.put("id", Integer.parseInt(id));
@@ -1287,7 +1367,7 @@ public class BusinessActivityController {
             .append("\"actId\":\"").append(businessActivity.getActId()).append("\"").append(",")
 		    .append("\"typeId\":\"").append(businessActivity.getTypeId()).append("\"").append(",")
 		    .append("\"actName\":\"").append(businessActivity.getActName()).append("\"").append(",")
-		    .append("\"actContent\":\"").append(businessActivity.getActContent().replace("\"", "\\\"")).append("\"").append(",")
+		    .append("\"actContent\":\"").append(JsonUtils.stringToJson(businessActivity.getActContent().replace("\"", "\\\""))).append("\"").append(",")
 		    .append("\"typeName\":\"").append(businessActivity.getTypeName()).append("\"").append(",")
 		    .append("\"actScope\":\"").append(businessActivity.getActScope()).append("\"").append(",")
 		    .append("\"brief\":\"").append(businessActivity.getBrief()).append("\"").append(",")
@@ -1345,6 +1425,18 @@ public class BusinessActivityController {
 				businessActivity.setEditTime(new Timestamp(System.currentTimeMillis()));
 				businessActivity.setIsImportant(0);
 				businessActivityService.update(businessActivity);
+				
+				String state = "已撤回";
+				BusinessOpertaion entity = new BusinessOpertaion(
+						getUser().getUserId(), 
+						getUser().getUserName(), 
+						"active", 
+						"active_cancle", 
+						businessActivity.getActId(), 
+						businessActivity.getActName(), 
+						state,
+						request.getRemoteAddr());
+				businessOpertaionService.save(entity);
 				
 				if(businessActivity.getState() == 5) {
 					Map paramMap = new HashMap();
@@ -1417,7 +1509,7 @@ public class BusinessActivityController {
      * @param response
      */
     @RequestMapping(value="acceptAct")
-    public void acceptAct(@RequestParam(value="actId") Integer actId, HttpServletResponse response) {
+    public void acceptAct(@RequestParam(value="actId") Integer actId, HttpServletRequest request, HttpServletResponse response) {
         String json = "";
         try{
         	BusinessActivity businessActivity = businessActivityService.findById(actId);
@@ -1434,6 +1526,8 @@ public class BusinessActivityController {
         	businessActivity.setEditor(CommonUtils.getUser().getUserName());
         	businessActivityService.update(businessActivity);
         	
+        	String state = "审核通过";
+			
         	if(businessActivity.getRecommend() != null && businessActivity.getState()== 1) {//推荐
             	if(businessActivity.getRecommend() == 0) {//推荐到首页焦点图
             		BusinessFocus businessFocus = new BusinessFocus();
@@ -1454,6 +1548,7 @@ public class BusinessActivityController {
 				    businessFocus.setSelectorName(getUser().getUserName());
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
+					state = "已发布-推荐到焦点图";
 					
 					AppFocusScope appFocusScope = new AppFocusScope();
 	    			Map paramMap = new HashMap();
@@ -1485,6 +1580,7 @@ public class BusinessActivityController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
+					state = "已发布-推荐到全网焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
 	    			Map paramMap = new HashMap();
@@ -1525,6 +1621,77 @@ public class BusinessActivityController {
                 }
         	}
         	
+        	//执行推送接口
+			//活动向小区内的所有居民发送通知
+			if(businessActivity.getIsPush() != null && businessActivity.getIsPush() == 1 && (businessActivity.getState() == 0 || businessActivity.getState() == 1)) {//可推送
+
+	            Map paramMap = new HashMap();
+	            paramMap.put("actId", businessActivity.getActId());
+	            List<BusinessActivityScope> beanList = businessActivityScopeService.findByMap(paramMap);
+	            
+				String ids = "";
+				for(int i=0;i<beanList.size();i++) {
+					BusinessActivityScope businessActivityScope = (BusinessActivityScope)beanList.get(i);
+					ids +="'"+businessActivityScope.getEstateId()+"',"; 
+				}
+				if(beanList.size() != 0){
+					ids = ids.substring(0, ids.length()-1);
+				}
+				
+				//查询该小区下的userId, baiduId, channelId
+				List appUserList = appUserService.findUserPushIds(ids);
+				AppPushLog appPushLog = new AppPushLog();
+				String title = "OK家";
+				String description = "【活动】"+businessActivity.getActName();	
+				paramMap = new HashMap();
+				paramMap.put("messageType", 9);
+				paramMap.put("ID", businessActivity.getActId());
+				
+				for(int j=0;j<appUserList.size();j++) {
+					AppUser appUser = (AppUser) appUserList.get(j);
+					if(appUser.getBaiduId() != null && !"".equals(appUser.getBaiduId()) && appUser.getChannelId() != null && !"".equals(appUser.getChannelId())) {
+						Integer success = AppPushNotificationUtil.pushNotification(
+								title, 
+								description, 
+								appUser.getDeviceType(),
+								Long.valueOf(appUser.getChannelId()).longValue(), 
+								appUser.getBaiduId(),
+								paramMap
+								);
+						//记录推送日志
+						appPushLog.setUserId(appUser.getUserId());
+					    appPushLog.setUserName(appUser.getRealname());
+					    appPushLog.setBaiduId(appUser.getBaiduId());
+					    appPushLog.setChannelId(appUser.getChannelId());
+					    appPushLog.setTitle(title);
+					    appPushLog.setDescription(description);
+					    appPushLog.setSendTime(new Timestamp(System.currentTimeMillis()));
+					    appPushLog.setSendState(success);
+					    appPushLog.setSenderId(getUser().getUserId());
+					    appPushLog.setSenderName(getUser().getUserName());
+						appPushLogService.save(appPushLog);
+					}
+				}
+				if(businessActivity.getRecommend() == 0) {
+					state = "已发布-已推送-推荐到焦点图";
+				} else if(businessActivity.getRecommend() == 3) {
+					state = "已发布-已推送-推荐到全网焦点图";
+				} else {
+					state = "已发布-已推送";
+				} 
+			}
+			
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"active", 
+					"active_auditor", 
+					businessActivity.getActId(), 
+					businessActivity.getActName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding("utf-8");
 			json = "{\"success\":\"true\",\"message\":\"接受成功\"}";
@@ -1556,6 +1723,19 @@ public class BusinessActivityController {
         	businessActivity.setEditTime(new Timestamp(System.currentTimeMillis()));
         	businessActivity.setEditor(CommonUtils.getUser().getUserName());
         	businessActivityService.update(businessActivity);
+        	
+        	String state = "未通过";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"active", 
+					"active_auditor", 
+					businessActivity.getActId(), 
+					businessActivity.getActName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
             response.setHeader("Cache-Control", "no-cache");
             response.setCharacterEncoding("utf-8");
 			
@@ -1642,7 +1822,7 @@ public class BusinessActivityController {
 	@RequestMapping(value="updateActImportantState")
 	public void updateActImportantState(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="id") String id, @RequestParam(value="oldactId") String oldactId) {
 		BusinessActivity businessActivity0 = new BusinessActivity();
-		BusinessActivity businessActivity = new BusinessActivity();
+		BusinessActivity businessActivity = businessActivityService.findById(Integer.parseInt(id));
 		String json = "";
 		try{
 			if(!oldactId.trim().equals("")) {
@@ -1659,6 +1839,18 @@ public class BusinessActivityController {
 			businessActivity.setEditTime(new Timestamp(System.currentTimeMillis()));
 			businessActivity.setEditor(CommonUtils.getUser().getUserName());
         	businessActivityService.update(businessActivity);
+			
+        	String state = "已置顶";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"active", 
+					"active_hot", 
+					businessActivity.getActId(), 
+					businessActivity.getActName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			Map paramMap = new HashMap();
 			paramMap.put("id", businessActivity.getActId());

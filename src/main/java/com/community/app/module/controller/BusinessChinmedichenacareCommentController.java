@@ -27,6 +27,7 @@ import com.community.app.module.service.BusinessChinmedichenacareCommentService;
 import com.community.app.module.service.BusinessChinmedichenacareService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessChinmedichenacareCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessChinmedichenacareComment")
@@ -78,7 +79,7 @@ public class BusinessChinmedichenacareCommentController {
 			    .append("\"commentorId\":\"").append(businessChinmedichenacareComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessChinmedichenacareComment.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessChinmedichenacareComment.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessChinmedichenacareComment.getComment()).append("\"").append(",")
+			    .append("\"comment\":\"").append(JsonUtils.stringToJson(businessChinmedichenacareComment.getComment().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessChinmedichenacareComment.getCommentTime()).append("\"").append(",")
 			    .append("\"commentorState\":\"").append(businessChinmedichenacareComment.getCommentorState()).append("\"").append(",")
 			    .append("\"repliedState\":\"").append(businessChinmedichenacareComment.getRepliedState()).append("\"")

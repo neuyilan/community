@@ -34,8 +34,11 @@ public class BusinessNewsQuery extends BaseBean {
 	private Integer isHot;
 	private Integer isAd;
 	private java.sql.Timestamp createTime;
+	private String creater;
 	private java.sql.Timestamp editTime;
 	private String editor;
+	private java.sql.Timestamp cancleTime;
+	private String cancler;
 	private Integer isPush;
 	private Integer isRecommend;
 	private Integer comId;
@@ -50,6 +53,7 @@ public class BusinessNewsQuery extends BaseBean {
 	private Integer stationId;
 	private Integer proId;
 	private java.sql.Timestamp hotTime;
+	private String hoter;
 	private Integer selectId;
 	
 	private Integer curUserId;//当前用户ID
@@ -69,6 +73,38 @@ public class BusinessNewsQuery extends BaseBean {
 	private Integer curEstateId;
 	private java.sql.Timestamp hotTime1;
 	
+	public String getCreater() {
+		return creater;
+	}
+
+	public void setCreater(String creater) {
+		this.creater = creater;
+	}
+
+	public java.sql.Timestamp getCancleTime() {
+		return cancleTime;
+	}
+
+	public void setCancleTime(java.sql.Timestamp cancleTime) {
+		this.cancleTime = cancleTime;
+	}
+
+	public String getCancler() {
+		return cancler;
+	}
+
+	public void setCancler(String cancler) {
+		this.cancler = cancler;
+	}
+
+	public String getHoter() {
+		return hoter;
+	}
+
+	public void setHoter(String hoter) {
+		this.hoter = hoter;
+	}
+
 	public java.sql.Timestamp getHotTime1() {
 		return hotTime1;
 	}

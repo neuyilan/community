@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>建议投诉管理</title>
+        <title>运营建议投诉管理</title>
         <%@include file="/common/meta.jsp"%>
         <script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
         <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">

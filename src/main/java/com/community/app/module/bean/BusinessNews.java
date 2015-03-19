@@ -36,13 +36,17 @@ public class BusinessNews implements java.io.Serializable{
 	private Integer isHot;
 	private Integer isAd;
 	private java.sql.Timestamp createTime;
+	private String creater;
 	private java.sql.Timestamp editTime;
 	private String editor;
+	private java.sql.Timestamp cancleTime;
+	private String cancler;
 	private Integer isPush;
 	private Integer isRecommend;
 	private String portrait;
 	private Integer breakId;
 	private java.sql.Timestamp hotTime;
+	private String hoter;
 	private java.sql.Timestamp hotTime1;
 	private String nickname;
 	private String buNickname;
@@ -51,6 +55,38 @@ public class BusinessNews implements java.io.Serializable{
 	private Integer isNickname;
 	private String tag;
 	
+	public String getCreater() {
+		return creater;
+	}
+
+	public void setCreater(String creater) {
+		this.creater = creater;
+	}
+
+	public java.sql.Timestamp getCancleTime() {
+		return cancleTime;
+	}
+
+	public void setCancleTime(java.sql.Timestamp cancleTime) {
+		this.cancleTime = cancleTime;
+	}
+
+	public String getCancler() {
+		return cancler;
+	}
+
+	public void setCancler(String cancler) {
+		this.cancler = cancler;
+	}
+
+	public String getHoter() {
+		return hoter;
+	}
+
+	public void setHoter(String hoter) {
+		this.hoter = hoter;
+	}
+
 	public java.sql.Timestamp getHotTime1() {
 		return hotTime1;
 	}

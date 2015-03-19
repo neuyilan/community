@@ -211,8 +211,11 @@
 		                <li id="isShow"><span class="xxl"><lable id="price" style="color: #cc2510;"></lable></span><span class="xxr"><lable id="isEstateAgent" style="color: #cc2510;"></lable></span></li>
 		                 <div class="s-xw-ic"><i class="rev"><lable id="comments"></lable></i><i class="look"><lable id="visits"></lable></i><i id="block6" class="help"><lable id="supports"></lable></i></div>
 		                <div class="link5"></div>
+		                <li id="viewInter"></li>
+		                <div class="link5"></div>
 		                <li id="remarks1" style="color: #cc2510; margin:17px 0 10px 0; display:none;"><lable id="remarks2"></lable></li>
 		                <div id="hr1" class="link5" style="display:none;"></div>
+		                <li id="viewInter"></li>
 		                <li>
 		                	<div class="s-xw-con">
 		                		<lable id="picture"></lable><br>
@@ -553,6 +556,7 @@
 		        $('#contactTel').html(data.contactTel);	//电   话
 		        /* $('#contactQQ').html(data.contactQq); */	//QQ
 		        $('#estateScope1').html(data.estateScope);	//地址
+		        $('#viewInter').html("预览地址：http://wx.bqsqcm.com/wxokjia/tiaozao_info.php?ID=2083");
 		        if(data.dealType == 0) {
 		        	$("#isShow").css('display','block'); 
 		        	$('#price').html("售价：￥" +data.price);	//售价

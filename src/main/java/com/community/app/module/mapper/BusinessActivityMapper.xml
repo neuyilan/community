@@ -639,7 +639,11 @@
 		couponNum,
 		couponValid,
 		reportExcel,
-		refuseMemo
+		refuseMemo,
+		QNHActId,
+		QNHName,
+		QNHId,
+		timeslot
 		) values(
 		#{typeId},
 		#{actName},
@@ -688,7 +692,12 @@
 		#{couponNum},
 		#{couponValid},
 		#{reportExcel},
-		#{refuseMemo}			
+		#{refuseMemo},	
+		#{QNHActId},	
+		#{QNHName},	
+		#{QNHId},
+		#{timeslot}
+			
 		)
 	</insert>
 	

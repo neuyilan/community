@@ -24,6 +24,7 @@ import com.community.app.module.service.BusinessBreakCommentService;
 import com.community.app.module.service.BusinessBreakService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessBreakCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessBreakComment")
@@ -71,7 +72,7 @@ public class BusinessBreakCommentController {
 			    .append("\"breakId\":\"").append(businessBreakComment.getBreakId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessBreakComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessBreakComment.getCommentorName()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessBreakComment.getContent()).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessBreakComment.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessBreakComment.getCommentTime()).append("\"").append(",")
 			    .append("\"contentType\":\"").append(businessBreakComment.getContentType()).append("\"").append(",")
 			    .append("\"videoSize\":\"").append(businessBreakComment.getVideoSize()).append("\"").append(",")

@@ -23,6 +23,7 @@ import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.BusinessRepairCommentService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessRepairCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessRepairComment")
@@ -69,7 +70,7 @@ public class BusinessRepairCommentController {
 			    .append("\"commentorId\":\"").append(businessRepairComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessRepairComment.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessRepairComment.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessRepairComment.getComment().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"comment\":\"").append(businessRepairComment.getComment().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessRepairComment.getCommentTime()).append("\"").append(",")
 			    .append("\"contentType\":\"").append(businessRepairComment.getContentType()).append("\"").append(",")
 			    .append("\"videoSize\":\"").append(businessRepairComment.getVideoSize()).append("\"").append(",")

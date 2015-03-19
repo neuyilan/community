@@ -28,6 +28,7 @@ import com.community.app.module.bean.BusinessBreakSelect;
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsScope;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.BusinessBreakAudioService;
@@ -38,10 +39,12 @@ import com.community.app.module.service.BusinessBreakService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessNewsScopeService;
 import com.community.app.module.service.BusinessNewsService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessBreakQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 
 @Controller
@@ -67,6 +70,8 @@ public class BusinessBreakController {
 	private AppLatestNewsService appLatestNewsService;
 	@Autowired
 	private BusinessNewsScopeService businessNewsScopeService;
+	@Autowired
+	private BusinessOpertaionService businessOpertaionService;
 	
 	/**
 	 * 进入管理页
@@ -140,10 +145,11 @@ public class BusinessBreakController {
 			    .append("\"breakId\":\"").append(businessBreak.getBreakId()).append("\"").append(",")
 			    .append("\"breakerId\":\"").append(businessBreak.getBreakerId()).append("\"").append(",")
 			    .append("\"breakerName\":\"").append(businessBreak.getBreakerName()).append("\"").append(",")
-			    .append("\"breakContent\":\"").append(businessBreak.getBreakContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"breakContent\":\"").append(JsonUtils.stringToJson(businessBreak.getBreakContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"breakTime\":\"").append(businessBreak.getBreakTime()).append("\"").append(",")
 			    .append("\"breakType\":\"").append(businessBreak.getBreakType()).append("\"").append(",")
 			    .append("\"comId\":\"").append(businessBreak.getComId()).append("\"").append(",")
+			    .append("\"comName\":\"").append(businessBreak.getComName()).append("\"").append(",")
 			    .append("\"state\":\"").append(businessBreak.getState()).append("\"").append(",")
 			    .append("\"isUsed\":\"").append(businessBreak.getIsUsed()).append("\"").append(",")
 			    .append("\"selectedNum\":\"").append(businessBreak.getSelectedNum()).append("\"").append(",")
@@ -236,11 +242,11 @@ public class BusinessBreakController {
 			List<BusinessBreakPic> businessBreakPicList =  businessBreakPicService.findPicListByBreakId(Integer.parseInt(id));
 			// BusinessCommunity businessCommunity = businessCommunityService.findById(getUser().getOrgId());
 			BusinessCommunity businessCommunity = businessCommunityService.findById(Integer.parseInt(businessBreak.getComId()));
-			Properties p = propertiesUtil.getProperties("config.properties");
-			String ip = p.getProperty("imageIp");   
+			/*Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   */
 			StringBuilder sb = new StringBuilder();
 			for(int i=0; i<businessBreakPicList.size(); i++) {
-				sb.append("<img src=\""+ ip + (businessBreakPicList.get(i).getPicUrl())+"\" style=\"max-width:500px; height:auto;\"/><br>");
+				sb.append("<img src=\"" + (businessBreakPicList.get(i).getPicUrl())+"\" style=\"max-width:500px; height:auto;\"/><br>");
 			}
 			businessNews.setTitle("");
 			businessNews.setBrief(businessBreak.getBreakContent());
@@ -266,6 +272,18 @@ public class BusinessBreakController {
 			businessNews.setBreakId(Integer.parseInt(id));
 			businessNews.setIsNickname(businessBreak.getIsNickname());
 			businessNewsService.save(businessNews);
+			
+			String state = "选择至新闻";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"break", 
+					"break_select_news", 
+					businessNews.getNewsId(), 
+					businessNews.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			Timestamp  ts=new Timestamp(new Date().getTime());
 			BusinessBreakSelect businessBreakSelect = new BusinessBreakSelect();

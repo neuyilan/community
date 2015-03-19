@@ -36,6 +36,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessChinmedichenacareCommentQuery;
 import com.community.app.module.vo.BusinessChinmedichenacareQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessChinmedichenacare")
@@ -115,8 +116,8 @@ public class BusinessChinmedichenacareController {
 				BusinessChinmedichenacare businessChinmedichenacare = (BusinessChinmedichenacare) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"cmhcId\":\"").append(businessChinmedichenacare.getCmhcId()).append("\"").append(",")
-			    .append("\"cmhcTitle\":\"").append(businessChinmedichenacare.getCmhcTitle()).append("\"").append(",")
-			    .append("\"cmhcContent\":\"").append(businessChinmedichenacare.getCmhcContent().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"cmhcTitle\":\"").append(JsonUtils.stringToJson(businessChinmedichenacare.getCmhcTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
+			    .append("\"cmhcContent\":\"").append("").append("\"").append(",")
 			    .append("\"cmhcPic\":\"").append(businessChinmedichenacare.getCmhcPic()).append("\"").append(",")
 			    .append("\"appPic\":\"").append(businessChinmedichenacare.getAppPic()).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessChinmedichenacare.getPublisherId()).append("\"").append(",")

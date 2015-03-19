@@ -18,6 +18,7 @@ public class BusinessBreak implements java.io.Serializable{
 	private java.sql.Timestamp breakTime;
 	private java.lang.Integer breakType;
 	private java.lang.String comId;
+	private java.lang.String comName;
 	private java.lang.Integer state;
 	private java.lang.Integer isUsed;
 	private java.lang.Integer selectedNum;
@@ -38,6 +39,14 @@ public class BusinessBreak implements java.io.Serializable{
 	private String tel;
 	private Integer isNickname;
 	private String realname;
+	
+	public java.lang.String getComName() {
+		return comName;
+	}
+
+	public void setComName(java.lang.String comName) {
+		this.comName = comName;
+	}
 
 	public String getRealname() {
 		return realname;

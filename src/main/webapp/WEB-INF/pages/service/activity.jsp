@@ -162,15 +162,17 @@ $(document).ready(function(){
          $(".x-qg").css("display","none");
 	     $(".x-pm").css("display","block");*/
 	     $.ajax({
-	           url: '${ctx}/service/activities/participateActivites.json',
+	    	 url: '${activityIp}/service/activities/participateActivites.json',
 	           cache: false,
-	           type: 'post',
-	           dataType: 'json',
 	           data: {
 	           	ID: '${actId}',
 	           	sessionid: '${sessionid}', 
 	           	userId: '${userId}'
 	           },
+	           type: 'get',
+	           dataType: 'jsonp',
+	           jsonp: "jsoncallback",
+	           jsonpCallback:"ajaxTestFn",
 	           success: function (data) {
 	        	   if(data.errorCode == '200') {
 	        		    $("#seeRank").click();
@@ -216,6 +218,18 @@ $(document).ready(function(){
 		 replyType = 0;//点击回复人类型
 		 $("#replaceinp").attr("placeholder","请输入您要评论的内容...");
 	 });
+	 //点击输入框判断登录状态
+	 $('#comment').click(function(){
+		 if(userId==0){
+				if(userId==0){
+					 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+					 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+					 	},'取消');
+					 	return;
+				}
+			}
+	 });
+	 
 	//点赞
 	 $('.x-z a').click(function(){
 		 /*if(userId==0){
@@ -538,28 +552,33 @@ function jump(nextNo) {
 	    }
 	});
 }
+function ajaxTestFn(date){
+}
 function msgbox(title,content,btn,fun,btn2){
 	 $(".tk").remove();
 	 var tk=$("<div class='tk'></div>");
+	 var ttotal=$("<div class='ttotal'></div>");
 	 var tcontent=$("<div class='tcontent'></div>");
-	 tk.append(tcontent);
-	 if(title!=""){
-		 tcontent.append("<p class='title'>"+title+"</p>");
-	 }
+	 tk.append(ttotal);
+	 ttotal.append(tcontent)
+	 
 	 tcontent.append("<div class='thead'><p>"+content+"</p></div>");
-	 tcontent.append("<div class='tbtn'></div>");
+	 
 	 var tbtn = $("<div class='tbtn'></div>");
 	 tcontent.append(tbtn);
-	 var btnA = $("<a>"+btn+"</a>");
+	 var btnA = $("<a style='margin: 0 20px;'>"+btn+"</a>");
 	 
-	 tbtn.append(btnA);
 	 if(btn2!=null && btn2!="" && btn2!=undefined){
-		 var btnB = $("<a style='margin-left:20px'>"+btn2+"</a>");
+		 var btnB = $("<a class='cancel' style=' background-color:#b7b7b7'>"+btn2+"</a>");
 		 tbtn.append(btnB);
 		 btnB.click(function(){
 			 $(".tk").remove();
 		 });
 	 }
+	 tbtn.append(btnA);
+	 
+	 tcontent.append("<i class='tkt'></i><i class='tkr'></i>")
+	 $(".ttotal").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
 	
 	 $("body").append(tk);
 	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
@@ -626,5 +645,7 @@ document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
             shareWeibo();  
             });  
         }, false);  
+        
+        
 </script>
 

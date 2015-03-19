@@ -5,6 +5,8 @@
 	</description>
 	<!-- 通过ServiceObjectSupplier参数指定SpringServletContextObjectSupplier类来获得Spring的ApplicationContext对象 -->
 	<parameter name="load-on-startup">true</parameter>
+	<parameter name="useOriginalwsdl">true</parameter>
+    <parameter name="modifyUserWSDLPortAddress">true</parameter>
 	<parameter name="ServiceObjectSupplier">
 		<!-- com.community.ws.common.MyServiceObjectSupplier locked="false" -->
 		org.apache.axis2.extensions.spring.receivers.SpringAppContextAwareObjectSupplier
@@ -12,12 +14,13 @@
 	<parameter name="SpringBeanName">uploadFileSer</parameter>
 	
 	<operation name="uploadFile">
+<!-- 	   <actionMapping>urn:uploadFile</actionMapping> -->
 		<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
 	</operation>
-	<operation name="downloadFile">
-			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" />
-	</operation>
-	<module ref="rampart" />
+<!-- 	<operation name="downloadFile"> -->
+<!-- 			<messageReceiver class="org.apache.axis2.rpc.receivers.RPCMessageReceiver" /> -->
+<!-- 	</operation> -->
+<!-- 	<module ref="rampart" /> -->
 <!-- 	<parameter name="InflowSecurity"> -->
 <!-- 		<action> -->
 <!-- 			<items>Encrypt</items> -->

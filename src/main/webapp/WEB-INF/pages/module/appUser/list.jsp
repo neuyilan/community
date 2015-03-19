@@ -75,7 +75,8 @@
 						<c:if test="${key.index % 3 == 0}" >style="margin-left:0;"</c:if>>
 						<a class="nopotr" href="javascript:;">
 							<div class="info">
-								注册时间：<span><fmt:formatDate value="${user.registTime }" pattern="yyyy-MM-dd HH:mm" /></span>
+								<span>注册时间：<fmt:formatDate value="${user.registTime }" pattern="yyyy-MM-dd HH:mm" /></span>
+								<span class="s-xw-sq">所属社区：${user.comName }</span>
 							</div>
 							<hr class="link">
 							<h2 class="yggl_title" style="line-height:21px;">
@@ -293,7 +294,7 @@
     	        		+ styleStr
     	        		+ '>'
                         + '<a class="nopotr" href="javascript:;">'
-    		            + '<div class="info">注册时间：<span>'+(row.registTime != '' ? row.registTime.substring(0, 16) : '')+'</span></div>'
+    		            + '<div class="info">注册时间：<span>'+(row.registTime != '' ? row.registTime.substring(0, 16) : '')+'</span><span class="s-xw-sq">所属社区：'+row.comName+'</span></div>'
     		            + '<hr class="link">'
     		            + '<h2 class="yggl_title" style="line-height:21px;"><span class="yggl_poht"><img src="<%=ctx%>'+row.portrait+'" style="width:100%;"></span><em>真实姓名：'+row.realname+'</em><br><em>昵　　称：'+row.nickname+'</em><br><em>电　　话：'+row.tel+'</em></h2>'
     		            + '<div class="state">'+type+'</div>'

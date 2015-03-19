@@ -159,7 +159,9 @@
 		<typeAlias alias="ManageSendMsg" type="com.community.app.module.bean.ManageSendMsg"/>
 		
 		<typeAlias alias="BusinessToken" type="com.community.app.module.bean.BusinessToken"/>
-		
+		<typeAlias alias="BusinessActivityQnhInformation" type="com.community.app.module.bean.BusinessActivityQnhInformation"/>
+		<typeAlias alias="BusinessHelpType" type="com.community.app.module.bean.BusinessHelpType"/>
+		<typeAlias alias="BusinessOpertaion" type="com.community.app.module.bean.BusinessOpertaion"/>
 	</typeAliases>
 	<!-- 这里交给sqlSessionFactory 的 mapperLocations属性去得到所有配置信息 -->
 	
@@ -199,6 +201,7 @@
         <mapper resource="com/community/app/module/mapper/BusinessAnnoScopeMapper.xml" />
         <mapper resource="com/community/app/module/mapper/AppFocusScopeMapper.xml" />
         <mapper resource="com/community/app/module/mapper/AppFocusAdScopeMapper.xml" />
+        <mapper resource="com/community/app/module/mapper/BusinessOpertaionMapper.xml" />
         
         <mapper resource="com/community/app/module/mapper/BusinessActivityCommentMapper.xml" />
         <mapper resource="com/community/app/module/mapper/BusinessActivityMessageMapper.xml" />
@@ -310,5 +313,10 @@
 		<mapper resource="com/community/app/module/mapper/BusinessProductKeywordMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/ManageSendMsgMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessTokenMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessActivityQnhInformationMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessHelpTypeMapper.xml" />
+		
+		
+		
 	</mappers>
 </configuration>

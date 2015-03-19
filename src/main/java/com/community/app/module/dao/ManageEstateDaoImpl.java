@@ -105,6 +105,17 @@ public class ManageEstateDaoImpl implements ManageEstateDao {
 		List<ManageEstate> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.ManageEstateDao.findByExample", query);
 		return list;
 	}
+
+	/**
+	 * 按VO对象条件查询所有ManageEstate
+	 * @param entity
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<ManageEstate> findBy3Km(final ManageEstateQuery query) throws DaoException {
+		List<ManageEstate> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.ManageEstateDao.findBy3Km", query);
+		return list;
+	}
 	
 	/**
 	 * 按VO对象条件查询所有ManageEstate-限制返回条数

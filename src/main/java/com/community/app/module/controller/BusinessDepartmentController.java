@@ -26,6 +26,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessDepartmentQuery;
 import com.community.app.module.vo.BusinessUserQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessDepartment")
@@ -143,8 +144,8 @@ public class BusinessDepartmentController {
 				BusinessDepartment businessDepartment = (BusinessDepartment) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"depId\":\"").append(businessDepartment.getDepId()).append("\"").append(",")
-			    .append("\"depName\":\"").append(businessDepartment.getDepName()).append("\"").append(",")
-			    .append("\"depDesc\":\"").append(businessDepartment.getDepDesc()).append("\"").append(",")
+			    .append("\"depName\":\"").append(businessDepartment.getDepName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"depDesc\":\"").append(businessDepartment.getDepDesc().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
 			    .append("\"createTime\":\"").append(businessDepartment.getCreateTime()).append("\"").append(",")
 			    .append("\"editTime\":\"").append(businessDepartment.getEditTime()).append("\"").append(",")
 			    .append("\"editor\":\"").append(businessDepartment.getEditor()).append("\"").append(",")

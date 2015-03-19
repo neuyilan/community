@@ -29,6 +29,7 @@ import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessAnnoCommentQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessAnnoComment")
@@ -99,7 +100,7 @@ public class BusinessAnnoCommentController {
 			    .append("\"commentorId\":\"").append(businessAnnoComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessAnnoComment.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessAnnoComment.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessAnnoComment.getComment().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"comment\":\"").append(JsonUtils.stringToJson(businessAnnoComment.getComment().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
 			    
 			    .append("\"commentorState\":\"").append(businessAnnoComment.getCommentorState()).append("\"").append(",")
 			    .append("\"repliedState\":\"").append(businessAnnoComment.getRepliedState()).append("\"").append(",")

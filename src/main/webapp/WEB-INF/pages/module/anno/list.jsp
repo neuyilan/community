@@ -481,9 +481,9 @@
 	            }
 	            
 	            if(data.annoType == 4){
-	            	$('#viewInter').html("预览地址：<%=ctx %>/service/station/<br>getStationDetailsById.json?ID="+annoId+"&userId=0" );
+	            	$('#viewInter').html("预览地址：http://wx.bqsqcm.com/wxokjia/gonggao_info.php?userId=0&ID=63");
 	            }else if(data.annoType == 0){
-					$('#viewInter').html("预览地址：<%=ctx %>/service/property/<br>getPopertyDetailsById.json?ID="+annoId+"&userId=0" );
+	            	$('#viewInter').html("预览地址：http://wx.bqsqcm.com/wxokjia/wuye_info.php?userId=0&ID=152");
 	            } else {
 	            	$("#viewInter").css('display','none'); 
 			         $("#hr2").css('display','none'); 

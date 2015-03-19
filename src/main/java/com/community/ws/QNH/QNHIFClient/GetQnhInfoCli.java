@@ -13,6 +13,7 @@ import org.apache.axis2.client.ServiceClient;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
+import com.community.ws.common.HeaderOMElement;
 
 /**
  * @author Administrator 2.1.3 获取青年汇信息 ok
@@ -21,7 +22,11 @@ public class GetQnhInfoCli {
 
 	private static EndpointReference targetEPR = new EndpointReference(DefaultConfig.getProperty("QHNSerAddr"));
 
-	public void getQnhInfo() {
+	/**
+	 * @param QNHActId  青年汇 活动ID
+	 */
+	public String getQnhInfo(String QNHActId) {
+		String retStr = "";
 		Options options = new Options();
 		options.setAction("http://ok.com/GetQnh_info");
 		options.setTo(targetEPR);
@@ -34,18 +39,22 @@ public class GetQnhInfoCli {
 			OMElement callMethod = fac.createOMElement("GetQnh_info", omNs);
 			OMElement nameEle = fac.createOMElement("Json", omNs);
 			JSONArray jsonArry = new JSONArray();
-			jsonArry.add(0, new JSONObject().element("id","C027DDC5-2096-4B87-9477-7B79C36E8938"));
+			jsonArry.add(0, new JSONObject().element("id", QNHActId));
 
 			nameEle.setText(jsonArry.toString());
 			callMethod.addChild(nameEle);
 			long start = System.currentTimeMillis();
+			/**添加soapHeader */
+			sender.addHeader(HeaderOMElement.createHeaderOMElement(omNs));
 			sender.getOptions().setTimeOutInMilliSeconds(CommonData.TimeOutData.QHN_WS_TIMEOUT);
 			OMElement response = sender.sendReceive(callMethod);
 			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
-			System.out.println(response.getFirstElement().getText());
+			retStr = response.getFirstElement().getText();
+			System.out.println(retStr);
 		} catch (Exception e) {
+			retStr = "";
 			e.printStackTrace();
 		} finally {
 			if (sender != null)
@@ -53,14 +62,16 @@ public class GetQnhInfoCli {
 			try {
 				sender.cleanup();
 			} catch (Exception e) {
+				retStr = "";
 				e.printStackTrace();
 			}
 		}
+		return retStr;
 	}
 
 	public static void main(String[] args) {
 		GetQnhInfoCli getQnhInfoCli = new GetQnhInfoCli();
-		getQnhInfoCli.getQnhInfo();
+		getQnhInfoCli.getQnhInfo("C027DDC5-2096-4B87-9477-7B79C36E8938");
 	}
 
 }

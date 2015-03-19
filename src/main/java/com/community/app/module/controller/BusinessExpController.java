@@ -59,6 +59,7 @@ import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessExpQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.MessageChannelClient;
 import com.community.framework.utils.StringUtil;
 import com.community.framework.utils.propertiesUtil;
@@ -334,19 +335,19 @@ public class BusinessExpController {
 				result.append("{")
 			    .append("\"expId\":\"").append(businessExp.getExpId()).append("\"").append(",")
 			    .append("\"senderId\":\"").append(businessExp.getSenderId()).append("\"").append(",")
-			    .append("\"senderName\":\"").append(businessExp.getSenderName()).append("\"").append(",")
+			    .append("\"senderName\":\"").append(JsonUtils.stringToJson(businessExp.getSenderName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"expCode\":\"").append(businessExp.getExpCode()).append("\"").append(",")
 			    .append("\"senderTel\":\"").append(businessExp.getSenderTel()).append("\"").append(",")
-			    .append("\"receiverName\":\"").append(businessExp.getReceiverName()).append("\"").append(",")
+			    .append("\"receiverName\":\"").append(JsonUtils.stringToJson(businessExp.getReceiverName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"receiverTel\":\"").append(businessExp.getReceiverTel()).append("\"").append(",")
 			    .append("\"receiveTime\":\"").append(businessExp.getReceiveTime()).append("\"").append(",")
-			    .append("\"receiverAddr\":\"").append(businessExp.getReceiverAddr()).append("\"").append(",")
+			    .append("\"receiverAddr\":\"").append(JsonUtils.stringToJson(businessExp.getReceiverAddr().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"sendTime\":\"").append(businessExp.getSendTime()).append("\"").append(",")
 			    .append("\"expContent\":\"").append(businessExp.getExpContent()).append("\"").append(",")
 			    .append("\"expState\":\"").append(businessExp.getExpState()).append("\"").append(",")
 			    .append("\"lastMessage\":\"").append(businessExp.getLastMessage() != null ?businessExp.getLastMessage().replace("\"", "\\\""):"").append("\"").append(",")
 			    .append("\"checkInTime\":\"").append(businessExp.getCheckInTime()).append("\"").append(",")
-			    .append("\"senderAddr\":\"").append(businessExp.getSenderAddr()).append("\"").append(",")
+			    .append("\"senderAddr\":\"").append(JsonUtils.stringToJson(businessExp.getSenderAddr().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"expType\":\"").append(businessExp.getExpType()).append("\"").append(",")
 			    .append("\"station\":\"").append(businessExp.getStation()).append("\"").append(",")
 			    .append("\"expCompanyId\":\"").append(businessExp.getExpCompanyID()).append("\"").append(",")

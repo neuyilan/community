@@ -83,7 +83,7 @@
 														<!--是否自动播放-->
 														<param name="AutoStart" value="">
 														<!--播放的文件地址-->
-														<param name="Filename" value="${ip}${resolve.resolveMemo}"
+														<param name="Filename" value="${ctx}${resolve.resolveMemo}"
 															valuetype="ref">
 													</object>
 												</c:when>

@@ -37,6 +37,7 @@ import com.community.app.module.service.BusinessHelpCommentService;
 import com.community.app.module.service.BusinessHelpService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessHelpCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessHelpComment")
@@ -91,7 +92,7 @@ public class BusinessHelpCommentController {
 			    .append("\"helpId\":\"").append(businessHelpComment.getHelp()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessHelpComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessHelpComment.getCommentorName()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessHelpComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessHelpComment.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessHelpComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessHelpComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessHelpComment.getReplyName()).append("\"")
@@ -142,7 +143,7 @@ public class BusinessHelpCommentController {
 			    .append("\"help\":\"").append(businessHelpComment.getHelp()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessHelpComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessHelpComment.getCommentorName()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessHelpComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"content\":\"").append((businessHelpComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessHelpComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessHelpComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessHelpComment.getReplyName()).append("\"").append(",")

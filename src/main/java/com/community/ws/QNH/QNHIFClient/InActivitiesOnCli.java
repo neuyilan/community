@@ -13,6 +13,7 @@ import org.apache.axis2.client.ServiceClient;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
+import com.community.ws.common.HeaderOMElement;
 
 /**
  * @author Administrator 2.1.5 线上报名活动
@@ -21,7 +22,15 @@ public class InActivitiesOnCli {
 
 	private static EndpointReference targetEPR = new EndpointReference(DefaultConfig.getProperty("QHNSerAddr"));
 
-	public void regOnLine() {
+
+	/**
+	 * @author Administrator
+	 * @desc 线上报名活动
+	 * @param QNHActId 青年汇活动ID
+	 * @param cellphone  报名手机号
+	 */
+	public String regOnLine(String QNHActId, String cellphone) {
+		String retStr = "";
 		Options options = new Options();
 		options.setAction("http://ok.com/InActivities_on");
 		options.setTo(targetEPR);
@@ -34,20 +43,25 @@ public class InActivitiesOnCli {
 			OMElement callMethod = fac.createOMElement("InActivities_on", omNs);
 			OMElement nameEle = fac.createOMElement("Json", omNs);
 			JSONArray jsonArry = new JSONArray();
-			jsonArry.add(0, new JSONObject().element("QNHActId", "229408")
-					.element("cellphone", "15945116753"));
+			// 
+			jsonArry.add(0, new JSONObject().element("QNHActId", QNHActId)
+					.element("cellphone", cellphone));
 			System.out.println(jsonArry);
 
 			nameEle.setText(jsonArry.toString());
 			callMethod.addChild(nameEle);
 			long start = System.currentTimeMillis();
+			/**添加soapHeader */
+			sender.addHeader(HeaderOMElement.createHeaderOMElement(omNs));
 			sender.getOptions().setTimeOutInMilliSeconds(CommonData.TimeOutData.QHN_WS_TIMEOUT);
 			OMElement response = sender.sendReceive(callMethod);
 			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
-			System.out.println(response.getFirstElement().getText());
+			retStr = response.getFirstElement().getText();
+			System.out.println(retStr);
 		} catch (Exception e) {
+			retStr = "";
 			e.printStackTrace();
 		} finally {
 			if (sender != null)
@@ -55,14 +69,16 @@ public class InActivitiesOnCli {
 			try {
 				sender.cleanup();
 			} catch (Exception e) {
+				retStr = "";
 				e.printStackTrace();
 			}
 		}
+		return retStr;
 	}
 
 	public static void main(String[] args) {
 		InActivitiesOnCli inActivitiesOnCli = new InActivitiesOnCli();
-		inActivitiesOnCli.regOnLine();
+		inActivitiesOnCli.regOnLine("2294080", "15945116753");
 	}
 
 }

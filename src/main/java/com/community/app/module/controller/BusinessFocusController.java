@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.AppFocusScope;
 import com.community.app.module.bean.BusinessFocus;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.CommunityBean;
@@ -33,11 +34,13 @@ import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppFocusScopeService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessFocusService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessFocusQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessFocus")
@@ -53,6 +56,8 @@ public class BusinessFocusController {
 	private AppFocusScopeService appFocusScopeService;
 	@Autowired
 	private BusinessUserResourceService businessUserResourceService;
+	@Autowired
+	private BusinessOpertaionService businessOpertaionService;
 	
 	/**
 	 * 进入管理页
@@ -140,8 +145,8 @@ public class BusinessFocusController {
 				BusinessFocus businessFocus = (BusinessFocus) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"focusId\":\"").append(businessFocus.getFocusId()).append("\"").append(",")
-			    .append("\"title\":\"").append(businessFocus.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
-			    .append("\"content\":\"").append(businessFocus.getContent().replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"title\":\"").append(JsonUtils.stringToJson(businessFocus.getTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
+			    .append("\"content\":\"").append("").append("\"").append(",")
 			    .append("\"picUrl\":\"").append(businessFocus.getPicUrl().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"sourceType\":\"").append(businessFocus.getSourceType()).append("\"").append(",")
 			    .append("\"sourceId\":\"").append(businessFocus.getSourceId()).append("\"").append(",")
@@ -294,6 +299,18 @@ public class BusinessFocusController {
 			businessFocus.setAuditorName(shiroUser.getUserName());
 			businessFocusService.update(businessFocus);
 			
+			String state = "已撤回";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focus", 
+					"focus_cancle", 
+					businessFocus.getFocusId(), 
+					businessFocus.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			json = "{\"success\":\"true\",\"message\":\"撤回发布成功\"}";
 		} catch(Exception e) {
 			json = "{\"success\":\"true\",\"message\":\"撤回发布失败\"}"; 
@@ -336,6 +353,18 @@ public class BusinessFocusController {
 			businessFocus.setAuditTime(new Timestamp(System.currentTimeMillis()));
 		    
 			businessFocusService.update(businessFocus);
+			
+			String state = "审核通过";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focus", 
+					"focus_auditor", 
+					businessFocus.getFocusId(), 
+					businessFocus.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			if(!auditInfo.equals("")) { json = "{\"success\":\"true\",\"message\":\"拒绝成功\"}"; } 
 			else { json = "{\"success\":\"true\",\"message\":\"发布成功\"}"; }
@@ -405,6 +434,25 @@ public class BusinessFocusController {
 		    businessFocus.setStartTime(query.getStartTime());
 		    businessFocus.setEndTime(query.getEndTime());
 			businessFocusService.save(businessFocus);
+			
+			String state = "";
+			if(businessFocus.getState() == 0) {
+				state = "已发布";
+			} else if(businessFocus.getState() == 1) {
+				state = "未发布";
+			} else if(businessFocus.getState() == 2) {
+				state = "待审核";
+			}
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focus", 
+					"focus_save", 
+					businessFocus.getFocusId(), 
+					businessFocus.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			// 保存展示范围
 			String focusSope = query.getFocusScope();
@@ -490,6 +538,25 @@ public class BusinessFocusController {
 		    
 			businessFocusService.update(businessFocus);
 			
+			String state = "";
+			if(businessFocus.getState() == 0) {
+				state = "已发布";
+			} else if(businessFocus.getState() == 1) {
+				state = "未发布";
+			} else if(businessFocus.getState() == 2) {
+				state = "待审核";
+			}
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focus", 
+					"focus_edit", 
+					businessFocus.getFocusId(), 
+					businessFocus.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			// 删除展示范围
 			Map paramMap = new HashMap();
 			paramMap.put("focusId", query.getFocusId());
@@ -530,8 +597,9 @@ public class BusinessFocusController {
 	 * @return
 	 */
 	@RequestMapping(value="delete")
-	public void delete(@RequestParam(value="id") String id, HttpServletResponse response) {
+	public void delete(@RequestParam(value="id") String id, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
+		BusinessFocus businessFocus = businessFocusService.findById(new Integer(id));
 		try{
 			if(id != null) {
 				if(id.indexOf(',') > -1) {
@@ -540,7 +608,20 @@ public class BusinessFocusController {
 						businessFocusService.delete(new Integer(ids[i]));
 					}
 				}else{
-					businessFocusService.delete(new Integer(id));
+					boolean result = businessFocusService.delete(new Integer(id));
+					if(result){
+						String state = "已删除";
+						BusinessOpertaion entity = new BusinessOpertaion(
+								getUser().getUserId(), 
+								getUser().getUserName(), 
+								"focus", 
+								"focus_delete", 
+								businessFocus.getFocusId(), 
+								businessFocus.getTitle(), 
+								state,
+								request.getRemoteAddr());
+						businessOpertaionService.save(entity);
+					}
 					Map paramMap = new HashMap();
 					paramMap.put("focusId", new Integer(id));
 					List scopeList = appFocusScopeService.findByMap(paramMap);

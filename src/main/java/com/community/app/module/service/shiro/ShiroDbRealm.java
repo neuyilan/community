@@ -360,7 +360,7 @@ public class ShiroDbRealm extends AuthorizingRealm{
 			
 		//info.addRole(businessUser.getOrgType());
 		//获取所有有效权限
-		List roleFunctionList = businessRoleFunctionService.findRoleFunctionList(businessUser.getUserId());
+		List<?> roleFunctionList = businessRoleFunctionService.findRoleFunctionList(businessUser.getUserId());
 		for(int j=0;j<roleFunctionList.size();j++){
 			BusinessRoleFunction roleFunction = (BusinessRoleFunction) roleFunctionList.get(j);
 			info.addStringPermission(roleFunction.getFunctionCode());

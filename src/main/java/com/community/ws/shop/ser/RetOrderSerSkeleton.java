@@ -40,7 +40,7 @@ public class RetOrderSerSkeleton {
 	 */
 	public com.community.ws.shop.ser.RetOrderResponse retOrder(
 			com.community.ws.shop.ser.RetOrder retOrder) {
-
+		
 		// TODO : fill this with the necessary business logic
 		// throw new java.lang.UnsupportedOperationException("Please implement "
 		// + this.getClass().getName() + "#retOrder");

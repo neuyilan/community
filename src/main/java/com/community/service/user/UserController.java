@@ -381,7 +381,7 @@ public class UserController {
 	}
 	
 	/**
-	 * 用户使用电话和密码快速注册
+	 * 用户使用电话快速注册
 	 * 
 	 * @param cellphone
 	 *            ,password

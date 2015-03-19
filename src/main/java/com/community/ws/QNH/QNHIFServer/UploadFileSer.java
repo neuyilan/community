@@ -7,15 +7,21 @@ import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.activation.DataHandler;
 
 import net.sf.json.JSONObject;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.OMText;
+import org.apache.axis2.context.MessageContext;
+
 import com.community.framework.utils.CompressPicDemo;
+import com.community.ws.common.HeaderOMElement;
 /**
  *  @autor baidd 
- *  @desc 文件上传接口
+ *  @desc 2.1.8	文件上传接口
  *  参考实现：
  *  http://blog.csdn.net/thinkpadshi/article/details/8173765
  *  http://huangqiqing123.iteye.com/blog/1455169
@@ -27,10 +33,32 @@ public class UploadFileSer {
     public String uploadFile(String fileName,DataHandler dataHandler)  
     {
     	
-    	JSONObject retJson = new JSONObject();
+    	JSONObject json = new JSONObject();
+		json.element("errorCode", 200).element("message", "文件传输成功!");
+		MessageContext msgContext = MessageContext.getCurrentMessageContext();
+		/**暂时解决方案*/
+		Iterator<?> list = msgContext.getEnvelope().getBody().getFirstElement().getChildElements();
+		while (list.hasNext()) {
+			OMElement element = (OMElement) list.next();;
+			if (element.getLocalName().equals("fileName"))
+				fileName = element.getText();
+			OMText binaryNode ;
+			if (element.getLocalName().equals("dataHandler"))
+			{
+				binaryNode = (OMText) element.getFirstOMChild();
+				binaryNode.setOptimize(true); //必须加此句，否则会出现ContentID is null的异常!  
+				dataHandler = (DataHandler) binaryNode.getDataHandler();
+			}
+		}
+		
+		/**校验 qhn WS 用户密码*/
+		if(!HeaderOMElement.checkWSUser(msgContext))
+		{
+			json.element("errorCode", 400).element("message", "新增活动失败 ， 用户名或密码错误！");
+			return json.toString();
+		}
+    	
         OutputStream os = null; 
-        retJson.element("errorCode", 200);
-        retJson.element("message", "文件传输成功！");
         JSONObject retJsonChild = new JSONObject();
         String picPath = "";
         File tmpfile =  null;
@@ -58,27 +86,25 @@ public class UploadFileSer {
             tmpfile = new File(java.net.URLDecoder.decode(picPath,"utf-8") );
             System.out.println("------>"+tmpfile.length()/1024);
             retJsonChild.element("filePath", retPath);
-            retJson.put("data", retJsonChild);
+            json.put("data", retJsonChild);
         }catch (Exception e){  
             e.printStackTrace();  
-            retJson.element("errorCode", 400);
-            retJson.element("message", "文件传输失败！");
+            json.element("errorCode", 400).element("message", "文件传输失败！");
             retJsonChild = new JSONObject();
             retJsonChild.element("filePath", "");
-            retJson.put("data", retJsonChild);
+            json.put("data", retJsonChild);
            // return retJson.toString();  // return放在try-finally块中不合理
         }finally{  
             try {
                 os.close();
             } catch (IOException e){
-                retJson.element("errorCode", 400);
-                retJson.element("message", "文件传输失败！");
+                json.element("errorCode", 400).element("message", "文件传输失败！");
                 retJsonChild = new JSONObject();
                 retJsonChild.element("filePath", "");
                 e.printStackTrace();
             }     
         }  
-        if ("200".equals(String.valueOf(retJson.get("errorCode"))))
+        if ("200".equals(String.valueOf(json.get("errorCode"))))
         {
         	/*压缩图片对方实现 */
         	System.out.println("tmp"+File.separator);
@@ -96,7 +122,7 @@ public class UploadFileSer {
         	}
         }
         
-        return retJson.toString();  
+        return json.toString();  
     }  
     /* 
      * 文件下载服务 

@@ -35,6 +35,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessHealthydietCommentQuery;
 import com.community.app.module.vo.BusinessHealthydietQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessHealthydiet")
@@ -112,8 +113,8 @@ public class BusinessHealthydietController {
 				BusinessHealthydiet businessHealthydiet = (BusinessHealthydiet) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"healId\":\"").append(businessHealthydiet.getHealId()).append("\"").append(",")
-			    .append("\"healTitle\":\"").append(businessHealthydiet.getHealTitle()).append("\"").append(",")
-			    .append("\"healContent\":\"").append(businessHealthydiet.getHealContent().replaceAll("(\r?\n()+)", "").replace("\"", "\\\"")).append("\"").append(",")
+			    .append("\"healTitle\":\"").append(JsonUtils.stringToJson(businessHealthydiet.getHealTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
+			    .append("\"healContent\":\"").append("").append("\"").append(",")
 			    .append("\"cmhcPic\":\"").append(businessHealthydiet.getCmhcPic()).append("\"").append(",")
 			    .append("\"appPic\":\"").append(businessHealthydiet.getAppPic()).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessHealthydiet.getPublisherId()).append("\"").append(",")

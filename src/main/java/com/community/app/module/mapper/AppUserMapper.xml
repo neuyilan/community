@@ -40,6 +40,7 @@
         <result column="baiduId" property="baiduId" />
         <result column="channelId" property="channelId" />
         <result column="deviceType" property="deviceType" />
+        <result column="comName" property="comName" />
     </resultMap>
 
     <!-- 所有字段 -->
@@ -255,7 +256,7 @@
 	
 	<!-- AppUser根据搜索条件，搜索分页数据  针对物业  -->
 	<select id="findAllPageByProperty" resultMap="AppUserResult" parameterType="Object">
-		select <include refid="Base_Column_List" /> from app_user u
+		select <include refid="Base_Column_List" />, bc.comName from app_user u
 		<!-- inner join app_estate_user aeu on aeu.userId = u.userId -->
 		inner join (
 				SELECT distinct estateId 
@@ -272,6 +273,8 @@
 				</if>
 					
 			)res on res.estateId = u.estateId 
+		inner join manage_estate e on e.estateId = u.estateId
+		inner join business_community bc on bc.comId = e.comId
 		<include refid="Base_Where_Clause" />
 		group by u.userId
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -317,6 +320,8 @@
 				</if>
 					
 			)res on res.estateId = u.estateId
+		inner join manage_estate e on e.estateId = u.estateId
+		inner join business_community bc on bc.comId = e.comId
 		<include refid="Base_Where_Clause" />
 		group by u.userId
 		) as cc

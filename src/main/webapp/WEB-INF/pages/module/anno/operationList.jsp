@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>运营公告管理</title>
         <%@include file="/common/meta.jsp"%>
         <script src="<%=ctx%>/js/anno/anno.js" type="text/javascript"></script>
         <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
@@ -472,9 +472,9 @@
 	            }
 	            
 	            if(data.annoType == 4){
-	            	$('#viewInter').html("预览地址：<%=ctx %>/service/station/<br>getStationDetailsById.json?ID="+annoId+"&userId=0" );
+	            	$('#viewInter').html("预览地址：http://wx.bqsqcm.com/wxokjia/gonggao_info.php?userId=0&ID=63");
 	            }else if(data.annoType == 0){
-					$('#viewInter').html("预览地址：<%=ctx %>/service/property/<br>getPopertyDetailsById.json?ID="+annoId+"&userId=0" );
+	            	$('#viewInter').html("预览地址：http://wx.bqsqcm.com/wxokjia/wuye_info.php?userId=0&ID=152");
 	            } else {
 	            	$("#viewInter").css('display','none'); 
 			         $("#hr2").css('display','none'); 

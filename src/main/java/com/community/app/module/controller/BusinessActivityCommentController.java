@@ -27,6 +27,7 @@ import com.community.app.module.service.BusinessActivityService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityCommentQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessActivityComment")
@@ -80,7 +81,7 @@ public class BusinessActivityCommentController {
 			    .append("\"commentId\":\"").append(businessActivityComment.getCommentId()).append("\"").append(",")
 			    .append("\"actId\":\"").append(businessActivityComment.getActId()).append("\"").append(",")
 			    .append("\"commentor\":\"").append(businessActivityComment.getCommentor()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessActivityComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessActivityComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessActivityComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessActivityComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessActivityComment.getReplyName()).append("\"").append(",")

@@ -67,8 +67,17 @@ public class AppUserQuery extends BaseBean {
 	private String ids;
 	private String[] comIdArray;
 	private Integer curComId;
+	private String comName;
 	
-    public Integer getCurComId() {
+    public String getComName() {
+		return comName;
+	}
+
+	public void setComName(String comName) {
+		this.comName = comName;
+	}
+
+	public Integer getCurComId() {
 		return curComId;
 	}
 

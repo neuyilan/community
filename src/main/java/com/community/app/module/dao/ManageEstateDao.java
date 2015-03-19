@@ -74,6 +74,14 @@ public interface ManageEstateDao {
 	 * @throws DaoException
 	 */	
 	public List<ManageEstate> findByExample(final ManageEstateQuery query) throws DaoException;	
+	
+	/**
+	 * 按VO对象条件查询所有ManageEstate
+	 * @param entity
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<ManageEstate> findBy3Km(final ManageEstateQuery query) throws DaoException;	
 
 	/**
 	 * 按VO对象条件查询所有ManageEstate-限制返回条数

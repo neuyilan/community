@@ -33,6 +33,7 @@ import com.community.app.module.service.BusinessNewspaperService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessNewspaperQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessNewspaper")
@@ -128,7 +129,7 @@ public class BusinessNewspaperController {
 				BusinessNewspaper businessNewspaper = (BusinessNewspaper) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"newspaperId\":\"").append(businessNewspaper.getNewspaperId()).append("\"").append(",")
-			    .append("\"title\":\"").append(businessNewspaper.getTitle()).append("\"").append(",")
+			    .append("\"title\":\"").append(JsonUtils.stringToJson(businessNewspaper.getTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"pic\":\"").append(businessNewspaper.getPic()).append("\"").append(",")
 			    .append("\"url\":\"").append(businessNewspaper.getUrl()).append("\"").append(",")
 			    .append("\"comId\":\"").append(businessNewspaper.getComId()).append("\"").append(",")

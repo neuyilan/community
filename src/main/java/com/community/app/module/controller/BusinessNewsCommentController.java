@@ -27,6 +27,7 @@ import com.community.app.module.service.BusinessNewsCommentService;
 import com.community.app.module.service.BusinessNewsService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessNewsCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessNewsComment")
@@ -75,7 +76,7 @@ public class BusinessNewsCommentController {
 			    .append("\"newsId\":\"").append(businessNewsComment.getNewsId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessNewsComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessNewsComment.getCommentorName()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessNewsComment.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessNewsComment.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessNewsComment.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessNewsComment.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessNewsComment.getReplyName()).append("\"")

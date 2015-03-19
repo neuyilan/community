@@ -124,7 +124,7 @@
 											<c:if test="${fn:length(obj.pics)>0 &&obj.pics != 'null'  && obj.audios != ''}">
 				                        		<c:set value="${ fn:split(obj.pics, ',') }" var="pics" />
 												<c:forEach items="${pics}" var="pic">
-												 	<img  src="${ip}${pic}" style="max-width:500px; height:auto;"/><br />
+												 	<img  src="${ctx}${pic}" style="max-width:500px; height:auto;"/><br />
 												</c:forEach>
 											</c:if>
 											
@@ -135,9 +135,9 @@
 														<!--是否自动播放-->
 														<param name="AutoStart" value="">
 														<!--播放的文件地址-->
-														<param name="Filename" value="${ip}${audio}" valuetype="ref">
+														<param name="Filename" value="${ctx}${audio}" valuetype="ref">
 													</object> --%>
-													<script type="text/javascript">pv_q("${ip}${audio}",100,32);</script>
+													<script type="text/javascript">pv_q("${ctx}${audio}",100,32);</script>
 												</c:forEach>
 											</c:if>
 		                        	</div>
@@ -173,9 +173,9 @@
 																<!--是否自动调整播放大小-->
 																<param name="AutoStart" value="">
 																<!--播放的文件地址-->
-																<param name="Filename" value="${ip}${list.comment}" valuetype="ref">
+																<param name="Filename" value="${ctx}${list.comment}" valuetype="ref">
 															</object> --%>
-															<script type="text/javascript">pv_q("${ip}${list.comment}",100,32);</script>
+															<script type="text/javascript">pv_q("${ctx}${list.comment}",100,32);</script>
 										              		<i></i>
 										              </p><%--语音--%>
 										       </c:when>

@@ -15,7 +15,7 @@
 <c:choose>
       <c:when test="${businessActivityParticipate.rank <= ranks}">
       	<p class="sortdes">
-		    您当前排名第<span>${businessActivityParticipate.rank}</span>位，恭喜您获得今天的奖品，请于次日尽快去您所属的驿站领取！
+		    您当前排名第<span>${businessActivityParticipate.rank}</span>位，恭喜您获得今天的奖品！
 		</p>
       </c:when>
       <c:when test="${businessActivityParticipate.rank > ranks}">

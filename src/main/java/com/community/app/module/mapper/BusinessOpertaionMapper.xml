@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessOpertaionDao">
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessOpertaionResult" type="BusinessOpertaion">
+		<result column="operId" property="operId" />
+		<result column="operUserId" property="operUserId" />
+		<result column="operUserName" property="operUserName" />
+		<result column="operIp" property="operIp" />
+		<result column="typeId" property="typeId" />
+		<result column="attrId" property="attrId" />
+		<result column="funcId" property="funcId" />
+		<result column="funcTitle" property="funcTitle" />
+		<result column="state" property="state" />
+		<result column="logTime" property="logTime" />
+	</resultMap>
+
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List">
+		operId,
+		operUserId,
+		operUserName,
+		operIp,
+		typeId,
+		attrId,
+		funcId,
+		funcTitle,
+		state,
+		logTime
+	</sql>
+
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim suffixOverrides=",">
+				<if test="operId != null and operId != ''">
+					and operId = #{operId}
+				</if>
+				<if test="operUserId != null and operUserId != ''">
+					and operUserId = #{operUserId}
+				</if>
+				<if test="operUserName != null and operUserName != ''">
+					and operUserName = #{operUserName}
+				</if>
+				<if test="operIp != null and operIp != ''">
+					and operIp = #{operIp}
+				</if>
+				<if test="typeId != null and typeId != ''">
+					and typeId = #{typeId}
+				</if>
+				<if test="attrId != null and attrId != ''">
+					and attrId = #{attrId}
+				</if>
+				<if test="funcId != null and funcId != ''">
+					and funcId = #{funcId}
+				</if>
+				<if test="funcTitle != null and funcTitle != ''">
+					and funcTitle = #{funcTitle}
+				</if>
+				<if test="state != null and state != ''">
+					and state = #{state}
+				</if>
+				<if test="logTime != null and logTime != ''">
+					and logTime = #{logTime}
+				</if>
+			</trim>
+		</where>
+	</sql>
+
+	<!-- 根据id查询 BusinessOpertaion -->
+	<select id="findById" resultMap="BusinessOpertaionResult"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from business_opertaion where operId = #{id}
+	</select>
+
+	<!-- 无条件查询所有BusinessOpertaion -->
+	<select id="findAll" resultMap="BusinessOpertaionResult">
+		select
+		<include refid="Base_Column_List" />
+		from business_opertaion
+	</select>
+
+	<!-- 按Map对象条件查询所有BusinessOpertaion -->
+	<select id="findByMap" resultMap="BusinessOpertaionResult"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from business_opertaion
+		<include refid="Base_Where_Clause" />
+	</select>
+
+	<!-- 按VO对象条件查询所有BusinessOpertaion -->
+	<select id="findByExample" resultMap="BusinessOpertaionResult"
+		parameterType="com.community.app.module.vo.BusinessOpertaionQuery">
+		select
+		<include refid="Base_Column_List" />
+		from business_opertaion
+		<include refid="Base_Where_Clause" />
+	</select>
+
+	<!-- BusinessOpertaion根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessOpertaionResult"
+		parameterType="Object">
+		select
+		<include refid="Base_Column_List" />
+		from business_opertaion
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<!-- BusinessOpertaion列表总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from business_opertaion
+		<include refid="Base_Where_Clause" />
+	</select>
+
+	<!-- BusinessOpertaion保存数据 -->
+	<insert id="save" parameterType="BusinessOpertaion">
+		<selectKey resultType="java.lang.Integer" order="AFTER"
+			keyProperty="operId">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into business_opertaion(
+
+		operUserId,
+		operUserName,
+		operIp,
+		typeId,
+		attrId,
+		funcId,
+		funcTitle,
+		state,
+		logTime
+		) values(
+		#{operUserId},
+		#{operUserName},
+		#{operIp},
+		#{typeId},
+		#{attrId},
+		#{funcId},
+		#{funcTitle},
+		#{state},
+		#{logTime}
+		)
+	</insert>
+
+	<!-- BusinessOpertaion修改数据 -->
+	<update id="update" parameterType="BusinessOpertaion">
+		update business_opertaion
+		<set>
+			<if test="operUserId != null and operUserId != ''">
+				operUserId=#{operUserId},
+			</if>
+			<if test="operUserName != null and operUserName != ''">
+				operUserName=#{operUserName},
+			</if>
+			<if test="operIp != null and operIp != ''">
+				operIp=#{operIp},
+			</if>
+			<if test="typeId != null and typeId != ''">
+				typeId=#{typeId},
+			</if>
+			<if test="attrId != null and attrId != ''">
+				attrId=#{attrId},
+			</if>
+			<if test="funcId != null and funcId != ''">
+				funcId=#{funcId},
+			</if>
+			<if test="funcTitle != null and funcTitle != ''">
+				funcTitle=#{funcTitle},
+			</if>
+			<if test="state != null and state != ''">
+				state=#{state},
+			</if>
+			<if test="logTime != null and logTime != ''">
+				logTime=#{logTime}
+			</if>
+		</set>
+		where
+		operId=#{operId}
+	</update>
+
+	<!-- BusinessOpertaion删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_opertaion
+		where
+		operId=#{operId}
+	</delete>
+</mapper>

@@ -19,6 +19,7 @@ import com.community.app.module.bean.BusinessActivityMessage;
 import com.community.app.module.service.BusinessActivityMessageService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityMessageQuery;
+import com.community.framework.utils.JsonUtils;
 
 
 @Controller
@@ -62,7 +63,7 @@ public class BusinessActivityMessageController {
 				result.append("{")
 			    .append("\"messageId\":\"").append(businessActivityMessage.getMessageId()).append("\"").append(",")
 			    .append("\"actId\":\"").append(businessActivityMessage.getActId()).append("\"").append(",")
-			    .append("\"content\":\"").append(businessActivityMessage.getContent()).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessActivityMessage.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessActivityMessage.getPublisherId()).append("\"").append(",")
 			    .append("\"publisherName\":\"").append(businessActivityMessage.getPublisherName()).append("\"").append(",")
 			    .append("\"publishTime\":\"").append(businessActivityMessage.getPublishTime()).append("\"").append(",")

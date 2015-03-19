@@ -251,10 +251,11 @@ $('#commentDiv').append('<div class="no-float"></div>');
 					昵　　称：<span class="user" style="font-size:16px; color:#000;">${businessHelp.nickname}</span><br> 
 					电	　　话：<span class="user" style="font-size:16px; color:#000;">${businessHelp.tel}</span><br> 
 					所属小区：<span class="com" style="font-size:16px; color:#000;">${businessHelp.estateName}</span><br>
-					社区聊吧时间：<span class="com" style="font-size:16px; color:#000;"><time><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm" /></time></span>
+					社区聊吧时间：<span class="com" style="font-size:16px; color:#000;"><time><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm" /></time></span><br>
+					预览地址：<span class="com" style="font-size:16px; color:#000;">http://wx.bqsqcm.com/wxokjia/chat_info.php?ID=4863</span>
 					</div>
-					<p style="margin-top:40px;" class="newsdeta"></p>
-					<hr style=" background: #9e9e9e; border: none; height: 1px; margin: 18px 0 18px; width: 100%;" class="link">
+					<p style="margin-top:60px;" class="newsdeta"></p>
+					<hr style=" background: #9e9e9e; border: none; height: 1px; margin: 28px 0 18px; width: 100%;" class="link">
 					<div style="margin-left:10px; margin-bottom:15px;">${businessHelp.helpContent}</div>
 					<c:forEach items="${list}" var="list" varStatus="status">
 						<div style="text-align:center;"><img src="<%=path %>${list.picUrl}"></div><br>

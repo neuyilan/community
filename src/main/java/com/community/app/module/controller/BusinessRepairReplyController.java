@@ -21,6 +21,7 @@ import com.community.app.module.service.BusinessRepairReplyService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessRepairReplyQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessRepairReply")
@@ -65,7 +66,7 @@ public class BusinessRepairReplyController {
 			    .append("\"commentorId\":\"").append(businessRepairReply.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessRepairReply.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessRepairReply.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessRepairReply.getComment()).append("\"").append(",")
+			    .append("\"comment\":\"").append(businessRepairReply.getComment().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessRepairReply.getCommentTime()).append("\"")
 				.append("}").append(",");
 			}

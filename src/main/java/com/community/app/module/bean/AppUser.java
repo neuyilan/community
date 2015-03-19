@@ -56,7 +56,16 @@ public class AppUser implements java.io.Serializable{
 	private String wenxinId;
 	private String qqId;
 	private Integer comId;
+	private String comName;
 	
+	public String getComName() {
+		return comName;
+	}
+
+	public void setComName(String comName) {
+		this.comName = comName;
+	}
+
 	public Integer getComId() {
 		return comId;
 	}

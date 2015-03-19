@@ -45,6 +45,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessChargeAnnoQuery;
 import com.community.app.module.vo.BusinessChargerQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.excel.CheckExcel;
 import com.community.framework.utils.excel.PaseExcel;
 
@@ -126,7 +127,7 @@ public class BusinessChargeAnnoController {
 				result.append("{")
 			    .append("\"reportId\":\"").append(businessChargeAnno.getReportId()).append("\"").append(",")
 			    .append("\"reportName\":\"").append(businessChargeAnno.getReportName()).append("\"").append(",")
-			    .append("\"reportDesc\":\"").append(businessChargeAnno.getReportDesc()).append("\"").append(",")
+			    .append("\"reportDesc\":\"").append(JsonUtils.stringToJson(businessChargeAnno.getReportDesc().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"reportExcel\":\"").append(businessChargeAnno.getReportExcel()).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessChargeAnno.getPublisherId()).append("\"").append(",")
 			    .append("\"publisherName\":\"").append(businessChargeAnno.getPublisherName()).append("\"").append(",")

@@ -327,7 +327,7 @@
 	            	$("#auditInfo1").css('display','none'); 
 			         $("#hr1").css('display','none'); 
 	            }
-	            $('#viewInter').html("预览地址：<%=ctx %>/service/activities/<br>getActivitiesDetailsById.json?ID="+data.actId+"&userId=0" );
+	            $('#viewInter').html("预览地址：http://wx.bqsqcm.com/wxokjia/activity-info.php?ID="+data.actId);
 	            
 	          	//参与，查看，编辑，点赞
 	            var comStr = '<div class="s-xw-ic"><i class="cyr">'+data.particpates+'</i><i class="rev">'+data.comments+'</i><i class="look">'+data.visits+'</i><i id="block6" class="help">'+data.supports+'</i></div>';

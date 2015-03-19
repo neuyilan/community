@@ -18,6 +18,7 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +116,7 @@ public class serviceController {
 				AppUser MemberVO = appUserService.findById(query.getUserId());
 				appUserService.updateBaiduId(appUser);
 				appUserService.update(appUser);
-				if (!query.getChannelId().equals(MemberVO.getChannelId()) && !query.getBaiduId().equals(MemberVO.getBaiduId())) {
+				if (!StringUtils.trimToEmpty(query.getChannelId()).equals(MemberVO.getChannelId()) && !StringUtils.trimToEmpty(query.getBaiduId()).equals(MemberVO.getBaiduId())) {
 					if(MemberVO.getBaiduId() != null && !"".equals(MemberVO.getBaiduId()) && MemberVO.getChannelId() != null && !"".equals(MemberVO.getChannelId())) {
 		        		if(MemberVO.getDeviceType()==4){
 		        			String typeString="";

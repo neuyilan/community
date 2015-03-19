@@ -417,28 +417,34 @@ function jump(nextNo) {
 		    }
 		});
 }
-
 function msgbox(title,content,btn,fun,btn2){
 	 $(".tk").remove();
 	 var tk=$("<div class='tk'></div>");
+	 var ttotal=$("<div class='ttotal'></div>");
 	 var tcontent=$("<div class='tcontent'></div>");
-	 tk.append(tcontent);
-	 if(title!=""){
-		 tcontent.append("<p class='title'>"+title+"</p>");
-	 }
+	 tk.append(ttotal);
+	 ttotal.append(tcontent)
+	 
 	 tcontent.append("<div class='thead'><p>"+content+"</p></div>");
-	 tcontent.append("<div class='tbtn'></div>");
+	 
 	 var tbtn = $("<div class='tbtn'></div>");
 	 tcontent.append(tbtn);
 	 var btnA = $("<a>"+btn+"</a>");
-	 tbtn.append(btnA);
+	 
 	 if(btn2!=null && btn2!="" && btn2!=undefined){
-		 var btnB = $("<a style='margin-left:20px'>"+btn2+"</a>");
+		 var btnB = $("<a class='cancel' style=' background-color:#b7b7b7'>"+btn2+"</a>");
 		 tbtn.append(btnB);
 		 btnB.click(function(){
 			 $(".tk").remove();
 		 });
+		 
+		 var btnA = $("<a style='margin-left: 20px;'>"+btn+"</a>");
 	 }
+	 tbtn.append(btnA);
+	 
+	 tcontent.append("<i class='tkt'></i><i class='tkr'></i>")
+	 $(".ttotal").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+	
 	 $("body").append(tk);
 	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
 	 btnA.click(function(){

@@ -40,6 +40,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessHelpCommentQuery;
 import com.community.app.module.vo.BusinessHelpQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessHelp")
@@ -129,7 +130,7 @@ public class BusinessHelpController {
 			    .append("\"helperId\":\"").append(businessHelp.getHelperId()).append("\"").append(",")
 			    .append("\"helperName\":\"").append(businessHelp.getHelperName()).append("\"").append(",")
 			    .append("\"helpTime\":\"").append(businessHelp.getHelpTime()).append("\"").append(",")
-			    .append("\"helpContent\":\"").append(businessHelp.getHelpContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"helpContent\":\"").append(JsonUtils.stringToJson(businessHelp.getHelpContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"helpType\":\"").append(businessHelp.getHelpType()).append("\"").append(",")
 			    .append("\"estateId\":\"").append(businessHelp.getEstateId()).append("\"").append(",")
 			    .append("\"estateName\":\"").append(businessHelp.getEstateName()).append("\"").append(",")

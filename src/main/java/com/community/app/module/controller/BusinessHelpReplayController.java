@@ -19,6 +19,7 @@ import com.community.app.module.bean.BusinessHelpReplay;
 import com.community.app.module.service.BusinessHelpReplayService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessHelpReplayQuery;
+import com.community.framework.utils.JsonUtils;
 
 
 @Controller
@@ -64,7 +65,7 @@ public class BusinessHelpReplayController {
 			    .append("\"helpId\":\"").append(businessHelpReplay.getHelpId()).append("\"").append(",")
 			    .append("\"commentorId\":\"").append(businessHelpReplay.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessHelpReplay.getCommentorName()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessHelpReplay.getComment().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"comment\":\"").append(JsonUtils.stringToJson(businessHelpReplay.getComment().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessHelpReplay.getCommentTime()).append("\"").append(",")
 			    .append("\"replyId\":\"").append(businessHelpReplay.getReplyId()).append("\"").append(",")
 			    .append("\"replyName\":\"").append(businessHelpReplay.getReplyName()).append("\"")

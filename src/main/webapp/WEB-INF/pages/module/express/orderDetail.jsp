@@ -122,18 +122,18 @@
 										 		<!--是否自动播放-->
 												<param name="AutoStart" value="">
 												<!--播放的文件地址-->
-												<param name="Filename" value="${ip}${resolve.resolveMemo}" valuetype="ref">
+												<param name="Filename" value="${ctx}${resolve.resolveMemo}" valuetype="ref">
 											</object> --%>
-											<!-- <script type="text/javascript">pv_q("${ip}${resolve.resolveMemo}",100,32);</script> -->
+											<!-- <script type="text/javascript">pv_q("${ctx}${resolve.resolveMemo}",100,32);</script> -->
 											<object width="100" height="32" classid="clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B" codebase="http://www.apple.com/qtactivex/qtplugin.cab"> 
-												<param name="src" value="${ip}${resolve.resolveMemo}"> 
+												<param name="src" value="${ctx}${resolve.resolveMemo}"> 
 												<param name="controller" value="true"> 
 												<param name="type" value="video/quicktime"> 
 												<param name="autoplay" value="false"> 
 												<param name="target" value="myself"> 
 												<param name="bgcolor" value="black"> 
 												<param name="pluginspage" value="http://www.apple.com/quicktime/download/index.html"> 
-												<embed src="${ip}${resolve.resolveMemo}" width="100" height="32" controller="true" align="middle" bgcolor="black" target="myself" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/index.html"></embed> 
+												<embed src="${ctx}${resolve.resolveMemo}" width="100" height="32" controller="true" align="middle" bgcolor="black" target="myself" type="video/quicktime" pluginspage="http://www.apple.com/quicktime/download/index.html"></embed> 
 											</object> 
 										</c:when>
 										<c:otherwise>

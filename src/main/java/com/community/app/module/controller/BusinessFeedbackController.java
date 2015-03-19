@@ -38,6 +38,7 @@ import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessFeedbackQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 
 @Controller
@@ -429,7 +430,7 @@ public class BusinessFeedbackController {
                     .append("\"fberId\":\"").append(businessFeedback.getFberId()).append("\"").append(",")
                     .append("\"fberName\":\"").append(businessFeedback.getFberName()).append("\"").append(",")
                     .append("\"fbTime\":\"").append(businessFeedback.getFbTime()).append("\"").append(",")
-                    .append("\"fbContent\":\"").append(businessFeedback.getFbContent()).append("\"").append(",")
+                    .append("\"fbContent\":\"").append(JsonUtils.stringToJson(businessFeedback.getFbContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
                     .append("\"fbType\":\"").append(businessFeedback.getFbType()).append("\"").append(",")
                     .append("\"fbState\":\"").append(businessFeedback.getFbState()).append("\"").append(",")
                     .append("\"fbReplies\":\"").append(businessFeedback.getFbReplies()).append("\"").append(",")

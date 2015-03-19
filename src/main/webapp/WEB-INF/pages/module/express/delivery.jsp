@@ -160,9 +160,9 @@
 										 		<!--是否自动播放-->
 												<param name="AutoStart" value="">
 												<!--播放的文件地址-->
-												<param name="Filename" value="${ip}${resolve.resolveMemo}" valuetype="ref">
+												<param name="Filename" value="${ctx}${resolve.resolveMemo}" valuetype="ref">
 											</object> --%>
-											<script type="text/javascript">pv_q("${ip}${resolve.resolveMemo}",100,32);</script>
+											<script type="text/javascript">pv_q("${ctx}${resolve.resolveMemo}",100,32);</script>
 										</c:when>
 										<c:otherwise>
 												${fn:replace(resolve.resolveMemo, '\\r\\n', '<br />')}

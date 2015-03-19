@@ -307,11 +307,12 @@ public class weather {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		 JSONArray jsonArray = JSONArray.fromObject( "['111','111','111']" );  
-		 for (Object object : jsonArray) {
-			System.err.println(object);
-		}
-	     System.out.println( jsonArray );  
+		grabWeather();
+//		 JSONArray jsonArray = JSONArray.fromObject( "['111','111','111']" );  
+//		 for (Object object : jsonArray) {
+//			System.err.println(object);
+//		}
+//	     System.out.println( jsonArray );  
 	}
 
 }

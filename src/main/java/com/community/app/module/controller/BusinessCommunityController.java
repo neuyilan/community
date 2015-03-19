@@ -19,6 +19,7 @@ import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessCommunityQuery;
+import com.community.framework.utils.JsonUtils;
 
 
 @Controller
@@ -63,7 +64,7 @@ public class BusinessCommunityController {
 			    .append("\"comId\":\"").append(businessCommunity.getComId()).append("\"").append(",")
 			    .append("\"orgId\":\"").append(businessCommunity.getOrgId()).append("\"").append(",")
 			    .append("\"comName\":\"").append(businessCommunity.getComName()).append("\"").append(",")
-			    .append("\"comBrief\":\"").append(businessCommunity.getComBrief()).append("\"").append(",")
+			    .append("\"comBrief\":\"").append(businessCommunity.getComBrief().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
 			    .append("\"comService\":\"").append(businessCommunity.getComService()).append("\"").append(",")
 			    .append("\"comTel\":\"").append(businessCommunity.getComTel()).append("\"").append(",")
 			    .append("\"comEmail\":\"").append(businessCommunity.getComEmail()).append("\"").append(",")

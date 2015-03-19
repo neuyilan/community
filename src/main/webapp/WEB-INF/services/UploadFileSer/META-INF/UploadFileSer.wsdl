@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://QNHIFServer.QNH.ws.community.com"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	targetNamespace="http://QNHIFServer.QNH.ws.community.com">
+	<wsdl:documentation>UploadFileSer</wsdl:documentation>
+	<wsdl:types>
+		<xs:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified" targetNamespace="http://QNHIFServer.QNH.ws.community.com">
+			<xs:element name="OKSoapHeader">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" maxOccurs="1"
+							minOccurs="1" />
+						<xs:element name="passWord" type="xs:string" maxOccurs="1"
+							minOccurs="1" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="uploadFile">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="fileName" nillable="true"
+							type="xs:string" />
+						<xs:element minOccurs="0" name="dataHandler" nillable="true"
+							type="xs:base64Binary" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="uploadFileResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="return" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="OKSoapHeaderMsg">
+		<wsdl:part name="OKSoapHeaderPart" element="ns:OKSoapHeader" />
+	</wsdl:message>
+	<wsdl:message name="uploadFileRequest">
+		<wsdl:part name="parameters" element="ns:uploadFile" />
+	</wsdl:message>
+	<wsdl:message name="uploadFileResponse">
+		<wsdl:part name="parameters" element="ns:uploadFileResponse" />
+	</wsdl:message>
+	<wsdl:portType name="UploadFileSerPortType">
+		<wsdl:operation name="uploadFile">
+			<wsdl:input message="ns:uploadFileRequest" wsaw:Action="urn:uploadFile" />
+			<wsdl:output message="ns:uploadFileResponse" wsaw:Action="urn:uploadFileResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="UploadFileSerSoap11Binding" type="ns:UploadFileSerPortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="uploadFile">
+			<soap:operation soapAction="urn:uploadFile" style="document" />
+			<wsdl:input>
+		        <soap:header message="ns:OKSoapHeaderMsg" part="OKSoapHeaderPart" use="literal" ></soap:header>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="UploadFileSerSoap12Binding" type="ns:UploadFileSerPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="uploadFile">
+			<soap12:operation soapAction="urn:uploadFile" style="document" />
+			<wsdl:input>
+			    <soap12:header message="ns:OKSoapHeaderMsg" part="OKSoapHeaderPart" use="literal" ></soap12:header>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="UploadFileSerHttpBinding" type="ns:UploadFileSerPortType">
+		<http:binding verb="POST" />
+		<wsdl:operation name="uploadFile">
+			<http:operation location="UploadFileSer/uploadFile" />
+			<wsdl:input>
+				<mime:content type="text/xml" part="uploadFile" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" part="uploadFile" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="UploadFileSer">
+		<wsdl:port name="UploadFileSerHttpSoap11Endpoint" binding="ns:UploadFileSerSoap11Binding">
+			<soap:address
+				location="http://localhost2:8080/community/services/UploadFileSer.UploadFileSerHttpSoap11Endpoint/" />
+		</wsdl:port>
+		<wsdl:port name="UploadFileSerHttpSoap12Endpoint" binding="ns:UploadFileSerSoap12Binding">
+			<soap12:address
+				location="http://localhost2:8080/community/services/UploadFileSer.UploadFileSerHttpSoap12Endpoint/" />
+		</wsdl:port>
+		<wsdl:port name="UploadFileSerHttpEndpoint" binding="ns:UploadFileSerHttpBinding">
+			<http:address
+				location="http://localhost2:8080/community/services/UploadFileSer.UploadFileSerHttpEndpoint/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

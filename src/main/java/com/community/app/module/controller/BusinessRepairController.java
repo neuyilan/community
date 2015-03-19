@@ -39,6 +39,7 @@ import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessRepairQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 
 @Controller
@@ -161,7 +162,7 @@ public class BusinessRepairController {
                     .append("\"repairId\":\"").append(businessRepair.getRepairId()).append("\"").append(",")
                     .append("\"reporterId\":\"").append(businessRepair.getReporterId()).append("\"").append(",")
                     .append("\"repairTime\":\"").append(businessRepair.getRepairTime()).append("\"").append(",")
-                    .append("\"repairContent\":\"").append(businessRepair.getRepairContent()).append("\"").append(",")
+                    .append("\"repairContent\":\"").append(businessRepair.getRepairContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
                     .append("\"repairType\":\"").append(businessRepair.getRepairType()).append("\"").append(",")
                     .append("\"repairState\":\"").append(businessRepair.getRepairState()).append("\"").append(",")
                     .append("\"repairScore\":\"").append(businessRepair.getRepairScore()).append("\"").append(",")

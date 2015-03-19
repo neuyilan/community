@@ -13,6 +13,7 @@ import org.apache.axis2.client.ServiceClient;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
+import com.community.ws.common.HeaderOMElement;
 
 /**
  * @author Administrator 2.1.7 线上签到活动
@@ -21,7 +22,12 @@ public class OnlineCheckInCli {
 
 	private static EndpointReference targetEPR = new EndpointReference(DefaultConfig.getProperty("QHNSerAddr"));
 
-	public void signOnline() {
+	/**
+	 * @param QNHActId
+	 * @param cellphone
+	 */
+	public String signOnline(String QNHActId, String cellphone) {
+		String retStr = "" ;
 		Options options = new Options();
 		options.setAction("http://ok.com/MemberCheck");
 		options.setTo(targetEPR);
@@ -34,19 +40,23 @@ public class OnlineCheckInCli {
 			OMElement callMethod = fac.createOMElement("MemberCheck", omNs);
 			OMElement nameEle = fac.createOMElement("Json", omNs);
 			JSONArray jsonArry = new JSONArray();
-			jsonArry.add(0, new JSONObject().element("QNHActId", "229408").element("cellphone", "15945116753"));
+			jsonArry.add(0, new JSONObject().element("QNHActId", QNHActId).element("cellphone", cellphone));
 			System.out.println(jsonArry);
 
 			nameEle.setText(jsonArry.toString());
 			callMethod.addChild(nameEle);
 			long start = System.currentTimeMillis();
+			/**添加soapHeader */
+			sender.addHeader(HeaderOMElement.createHeaderOMElement(omNs));
 			sender.getOptions().setTimeOutInMilliSeconds(CommonData.TimeOutData.QHN_WS_TIMEOUT);
 			OMElement response = sender.sendReceive(callMethod);
 			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
-			System.out.println(response.getFirstElement().getText());
+			retStr = response.getFirstElement().getText();
+			System.out.println(retStr);
 		} catch (Exception e) {
+			retStr = "" ;
 			e.printStackTrace();
 		} finally {
 			if (sender != null)
@@ -54,14 +64,16 @@ public class OnlineCheckInCli {
 			try {
 				sender.cleanup();
 			} catch (Exception e) {
+				retStr = "" ;
 				e.printStackTrace();
 			}
 		}
+		return retStr;
 	}
 
 	public static void main(String[] args) {
 		OnlineCheckInCli onlineCheckInCli = new OnlineCheckInCli();
-		onlineCheckInCli.signOnline();
+		onlineCheckInCli.signOnline("229408", "15945116753");
 	}
 
 }

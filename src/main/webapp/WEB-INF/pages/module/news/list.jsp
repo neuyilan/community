@@ -121,7 +121,7 @@
 								<c:if test="${news.state == 3 }"><span class="relsta cred">未通过</span></c:if>
 								<c:if test="${news.state == 4 }"><span class="relsta cblue">已通过</span></c:if>
 								<c:if test="${news.state == 5 }"><span class="relsta cyellow">已撤回</span></c:if>
-								<c:if test="${news.isPush == 1 }"><span class="relsta cred" style="margin-left:10px;">已推送</span></c:if>
+								<c:if test="${news.isPush == 1 && news.state == 0 }"><span class="relsta cred" style="margin-left:10px;">已推送</span></c:if>
 								<div class="other-r">
 									<c:choose>
 									       <c:when test="${news.state == 0 && news.comments!=0}">
@@ -348,7 +348,7 @@ function jump(pageNo) {
 			            	state = '<span class="relsta cyellow">已撤回</span>';
 			            }
 	                	var push = '';
-	                	if(row.isPush == 1) {
+	                	if(row.isPush == 1 && row.state == 0) {
 	                		push += '<span class="relsta cred" style="margin-left:10px;">已推送</span>';
 			            }
 	                	var newsType = '';
@@ -588,7 +588,7 @@ function jump(pageNo) {
 	            $('#visits').html(data.visits);	//浏览量
 	            $('#supports').html(data.supports);	//支持量
 	            $('#auditInfo2').html("批注：" +data.auditInfo);	//审批原因
-	            $('#viewInter').html("预览地址：<%=ctx %>/service/commiunity<br>/getJournalismDetailsById.json?ID="+data.newsId+"&userId=0" );
+	            $('#viewInter').html("预览地址：http://wx.bqsqcm.com/wxokjia/news_info.php?ID="+data.newsId);
 	            var concatStr = "";
 	            if(data.editTime != null) {
 	            	concatStr+="<li><span class=\"xxl\">编辑人："+data.editor+"</span><span class=\"xxr\">编辑时间："+new Date(data.editTime.time).format('yyyy-MM-dd hh:mm')+"</span></li>";

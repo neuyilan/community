@@ -166,19 +166,12 @@ public class activitiesController {
 				BusinessActivity businessActivity = (BusinessActivity) topBaseBean.getList().get(i);
 				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName().replace("\\", "\\\\")+"\",\"time\":\""
 						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief().replace("\\", "\\\\")+"\",";
-				if(businessActivity.getState()==2){
-					if("".equals(businessActivity.getActPicNo()) || businessActivity.getActPicNo()==null  || businessActivity.getActPicNo().indexOf("/images/icon/")>=0){
-						json +="\"pic\":\"\",";
-					}else{
-						json +="\"pic\":\""+ip+businessActivity.getActPicNo()+"\",";
-					}
-				}else {
-					if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
-						json +="\"pic\":\"\",";
-					}else{
-						json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
-					}
+				if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
+					json +="\"pic\":\"\",";
+				}else{
+					json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
 				}
+				
 				if (businessActivity.getTypeId()==1 || businessActivity.getTypeId()==4) {
 					String startTime = businessActivity.getPublishDate() + " " + businessActivity.getPublishTime() + ":00";
 					//开始结束时间计算
@@ -215,18 +208,10 @@ public class activitiesController {
 				BusinessActivity businessActivity = (BusinessActivity) baseBean.getList().get(i);
 				json += "{\"ID\":\""+businessActivity.getActId()+"\",\"title\":\""+businessActivity.getActName().replace("\\", "\\\\")+"\",\"time\":\""
 						+businessActivity.getPublishTime()+"\",\"brief\":\""+businessActivity.getBrief().replace("\\", "\\\\")+"\",";
-				if(businessActivity.getState()==2){
-					if("".equals(businessActivity.getActPicNo()) || businessActivity.getActPicNo()==null  || businessActivity.getActPicNo().indexOf("/images/icon/")>=0){
-						json +="\"pic\":\"\",";
-					}else{
-						json +="\"pic\":\""+ip+businessActivity.getActPicNo()+"\",";
-					}
-				}else {
-					if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
-						json +="\"pic\":\"\",";
-					}else{
-						json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
-					}
+				if("".equals(businessActivity.getActPic()) || businessActivity.getActPic()==null  || businessActivity.getActPic().indexOf("/images/icon/")>=0){
+					json +="\"pic\":\"\",";
+				}else{
+					json +="\"pic\":\""+ip+businessActivity.getActPic()+"\",";
 				}
 				
 				if (businessActivity.getTypeId()==1 || businessActivity.getTypeId()==4) {
@@ -314,7 +299,9 @@ public class activitiesController {
 		ModelAndView mav = new ModelAndView("/service/activity");
 		Properties p = propertiesUtil.getProperties("config.properties");
 		String ip = p.getProperty("imageIp");   
-		String phpIp = p.getProperty("phpIp");   
+		String phpIp = p.getProperty("phpIp");
+		String activityIp = p.getProperty("activityIp");
+		
 		Integer ID = new Integer(request.getParameter("ID"));
 		//Integer ID = 11;
 		String sessionid = request.getParameter("sessionid");
@@ -364,6 +351,7 @@ public class activitiesController {
 			mav.addObject("state", activity.getState());//活动状态
 			mav.addObject("ranks", activity.getRank());//活动排位
 			mav.addObject("phpIp", phpIp);
+			mav.addObject("activityIp", activityIp);
 			String startTime = activity.getPublishDate() + " " + activity.getPublishTime() + ":00";
 			//开始结束时间计算
 			if(activity.getTypeId()==1 || activity.getTypeId()==3 || activity.getTypeId()==4){
@@ -1301,7 +1289,8 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(JsonUtils.stringToJson(json));
+			String jsoncallback = request.getParameter("jsoncallback");
+			response.getWriter().write(jsoncallback +"("+JsonUtils.stringToJson(json)+")");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1433,11 +1422,13 @@ public class activitiesController {
 		Map<String,Object> map = new HashMap<String,Object>();
 		ModelAndView mav = new ModelAndView("/service/receiveCoupon");
 		Properties p = propertiesUtil.getProperties("config.properties");
-		String ip = p.getProperty("imageIp");   
+		String ip = p.getProperty("imageIp");  
+		String activityIp = p.getProperty("activityIp");
 		try{
 			String path = request.getContextPath();
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
 			mav.addObject("ctx", ctx);
+			mav.addObject("activityIp", activityIp);
 			mav.addObject("userId", query.getUserId());
 			mav.addObject("actId", query.getID());
 		}catch(Exception e){
@@ -1551,7 +1542,8 @@ public class activitiesController {
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
-			response.getWriter().write(JsonUtils.stringToJson(json));
+			String jsoncallback = request.getParameter("jsoncallback");
+			response.getWriter().write(jsoncallback +"("+JsonUtils.stringToJson(json)+")");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1713,6 +1705,551 @@ public class activitiesController {
 		}
 		
 		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取活动详情
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getActivitiesDetails")
+	public void getActivitiesDetails(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"actPic\":\"http://b.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252d0d9b5d5b379b033b5ab5b9e5.jpg\",";
+			json += "\"actName\":\"社区美女\",";
+			json += "\"actName\":\"社区美女\",";
+			json += "\"startTime\":\"2014-1-1 00:00:00\",";
+			json += "\"endTime\":\"2014-1-2 12:00:00\",";
+			json += "\"actContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\",";
+			json += "\"state\":\"0\",";
+			json += "\"registrationEndTime\":\"2014-1-2 8:00:00\"";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取活动奖品接口
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getActivitiesPrizeList")
+	public void getActivitiesPrizeList(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"list\":[";
+			json += "{\"awardsName\":\"一等奖\",";
+			json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
+			json += "\"prizeQuota\":\"10\",";
+			json += "\"prizeName\":\"大米三袋\",";
+			json += "\"prizeRanking\":\"1-10\",";
+			json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
+			json += "},";
+			json += "{\"awardsName\":\"二等奖\",";
+			json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
+			json += "\"prizeQuota\":\"10\",";
+			json += "\"prizeName\":\"大米俩袋\",";
+			json += "\"prizeRanking\":\"10-20\",";
+			json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
+			json += "},";
+			json += "{\"awardsName\":\"三等奖\",";
+			json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
+			json += "\"prizeQuota\":\"10\",";
+			json += "\"prizeName\":\"大米一袋\",";
+			json += "\"prizeRanking\":\"20-30\",";
+			json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
+			json += "}";
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取活动排名
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getActivitiesRanking")
+	public void getActivitiesRanking(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"list\":[";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "},";
+			json += "{\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\"";
+			json += "}";
+			json += "]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取选手信息
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getActivitiesPlayerInfo")
+	public void getActivitiesPlayerInfo(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"nickname\":\"美女\",";
+			json += "\"estateName\":\"罗马嘉员东区\",";
+			json += "\"number\":\"10012\",";
+			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+			json += "\"contestantNo\":\"01\",";
+			json += "\"no\":\"1\",";
+			json += "\"brief\":\"简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介\",";
+			json += "\"Images\":[\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\"]";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取选手信息
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getActivitiesPrompt")
+	public void getActivitiesPrompt(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"prompt\":\"最多上传3张图片！！！\"";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 获取选手信息
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="saveActivitiesRegistration")
+	public void saveActivitiesRegistration(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\"";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {

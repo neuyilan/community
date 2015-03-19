@@ -30,6 +30,7 @@ import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppPushLog;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserConfig;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessProduct;
 import com.community.app.module.bean.BusinessProductPic;
 import com.community.app.module.bean.BusinessProductType;
@@ -40,6 +41,7 @@ import com.community.app.module.service.AppPushLogService;
 import com.community.app.module.service.AppUserConfigService;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessCommunityService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessProductCommentService;
 import com.community.app.module.service.BusinessProductPicService;
 import com.community.app.module.service.BusinessProductService;
@@ -74,6 +76,8 @@ public class BusinessProductController {
 	private BusinessProductTypeService businessProductTypeService;
 	@Autowired
 	private BusinessCommunityService businessCommunityService;
+	@Autowired
+	private BusinessOpertaionService businessOpertaionService;
 	
 	/**
 	 * 进入管理页
@@ -160,12 +164,12 @@ public class BusinessProductController {
 				BusinessProduct businessProduct = (BusinessProduct) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"productId\":\"").append(businessProduct.getProductId()).append("\"").append(",")
-			    .append("\"productName\":\"").append(businessProduct.getProductName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"productName\":\"").append(businessProduct.getProductName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessProduct.getPublisherId()).append("\"").append(",")
-			    .append("\"publisherName\":\"").append(businessProduct.getPublisherName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
-			    .append("\"content\":\"").append(businessProduct.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
-			    .append("\"title\":\"").append(businessProduct.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
-			    .append("\"contactName\":\"").append(businessProduct.getContactName().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"publisherName\":\"").append(businessProduct.getPublisherName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"content\":\"").append(businessProduct.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"title\":\"").append(businessProduct.getTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"contactName\":\"").append(businessProduct.getContactName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
 			    .append("\"contactTel\":\"").append(businessProduct.getContactTel()).append("\"").append(",")
 			    .append("\"contactQq\":\"").append(businessProduct.getContactQq()).append("\"").append(",")
 			    .append("\"typeId\":\"").append(businessProduct.getTypeId()).append("\"").append(",")
@@ -314,7 +318,7 @@ public class BusinessProductController {
 	 */
 	@RequestMapping(value="updateProductState")
 	public void updateProductState(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="id") String id, @RequestParam(value="auditInfo") String auditInfo) {
-		BusinessProduct businessProduct = new BusinessProduct();
+		BusinessProduct businessProduct = businessProductService.findProductById(Integer.parseInt(id));
 		String json = "";
 		try{
 			if(!auditInfo.equals("")) {
@@ -331,6 +335,19 @@ public class BusinessProductController {
 			businessProduct.setEditTime(new Timestamp(System.currentTimeMillis()));
 			
 			businessProductService.update(businessProduct);
+			
+			String state = "未通过";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"market", 
+					"market_auditor", 
+					businessProduct.getProductId(), 
+					businessProduct.getProductName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			//保存成功
 			if(businessProduct.getDealState() == 0) { 
 				json = "{\"success\":\"true\",\"message\":\"发布成功\"}"; 
@@ -428,7 +445,7 @@ public class BusinessProductController {
 	 */
 	@RequestMapping(value="delProductState")
 	public void delProductState(HttpServletRequest request, HttpServletResponse response, @RequestParam(value="id") String id, @RequestParam(value="auditInfo") String auditInfo) {
-		BusinessProduct businessProduct = new BusinessProduct();
+		BusinessProduct businessProduct = businessProductService.findProductById(Integer.parseInt(id));
 		String json = "";
 		try{
 			businessProduct.setDealState(4);  // 已删除
@@ -439,6 +456,18 @@ public class BusinessProductController {
 			businessProduct.setAuditTime(new Timestamp(System.currentTimeMillis()));
 			businessProduct.setEditTime(new Timestamp(System.currentTimeMillis()));
 			businessProductService.update(businessProduct);
+			
+			String state = "审核删除";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"market", 
+					"market_delete", 
+					businessProduct.getProductId(), 
+					businessProduct.getProductName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			json = "{\"success\":\"true\",\"message\":\"删除成功\"}";
 			if(businessProduct.getDealState() == 4) {
@@ -567,6 +596,18 @@ public class BusinessProductController {
 				businessProduct.setIsEstateAgent(1);
 			}
 			businessProductService.save(businessProduct);
+			
+			String state = "发布中";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"market", 
+					"market_save", 
+					businessProduct.getProductId(), 
+					businessProduct.getProductName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			if(query.getDealType() ==0 || query.getDealType() ==2){
 				if(query.getAppPic() != null) {

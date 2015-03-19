@@ -1,7 +1,5 @@
 package com.community.ws.QNH.QNHIFClient;
 
-import java.util.Iterator;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -9,11 +7,9 @@ import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
 import org.apache.axiom.om.OMNamespace;
-import org.apache.axis2.AxisFault;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
-import org.apache.axis2.context.MessageContext;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
@@ -26,10 +22,12 @@ public class MemberCheckCli {
 
 	private static EndpointReference targetEPR = new EndpointReference(DefaultConfig.getProperty("QHNSerAddr"));
 
-	public void memberCheck() {
-		
-		
-		
+	/**
+	 * @param cellphone
+	 * @return json 
+	 */
+	public String memberCheck(String cellphone) {
+		String str="";
 		Options options = new Options();
 		options.setAction("http://ok.com/MemberCheck");
 		options.setTo(targetEPR);
@@ -44,7 +42,7 @@ public class MemberCheckCli {
 			
 			
 			JSONArray jsonArry = new JSONArray();
-			jsonArry.add(0, new JSONObject().element("cellphone", "15945116753"));
+			jsonArry.add(0, new JSONObject().element("cellphone", cellphone));
 			System.out.println(jsonArry);
 
 			nameEle.setText(jsonArry.toString());
@@ -58,7 +56,9 @@ public class MemberCheckCli {
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
 			System.out.println(response.getFirstElement().getText());
+			str = response.getFirstElement().getText();
 		} catch (Exception e) {
+			str = "";
 			e.printStackTrace();
 		} finally {
 			if (sender != null)
@@ -66,14 +66,16 @@ public class MemberCheckCli {
 			try {
 				sender.cleanup();
 			} catch (Exception e) {
+				str = "";
 				e.printStackTrace();
 			}
 		}
+		return str;
 	}
 
 	public static void main(String[] args) {
 		MemberCheckCli memberCheckCli = new MemberCheckCli();
-		memberCheckCli.memberCheck();
+		memberCheckCli.memberCheck("15945116753");
 	}
 
 }

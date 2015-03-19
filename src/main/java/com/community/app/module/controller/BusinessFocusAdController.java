@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.AppFocusAdScope;
 import com.community.app.module.bean.BusinessFocusAd;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.CommunityBean;
@@ -33,11 +34,13 @@ import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppFocusAdScopeService;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessFocusAdService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessFocusAdQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessFocusAd")
@@ -53,6 +56,8 @@ public class BusinessFocusAdController {
 	private AppFocusAdScopeService appFocusAdScopeService;
 	@Autowired
 	private BusinessUserResourceService businessUserResourceService;
+	@Autowired
+	private BusinessOpertaionService businessOpertaionService;
 	
 	/**
 	 * 进入管理页
@@ -152,8 +157,8 @@ public class BusinessFocusAdController {
 				BusinessFocusAd businessFocusAd = (BusinessFocusAd) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"focusAdId\":\"").append(businessFocusAd.getFocusAdId()).append("\"").append(",")
-			    .append("\"title\":\"").append(businessFocusAd.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
-			    .append("\"content\":\"").append(businessFocusAd.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"title\":\"").append(JsonUtils.stringToJson(businessFocusAd.getTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
+			    .append("\"content\":\"").append("").append("\"").append(",")
 			    .append("\"picUrl\":\"").append(businessFocusAd.getPicUrl().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
 			    .append("\"sourceType\":\"").append(businessFocusAd.getSourceType()).append("\"").append(",")
 			    .append("\"sourceId\":\"").append(businessFocusAd.getSourceId()).append("\"").append(",")
@@ -255,7 +260,7 @@ public class BusinessFocusAdController {
 	}
 	
 	/**
-     * 查询广告焦点图详情信息
+     * 查询全网焦点图详情信息
      * @param query
      * @param response
      */
@@ -300,6 +305,18 @@ public class BusinessFocusAdController {
 			businessFocusAd.setAuditorName(shiroUser.getUserName());
 			businessFocusAdService.update(businessFocusAd);
 			
+			String state = "已撤回";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focusAd", 
+					"focusAd_cancle", 
+					businessFocusAd.getFocusAdId(), 
+					businessFocusAd.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			json = "{\"success\":\"true\",\"message\":\"撤回发布成功\"}";
 		} catch(Exception e) {
 			json = "{\"success\":\"true\",\"message\":\"撤回发布失败\"}"; 
@@ -342,6 +359,18 @@ public class BusinessFocusAdController {
 			businessFocusAd.setAuditTime(new Timestamp(System.currentTimeMillis()));
 		    
 			businessFocusAdService.update(businessFocusAd);
+			
+			String state = "审核通过";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focusAd", 
+					"focusAd_auditor", 
+					businessFocusAd.getFocusAdId(), 
+					businessFocusAd.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			if(!auditInfo.equals("")) { json = "{\"success\":\"true\",\"message\":\"拒绝成功\"}"; } 
 			else { json = "{\"success\":\"true\",\"message\":\"发布成功\"}"; }
@@ -412,6 +441,26 @@ public class BusinessFocusAdController {
 		    businessFocusAd.setIshtml(1);  // 静态
 		    businessFocusAd.setFocusAdScope(query.getFocusAdScopeInfo());
 			businessFocusAdService.save(businessFocusAd);
+			
+			String state = "";
+			if(businessFocusAd.getState() == 0) {
+				state = "已发布";
+			} else if(businessFocusAd.getState() == 1) {
+				state = "未发布";
+			} else if(businessFocusAd.getState() == 2) {
+				state = "待审核";
+			}
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focusAd", 
+					"focusAd_save", 
+					businessFocusAd.getFocusAdId(), 
+					businessFocusAd.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			// 保存展示范围
 			String focusSope = query.getFocusAdScope();
 			String[] focusSopes = focusSope.split(",");
@@ -497,6 +546,25 @@ public class BusinessFocusAdController {
 		    
 			businessFocusAdService.update(businessFocusAd);
 			
+			String state = "";
+			if(businessFocusAd.getState() == 0) {
+				state = "已发布";
+			} else if(businessFocusAd.getState() == 1) {
+				state = "未发布";
+			} else if(businessFocusAd.getState() == 2) {
+				state = "待审核";
+			}
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"focusAd", 
+					"focusAd_edit", 
+					businessFocusAd.getFocusAdId(), 
+					businessFocusAd.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			// 删除展示范围
 			Map paramMap = new HashMap();
 			paramMap.put("focusAdId", query.getFocusAdId());
@@ -538,8 +606,9 @@ public class BusinessFocusAdController {
 	 * @return
 	 */
 	@RequestMapping(value="delete")
-	public void delete(@RequestParam(value="id") String id, HttpServletResponse response) {
+	public void delete(@RequestParam(value="id") String id, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
+		BusinessFocusAd businessFocusAd = businessFocusAdService.findById(new Integer(id));
 		try{
 			if(id != null) {
 				if(id.indexOf(',') > -1) {
@@ -549,6 +618,19 @@ public class BusinessFocusAdController {
 					}
 				}else{
 					businessFocusAdService.delete(new Integer(id));
+					
+					String state = "已删除";
+					BusinessOpertaion entity = new BusinessOpertaion(
+							getUser().getUserId(), 
+							getUser().getUserName(), 
+							"focusAd", 
+							"focusAd_delete", 
+							businessFocusAd.getFocusAdId(), 
+							businessFocusAd.getTitle(), 
+							state,
+							request.getRemoteAddr());
+					businessOpertaionService.save(entity);
+					
 					Map paramMap = new HashMap();
 					paramMap.put("focusAdId", new Integer(id));
 					List scopeList = appFocusAdScopeService.findByMap(paramMap);

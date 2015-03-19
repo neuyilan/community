@@ -104,7 +104,7 @@
 		                        	<div class="s-bl-img">
 		                        		<c:if test="${fn:length(businessBreakPicList)>0 && businessBreakPicList != 'null'}">
 											<c:forEach items="${businessBreakPicList}" var="businessBreakPic" >
-			                             		<img id="${businessBreakPic.picId}"  src="${ip}${businessBreakPic.picUrl}" style="max-width:500px; height:auto;"/>
+			                             		<img id="${businessBreakPic.picId}"  src="${ctx}${businessBreakPic.picUrl}" style="max-width:500px; height:auto;"/>
 			                        		</c:forEach>
 										</c:if>
 		                        	</div>
@@ -114,9 +114,9 @@
 														<!--是否自动播放-->
 														<param name="AutoStart" value="">
 														<!--播放的文件地址-->
-														<param name="Filename" value="${ip}${businessBreakAudio.picUrl}" valuetype="ref">
+														<param name="Filename" value="${ctx}${businessBreakAudio.picUrl}" valuetype="ref">
 												</object> --%>
-												<script type="text/javascript">pv_q("${ip}${businessBreakAudio.picUrl}",100,32);</script>
+												<script type="text/javascript">pv_q("${ctx}${businessBreakAudio.picUrl}",100,32);</script>
 			                        	</c:forEach>
 			                        </c:if>
 		                        </div>
@@ -157,9 +157,9 @@
 																			<!--是否自动调整播放大小-->
 																			<param name="AutoStart" value="">
 																			<!--播放的文件地址-->
-																			<param name="Filename" value="${ip}${businessBreakComment.content}" valuetype="ref">
+																			<param name="Filename" value="${ctx}${businessBreakComment.content}" valuetype="ref">
 																		</object> --%>
-																		<script type="text/javascript">pv_q("${ip}${businessBreakComment.content}",100,32);</script>
+																		<script type="text/javascript">pv_q("${ctx}${businessBreakComment.content}",100,32);</script>
 													              		<i></i>
 													              </p><%--语音--%>
 													       </c:when>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://QNHIFServer.QNH.ws.community.com"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	targetNamespace="http://QNHIFServer.QNH.ws.community.com">
+	<wsdl:documentation>QNHOfflineRegActSer</wsdl:documentation>
+	<wsdl:types>
+		<xs:schema attributeFormDefault="qualified"
+			elementFormDefault="qualified" targetNamespace="http://QNHIFServer.QNH.ws.community.com">
+			<xs:element name="OKSoapHeader">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="userName" type="xs:string" maxOccurs="1"
+							minOccurs="1" />
+						<xs:element name="passWord" type="xs:string" maxOccurs="1"
+							minOccurs="1" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="regAct">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="reqStr" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="regActResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" name="return" nillable="true"
+							type="xs:string" />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:schema>
+	</wsdl:types>
+		<wsdl:message name="OKSoapHeaderMsg">
+		<wsdl:part name="OKSoapHeaderPart" element="ns:OKSoapHeader" />
+	</wsdl:message>
+	<wsdl:message name="regActRequest">
+		<wsdl:part name="parameters" element="ns:regAct" />
+	</wsdl:message>
+	<wsdl:message name="regActResponse">
+		<wsdl:part name="parameters" element="ns:regActResponse" />
+	</wsdl:message>
+	<wsdl:portType name="QNHOfflineRegActSerPortType">
+		<wsdl:operation name="regAct">
+			<wsdl:input message="ns:regActRequest" wsaw:Action="urn:regAct" />
+			<wsdl:output message="ns:regActResponse" wsaw:Action="urn:regActResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="QNHOfflineRegActSerSoap11Binding"
+		type="ns:QNHOfflineRegActSerPortType">
+		<soap:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="regAct">
+			<soap:operation soapAction="urn:regAct" style="document" />
+			<wsdl:input>
+			    <soap:header message="ns:OKSoapHeaderMsg" part="OKSoapHeaderPart" use="literal" ></soap:header>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="QNHOfflineRegActSerSoap12Binding"
+		type="ns:QNHOfflineRegActSerPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"
+			style="document" />
+		<wsdl:operation name="regAct">
+			<soap12:operation soapAction="urn:regAct" style="document" />
+			<wsdl:input>
+				<soap12:header message="ns:OKSoapHeaderMsg" part="OKSoapHeaderPart" use="literal" ></soap12:header>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:binding name="QNHOfflineRegActSerHttpBinding" type="ns:QNHOfflineRegActSerPortType">
+		<http:binding verb="POST" />
+		<wsdl:operation name="regAct">
+			<http:operation location="QNHOfflineRegActSer/regAct" />
+			<wsdl:input>
+				<mime:content type="text/xml" part="regAct" />
+			</wsdl:input>
+			<wsdl:output>
+				<mime:content type="text/xml" part="regAct" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="QNHOfflineRegActSer">
+		<wsdl:port name="QNHOfflineRegActSerHttpSoap11Endpoint"
+			binding="ns:QNHOfflineRegActSerSoap11Binding">
+			<soap:address
+				location="http://localhost:8080/community/services/QNHOfflineRegActSer.QNHOfflineRegActSerHttpSoap11Endpoint/" />
+		</wsdl:port>
+		<wsdl:port name="QNHOfflineRegActSerHttpSoap12Endpoint"
+			binding="ns:QNHOfflineRegActSerSoap12Binding">
+			<soap12:address
+				location="http://localhost:8080/community/services/QNHOfflineRegActSer.QNHOfflineRegActSerHttpSoap12Endpoint/" />
+		</wsdl:port>
+		<wsdl:port name="QNHOfflineRegActSerHttpEndpoint" binding="ns:QNHOfflineRegActSerHttpBinding">
+			<http:address
+				location="http://localhost:8080/community/services/QNHOfflineRegActSer.QNHOfflineRegActSerHttpEndpoint/" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -25,6 +25,7 @@ import com.community.app.module.service.BusinessFeedbackCommentService;
 import com.community.app.module.service.BusinessFeedbackService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessFeedbackCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessFeedbackComment")
@@ -73,7 +74,7 @@ public class BusinessFeedbackCommentController {
 			    .append("\"commentorId\":\"").append(businessFeedbackComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessFeedbackComment.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessFeedbackComment.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessFeedbackComment.getComment().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"comment\":\"").append(JsonUtils.stringToJson(businessFeedbackComment.getComment().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessFeedbackComment.getCommentTime()).append("\"").append(",")
 			    .append("\"contentType\":\"").append(businessFeedbackComment.getContentType()).append("\"").append(",")
 			    .append("\"videoSize\":\"").append(businessFeedbackComment.getVideoSize()).append("\"").append(",")

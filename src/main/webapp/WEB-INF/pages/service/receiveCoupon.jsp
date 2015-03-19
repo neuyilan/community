@@ -40,15 +40,17 @@
 			}
 		}
 		$.ajax({
-	           url: '${ctx}/service/activities/receiveCoupon.json',
+	           url: '${activityIp}/service/activities/receiveCoupon.json',
 	           cache: false,
-	           type: 'post',
-	           dataType: 'json',
 	           data: {
 	        	actId: '${actId}',
 	        	userId: '${userId}',
 	        	cellphone:$("#cellphone").val()
 	           },
+	           type: 'get',
+	           dataType: 'jsonp',
+	           jsonp: "jsoncallback",
+	           jsonpCallback:"ajaxTestFn",
 	           success: function (data) {
 	        	   //eval('data=' + data);
 	        	   if(data.errorCode == 200) {
@@ -88,7 +90,8 @@
 	 });
 	 btnA.click(fun);
 }
-	
+function ajaxTestFn(date){
+}	
 
 </script>
 </body>

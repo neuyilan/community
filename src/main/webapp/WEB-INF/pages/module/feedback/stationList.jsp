@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>建议投诉管理</title>
+        <title>驿站建议投诉管理</title>
         <%@include file="/common/meta.jsp"%>
         <script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
         <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
@@ -104,13 +104,16 @@
 										</c:choose>
 									</span>
 								</p>
+								<span class="s-xw-sq">所属范围：${feedback.estateName }</span>
+							</div>
+		                    <div class="info">
+		                    	<span><time class="time"><fmt:formatDate value="${feedback.fbTime }" pattern="yyyy-MM-dd HH:mm"/></time></span> 
 								<c:if test="${feedback.fbType == 4}">
 									<p style="float:right">
 										运单号：<span  style="color: #3EAF0E;">${feedback.expCode}</span>
 									</p>
 								</c:if>
 							</div>
-		                    <time class="time"><fmt:formatDate value="${feedback.fbTime }" pattern="yyyy-MM-dd HH:mm"/></time>
 		                    <hr class="link2">
 		                    
 		                    <h2 class="title_h"><span class="poht"><img src="<%=ctx %>${feedback.portrait}" style="width:100%;"></span>
@@ -311,8 +314,11 @@
 						+ styleStr
                     	+ '>'
                     	+ '<a class="nopotr2" href="javascript:;" style="height:296px;">'
-                    	+ '<div class="info"><p style="float:left;">建议投诉类型：<span style="color: #3EAF0E;">'+fbType+'</span></p>'+fbType1+'</div>'
-                    	+ '<time>'+(row.fbTime != null ? row.fbTime.substring(0, 16) : '')+'</time>'
+                    	+ '<div class="info">'
+                    	+ '<p style="float:left;">建议投诉类型：<span style="color: #3EAF0E;">'+fbType+'</span></p>' 
+                    	+ '<span class="s-xw-sq">所属范围：'+row.estateName+'</span>'
+                    	+ '</div>'
+                    	+ '<div class="info"><time>'+(row.fbTime != null ? row.fbTime.substring(0, 16) : '')+'</time>'+fbType1+'</div>'
                     	+ '<hr class="link2">'
                     	+ '<h2 class="title_h"><span class="poht"><img src="<%=ctx%>'+row.portrait+'" style="width:100%;"></span><em style="font-style:normal; font-weight:bold; line-height:31px;">'+row.fberName+'</em><br> <strong style="font-weight:normal; font-size:16px;">'+row.address+'</strong></h2>'
                     	+ '<div class="state">'

@@ -156,7 +156,16 @@
 	
 	<!-- 根据id查询 ManageEstate -->
 	<select id="findById"  resultMap="ManageEstateResult" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List" /> from manage_estate where estateId = #{id}
+		select <include refid="Base_Column_List" /> from manage_estate where estateId = #{id} 
+	</select>
+	
+	<!-- 根据id查询 ManageEstate -->
+	<select id="findBy3Km"  resultMap="ManageEstateResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from manage_estate where 
+		e.estateLongitude BETWEEN #{estateLongitude}-0.0135
+   		AND #{estateLongitude}+0.0135
+   		and e.estateLatitude BETWEEN #{estateLatitude}-0.0135
+   		and #{estateLatitude}+0.0135
 	</select>
 	
 	<!-- 根据id查询小区周边公交 -->

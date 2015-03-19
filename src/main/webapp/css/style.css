@@ -608,7 +608,7 @@ input{ border:0; border:none; background:none;}
 .wrapos{ position:relative; z-index:1;}
 .max-height{width:100%;}
 .busswi5{width:100%; position:fixed; display:none; top:0; right:0px; z-index:999; background:rgba(0,0,0,0.3); height:100%;}
-.busswi5 .sidebar5{width:492px; background:#fff; padding:20px 0px; position:absolute; right:0; top:0; overflow:hidden; height:100%;}
+.busswi5 .sidebar5{width:492px; background:#fff; padding:20px 0px; position:absolute; right:0; top:0; overflow:auto; height:100%;}
 .busswi5 .sidebar5 .tit5{ line-height:60px; padding:0 20px;}
 .sidebar5 .link5{width:91%; margin:0 auto; border:0; border:none; border-bottom:dashed 1px #999; margin-top:19px;}
 .sidebar5 #close5{ position:absolute; top:36px; right:13px; width:28px; height:28px; background:url(../images/icon/colse.png) no-repeat center center;}
@@ -1540,4 +1540,8 @@ height: 40px;padding: 0 10px;vertical-align: top;width: 320px;margin-bottom:10px
 .lyq{background-color:#fff; margin:15px auto; width:97%;}
 .lyq #commentDiv{ padding:15px;}
 .review-b .cominfo .opera .lyqdel{ width:22px; height:25px; margin:38px auto 38px;}
+
+/* 去除ie 输入框中默认的x符号*/
+input::-ms-clear{ display:none;}
+input::-ms-reveal{ display:none;}
 

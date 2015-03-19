@@ -27,6 +27,7 @@ import com.community.app.module.service.BusinessHealthydietCommentService;
 import com.community.app.module.service.BusinessHealthydietService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessHealthydietCommentQuery;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessHealthydietComment")
@@ -78,7 +79,7 @@ public class BusinessHealthydietCommentController {
 			    .append("\"commentorId\":\"").append(businessHealthydietComment.getCommentorId()).append("\"").append(",")
 			    .append("\"commentorName\":\"").append(businessHealthydietComment.getCommentorName()).append("\"").append(",")
 			    .append("\"commentorAvatar\":\"").append(businessHealthydietComment.getCommentorAvatar()).append("\"").append(",")
-			    .append("\"comment\":\"").append(businessHealthydietComment.getComment()).append("\"").append(",")
+			    .append("\"comment\":\"").append(JsonUtils.stringToJson(businessHealthydietComment.getComment().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"commentTime\":\"").append(businessHealthydietComment.getCommentTime()).append("\"").append(",")
 			    .append("\"commentorState\":\"").append(businessHealthydietComment.getCommentorState()).append("\"").append(",")
 			    .append("\"repliedState\":\"").append(businessHealthydietComment.getRepliedState()).append("\"")

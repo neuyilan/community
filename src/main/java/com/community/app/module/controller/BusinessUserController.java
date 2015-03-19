@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessDepartment;
 import com.community.app.module.bean.BusinessMenu;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessPosition;
 import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.bean.BusinessUserResource;
@@ -49,6 +50,7 @@ import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessDepartmentService;
 import com.community.app.module.service.BusinessMenuService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessPositionService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.BusinessUserRoleService;
@@ -92,9 +94,10 @@ public class BusinessUserController {
     private BusinessUserResourceService businessUserResourceService;
     @Autowired
     private BusinessCommunityService businessCommunityService;
-    
     @Autowired
     private BusinessUserRoleService businessUserRoleService;
+    @Autowired
+	private BusinessOpertaionService businessOpertaionService;
     
 	/**
 	 * 进入管理页
@@ -627,6 +630,19 @@ public class BusinessUserController {
             businessUser.setRightsInfo(query.getRightsInfo());
              //保存员工基础信息
 			businessUserService.save(businessUser);
+			
+			String state = "员工新增";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"user", 
+					"user_save", 
+					businessUser.getUserId(), 
+					businessUser.getUserName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
             //保存所有权限 manage_user_functon
             String right = query.getRights();
             String[] rights = right.split("\\,");
@@ -787,7 +803,19 @@ public class BusinessUserController {
             	businessUser.setRightsInfo(query.getRightsInfo());
             }
 			businessUserService.update(businessUser);
-
+			
+			String state = "员工修改";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"user", 
+					"user_edit", 
+					businessUser.getUserId(), 
+					businessUser.getUserName(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
             //保存所有权限 manage_user_functon
             
             if(right != null && !"-1".equals(right)) {
@@ -1799,7 +1827,7 @@ public class BusinessUserController {
 	 * @return
 	 */
 	@RequestMapping(value="delete")
-	public void delete(@RequestParam(value="id") String id, HttpServletResponse response) {
+	public void delete(@RequestParam(value="id") String id, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try{
 			if(id != null) {
@@ -1809,7 +1837,19 @@ public class BusinessUserController {
 						businessUserService.delete(new Integer(ids[i]));
 					}
 				}else{
+					BusinessUser businessUser = businessUserService.findById(new Integer(id));
 					businessUserService.delete(new Integer(id));
+					String state = "员工删除";
+					BusinessOpertaion entity = new BusinessOpertaion(
+							getUser().getUserId(), 
+							getUser().getUserName(), 
+							"user", 
+							"user_delete", 
+							businessUser.getUserId(), 
+							businessUser.getUserName(), 
+							state,
+							request.getRemoteAddr());
+					businessOpertaionService.save(entity);
 				}
 			}
 			

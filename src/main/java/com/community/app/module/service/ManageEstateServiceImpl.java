@@ -158,6 +158,24 @@ public class ManageEstateServiceImpl implements ManageEstateService {
 	 * @throws ServiceException
 	 */	
 	@Transactional(readOnly = true)
+	public List<ManageEstate> findBy3Km(final ManageEstateQuery query) throws ServiceException {
+		List<ManageEstate> list = new ArrayList<ManageEstate>() ;
+		try {
+			list=manageEstateDao.findBy3Km(query);
+		} catch (DaoException e) {
+			logger.debug("ManageEstateServiceImpl findByExample()：按VO对象条件查询所有ManageEstate发生错误！", e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	/**
+	 * 按VO对象条件查询所有ManageEstate
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@Transactional(readOnly = true)
 	public List<ManageEstate> findByExample(final ManageEstateQuery query) throws ServiceException {
 		List<ManageEstate> list = new ArrayList<ManageEstate>() ;
 		try {

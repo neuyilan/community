@@ -1,6 +1,7 @@
 package com.community.app.module.controller;
 
 import static com.community.framework.utils.CommonUtils.getFomatDate;
+import static com.community.framework.utils.CommonUtils.getUser;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -21,11 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.AppUser;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.MemberVO;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.ModuleConst;
 import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessCommunityService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessUserPropertyComService;
 import com.community.app.module.vo.AppUserQuery;
 import com.community.app.module.vo.BaseBean;
@@ -41,6 +44,8 @@ public class AppUserController {
 	private BusinessUserPropertyComService businessUserPropertyComService;
     @Autowired
     private BusinessCommunityService businessCommunityService;
+    @Autowired
+	private BusinessOpertaionService businessOpertaionService;
     
 	/**
 	 * 进入管理页
@@ -138,7 +143,7 @@ public class AppUserController {
 			    
 			    .append("\"address\":\"").append(appUser.getAddress()).append("\"").append(",")
 			    .append("\"estateName\":\"").append(appUser.getEstateName()).append("\"").append(",")
-			    
+			    .append("\"comName\":\"").append(appUser.getComName()).append("\"").append(",")
 			    .append("\"random\":\"").append(appUser.getRandom()).append("\"").append(",")
 			    .append("\"registTime\":\"").append(appUser.getRegistTime()).append("\"").append(",")
 			    .append("\"verifyTime\":\"").append(appUser.getVerifyTime()).append("\"").append(",")
@@ -269,6 +274,19 @@ public class AppUserController {
 		try{
 			appUser.setRemarks(remarks);
 		    appUserService.updateRemarks(appUser);
+		    
+		    String state = "备注居民信息";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"appUser", 
+					"appUser_remark", 
+					appUser.getUserId(), 
+					appUser.getNickname(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			json = "{\"success\":\"true\",\"message\":\"备注居民信息成功\"}"; 
 		} catch(Exception e) {
 			json = "{\"success\":\"false\",\"message\":\"备注居民信息失败\"}";
@@ -509,11 +527,31 @@ public class AppUserController {
 		AppUser appUser = null;
 		String json = "";
 		try{
+
+			
+			String state = "";
+			String attrId = "";
 			appUser = appUserService.findById(userId);
-			if (appUser.getIsWorker() == 0)
+			if (appUser.getIsWorker() == 0) {
 				appUser.setIsWorker(1);
-			else
+				state = "开通记者权限";
+				attrId = "appUser_open";
+			} else {
 				appUser.setIsWorker(0);
+				state = "关闭记者权限";
+				attrId = "appUser_close";
+			}
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"appUser", 
+					attrId, 
+					appUser.getUserId(), 
+					appUser.getNickname(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			appUserService.update(appUser);//save(appUser);
 			json = "{\"success\":\"true\",\"message\":\"修改身份成功\"}";
 		} catch(Exception e) {

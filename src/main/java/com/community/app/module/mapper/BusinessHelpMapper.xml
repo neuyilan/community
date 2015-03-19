@@ -260,7 +260,7 @@
 	
 	<!-- 无条件查询所有BusinessHelp -->
 	<select id="findAll" resultMap="BusinessHelpResult">
-		select <include refid="Base_Column_List" /> from business_help h
+		select <include refid="Base_Column_List" /> from business_help 
 	</select>
 	
 	<!-- 按Map对象条件查询所有BusinessHelp -->

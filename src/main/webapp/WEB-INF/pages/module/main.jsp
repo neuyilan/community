@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>北青社区后台管理系统</title>
+<title>北青社区文化传媒后台管理系统</title>
 <%@include file="/common/meta.jsp"%>
 <link rel="stylesheet"
 	href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">

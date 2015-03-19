@@ -28,6 +28,7 @@
 			<result column="tel" property="tel" />
 			<result column="newsCount" property="newsCount" />
 			<result column="isNickname" property="isNickname" />
+			<result column="comName" property="comName" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -153,11 +154,12 @@
 	
 	<!-- BusinessBreak根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessBreakResult" parameterType="Object">
-		select <include refid="Base_Column_List" />, u.tel, u.address, u.portrait, count(p.picId) as picCount, count(news.newsId) as newsCount 
+		select <include refid="Base_Column_List" />, u.tel, u.address, u.portrait, bc.comName, count(p.picId) as picCount, count(news.newsId) as newsCount 
 		from business_break b 
+		inner join business_community bc on bc.comId = b.comId
 		left join app_user u on b.breakerId=u.userId left 
 		join business_break_pic p on b.breakId=p.breakId
-		inner join (
+		inner join  (
 				SELECT distinct comId 
 				FROM business_user_resource 
 				WHERE 1 = 1
@@ -186,6 +188,7 @@
 	<!-- BusinessBreak列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">		
 		select count(distinct(b.breakId)) from business_break b
+		inner join business_community bc on bc.comId = b.comId
 		left join app_user u on b.breakerId = u.userId 
 		inner join (
 				SELECT distinct comId 

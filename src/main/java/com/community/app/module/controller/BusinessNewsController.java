@@ -43,6 +43,7 @@ import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessFocusAd;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsScope;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ManageTag;
 import com.community.app.module.bean.ShiroUser;
@@ -63,6 +64,7 @@ import com.community.app.module.service.BusinessFocusService;
 import com.community.app.module.service.BusinessNewsCommentService;
 import com.community.app.module.service.BusinessNewsScopeService;
 import com.community.app.module.service.BusinessNewsService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.BusinessUserService;
 import com.community.app.module.service.ManageEstateService;
@@ -72,6 +74,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessNewsCommentQuery;
 import com.community.app.module.vo.BusinessNewsQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.Uploader;
 import com.community.framework.utils.propertiesUtil;
 
@@ -119,6 +122,8 @@ public class BusinessNewsController {
 	private ManageTagService manageTagService;
 	@Autowired
 	private BusinessUserResourceService businessUserResourceService;
+	@Autowired
+	private BusinessOpertaionService businessOpertaionService;
 	
 	/**
 	 * 进入管理页
@@ -141,7 +146,7 @@ public class BusinessNewsController {
 			// query.setRows(11);
 			query.setOrder("desc");
 			if((query.getSort() == null || "".equals(query.getSort())) && (query.getState() == null || "".equals(query.getState()))) {
-				query.setSort("editTime");
+				query.setSort("publishTime");
 			}	
 			Subject currentUser = SecurityUtils.getSubject();  
 			if (currentUser.isPermitted("news_publish")) {  //鏂板鏂伴椈鍔熻兘灞曠ず浼氬奖鍝嶅垎椤?
@@ -189,7 +194,7 @@ public class BusinessNewsController {
 			if(!("").equals(query.getOrderBy()) && query.getOrderBy() != null) {
 				query.setSort(query.getOrderBy());
 			}else{
-				query.setSort("editTime");
+				query.setSort("publishTime");
 			}
 			Subject currentUser = SecurityUtils.getSubject();  
 			if (currentUser.isPermitted("news_publish")) {  //社区和驿站根据小区范围数据范围不同
@@ -207,10 +212,10 @@ public class BusinessNewsController {
 				BusinessNews businessNews = (BusinessNews) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"newsId\":\"").append(businessNews.getNewsId()).append("\"").append(",")
-			    .append("\"title\":\"").append(businessNews.getTitle().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
-			    .append("\"content\":\"").append(businessNews.getContent().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"title\":\"").append(JsonUtils.stringToJson(businessNews.getTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
+			    .append("\"content\":\"").append("").append("\"").append(",")
 			    .append("\"pageUrl\":\"").append(businessNews.getPageUrl()).append("\"").append(",")
-			    .append("\"brief\":\"").append(businessNews.getBrief().replaceAll("(\r?\n()+)", "").replace("\"", "")).append("\"").append(",")
+			    .append("\"brief\":\"").append("").append("\"").append(",")
 			    .append("\"subjectPic\":\"").append(businessNews.getSubjectPic()).append("\"").append(",")
 			    .append("\"newsType\":\"").append(businessNews.getNewsType()).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessNews.getPublisherId()).append("\"").append(",")
@@ -344,9 +349,24 @@ public class BusinessNewsController {
 			businessNews.setNewsId(Integer.parseInt(id));
 			businessNews.setIsHot(1);
 			businessNews.setHotTime(new Timestamp(System.currentTimeMillis()));
-			businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
-			businessNewsService.update(businessNews);
-			
+			businessNews.setHoter(getUser().getUserName());
+			businessNews.setPublishTime(new Timestamp(System.currentTimeMillis()));
+			businessNews.setPublisherName(getUser().getUserName());
+			// businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
+			int count = businessNewsService.update(businessNews);
+			if(count > 0) {
+				String state = "已置顶";
+				BusinessOpertaion entity = new BusinessOpertaion(
+						getUser().getUserId(), 
+						getUser().getUserName(), 
+						"news", 
+						"news_hot", 
+						businessNews1.getNewsId(), 
+						businessNews1.getTitle(), 
+						state,
+						request.getRemoteAddr());
+				businessOpertaionService.save(entity);
+			}
 			Map paramMap = new HashMap();
 			paramMap.put("id", businessNews.getNewsId());
 			if(businessNews1.getNewsType() == 1){
@@ -416,12 +436,27 @@ public class BusinessNewsController {
 		BusinessNews businessNews = businessNewsService.findById(query.getNewsId());
 		String json = "";
 		try{
-			businessNews.setState(1);  // 未发布
-		    businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
+			businessNews.setState(5);  // 已撤回
 		    businessNews.setIsHot(0);
+		    businessNews.setCancleTime(new Timestamp(System.currentTimeMillis()));
+		    businessNews.setCancler(getUser().getUserName());
+			businessNews.setPublishTime(new Timestamp(System.currentTimeMillis()));
+			businessNews.setPublisherName(getUser().getUserName());
 			int count = businessNewsService.update(businessNews);
-			
-			if(count>0 && businessNews.getState() == 1) {
+						
+			if(count>0 && businessNews.getState() == 5) {
+				String state = "已撤回";
+				BusinessOpertaion entity = new BusinessOpertaion(
+						getUser().getUserId(), 
+						getUser().getUserName(), 
+						"news", 
+						"news_cancle", 
+						businessNews.getNewsId(), 
+						businessNews.getTitle(), 
+						state,
+						request.getRemoteAddr());
+				businessOpertaionService.save(entity);
+				
 				Map paramMap = new HashMap();
 				paramMap.put("id", Integer.parseInt(id));
 				if(businessNews.getNewsType() == 1){
@@ -510,13 +545,134 @@ public class BusinessNewsController {
 				businessNews.setState(0);  // 已发布
 			}
 
-		    businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
+		    // businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
 		    businessNews.setAuditorId(getUser().getUserId());
 		    businessNews.setAuditorName(getUser().getUserName());
 		    businessNews.setAuditTime(new Timestamp(System.currentTimeMillis()));
 		    businessNews.setPublishTime(new Timestamp(System.currentTimeMillis()));
-		    
+		    businessNews.setPublisherName(getUser().getUserName());
 			int count = businessNewsService.update(businessNews);
+
+			String state = "";
+			if(businessNews.getState() == 0) {
+				state = "已发布";
+			} else if(businessNews.getState() == 3) {
+				state = "未通过";
+			}
+			
+			//发布新闻
+			if(businessNews.getIsRecommend() != null && businessNews.getState() == 0) {
+				if(businessNews.getIsRecommend() == 0) {
+					StringBuilder sb = new StringBuilder();
+					BusinessFocus businessFocus = new BusinessFocus();
+					businessFocus.setTitle(businessNews.getTitle());
+				    businessFocus.setState(2);   // 待审核
+				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
+				    // businessFocus.setPicUrl("");
+				    businessFocus.setPageUrl("");
+				    businessFocus.setSourceId(businessNews.getNewsId());
+				    businessFocus.setSourceType(0);	// 来源类型
+				    businessFocus.setIshtml(0);  // 静态
+				    businessFocus.setAuditInfo("");
+				    
+				    Map paramMap = new HashMap();
+				    paramMap.put("newsId", businessNews.getNewsId());
+				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
+
+				    for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	paramMap.put("userId", shiroUser.getUserId());
+				    	// List estateList = manageEstateService.findByMap(paramMap);
+				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
+				    	for(int j=0;j<businessUserResourceList.size();j++) {
+				    		BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
+							sb.append(businessUserResource.getEstateName()).append(",");
+						}
+				    }
+				    businessFocus.setFocusScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
+				    businessFocus.setVisits(0);
+				    businessFocus.setSupports(0);
+				    businessFocus.setSelectorId(getUser().getUserId());
+				    businessFocus.setSelectorName(getUser().getUserName());
+				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
+					businessFocusService.save(businessFocus);
+					state = "已发布-推荐到焦点图";
+					
+					for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	paramMap.put("userId", shiroUser.getUserId());
+				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
+				    	AppFocusScope appFocusScope = new AppFocusScope();
+						for(int j=0;j<businessUserResourceList.size();j++) {
+							BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
+							appFocusScope.setFocusId(businessFocus.getFocusId());
+							appFocusScope.setEstateId(businessUserResource.getEstateId());
+							appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+							appFocusScopeService.save(appFocusScope);
+						}
+				    }
+				} else if(businessNews.getIsRecommend() == 3) {
+					StringBuilder sb = new StringBuilder();
+					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
+					businessFocusAd.setTitle(businessNews.getTitle());
+				    businessFocusAd.setState(2);   // 待审核
+				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
+				    // businessFocusAd.setPicUrl("");
+				    businessFocusAd.setPageUrl("");
+				    businessFocusAd.setSourceId(businessNews.getNewsId());
+				    businessFocusAd.setSourceType(0);	// 来源类型
+				    businessFocusAd.setIshtml(0);  // 静态
+				    businessFocusAd.setAuditInfo("");
+				    
+				    Map paramMap = new HashMap();
+				    paramMap.put("newsId", businessNews.getNewsId());
+				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
+
+				    for(int i=0; i<newsScopeList.size(); i++) {
+				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	paramMap.put("userId", shiroUser.getUserId());
+				    	// List estateList = manageEstateService.findByMap(paramMap);
+				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
+				    	for(int j=0;j<businessUserResourceList.size();j++) {
+				    		BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
+							sb.append(businessUserResource.getEstateName()).append(",");
+						}
+				    }
+				    businessFocusAd.setFocusAdScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
+				    businessFocusAd.setVisits(0);
+				    businessFocusAd.setSupports(0);
+				    businessFocusAd.setSelectorId(getUser().getUserId());
+				    businessFocusAd.setSelectorName(getUser().getUserName());
+				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
+					businessFocusAdService.save(businessFocusAd);
+					state = "已发布-推荐到全网焦点图";
+					
+					for(int i=0; i<newsScopeList.size(); i++) {
+						BusinessNewsScope newsScopeBean = newsScopeList.get(i);
+				    	paramMap = new HashMap();
+				    	paramMap.put("comId", newsScopeBean.getComId());
+				    	paramMap.put("userId", shiroUser.getUserId());
+				    	// List estateList = manageEstateService.findByMap(paramMap);
+				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
+				    	AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
+						for(int j=0;j<businessUserResourceList.size();j++) {
+							BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
+							appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
+							appFocusAdScope.setEstateId(businessUserResource.getEstateId());
+							appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
+							appFocusAdScopeService.save(appFocusAdScope);
+						}
+				    }
+				}
+			}
+			
 			//发布并可以推送
 			if(businessNews.getState() == 0) {
 				//查询该社区下的userId, baiduId, channelId
@@ -573,6 +729,13 @@ public class BusinessNewsController {
 							appPushLogService.save(appPushLog);
 						}
 					}
+					if(businessNews.getIsRecommend() == 0) {
+						state = "已发布-已推送-推荐到焦点图";
+					} else if(businessNews.getIsRecommend() == 3) {
+						state = "已发布-已推送-推荐到全网焦点图";
+					} else {
+						state = "已发布-已推送";
+					} 
 				}				
 				
 				//如果是爆料则给爆料人推送信息
@@ -638,116 +801,6 @@ public class BusinessNewsController {
 				}
 			}
 			
-			//发布新闻
-			if(businessNews.getIsRecommend() != null && businessNews.getState() == 0) {
-				if(businessNews.getIsRecommend() == 0) {
-					StringBuilder sb = new StringBuilder();
-					BusinessFocus businessFocus = new BusinessFocus();
-					businessFocus.setTitle(businessNews.getTitle());
-				    businessFocus.setState(2);   // 待审核
-				    businessFocus.setPicUrl("/images/icon/tp01.jpg");
-				    // businessFocus.setPicUrl("");
-				    businessFocus.setPageUrl("");
-				    businessFocus.setSourceId(businessNews.getNewsId());
-				    businessFocus.setSourceType(0);	// 来源类型
-				    businessFocus.setIshtml(0);  // 静态
-				    businessFocus.setAuditInfo("");
-				    
-				    Map paramMap = new HashMap();
-				    paramMap.put("newsId", businessNews.getNewsId());
-				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
-
-				    for(int i=0; i<newsScopeList.size(); i++) {
-				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
-				    	paramMap = new HashMap();
-				    	
-				    	paramMap.put("comId", newsScopeBean.getComId());
-				    	paramMap.put("userId", shiroUser.getUserId());
-				    	// List estateList = manageEstateService.findByMap(paramMap);
-				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
-				    	for(int j=0;j<businessUserResourceList.size();j++) {
-				    		BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
-							sb.append(businessUserResource.getEstateName()).append(",");
-						}
-				    }
-				    businessFocus.setFocusScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
-				    businessFocus.setVisits(0);
-				    businessFocus.setSupports(0);
-				    businessFocus.setSelectorId(getUser().getUserId());
-				    businessFocus.setSelectorName(getUser().getUserName());
-				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
-					businessFocusService.save(businessFocus);
-					
-					for(int i=0; i<newsScopeList.size(); i++) {
-				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
-				    	paramMap = new HashMap();
-				    	paramMap.put("comId", newsScopeBean.getComId());
-				    	paramMap.put("userId", shiroUser.getUserId());
-				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
-				    	AppFocusScope appFocusScope = new AppFocusScope();
-						for(int j=0;j<businessUserResourceList.size();j++) {
-							BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
-							appFocusScope.setFocusId(businessFocus.getFocusId());
-							appFocusScope.setEstateId(businessUserResource.getEstateId());
-							appFocusScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
-							appFocusScopeService.save(appFocusScope);
-						}
-				    }
-				} else if(businessNews.getIsRecommend() == 3) {
-					StringBuilder sb = new StringBuilder();
-					BusinessFocusAd businessFocusAd = new BusinessFocusAd();
-					businessFocusAd.setTitle(businessNews.getTitle());
-				    businessFocusAd.setState(2);   // 待审核
-				    businessFocusAd.setPicUrl("/images/icon/tp01.jpg");
-				    // businessFocusAd.setPicUrl("");
-				    businessFocusAd.setPageUrl("");
-				    businessFocusAd.setSourceId(businessNews.getNewsId());
-				    businessFocusAd.setSourceType(0);	// 来源类型
-				    businessFocusAd.setIshtml(0);  // 静态
-				    businessFocusAd.setAuditInfo("");
-				    
-				    Map paramMap = new HashMap();
-				    paramMap.put("newsId", businessNews.getNewsId());
-				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
-
-				    for(int i=0; i<newsScopeList.size(); i++) {
-				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
-				    	paramMap = new HashMap();
-				    	paramMap.put("comId", newsScopeBean.getComId());
-				    	paramMap.put("userId", shiroUser.getUserId());
-				    	// List estateList = manageEstateService.findByMap(paramMap);
-				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
-				    	for(int j=0;j<businessUserResourceList.size();j++) {
-				    		BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
-							sb.append(businessUserResource.getEstateName()).append(",");
-						}
-				    }
-				    businessFocusAd.setFocusAdScope(sb.toString().substring(0, sb.toString().length()-1));  //展示范围
-				    businessFocusAd.setVisits(0);
-				    businessFocusAd.setSupports(0);
-				    businessFocusAd.setSelectorId(getUser().getUserId());
-				    businessFocusAd.setSelectorName(getUser().getUserName());
-				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
-					businessFocusAdService.save(businessFocusAd);
-					
-					for(int i=0; i<newsScopeList.size(); i++) {
-						BusinessNewsScope newsScopeBean = newsScopeList.get(i);
-				    	paramMap = new HashMap();
-				    	paramMap.put("comId", newsScopeBean.getComId());
-				    	paramMap.put("userId", shiroUser.getUserId());
-				    	// List estateList = manageEstateService.findByMap(paramMap);
-				    	List businessUserResourceList = businessUserResourceService.findByMap(paramMap);
-				    	AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
-						for(int j=0;j<businessUserResourceList.size();j++) {
-							BusinessUserResource businessUserResource = (BusinessUserResource) businessUserResourceList.get(j);
-							appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
-							appFocusAdScope.setEstateId(businessUserResource.getEstateId());
-							appFocusAdScope.setCreateTime(new Timestamp(System.currentTimeMillis()));
-							appFocusAdScopeService.save(appFocusAdScope);
-						}
-				    }
-				}
-			}
 			if(businessNews.getState() == 0){
 				AppHomepage appHomepage = new AppHomepage();
 				appHomepage.setId(businessNews.getNewsId());
@@ -776,6 +829,18 @@ public class BusinessNewsController {
 					appHomepageScopeService.save(appHomepageScope);
 				}
 			}	
+
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"news", 
+					"news_auditor", 
+					businessNews.getNewsId(), 
+					businessNews.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			if(!auditInfo.equals("")) { json = "{\"success\":\"true\",\"message\":\"拒绝成功\"}"; } 
 			else { json = "{\"success\":\"true\",\"message\":\"发布成功\"}"; }
 		} catch(Exception e) {
@@ -809,12 +874,26 @@ public class BusinessNewsController {
 		String json = "";
 		try{
 			businessNews.setState(4);  // 通过审核
-		    businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
+		    // businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
 		    businessNews.setAuditorId(getUser().getUserId());
 		    businessNews.setAuditorName(getUser().getUserName());
 		    businessNews.setAuditTime(new Timestamp(System.currentTimeMillis()));
 		    businessNews.setPublishTime(new Timestamp(System.currentTimeMillis()));
-			businessNewsService.update(businessNews);
+		    businessNews.setPublisherName(getUser().getUserName());
+			int count = businessNewsService.update(businessNews);
+			if(count > 0) {
+				String state = "审核通过";
+				BusinessOpertaion entity = new BusinessOpertaion(
+						getUser().getUserId(), 
+						getUser().getUserName(), 
+						"news", 
+						"news_auditor", 
+						businessNews.getNewsId(), 
+						businessNews.getTitle(), 
+						state,
+						request.getRemoteAddr());
+				businessOpertaionService.save(entity);
+			}
 			json = "{\"success\":\"true\",\"message\":\"审核通过成功\"}"; 
 		} catch(Exception e) {
 			json = "{\"success\":\"false\",\"message\":\"审核通过失败\"}";
@@ -901,9 +980,17 @@ public class BusinessNewsController {
 		    	businessNews.setIsRecommend(query.getIsRecommend());
 		    }
 	        businessNews.setCreateTime(new Timestamp(System.currentTimeMillis()));
-	        businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
-	        
+	        businessNews.setCreater(shiroUser.getUserName());
 			businessNewsService.save(businessNews);
+			
+			String state = "";
+			if(businessNews.getState() == 0) {
+				state = "已发布";
+			} else if(businessNews.getState() == 1) {
+				state = "未发布";
+			} else if(businessNews.getState() == 2) {
+				state = "待审核";
+			}
 			
 			//保存新闻范围
 			String newsScope = query.getNewsScope();
@@ -934,7 +1021,6 @@ public class BusinessNewsController {
 				    businessFocus.setSourceType(0);	// 来源类型
 				    businessFocus.setIshtml(0);  // 静态
 				    businessFocus.setAuditInfo("");
-				    
 				    Map paramMap = new HashMap();
 				    paramMap.put("newsId", businessNews.getNewsId());
 				    List<BusinessNewsScope> newsScopeList = businessNewsScopeService.findByMap(paramMap);
@@ -959,7 +1045,8 @@ public class BusinessNewsController {
 				    businessFocus.setSelectorName(shiroUser.getUserName());
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
-					
+				    state = "已发布-推荐到焦点图";
+				    
 					for(int i=0; i<newsScopeList.size(); i++) {
 				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
 				    	paramMap = new HashMap();
@@ -1013,6 +1100,7 @@ public class BusinessNewsController {
 				    businessFocusAd.setSelectorName(shiroUser.getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
+					state = "已发布-推荐到全网焦点图";
 					
 					for(int i=0; i<newsScopeList.size(); i++) {
 				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
@@ -1062,6 +1150,14 @@ public class BusinessNewsController {
 			}					
 			//发布并可以推送
 			if(businessNews.getState() == 0 && businessNews.getIsPush() == 1) {
+				
+				if(query.getIsRecommend() == 0) {
+					state = "已发布-已推送-推荐到焦点图";
+				} else if(query.getIsRecommend() == 3) {
+					state = "已发布-已推送-推荐到全网焦点图";
+				} else {
+					state = "已发布-已推送";
+				} 
 				//查询该社区下的userId, baiduId, channelId
 				Map map = new HashMap();
 				map.put("newsId", businessNews.getNewsId());
@@ -1117,6 +1213,17 @@ public class BusinessNewsController {
 					}
 				}
 			}	
+			
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"news", 
+					"news_save", 
+					businessNews.getNewsId(), 
+					businessNews.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			//保存成功
 			json = "{\"success\":\"true\",\"message\":\"保存成功\"}";
@@ -1222,6 +1329,7 @@ public class BusinessNewsController {
 		    businessNews.setAuditorName("");
 		    businessNews.setEditTime(new Timestamp(System.currentTimeMillis()));
 		    businessNews.setEditor(getUser().getUserName());
+		    businessNews.setPublishTime(new Timestamp(System.currentTimeMillis()));
 		    businessNews.setIsPush(query.getIsPush());
 		    if(query.getIsPush() == 1) {//选择了推送
 		    	//推送处理逻辑
@@ -1230,7 +1338,16 @@ public class BusinessNewsController {
 		    	businessNews.setIsRecommend(query.getIsRecommend());
 		    }
 			int count = businessNewsService.update(businessNews);
-			
+
+			String state = "";
+			if(businessNews.getState() == 0) {
+				state = "已发布";
+			} else if(businessNews.getState() == 1) {
+				state = "未发布";
+			} else if(businessNews.getState() == 2) {
+				state = "待审核";
+			}
+				
 			//更新新闻范围
 			String newsScope = query.getNewsScope();
 			if(newsScope != null && !"".equals(newsScope)) {
@@ -1288,6 +1405,7 @@ public class BusinessNewsController {
 				    businessFocus.setSelectorName(getUser().getUserName());
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusService.save(businessFocus);
+					state = "已发布-推荐到焦点图";
 					
 					for(int i=0; i<newsScopeList.size(); i++) {
 				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
@@ -1352,7 +1470,8 @@ public class BusinessNewsController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
-					
+					state = "已发布-推荐到全网焦点图";
+					 
 					for(int i=0; i<newsScopeList.size(); i++) {
 				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
 				    	/*paramMap = new HashMap();
@@ -1405,7 +1524,7 @@ public class BusinessNewsController {
 				}
 			}
 			//发布并可以推送
-			if(businessNews.getState() == 0) {
+			if(businessNews.getState() == 0 ) {
 				//查询该社区下的userId, baiduId, channelId
 				Map map = new HashMap();
 				map.put("newsId", businessNews.getNewsId());
@@ -1461,7 +1580,14 @@ public class BusinessNewsController {
 							appPushLogService.save(appPushLog);
 						}
 					}
-				}				
+					if(query.getIsRecommend() == 0) {
+						state = "已发布-已推送-推荐到焦点图";
+					} else if(query.getIsRecommend() == 3) {
+						state = "已发布-已推送-推荐到全网焦点图";
+					} else {
+						state = "已发布-已推送";
+					} 
+				}
 				
 				//如果是爆料则给爆料人推送信息
 				if(count>0 && businessNews.getNewsType() == 1) {
@@ -1521,7 +1647,16 @@ public class BusinessNewsController {
 					}
 				}
 			}
-			
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"news", 
+					"news_edit", 
+					businessNews.getNewsId(), 
+					businessNews.getTitle(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			json = "{\"success\":\"true\",\"message\":\"编辑成功\"}";
 		} catch(Exception e) {
 			json = "{\"success\":\"false\",\"message\":\"编辑失败\"}";
@@ -1544,7 +1679,7 @@ public class BusinessNewsController {
 	 * @return
 	 */
 	@RequestMapping(value="delete")
-	public void delete(@RequestParam(value="id") String id, HttpServletResponse response) {
+	public void delete(@RequestParam(value="id") String id, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try{
 			if(id != null) {
@@ -1557,6 +1692,18 @@ public class BusinessNewsController {
 					BusinessNews businessNews = businessNewsService.findById(Integer.parseInt(id));
 					Boolean  result = businessNewsService.delete(new Integer(id));
 					if(result) {
+						String state = "已删除";
+						BusinessOpertaion entity = new BusinessOpertaion(
+								getUser().getUserId(), 
+								getUser().getUserName(), 
+								"news", 
+								"news_delete", 
+								businessNews.getNewsId(), 
+								businessNews.getTitle(), 
+								state,
+								request.getRemoteAddr());
+						businessOpertaionService.save(entity);
+						
 						businessNewsScopeService.deleteScopeByNews(new Integer(id));
 						Map paramMap = new HashMap();
 						paramMap.put("id", Integer.parseInt(id));

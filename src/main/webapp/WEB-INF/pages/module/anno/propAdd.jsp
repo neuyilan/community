@@ -80,7 +80,7 @@
                     <shiro:hasPermission name="prop_anno_audting_anno">
                     <br>
                     <label>
-                        <input class="radiostyle" type="radio" name="publishState" value="1">
+                        <input class="radiostyle" type="radio" name="publishState" value="1" checked>
                         暂缓发布</label>
                     <br>
                     </shiro:hasPermission>

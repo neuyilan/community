@@ -74,6 +74,14 @@ public interface ManageEstateService {
 	 * @throws ServiceException
 	 */	
 	public List<ManageEstate> findByExample(final ManageEstateQuery query) throws ServiceException;	
+	
+	/**
+	 * 按VO对象条件查询所有ManageEstate
+	 * @param entity
+	 * @return
+	 * @throws ServiceException
+	 */	
+	public List<ManageEstate> findBy3Km(final ManageEstateQuery query) throws ServiceException;	
 
 	/**
 	 * service方法
