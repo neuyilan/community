@@ -23,6 +23,8 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +101,7 @@ import com.community.framework.utils.StringUtil;
 import com.community.framework.utils.messagesUtil;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.weather;
+import com.community.ws.QNH.QNHIFClient.MemberCheckCli;
 import com.qq.connect.api.OpenID;
 import com.qq.connect.api.qzone.UserInfo;
 import com.qq.connect.javabeans.AccessToken;
@@ -378,6 +381,34 @@ public class UserController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		try {
+			MemberCheckCli memberCheckCli = new MemberCheckCli();
+			String string  = memberCheckCli.memberCheck(query.getCellphone());
+			if (string !=null && !string.equals("")) {
+				JSONObject jsn = JSONObject.fromObject(string);
+				JSONObject content= jsn.getJSONObject("content");
+				JSONObject state= content.getJSONObject("state");
+				if (state.toString().equals(1)) {
+					JSONObject user= content.getJSONObject("user");
+					Timestamp ts = new Timestamp(new Date().getTime());
+					AppUser appUser1 = new AppUser();
+					appUser1.setUserId(appUser.getUserId());
+					appUser1.setIsQNH(1);
+					appUser1.setRealname(user.getJSONObject("realname").toString());
+					appUser1.setNickname(user.getJSONObject("nickname").toString());
+					appUser1.setSex(new Integer(user.getJSONObject("sex").toString()));
+					appUser1.setAge(new Integer(new Integer(user.getJSONObject("age").toString())));
+					appUserService.update(appUser1);
+				}
+
+				
+				
+			}
+		} catch (Exception e) {
+			// 判断青年汇错误
+			GSLogger.error("判断是否是青年汇用户错误", e);
+		}
 	}
 	
 	/**
@@ -604,6 +635,34 @@ public class UserController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		try {
+			MemberCheckCli memberCheckCli = new MemberCheckCli();
+			String string  = memberCheckCli.memberCheck(query.getCellphone());
+			if (string !=null && !string.equals("")) {
+				JSONObject jsn = JSONObject.fromObject(string);
+				JSONObject content= jsn.getJSONObject("content");
+				JSONObject state= content.getJSONObject("state");
+				if (state.toString().equals(1)) {
+					JSONObject user= content.getJSONObject("user");
+					Timestamp ts = new Timestamp(new Date().getTime());
+					AppUser appUser1 = new AppUser();
+					appUser1.setUserId(appUser.getUserId());
+					appUser1.setIsQNH(1);
+					appUser1.setRealname(user.getJSONObject("realname").toString());
+					appUser1.setNickname(user.getJSONObject("nickname").toString());
+					appUser1.setSex(new Integer(user.getJSONObject("sex").toString()));
+					appUser1.setAge(new Integer(new Integer(user.getJSONObject("age").toString())));
+					appUserService.update(appUser1);
+				}
+
+				
+				
+			}
+		} catch (Exception e) {
+			// 判断青年汇错误
+			GSLogger.error("判断是否是青年汇用户错误", e);
 		}
 	}
 	

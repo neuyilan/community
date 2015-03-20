@@ -13,6 +13,7 @@ import org.apache.axis2.client.ServiceClient;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
+import com.community.framework.utils.JsonUtils;
 import com.community.ws.common.HeaderOMElement;
 
 /**
@@ -48,10 +49,10 @@ public class GetQnhInfoCli {
 			sender.addHeader(HeaderOMElement.createHeaderOMElement(omNs));
 			sender.getOptions().setTimeOutInMilliSeconds(CommonData.TimeOutData.QHN_WS_TIMEOUT);
 			OMElement response = sender.sendReceive(callMethod);
-			System.out.println("response====>" + response);
+//			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
-			retStr = response.getFirstElement().getText();
+			retStr = JsonUtils.stringToJson( response.getFirstElement().getText());
 			System.out.println(retStr);
 		} catch (Exception e) {
 			retStr = "";
@@ -60,6 +61,7 @@ public class GetQnhInfoCli {
 			if (sender != null)
 				sender.disengageModule("addressing");
 			try {
+				sender.cleanupTransport();
 				sender.cleanup();
 			} catch (Exception e) {
 				retStr = "";
@@ -71,7 +73,10 @@ public class GetQnhInfoCli {
 
 	public static void main(String[] args) {
 		GetQnhInfoCli getQnhInfoCli = new GetQnhInfoCli();
-		getQnhInfoCli.getQnhInfo("C027DDC5-2096-4B87-9477-7B79C36E8938");
+//		getQnhInfoCli.getQnhInfo("C027DDC5-2096-4B87-9477-7B79C36E8938");
+//		getQnhInfoCli.getQnhInfo("3AC6C979-7DB7-4F1D-91C8-069C2A70F752");
+		getQnhInfoCli.getQnhInfo("36F79468-8976-4CB7-9EF0-01464DFBDEC7");
+		getQnhInfoCli.getQnhInfo("F1B382F2-7085-4AD1-B715-0171CB2AA448");
 	}
 
 }

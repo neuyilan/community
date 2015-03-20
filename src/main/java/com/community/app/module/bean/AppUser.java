@@ -57,7 +57,25 @@ public class AppUser implements java.io.Serializable{
 	private String qqId;
 	private Integer comId;
 	private String comName;
+	private Integer isQNH;
+	private Integer age;
 	
+	public Integer getIsQNH() {
+		return isQNH;
+	}
+
+	public void setIsQNH(Integer isQNH) {
+		this.isQNH = isQNH;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
 	public String getComName() {
 		return comName;
 	}

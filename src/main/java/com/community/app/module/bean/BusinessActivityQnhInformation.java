@@ -22,6 +22,15 @@ public class BusinessActivityQnhInformation implements java.io.Serializable{
 	private java.sql.Timestamp createTime;
 	private java.sql.Timestamp editTime;
 	private java.lang.String editor;
+	private java.lang.String tel;
+
+	public java.lang.String getTel() {
+		return tel;
+	}
+
+	public void setTel(java.lang.String tel) {
+		this.tel = tel;
+	}
 
 	public java.lang.Integer getState() {
 		return state;

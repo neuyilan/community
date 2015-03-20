@@ -551,7 +551,13 @@
                 channelId = #{channelId},
             </if>
              <if test="deviceType != null" >
-                deviceType = #{deviceType}
+                deviceType = #{deviceType},
+            </if>
+            <if test="isQNH != null" >
+                isQNH = #{isQNH},
+            </if>
+            <if test="deviceType != null" >
+                age = #{age}
             </if>
         </set>
         where

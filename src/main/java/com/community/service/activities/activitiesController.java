@@ -24,6 +24,9 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +81,9 @@ import com.community.framework.utils.messagesUtil;
 import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.weather;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
+import com.community.ws.QNH.QNHIFClient.InActivitiesOnCli;
+import com.community.ws.QNH.QNHIFClient.MemberCheckCli;
+import com.community.ws.QNH.QNHIFClient.OnlineCheckInCli;
 
 
 @Controller
@@ -1551,7 +1557,7 @@ public class activitiesController {
 	}
 	
 	/**
-	 * 用户参与活动
+	 * 用户签到
 	 * @param comId
 	 * @return
 	 * json
@@ -1559,12 +1565,25 @@ public class activitiesController {
 	@RequestMapping(value="signInQNH")
 	public synchronized  void signInQNH(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
 		String json = "";
+		boolean flag = false;
+		List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList= null;
 		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"签到成功\",";
-			json += "\"content\":{\"count\":\"1\"}";
-			json += "}";
+			BusinessActivityQnhInformationQuery businessActivityQnhInformationQuery= new BusinessActivityQnhInformationQuery ();
+			businessActivityQnhInformationQuery.setActId(query.getID());
+			businessActivityQnhInformationQuery.setUserId(query.getUserId());
+			BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
+			if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
+				BusinessActivityQnhInformation BusinessActivityQnhInformation = new BusinessActivityQnhInformation();
+				BusinessActivityQnhInformation.setInformationId(BusinessActivityQnhInformationList.get(0).getInformationId());
+				BusinessActivityQnhInformation.setState(1);
+				flag=true;
+			}else {
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"抱歉！您没有报名活动不能签到！\"";
+				json += "}";
+			}
 			
 		}catch(Exception e){
 			json = "";
@@ -1573,6 +1592,44 @@ public class activitiesController {
 			json += "\"message\":\"参与失败\"";
 			json += "}";
 			e.printStackTrace();
+		}
+		
+		try {
+			if(flag) {
+				BusinessActivity activity = businessActivityService.findById_app(query.getActId());
+				OnlineCheckInCli onlineCheckInCli = new OnlineCheckInCli();
+				String string =  onlineCheckInCli.signOnline(activity.getQNHActId(), BusinessActivityQnhInformationList.get(0).getTel());
+				JSONObject jsn = JSONObject.fromObject(string);
+				if (jsn.getJSONObject("errorCode").equals("200")) {
+					JSONObject content= jsn.getJSONObject("content");
+					JSONObject times= content.getJSONObject("times");
+					JSONObject state= content.getJSONObject("state");
+					json += "{";
+					json += "\"errorCode\":\"200\",";
+					json += "\"message\":\"签到成功\",";
+					json += "\"content\":{\"count\":\""+times+"\"}";
+					json += "}";
+					if (state.toString().equals(1)) {
+						AppUser appUser = appUserService.findById(query.getUserId());
+						if (query.getIsQNH()==0) {
+							AppUser appUser1 = new AppUser();
+							appUser1.setUserId(appUser.getUserId());
+							appUser1.setIsQNH(1);
+							appUserService.update(appUser1);
+						}
+					}
+				}else {
+					json += "{";
+					json += "\"errorCode\":\"200\",";
+					json += "\"message\":\"签到成功\",";
+					json += "\"content\":{\"count\":\"1\"}";
+					json += "}";
+				}
+				
+			}
+		} catch (Exception e) {
+			// 判断青年汇错误
+			GSLogger.error("青年汇活动报名错误", e);
 		}
 		
 		
@@ -1617,7 +1674,7 @@ public class activitiesController {
 			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
 			mav.addObject("ctx", ctx);
 			mav.addObject("title", activity.getActName());
-			mav.addObject("time", activity.getPublishTime());
+			mav.addObject("time", activity.getTimeslot());
 			mav.addObject("userId", appUser.getUserId());
 			mav.addObject("nickname", appUser.getNickname());
 			mav.addObject("realname", appUser.getRealname());
@@ -1658,6 +1715,7 @@ public class activitiesController {
 	@RequestMapping(value="savebusinessActivityQnhInformation")
 	public synchronized  void savebusinessActivityQnhInformation(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
 		String json = "";
+		List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList= null;
 		if(query.getUserId()==null){
 			json = "";
 			json += "{";
@@ -1670,7 +1728,7 @@ public class activitiesController {
 				BusinessActivityQnhInformationQuery businessActivityQnhInformationQuery = new BusinessActivityQnhInformationQuery();
 				businessActivityQnhInformationQuery.setActId(query.getActId());
 				businessActivityQnhInformationQuery.setUserId(query.getUserId());
-				List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
+				BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
 				
 				if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
 					json = "";
@@ -1688,6 +1746,7 @@ public class activitiesController {
 					businessActivityQnhInformation.setCreateTime(ts);
 					businessActivityQnhInformation.setEditTime(ts);
 					businessActivityQnhInformation.setEditor("");
+					businessActivityQnhInformation.setTel(query.getTel());
 					businessActivityQnhInformationService.save(businessActivityQnhInformation);
 					json += "{";
 					json += "\"errorCode\":\"200\",";
@@ -1712,6 +1771,18 @@ public class activitiesController {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		try {
+			if(BusinessActivityQnhInformationList != null && BusinessActivityQnhInformationList.size()>0){
+				BusinessActivity activity = businessActivityService.findById_app(query.getActId());
+				InActivitiesOnCli inActivitiesOnCli = new InActivitiesOnCli();
+				inActivitiesOnCli.regOnLine(activity.getQNHId(), query.getTel());
+			}
+			
+		} catch (Exception e) {
+			// 判断青年汇错误
+			GSLogger.error("青年汇活动报名错误", e);
 		}
 	}
 	

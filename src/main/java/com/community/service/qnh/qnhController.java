@@ -23,6 +23,9 @@ import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +49,7 @@ import com.community.app.module.vo.ManageEstateQuery;
 import com.community.framework.utils.FileUtil;
 import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
+import com.community.ws.QNH.QNHIFClient.CheckDistanceKmCli;
 
 
 @Controller
@@ -66,33 +70,54 @@ public class qnhController {
 	public void findByUser(HttpServletRequest request, HttpServletResponse response,ManageEstateQuery query) {
 		String json = "";
 		try {
+			CheckDistanceKmCli checkDistanceKmCli = new CheckDistanceKmCli();
+			String string = checkDistanceKmCli.getNearbyQNH(query.getLongitude(), query.getLatitude());
 			json += "{";
 			json += "\"errorCode\":\"200\",";
 			json += "\"message\":\"获取成功\",";
 			json += "\"content\":{";
 			json += "\"count\":\"2\",";
-			json += "\"list\":[";
-			json += "{";
-			json +=	"\"activities\":{\"ID\":\"28\",\"title\":\"文艺·尚汇，邀青年一起品味艺术人生\",\"time\":\"2015-3-4\",\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",\"pic\":\"/images.jpg\",\"state\":\"1\",\"startTime\":\"2014-1-1\",\"endTime\":\"2014-1-1\"},";
-			json += "\"name\":\"青年汇\",";
-			json += "\"addr\":\"朝阳区武胜路128号东塔2号楼103\",";
-			json += "\"longitude\":\"116.522639\",";
-			json += "\"latitude\":\"39.930924\",";
-			json += "\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",";
-			json += "\"staff\":[{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"},{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"}]";
-			json += "},";
-			json += "{";
-			json +=	"\"activities\":{\"ID\":\"28\",\"title\":\"文艺·尚汇，邀青年一起品味艺术人生\",\"time\":\"2015-3-4\",\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",\"pic\":\"/images.jpg\",\"state\":\"1\",\"startTime\":\"2014-1-1\",\"endTime\":\"2014-1-1\"},";
-			json += "\"name\":\"青年汇\",";
-			json += "\"addr\":\"朝阳区武胜路128号东塔2号楼103\",";
-			json += "\"longitude\":\"116.49308\",";
-			json += "\"latitude\":\"39.913577\",";
-			json += "\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",";
-			json += "\"staff\":[{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"},{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"}]";
-			json += "}";
-			json += "]";
+			if (string != null && !string.equals("")) {
+				JSONObject jsn = JSONObject.fromObject(string);
+				JSONObject content= jsn.getJSONObject("content");
+				JSONArray list= content.getJSONArray("list");
+				json += "\"list\":"+list.toString()+"";
+			}else {
+				json += "\"list\":[]";
+			}
 			json += "}";
 			json += "}";
+			
+			
+			
+			
+//			json += "{";
+//			json += "\"errorCode\":\"200\",";
+//			json += "\"message\":\"获取成功\",";
+//			json += "\"content\":{";
+//			json += "\"count\":\"2\",";
+//			json += "\"list\":[";
+//			json += "{";
+//			json +=	"\"activities\":{\"ID\":\"28\",\"title\":\"文艺·尚汇，邀青年一起品味艺术人生\",\"time\":\"2015-3-4\",\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",\"pic\":\"/images.jpg\",\"state\":\"1\",\"startTime\":\"2014-1-1\",\"endTime\":\"2014-1-1\"},";
+//			json += "\"name\":\"青年汇\",";
+//			json += "\"addr\":\"朝阳区武胜路128号东塔2号楼103\",";
+//			json += "\"longitude\":\"116.522639\",";
+//			json += "\"latitude\":\"39.930924\",";
+//			json += "\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",";
+//			json += "\"staff\":[{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"},{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"}]";
+//			json += "},";
+//			json += "{";
+//			json +=	"\"activities\":{\"ID\":\"28\",\"title\":\"文艺·尚汇，邀青年一起品味艺术人生\",\"time\":\"2015-3-4\",\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",\"pic\":\"/images.jpg\",\"state\":\"1\",\"startTime\":\"2014-1-1\",\"endTime\":\"2014-1-1\"},";
+//			json += "\"name\":\"青年汇\",";
+//			json += "\"addr\":\"朝阳区武胜路128号东塔2号楼103\",";
+//			json += "\"longitude\":\"116.49308\",";
+//			json += "\"latitude\":\"39.913577\",";
+//			json += "\"brief\":\"社区青年汇的服务对象既包括户籍青年，也包括流动青年，并注重不同青年群体之间的交流。针对青年成长需求，青年汇开展三类工作：提供包括学习培训、城市融入、交友联谊、志愿服务、文化艺术、体育比赛六项全市统一活动；支持各青年汇结合自身所服务青年的特点，开展创新性特色活动。\",";
+//			json += "\"staff\":[{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"},{\"name\":\"张三\",\"brief\":\"社区青年汇，您温暖的港湾！\",\"tel\":\"110\",\"avatar\":\"110.jpg\"}]";
+//			json += "}";
+//			json += "]";
+//			json += "}";
+//			json += "}";
 		} catch (Exception e) {
 			e.printStackTrace();
 			json = "";

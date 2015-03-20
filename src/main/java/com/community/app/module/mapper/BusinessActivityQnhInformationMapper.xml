@@ -104,7 +104,8 @@
 		state,
 		createTime,
 		editTime,
-		editor
+		editor,
+		tel
 		) values(
 				#{userId},
 		#{actId},
@@ -112,7 +113,8 @@
 		#{state},
 		#{createTime},
 		#{editTime},
-		#{editor}
+		#{editor},
+		#{tel}
 		)
 	</insert>
 	
@@ -125,6 +127,9 @@
 			</if>
 			<if test="actId != null and actId != ''" >
 			actId=#{actId},
+			</if>
+			<if test="state != null and state != ''" >
+			state=#{state},
 			</if>
 			<if test="realname != null and realname != ''" >
 			realname=#{realname},

@@ -32,6 +32,8 @@ public class ManageEstateQuery extends BaseBean {
 	private java.lang.String stationName;
 	private java.lang.Double busLongitude;
 	private java.lang.Double busLatitude;
+	private java.lang.Double longitude;
+	private java.lang.Double latitude;
 	private java.lang.Integer ID;
 	private java.lang.Integer serviceId;
 	private java.lang.String serviceName;

@@ -13,6 +13,7 @@ import org.apache.axis2.client.ServiceClient;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
+import com.community.framework.utils.JsonUtils;
 import com.community.ws.common.HeaderOMElement;
 
 /**
@@ -29,7 +30,7 @@ public class OnlineCheckInCli {
 	public String signOnline(String QNHActId, String cellphone) {
 		String retStr = "" ;
 		Options options = new Options();
-		options.setAction("http://ok.com/MemberCheck");
+		options.setAction("http://ok.com/OnlineCheckIn");
 		options.setTo(targetEPR);
 		ServiceClient sender = null;
 		try {
@@ -37,7 +38,7 @@ public class OnlineCheckInCli {
 			sender.setOptions(options);
 			OMFactory fac = OMAbstractFactory.getOMFactory();
 			OMNamespace omNs = fac.createOMNamespace("http://ok.com/", "ok");
-			OMElement callMethod = fac.createOMElement("MemberCheck", omNs);
+			OMElement callMethod = fac.createOMElement("OnlineCheckIn", omNs);
 			OMElement nameEle = fac.createOMElement("Json", omNs);
 			JSONArray jsonArry = new JSONArray();
 			jsonArry.add(0, new JSONObject().element("QNHActId", QNHActId).element("cellphone", cellphone));
@@ -53,7 +54,7 @@ public class OnlineCheckInCli {
 			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
-			retStr = response.getFirstElement().getText();
+			retStr = JsonUtils.stringToJson( response.getFirstElement().getText());
 			System.out.println(retStr);
 		} catch (Exception e) {
 			retStr = "" ;
@@ -62,6 +63,7 @@ public class OnlineCheckInCli {
 			if (sender != null)
 				sender.disengageModule("addressing");
 			try {
+				sender.cleanupTransport();
 				sender.cleanup();
 			} catch (Exception e) {
 				retStr = "" ;
@@ -73,7 +75,11 @@ public class OnlineCheckInCli {
 
 	public static void main(String[] args) {
 		OnlineCheckInCli onlineCheckInCli = new OnlineCheckInCli();
-		onlineCheckInCli.signOnline("229408", "15945116753");
+//		onlineCheckInCli.signOnline("229408", "15945116754");
+		onlineCheckInCli.signOnline("00008A9E-CFFB-4C4D-A36D-5E8C83DD6E94", "13718877107");
+//		onlineCheckInCli.signOnline("000A8003-A2CC-4BDC-A3C7-20A1E4179E61", "15945116753");
+//		onlineCheckInCli.signOnline("000B148F-C7DB-4B31-AAF1-7F86BF6D8C1B", "15040636057");
+//		onlineCheckInCli.signOnline("000B86FB-50C4-4E29-B681-EA86D1AF52FC", "18911905706");
 	}
 
 }

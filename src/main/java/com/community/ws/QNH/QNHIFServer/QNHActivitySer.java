@@ -1,7 +1,5 @@
 package com.community.ws.QNH.QNHIFServer;
 
-import static com.community.framework.utils.CommonUtils.getUser;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -103,8 +101,8 @@ public class QNHActivitySer {
 	        businessActivity.setTimeslot("");
 			businessActivityService.save(businessActivity);
 			ManageEstateQuery manageEstateQuery = new ManageEstateQuery();
-			manageEstateQuery.setBusLatitude(new Double(jsn.get("latitude").toString()));
-			manageEstateQuery.setBusLongitude(new Double(jsn.get("longitude").toString()));
+			manageEstateQuery.setEstateLatitude(new Double(jsn.get("latitude").toString()));
+			manageEstateQuery.setEstateLongitude(new Double(jsn.get("longitude").toString()));
 			List<ManageEstate> list = manageEstateService.findBy3Km(manageEstateQuery);
 			String str = "";
 			for (ManageEstate manageEstate : list) {
@@ -116,13 +114,24 @@ public class QNHActivitySer {
             	str += manageEstate.getEstateName()+',';
             	businessActivityScopeService.save(scope);
 			}
-			str = str.substring(0, str.length()-1);
-			BusinessActivity businessActivity1 = new BusinessActivity();
-			businessActivity1.setActId(businessActivity.getActId());
-			businessActivity1.setActScope(str);
-	        businessActivityService.update(businessActivity1);
+			if (list.size()>0) {
+				str = str.substring(0, str.length()-1);
+				BusinessActivity businessActivity1 = new BusinessActivity();
+				businessActivity1.setActId(businessActivity.getActId());
+				businessActivity1.setActScope(str);
+		        businessActivityService.update(businessActivity1);
+			}
+//			"content":{
+//				code:{
+//				uuid: 88023f8d-e710-487c-9c78-38dd90ceda68, 
+//				type:4,
+//				ID:1
+//				}
 			
-			
+
+			json.element("content", new JSONObject().element("code",new JSONObject().element("uuid", "88023f8d-e710-487c-9c78-38dd90ceda68")
+					.element("type", "4").element("ID", businessActivity.getActId())));
+			System.out.println(json.toString());
 			System.out.println(jsn.get("actContent"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -133,6 +142,12 @@ public class QNHActivitySer {
 		return json.toString();
 	}
 
-
+	public static void main(String[] args) {
+		JSONObject json = new JSONObject();
+		json.element("errorCode", 200).element("message", "新增活动成功！");
+		json.element("content", new JSONObject().element("code",new JSONObject().element("uuid", "88023f8d-e710-487c-9c78-38dd90ceda68")
+				.element("type", "4").element("ID","1").toString()));
+		System.out.println(json.toString());
+	}
 
 }

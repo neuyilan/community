@@ -13,6 +13,7 @@ import org.apache.axis2.client.ServiceClient;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
+import com.community.framework.utils.JsonUtils;
 import com.community.ws.common.HeaderOMElement;
 
 /**
@@ -58,7 +59,7 @@ public class InActivitiesOnCli {
 			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
-			retStr = response.getFirstElement().getText();
+			retStr = JsonUtils.stringToJson( response.getFirstElement().getText());
 			System.out.println(retStr);
 		} catch (Exception e) {
 			retStr = "";
@@ -67,6 +68,7 @@ public class InActivitiesOnCli {
 			if (sender != null)
 				sender.disengageModule("addressing");
 			try {
+				sender.cleanupTransport();
 				sender.cleanup();
 			} catch (Exception e) {
 				retStr = "";
@@ -77,8 +79,23 @@ public class InActivitiesOnCli {
 	}
 
 	public static void main(String[] args) {
+		/*
+00008A9E-CFFB-4C4D-A36D-5E8C83DD6E94
+000A8003-A2CC-4BDC-A3C7-20A1E4179E61
+000B148F-C7DB-4B31-AAF1-7F86BF6D8C1B
+000B86FB-50C4-4E29-B681-EA86D1AF52FC
+
+13718877107
+15945116753
+15040636057
+18911905706
+
+		 */
 		InActivitiesOnCli inActivitiesOnCli = new InActivitiesOnCli();
-		inActivitiesOnCli.regOnLine("2294080", "15945116753");
+		inActivitiesOnCli.regOnLine("00008A9E-CFFB-4C4D-A36D-5E8C83DD6E94", "13718877107");
+//		inActivitiesOnCli.regOnLine("000A8003-A2CC-4BDC-A3C7-20A1E4179E61", "15945116753");
+//		inActivitiesOnCli.regOnLine("000B148F-C7DB-4B31-AAF1-7F86BF6D8C1B", "15040636057");
+//		inActivitiesOnCli.regOnLine("000B86FB-50C4-4E29-B681-EA86D1AF52FC", "18911905706");
 	}
 
 }

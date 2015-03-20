@@ -13,6 +13,7 @@ import org.apache.axis2.client.ServiceClient;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
+import com.community.framework.utils.JsonUtils;
 import com.community.ws.common.HeaderOMElement;
 
 /**
@@ -56,7 +57,7 @@ public class CheckDistanceKmCli {
 			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
 			System.out.println(end - start);
-			retStr = response.getFirstElement().getText();
+			retStr = JsonUtils.stringToJson( response.getFirstElement().getText());
 			System.out.println(retStr);
 		} catch (Exception e) {
 			retStr = "";
@@ -65,6 +66,7 @@ public class CheckDistanceKmCli {
 			if (sender != null)
 				sender.disengageModule("addressing");
 			try {
+				sender.cleanupTransport();
 				sender.cleanup();
 			} catch (Exception e) {
 				retStr = "";
@@ -75,8 +77,18 @@ public class CheckDistanceKmCli {
 	}
 	
 	public static void main(String[] args) {
+		/*
+参数：longitude 经度    1：(116.09,39.95)
+      latitude  纬度    2: (115.96,39.76)
+                        3：(115.99,39.69)
+                        4：(116.71,39.72)
+		 */
 		CheckDistanceKmCli checkDistanceKmCli = new CheckDistanceKmCli();
-		checkDistanceKmCli.getNearbyQNH(116.09,39.95);
+		String ret = checkDistanceKmCli.getNearbyQNH(116.09,39.95);
+		System.out.println(JSONObject.fromObject(JsonUtils.stringToJson(ret)));
+		checkDistanceKmCli.getNearbyQNH(115.96,39.76);
+		checkDistanceKmCli.getNearbyQNH(115.99,39.69);
+		checkDistanceKmCli.getNearbyQNH(116.71,39.72);
 	}
 
 }

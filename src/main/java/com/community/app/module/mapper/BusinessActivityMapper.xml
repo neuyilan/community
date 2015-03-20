@@ -112,7 +112,11 @@
 			a.couponImg,
 			a. couponNum,
 			a.couponValid,
-			a.reportExcel
+			a.reportExcel,
+			a.QNHActId,
+			a.QNHName,
+			a.QNHId,
+			a.isQNH
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
@@ -244,6 +248,9 @@
 					</if>
 					<if test="timingPublicTime != null and timingPublicTime != ''" >
 				   		and a.timingPublicTime = #{timingPublicTime}
+					</if>
+					<if test="QNHActId != null and QNHActId != ''" >
+				   		and a.QNHActId = #{QNHActId}
 					</if>
 					
 					<if test="timeScope != null and timeScope != ''" >
@@ -424,6 +431,9 @@
 					</if>
 					<if test="editor != null and editor != ''" >
 				   		and a.editor = #{editor}
+					</if>
+					<if test="QNHActId != null and QNHActId != ''" >
+				   		and a.QNHActId = #{QNHActId}
 					</if>
 					
 					<if test="timeScope != null and timeScope != ''" >
