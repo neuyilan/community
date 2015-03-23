@@ -2231,6 +2231,7 @@ public class activitiesController {
 	@RequestMapping(value="getActivitiesPlayerInfo")
 	public void getActivitiesPlayerInfo(HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
+		request.getParameter("userId");
 		try{
 			json += "{";
 			json += "\"errorCode\":\"200\",";

@@ -47,15 +47,18 @@ public class QNHOfflineRegActSer {
 		reqStr = el.getText();
 		/** 校验 qhn WS 用户密码 */
 		if (!HeaderOMElement.checkWSUser(msgContext)) {
+			jsonString.clear();
 			jsonString.element("errorCode", 400).element("message", "报名失败 ， 用户名或密码错误！");
-			return json.toString();
+			return jsonString.toString();
 		}
 		// {"QNHActId":"5","cellphone":"1283333"};
 		JSONObject reqJson = JSONObject.fromObject(reqStr);
 		reqJson.get("QNHActId");
 		try{
 			if (appUserService.whetherRepeat(String.valueOf(reqJson.get("cellphone")))) {
+				jsonString.clear();
 				jsonString.element("errorCode", 400).element("message", "报名失败/手机号未注册");
+				return jsonString.toString();
 			}else {
 				BusinessActivityQuery businessActivityQuery = new BusinessActivityQuery();
 				businessActivityQuery.setQNHActId(reqJson.get("QNHActId").toString());

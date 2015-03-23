@@ -54,7 +54,9 @@ public class UploadFileSer {
 		/**校验 qhn WS 用户密码*/
 		if(!HeaderOMElement.checkWSUser(msgContext))
 		{
-			json.element("errorCode", 400).element("message", "新增活动失败 ， 用户名或密码错误！");
+			json.clear();
+			json.element("errorCode", 400).element("message", "上传文件失败 ， 用户名或密码错误！");
+            json.element("data", new JSONObject().element("filePath", ""));
 			return json.toString();
 		}
     	
@@ -63,9 +65,10 @@ public class UploadFileSer {
         String picPath = "";
         File tmpfile =  null;
         String retPath = "";
+        String fileExt = "";
         
         try{  
-        	String fileExt = "."+ fileName.substring(fileName.lastIndexOf(".")+1, fileName.length());
+            fileExt = "."+ fileName.substring(fileName.lastIndexOf(".")+1, fileName.length());
         	String newFileName =  new Timestamp(System.currentTimeMillis()).getTime() + fileExt;
     		String path = this.getClass().getResource("/").getPath();
     		System.out.println(path);
@@ -88,23 +91,28 @@ public class UploadFileSer {
             retJsonChild.element("filePath", retPath);
             json.put("data", retJsonChild);
         }catch (Exception e){  
-            e.printStackTrace();  
+            json.clear();
             json.element("errorCode", 400).element("message", "文件传输失败！");
             retJsonChild = new JSONObject();
             retJsonChild.element("filePath", "");
             json.put("data", retJsonChild);
+            e.printStackTrace();  
            // return retJson.toString();  // return放在try-finally块中不合理
         }finally{  
             try {
                 os.close();
             } catch (IOException e){
+            	json.clear();
                 json.element("errorCode", 400).element("message", "文件传输失败！");
                 retJsonChild = new JSONObject();
                 retJsonChild.element("filePath", "");
                 e.printStackTrace();
             }     
         }  
-        if ("200".equals(String.valueOf(json.get("errorCode"))))
+        if ("200".equals(String.valueOf(json.get("errorCode"))) && (fileExt.toLowerCase().equals(".jpg") 
+        		|| fileExt.toLowerCase().equals(".png")
+        		|| fileExt.toLowerCase().equals(".jpeg")
+        		))
         {
         	/*压缩图片对方实现 */
         	System.out.println("tmp"+File.separator);
@@ -120,6 +128,13 @@ public class UploadFileSer {
 	            if (dstFile.exists())
 	            	tmpfile.delete();
         	}
+        }else
+        {
+        	String realPath = tmpfile.getPath().replaceAll("tmp", ""); 
+        	File dstFile = new File(realPath); 
+        	tmpfile.renameTo(dstFile);
+            if (dstFile.exists())
+            	tmpfile.delete();
         }
         
         return json.toString();  

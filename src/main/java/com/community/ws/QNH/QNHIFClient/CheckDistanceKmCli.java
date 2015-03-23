@@ -85,7 +85,7 @@ public class CheckDistanceKmCli {
 		 */
 		CheckDistanceKmCli checkDistanceKmCli = new CheckDistanceKmCli();
 		String ret = checkDistanceKmCli.getNearbyQNH(116.09,39.95);
-		System.out.println(JSONObject.fromObject(JsonUtils.stringToJson(ret)));
+//		System.out.println(JSONObject.fromObject(JsonUtils.stringToJson(ret)));
 		checkDistanceKmCli.getNearbyQNH(115.96,39.76);
 		checkDistanceKmCli.getNearbyQNH(115.99,39.69);
 		checkDistanceKmCli.getNearbyQNH(116.71,39.72);

@@ -235,7 +235,7 @@ public class serviceController {
 				json += "\"message\":\"获取成功\",";
 				json += "\"content\":{";
 				AppUser appUser = appUserService.findById(query.getUserId());
-				if (!query.getChannelId().equals(appUser.getChannelId()) && !query.getBaiduId().equals(appUser.getBaiduId())) {
+				if (!StringUtils.trimToEmpty(query.getChannelId()).equals(appUser.getChannelId()) && !StringUtils.trimToEmpty(query.getBaiduId()).equals(appUser.getBaiduId())) {
 					String typeString="";
 	    			if (appUser.getDeviceType()==4) {
 	    				typeString="iphone";

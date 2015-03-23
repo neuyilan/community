@@ -3,12 +3,16 @@ package com.community.ws.QNH.QNHIFServer;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.context.MessageContext;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.community.app.module.bean.BusinessActivity;
@@ -51,6 +55,7 @@ public class QNHActivitySer {
 		/**校验 qhn WS 用户密码*/
 		if(!HeaderOMElement.checkWSUser(msgContext))
 		{
+			json.clear();
 			json.element("errorCode", 400).element("message", "新增活动失败 ， 用户名或密码错误！");
 			return json.toString();
 		}
@@ -58,6 +63,20 @@ public class QNHActivitySer {
 		
 		try {
 			JSONObject jsn = JSONObject.fromObject(reqStr);
+			/**判断活动是否存在*/
+	        if (StringUtils.isNotBlank(jsn.get("QNHActId").toString()))
+	        {
+	        	Map<String,Object> conMap = new HashMap<String,Object>();
+	        	conMap.put("QNHActId", jsn.get("QNHActId").toString());
+	        	List<BusinessActivity> qnhActs = businessActivityService.findByMap(conMap);
+	        	if (CollectionUtils.isNotEmpty(qnhActs))
+	        	{
+	        		json.clear();
+	        		json.element("errorCode", 400).element("message", "新增活动失败 ，活动已存在，有问题请联系OK家！");
+	        		return json.toString();
+	        	}
+	        }
+	                	
 			BusinessActivity businessActivity = new BusinessActivity();
 			
 		 	businessActivity.setTypeId(new Integer(jsn.get("typeId").toString()));
@@ -121,6 +140,7 @@ public class QNHActivitySer {
 				businessActivity1.setActScope(str);
 		        businessActivityService.update(businessActivity1);
 			}
+			
 //			"content":{
 //				code:{
 //				uuid: 88023f8d-e710-487c-9c78-38dd90ceda68, 
@@ -128,13 +148,13 @@ public class QNHActivitySer {
 //				ID:1
 //				}
 			
-
 			json.element("content", new JSONObject().element("code",new JSONObject().element("uuid", "88023f8d-e710-487c-9c78-38dd90ceda68")
 					.element("type", "4").element("ID", businessActivity.getActId())));
 			System.out.println(json.toString());
 			System.out.println(jsn.get("actContent"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			json.clear();
 			json.element("errorCode", 400).element("message", "新增活动失败 - json解析失败");
 			e.printStackTrace();
 		}
@@ -143,10 +163,17 @@ public class QNHActivitySer {
 	}
 
 	public static void main(String[] args) {
+//		JSONObject json = new JSONObject();
+//		json.element("errorCode", 200).element("message", "新增活动成功！");
+//		json.element("content", new JSONObject().element("code",new JSONObject().element("uuid", "88023f8d-e710-487c-9c78-38dd90ceda68")
+//				.element("type", "4").element("ID","1").toString()));
+		
+		
 		JSONObject json = new JSONObject();
 		json.element("errorCode", 200).element("message", "新增活动成功！");
-		json.element("content", new JSONObject().element("code",new JSONObject().element("uuid", "88023f8d-e710-487c-9c78-38dd90ceda68")
-				.element("type", "4").element("ID","1").toString()));
+		json.clear();
+		json.element("errorCodes", 400).element("messages", "新增活动失败 ， 用户名或密码错误！");
+
 		System.out.println(json.toString());
 	}
 
