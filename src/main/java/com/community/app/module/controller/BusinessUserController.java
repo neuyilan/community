@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +66,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessDepartmentQuery;
 import com.community.app.module.vo.BusinessUserQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessUser")
@@ -361,14 +363,14 @@ public class BusinessUserController {
                 BusinessUser businessUser = (BusinessUser) baseBean.getList().get(i);
                 result.append("{")
                         .append("\"userId\":\"").append(businessUser.getUserId()).append("\"").append(",")
-                        .append("\"userName\":\"").append(businessUser.getUserName()).append("\"").append(",")
+                        .append("\"userName\":\"").append(JsonUtils.stringToJson(businessUser.getUserName().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
                         .append("\"userTel\":\"").append(businessUser.getUserTel()).append("\"").append(",")
                         .append("\"userPassword\":\"").append(businessUser.getUserPassword()).append("\"").append(",")
-                        .append("\"userCode\":\"").append(businessUser.getUserCode()).append("\"").append(",")
+                        .append("\"userCode\":\"").append(JsonUtils.stringToJson(businessUser.getUserCode().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
                         .append("\"lastLoginTime\":\"").append(businessUser.getLastLoginTime()).append("\"").append(",")
                         .append("\"userEmail\":\"").append(businessUser.getUserEmail()).append("\"").append(",")
                         .append("\"userPhoto\":\"").append(businessUser.getUserPhoto()).append("\"").append(",")
-                        .append("\"userBrief\":\"").append(businessUser.getUserBrief()).append("\"").append(",")
+                        .append("\"userBrief\":\"").append(JsonUtils.stringToJson(businessUser.getUserBrief().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
                         .append("\"userService\":\"").append(businessUser.getUserService()).append("\"").append(",")
                         .append("\"createTime\":\"").append(businessUser.getCreateTime()).append("\"").append(",")
                         .append("\"editTime\":\"").append(businessUser.getEditTime()).append("\"").append(",")
@@ -385,7 +387,7 @@ public class BusinessUserController {
                         .append("\"isMarriage\":\"").append(businessUser.getIsMarriage()).append("\"").append(",")
                         .append("\"hometown\":\"").append(businessUser.getHometown()).append("\"").append(",")
                         .append("\"nation\":\"").append(businessUser.getNation()).append("\"").append(",")
-                        .append("\"nickname\":\"").append(businessUser.getNickname()).append("\"").append(",")
+                        .append("\"nickname\":\"").append(JsonUtils.stringToJson(businessUser.getNickname().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
                         .append("\"avatar\":\"").append(businessUser.getAvatar()).append("\"").append(",")
                         .append("\"isManager\":\"").append(businessUser.getIsManager()).append("\"").append(",")
                         .append("\"isGirl\":\"").append(businessUser.getIsGirl()).append("\"").append(",")
@@ -462,6 +464,8 @@ public class BusinessUserController {
 	public ModelAndView modify(BusinessUserQuery query) {	
 		BusinessUser businessUser=new BusinessUser();
         List list = new ArrayList();
+        StringBuilder sb = new StringBuilder();
+        
 		try{
 			businessUser = businessUserService.findById(query.getUserId()); //员工基础信息
             businessUser.setScope("-1"); //初始化范围
@@ -470,38 +474,22 @@ public class BusinessUserController {
             Map map = new HashMap();
             map.put("userId", query.getUserId());
             list = businessUserResourceService.findByMap(map);
-
+      		if(list.size() > 0){
+      			for(int i=0;i<list.size();i++) {
+      				BusinessUserResource businessUserResource = (BusinessUserResource) list.get(i);
+      				sb.append(businessUserResource.getEstateId()+",");
+      			}
+      		}
 		}catch(Exception e){
 			GSLogger.error("进入businessUser修改页时发生错误：/business/businessUser/modify", e);
 			e.printStackTrace();
 		}
         ModelAndView mav = new ModelAndView();
-        ShiroUser shiroUser = CommonUtils.getUser();
-		/*String orgType = "";
-		if(shiroUser.getCurOrgType().equals("") || shiroUser.getCurOrgType() == null) {
-			orgType = shiroUser.getOrgType();
-		} else {
-			orgType = shiroUser.getCurOrgType();
-		}*/
-		/*if(orgType.equals(ModuleConst.PROPERTY_CODE)) {//物业
-			mav = new ModelAndView("/module/businessUser/propertyModify");
-		}else if(orgType.equals(ModuleConst.STATION_CODE)){//驿站
-			mav = new ModelAndView("/module/businessUser/stationModify");
-		}else if(orgType.equals(ModuleConst.COMMUNITY_CODE) ){//社区报
-			mav = new ModelAndView("/module/businessUser/communityModify");
-			
-			Map map = new HashMap();
-			map.put("userId", shiroUser.getUserId());
-			map.put("orgType", shiroUser.getOrgType());
-			map.put("comId", shiroUser.getCurComId());
-			
-			List comList = businessCommunityService.findComsByUser(map);
-			 mav.addObject("comList", comList);
-		}else{//运营
-			mav = new ModelAndView("/module/businessUser/operationModify");
-		}*/
         mav = new ModelAndView("/module/businessUser/propertyModify");
         mav.addObject("businessUser", businessUser);
+        if(sb.toString().length() > 0){
+			mav.addObject("scope1", sb.toString().substring(0, sb.toString().length()-1));
+        }
         mav.addObject("resourceList", list);
 		return mav;
 	}
@@ -2830,30 +2818,33 @@ public class BusinessUserController {
 	 * @param response
 	 */
 	@RequestMapping(value="getComsScopeTree")
-	public void getComsScopeTree(HttpServletResponse response) {
+	public void getComsScopeTree(BusinessUserQuery query, HttpServletResponse response) {
 		JSONObject jsonObj = new JSONObject();
 		JSONArray comArr = new JSONArray();
 		
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			//获取该用户负责的多社区范围
-			Map map = new HashMap();
-			//map.put("userId", shiroUser.getUserId());
-			//map.put("orgType", shiroUser.getOrgType());
-			//map.put("comId", shiroUser.getCurComId());
 			
-			//List comList = businessCommunityService.findComsByUser(map);
+			JSONObject allObj = new JSONObject();
+			allObj.put("id", "allCom");
+			allObj.put("text", "全部社区");
+			JSONArray allArr = new JSONArray();
 			List comList = shiroUser.getComList();
+			
+			List<String> tempList = null; 
 			JSONObject comObj = null;
 			Map paramMap = null;
+			if(query.getFlag().equals("update")) {
+				String strArr[] = query.getScope().split(",");
+				tempList = Arrays.asList(strArr);
+			} 
+			
 			for(int i=0;i<comList.size();i++) {
-				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
 				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
 				paramMap = new HashMap();
 				paramMap.put("comId", community.getComId());
 				paramMap.put("userId", shiroUser.getUserId());
-				//List estateList = manageEstateService.findByMap(paramMap);
 				List estateList = businessUserResourceService.findByMap(paramMap);
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
@@ -2864,16 +2855,23 @@ public class BusinessUserController {
 						JSONObject estateObj = new JSONObject();
 						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
 						estateObj.put("text", businessUserResource.getEstateName());
-						estateObj.put("checkbox", true);
 						estateObj.put("state", "close");
+						if(query.getFlag().equals("update")) {
+							if(tempList.contains(businessUserResource.getEstateId()+"")) {
+								estateObj.put("checked","true");
+							}
+						}
 						estateArr.add(estateObj);
 					}
 					comObj.put("children", estateArr);
 					comObj.put("state", "closed");
-					comArr.add(comObj);
+					allArr.add(comObj);
 				}				
 			}
-			// }
+			allObj.put("children", allArr);
+			allObj.put("state", "closed");
+			comArr.add(allObj);
+			
 			jsonObj.put("success", true);
 			jsonObj.put("result", comArr);
 		}catch(Exception e){

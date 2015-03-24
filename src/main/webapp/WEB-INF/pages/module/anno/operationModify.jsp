@@ -32,7 +32,8 @@
     <div class="newsrel">
         <div class="header-public" style="cursor: pointer;"><span class="return" onclick="history.go(-1)" style="cursor: pointer;"></span>公告发布</div>
         <div class="cont-l">
-        <input type="hidden" name="annoId" id="annoId" value="${businessAnno.annoId }" />
+        	<input type="hidden" name="annoId" id="annoId" value="${businessAnno.annoId }" />
+        	<input type="hidden" id="scope1" name="scope1" value="${scope1}" />
             <h2 class="title" style="font-weight: bold;">公告标题<label for="annoTitle" class="error success"></label></h2>
             <input class="iptnewtit" type="text" name="annoTitle" placeholder='请输入公告标题24字以内' value="${businessAnno.annoTitle }" />
             
@@ -389,8 +390,10 @@
                 $("#scopeBar").css("height",$(document.body).outerHeight(true)-40+'px');
                 //显示小区结构
                 $.ajax({
-                    url: '${ctx}/manage/manageEstate/getAllEstateTree.do',
+                    // url: '${ctx}/manage/manageEstate/getAllEstateTree.do',
+                    url: '${ctx}/business/businessAnno/getBuildingsByUser.do',
                     dataType: 'json',
+                    data: {flag: 'update', scope: $('#scope1').val()},
                     cache: false,
                     success: function (data) {
                          

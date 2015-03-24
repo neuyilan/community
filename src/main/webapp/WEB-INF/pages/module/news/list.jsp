@@ -151,7 +151,7 @@
 		                    	</shiro:hasPermission>
 		                    </div>
 		                	<c:if test="${news.hotTime1 != null}">
-		                    	<span class="gore goreblock"><img src="<%=ctx %>/images/icon/gore.png" width="31" height="31" /><i>顶</i></span>
+		                    	<span class="gore goreblock"><img src="<%=ctx %>/images/icon/gore.png" width="31" height="31" /><i class="tt">头条</i></span>
 		                	</c:if>
 		                </a>
 		            </div>
@@ -388,7 +388,7 @@ function jump(pageNo) {
 			            + '<span id="text1" class="del"  title="删除新鲜事" onclick="deleteNews('+row.newsId+')"></span>'
 			            </shiro:hasPermission>
 			            + '</div>'
-	                	+ (row.hotTime1 == "null" ? '':'<span class="gore goreblock"><img src="<%=ctx%>/images/icon/gore.png" width="31" height="31" /><i>顶</i></span>')
+	                	+ (row.hotTime1 == "null" ? '':'<span class="gore goreblock"><img src="<%=ctx%>/images/icon/gore.png" width="31" height="31" /><i class="tt">头条</i></span>')
 	                	+ '</a>'		                
 	                	+ '</div>';
 	                	$('.column').append(htmlDom);

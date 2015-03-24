@@ -117,7 +117,7 @@
                 <textarea id="helpContent" name="helpContent" type="text/plain" style="width:1024px;height:150px;"></textarea>
                 
                 <div class="submtpres">
-                    <input id="qrbut" type="button" value="确认提交" onclick="submitForm();"/>
+                    <input id="qrbut" type="button" value="确认提交" onclick="submitForm()"/>
                 </div>
             </div>
             </form>

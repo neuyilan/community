@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessRegPicDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessRegPicResult" type="BusinessRegPic">
+			<result column="picId" property="picId" />
+			<result column="regId" property="regId" />
+			<result column="picUrl" property="picUrl" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			picId,
+			regId,
+			picUrl
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="picId != null and picId != ''" >
+				   		and picId = #{picId}
+					</if>
+					<if test="regId != null and regId != ''" >
+				   		and regId = #{regId}
+					</if>
+					<if test="picUrl != null and picUrl != ''" >
+				   		and picUrl = #{picUrl}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessRegPic -->
+	<select id="findById"  resultMap="BusinessRegPicResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_reg_pic where picId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessRegPic -->
+	<select id="findAll" resultMap="BusinessRegPicResult">
+		select <include refid="Base_Column_List" /> from business_reg_pic 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessRegPic -->
+	<select id="findByMap" resultMap="BusinessRegPicResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_reg_pic <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessRegPic -->
+	<select id="findByExample" resultMap="BusinessRegPicResult" parameterType="com.community.app.module.vo.BusinessRegPicQuery">
+		select <include refid="Base_Column_List" /> from business_reg_pic <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRegPic根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessRegPicResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_reg_pic  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessRegPic列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_reg_pic 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessRegPic保存数据 -->
+	<insert id="save" parameterType="BusinessRegPic">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="picId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_reg_pic(
+		
+		regId,
+		picUrl
+		) values(
+				#{regId},
+		#{picUrl}
+		)
+	</insert>
+	
+	<!-- BusinessRegPic修改数据 -->
+	<update id="update" parameterType="BusinessRegPic">
+		update business_reg_pic 
+		<set>
+			<if test="regId != null and regId != ''" >
+			regId=#{regId},
+			</if>
+			<if test="picUrl != null and picUrl != ''" >
+			picUrl=#{picUrl}
+			</if>
+		</set> 
+		where 
+		picId=#{picId}
+		
+		
+	</update>
+	
+	<!-- BusinessRegPic删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_reg_pic where 
+		picId=#{picId}
+					</delete>
+	
+</mapper>
+	

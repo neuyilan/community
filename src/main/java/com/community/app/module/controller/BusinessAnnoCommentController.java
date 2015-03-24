@@ -212,10 +212,10 @@ public class BusinessAnnoCommentController {
             businessAnnoComment.setCommentTime(ts);
 			businessAnnoCommentService.replySave(businessAnnoComment);
 			
-			if (query.getReplyId()!=0) {
+			if (query.getRepliedId()!=0) {
 				BusinessAnno businessAnno = businessAnnoService.findById_app(query.getAnnoId());
 				AppUserNews appUserNews = new AppUserNews();
-				appUserNews.setUserId(query.getReplyId());
+				appUserNews.setUserId(query.getRepliedId());
 				appUserNews.setCreateTime(new Timestamp(new Date().getTime()));
 				appUserNews.setNewTitle(businessAnno.getAnnoTitle());
 				if(businessAnno.getAnnoType() == 0 || businessAnno.getAnnoType() == 1) {  // 物业公告
@@ -230,7 +230,7 @@ public class BusinessAnnoCommentController {
 				appUserNews.setLastMessageName(businessAnnoComment.getCommentorName());
 				appUserNewsService.saveReply_manage(appUserNews);
 				AppLatestNews appLatestNews = new AppLatestNews();
-				appLatestNews.setUserId(query.getReplyId());
+				appLatestNews.setUserId(query.getRepliedId());
 				appLatestNews.setTypeId(7);
 				appLatestNews.setSourceId(query.getAnnoId());
 				appLatestNews.setTo(0);

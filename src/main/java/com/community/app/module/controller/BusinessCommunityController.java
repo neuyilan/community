@@ -19,7 +19,6 @@ import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessCommunityQuery;
-import com.community.framework.utils.JsonUtils;
 
 
 @Controller

@@ -72,7 +72,25 @@ public class BusinessNewsQuery extends BaseBean {
 	
 	private Integer curEstateId;
 	private java.sql.Timestamp hotTime1;
+	private String flag;
+	private String scope;
 	
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
 	public String getCreater() {
 		return creater;
 	}

@@ -37,6 +37,24 @@ public class BusinessFocusQuery extends BaseBean {
 	private Integer curComId;
 	private Integer curUserId;
 	private Integer curEstateId;
+	private String flag;
+	private String scope;
+	
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
 
 	public Integer getCurEstateId() {
 		return curEstateId;
@@ -300,4 +318,3 @@ public class BusinessFocusQuery extends BaseBean {
 	}
 	
 }
-

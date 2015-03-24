@@ -119,7 +119,7 @@
 					<div><input class="updatePwd y-x-xmm" type="password" id="valipassword" name="valipassword" placeholder='请再次输入您的新密码' /><label for="valipassword" class="error success">确认密码需与新密码一致！</label></div>
 					<div class="no-float"></div>
 					<div class="submtpres" id="submtpres_1">
-						<input class="y-x-qrxg" type="button" name="" value="确认修改" onclick="submitForm();"/>
+						<input class="y-x-qrxg" type="button" name="" value="确认修改" onclick="submitForm()"/>
 					</div>
 				</div>
 		</div>

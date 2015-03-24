@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -179,7 +178,7 @@
             <div id="timingPublicLabel"></div>
             
             <div class="submtpres">
-                <input id="qrbut" type="button" value="确认提交" onclick="submitForm();"/>
+                <input id="qrbut" type="button" value="确认提交" onclick="submitForm()"/>
             </div>
         </div>
     </div>
@@ -846,9 +845,9 @@
             $.ajax({
                 url: '${ctx}/business/businessActivity/getEstateTree.do',
                 dataType: 'json',
+                data: {flag: 'add'},
                 cache: false,
                 success: function (data) {
-                     
                     if(data.success == true){
                         var rows = data.result;
                         //alert('data.result   '+rows.length);
@@ -883,7 +882,7 @@
             if(scopeNodes != null && scopeNodes.length > 0) {
                 for(var i=0;i<scopeNodes.length;i++) {
                 	var node = scopeNodes[i];
-                	if(node.id.indexOf("com")<0){
+                	if(node.id.indexOf("com")<0 && node.id.indexOf("allCom")<0){
                 		var idArr = node.id.split('_');
                         var typeid = idArr[0];
                         scopeIds += idArr[1] + ':' + node.text + ',';

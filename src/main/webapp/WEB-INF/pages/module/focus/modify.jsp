@@ -104,6 +104,7 @@
 <body class="bagcolr">
 <form id="ff"  action="update.do" method="post">
 	<input type="hidden" name="focusId" id="focusId" value="${businessFocus.focusId }" />
+	<input type="hidden" name="scope" id="scope" value="${scope1 }" />
     <div class="wrapper wranews">
         <div class="newsrel">
             <div class="header-public"><span class="return" onclick="history.go(-1);"></span>编辑焦点图</div>
@@ -142,7 +143,7 @@
                 </div>
                 
                 <div class="submtpres">
-                    <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm();"/>
+                    <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm()"/>
                 </div>
             </div>
         </div>
@@ -226,6 +227,7 @@
 	   	        $.ajax({
 	   	            url: '${ctx}/business/businessFocus/getExpendScopeTree.do',
 	   	            dataType: 'json',
+	   	        	data: {flag: 'update', scope: $('#scope').val()},
 	   	            cache: false,
 	   	            success: function (data) {
 	   	                if(data.success == true){

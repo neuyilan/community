@@ -162,6 +162,9 @@
 		<typeAlias alias="BusinessActivityQnhInformation" type="com.community.app.module.bean.BusinessActivityQnhInformation"/>
 		<typeAlias alias="BusinessHelpType" type="com.community.app.module.bean.BusinessHelpType"/>
 		<typeAlias alias="BusinessOpertaion" type="com.community.app.module.bean.BusinessOpertaion"/>
+		<typeAlias alias="BusinessPrize" type="com.community.app.module.bean.BusinessPrize"/>
+		<typeAlias alias="BusinessSponsor" type="com.community.app.module.bean.BusinessSponsor"/>
+		
 	</typeAliases>
 	<!-- 这里交给sqlSessionFactory 的 mapperLocations属性去得到所有配置信息 -->
 	
@@ -315,6 +318,9 @@
 		<mapper resource="com/community/app/module/mapper/BusinessTokenMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessActivityQnhInformationMapper.xml" />
 		<mapper resource="com/community/app/module/mapper/BusinessHelpTypeMapper.xml" />
+		
+		<mapper resource="com/community/app/module/mapper/BusinessPrizeMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessSponsorMapper.xml" />
 		
 		
 		

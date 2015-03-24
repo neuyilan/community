@@ -8,6 +8,11 @@ import org.apache.commons.lang.builder.ToStringStyle;
 
 public class BusinessExp implements java.io.Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6601130873275695757L;
+
 	//别名
 	public static final String TABLE_ALIAS = "BusinessExp";
 

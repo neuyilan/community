@@ -27,6 +27,8 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ import com.community.app.module.bean.AppLatestNews;
 import com.community.app.module.bean.AppStatisticsClick;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserNews;
+import com.community.app.module.bean.BusinessActReg;
 import com.community.app.module.bean.BusinessActivity;
 import com.community.app.module.bean.BusinessActivityComment;
 import com.community.app.module.bean.BusinessActivityCoupon;
@@ -47,10 +50,15 @@ import com.community.app.module.bean.BusinessActivityRegistrationInformation;
 import com.community.app.module.bean.BusinessActivityRegistrationTimeslot;
 import com.community.app.module.bean.BusinessActivitySupport;
 import com.community.app.module.bean.BusinessActivityVoteOptions;
+import com.community.app.module.bean.BusinessPrize;
+import com.community.app.module.bean.BusinessRegPic;
+import com.community.app.module.bean.BusinessSponsor;
+import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
 import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.BusinessActRegService;
 import com.community.app.module.service.BusinessActivityCommentService;
 import com.community.app.module.service.BusinessActivityCouponService;
 import com.community.app.module.service.BusinessActivityParticipateService;
@@ -62,9 +70,13 @@ import com.community.app.module.service.BusinessActivitySupportService;
 import com.community.app.module.service.BusinessActivityVoteInformationService;
 import com.community.app.module.service.BusinessActivityVoteOptionsService;
 import com.community.app.module.service.BusinessCommunityService;
+import com.community.app.module.service.BusinessPrizeService;
+import com.community.app.module.service.BusinessRegPicService;
+import com.community.app.module.service.BusinessSponsorService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageSendMsgService;
 import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessActRegQuery;
 import com.community.app.module.vo.BusinessActivityCommentQuery;
 import com.community.app.module.vo.BusinessActivityCouponQuery;
 import com.community.app.module.vo.BusinessActivityParticipateQuery;
@@ -75,6 +87,8 @@ import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
 import com.community.app.module.vo.BusinessActivitySupportQuery;
 import com.community.app.module.vo.BusinessActivityVoteInformationQuery;
 import com.community.app.module.vo.BusinessActivityVoteOptionsQuery;
+import com.community.app.module.vo.BusinessSponsorQuery;
+import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DateUtil;
 import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.messagesUtil;
@@ -82,7 +96,6 @@ import com.community.framework.utils.propertiesUtil;
 import com.community.framework.utils.weather;
 import com.community.framework.utils.testfilter.src.com.gao.SensitivewordFilter;
 import com.community.ws.QNH.QNHIFClient.InActivitiesOnCli;
-import com.community.ws.QNH.QNHIFClient.MemberCheckCli;
 import com.community.ws.QNH.QNHIFClient.OnlineCheckInCli;
 
 
@@ -124,9 +137,14 @@ public class activitiesController {
 	private ManageSendMsgService manageSendMsgService;
 	@Autowired
 	private BusinessActivityQnhInformationService businessActivityQnhInformationService;
-	
-	
-	
+	@Autowired
+	private BusinessPrizeService businessPrizeService;
+	@Autowired
+	private BusinessSponsorService businessSponsorService;
+	@Autowired
+	private BusinessActRegService businessActRegService;
+	@Autowired
+	private BusinessRegPicService businessRegPicService;
 	
 	/**
 	 * 用户查看活动列表
@@ -1576,6 +1594,7 @@ public class activitiesController {
 				BusinessActivityQnhInformation BusinessActivityQnhInformation = new BusinessActivityQnhInformation();
 				BusinessActivityQnhInformation.setInformationId(BusinessActivityQnhInformationList.get(0).getInformationId());
 				BusinessActivityQnhInformation.setState(1);
+				businessActivityQnhInformationService.update(BusinessActivityQnhInformation);
 				flag=true;
 			}else {
 				json = "";
@@ -1596,14 +1615,14 @@ public class activitiesController {
 		
 		try {
 			if(flag) {
-				BusinessActivity activity = businessActivityService.findById_app(query.getActId());
+				BusinessActivity activity = businessActivityService.findById_app(query.getID());
 				OnlineCheckInCli onlineCheckInCli = new OnlineCheckInCli();
 				String string =  onlineCheckInCli.signOnline(activity.getQNHActId(), BusinessActivityQnhInformationList.get(0).getTel());
 				JSONObject jsn = JSONObject.fromObject(string);
-				if (jsn.getJSONObject("errorCode").equals("200")) {
+				if (jsn.get("errorCode").toString().equals("200")) {
 					JSONObject content= jsn.getJSONObject("content");
-					JSONObject times= content.getJSONObject("times");
-					JSONObject state= content.getJSONObject("state");
+					String times= content.get("times").toString();
+					String state= content.get("state").toString();
 					json += "{";
 					json += "\"errorCode\":\"200\",";
 					json += "\"message\":\"签到成功\",";
@@ -1630,6 +1649,11 @@ public class activitiesController {
 		} catch (Exception e) {
 			// 判断青年汇错误
 			GSLogger.error("青年汇活动报名错误", e);
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"参与失败\"";
+			json += "}";
 		}
 		
 		
@@ -1734,24 +1758,36 @@ public class activitiesController {
 					json = "";
 					json += "{";
 					json += "\"errorCode\":\"400\",";
-					json += "\"message\":\"您已经参与活动！不能重复参与！\"";
+					json += "\"message\":\"您已报名活动！不能重复报名！\"";
 					json += "}";
 				}else {
-					Timestamp  ts=new Timestamp(new Date().getTime());
-					BusinessActivityQnhInformation businessActivityQnhInformation = new BusinessActivityQnhInformation();
-					businessActivityQnhInformation.setActId(query.getActId());
-					businessActivityQnhInformation.setUserId(query.getUserId());
-					businessActivityQnhInformation.setState(0);
-					businessActivityQnhInformation.setRealname(query.getRealname());
-					businessActivityQnhInformation.setCreateTime(ts);
-					businessActivityQnhInformation.setEditTime(ts);
-					businessActivityQnhInformation.setEditor("");
-					businessActivityQnhInformation.setTel(query.getTel());
-					businessActivityQnhInformationService.save(businessActivityQnhInformation);
-					json += "{";
-					json += "\"errorCode\":\"200\",";
-					json += "\"message\":\"参与成功\"";
-					json += "}";
+					businessActivityQnhInformationQuery.setUserId(null);
+					businessActivityQnhInformationQuery.setTel(query.getTel());
+					BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
+					if(BusinessActivityQnhInformationList.size()>0){
+						json = "";
+						json += "{";
+						json += "\"errorCode\":\"400\",";
+						json += "\"message\":\"您输入的手机号已报名活动！不能重复报名！\"";
+						json += "}";
+					}else {
+						Timestamp  ts=new Timestamp(new Date().getTime());
+						BusinessActivityQnhInformation businessActivityQnhInformation = new BusinessActivityQnhInformation();
+						businessActivityQnhInformation.setActId(query.getActId());
+						businessActivityQnhInformation.setUserId(query.getUserId());
+						businessActivityQnhInformation.setState(0);
+						businessActivityQnhInformation.setRealname(query.getRealname());
+						businessActivityQnhInformation.setCreateTime(ts);
+						businessActivityQnhInformation.setEditTime(ts);
+						businessActivityQnhInformation.setEditor("");
+						businessActivityQnhInformation.setTel(query.getTel());
+						businessActivityQnhInformationService.save(businessActivityQnhInformation);
+						json += "{";
+						json += "\"errorCode\":\"200\",";
+						json += "\"message\":\"参与成功\"";
+						json += "}";
+					}
+					
 				}
 			}catch(Exception e){
 				json = "";
@@ -1774,10 +1810,10 @@ public class activitiesController {
 		}
 		
 		try {
-			if(BusinessActivityQnhInformationList != null && BusinessActivityQnhInformationList.size()>0){
+			if(BusinessActivityQnhInformationList.size()==0){
 				BusinessActivity activity = businessActivityService.findById_app(query.getActId());
 				InActivitiesOnCli inActivitiesOnCli = new InActivitiesOnCli();
-				inActivitiesOnCli.regOnLine(activity.getQNHId(), query.getTel());
+				inActivitiesOnCli.regOnLine(activity.getQNHActId(), query.getTel());
 			}
 			
 		} catch (Exception e) {
@@ -1794,30 +1830,55 @@ public class activitiesController {
 	 */
 	@RequestMapping(value="getActivitiesDetails")
 	public void getActivitiesDetails(HttpServletRequest request, HttpServletResponse response) {
+
 		String json = "";
-		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\",";
-			json += "\"content\":{";
-			json += "\"actPic\":\"http://b.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252d0d9b5d5b379b033b5ab5b9e5.jpg\",";
-			json += "\"actName\":\"社区美女\",";
-			json += "\"actName\":\"社区美女\",";
-			json += "\"startTime\":\"2014-1-1 00:00:00\",";
-			json += "\"endTime\":\"2014-1-2 12:00:00\",";
-			json += "\"actContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\",";
-			json += "\"state\":\"0\",";
-			json += "\"registrationEndTime\":\"2014-1-2 8:00:00\"";
-			json += "}";
-			json += "}";
-		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"获取失败\"";
-			json += "}";
-			e.printStackTrace();
-		}	
+		String actId = request.getParameter("ID");
+		if (StringUtils.isNotBlank(actId))
+		{
+
+			BusinessActivity activity = businessActivityService.findById(Integer.valueOf(request.getParameter("ID")));
+			if (activity != null)
+			{
+				try{
+			        Properties p = propertiesUtil.getProperties("config.properties");
+					String ip = p.getProperty("imageIp");   
+					
+					json = new JSONObject().element("errorCode", "200").element("message", "获取成功").element("content", 
+							new JSONObject()							
+					         .element("actPic", ip + activity.getActPic())
+							.element("actName", activity.getActName())
+							.element("startTime", activity.getStartTime())
+							.element("endTime", activity.getEndTime())
+							.element("actContent", activity.getActContent())
+							.element("state", activity.getState())
+							.element("registrationEndTime", activity.getEndTime())
+							).toString();
+//					json += "{";
+//					json += "\"errorCode\":\"200\",";
+//					json += "\"message\":\"获取成功\",";
+//					json += "\"content\":{";
+//					json += "\"actPic\":\"http://b.hiphotos.baidu.com/image/pic/item/d8f9d72a6059252d0d9b5d5b379b033b5ab5b9e5.jpg\",";
+//					json += "\"actName\":\"社区美女\",";
+//					json += "\"actName\":\"社区美女\",";
+//					json += "\"startTime\":\"2014-1-1 00:00:00\",";
+//					json += "\"endTime\":\"2014-1-2 12:00:00\",";
+//					json += "\"actContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\",";
+//					json += "\"state\":\"0\",";
+//					json += "\"registrationEndTime\":\"2014-1-2 8:00:00\"";
+//					json += "}";
+//					json += "}";
+				}catch(Exception e){
+					json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
+					e.printStackTrace();
+				}
+			}else
+			{
+				json=new JSONObject().element("errorCode", "400").element("message", "获取条数为空").toString();
+			}
+		}else
+		{
+			json=new JSONObject().element("errorCode", "400").element("message", "活动ID为空").toString();
+		}
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
@@ -1836,47 +1897,163 @@ public class activitiesController {
 	 */
 	@RequestMapping(value="getActivitiesPrizeList")
 	public void getActivitiesPrizeList(HttpServletRequest request, HttpServletResponse response) {
+		
 		String json = "";
-		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\",";
-			json += "\"content\":{";
-			json += "\"list\":[";
-			json += "{\"awardsName\":\"一等奖\",";
-			json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
-			json += "\"prizeQuota\":\"10\",";
-			json += "\"prizeName\":\"大米三袋\",";
-			json += "\"prizeRanking\":\"1-10\",";
-			json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
-			json += "},";
-			json += "{\"awardsName\":\"二等奖\",";
-			json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
-			json += "\"prizeQuota\":\"10\",";
-			json += "\"prizeName\":\"大米俩袋\",";
-			json += "\"prizeRanking\":\"10-20\",";
-			json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
-			json += "},";
-			json += "{\"awardsName\":\"三等奖\",";
-			json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
-			json += "\"prizeQuota\":\"10\",";
-			json += "\"prizeName\":\"大米一袋\",";
-			json += "\"prizeRanking\":\"20-30\",";
-			json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
-			json += "}";
-			json += "]";
-			json += "}";
-			json += "}";
-		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"获取失败\"";
-			json += "}";
-			e.printStackTrace();
-		}	
+		String actId = request.getParameter("ID");
+		String psize = request.getParameter("psize");//0 全查  n查n条 (0 取活动 奖品规则)
+		if(StringUtils.isNotBlank(actId) && StringUtils.isNotBlank(psize))
+		{
+				Map<String, Object> map = new HashMap<String, Object>();
+				
+				map.put("actId", Integer.valueOf(actId) );
+				if (!"0".equals(psize))
+					map.put("psize", Integer.valueOf(psize)); 
+				List<BusinessPrize> prizeList = businessPrizeService.findByMap(map);
+				if (CollectionUtils.isNotEmpty(prizeList))
+				{
+					try{
+						JSONObject jsn = new JSONObject()
+						.element("errorCode", "200")
+						.element("message", "获取成功");
+						JSONArray jsnary = new JSONArray();
+						for(BusinessPrize prize :prizeList)
+							jsnary.element(new JSONObject()
+							.element("prizeId", prize.getPrizeId())
+							.element("awardsName", prize.getAwardName())
+							.element("prizeImg", prize.getPrizeImg())
+							.element("prizeQuota", prize.getPrizeQuota())
+							.element("prizeName", prize.getPrizeName())
+							.element("prizeRanking", prize.getRankStart()+"-"+prize.getRankEnd())
+							.element("prizeContent", prize.getPrizeContent()));
+						jsn.element("content",new JSONObject().element("list", jsnary))
+						.element("rule","发放规则 发放规则 发放规则").toString();
+						json = jsn.toString();
+						/*json += "{";
+						json += "\"errorCode\":\"200\",";
+						json += "\"message\":\"获取成功\",";
+						json += "\"content\":{";
+						json += "\"list\":[";
+						json += "{\"awardsName\":\"一等奖\",";
+						json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
+						json += "\"prizeQuota\":\"10\",";
+						json += "\"prizeName\":\"大米三袋\",";
+						json += "\"prizeRanking\":\"1-10\",";
+						json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
+						json += "},";
+						json += "{\"awardsName\":\"二等奖\",";
+						json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
+						json += "\"prizeQuota\":\"10\",";
+						json += "\"prizeName\":\"大米俩袋\",";
+						json += "\"prizeRanking\":\"10-20\",";
+						json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
+						json += "},";
+						json += "{\"awardsName\":\"三等奖\",";
+						json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
+						json += "\"prizeQuota\":\"10\",";
+						json += "\"prizeName\":\"大米一袋\",";
+						json += "\"prizeRanking\":\"20-30\",";
+						json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
+						json += "}";
+						json += "]";
+						json += "}";
+						json += "}";*/
+					}catch(Exception e){
+						json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
+						e.printStackTrace();
+					}
+				}else
+				{
+					json=new JSONObject().element("errorCode", "400").element("message", "获取条数为空").toString();
+				}
+		}else
+		{
+			json=new JSONObject().element("errorCode", "400").element("message", "ID或psize为空").toString();
+		}
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 获取活动奖品详情接口
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getActivitiesPrizeByPid")
+	public void getActivitiesPrizeByPid(HttpServletRequest request, HttpServletResponse response) {
+		
+		String json = "";
+		String prizeId = request.getParameter("ID");
+		if(StringUtils.isNotBlank(prizeId))
+		{
+			    BusinessPrize prize = businessPrizeService.findById(Integer.valueOf(prizeId));
+				if (prize != null)
+				{
+					try{
+						json = new JSONObject()
+						.element("errorCode", "200")
+						.element("message", "获取成功")
+						.element("content", new JSONObject()
+						.element("prizeId", prize.getPrizeId())
+						.element("awardsName", prize.getAwardName())
+						.element("prizeImg", prize.getPrizeImg())
+						.element("prizeQuota", prize.getPrizeQuota())
+						.element("prizeName", prize.getPrizeName())
+						.element("prizeRanking", prize.getRankStart()+"-"+prize.getRankEnd())
+						.element("prizeContent", prize.getPrizeContent())).toString();
+					}catch(Exception e){
+						json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
+						e.printStackTrace();
+					}
+				}else
+					json=new JSONObject().element("errorCode", "400").element("message", "获取条数为空").toString();
+		}else
+			json=new JSONObject().element("errorCode", "400").element("message", "ID或psize为空").toString();
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/**
+	 * 获取活动奖品详情接口
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="IWantSponsor")
+	public void IWantSponsor(HttpServletRequest request, HttpServletResponse response, BusinessSponsorQuery query) {
+		String json = "";
+			try{
+				BusinessSponsor sponsor = new BusinessSponsor();
+				sponsor.setUserId(query.getUserId());
+				sponsor.setActId(query.getActId());
+				sponsor.setSponsorName(query.getSponsorName());
+				sponsor.setSponsorPhone(query.getSponsorPhone());
+				sponsor.setSponsorContent(query.getSponsorContent());
+				System.out.println("==="+query.getSponsorContent());
+				sponsor.setCreatTime(new Timestamp(new Date().getTime()));
+				sponsor.setFlag(CommonData.GlobalData.RET_SUCCESS);
+				businessSponsorService.save(sponsor);
+				json=new JSONObject().element("errorCode", "200").element("message", "保存赞助信息成功").toString();
+			}catch(Exception e){
+				json=new JSONObject().element("errorCode", "400").element("message", "保存赞助信息失败").toString();
+				e.printStackTrace();
+		    }
+			response.setHeader("Cache-Control", "no-cache");
+			response.setCharacterEncoding("utf-8");
 		try {
 			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
@@ -2231,7 +2408,6 @@ public class activitiesController {
 	@RequestMapping(value="getActivitiesPlayerInfo")
 	public void getActivitiesPlayerInfo(HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
-		request.getParameter("userId");
 		try{
 			json += "{";
 			json += "\"errorCode\":\"200\",";
@@ -2274,20 +2450,20 @@ public class activitiesController {
 	@RequestMapping(value="getActivitiesPrompt")
 	public void getActivitiesPrompt(HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
+		String actId = request.getParameter("ID");
 		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\",";
-			json += "\"content\":{";
-			json += "\"prompt\":\"最多上传3张图片！！！\"";
-			json += "}";
-			json += "}";
+			BusinessActivity act = businessActivityService.findById(Integer.valueOf(actId));
+			if (act == null)
+				throw new Exception();
+			json = new JSONObject()
+			.element("errorCode", "200")
+			.element("message", "获取成功")
+			.element("content", new JSONObject()
+			.element("prompt", act.getActRegWords())).toString();  //活动报名话术
 		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"获取失败\"";
-			json += "}";
+			json = new JSONObject()
+			.element("errorCode", "400")
+			.element("message", "获取失败").toString();
 			e.printStackTrace();
 		}	
 		response.setHeader("Cache-Control", "no-cache");
@@ -2295,31 +2471,60 @@ public class activitiesController {
 		try {
 			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * 获取选手信息
+	 * 选手报名
 	 * @param userId,sessionid,ID,page,rows
 	 * @return
 	 * json
 	 */
 	@RequestMapping(value="saveActivitiesRegistration")
-	public void saveActivitiesRegistration(HttpServletRequest request, HttpServletResponse response) {
+	public void saveActivitiesRegistration(HttpServletRequest request, HttpServletResponse response, BusinessActRegQuery query) {
 		String json = "";
 		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\"";
-			json += "}";
+			ManageEstate est = manageEstateService.findById(query.getEstateId());
+			BusinessActReg actReg = new BusinessActReg();
+			actReg.setUserId(query.getUserId());
+			actReg.setActId(query.getActId());
+			actReg.setEstateId(query.getEstateId());
+			actReg.setEstateName(est.getEstateName());
+			actReg.setDesc(query.getDesc());
+			actReg.setNickName("");
+			actReg.setAvatar("");
+			actReg.setRegTime(new Timestamp(new Date().getTime()));
+			actReg.setFlag(CommonData.GlobalData.RET_VERIFY);
+			actReg.setVotes(0);
+			actReg.setCode(0);
+			
+			int regId =businessActRegService.save(actReg);
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("regId", regId);  
+			map.put("actId", query.getActId());
+			int cnt = businessActRegService.cntFront(map)+1;  // code = cnt+1
+			map.put("code", cnt);
+			//TODO 事务绑定
+			businessActRegService.updateCode(map);
+			
+			/**图片数组*/
+			String images = request.getParameter("images");
+			if (StringUtils.isNotBlank(images))
+			{
+				String[] imgArry = images.split(",");
+				for(String img : imgArry)
+				{
+					BusinessRegPic regPic = new BusinessRegPic();
+					regPic.setRegId(regId);
+					regPic.setPicUrl(img);
+					businessRegPicService.save(regPic);
+				}
+			}
+			json = new JSONObject().element("errorCode", "200").element("message", "报名成功").toString();
 		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"获取失败\"";
-			json += "}";
+			json = new JSONObject().element("errorCode", "400").element("message", "报名失败").toString();
 			e.printStackTrace();
 		}	
 		response.setHeader("Cache-Control", "no-cache");

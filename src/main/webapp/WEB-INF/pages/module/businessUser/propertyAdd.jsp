@@ -139,7 +139,7 @@
             </div>
             
             <div class="submtpres">
-                <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm();"/>
+                <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm()"/>
             </div>
         </div>
     	</form>
@@ -592,6 +592,7 @@
         		$.ajax({
                     url: '<%=path %>/business/businessUser/getComsScopeTree.do',
                     dataType: 'json',
+                    data: {flag: 'add'},
                     cache: false,
                     success: function (data) {
                     	 

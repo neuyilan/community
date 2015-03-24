@@ -161,7 +161,7 @@
 	
 	<!-- 根据id查询 ManageEstate -->
 	<select id="findBy3Km"  resultMap="ManageEstateResult" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List" /> from manage_estate where 
+		select <include refid="Base_Column_List" /> from manage_estate e where 
 		e.estateLongitude BETWEEN #{estateLongitude}-0.0135
    		AND #{estateLongitude}+0.0135
    		and e.estateLatitude BETWEEN #{estateLatitude}-0.0135

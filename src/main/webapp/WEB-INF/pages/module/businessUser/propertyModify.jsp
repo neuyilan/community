@@ -22,7 +22,8 @@
         <form id="addForm" modelAttribute="businessUser" method="post" action="updateProperty.do">
     	<div class="header-public"><span class="return" onclick="history.go(-1)"></span>修改员工信息</div>
         <div class="cont-l">
-        <input type="hidden" name="userId" id="userId" value="${businessUser.userId }" />
+        	<input type="hidden" name="userId" id="userId" value="${businessUser.userId }" />
+            <input type="hidden" name="scope" id="scope" value="${scope1 }" />
         	<h2 class="relran">公司邮箱<font color="red">*</font><label for="userEmail" class="error success"></label></h2>
             <input name="userEmail" style="width:300px;" class="iptnewtit" type="text" id="userEmail" placeholder='' value="${businessUser.userEmail }" />
             
@@ -145,7 +146,7 @@
             </div>
             
             <div class="submtpres">
-                <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm();"/>
+                <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm()"/>
             </div>
         </div>
         <hidden name="userId"/>
@@ -600,6 +601,7 @@
         		$.ajax({
                     url: '<%=path %>/business/businessUser/getComsScopeTree.do',
                     dataType: 'json',
+                    data: {flag: 'update', scope: $('#scope').val()},
                     cache: false,
                     success: function (data) {
                     	 

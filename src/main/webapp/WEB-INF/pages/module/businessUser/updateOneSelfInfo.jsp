@@ -76,7 +76,7 @@
             <textarea class="newtext" id="comWord" name="comWord" placeholder="">${businessUser.comWord }</textarea>
            
             <div class="submtpres">
-                <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm();"/>
+                <input id="qrbut" type="button" name="" value="确认提交"  onclick="submitForm()"/>
             </div>
         </div>
     	</form>

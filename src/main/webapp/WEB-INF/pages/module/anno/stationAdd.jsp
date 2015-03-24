@@ -114,7 +114,7 @@
                     <shiro:hasPermission name="station_anno_audting_anno">
                     <br>
                     <label>
-                        <input class="radiostyle" type="radio" name="publishState" value="1">
+                        <input class="radiostyle" type="radio" name="publishState" value="1" checked>
                         &nbsp;暂缓发布</label>
                     <br>
                     </shiro:hasPermission>
@@ -236,6 +236,7 @@
             $.ajax({
                 url: '${ctx}/business/businessAnno/getBuildingsByUser.do',
                 dataType: 'json',
+                data: {flag: 'add'},
                 cache: false,
                 success: function (data) {
                      

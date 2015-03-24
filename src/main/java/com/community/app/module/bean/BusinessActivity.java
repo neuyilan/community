@@ -61,6 +61,8 @@ public class BusinessActivity implements java.io.Serializable {
 	private String content;
 	private String image;
 
+	private String actRegWords;
+	private String prizeRules;
 	private String couponName;
 	private String couponDesc;
 	private String couponImg;
@@ -600,6 +602,8 @@ public class BusinessActivity implements java.io.Serializable {
 				.append("IsPush", getIsPush())
 				.append("CreateTime", getCreateTime())
 				.append("EditTime", getEditTime())
+				.append("actRegWords", getActRegWords())
+				.append("prizeRules", getPrizeRules())
 				.append("Editor", getEditor()).toString();
 	}
 
@@ -615,5 +619,21 @@ public class BusinessActivity implements java.io.Serializable {
 		BusinessActivity other = (BusinessActivity) obj;
 		return new EqualsBuilder().append(getActId(), other.getActId())
 				.isEquals();
+	}
+
+	public String getActRegWords() {
+		return actRegWords;
+	}
+
+	public void setActRegWords(String actRegWords) {
+		this.actRegWords = actRegWords;
+	}
+
+	public String getPrizeRules() {
+		return prizeRules;
+	}
+
+	public void setPrizeRules(String prizeRules) {
+		this.prizeRules = prizeRules;
 	}
 }

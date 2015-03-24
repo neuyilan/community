@@ -265,7 +265,7 @@
     	$.ajax({
     		type: 'post',
             url: '<%=path %>/app/appUser/getPageList.do',
-            timeout: 1000,
+            // timeout: 1000,
             data: params,
             cache: false,
             dataType: 'json',

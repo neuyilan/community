@@ -16,6 +16,7 @@
 					<div class="uploadImg">
 						<input id="hidImgName" type="text" style="display: none;" value="">
 						<input id="btnUploadImg" class=" " type="button" value="点击浏览上传" style="margin-left: 5px; font-size: 22px;">
+						<label id="maxCount" style="margin-left:15px; font-size:18px; color:Red;">最多只能上传6张图片！</label>
 					</div></li>
 				<ul id="imageShow" class="sub-menu4"> </ul>
 			</ul>
@@ -24,6 +25,8 @@
 </div>
 
 <script type="text/javascript">
+
+var count = 0;
 //初始化上传动作 
 ////第四个参数flag为是否显示默认图片
 function uploadInit(folderName, fieldName, imgType, flag) {
@@ -60,6 +63,8 @@ function uploadInit(folderName, fieldName, imgType, flag) {
 	    });
 	}
 	
+	$('#maxCount').hide();
+	
 	// 获取添加的img路径
 	var arr = new Array();
 	$("img").each(function() {
@@ -69,6 +74,10 @@ function uploadInit(folderName, fieldName, imgType, flag) {
 	});
 	if(arr.length > 0){
 		 var uploadField = $('#uploadField').val();
+		 if(count >= 6) {
+        	$('#btnUploadImg').hide();
+        	$('#maxCount').show();
+         } 
 		 for(var i=0; i<arr.length; i++) {
 			 $('#imageShow').append(
 		          '<li id="li_'+imgpath.substring(arr[i].lastIndexOf('/')+1,arr[i].lastIndexOf('.'))+'">'+
@@ -136,6 +145,11 @@ function g_AjxUploadImg(imgUploadBtn, imgShow, hidImgName, folderName) {
               '</a>'+
               '<span class="delet4" id="btnDeleteImg" onclick="delImg(\''+uploadField+'\', \''+imgpath.substring(imgpath.lastIndexOf('/')+1,imgpath.lastIndexOf('.'))+'\',\''+imgpath+'\')"></span>'+
               '</li> ');
+	        count++;
+	        if(count >= 6) {
+	        	$('#btnUploadImg').hide();
+	        	$('#maxCount').show();
+	        } 
 	    }
 	});
 }
@@ -161,6 +175,11 @@ function delImg(uploadField, img_id, imgpath){
 			  $('#img_'+img_id).empty();
 			  $('#li_'+img_id).empty();
 			  $('#'+uploadField).val(img);
+			  count--;
+			  if(count < 6) {
+				  $('#btnUploadImg').show();
+	        	  $('#maxCount').hide();
+	          }
 		  },
 		  error: function() {
 			  alert('删除失败');

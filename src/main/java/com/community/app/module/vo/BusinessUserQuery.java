@@ -57,6 +57,15 @@ public class BusinessUserQuery extends BaseBean {
 	private String valipassword;
 	private Integer curEstateId;
 	private Integer curComId;
+	private String flag;
+	
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
 
 	public Integer getCurComId() {
 		return curComId;

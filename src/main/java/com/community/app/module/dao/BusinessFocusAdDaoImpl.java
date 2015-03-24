@@ -9,7 +9,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessFocusAd;
 import com.community.app.module.vo.BusinessFocusAdQuery;
 import com.community.framework.exception.DaoException;

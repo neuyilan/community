@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessPrizeDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessPrizeResult" type="BusinessPrize">
+			<result column="prizeId" property="prizeId" />
+			<result column="awardName" property="awardName" />
+			<result column="prizeName" property="prizeName" />
+			<result column="prizeQuota" property="prizeQuota" />
+			<result column="prizeContent" property="prizeContent" />
+			<result column="actId" property="actId" />
+			<result column="prizeImg" property="prizeImg" />
+			<result column="rankStart" property="rankStart" />
+			<result column="rankEnd" property="rankEnd" />
+			<result column="prizeOrder" property="prizeOrder" />
+			<result column="creatTime" property="creatTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			prizeId,
+			awardName,
+			prizeName,
+			prizeQuota,
+			prizeContent,
+			actId,
+			prizeImg,
+			rankStart,
+			rankEnd,
+			prizeOrder,
+			creatTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="prizeId != null and prizeId != ''" >
+				   		and prizeId = #{prizeId}
+					</if>
+					<if test="awardName != null and awardName != ''" >
+				   		and awardName = #{awardName}
+					</if>
+					<if test="prizeName != null and prizeName != ''" >
+				   		and prizeName = #{prizeName}
+					</if>
+					<if test="prizeQuota != null and prizeQuota != ''" >
+				   		and prizeQuota = #{prizeQuota}
+					</if>
+					<if test="prizeContent != null and prizeContent != ''" >
+				   		and prizeContent = #{prizeContent}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="prizeImg != null and prizeImg != ''" >
+				   		and prizeImg = #{prizeImg}
+					</if>
+					<if test="rankStart != null and rankStart != ''" >
+				   		and rankStart = #{rankStart}
+					</if>
+					<if test="rankEnd != null and rankEnd != ''" >
+				   		and rankEnd = #{rankEnd}
+					</if>
+
+					<if test="prizeOrder != null and prizeOrder != ''" >
+				   		and prizeOrder = #{prizeOrder}
+					</if>
+					<if test="creatTime != null and creatTime != ''" >
+				   		and creatTime = #{creatTime}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessPrize -->
+	<select id="findById"  resultMap="BusinessPrizeResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_prize where prizeId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessPrize -->
+	<select id="findAll" resultMap="BusinessPrizeResult">
+		select <include refid="Base_Column_List" /> from business_prize 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessPrize -->
+	<select id="findByMap" resultMap="BusinessPrizeResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_prize <include refid="Base_Where_Clause" />
+		order by prizeOrder
+	<if test="psize != null" >
+   		 LIMIT  #{psize}
+	</if>
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessPrize -->
+	<select id="findByExample" resultMap="BusinessPrizeResult" parameterType="com.community.app.module.vo.BusinessPrizeQuery">
+		select <include refid="Base_Column_List" /> from business_prize <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessPrize根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessPrizeResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_prize  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessPrize列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_prize 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessPrize保存数据 -->
+	<insert id="save" parameterType="BusinessPrize">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="prizeId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_prize(
+		
+		awardName,
+		prizeName,
+		prizeQuota,
+		prizeContent,
+		actId,
+		prizeImg,
+		rankStart,
+		rankEnd,
+		prizeOrder,
+		creatTime
+		) values(
+				#{awardName},
+		#{prizeName},
+		#{prizeQuota},
+		#{prizeContent},
+		#{actId},
+		#{prizeImg},
+		#{rankStart},
+		#{rankEnd},
+		#{prizeOrder},
+		#{creatTime}
+		)
+	</insert>
+	
+	<!-- BusinessPrize修改数据 -->
+	<update id="update" parameterType="BusinessPrize">
+		update business_prize 
+		<set>
+			<if test="awardName != null and awardName != ''" >
+			awardName=#{awardName},
+			</if>
+			<if test="prizeName != null and prizeName != ''" >
+			prizeName=#{prizeName},
+			</if>
+			<if test="prizeQuota != null and prizeQuota != ''" >
+			prizeQuota=#{prizeQuota},
+			</if>
+			<if test="prizeContent != null and prizeContent != ''" >
+			prizeContent=#{prizeContent},
+			</if>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="prizeImg != null and prizeImg != ''" >
+			prizeImg=#{prizeImg},
+			</if>
+			<if test="rankStart != null and rankStart != ''" >
+			rankStart=#{rankStart},
+			</if>
+			<if test="rankEnd != null and rankEnd != ''" >
+			rankEnd=#{rankEnd},
+			</if>
+			<if test="prizeOrder != null and prizeOrder != ''" >
+			prizeOrder=#{prizeOrder},
+			</if>
+			<if test="creatTime != null and creatTime != ''" >
+			creatTime=#{creatTime}
+			</if>
+		</set> 
+		where 
+		prizeId=#{prizeId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessPrize删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_prize where 
+		prizeId=#{prizeId}
+																					</delete>
+	
+</mapper>
+	

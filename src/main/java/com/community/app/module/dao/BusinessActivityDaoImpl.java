@@ -136,6 +136,29 @@ public class BusinessActivityDaoImpl implements BusinessActivityDao {
 	 * @return
 	 * @throws DaoException
 	 */
+	public int selectCount_app_QNH(final BusinessActivityQuery query) throws DaoException {
+		int count = this.sqlSessionTemplate.selectOne("com.community.app.module.dao.BusinessActivityDao.selectCount_app_QNH",query);
+		return count;
+	}
+	
+	/**
+	 * 根据搜索条件，搜索分页数据
+	 * @param query
+	 * @param pageData
+	 * @return
+	 * @throws DaoException
+	 */
+	public List<BusinessActivity> findAllPage_app_QNH(final BusinessActivityQuery query) throws DaoException {
+		List<BusinessActivity> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessActivityDao.findAllPage_app_QNH",query);
+		return list;
+	}
+
+	/**
+	 * 根据搜索条件，搜索分页总数
+	 * @param pageData
+	 * @return
+	 * @throws DaoException
+	 */
 	public int selectCount_app(final BusinessActivityQuery query) throws DaoException {
 		int count = this.sqlSessionTemplate.selectOne("com.community.app.module.dao.BusinessActivityDao.selectCount_app",query);
 		return count;

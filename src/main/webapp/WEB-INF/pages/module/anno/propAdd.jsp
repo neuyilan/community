@@ -308,6 +308,7 @@
             $.ajax({
                 url: '${ctx}/business/businessAnno/getBuildingsByUser.do',
                 dataType: 'json',
+                data: {flag: 'add'},
                 cache: false,
                 success: function (data) {
                      

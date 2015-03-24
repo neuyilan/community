@@ -91,6 +91,7 @@ public class BusinessBreakController {
 			if(shiroUser.getCurComId() != null && shiroUser.getCurComId() != 0) {
 				query.setCurComId(shiroUser.getCurComId());
 			}
+			query.setNewsCount(0);
 			query.setRows(12);
 			query.setOrder("desc");
 			query.setSort("editTime");

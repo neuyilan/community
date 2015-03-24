@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessSponsorDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessSponsorResult" type="BusinessSponsor">
+			<result column="sponsorId" property="sponsorId" />
+			<result column="userId" property="userId" />
+			<result column="actId" property="actId" />
+			<result column="sponsorName" property="sponsorName" />
+			<result column="sponsorPhone" property="sponsorPhone" />
+			<result column="sponsorContent" property="sponsorContent" />
+			<result column="creatTime" property="creatTime" />
+			<result column="flag" property="flag" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			sponsorId,
+			userId,
+			actId,
+			sponsorName,
+			sponsorPhone,
+			sponsorContent,
+			creatTime,
+			flag
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="sponsorId != null and sponsorId != ''" >
+				   		and sponsorId = #{sponsorId}
+					</if>
+					<if test="userId != null and userId != ''" >
+				   		and userId = #{userId}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="sponsorName != null and sponsorName != ''" >
+				   		and sponsorName = #{sponsorName}
+					</if>
+					<if test="sponsorPhone != null and sponsorPhone != ''" >
+				   		and sponsorPhone = #{sponsorPhone}
+					</if>
+					<if test="sponsorContent != null and sponsorContent != ''" >
+				   		and sponsorContent = #{sponsorContent}
+					</if>
+					<if test="creatTime != null and creatTime != ''" >
+				   		and creatTime = #{creatTime}
+					</if>
+					<if test="flag != null and flag != ''" >
+				   		and flag = #{flag}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessSponsor -->
+	<select id="findById"  resultMap="BusinessSponsorResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_sponsor where sponsorId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessSponsor -->
+	<select id="findAll" resultMap="BusinessSponsorResult">
+		select <include refid="Base_Column_List" /> from business_sponsor 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessSponsor -->
+	<select id="findByMap" resultMap="BusinessSponsorResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_sponsor <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessSponsor -->
+	<select id="findByExample" resultMap="BusinessSponsorResult" parameterType="com.community.app.module.vo.BusinessSponsorQuery">
+		select <include refid="Base_Column_List" /> from business_sponsor <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessSponsor根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessSponsorResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_sponsor  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessSponsor列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_sponsor 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessSponsor保存数据 -->
+	<insert id="save" parameterType="BusinessSponsor">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="sponsorId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_sponsor(
+		
+		userId,
+		actId,
+		sponsorName,
+		sponsorPhone,
+		sponsorContent,
+		creatTime,
+		flag
+		) values(
+				#{userId},
+		#{actId},
+		#{sponsorName},
+		#{sponsorPhone},
+		#{sponsorContent},
+		#{creatTime},
+		#{flag}
+		)
+	</insert>
+	
+	<!-- BusinessSponsor修改数据 -->
+	<update id="update" parameterType="BusinessSponsor">
+		update business_sponsor 
+		<set>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="sponsorName != null and sponsorName != ''" >
+			sponsorName=#{sponsorName},
+			</if>
+			<if test="sponsorPhone != null and sponsorPhone != ''" >
+			sponsorPhone=#{sponsorPhone},
+			</if>
+			<if test="sponsorContent != null and sponsorContent != ''" >
+			sponsorContent=#{sponsorContent},
+			</if>
+			<if test="creatTime != null and creatTime != ''" >
+			creatTime=#{creatTime},
+			</if>
+			<if test="flag != null and flag != ''" >
+			flag=#{flag}
+			</if>
+		</set> 
+		where 
+		sponsorId=#{sponsorId}
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessSponsor删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_sponsor where 
+		sponsorId=#{sponsorId}
+															</delete>
+	
+</mapper>
+	

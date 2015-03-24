@@ -602,15 +602,16 @@
     		   
     		  if(data.success == 'true') {
     			  alert(data.message);
-    			  $('#publishState_'+annoId).text('已发布');
-    			  $(".busswi5").fadeOut("slow");
+    			  // $('#publishState_'+annoId).text('已发布');
+    			  // $(".busswi5").fadeOut("slow");
+    			  window.location.reload();
     		  }else{
     			  alert(data.message);
     		  }
     	  }
       });
   }
-
+	
    // 拒绝
   function refusebtn(annoId) {
 		$('#annoContentLi').hide();
@@ -632,8 +633,9 @@
 	    		   
 	    		  if(data.success == 'true') {
 	    			  alert(data.message);
-	    			  $('#publishState_'+annoId).text('未通过');
-	    			  $(".busswi5").fadeOut("slow");
+	    			  //$('#publishState_'+annoId).text('未通过');
+	    			  //$(".busswi5").fadeOut("slow");
+	    			  window.location.reload();
 	    		  }else{
 	    			  alert(data.message);
 	    		  }

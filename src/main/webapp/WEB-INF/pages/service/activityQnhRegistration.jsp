@@ -106,21 +106,13 @@ $(document).ready(function(){
 			$(".x-pm").css("display","none");//排名
 		}else if(currState == 0) {//已开始 抢票中
 			if(currRank == 0) {//未投票
-				if(flag=="true"){
-					$(".x-djs").css("display","block");//倒计时
-					$(".x-pm").css("display","none");//排名
-					$(".x-djs").html("报名人数已满")
-				}else{
-					$(".x-qg").css("display","block");//立即抢购
-					$(".x-djs").css("display","none");//倒计时
-					$(".x-pm").css("display","none");//排名
-				}
-				
-			}else{//已投票
-				$(".x-qg").css("display","none");//已结束
+				$(".x-qg").css("display","block");//立即抢购
 				$(".x-djs").css("display","none");//倒计时
-				$('.x-pm').html("<span>查看我的报名信息</span>");
-				$(".x-pm").css("display","block");//排名
+				$(".x-pm").css("display","none");//排名
+			}else{//已投票
+				$(".x-djs").css("display","block");//倒计时
+				$(".x-pm").css("display","none");//排名
+				$(".x-djs").html("已报名")
 			}
 		}else if(currState == 2) {//已结束
 			if(currRank == 0) {//未投票
@@ -136,7 +128,7 @@ $(document).ready(function(){
 	$(".x-qg").click(function(e) {
 		if(userId==0){
 			if(userId==0){
-			 	msgbox('提示','为了确保您正常参与活动，请您填写相关信息。。','确定',function(){
+			 	msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
 			 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
 			 	},'取消');
 			 	return;
@@ -149,7 +141,7 @@ $(document).ready(function(){
 	$("#seeRank").click(function(e) {
 		if(userId==0){
 			if(userId==0){
-			 	msgbox('提示','查看活动需要登录！！是否进去登录页？','确定',function(){
+			 	msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
 			 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
 			 	},'取消');
 			 	return;
@@ -174,10 +166,11 @@ $(document).ready(function(){
 	 $('#comment').click(function(){
 		 if(userId==0){
 				if(userId==0){
-					 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
-					 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
-					 	},'取消');
-					 	return;
+					$("#comment").blur();
+				 	msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
+				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+				 	},'取消');
+				 	return;
 				}
 			}
 	 });
@@ -239,7 +232,7 @@ $(document).ready(function(){
 	 $('#commentBtn').click(function comment() {
 		if(userId==0){
 			 if(userId==0){
-				 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+				 	msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
 				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
 				 	},'取消');
 				 	return;

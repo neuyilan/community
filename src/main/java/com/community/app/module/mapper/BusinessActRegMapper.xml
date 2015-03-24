@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessActRegDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessActRegResult" type="BusinessActReg">
+			<result column="regId" property="regId" />
+			<result column="userId" property="userId" />
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="nickName" property="nickName" />
+			<result column="avatar" property="avatar" />
+			<result column="code" property="code" />
+			<result column="desc" property="desc" />
+			<result column="actId" property="actId" />
+			<result column="votes" property="votes" />
+			<result column="regTime" property="regTime" />
+			<result column="flag" property="flag" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			regId,
+			userId,
+			estateId,
+			estateName,
+			nickName,
+			avatar,
+			code,
+			desc,
+			actId,
+			votes,
+			regTime,
+			flag
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="regId != null and regId != ''" >
+				   		and regId = #{regId}
+					</if>
+					<if test="userId != null" >
+				   		and userId = #{userId}
+					</if>
+					<if test="estateId != null" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="estateName != null" >
+				   		and estateName = #{estateName}
+					</if>
+					<if test="nickName != null and nickName != ''" >
+				   		and nickName = #{nickName}
+					</if>
+					<if test="avatar != null and avatar != ''" >
+				   		and avatar = #{avatar}
+					</if>
+					<if test="code != null and code != ''" >
+				   		and code = #{code}
+					</if>
+					<if test="desc != null and desc != ''" >
+				   		and desc = #{desc}
+					</if>
+					<if test="actId != null and actId != ''" >
+				   		and actId = #{actId}
+					</if>
+					<if test="votes != null and votes != ''" >
+				   		and votes = #{votes}
+					</if>
+					<if test="regTime != null and regTime != ''" >
+				   		and regTime = #{regTime}
+					</if>
+					<if test="flag != null and flag != ''" >
+				   		and flag = #{flag}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessActReg -->
+	<select id="findById"  resultMap="BusinessActRegResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_act_reg where regId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessActReg -->
+	<select id="findAll" resultMap="BusinessActRegResult">
+		select <include refid="Base_Column_List" /> from business_act_reg 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessActReg -->
+	<select id="findByMap" resultMap="BusinessActRegResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_act_reg <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessActReg -->
+	<select id="findByExample" resultMap="BusinessActRegResult" parameterType="com.community.app.module.vo.BusinessActRegQuery">
+		select <include refid="Base_Column_List" /> from business_act_reg <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessActReg根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessActRegResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_act_reg  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessActReg列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_act_reg 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+		<!-- 计算当前选手前面有多少名 -->
+	<select id="cntFront" resultType="java.lang.Integer"  parameterType="java.util.Map">
+		select count(1) from business_act_reg 
+		where 1 = 1
+		<if test="regId != null" >
+	   		and regId = #{regId}
+		</if>
+		<if test="actId != null" >
+	   		and actId = #{actId}
+		</if>		
+	</select>
+	
+		<!-- 修改当前选手排名 -->
+	<update id="updateCode" parameterType="java.util.Map">
+		<if test="regId != null and actId != null" >
+		update business_act_reg 
+		<set>
+			<if test="code != null" >
+			code=#{code},
+			</if>
+		</set> 
+		where regId = #{regId}
+	   		and actId = #{actId}
+		</if>	
+	</update>
+	
+	<!-- BusinessActReg保存数据 -->
+	<insert id="save" parameterType="BusinessActReg">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="regId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_act_reg(
+		
+		userId,
+		estateId,
+		estateName,
+		nickName,
+		avatar,
+		code,
+		desc,
+		actId,
+		votes,
+		regTime,
+		flag
+		) values(
+				#{userId},
+		#{estateId},
+		#{estateName},
+		#{nickName},
+		#{avatar},
+		#{code},
+		#{desc},
+		#{actId},
+		#{votes},
+		#{regTime},
+		#{flag}
+		)
+	</insert>
+	
+	<!-- BusinessActReg修改数据 -->
+	<update id="update" parameterType="BusinessActReg">
+		update business_act_reg 
+		<set>
+			<if test="userId != null" >
+			userId=#{userId},
+			</if>
+			<if test="estateId != null" >
+		   	estateId = #{estateId},
+			</if>
+			<if test="estateName != null" >
+		   	estateName = #{estateName},
+			</if>
+			<if test="nickName != null and nickName != ''" >
+			nickName=#{nickName},
+			</if>
+			<if test="avatar != null and avatar != ''" >
+			avatar=#{avatar},
+			</if>
+			<if test="code != null and code != ''" >
+			code=#{code},
+			</if>
+			<if test="desc != null and desc != ''" >
+			desc=#{desc},
+			</if>
+			<if test="actId != null and actId != ''" >
+			actId=#{actId},
+			</if>
+			<if test="votes != null and votes != ''" >
+			votes=#{votes},
+			</if>
+			<if test="regTime != null and regTime != ''" >
+			regTime=#{regTime},
+			</if>
+			<if test="flag != null and flag != ''" >
+			flag=#{flag}
+			</if>
+		</set> 
+		where 
+		regId=#{regId}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessActReg删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_act_reg where 
+		regId=#{regId}
+																			</delete>
+	
+</mapper>
+	

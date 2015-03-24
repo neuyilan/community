@@ -370,6 +370,7 @@ input{ border:0; border:none; background:none;}
 .mainr .column .manbox .operate_h2 .del{ background:url(../images/icon/del.png) no-repeat center center;}
 .mainr .column .manbox .gore{position:absolute; top:0; right:0; display:none;}
 .mainr .column .manbox .gore i{ position:absolute; top:5px; right:6px; font-style:normal; font-size:12px; color:#fff;}
+.mainr .column .manbox .gore .tt{ position:absolute; top:5px; right:1px; font-style:normal; font-size:12px; color:#fff;}
 .mainr .column .manbox .goreblock{display:block;}
 .mainr .column .manbox .operate_h2 .see:hover{ background:url(../images/icon/hover1.png) no-repeat center center; display:block; width:31px; height:50px; position:relative;}
 .mainr .column .manbox .operate_h2 .edit:hover{ background:url(../images/icon/hover2.png) no-repeat center center; display:block; width:31px; height:31px;}

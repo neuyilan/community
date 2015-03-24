@@ -4,6 +4,7 @@ import static com.community.framework.utils.CommonUtils.getUser;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -190,31 +191,31 @@ public class BusinessFocusController {
 	 * @param response
 	 */
 	@RequestMapping(value="getExpendScopeTree")
-	public void getExpendScopeTree(HttpServletResponse response) {
+	public void getExpendScopeTree(BusinessFocusQuery query, HttpServletResponse response) {
 		JSONObject jsonObj = new JSONObject();
 		JSONArray comArr = new JSONArray();
 		
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			// if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {//驿站
-			// List comList = businessCommunityService.findAll();
-			Map map = new HashMap();
-			//map.put("userId", shiroUser.getUserId());
-			//map.put("orgType", shiroUser.getOrgType());
-			//map.put("comId", shiroUser.getCurComId());
-			
-			//List comList = businessCommunityService.findComsByUser(map);
+			JSONObject allObj = new JSONObject();
+			allObj.put("id", "allCom");
+			allObj.put("text", "全部社区");
+			JSONArray allArr = new JSONArray();
 			List comList = shiroUser.getComList();
+
+			List<String> tempList = null; 
 			JSONObject comObj = null;
 			Map paramMap = null;
+			if(query.getFlag().equals("update")) {
+				String strArr[] = query.getScope().split(",");
+				tempList = Arrays.asList(strArr);
+			} 
 			for(int i=0;i<comList.size();i++) {
-				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
 				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
 				paramMap = new HashMap();
 				paramMap.put("comId", community.getComId());
 				paramMap.put("userId", shiroUser.getUserId());
-				//List estateList = manageEstateService.findByMap(paramMap);
 				List estateList = businessUserResourceService.findByMap(paramMap);
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
@@ -225,16 +226,23 @@ public class BusinessFocusController {
 						JSONObject estateObj = new JSONObject();
 						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
 						estateObj.put("text", businessUserResource.getEstateName());
-						estateObj.put("checkbox", true);
 						estateObj.put("state", "close");
+						if(query.getFlag().equals("update")) {
+							if(tempList.contains(businessUserResource.getEstateId()+"")) {
+								estateObj.put("checked","true");
+							}
+						}
 						estateArr.add(estateObj);
 					}
 					comObj.put("children", estateArr);
 					comObj.put("state", "closed");
-					comArr.add(comObj);
+					allArr.add(comObj);
 				}				
 			}
-			// }
+			allObj.put("children", allArr);
+			allObj.put("state", "closed");
+			comArr.add(allObj);
+			
 			jsonObj.put("success", true);
 			jsonObj.put("result", comArr);
 		}catch(Exception e){
@@ -496,12 +504,15 @@ public class BusinessFocusController {
 			paramMap.put("focusId", businessFocus.getFocusId());
 			List list = appFocusScopeService.findByMap(paramMap);
 			StringBuilder sb = new StringBuilder();
+			StringBuilder sbScope = new StringBuilder();
 			if(list.size() > 0){
 				for(int i=0;i<list.size();i++) {
 					AppFocusScope appFocusScope = (AppFocusScope) list.get(i);
 					sb.append(appFocusScope.getEstateId()+":"+appFocusScope.getEstateName()+",");
+					sbScope.append(",").append(appFocusScope.getEstateId());
 				}
 				mav.addObject("scope", sb.toString().subSequence(0, sb.toString().length()-1));
+				mav.addObject("scope1",  sbScope.toString().substring(1));
 			}
 		}catch(Exception e){
 			GSLogger.error("进入businessFocus修改页时发生错误：/business/businessFocus/modify", e);

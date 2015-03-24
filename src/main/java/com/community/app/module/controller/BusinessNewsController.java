@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,6 @@ import com.community.app.module.bean.AppPushLog;
 import com.community.app.module.bean.AppUser;
 import com.community.app.module.bean.AppUserConfig;
 import com.community.app.module.bean.BusinessBreak;
-import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessFocusAd;
 import com.community.app.module.bean.BusinessNews;
@@ -47,6 +47,7 @@ import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ManageTag;
 import com.community.app.module.bean.ShiroUser;
+import com.community.app.module.common.CommunityBean;
 import com.community.app.module.push.AppPushNotificationUtil;
 import com.community.app.module.service.AppFocusAdScopeService;
 import com.community.app.module.service.AppFocusScopeService;
@@ -1249,6 +1250,7 @@ public class BusinessNewsController {
 	@RequestMapping(value="modify")
 	public ModelAndView modify(BusinessNewsQuery query) {	
 		BusinessNews businessNews = new BusinessNews();
+		StringBuilder sbScope = new StringBuilder();
 		List scopeList = new ArrayList();
 		String newsScope = "";
 		String tagInfo = "";
@@ -1260,6 +1262,7 @@ public class BusinessNewsController {
 			for(int i=0; i<scopeList.size(); i++) {
 				BusinessNewsScope scope = (BusinessNewsScope)scopeList.get(i);
 				newsScope+= "," + scope.getComId()+":"+scope.getComName();
+				sbScope.append(",").append(scope.getComId());
 			}
 			if(businessNews.getTag() != null && !businessNews.getTag().equals("")) {
 				String tagArr[] = businessNews.getTag().split(",");
@@ -1278,6 +1281,7 @@ public class BusinessNewsController {
 		mav.addObject("businessNews", businessNews);
 		mav.addObject("scopeList", scopeList);
 		mav.addObject("newsScope", newsScope.substring(1));
+		mav.addObject("scope",  sbScope.toString().substring(1));
 		mav.addObject("tagInfo", tagInfo);
 		return mav;
 	}
@@ -1801,56 +1805,26 @@ public class BusinessNewsController {
 	 * @param response
 	 */
 	@RequestMapping(value="getExpendScopeTree")
-	public void getExpendScopeTree(HttpServletResponse response) {
+	public void getExpendScopeTree(BusinessNewsQuery query,  HttpServletResponse response) {
 		JSONObject jsonObj = new JSONObject();
 		JSONArray comArr = new JSONArray();
-		
 		try{
-			/*ShiroUser shiroUser = CommonUtils.getUser();
-			// if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {//驿站
-			List comList = businessCommunityService.findAll();
-			JSONObject comObj = null;
-			Map paramMap = null;
-			for(int i=0;i<comList.size();i++) {
-				BusinessCommunity community = (BusinessCommunity) comList.get(i);
-				comObj = new JSONObject();
-				paramMap = new HashMap();
-				paramMap.put("comId", community.getComId());
-				List estateList = manageEstateService.findByMap(paramMap); 
-				if(estateList.size() > 0){
-					comObj.put("id", "com_"+community.getComId());
-					comObj.put("text", community.getComName());
-					JSONArray estateArr = new JSONArray();
-					for(int j=0;j<estateList.size();j++) {
-						ManageEstate estate = (ManageEstate) estateList.get(j);
-						JSONObject estateObj = new JSONObject();
-						estateObj.put("id", "estate_"+estate.getEstateId());
-						estateObj.put("text", estate.getEstateName());
-						estateObj.put("checkbox", true);
-						estateObj.put("state", "close");
-						estateArr.add(estateObj);
-					}
-					comObj.put("children", estateArr);
-					comObj.put("state", "closed");
-					comArr.add(comObj);
-				}				
-			}
-			// }
-			jsonObj.put("success", true);
-			jsonObj.put("result", comArr);*/
-			
 			ShiroUser shiroUser = CommonUtils.getUser();
-			//获取该用户负责的多社区范围
-			Map map = new HashMap();
-			map.put("userId", shiroUser.getUserId());
-			map.put("orgType", shiroUser.getOrgType());
-			map.put("comId", shiroUser.getCurComId());
+			JSONObject allObj = new JSONObject();
+			allObj.put("id", "allCom");
+			allObj.put("text", "全部社区");
+			JSONArray allArr = new JSONArray();
+			List comList = shiroUser.getComList();
 			
-			List comList = businessCommunityService.findComsByUser(map);
+			List<String> tempList = null;
 			JSONObject comObj = null;
 			Map paramMap = null;
+			if(query.getFlag().equals("update")) {
+				String strArr[] = query.getScope().split(",");
+				tempList = Arrays.asList(strArr);
+			}
 			for(int i=0;i<comList.size();i++) {
-				BusinessCommunity community = (BusinessCommunity) comList.get(i);
+				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
 				paramMap = new HashMap();
 				paramMap.put("comId", community.getComId());
@@ -1858,10 +1832,18 @@ public class BusinessNewsController {
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
 					comObj.put("text", community.getComName());
-					comArr.add(comObj);
-				}				
-			}
-			// }
+					if(query.getFlag().equals("update")) {
+						if(tempList.contains(community.getComId()+"")) {
+							comObj.put("checked","true");
+						}
+					}
+					allArr.add(comObj);
+				}
+			}	
+			allObj.put("children", allArr);
+			allObj.put("state", "closed");
+			comArr.add(allObj);
+			
 			jsonObj.put("success", true);
 			jsonObj.put("result", comArr);
 		}catch(Exception e){

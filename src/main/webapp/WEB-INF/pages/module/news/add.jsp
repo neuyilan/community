@@ -69,7 +69,7 @@ label.error {
                 },
                 rules: {
                     title: {
-                        required: true,
+                        /* required: true, */
                         maxlength: 28
                     },
                     /* brief: {
@@ -77,19 +77,19 @@ label.error {
                     	maxlength: 28
                     },*/
                     content: {
-                        required: true
+                       /*  required: true */
                     },
                     newsScope: {
                     	required: true
                     },
                     tag: {
-                    	required: true
+                    	/* required: true */
                     },
                     /* subjectPic: {
                        required: true
                     }, */
                     appPic: {
-                       required: true
+                       /* required: true */
                     },
                     isPush: {
                         required: true
@@ -100,7 +100,7 @@ label.error {
                 },
                 messages: {
                     title: {
-                        required: '请填写新鲜事标题！',
+                        /* required: '请填写新鲜事标题！', */
                         maxlength: '新鲜事标题在28字以内'
                     },
                     /* brief: {
@@ -108,7 +108,7 @@ label.error {
                     	maxlength: '新鲜事简介在28字以内'
                     },*/
                     content: {
-                        required: '请填写新鲜事内容！'
+                        /* required: '请填写新鲜事内容！' */
                     }, 
                     /* subjectPic: {
                         required: '请选择列表页大图！'
@@ -117,10 +117,10 @@ label.error {
                     	required: '请选择新鲜事范围'
                     },
                     tag: {
-                    	required:  '请选择新鲜事标签'
+                    	/* required:  '请选择新鲜事标签' */
                     },
                     appPic: {
-                        required: '请选择分享展示图！'
+                       /*  required: '请选择分享展示图！' */
                     },
                     isPush: {
                         required: '请选择是否推送！'
@@ -254,15 +254,15 @@ label.error {
 							</shiro:hasPermission>
 							<shiro:hasPermission name="news_wait_publish">
 								<label><input class="radiostyle" type="radio"
-									name="state" value="1">&nbsp;暂存<br> <br></label>
+									name="state" value="1" checked>&nbsp;暂存<span style="color: #e7402f; margin-left:20px; font-weight:normal;font-size: 16px;">暂存的【展示范围】是必选项！</span><br> <br></label>
 							</shiro:hasPermission>
 							<label><input class="radiostyle" type="radio"
-								name="state" value="2" checked>&nbsp;提交审核<br> <br></label>
+								name="state" value="2">&nbsp;提交审核<br> <br></label>
 						</p>
 					</div>
 
 					<div class="submtpres">
-						<input id="qrbut" type="button" name="" value="确认提交" onclick="submitForm();" />
+						<input id="qrbut" type="button" name="" value="确认提交" onclick="submitForm()" />
 					</div>
 
 				</div>
@@ -365,6 +365,7 @@ label.error {
 	   	        $.ajax({
 	   	            url: '${ctx}/business/businessNews/getExpendScopeTree.do',
 	   	            dataType: 'json',
+	   	         	data: {flag: 'add'},
 	   	            cache: false,
 	   	            success: function (data) {
 	   	                if(data.success == true){

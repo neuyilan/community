@@ -60,6 +60,9 @@
 			<result column="QNHName" property="QNHName" />
 			<result column="QNHId" property="QNHId" />
 			<result column="isQNH" property="isQNH" />
+			
+			<result column="actRegWords" property="actRegWords" />
+			<result column="prizeRules" property="prizeRules" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -116,7 +119,9 @@
 			a.QNHActId,
 			a.QNHName,
 			a.QNHId,
-			a.isQNH
+			a.isQNH,
+			a.actRegWords,
+			a.prizeRules
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
@@ -331,7 +336,9 @@
 			a.QNHActId,
 			a.QNHName,
 			a.QNHId,
-			a.isQNH
+			a.isQNH,
+			a.actRegWords,
+			a.prizeRules
 			
 	</sql>
 	
@@ -393,6 +400,9 @@
 					<if test="state == 1" >
 				   		and a.state = '0' or a.state = '1' or a.state = '2'
 					</if>
+					<if test="state == 0" >
+				   		and a.state = '0'
+					</if>
 					<if test="auditorId != null and auditorId != ''" >
 				   		and a.auditorId = #{auditorId}
 					</if>
@@ -453,6 +463,131 @@
 					</if>
 					<if test="statetype==2" >
 				   		and a.state=0 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH} or a.state=1 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH} or a.state=2 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH}
+					</if>
+					
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause_app_QNH">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="actId != null and actId != ''" >
+				   		and a.actId = #{actId}
+					</if>
+					<if test="typeId != null and typeId != ''" >
+				   		and a.typeId = #{typeId}
+					</if>
+					<if test="actName != null and actName != ''" >
+				   		and a.actName = #{actName}
+					</if>
+					<if test="actContent != null and actContent != ''" >
+				   		and a.actContent = #{actContent}
+					</if>
+					<if test="typeName != null and typeName != ''" >
+				   		and a.typeName = #{typeName}
+					</if>
+					<if test="actScope != null and actScope != ''" >
+				   		and s.estateId = #{actScope}
+					</if>
+					<if test="brief != null and brief != ''" >
+				   		and a.brief = #{brief}
+					</if>
+					<if test="actPic != null and actPic != ''" >
+				   		and a.actPic = #{actPic}
+					</if>
+					<if test="actLink != null and actLink != ''" >
+				   		and a.actLink = #{actLink}
+					</if>
+					<if test="actManage != null and actManage != ''" >
+				   		and a.actManage = #{actManage}
+					</if>
+					<if test="userType != null and userType != ''" >
+				   		and a.userType = #{userType}
+					</if>
+					<if test="publisherId != null and publisherId != ''" >
+				   		and a.publisherId = #{publisherId}
+					</if>
+					<if test="publishDate != null and publishDate != ''" >
+				   		and a.publishDate = #{publishDate}
+					</if>
+					<if test="publishTime != null and publishTime != ''" >
+				   		and a.publishTime = #{publishTime}
+					</if>
+					<if test="startTime != null and startTime != ''" >
+				   		and a.startTime = #{startTime}
+					</if>
+					<if test="endTime != null and endTime != ''" >
+				   		and a.endTime = #{endTime}
+					</if>
+					<if test="rank != null and rank != ''" >
+				   		and a.rank = #{rank}
+					</if>
+					<if test="state == 1" >
+				   		and a.state = '0' or a.state = '1' or a.state = '2'
+					</if>
+					<if test="state == 0" >
+				   		and a.state = '0'
+					</if>
+					<if test="auditorId != null and auditorId != ''" >
+				   		and a.auditorId = #{auditorId}
+					</if>
+					<if test="auditorName != null and auditorName != ''" >
+				   		and a.auditorName = #{auditorName}
+					</if>
+					<if test="auditTime != null and auditTime != ''" >
+				   		and a.auditTime = #{auditTime}
+					</if>
+					<if test="visits != null and visits != ''" >
+				   		and a.visits = #{visits}
+					</if>
+					<if test="comments != null and comments != ''" >
+				   		and a.comments = #{comments}
+					</if>
+					<if test="supports != null and supports != ''" >
+				   		and a.supports = #{supports}
+					</if>
+					<if test="particpates != null and particpates != ''" >
+				   		and a.particpates = #{particpates}
+					</if>
+					<if test="isComment != null and isComment != ''" >
+				   		and a.isComment = #{isComment}
+					</if>
+					<if test="recommend != null and recommend != ''" >
+				   		and a.recommend = #{recommend}
+					</if>
+					<if test="isPush != null and isPush != ''" >
+				   		and a.isPush = #{isPush}
+					</if>
+					<if test="createTime != null and createTime != ''" >
+				   		and a.createTime = #{createTime}
+					</if>
+					<if test="editTime != null and editTime != ''" >
+				   		and a.editTime = #{editTime}
+					</if>
+					<if test="editor != null and editor != ''" >
+				   		and a.editor = #{editor}
+					</if>
+					<if test="QNHActId != null and QNHActId != ''" >
+				   		and a.QNHActId = #{QNHActId}
+					</if>
+					
+					<if test="timeScope != null and timeScope != ''" >
+	      				and #{timeScope} >= DATEDIFF(now(), a.createTime)
+		      		</if>
+		      		<if test="startActTime !=null and startActTime != '' and endActTime !=null and endActTime != '' " >
+		      			and a.createTime between #{startActTime} and #{endActTime}
+		      		</if>
+		      		<if test="keyWord != null and keyWord != ''" >
+				   		and a.actName like '%${keyWord}%'
+					</if>
+					<if test="isImportant != null" >
+				   		and a.isImportant = #{isImportant}
+					</if>
+				
+					<if test="statetype==2" >
+				   		and a.state=0  and a.isQNH = #{isQNH} or a.state=1  and a.isQNH = #{isQNH} or a.state=2 and a.isQNH = #{isQNH}
 					</if>
 					
 			</trim>
@@ -596,6 +731,27 @@
 		<include refid="Base_Where_Clause_app" />
 	</select>
 	
+	<!-- BusinessActivity列表总数-->
+	<select id="selectCount_app_QNH" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_activity_scope s inner join  business_activity a on s.actId=a.actId 
+		<include refid="Base_Where_Clause_app_QNH" />
+	</select>
+	
+	<!-- BusinessActivity根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage_app_QNH" resultType="BusinessActivity" parameterType="Object">
+		select <include refid="Base_Column_List_app" />,u.avatar AS portrait 
+		from business_activity_scope s 
+		inner join  business_activity a on s.actId=a.actId
+		left join business_user u on u.userId = a.publisherId    
+		<include refid="Base_Where_Clause_app_QNH" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
 	<!-- BusinessActivity保存数据 -->
 	<insert id="save" parameterType="BusinessActivity">
 		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="actId">
@@ -653,7 +809,10 @@
 		QNHActId,
 		QNHName,
 		QNHId,
-		timeslot
+		isQNH,
+		timeslot,
+		actRegWords,
+		prizeRules
 		) values(
 		#{typeId},
 		#{actName},
@@ -706,8 +865,10 @@
 		#{QNHActId},	
 		#{QNHName},	
 		#{QNHId},
-		#{timeslot}
-			
+		#{isQNH},
+		#{timeslot},
+		#{actRegWords},
+		#{prizeRules}
 		)
 	</insert>
 	
@@ -859,6 +1020,13 @@
 			<if test="reportExcel != null and reportExcel != ''" >
 			reportExcel=#{reportExcel},
 			</if>
+
+			<if test="actRegWords != null and actRegWords != ''" >
+			actRegWords=#{actRegWords},
+			</if>	
+		    <if test="prizeRules != null and prizeRules != ''" >
+			prizeRules=#{prizeRules},
+			</if>	
 			<if test="refuseMemo != null and refuseMemo != ''" >
 			refuseMemo=#{refuseMemo}
 			</if>	

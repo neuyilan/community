@@ -31,6 +31,14 @@
 							</ul>
 						</li>
 						
+						<li id="newsCount_0" class="active navlist">
+							<a href="javascript:;"><span>查看状态</span><b class="donbut"><i></i></b></a> 
+							<input type="hidden" name="newsCount" id="newsCount" value="" />
+							<ul class="erjnav">
+								<li id="newsCount_1"><a href="javascript:;">未查看</a></li>
+							</ul>
+						</li>
+						
 						<li id="isUsed_" class="active navlist">
 							<a href="javascript:;"><span>所有选用</span><b class="donbut"><i></i></b></a> 
 							<input type="hidden" name="isUsed" id="isUsed" value="" />
@@ -175,6 +183,7 @@
 			params = {keyWord: keyWord};
 		}else{
 			params = {
+					newsCount: $('#newsCount').val(),
 					state: $('#state').val(),
 					timeScope: $('#timeScope').val(),
 					startTime: $('#startTime').val(),

@@ -238,6 +238,32 @@ public class BusinessActivityServiceImpl implements BusinessActivityService {
 	}
 	
 	/**
+	 * service
+	 * 根据搜索条件，搜索分页数据
+	 * @param query
+	 * @param pageData
+	 * @return
+	 * @throws ServiceException
+	 */
+	@Transactional(readOnly = true)
+	public BaseBean findAllPage_app_QNH(final BusinessActivityQuery query) throws ServiceException {
+		List<BusinessActivity> list = new ArrayList<BusinessActivity>() ;
+		int count=0;
+		BaseBean baseBean = new BaseBean();
+		try {
+			count=businessActivityDao.selectCount_app_QNH(query);
+			query.setCount(count);
+			list=businessActivityDao.findAllPage_app_QNH(query);			
+		} catch (DaoException e) {
+			logger.debug("BusinessActivityServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
+			e.printStackTrace();
+		}
+		baseBean.setList(list);
+		baseBean.setCount(count);
+		return baseBean;
+	}
+	
+	/**
 	 * 根据搜索条件，搜索分页总数
 	 * @param pageData
 	 * @return
@@ -248,6 +274,24 @@ public class BusinessActivityServiceImpl implements BusinessActivityService {
 		int count = 0;
 		try {
 			count = businessActivityDao.selectCount(query);
+		} catch (DaoException e) {
+			logger.debug("BusinessActivityServiceImpl selectCount()：根据搜索条件，搜索分页总数发生错误！", e);
+			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	/**
+	 * 根据搜索条件，搜索分页总数
+	 * @param pageData
+	 * @return
+	 * @throws ServiceException
+	 */
+	@Transactional(readOnly = true)
+	public int selectCount_app(final BusinessActivityQuery query) throws ServiceException {
+		int count = 0;
+		try {
+			count = businessActivityDao.selectCount_app(query);
 		} catch (DaoException e) {
 			logger.debug("BusinessActivityServiceImpl selectCount()：根据搜索条件，搜索分页总数发生错误！", e);
 			e.printStackTrace();

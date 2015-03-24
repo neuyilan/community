@@ -163,7 +163,7 @@ $(document).ready(function(){
 	//参加活动
 	$(".x-qg").click(function(e) {
 		if(userId==0){
-			msgbox('提示','为了确保您正常参与活动，请您填写相关信息。','确定',function(){
+			msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
 		 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
 		 	},'取消');
 		 	return;
@@ -187,7 +187,7 @@ $(document).ready(function(){
 	$("#seeRank").click(function(e) {
 		if(userId==0){
 			if(userId==0){
-			 	msgbox('提示','为了确保您正常参与活动，请您填写相关信息。','确定',function(){
+			 	msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
 			 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
 			 	},'取消');
 			 	return;
@@ -209,10 +209,11 @@ $(document).ready(function(){
 	 $('#comment').click(function(){
 		 if(userId==0){
 				if(userId==0){
-					 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
-					 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
-					 	},'取消');
-					 	return;
+					$("#comment").blur();
+				 	msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
+				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
+				 	},'取消');
+				 	return;
 				}
 			}
 	 });
@@ -274,7 +275,7 @@ $(document).ready(function(){
 	 $('#commentBtn').click(function comment() {
 		if(userId==0){
 			 if(userId==0){
-				 	msgbox('提示','为了确保您的信息正常发布，请您填写相关信息。','确定',function(){
+				 	msgbox('提示','简单注册一下吧，注册会员才有发布信息和参与活动的权利噢！','确定',function(){
 				 		 window.location.href='${phpIp}/wxokjia/reggoin.php';
 				 	},'取消');
 				 	return;

@@ -14,9 +14,18 @@ public class BusinessActivityQnhInformationQuery extends BaseBean {
 	private java.lang.Integer userId;
 	private java.lang.Integer actId;
 	private java.lang.String realname;
+	private java.lang.String tel;
 	private java.sql.Timestamp createTime;
 	private java.sql.Timestamp editTime;
 	private java.lang.String editor;
+
+	public java.lang.String getTel() {
+		return tel;
+	}
+
+	public void setTel(java.lang.String tel) {
+		this.tel = tel;
+	}
 
 	public BusinessActivityQnhInformationQuery(BusinessActivityQnhInformation businessActivityQnhInformation) {
 		this.informationId = businessActivityQnhInformation.getInformationId();

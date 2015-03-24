@@ -19,6 +19,7 @@
 			userId,
 			actId,
 			realname,
+			tel,
 			createTime,
 			editTime,
 			editor
@@ -36,6 +37,9 @@
 					</if>
 					<if test="actId != null and actId != ''" >
 				   		and actId = #{actId}
+					</if>
+					<if test="tel != null and tel != ''" >
+				   		and tel = #{tel}
 					</if>
 					<if test="realname != null and realname != ''" >
 				   		and realname = #{realname}

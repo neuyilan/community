@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.community.app.module.bean.AppHomepage;
-import com.community.app.module.bean.AppHomepageScope;
 import com.community.app.module.bean.BusinessNews;
 import com.community.app.module.bean.BusinessNewsScope;
 import com.community.app.module.bean.index;

@@ -88,7 +88,7 @@
 		                    <shiro:hasPermission name="operation_anno_audting_anno">
 		                    <br>
 		                    <label>
-		                        <input class="radiostyle" type="radio" name="publishState" value="1">
+		                        <input class="radiostyle" type="radio" name="publishState" value="1" checked>
 		                        暂缓发布</label>
 		                    <br>
 		                    </shiro:hasPermission>
@@ -291,8 +291,10 @@
             $("#scopeBar").css("height",$(document.body).outerHeight(true)-40+'px');
             //显示小区结构
             $.ajax({
-                url: '${ctx}/manage/manageEstate/getAllEstateTree.do',
+                // url: '${ctx}/manage/manageEstate/getAllEstateTree.do',
+                url: '${ctx}/business/businessAnno/getBuildingsByUser.do',
                 dataType: 'json',
+                data: {flag: 'add'},
                 cache: false,
                 success: function (data) {
                      

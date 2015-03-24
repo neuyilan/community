@@ -165,7 +165,7 @@
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
 		select count(1) from  business_activity_participate p 
 			left join app_user u on p.userId = u.userId
-			left join app_estate_user aeu on aeu.userId = u.userId 
+			left join app_estate_user aeu on aeu.userId = u.userId AND aeu.estateId = p.estateId
 			<if test="keyWord != null and keyWord != ''" >
 		   		inner join app_user_cellphone phone on phone.userId = p.userId and phone.cellphone like '%${keyWord}%'
 			</if>

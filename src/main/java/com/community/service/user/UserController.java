@@ -383,27 +383,29 @@ public class UserController {
 		}
 		
 		try {
-			MemberCheckCli memberCheckCli = new MemberCheckCli();
-			String string  = memberCheckCli.memberCheck(query.getCellphone());
-			if (string !=null && !string.equals("")) {
-				JSONObject jsn = JSONObject.fromObject(string);
-				JSONObject content= jsn.getJSONObject("content");
-				JSONObject state= content.getJSONObject("state");
-				if (state.toString().equals(1)) {
-					JSONObject user= content.getJSONObject("user");
-					Timestamp ts = new Timestamp(new Date().getTime());
-					AppUser appUser1 = new AppUser();
-					appUser1.setUserId(appUser.getUserId());
-					appUser1.setIsQNH(1);
-					appUser1.setRealname(user.getJSONObject("realname").toString());
-					appUser1.setNickname(user.getJSONObject("nickname").toString());
-					appUser1.setSex(new Integer(user.getJSONObject("sex").toString()));
-					appUser1.setAge(new Integer(new Integer(user.getJSONObject("age").toString())));
-					appUserService.update(appUser1);
+			if (whetherRepeat) {
+				MemberCheckCli memberCheckCli = new MemberCheckCli();
+				String string  = memberCheckCli.memberCheck(query.getCellphone());
+				if (string !=null && !string.equals("")) {
+					JSONObject jsn = JSONObject.fromObject(string);
+					if (jsn.get("errorCode").toString().equals("200")) {
+						JSONObject content= jsn.getJSONObject("content");
+						String state= content.get("state").toString();
+						if (state.toString().equals(1)) {
+							JSONObject user= content.getJSONObject("user");
+							Timestamp ts = new Timestamp(new Date().getTime());
+							AppUser appUser1 = new AppUser();
+							appUser1.setUserId(appUser.getUserId());
+							appUser1.setIsQNH(1);
+							appUser1.setRealname(user.get("realname").toString());
+							appUser1.setNickname(user.get("nickname").toString());
+							appUser1.setSex(new Integer(user.get("sex").toString()));
+							appUser1.setAge(new Integer(new Integer(user.get("age").toString())));
+							appUserService.update(appUser1);
+						}
+					}
+					
 				}
-
-				
-				
 			}
 		} catch (Exception e) {
 			// 判断青年汇错误
@@ -638,27 +640,28 @@ public class UserController {
 		}
 		
 		try {
-			MemberCheckCli memberCheckCli = new MemberCheckCli();
-			String string  = memberCheckCli.memberCheck(query.getCellphone());
-			if (string !=null && !string.equals("")) {
-				JSONObject jsn = JSONObject.fromObject(string);
-				JSONObject content= jsn.getJSONObject("content");
-				JSONObject state= content.getJSONObject("state");
-				if (state.toString().equals(1)) {
-					JSONObject user= content.getJSONObject("user");
-					Timestamp ts = new Timestamp(new Date().getTime());
-					AppUser appUser1 = new AppUser();
-					appUser1.setUserId(appUser.getUserId());
-					appUser1.setIsQNH(1);
-					appUser1.setRealname(user.getJSONObject("realname").toString());
-					appUser1.setNickname(user.getJSONObject("nickname").toString());
-					appUser1.setSex(new Integer(user.getJSONObject("sex").toString()));
-					appUser1.setAge(new Integer(new Integer(user.getJSONObject("age").toString())));
-					appUserService.update(appUser1);
+			if (whetherRepeat) {
+				MemberCheckCli memberCheckCli = new MemberCheckCli();
+				String string  = memberCheckCli.memberCheck(query.getCellphone());
+				if (string !=null && !string.equals("")) {
+					JSONObject jsn = JSONObject.fromObject(string);
+					if (jsn.get("errorCode").toString().equals("200")) {
+						JSONObject content= jsn.getJSONObject("content");
+						String state= content.get("state").toString();
+						if (state.toString().equals(1)) {
+							JSONObject user= content.getJSONObject("user");
+							Timestamp ts = new Timestamp(new Date().getTime());
+							AppUser appUser1 = new AppUser();
+							appUser1.setUserId(appUser.getUserId());
+							appUser1.setIsQNH(1);
+							appUser1.setRealname(user.get("realname").toString());
+							appUser1.setNickname(user.get("nickname").toString());
+							appUser1.setSex(new Integer(user.get("sex").toString()));
+							appUser1.setAge(new Integer(new Integer(user.get("age").toString())));
+							appUserService.update(appUser1);
+						}
+					}
 				}
-
-				
-				
 			}
 		} catch (Exception e) {
 			// 判断青年汇错误

@@ -396,7 +396,7 @@
                 <input class="iptnewtit" type="text" id="receiverAddr" name="receiverAddr" placeholder='' />
                 <br>
                 <div class="submtpres">
-                    <input id="qrbut" type="button" value="确认提交" onclick="submitForm();"/>
+                    <input id="qrbut" type="button" value="确认提交" onclick="submitForm()"/>
                 </div>
             </div>
         </div>

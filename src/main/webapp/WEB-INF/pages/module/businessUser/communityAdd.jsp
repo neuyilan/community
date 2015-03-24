@@ -122,7 +122,7 @@
             </div>
             
             <div class="submtpres">
-                <input id="qrbut" type="button" name="" value="确认提交" onclick="submitForm();"/>
+                <input id="qrbut" type="button" name="" value="确认提交" onclick="submitForm()"/>
                 <!-- <input id="qrbutSubmit" type="submit" name="" value="确认提交" style="display:none"/> -->
             </div>
         </div>

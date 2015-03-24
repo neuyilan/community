@@ -51,7 +51,16 @@ public class BusinessBreakQuery extends BaseBean {
 	private Integer curComId;//当前社区ID
 	
 	private Integer curEstateId;
+	private Integer newsCount;
 	
+	public Integer getNewsCount() {
+		return newsCount;
+	}
+
+	public void setNewsCount(Integer newsCount) {
+		this.newsCount = newsCount;
+	}
+
 	public java.lang.String getComName() {
 		return comName;
 	}

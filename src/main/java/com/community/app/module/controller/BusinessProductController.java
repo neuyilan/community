@@ -51,6 +51,7 @@ import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessProductCommentQuery;
 import com.community.app.module.vo.BusinessProductQuery;
 import com.community.framework.utils.CommonUtils;
+import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.Uploader;
 import com.community.framework.utils.propertiesUtil;
 
@@ -164,12 +165,12 @@ public class BusinessProductController {
 				BusinessProduct businessProduct = (BusinessProduct) baseBean.getList().get(i);
 				result.append("{")
 			    .append("\"productId\":\"").append(businessProduct.getProductId()).append("\"").append(",")
-			    .append("\"productName\":\"").append(businessProduct.getProductName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"productName\":\"").append(businessProduct.getProductName()).append("\"").append(",")
 			    .append("\"publisherId\":\"").append(businessProduct.getPublisherId()).append("\"").append(",")
-			    .append("\"publisherName\":\"").append(businessProduct.getPublisherName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
-			    .append("\"content\":\"").append(businessProduct.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
-			    .append("\"title\":\"").append(businessProduct.getTitle().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
-			    .append("\"contactName\":\"").append(businessProduct.getContactName().replace("\"", "\\\"").replaceAll("(\r?\n()+)", "")).append("\"").append(",")
+			    .append("\"publisherName\":\"").append(businessProduct.getPublisherName()).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessProduct.getContent().replaceAll("(\r?\n()+)", "").replace("\"", ""))).append("\"").append(",")
+			    .append("\"title\":\"").append(businessProduct.getTitle()).append("\"").append(",")
+			    .append("\"contactName\":\"").append(businessProduct.getContactName()).append("\"").append(",")
 			    .append("\"contactTel\":\"").append(businessProduct.getContactTel()).append("\"").append(",")
 			    .append("\"contactQq\":\"").append(businessProduct.getContactQq()).append("\"").append(",")
 			    .append("\"typeId\":\"").append(businessProduct.getTypeId()).append("\"").append(",")

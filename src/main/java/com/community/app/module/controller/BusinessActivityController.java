@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -751,6 +752,18 @@ public class BusinessActivityController {
   			businessActivity.setCouponStartDate(couponValid[0]);
   			businessActivity.setCouponEndDate(couponValid[1]);
   		}
+  		Map map = new HashMap();
+		map.put("actId", query.getActId());
+		List scopeList = businessActivityScopeService.findByMap(map);
+		StringBuffer scopeStr = new StringBuffer();
+		for(int i=0; i<scopeList.size(); i++) {
+			BusinessActivityScope scopeBean = (BusinessActivityScope)scopeList.get(i);
+			scopeStr.append(",").append(scopeBean.getEstateId());
+		}
+		if(scopeStr.length() > 1) {
+			String scope = scopeStr.toString().substring(1);
+			mav.addObject("scope", scope);
+		}
         mav.addObject("businessActivity", businessActivity);
         return mav;
 	}
@@ -1293,33 +1306,33 @@ public class BusinessActivityController {
 	 * @param response
 	 */
 	@RequestMapping(value="getEstateTree")
-	public void getEstateTree(HttpServletResponse response) {
+	public void getEstateTree(BusinessActivityQuery query,  HttpServletResponse response) {
 		JSONObject jsonObj = new JSONObject();
 		JSONArray comArr = new JSONArray();
 		
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
-			// if(ModuleConst.OPERATION_CODE.equals(shiroUser.getOrgType())) {//驿站
-			// List comList = businessCommunityService.findAll();
-			//获取该用户负责的多社区范围
-			Map map = new HashMap();
-			//map.put("userId", shiroUser.getUserId());
-			//map.put("orgType", shiroUser.getOrgType());
-			//map.put("comId", shiroUser.getCurComId());
-			
-			//List comList = businessCommunityService.findComsByUser(map);
+			JSONObject allObj = new JSONObject();
+			allObj.put("id", "allCom");
+			allObj.put("text", "全部社区");
+			JSONArray allArr = new JSONArray();
 			List comList = shiroUser.getComList();
+			
+			List<String> tempList = null; 
 			JSONObject comObj = null;
 			Map paramMap = null;
+			if(query.getFlag().equals("update")) {
+				String strArr[] = query.getScope().split(",");
+				tempList = Arrays.asList(strArr);
+			} 
+			 
 			for(int i=0;i<comList.size();i++) {
-				//BusinessCommunity community = (BusinessCommunity) comList.get(i);
 				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
 				paramMap = new HashMap();
 				paramMap = new HashMap();
 				paramMap.put("comId", community.getComId());
 				paramMap.put("userId", shiroUser.getUserId());
-				//List estateList = manageEstateService.findByMap(paramMap); 
 				List estateList = businessUserResourceService.findByMap(paramMap);
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
@@ -1330,16 +1343,23 @@ public class BusinessActivityController {
 						JSONObject estateObj = new JSONObject();
 						estateObj.put("id", "estate_"+businessUserResource.getEstateId());
 						estateObj.put("text", businessUserResource.getEstateName());
-						estateObj.put("checkbox", true);
 						estateObj.put("state", "close");
+						if(query.getFlag().equals("update")) {
+							if(tempList.contains(businessUserResource.getEstateId()+"")) {
+								estateObj.put("checked","true");
+							}
+						}
 						estateArr.add(estateObj);
 					}
 					comObj.put("children", estateArr);
 					comObj.put("state", "closed");
-					comArr.add(comObj);
+					allArr.add(comObj);
 				}				
 			}
-			// }
+			allObj.put("children", allArr);
+			allObj.put("state", "closed");
+			comArr.add(allObj);
+			
 			jsonObj.put("success", true);
 			jsonObj.put("result", comArr);
 		}catch(Exception e){

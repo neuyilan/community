@@ -172,9 +172,13 @@
 				<if test="curEstateId != null and curEstateId != 0" >
 		   			and estateId = #{curEstateId}
 				</if>
-					
 			)res on res.comId = b.comId
-		left join app_latest_news news on news.sourceId = b.breakId and news.typeId=40 and news.to=1 
+		<if test="newsCount == ''" >
+			left join app_latest_news news on news.sourceId = b.breakId and news.typeId=40 and news.to=1 
+		</if>
+		<if test="newsCount != '' and newsCount != 0" >
+			inner join app_latest_news news on news.sourceId = b.breakId and news.typeId=40 and news.to=1 
+		</if>
 		<include refid="Base_Where_Clause" /> 
 		GROUP BY b.breakId 
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
@@ -203,8 +207,13 @@
 				<if test="curEstateId != null and curEstateId != 0" >
 		   			and estateId = #{curEstateId}
 				</if>
-					
 			) res on res.comId = b.comId
+		<if test="newsCount == ''" >
+			left join app_latest_news news on news.sourceId = b.breakId and news.typeId=40 and news.to=1 
+		</if>
+		<if test="newsCount != '' and newsCount != 0" >
+			inner join app_latest_news news on news.sourceId = b.breakId and news.typeId=40 and news.to=1 
+		</if>
 		<include refid="Base_Where_Clause" />
 	</select>
 	

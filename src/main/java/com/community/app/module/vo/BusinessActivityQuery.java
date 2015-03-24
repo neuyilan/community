@@ -77,6 +77,9 @@ public class BusinessActivityQuery extends BaseBean {
 	private String image;
 	private Integer curEstateId;
 	
+	private String actRegWords;
+	private String prizeRules;
+	
 	private String couponName;
 	private String couponDesc;
 	private String couponImg;
@@ -89,7 +92,34 @@ public class BusinessActivityQuery extends BaseBean {
 	private String QNHActId;
 	private Integer isQNH;
 	private String realname;
+	private String flag;
+	private String scope;
+	private String QNHId;
 	
+	public String getQNHId() {
+		return QNHId;
+	}
+
+	public void setQNHId(String qNHId) {
+		QNHId = qNHId;
+	}
+
+	public String getScope() {
+		return scope;
+	}
+
+	public void setScope(String scope) {
+		this.scope = scope;
+	}
+
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
 	public String getRealname() {
 		return realname;
 	}
@@ -482,6 +512,8 @@ public class BusinessActivityQuery extends BaseBean {
 		this.isImportant = businessActivity.getIsImportant();
 		this.refuseMemo = businessActivity.getRefuseMemo();
 		this.importantTime = businessActivity.getImportantTime();
+		this.actRegWords = businessActivity.getActRegWords();
+		this.prizeRules = businessActivity.getPrizeRules();
 	}
 
 	public BusinessActivityQuery() {
@@ -779,5 +811,21 @@ public class BusinessActivityQuery extends BaseBean {
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this,
 				ToStringStyle.MULTI_LINE_STYLE);
+	}
+
+	public String getActRegWords() {
+		return actRegWords;
+	}
+
+	public void setActRegWords(String actRegWords) {
+		this.actRegWords = actRegWords;
+	}
+
+	public String getPrizeRules() {
+		return prizeRules;
+	}
+
+	public void setPrizeRules(String prizeRules) {
+		this.prizeRules = prizeRules;
 	}
 }

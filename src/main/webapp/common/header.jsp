@@ -10,6 +10,40 @@
 <html>
 <head>
     <title>导航菜单</title>
+    <script type="text/javascript">
+        var popUpWin = 0;
+        function PopUpWindow(URLStr, left, top, width, height, newWin, scrollbars) {
+            if (typeof (newWin) == "undefined")
+                newWin = false;
+
+            if (typeof (left) == "undefined")
+                left = 100;
+
+            if (typeof (top) == "undefined")
+                top = 0;
+
+            if (typeof (width) == "undefined")
+                width = 800;
+
+            if (typeof (height) == "undefined")
+                height = 760;
+
+            if (newWin) {
+                open(URLStr, '', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=' + scrollbars + ',resizable=yes,copyhistory=yes,width=' + width + ',height=' + height + ',left=' + left + ', top=' + top + ',screenX=' + left + ',screenY=' + top + '');
+                return;
+            }
+
+            if (typeof (scrollbars) == "undefined") {
+                scrollbars = 0;
+            }
+
+            if (popUpWin) {
+                if (!popUpWin.closed) popUpWin.close();
+            }
+            popUpWin = open(URLStr, 'popUpWin', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=' + scrollbars + ',resizable=yes,copyhistory=yes,width=' + width + ',height=' + height + ',left=' + left + ', top=' + top + ',screenX=' + left + ',screenY=' + top + '');
+            popUpWin.focus();
+        }
+    </script>
 </head>
 <body>
 
@@ -55,6 +89,7 @@
         <!--<hr class="link3">-->
         <div>
         	<span style="margin-left:15px;">
+            	<%-- <a href="javascript:void(0);" onclick="javascript:PopUpWindow('<%=ctx %>/common/uploadimage.jsp',100,100,600,500);"><img alt="修改头像" src="<%=ctx %><%=shiroUser.getAvatar() %>" width="100" height="100"/></a> --%>
             	<img alt="修改头像" src="<%=ctx %><%=shiroUser.getAvatar() %>" width="100" height="100"/>
             </span>
             <span>

@@ -55,9 +55,16 @@ public class BusinessAnnoQuery extends BaseBean {
 	
 	private Integer scopeType; //范围类型 只为首页的内部公告查询使用预留
 	private String dateField;
+	private String flag;
 	
-		
-	
+	public String getFlag() {
+		return flag;
+	}
+
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
+
 	public String getDateField() {
 		return dateField;
 	}

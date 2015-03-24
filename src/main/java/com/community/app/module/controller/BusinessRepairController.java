@@ -39,7 +39,6 @@ import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessRepairQuery;
 import com.community.framework.utils.CommonUtils;
-import com.community.framework.utils.JsonUtils;
 import com.community.framework.utils.propertiesUtil;
 
 @Controller

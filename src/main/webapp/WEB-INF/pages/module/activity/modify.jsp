@@ -30,7 +30,7 @@
         <div class="header-public"><span class="return" onclick="history.go(-1);"></span>编辑活动</div>
         <div class="cont-l">
         	<input type="hidden" name="actId" id="actId" value="${businessActivity.actId }" />
-            
+            <input type="hidden" name="scope" id="scope" value="${scope }" />
             <h2 class="title">活动名称<label for="actName" class="error success"></label></h2>
             <input class="iptnewtit" type="text" id="actName" name="actName" placeholder='请输入活动名称24字以内' value="${businessActivity.actName }" />
             
@@ -194,7 +194,7 @@
             </div>
             <div id="timingPublicLabel"></div>
             <div class="submtpres">
-                <input id="qrbut" type="button" value="确认提交" onclick="submitForm();"/>
+                <input id="qrbut" type="button" value="确认提交" onclick="submitForm()"/>
             </div>
         </div>
     </div>
@@ -1146,9 +1146,9 @@
             $.ajax({
                 url: '${ctx}/business/businessActivity/getEstateTree.do',
                 dataType: 'json',
+                data: {flag: 'update', scope: $('#scope').val()},
                 cache: false,
                 success: function (data) {
-                     
                     if(data.success == true){
                         var rows = data.result;
                         //alert('data.result   '+rows.length);
@@ -1183,7 +1183,7 @@
             if(scopeNodes != null && scopeNodes.length > 0) {
                 for(var i=0;i<scopeNodes.length;i++) {
                 	var node = scopeNodes[i];
-                	if(node.id.indexOf("com")<0){
+                	if(node.id.indexOf("com")<0 && node.id.indexOf("allCom")<0){
                 		var idArr = node.id.split('_');
                         var typeid = idArr[0];
                         scopeIds += idArr[1] + ':' + node.text + ',';
