@@ -2129,7 +2129,7 @@ public class activitiesController {
 			query.setActId(query.getID());
 			if (query.getType()==3) {
 				userList= businessActRegService.findById_app(query);
-				if (userList != null && userList.size()>0) {
+				if (CollectionUtils.isNotEmpty(userList)){
 					if (userList.get(0).getFlag()==2) {
 						state = 2;
 					}else if (userList.get(0).getFlag()==0) {
@@ -2146,7 +2146,7 @@ public class activitiesController {
 				}
 			}
 			query.setUserId(null);
-			query.setFlag(0);
+			query.setFlag(CommonData.GlobalData.RET_SUCCESS);
 			//	BaseBean baseBean = businessActivityCommentService.findAllPage_app(query);
 			BaseBean baseBean = businessActRegService.findRankPage(query);
 //			List<BusinessActReg> actRegers = businessActRegService.findAll();
@@ -2164,7 +2164,6 @@ public class activitiesController {
 				.element("portrait", actReger.getAvatar())
 				.element("contestantNo", actReger.getCode() > 10 ? actReger.getCode() + "" : "0"+actReger.getCode()) // 编号 <10 补上0
 				.element("no", actReger.getRank())); //
-			
 			jsn.element("content",new JSONObject().element("state", state).element("PageState", baseBean.getCount()>query.getPage()*query.getRows() ? "true" : "false").element("list", jsnary));
 			json = jsn.toString();
 			
@@ -2319,7 +2318,7 @@ public class activitiesController {
 	}
 	
 	/**
-	 * 获取选手信息
+	 * 获取选手话术
 	 * @param userId,sessionid,ID,page,rows
 	 * @return
 	 * json
@@ -2330,8 +2329,6 @@ public class activitiesController {
 		String actId = request.getParameter("ID");
 		try{
 			BusinessActivity act = businessActivityService.findById(Integer.valueOf(actId));
-			if (act == null)
-				throw new Exception();
 			json = new JSONObject()
 			.element("errorCode", "200")
 			.element("message", "获取成功")
@@ -2362,44 +2359,50 @@ public class activitiesController {
 	public void saveActivitiesRegistration(HttpServletRequest request, HttpServletResponse response, BusinessActRegQuery query) {
 		String json = "";
 		try{
-			ManageEstate est = manageEstateService.findById(query.getEstateId());
-			BusinessActReg actReg = new BusinessActReg();
-			actReg.setUserId(query.getUserId());
-			actReg.setActId(query.getActId());
-			actReg.setEstateId(query.getEstateId());
-			actReg.setEstateName(est.getEstateName());
-			actReg.setDesc(query.getDesc());
-			actReg.setNickName("");
-			actReg.setAvatar("");
-			actReg.setRegTime(new Timestamp(new Date().getTime()));
-			actReg.setFlag(CommonData.GlobalData.RET_VERIFY);
-			actReg.setVotes(0);
-			actReg.setCode(0);
-			
-			int regId =businessActRegService.save(actReg);
-			
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("regId", regId);  
-			map.put("actId", query.getActId());
-			int cnt = businessActRegService.cntFront(map)+1;  // code = cnt+1
-			map.put("code", cnt);
-			//TODO 事务绑定
-			businessActRegService.updateCode(map);
-			
-			/**图片数组*/
-			String images = request.getParameter("images");
-			if (StringUtils.isNotBlank(images))
+			if (businessActRegService.findAllPage(query).getList().size() == 0 )
 			{
-				String[] imgArry = images.split(",");
-				for(String img : imgArry)
+				ManageEstate est = manageEstateService.findById(query.getEstateId());
+				BusinessActReg actReg = new BusinessActReg();
+				actReg.setUserId(query.getUserId());
+				actReg.setActId(query.getActId());
+				actReg.setEstateId(query.getEstateId());
+				actReg.setEstateName(est.getEstateName());
+				actReg.setDesc(query.getDesc());
+				actReg.setNickName("");
+				actReg.setAvatar("");
+				actReg.setRegTime(new Timestamp(new Date().getTime()));
+				actReg.setFlag(CommonData.GlobalData.RET_VERIFY);
+				actReg.setVotes(0);
+				actReg.setCode(0);
+				
+				int regId =businessActRegService.save(actReg);
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("regId", regId);  
+				map.put("actId", query.getActId());
+				int cnt = businessActRegService.cntFront(map)+1;  // code = cnt+1
+				map.put("code", cnt);
+				//TODO 事务绑定
+				businessActRegService.updateCode(map);
+				
+				/**图片数组*/
+				String images = request.getParameter("images");
+				if (StringUtils.isNotBlank(images))
 				{
-					BusinessRegPic regPic = new BusinessRegPic();
-					regPic.setRegId(regId);
-					regPic.setPicUrl(img);
-					businessRegPicService.save(regPic);
+					String[] imgArry = images.split(",");
+					for(String img : imgArry)
+					{
+						BusinessRegPic regPic = new BusinessRegPic();
+						regPic.setRegId(regId);
+						regPic.setPicUrl(img);
+						businessRegPicService.save(regPic);
+					}
 				}
+				json = new JSONObject().element("errorCode", "200").element("message", "报名成功").toString();
+			}else
+			{
+				json = new JSONObject().element("errorCode", "400").element("message", "您已经参与活动报名！").toString();
 			}
-			json = new JSONObject().element("errorCode", "200").element("message", "报名成功").toString();
 		}catch(Exception e){
 			json = new JSONObject().element("errorCode", "400").element("message", "报名失败").toString();
 			e.printStackTrace();
