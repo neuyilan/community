@@ -181,6 +181,15 @@ public class BusinessActivityDaoImpl implements BusinessActivityDao {
 	public void update(final BusinessActivity entity) throws DaoException {
 		this.sqlSessionTemplate.update("com.community.app.module.dao.BusinessActivityDao.update",entity);
 	}
+	
+	/**
+	 * 修改BusinessActivity数据
+	 * @param entity
+	 * @throws DaoException
+	 */
+	public void addParticipants(final BusinessActivityQuery entity) throws DaoException {
+		this.sqlSessionTemplate.update("com.community.app.module.dao.BusinessActivityDao.addParticipants",entity);
+	}
 
 	/**
 	 * 删除BusinessActivity

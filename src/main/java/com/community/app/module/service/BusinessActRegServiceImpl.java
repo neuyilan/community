@@ -115,6 +115,24 @@ public class BusinessActRegServiceImpl implements BusinessActRegService {
 	}
 	
 	/**
+	 * 按VO对象条件查询所有BusinessActReg
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */	
+	@Transactional(readOnly = true)
+	public List<BusinessActReg> findById_app(final BusinessActRegQuery query) throws ServiceException {
+		List<BusinessActReg> list = new ArrayList<BusinessActReg>() ;
+		try {
+			list=businessActRegDao.findById_app(query);
+		} catch (DaoException e) {
+			logger.debug("BusinessActRegServiceImpl findByExample()：按VO对象条件查询所有BusinessActReg发生错误！", e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	/**
 	 * 按VO对象条件查询所有BusinessActReg-限制返回条数
 	 * @param query
 	 * @return
@@ -254,6 +272,51 @@ public class BusinessActRegServiceImpl implements BusinessActRegService {
 			logger.debug("BusinessActRegServiceImpl cntFront()：修改当前的选手的code 发生错误！", e);
 			e.printStackTrace();
 		}
+	}
+
+
+	/**
+	 * 查询报名排名
+	 * @param map
+	 * @return
+	 */
+	public BaseBean findRankPage(BusinessActRegQuery query) 
+			throws ServiceException {
+		List<BusinessActReg> list = new ArrayList<BusinessActReg>() ;
+		int count=0;
+		BaseBean baseBean = new BaseBean();
+		try {
+			list=businessActRegDao.findRankPage(query);
+			count=businessActRegDao.selectCount(query);
+		} catch (DaoException e) {
+			logger.debug("BusinessActRegServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
+			e.printStackTrace();
+		}
+		baseBean.setList(list);
+		baseBean.setCount(count);
+		return baseBean;
+	}
+
+	/**
+	 * 获取最新报名
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public BaseBean findLatestRegPage(BusinessActRegQuery query) throws ServiceException {
+		List<BusinessActReg> list = new ArrayList<BusinessActReg>() ;
+		int count=0;
+		BaseBean baseBean = new BaseBean();
+		try {
+			list=businessActRegDao.findLatestRegPage(query);
+			count=businessActRegDao.selectCount(query);
+		} catch (DaoException e) {
+			logger.debug("BusinessActRegServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
+			e.printStackTrace();
+		}
+		baseBean.setList(list);
+		baseBean.setCount(count);
+		return baseBean;
 	}
 	
 }

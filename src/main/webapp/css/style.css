@@ -14,6 +14,10 @@ select,textarea,input[type="text"],input[type="password"],input[type="datetime"]
 input[class*="span"],select[class*="span"],textarea[class*="span"],.uneditable-input[class*="span"],.row-fluid input[class*="span"],.row-fluid select[class*="span"],.row-fluid textarea[class*="span"],.row-fluid .uneditable-input[class*="span"] {border-radius:3px;}
 input{ border:0; border:none; background:none;}
 .no-float{ clear:both;}
+.clearfix:after {content:"\200B"; display:block; height:0; clear:both; }
+.clearfix { *zoom:1; }
+.fleft{ float:left;}
+.fright{ float:right;}
 
 /*公用footer*/
 .wrapper .footer{ width:100%; background:#f0f0f0; padding:10px 0;}
@@ -1507,7 +1511,7 @@ height: 40px;padding: 0 10px;vertical-align: top;width: 320px;margin-bottom:10px
     width: 0;
 }
 .content #oneul{ height:52px; float:left;}
-.exp-exc{ background-color:#ffffff; padding:10px 20px 0; font-size:14px;}
+.exp-exc{ padding:10px 20px 0; font-size:14px;}/*2015.3.24*/
 .exp-exc table{ width:100%; text-align:center;}
 .exp-exc thead{ background-color:#666666; color:#ffffff; height:56px; border-top-left-radius:4px; border-top-right-radius:4px;}
 .exp-exc tr{ height:50px;}
@@ -1546,3 +1550,81 @@ height: 40px;padding: 0 10px;vertical-align: top;width: 320px;margin-bottom:10px
 input::-ms-clear{ display:none;}
 input::-ms-reveal{ display:none;}
 
+/*2015.3.24*/
+.exp-list{ padding-bottom:10px;}
+.exp-list span{ font-size:22px; color:#333333;  vertical-align:middle;}
+.exp-list select{ width:120px; height:20px; margin-left:30px;}
+.red{ color:#FF3300;}
+.bluea,.bluea:hover{ color:#03F; text-decoration:underline;}
+.tpinfo{ color:#333333; font-size:14px; line-height:22px;}
+.review-b .cominfo .tpbox{ height:110px;}
+.review-b .cominfo .tpbox .rakin{ height:110px; line-height:110px;}
+.tpbox .red{float: right;height: 90px;position: relative;width: 120px; text-align:right; padding:10px 20px;}
+.tp-title{ padding:10px 0 0 10px; color:#333333;}
+.tp-title select{ width:120px; height:26px;}
+.tp-title span{ font-size:20px; padding-left:30px;}
+.tp-title em{ font-size:28px;} 
+.tp-message{ left: 65%;position: absolute;top: 0;}
+.tp-message textarea{ resize:none; width:300px; height:200px; color:#666666; font-size:16px; padding:10px;}
+.tp-message a{ width:260px; height:40px; margin:20px 31px 0; color:#fff; font-size:24px; display:block; border-radius:4px; text-align:center; line-height:40px;}
+.tp-message .green{ background-color:#66cc00;}
+.tp-message .gray{ background-color:#cccccc;}
+.hd-head a{ display:inline-block; background-color:#efefef; width:180px; height:40px; line-height:40px; border-radius:4px 4px 0 0; text-align:center; color:#000; font-size:16px; border:1px solid #cccccc; border-bottom:none;}
+.hd-head .hd-active{ background-color:#fff;}
+.hd-tj{ border:1px solid #cccccc; background-color:#efefef; height:36px;}
+.hd-tj .exp-list{ padding:0; padding-top:5px; float:left;}
+.hd-search{ float:right; height:26px; margin:4px 6px 0 0; padding:0 6px; border:1px solid #cccccc; border-radius:4px; width:220px; background-color:#fff; }
+.hd-text{ height:26px;}
+.hd-button{background: url("../images/icon/search.png") no-repeat scroll center center rgba(0, 0, 0, 0);cursor: pointer;float: right;height: 26px;width: 26px;}
+.hd-img{ float:left; width:118px; margin-top:19px;}
+.hd-img img{ width:118px; height:118px; border-radius:59px; vertical-align:middle;}
+.review-b .cominfo .hdbox .rakin{ height:156px; line-height:156px;}
+.review-b .cominfo .hdbox{ height:156px;}
+.review-b .cominfo .hdbox .textinfo{ left:200px; padding:20px 0; right:340px;}
+.hdbox .textinfo p{ line-height:40px; font-size:18px;}
+.hdbox .textinfo em{ font-size:22px; color:#ff3300; padding-right:10px;}
+.hdbox .textinfo span{ font-size:22px;}
+.hd-yzname{ background:url(../images/icon/hddz.png) no-repeat left center; padding-left:26px; font-size:18px;}
+.hdbox .hd-intro{ float:right; width:340px; color:#333333; line-height:24px; border-left:1px solid #d9d9d9; margin:10px 0; padding:0 10px; height:136px;}
+.hd-adetail{ left:62%; position:absolute; top:56px; height:40px; line-height:40px; width:158px; background-color:#efefef; border-radius:8px; text-align:center; border:1px solid #cccccc;}
+.hd-adetail a{color:#000; font-size:18px;}
+.review-b .hdinfo{ height:156px;}
+
+/*2015.3.25 活动*/
+.zs-detail{ padding:20px 0; margin:10px 10px 0; border-top:1px solid #eaeaea; height:118px; line-height:118px; overflow:hidden;}
+.zs-dmc{ width:70px; text-align:center; font-size:36px; color:#7d7d7d;}
+.zs-dimg{ height:118px;}
+.zs-dimg img{width:118px; height:118px; border-radius:59px;}
+.zs-dinfo{ margin-left:20px; max-width:180px; overflow:hidden;}
+.zs-dinfo p{ font-size:22px; color:#333333; line-height:40px;}
+.zs-dinfo .hd-yzname{ font-size:18px;}
+.zs-dinfo em{ color: #ff3300;font-size: 22px;padding-right: 10px;}
+.zs-intro{ background-color:#fff; padding:10px 20px; font-size:18px; line-height:36px; margin:0 -20px; color:#333333;}
+.zs-img{ margin-bottom:60px;}
+.zs-img img{ width:100%; height:auto; vertical-align:middle; margin-top:20px;}
+
+.review-b .cominfo .bmzbox .rakin{ color:#ff3300;}
+.bmz-img{ text-align:center; position:relative;}
+.bmz-img img{ max-width:118px; max-height:118px; height:auto; width:auto; border-radius:0;}
+.bmz-img em{ display:inline-block; width:30px; height:30px; background-color:#666666; font-size:22px; font-weight:bold; color:#fff; position:absolute; top:0; right:0;}
+.bmz-bj{ top:30px;}
+.bmz-start{ top:90px; background-color:#66cc00;}
+.bmz-start a{ color:#fff;}
+
+.bj-jbinfo{ font-size:16px; line-height:30px;}
+.bj-jbtit{ width:100px; display:inline-block;}
+.bj-intro{ resize:none; width:760px; height:200px; font-size:14px; line-height:24px; padding:20px; margin-top:20px;}
+.bj-img{ margin-top:20px;}
+.bj-btn{ text-align:center; margin-top:20px;}
+.bj-btn input{ height:48px; border-radius:8px; line-height:48px; font-size:16px; border: 1px solid #cccccc; text-align:center; font-weight:bold;}
+.bj-btnsave{ background-color:#efefef; width:120px;}
+.bj-btnst{ background-color:#66cc00; color:#fff; padding:0 10px; margin-left:20px;}
+
+.zs-tinfo,.zs-tinfo:hover{ color:#333333;}
+.zs-info{ float:left; padding:10px 20px;}
+.zs-name{ font-size:20px; line-height:28px;}
+.zs-phone{ font-size:16px; line-height:24px; margin-top:24px;}
+.zs-tinfo .hd-intro{border-left: 1px solid #d9d9d9; bottom: 10px;left: 150px;padding-left: 20px;position: absolute;right: 20px;top: 10px;}
+.zsinfo{ height:102px;}
+.zsinfo .hd-adetail{ top:30px;}
+.zz-detail{ color:#333333; margin:20px 0;}

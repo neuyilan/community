@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessVoteDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessVoteResult" type="BusinessVote">
+		<result column="voteId" property="voteId" />
+		<result column="regId" property="regId" />
+		<result column="userId" property="userId" />
+		<result column="vateTime" property="vateTime" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+		voteId,
+		regId,
+		userId,
+		vateTime
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+				<if test="voteId != null and voteId != ''" >
+			   		and voteId = #{voteId}
+				</if>
+				<if test="regId != null and regId != ''" >
+			   		and regId = #{regId}
+				</if>
+				<if test="userId != null and userId != ''" >
+			   		and userId = #{userId}
+				</if>
+				<if test="vateTime != null and vateTime != ''" >
+			   		and vateTime = #{vateTime}
+				</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessVote -->
+	<select id="findById"  resultMap="BusinessVoteResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_vote where voteId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessVote -->
+	<select id="findAll" resultMap="BusinessVoteResult">
+		select <include refid="Base_Column_List" /> from business_vote 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessVote -->
+	<select id="findByMap" resultMap="BusinessVoteResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_vote <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessVote -->
+	<select id="findByExample" resultMap="BusinessVoteResult" parameterType="com.community.app.module.vo.BusinessVoteQuery">
+		select <include refid="Base_Column_List" /> from business_vote <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessVote根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessVoteResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_vote  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessVote列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_vote 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessVote保存数据 -->
+	<insert id="save" parameterType="BusinessVote">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="voteId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_vote(
+		regId,
+		userId,
+		vateTime
+		) values(
+		#{regId},
+		#{userId},
+		#{vateTime}
+		)
+	</insert>
+	
+	<!-- BusinessVote修改数据 -->
+	<update id="update" parameterType="BusinessVote">
+		update business_vote 
+		<set>
+			<if test="regId != null and regId != ''" >
+			regId=#{regId},
+			</if>
+			<if test="userId != null and userId != ''" >
+			userId=#{userId},
+			</if>
+			<if test="vateTime != null and vateTime != ''" >
+			vateTime=#{vateTime}
+			</if>
+		</set> 
+		where 
+		voteId=#{voteId}
+	</update>
+	
+	<!-- BusinessVote删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_vote where 
+		voteId=#{voteId}
+	</delete>
+</mapper>

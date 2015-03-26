@@ -372,9 +372,9 @@
                     <span class="xx-qsi"><img src="<%=request.getContextPath()%>/images/icon/qs.jpg"></span>
                     <p class="xx-wz">
                     	<input type="hidden" name="expId" id="expId" value="" />
-                        <span>快递公司:<i><span id="expCompany"></span></i></span>
-                        <span>收货人：<i><span id="receiverName"></span></i></span>
-                        <span>电话：<i><span id="receiverTel"></span></i></span>
+                       	<span>快递公司：<label id="expCompany"></label></span>
+                        <span>收&nbsp;&nbsp;货&nbsp;人：<label id="receiverName"></label></span>
+                        <span>电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：<label id="receiverTel"></label></span>
                     </p>
                 </div>
                 <div class="y-kd-ztqr"><input type="button" class="y-zt-qr" name="" id="signReceiveBtn" value="确认签收"></div>

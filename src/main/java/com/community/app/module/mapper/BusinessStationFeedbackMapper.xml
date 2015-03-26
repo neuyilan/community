@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.community.app.module.dao.BusinessStationFeedbackDao" >
+	<!-- 返回结构集 -->
+	<resultMap id="BusinessStationFeedbackResult" type="BusinessStationFeedback">
+			<result column="feedId" property="feedId" />
+			<result column="comId" property="comId" />
+			<result column="comName" property="comName" />
+			<result column="estateId" property="estateId" />
+			<result column="estateName" property="estateName" />
+			<result column="state" property="state" />
+			<result column="totalPoll" property="totalPoll" />
+	</resultMap>
+	
+	<!-- 所有字段 -->
+	<sql id="Base_Column_List" >
+			feedId,
+			comId,
+			comName,
+			estateId,
+			estateName,
+			state,
+			totalPoll
+	</sql>
+	
+	<!-- 所有字段查询条件 -->
+	<sql id="Base_Where_Clause">
+		<where>
+			<trim  suffixOverrides="," >
+					<if test="feedId != null and feedId != ''" >
+				   		and feedId = #{feedId}
+					</if>
+					<if test="comId != null and comId != ''" >
+				   		and comId = #{comId}
+					</if>
+					<if test="comName != null and comName != ''" >
+				   		and comName = #{comName}
+					</if>
+					<if test="estateId != null and estateId != ''" >
+				   		and estateId = #{estateId}
+					</if>
+					<if test="estateName != null and estateName != ''" >
+				   		and estateName = #{estateName}
+					</if>
+					<if test="state != null and state != ''" >
+				   		and state = #{state}
+					</if>
+					<if test="totalPoll != null and totalPoll != ''" >
+				   		and totalPoll = #{totalPoll}
+					</if>
+			</trim>
+		</where>
+	</sql>
+	
+	<!-- 根据id查询 BusinessStationFeedback -->
+	<select id="findById"  resultMap="BusinessStationFeedbackResult" parameterType="java.lang.Integer">
+		select <include refid="Base_Column_List" /> from business_station_feedback where feedId = #{id}
+	</select>
+	
+	<!-- 无条件查询所有BusinessStationFeedback -->
+	<select id="findAll" resultMap="BusinessStationFeedbackResult">
+		select <include refid="Base_Column_List" /> from business_station_feedback 
+	</select>
+	
+	<!-- 按Map对象条件查询所有BusinessStationFeedback -->
+	<select id="findByMap" resultMap="BusinessStationFeedbackResult" parameterType="java.util.Map">
+		select <include refid="Base_Column_List" /> from business_station_feedback <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- 按VO对象条件查询所有BusinessStationFeedback -->
+	<select id="findByExample" resultMap="BusinessStationFeedbackResult" parameterType="com.community.app.module.vo.BusinessStationFeedbackQuery">
+		select <include refid="Base_Column_List" /> from business_station_feedback <include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessStationFeedback根据搜索条件，搜索分页数据 -->
+	<select id="findAllPage" resultMap="BusinessStationFeedbackResult" parameterType="Object">
+		select <include refid="Base_Column_List" /> from business_station_feedback  
+		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if>
+	</select>
+	
+	<!-- BusinessStationFeedback列表总数-->
+	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
+		select count(1) from business_station_feedback 
+		<include refid="Base_Where_Clause" />
+	</select>
+	
+	<!-- BusinessStationFeedback保存数据 -->
+	<insert id="save" parameterType="BusinessStationFeedback">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="feedId">
+			SELECT LAST_INSERT_ID()
+  		</selectKey>
+		insert into business_station_feedback(
+		
+		comId,
+		comName,
+		estateId,
+		estateName,
+		state,
+		totalPoll
+		) values(
+				#{comId},
+		#{comName},
+		#{estateId},
+		#{estateName},
+		#{state},
+		#{totalPoll}
+		)
+	</insert>
+	
+	<!-- BusinessStationFeedback修改数据 -->
+	<update id="update" parameterType="BusinessStationFeedback">
+		update business_station_feedback 
+		<set>
+			<if test="comId != null and comId != ''" >
+			comId=#{comId},
+			</if>
+			<if test="comName != null and comName != ''" >
+			comName=#{comName},
+			</if>
+			<if test="estateId != null and estateId != ''" >
+			estateId=#{estateId},
+			</if>
+			<if test="estateName != null and estateName != ''" >
+			estateName=#{estateName},
+			</if>
+			<if test="state != null and state != ''" >
+			state=#{state},
+			</if>
+			<if test="totalPoll != null and totalPoll != ''" >
+			totalPoll=#{totalPoll}
+			</if>
+		</set> 
+		where 
+		feedId=#{feedId}
+		
+		
+		
+		
+		
+		
+	</update>
+	
+	<!-- BusinessStationFeedback删除数据 -->
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from business_station_feedback where 
+		feedId=#{feedId}
+													</delete>
+	
+</mapper>
+	

@@ -391,7 +391,7 @@ public class UserController {
 					if (jsn.get("errorCode").toString().equals("200")) {
 						JSONObject content= jsn.getJSONObject("content");
 						String state= content.get("state").toString();
-						if (state.toString().equals(1)) {
+						if (state.toString().equals("1")) {
 							JSONObject user= content.getJSONObject("user");
 							Timestamp ts = new Timestamp(new Date().getTime());
 							AppUser appUser1 = new AppUser();
@@ -399,8 +399,17 @@ public class UserController {
 							appUser1.setIsQNH(1);
 							appUser1.setRealname(user.get("realname").toString());
 							appUser1.setNickname(user.get("nickname").toString());
-							appUser1.setSex(new Integer(user.get("sex").toString()));
-							appUser1.setAge(new Integer(new Integer(user.get("age").toString())));
+							if (user.get("sex").toString().equals("")) {
+								appUser1.setSex(0);
+							}else{
+								appUser1.setSex(new Integer(user.get("sex").toString()));
+							}
+							
+							if (user.get("age").toString().equals("")) {
+								appUser1.setAge(0);
+							}else{
+								appUser1.setAge(new Integer(user.get("age").toString()));
+							}
 							appUserService.update(appUser1);
 						}
 					}
@@ -3872,7 +3881,7 @@ public class UserController {
 			json += "\"mall\":{";
 			json += "\"title\":\"新年大集\",";		
 			json += "\"url\":\"http://wx.bqsqcm.com/okjiashop/\",";		
-			json += "\"list\":"+weather.grabMindex();
+			json += "\"list\":"+"[]";
 			json += "}";
 
 			

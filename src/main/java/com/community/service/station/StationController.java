@@ -1526,4 +1526,72 @@ public class StationController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 用户查询驿站申请开通数量
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getStationFeedbackCount")
+	public void getStationFeedbackCount(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"获取成功\",";
+			json += "\"content\":{";
+			json += "\"count\":\"22\",";
+			json += "\"state\":\"1\"";
+			json += "}";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"获取失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户为开通驿站投票
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="saveFeedbackInformation")
+	public void saveFeedbackInformation(HttpServletRequest request, HttpServletResponse response) {
+		String json = "";
+		try{
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"投票成功\"";
+			json += "}";
+		}catch(Exception e){
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"投票失败\"";
+			json += "}";
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

@@ -330,6 +330,21 @@ public class BusinessActivityServiceImpl implements BusinessActivityService {
 	}
 	
 	/**
+	 * 修改BusinessActivity数据
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	@Transactional("transactionManager")
+	public void addParticipants(BusinessActivityQuery entity) throws ServiceException {
+		try {
+			businessActivityDao.addParticipants(entity);
+		} catch (DaoException e) {
+			logger.debug("BusinessActivityServiceImpl update()：修改BusinessActivity发生错误！", e);
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 查询未开始和已开始的活动判断活动是否关闭或启动
 	 * @param entity
 	 * @throws ServiceException

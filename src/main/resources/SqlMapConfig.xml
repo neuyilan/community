@@ -106,6 +106,15 @@
 		
 		<typeAlias alias="BusinessUserRole" type="com.community.app.module.bean.BusinessUserRole"/>
 		
+		<typeAlias alias="BusinessActReg" type="com.community.app.module.bean.BusinessActReg"/>
+		<typeAlias alias="BusinessPrize" type="com.community.app.module.bean.BusinessPrize"/>
+		<typeAlias alias="BusinessRegPic" type="com.community.app.module.bean.BusinessRegPic"/>
+		<typeAlias alias="BusinessSponsor" type="com.community.app.module.bean.BusinessSponsor"/>
+		<typeAlias alias="BusinessVote" type="com.community.app.module.bean.BusinessVote"/>
+		
+		<typeAlias alias="BusinessStationFeedback" type="com.community.app.module.bean.BusinessStationFeedback"/>
+		<typeAlias alias="BusinessStationFeedbackInformation" type="com.community.app.module.bean.BusinessStationFeedbackInformation"/>
+		
         <!-- service -->
 		<typeAlias alias="BusinessCommunity" type="com.community.app.module.bean.BusinessCommunity"/>
 		<typeAlias alias="ManageEstate" type="com.community.app.module.bean.ManageEstate"/>
@@ -268,7 +277,16 @@
 		<mapper resource="com/community/app/module/mapper/BusinessRoleRefuMapper.xml" />	
 		<mapper resource="com/community/app/module/mapper/BusinessSpecialMenuMapper.xml" />	
 		<mapper resource="com/community/app/module/mapper/BusinessSpecialFunctionMapper.xml" />
-		<mapper resource="com/community/app/module/mapper/BusinessUserRoleMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessUserRoleMapper.xml" />
+		
+		<mapper resource="com/community/app/module/mapper/BusinessActRegMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessPrizeMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessRegPicMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessSponsorMapper.xml" />	
+		<mapper resource="com/community/app/module/mapper/BusinessVoteMapper.xml" />
+		
+		<mapper resource="com/community/app/module/mapper/BusinessStationFeedbackMapper.xml" />
+		<mapper resource="com/community/app/module/mapper/BusinessStationFeedbackInformationMapper.xml" />		
 		
         <!-- service -->
 		<mapper resource="com/community/app/module/mapper/AppUserMapper.xml" />

@@ -126,7 +126,7 @@ $(document).ready(function(){
 	
 	//送货上门操作
 	$('#sendHomeBtn').click(function() {
-		if(confirm('确认上门取件吗?')) {
+		if(confirm('确认上门送件吗?')) {
 			$.ajax({
 	    		url: 'saveSendHomeResolve.do',
 	    		dataType: 'json',

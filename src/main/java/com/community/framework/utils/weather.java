@@ -139,15 +139,16 @@ public class weather {
 		Document doc;
 		String json = "";
 		try {
-			doc = Jsoup
-					.connect(
-							"http://wx.bqsqcm.com/okjiashop/mobile/mindex.php")
-					.get();
-			String title = doc.title();
-			// 今天
-			Elements arr= doc.select("div.mindex");
-			json = arr.get(0).text();
-		} catch (IOException e) {
+//			doc = Jsoup
+//			.connect(
+//					"http://wx.bqsqcm.com/okjiashop/mobile/mindex.php")
+//			.get();
+//	String title = doc.title();
+//	// 今天
+//	Elements arr= doc.select("div.mindex");
+//	json = arr.get(0).text();
+	json = "[]";
+} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

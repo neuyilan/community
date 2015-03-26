@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.community.app.module.bean.BusinessActReg;
 import com.community.app.module.vo.BusinessActRegQuery;
 import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Repository
 public interface BusinessActRegDao {
@@ -48,6 +49,14 @@ public interface BusinessActRegDao {
 	 * @throws DaoException
 	 */	
 	public List<BusinessActReg> findByExample(final BusinessActRegQuery query) throws DaoException;	
+	
+	/**
+	 * 按VO对象条件查询所有BusinessActReg
+	 * @param entity
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<BusinessActReg> findById_app(final BusinessActRegQuery query) throws DaoException;	
 
 	/**
 	 * 按VO对象条件查询所有BusinessActReg-限制返回条数
@@ -110,5 +119,20 @@ public interface BusinessActRegDao {
 	 * @return
 	 */
 	public void updateCode(Map<String, Object> map) throws DaoException;
+
+	/**
+	 * 查询报名排名
+	 * @param map
+	 * @return
+	 */
+	public List<BusinessActReg> findRankPage(BusinessActRegQuery query) throws DaoException;
+
+	/**
+	 * 获取最新报名
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public List<BusinessActReg> findLatestRegPage(BusinessActRegQuery query) throws DaoException;
 	
 }

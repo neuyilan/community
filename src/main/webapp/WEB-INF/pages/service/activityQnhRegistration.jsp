@@ -109,19 +109,29 @@ $(document).ready(function(){
 				$(".x-qg").css("display","block");//立即抢购
 				$(".x-djs").css("display","none");//倒计时
 				$(".x-pm").css("display","none");//排名
-			}else{//已投票
+			}else if(currRank == 1){//已投票
 				$(".x-djs").css("display","block");//倒计时
 				$(".x-pm").css("display","none");//排名
 				$(".x-djs").html("已报名")
+			}else{
+				$(".x-djs").css("display","block");//倒计时
+				$(".x-pm").css("display","none");//排名
+				$(".x-djs").html("已签到");
 			}
+				
 		}else if(currState == 2) {//已结束
 			if(currRank == 0) {//未投票
 				
-			}else{//已投票
+			}else if(currRank == 1){//已投票
 				$(".x-djs").css("display","block");//倒计时
 				$(".x-pm").css("display","none");//排名
-				$(".x-djs").html("已报名")
+				$(".x-djs").html("已报名");
+			}else{
+				$(".x-djs").css("display","block");//倒计时
+				$(".x-pm").css("display","none");//排名
+				$(".x-djs").html("已签到");
 			}
+				
 		}      
 	
 	//参加活动

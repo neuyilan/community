@@ -60,7 +60,6 @@
 			<result column="QNHName" property="QNHName" />
 			<result column="QNHId" property="QNHId" />
 			<result column="isQNH" property="isQNH" />
-			
 			<result column="actRegWords" property="actRegWords" />
 			<result column="prizeRules" property="prizeRules" />
 	</resultMap>
@@ -337,8 +336,7 @@
 			a.QNHName,
 			a.QNHId,
 			a.isQNH,
-			a.actRegWords,
-			a.prizeRules
+			a.timeslot
 			
 	</sql>
 	
@@ -445,6 +443,9 @@
 					<if test="QNHActId != null and QNHActId != ''" >
 				   		and a.QNHActId = #{QNHActId}
 					</if>
+					<if test="isQNH != null and isQNH != ''" >
+				   		and a.isQNH = #{isQNH}
+					</if>
 					
 					<if test="timeScope != null and timeScope != ''" >
 	      				and #{timeScope} >= DATEDIFF(now(), a.createTime)
@@ -464,7 +465,6 @@
 					<if test="statetype==2" >
 				   		and a.state=0 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH} or a.state=1 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH} or a.state=2 and  a.isImportant = #{isImportant} and a.isQNH = #{isQNH}
 					</if>
-					
 			</trim>
 		</where>
 	</sql>
@@ -727,7 +727,7 @@
 	
 	<!-- BusinessActivity列表总数-->
 	<select id="selectCount_app" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_activity_scope s inner join  business_activity a on s.actId=a.actId and  s.estateId=#{actScope} 
+		select count(1) from business_activity_scope s inner join  business_activity a on s.actId=a.actId and  s.estateId=#{estateId} 
 		<include refid="Base_Where_Clause_app" />
 	</select>
 	
@@ -810,9 +810,7 @@
 		QNHName,
 		QNHId,
 		isQNH,
-		timeslot,
-		actRegWords,
-		prizeRules
+		timeslot
 		) values(
 		#{typeId},
 		#{actName},
@@ -866,9 +864,8 @@
 		#{QNHName},	
 		#{QNHId},
 		#{isQNH},
-		#{timeslot},
-		#{actRegWords},
-		#{prizeRules}
+		#{timeslot}
+			
 		)
 	</insert>
 	
@@ -1020,13 +1017,6 @@
 			<if test="reportExcel != null and reportExcel != ''" >
 			reportExcel=#{reportExcel},
 			</if>
-
-			<if test="actRegWords != null and actRegWords != ''" >
-			actRegWords=#{actRegWords},
-			</if>	
-		    <if test="prizeRules != null and prizeRules != ''" >
-			prizeRules=#{prizeRules},
-			</if>	
 			<if test="refuseMemo != null and refuseMemo != ''" >
 			refuseMemo=#{refuseMemo}
 			</if>	
@@ -1044,6 +1034,9 @@
 	UPDATE business_activity SET particpates=particpates+1 where actId=#{actId}
 	</update>
 	<update id="updateParticpates2" parameterType="BusinessActivityRegistrationInformation">
+	UPDATE business_activity SET particpates=particpates+1 where actId=#{actId}
+	</update>
+	<update id="addParticipants" parameterType="Object">
 	UPDATE business_activity SET particpates=particpates+1 where actId=#{actId}
 	</update>
 	<!--修改supports -->

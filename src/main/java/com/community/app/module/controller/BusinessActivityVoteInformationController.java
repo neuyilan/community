@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.community.app.module.bean.BusinessActivityVoteInformation;
+import com.community.app.module.service.BusinessActivityService;
 import com.community.app.module.service.BusinessActivityVoteInformationService;
 import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessActivityQuery;
 import com.community.app.module.vo.BusinessActivityVoteInformationQuery;
 
 @Controller
@@ -26,6 +28,8 @@ public class BusinessActivityVoteInformationController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessActivityVoteInformationController.class);
 	@Autowired
 	private BusinessActivityVoteInformationService businessActivityVoteInformationService;
+	@Autowired
+	private BusinessActivityService businessActivityService;
 	
 	/**
 	 * 进入管理页
@@ -151,6 +155,10 @@ public class BusinessActivityVoteInformationController {
 				    businessActivityVoteInformation.setEditTime(ts);
 				    businessActivityVoteInformation.setEditor("");
 					businessActivityVoteInformationService.save(businessActivityVoteInformation);
+					//参与人增加
+					BusinessActivityQuery businessActivityQuery = new BusinessActivityQuery();
+					businessActivityQuery.setActId(query.getID());
+					businessActivityService.addParticipants(businessActivityQuery);
 				}
 				//保存成功
 				json += "{";

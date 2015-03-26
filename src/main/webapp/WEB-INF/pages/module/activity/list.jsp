@@ -174,7 +174,15 @@
 		                    <%-- <p class="y-hdgl-dzinfor"><span>活动截止时间：${act.publishDate }&nbsp;&nbsp;${act.publishTime }</span></p> --%>
 		                    
 		                    <p class="y-hdgl-dzinfor">
-		                    	<span>活动截止时间：
+		                    	<span>
+		                    		<c:choose>
+										<c:when test="${act.typeId == 2}">
+											报名截止时间：
+										</c:when>
+										<c:otherwise>
+											活动截止时间：
+										</c:otherwise>
+									</c:choose>
 		                    		<c:choose>
 										<c:when test="${fn:length(act.endTime) > 17}">
 											<c:out value="${fn:substring(act.endTime, 0, 16)}" />
@@ -239,7 +247,7 @@
                 <div class="link5"></div>
                 <ul class="sub-menu5 s-xw-xx">
 		              <li><span class="xxl">活动类型：<lable id="typeName"></lable></span><span class="xxr">活动范围：<lable id="actScope"></lable></span></li>
-		              <li><span class="xxl">活动截止时间：<lable id="actTime"></lable></span></li>
+		              <li><span class="xxl">报名截止时间：<lable id="actTime"></lable></span></li>
 		              <li><span class="xxl">发布人：<lable id="editor"></lable></span><span class="xxr">发布时间：<lable id="createTime"></lable></span></li>
 		              <li id="auditLi"><span class="xxl">审核人：<lable id="auditorName"></lable></span><span class="xxr">审核时间：<lable id="auditTime"></lable></span></li>
 		              <li id="viewComponent"></li>
@@ -527,6 +535,13 @@
                 		comment = '<i class="rev" title="评论量">'+row.comments+'</i>';
                 	}
                 	
+                	var tag = '';
+                	if(row.typeId == 2) {
+                		tag = '报名截止时间';
+                	} else {
+                		tag = '活动截止时间';
+                	}
+                	
                 	var htmlDom = ''
 	              		+ '<div class="manbox"'
 	    	        	+ styleStr
@@ -547,7 +562,7 @@
 	                	+ '<img class="y-hdgl-img" src="<%=ctx%>'+row.actPic+'" style="height: 100px; "/>'
                     	+ '<p class="y-hdgl-dzinfor">'
                     	//+ '<span>活动截止时间：'+row.publishDate+'&nbsp;&nbsp;'+row.publishTime+' </span></p>'
-                    	+ '<span>活动截止时间：'+(row.endTime != '' && row.endTime != "null" ? row.endTime.substring(0, 16) : '')+' </span></p>'
+                    	+ '<span>'+tag+'：'+(row.endTime != '' && row.endTime != "null" ? row.endTime.substring(0, 16) : '')+' </span></p>'
                     	+ '<hr class="link">'
                     	+ '<div class="operate">'
                     	<shiro:hasPermission name="activity_view_detail">

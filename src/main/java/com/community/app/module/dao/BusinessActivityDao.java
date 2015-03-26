@@ -130,6 +130,13 @@ public interface BusinessActivityDao {
 	 * @throws DaoException
 	 */
 	public void update(final BusinessActivity entity) throws DaoException;
+	
+	/**
+	 * 修改BusinessActivity数据
+	 * @param entity
+	 * @throws DaoException
+	 */
+	public void addParticipants(final BusinessActivityQuery entity) throws DaoException;
 
 	/**
 	 * 删除BusinessActivity

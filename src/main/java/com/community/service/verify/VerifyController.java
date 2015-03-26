@@ -79,6 +79,11 @@ public class VerifyController {
 						json += "\"errorCode\":\"200\",";
 						json += "\"message\":\"发送成功\"";
 						json += "}";
+					}else {
+						json += "{";
+						json += "\"errorCode\":\"400\",";
+						json += "\"message\":\"发送失败\"";
+						json += "}";
 					}
 				}catch(Exception e){
 					json = "";
@@ -110,10 +115,16 @@ public class VerifyController {
 					// 发送短信
 					str="您获取的验证码为 "+str+"，请在页面中输入以完成验证。【OK家】";
 					String returnMessage = messagesUtil.returnMessageRrid(query.getCellphone(), str);
+					manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
 					if(!returnMessage.contains("-")) {
 						json += "{";
 						json += "\"errorCode\":\"200\",";
 						json += "\"message\":\"发送成功\"";
+						json += "}";
+					}else {
+						json += "{";
+						json += "\"errorCode\":\"400\",";
+						json += "\"message\":\"发送失败\"";
 						json += "}";
 					}
 				}catch(Exception e){
@@ -185,6 +196,123 @@ public class VerifyController {
 			json += "}";
 			e.printStackTrace();
 		}
+		
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 用户注册时获取验证码，服务器返回验证码
+	 * @param cellphone
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getCodeSpeech")
+	public void getCodeSpeech(HttpServletRequest request, HttpServletResponse response,AppVerifyQuery query) {
+		String json = "";
+		boolean whetherRepeat = false;
+		try {
+			whetherRepeat = appUserService.whetherRepeat(query.getCellphone());
+		} catch (Exception e) {
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"验证失败\"";
+			json += "}";
+			e.printStackTrace();
+		}
+		if("0".equals(request.getParameter("type"))){
+			if(whetherRepeat){
+				AppVerify appVerify = new AppVerify();
+				try{
+					String str=StringUtil.createRandom(true, 6);
+					appVerify.setCellphone(query.getCellphone());
+				    appVerify.setVerificationCode(str);
+				    appVerify.setCreateTime(query.getCreateTime());
+			        Timestamp  ts=new Timestamp(new Date().getTime());
+			        appVerify.setCreateTime(ts);
+			        appVerifyService.delete(query);
+					appVerifyService.save(appVerify);
+					// 发送语音
+					str="您获取的验证码为 "+str+"，请在页面中输入以完成验证。";
+					String returnMessage = messagesUtil.returnMessageRridSpeech(query.getCellphone(), str);
+					manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
+					if(!returnMessage.contains("-")) {
+						json += "{";
+						json += "\"errorCode\":\"200\",";
+						json += "\"message\":\"发送成功\"";
+						json += "}";
+					}else {
+						json += "{";
+						json += "\"errorCode\":\"400\",";
+						json += "\"message\":\"发送失败\"";
+						json += "}";
+					}
+				}catch(Exception e){
+					json = "";
+					json += "{";
+					json += "\"errorCode\":\"400\",";
+					json += "\"message\":\"发送失败\"";
+					json += "}";
+					e.printStackTrace();
+				}
+			}else{
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"该手机号已注册\"";
+				json += "}";
+			}
+		}else {
+			if(!whetherRepeat){
+				AppVerify appVerify = new AppVerify();
+				try{
+					String str=StringUtil.createRandom(true, 6);
+					appVerify.setCellphone(query.getCellphone());
+				    appVerify.setVerificationCode(str);
+				    appVerify.setCreateTime(query.getCreateTime());
+			        Timestamp  ts=new Timestamp(new Date().getTime());
+			        appVerify.setCreateTime(ts);
+			        appVerifyService.delete(query);
+					appVerifyService.save(appVerify);
+					// 发送语音
+					str="您获取的验证码为 "+str+"，请在页面中输入以完成验证。";
+					String returnMessage = messagesUtil.returnMessageRridSpeech(query.getCellphone(), str);
+					manageSendMsgService.save(query.getCellphone(),returnMessage,str,1);
+					if(!returnMessage.contains("-")) {
+						json += "{";
+						json += "\"errorCode\":\"200\",";
+						json += "\"message\":\"发送成功\"";
+						json += "}";
+					}else {
+						json += "{";
+						json += "\"errorCode\":\"400\",";
+						json += "\"message\":\"发送失败\"";
+						json += "}";
+					}
+				}catch(Exception e){
+					json = "";
+					json += "{";
+					json += "\"errorCode\":\"400\",";
+					json += "\"message\":\"发送失败\"";
+					json += "}";
+					e.printStackTrace();
+				}
+			}else{
+				json = "";
+				json += "{";
+				json += "\"errorCode\":\"400\",";
+				json += "\"message\":\"该手机号未注册\"";
+				json += "}";
+			}
+		}
+		
 		
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");

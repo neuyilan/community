@@ -80,6 +80,7 @@ public class qnhController {
 			CheckDistanceKmCli checkDistanceKmCli = new CheckDistanceKmCli();
 			String string = checkDistanceKmCli.getNearbyQNH(query.getLongitude(), query.getLatitude());
 			BusinessActivityQuery businessActivityQuery = new BusinessActivityQuery();
+			businessActivityQuery.setIsQNH(1);
 			businessActivityQuery.setEstateId(query.getEstateId());
 			businessActivityQuery.setState(0);
 			int count = businessActivityService.selectCount_app(businessActivityQuery);
@@ -90,28 +91,34 @@ public class qnhController {
 			json += "\"count\":\""+count+"\",";
 			if (string != null && !string.equals("")) {
 				JSONObject jsn = JSONObject.fromObject(string);
-				JSONObject content= jsn.getJSONObject("content");
-				JSONArray list= content.getJSONArray("list");
-				for (int i = 0; i < list.size(); i++) {
-					JSONObject object = JSONObject.fromObject(list.get(i));
-					BusinessActivityQuery act = new BusinessActivityQuery();
-					act.setStatetype(2);
-					act.setIsQNH(1);
-					act.setType(null);
-					act.setSort("editTime");
-					act.setOrder("desc");
-					act.setRows(15);
-					
-					act.setQNHId(object.get("id").toString());
-					BaseBean baseBean = businessActivityService.findAllPage_app_QNH(act);
-					List<BusinessActivity> actList = baseBean.getList();
-					if (actList.size()>0) {
-						object.element("activities", new JSONObject().element("ID", actList.get(0).getActId()).element("title", actList.get(0).getActName()).element("time", actList.get(0).getPublishTime()).element("brief", actList.get(0).getBrief()).element("pic", actList.get(0).getActPic()));
-					}else {
+				if (jsn.get("errorCode").toString().equals("200")) {
+					JSONObject content= jsn.getJSONObject("content");
+					JSONArray list= content.getJSONArray("list");
+					for (int i = 0; i < list.size(); i++) {
+						JSONObject object = JSONObject.fromObject(list.get(i));
+						BusinessActivityQuery act = new BusinessActivityQuery();
+						act.setStatetype(2);
+						act.setIsQNH(1);
+						act.setType(null);
+						act.setSort("editTime");
+						act.setOrder("desc");
+						act.setRows(15);
+						
+						act.setQNHId(object.get("id").toString());
+						BaseBean baseBean = businessActivityService.findAllPage_app_QNH(act);
+						List<BusinessActivity> actList = baseBean.getList();
+						if (actList.size()>0) {
+							object.element("activities", new JSONObject().element("ID", actList.get(0).getActId()).element("title", actList.get(0).getActName()).element("time", actList.get(0).getStartTime()).element("brief", actList.get(0).getBrief()).element("pic", actList.get(0).getActPic()));
+							list.set(i, object);
+						}else {
+						}
+						System.out.println(object);
 					}
-					System.out.println(object);
+					json += "\"list\":"+list.toString()+"";
+				}else {
+					json += "\"list\":[]";
 				}
-				json += "\"list\":"+list.toString()+"";
+				
 			}else {
 				json += "\"list\":[]";
 			}

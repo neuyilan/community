@@ -602,8 +602,8 @@ public class BusinessActivity implements java.io.Serializable {
 				.append("IsPush", getIsPush())
 				.append("CreateTime", getCreateTime())
 				.append("EditTime", getEditTime())
-				.append("actRegWords", getActRegWords())
-				.append("prizeRules", getPrizeRules())
+				.append("ActRegWords", getActRegWords())
+				.append("PrizeRules", getPrizeRules())
 				.append("Editor", getEditor()).toString();
 	}
 

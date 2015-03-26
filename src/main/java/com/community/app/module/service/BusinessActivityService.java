@@ -125,6 +125,13 @@ public interface BusinessActivityService {
 	public void update(final BusinessActivity entity) throws ServiceException;
 	
 	/**
+	 * 修改BusinessActivity数据
+	 * @param entity
+	 * @throws ServiceException
+	 */
+	public void addParticipants(final BusinessActivityQuery entity) throws ServiceException;
+	
+	/**
 	 * 查询未开始和已开始的活动判断活动是否关闭或启动
 	 * @param entity
 	 * @throws ServiceException

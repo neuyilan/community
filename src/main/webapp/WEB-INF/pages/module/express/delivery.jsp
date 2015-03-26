@@ -4,7 +4,7 @@
     <title>送货上门</title>
     <%@include file="/common/meta.jsp"%>
     <script src="<%=ctx %>/js/jquery-1.7.2.min.js" type="text/javascript" ></script>
-    <script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
+    <%-- <script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script> --%>
     <script>
 
     $(document).ready(function(){
@@ -19,7 +19,7 @@
         $("#qsbtn").click(function(){
             $("#y-kd-qsinfor").fadeIn("slow");
             $("#y-kd-qsinfor").css("height",$(document.body).outerHeight(true)+'px');
-            $("#qscon").css("height",$(document.body).outerHeight(true)-40+'px')
+            $("#qscon").css("height",$(document.body).outerHeight(true)-40+'px');
         });
 
         $("#closeqs").click(function(){

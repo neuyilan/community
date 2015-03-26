@@ -492,7 +492,11 @@ public class activitiesController {
 				
 				if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
 					rank = 1;
+					if (BusinessActivityQnhInformationList.get(0).getState()==1) {
+						rank=2;
+					}
 				}
+				
 				
 			}else {
 				List<BusinessActivityParticipate> participateList = businessActivityParticipateService.findByMap(paramMap);
@@ -773,7 +777,6 @@ public class activitiesController {
 			json += "\"appPic\":\""+ip+BusinessActivity.getAppPic()+"\",";
 			json += "\"title\":\""+BusinessActivity.getActName()+"\",";
 			json += "\"url\":\""+phpIp+"/wxokjia/activity-info.php?ID="+query.getID()+"\",";
-	
 			json += "\"supports\":\""+BusinessActivity.getSupports()+"\",";
 			json += "\"comments\":\""+BusinessActivity.getComments()+"\",";
 			json += "\"PageState\":";
@@ -1525,6 +1528,8 @@ public class activitiesController {
 						businessActivityCoupon.setEditTime(ts);
 						//修改优惠券状态
 						businessActivityCouponService.update(businessActivityCoupon);
+						//参与人增加
+						businessActivityService.addParticipants(query);
 						
 						//发送短信
 						String str="恭喜！您成功领取了（"+activity.getCouponName()+"），使用验证码为："+list.get(0).getCouponCode()+"，请妥善保存，并于"+activity.getCouponValid()+"期间内使用。【OK家】";
@@ -1581,21 +1586,36 @@ public class activitiesController {
 	 * json
 	 */
 	@RequestMapping(value="signInQNH")
-	public synchronized  void signInQNH(HttpServletRequest request, HttpServletResponse response,BusinessActivityQuery query) {
+	public synchronized  void signInQNH(HttpServletRequest request, HttpServletResponse response,BusinessActivityQnhInformationQuery query) {
+		BusinessActivityQuery businessActivityQuery = new BusinessActivityQuery();
+		List<BusinessActivity> businessActivityList= null;
 		String json = "";
 		boolean flag = false;
 		List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList= null;
 		try{
+			
+			businessActivityQuery.setQNHActId(query.getID());
+			businessActivityList= businessActivityService.findByExample(businessActivityQuery);
+			
 			BusinessActivityQnhInformationQuery businessActivityQnhInformationQuery= new BusinessActivityQnhInformationQuery ();
-			businessActivityQnhInformationQuery.setActId(query.getID());
+			businessActivityQnhInformationQuery.setActId(businessActivityList.get(0).getActId());
 			businessActivityQnhInformationQuery.setUserId(query.getUserId());
 			BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
 			if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
-				BusinessActivityQnhInformation BusinessActivityQnhInformation = new BusinessActivityQnhInformation();
-				BusinessActivityQnhInformation.setInformationId(BusinessActivityQnhInformationList.get(0).getInformationId());
-				BusinessActivityQnhInformation.setState(1);
-				businessActivityQnhInformationService.update(BusinessActivityQnhInformation);
-				flag=true;
+				if (BusinessActivityQnhInformationList.get(0).getState()==1) {
+					json = "";
+					json += "{";
+					json += "\"errorCode\":\"401\",";
+					json += "\"message\":\"抱歉！您已经签到该活动！\"";
+					json += "}";
+				}else {
+					BusinessActivityQnhInformation BusinessActivityQnhInformation = new BusinessActivityQnhInformation();
+					BusinessActivityQnhInformation.setInformationId(BusinessActivityQnhInformationList.get(0).getInformationId());
+					BusinessActivityQnhInformation.setState(1);
+					businessActivityQnhInformationService.update(BusinessActivityQnhInformation);
+					flag=true;
+				}
+				
 			}else {
 				json = "";
 				json += "{";
@@ -1615,27 +1635,35 @@ public class activitiesController {
 		
 		try {
 			if(flag) {
-				BusinessActivity activity = businessActivityService.findById_app(query.getID());
+				BusinessActivity activity = businessActivityService.findById_app(businessActivityList.get(0).getActId());
 				OnlineCheckInCli onlineCheckInCli = new OnlineCheckInCli();
 				String string =  onlineCheckInCli.signOnline(activity.getQNHActId(), BusinessActivityQnhInformationList.get(0).getTel());
-				JSONObject jsn = JSONObject.fromObject(string);
-				if (jsn.get("errorCode").toString().equals("200")) {
-					JSONObject content= jsn.getJSONObject("content");
-					String times= content.get("times").toString();
-					String state= content.get("state").toString();
-					json += "{";
-					json += "\"errorCode\":\"200\",";
-					json += "\"message\":\"签到成功\",";
-					json += "\"content\":{\"count\":\""+times+"\"}";
-					json += "}";
-					if (state.toString().equals(1)) {
-						AppUser appUser = appUserService.findById(query.getUserId());
-						if (query.getIsQNH()==0) {
-							AppUser appUser1 = new AppUser();
-							appUser1.setUserId(appUser.getUserId());
-							appUser1.setIsQNH(1);
-							appUserService.update(appUser1);
+				if (string!=null && !string.equals("")) {
+					JSONObject jsn = JSONObject.fromObject(string);
+					if (jsn.get("errorCode").toString().equals("200")) {
+						JSONObject content= jsn.getJSONObject("content");
+						String times= content.get("times").toString();
+						String state= content.get("state").toString();
+						json += "{";
+						json += "\"errorCode\":\"200\",";
+						json += "\"message\":\"签到成功\",";
+						json += "\"content\":{\"count\":\""+times+"\"}";
+						json += "}";
+						if (state.toString().equals("1")) {
+							AppUser appUser = appUserService.findById(query.getUserId());
+							if (appUser.getIsQNH()==0) {
+								AppUser appUser1 = new AppUser();
+								appUser1.setUserId(appUser.getUserId());
+								appUser1.setIsQNH(1);
+								appUserService.update(appUser1);
+							}
 						}
+					}else {
+						json += "{";
+						json += "\"errorCode\":\"200\",";
+						json += "\"message\":\"签到成功\",";
+						json += "\"content\":{\"count\":\"1\"}";
+						json += "}";
 					}
 				}else {
 					json += "{";
@@ -1644,6 +1672,7 @@ public class activitiesController {
 					json += "\"content\":{\"count\":\"1\"}";
 					json += "}";
 				}
+				
 				
 			}
 		} catch (Exception e) {
@@ -1705,7 +1734,7 @@ public class activitiesController {
 			mav.addObject("tel", query.getTel());
 			mav.addObject("protrait", protrait);
 			mav.addObject("ID", query.getID());
-			mav.addObject("timeSlotId", query.getTimeSlotId());
+			mav.addObject("timeSlotId", activity.getTimeslot());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -1729,7 +1758,7 @@ public class activitiesController {
 		
 		return mav;	
 	}
-	
+		
 	/**
 	 * 用户参与活动
 	 * @param comId
@@ -1782,6 +1811,27 @@ public class activitiesController {
 						businessActivityQnhInformation.setEditor("");
 						businessActivityQnhInformation.setTel(query.getTel());
 						businessActivityQnhInformationService.save(businessActivityQnhInformation);
+						
+						AppUserNews appUserNews = new AppUserNews();
+						appUserNews.setUserId(query.getUserId());
+						appUserNews.setCreateTime(ts);
+						appUserNews.setNewTitle("活动通知");
+						appUserNews.setType(6);
+						appUserNews.setId(query.getActId());
+						appUserNews.setContent(query.getTitle());
+						appUserNewsService.saveReply(appUserNews);
+						AppLatestNews appLatestNews = new AppLatestNews();
+						appLatestNews.setUserId(query.getUserId());
+						appLatestNews.setTypeId(7);
+						appLatestNews.setSourceId(query.getActId());
+						appLatestNews.setTo(0);
+						appLatestNews.setEstateId(0);
+						appLatestNewsService.save_app(appLatestNews);
+						appLatestNews.setTypeId(8);
+						appLatestNewsService.save_app(appLatestNews);
+						appLatestNews.setTypeId(10);
+						appLatestNewsService.save_app(appLatestNews);
+						
 						json += "{";
 						json += "\"errorCode\":\"200\",";
 						json += "\"message\":\"参与成功\"";
@@ -2069,324 +2119,80 @@ public class activitiesController {
 	 * json
 	 */
 	@RequestMapping(value="getActivitiesRanking")
-	public void getActivitiesRanking(HttpServletRequest request, HttpServletResponse response) {
+	public void getActivitiesRanking(HttpServletRequest request, HttpServletResponse response,BusinessActRegQuery query ) {
 		String json = "";
+		List<BusinessActReg> userList = null;
 		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\",";
-			json += "\"content\":{";
-			json += "\"list\":[";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "},";
-			json += "{\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\"";
-			json += "}";
-			json += "]";
-			json += "}";
-			json += "}";
+			JSONArray jsnary = new JSONArray();
+			int state = 1;
+			query.setRows(20);
+			query.setActId(query.getID());
+			if (query.getType()==3) {
+				userList= businessActRegService.findById_app(query);
+				if (userList != null && userList.size()>0) {
+					if (userList.get(0).getFlag()==2) {
+						state = 2;
+					}else if (userList.get(0).getFlag()==0) {
+						BusinessActReg regobj = userList.get(0);
+						state = 3;
+						jsnary.element(new JSONObject()
+						.element("nickname", regobj.getNickName())
+						.element("estateName", regobj.getEstateName())
+						.element("number", regobj.getVotes())
+						.element("portrait", regobj.getAvatar())
+						.element("contestantNo", regobj.getCode() > 10 ? regobj.getCode() + "" : "0"+regobj.getCode()) // 编号 <10 补上0
+						.element("no", regobj.getRank()));
+					}
+				}
+			}
+			query.setUserId(null);
+			query.setFlag(0);
+			//	BaseBean baseBean = businessActivityCommentService.findAllPage_app(query);
+			BaseBean baseBean = businessActRegService.findRankPage(query);
+//			List<BusinessActReg> actRegers = businessActRegService.findAll();
+			
+			JSONObject jsn = new JSONObject()
+			.element("errorCode", "200")
+			.element("message", "获取成功");
+			List<BusinessActReg> list = (List<BusinessActReg>)baseBean.getList();
+			
+			for(BusinessActReg actReger :list)
+				jsnary.element(new JSONObject()
+				.element("nickname", actReger.getNickName())
+				.element("estateName", actReger.getEstateName())
+				.element("number", actReger.getVotes())
+				.element("portrait", actReger.getAvatar())
+				.element("contestantNo", actReger.getCode() > 10 ? actReger.getCode() + "" : "0"+actReger.getCode()) // 编号 <10 补上0
+				.element("no", actReger.getRank())); //
+			
+			jsn.element("content",new JSONObject().element("state", state).element("PageState", baseBean.getCount()>query.getPage()*query.getRows() ? "true" : "false").element("list", jsnary));
+			json = jsn.toString();
+			
+//			json += "{";
+//			json += "\"errorCode\":\"200\",";
+//			json += "\"message\":\"获取成功\",";
+//			json += "\"content\":{";
+//			json += "\"list\":[";
+//			json += "{\"nickname\":\"美女\",";
+//			json += "\"estateName\":\"罗马嘉员东区\",";
+//			json += "\"number\":\"10012\",";
+//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+//			json += "\"contestantNo\":\"01\",";
+//			json += "\"no\":\"1\"";
+//			json += "},";
+//			json += "{\"nickname\":\"美女\",";
+//			json += "\"estateName\":\"罗马嘉员东区\",";
+//			json += "\"number\":\"10012\",";
+//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+//			json += "\"contestantNo\":\"01\",";
+//			json += "\"no\":\"1\"";
+//			json += "}";
+//			json += "]";
+//			json += "}";
+//			json += "}";
+			
 		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"获取失败\"";
-			json += "}";
+			json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
 			e.printStackTrace();
 		}	
 		response.setHeader("Cache-Control", "no-cache");
@@ -2398,6 +2204,77 @@ public class activitiesController {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * 获取活动排名
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="getLatestRegistration")
+	public void getLatestRegistration(HttpServletRequest request, HttpServletResponse response,BusinessActRegQuery query ) {
+		String json = "";
+		try{
+			
+			//	BaseBean baseBean = businessActivityCommentService.findAllPage_app(query);
+			BaseBean baseBean = businessActRegService.findLatestRegPage(query);
+//			List<BusinessActReg> actRegers = businessActRegService.findAll();
+			
+			JSONObject jsn = new JSONObject()
+			.element("errorCode", "200")
+			.element("message", "获取成功")
+			.element("PageState", baseBean.getCount()>query.getPage()*query.getRows() ? "true" : "false");
+			JSONArray jsnary = new JSONArray();
+			List<BusinessActReg> list = (List<BusinessActReg>)baseBean.getList();
+			for(BusinessActReg actReger :list)
+				jsnary.element(new JSONObject()
+				.element("nickname", actReger.getNickName())
+				.element("estateName", actReger.getEstateName())
+				.element("number", actReger.getVotes())
+				.element("portrait", actReger.getAvatar())
+				.element("contestantNo", actReger.getCode() > 10 ? actReger.getCode() + "" : "0"+actReger.getCode()) // 编号 <10 补上0
+				.element("no", actReger.getRank())); //
+			
+			jsn.element("content",new JSONObject().element("list", jsnary));
+			json = jsn.toString();
+			
+//			json += "{";
+//			json += "\"errorCode\":\"200\",";
+//			json += "\"message\":\"获取成功\",";
+//			json += "\"content\":{";
+//			json += "\"list\":[";
+//			json += "{\"nickname\":\"美女\",";
+//			json += "\"estateName\":\"罗马嘉员东区\",";
+//			json += "\"number\":\"10012\",";
+//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+//			json += "\"contestantNo\":\"01\",";
+//			json += "\"no\":\"1\"";
+//			json += "},";
+//			json += "{\"nickname\":\"美女\",";
+//			json += "\"estateName\":\"罗马嘉员东区\",";
+//			json += "\"number\":\"10012\",";
+//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
+//			json += "\"contestantNo\":\"01\",";
+//			json += "\"no\":\"1\"";
+//			json += "}";
+//			json += "]";
+//			json += "}";
+//			json += "}";
+			
+		}catch(Exception e){
+			json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 	
 	/**
 	 * 获取选手信息

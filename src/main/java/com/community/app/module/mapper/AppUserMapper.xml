@@ -79,7 +79,8 @@
         u.baiduId,
         u.channelId,
         u.deviceType,
-        u.remarks
+        u.remarks,
+        u.isQNH
     </sql>
 
     <!-- 所有字段查询条件 -->

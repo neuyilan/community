@@ -33,6 +33,7 @@ import com.community.app.module.bean.BusinessExp;
 import com.community.app.module.bean.BusinessExpBackresolve;
 import com.community.app.module.bean.BusinessExpFav;
 import com.community.app.module.bean.BusinessExpResolve;
+import com.community.app.module.bean.BusinessOpertaion;
 import com.community.app.module.bean.BusinessStation;
 import com.community.app.module.bean.BusinessUser;
 import com.community.app.module.bean.ManageEstate;
@@ -49,6 +50,7 @@ import com.community.app.module.service.BusinessExpBackresolveService;
 import com.community.app.module.service.BusinessExpFavService;
 import com.community.app.module.service.BusinessExpResolveService;
 import com.community.app.module.service.BusinessExpService;
+import com.community.app.module.service.BusinessOpertaionService;
 import com.community.app.module.service.BusinessStationService;
 import com.community.app.module.service.BusinessUserService;
 import com.community.app.module.service.ManageEstateService;
@@ -98,6 +100,9 @@ public class BusinessExpController {
 	private ManageExpressAllService manageExpressAllService;
 	@Autowired
 	private ManageSendMsgService manageSendMsgService;
+	@Autowired
+	private BusinessOpertaionService businessOpertaionService;
+	
 	/**
 	 * 进入管理页
 	 * @return
@@ -641,6 +646,18 @@ public class BusinessExpController {
 		    businessExp.setIsProblem(0);
 			businessExpService.save(businessExp);
 			
+			String state = "已入库";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_save_receive", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			if(businessExp.getExpId() > 0 && businessExp.getReceiverTel().length() == 11) {
 				if(query.getFlag() == 1) {
 					BusinessAddress businessAddress = new BusinessAddress();
@@ -872,6 +889,18 @@ public class BusinessExpController {
             
 			businessExpService.save(businessExp);
 			
+			String state = "已发送";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_save_send", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 			if(businessExp.getExpId() > 0 && businessExp.getSenderTel().length() == 11) {
             	if(query.getFlag() == 1) {
 					BusinessAddress businessAddress = new BusinessAddress();
@@ -1087,7 +1116,9 @@ public class BusinessExpController {
 			    businessExp.setExpCompanyID(manageExpress.getExpressId());
 			    businessExp.setExpCompany(manageExpress.getExpressComppay());
 			    businessExp.setLogo(manageExpress.getExpressIcon());*/
+	            ManageEstate manageEstate = manageEstateService.findById(shiroUser.getCurEstateId());
 	            ManageExpressAll manageExpressAll = manageExpressAllService.findById(query.getExpCompanyID());
+	            // businessStation = businessStationService.findById(manageEstate.getStationId());
 			    businessExp.setExpCompanyID(manageExpressAll.getExpressId());
 			    businessExp.setExpCompany(manageExpressAll.getExpressComppay());
 			    businessExp.setLogo(manageExpressAll.getExpressIcon());
@@ -1111,6 +1142,18 @@ public class BusinessExpController {
 		        Timestamp  ts=new Timestamp(new Date().getTime());
 
 				businessExpService.update(businessExp);
+				
+				String state = "已发送";
+				BusinessOpertaion entity = new BusinessOpertaion(
+						getUser().getUserId(), 
+						getUser().getUserName(), 
+						"exp", 
+						"exp_update_send", 
+						businessExp.getExpId(), 
+						businessExp.getExpCode(), 
+						state,
+						request.getRemoteAddr());
+				businessOpertaionService.save(entity);
 				
 				//todo:判断发件人手机号，如果非APP用户则给收件人发送短信，如果是APP用户则给收件人推送通知
 	            /* Map map = new HashMap();
@@ -1348,6 +1391,18 @@ public class BusinessExpController {
             //}
             businessExpService.save(businessExp);
             
+            String state = "上门取件";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_save_appointment", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
             if(businessExp.getExpId() > 0 && businessExp.getSenderTel().length() == 11) {
             	if(query.getFlag() == 1) {
 					BusinessAddress businessAddress = new BusinessAddress();
@@ -1569,7 +1624,7 @@ public class BusinessExpController {
 	 * @return
 	 */
 	@RequestMapping(value="signExp")
-	public void signExp(BusinessExpQuery query, HttpServletResponse response) {
+	public void signExp(BusinessExpQuery query, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try {
 			BusinessExp businessExp = businessExpService.findById(query.getExpId());
@@ -1584,6 +1639,18 @@ public class BusinessExpController {
 			businessExp.setEditor(getUser().getUserName());
 	        businessExp.setModifyTime(new Timestamp(System.currentTimeMillis()));
 			businessExpService.update(businessExp);
+			
+			String state = "已签收";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_sign", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 			
 			//保存处理
 	        BusinessExpResolve businessExpResolve = new BusinessExpResolve();
@@ -1744,7 +1811,7 @@ public class BusinessExpController {
      * @return
      */
     @RequestMapping(value="saveGetResolve")
-	public void saveGetResolve(BusinessExpQuery query, HttpServletResponse response) {
+	public void saveGetResolve(BusinessExpQuery query, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try {
 			AppLatestNewsQuery newsQuery = new AppLatestNewsQuery();
@@ -1757,6 +1824,19 @@ public class BusinessExpController {
 	        businessExp.setEditor(getUser().getUserName());
 	        businessExp.setModifyTime(new Timestamp(System.currentTimeMillis()));
 	        businessExpService.update(businessExp);
+	        
+	        String state = "开始取件";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_save_getresolve", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 	        //保存处理
 	        BusinessExpResolve businessExpResolve = new BusinessExpResolve();
 	        businessExpResolve.setExpId(query.getExpId());
@@ -1884,7 +1964,7 @@ public class BusinessExpController {
      * @return
      */
     @RequestMapping(value="savePickResolve")
-	public void savePickResolve(BusinessExpQuery query, HttpServletResponse response) {
+	public void savePickResolve(BusinessExpQuery query, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try {
 			BusinessExp businessExp = businessExpService.findById(query.getExpId());
@@ -1893,6 +1973,19 @@ public class BusinessExpController {
 	        businessExp.setEditor(getUser().getUserName());
 	        businessExp.setModifyTime(new Timestamp(System.currentTimeMillis()));
 	        businessExpService.update(businessExp);
+	        
+	        String state = "自提";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_save_sendhomeresolve", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 	        //保存处理
 	        BusinessExpResolve businessExpResolve = new BusinessExpResolve();
 	        businessExpResolve.setExpId(query.getExpId());
@@ -1969,7 +2062,7 @@ public class BusinessExpController {
      * @return
      */
     @RequestMapping(value="saveSendHomeResolve")
-	public void saveSendHomeResolve(BusinessExpQuery query, HttpServletResponse response) {
+	public void saveSendHomeResolve(BusinessExpQuery query, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try {
 			BusinessExp businessExp = businessExpService.findById(query.getExpId());
@@ -1978,6 +2071,17 @@ public class BusinessExpController {
 	        businessExp.setEditor(getUser().getUserName());
 	        businessExp.setModifyTime(new Timestamp(System.currentTimeMillis()));
 	        businessExpService.update(businessExp);
+	        String state = "上门送件";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_save_pickresolve", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
 	        //保存处理
 	        BusinessExpResolve businessExpResolve = new BusinessExpResolve();
 	        businessExpResolve.setExpId(query.getExpId());
@@ -2060,7 +2164,7 @@ public class BusinessExpController {
      * @return
      */
     @RequestMapping(value="saveSignedResolve")
-	public void saveSignedResolve(BusinessExpQuery query, HttpServletResponse response) {
+	public void saveSignedResolve(BusinessExpQuery query, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try {
 			AppLatestNewsQuery newsQuery = new AppLatestNewsQuery();
@@ -2078,6 +2182,19 @@ public class BusinessExpController {
 	        businessExp.setEditor(getUser().getUserName());
 	        businessExp.setModifyTime(new Timestamp(System.currentTimeMillis()));
 	        businessExpService.update(businessExp);
+	        
+	        String state = "已签收";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_save_signedresolve", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
 	        //保存处理
 	        BusinessExpResolve businessExpResolve = new BusinessExpResolve();
 	        businessExpResolve.setExpId(query.getExpId());
@@ -2166,7 +2283,7 @@ public class BusinessExpController {
 	 * @return
 	 */
 	@RequestMapping(value="startDistribution")
-	public void startDistribution(BusinessExpQuery query, HttpServletResponse response) {
+	public void startDistribution(BusinessExpQuery query, HttpServletRequest request, HttpServletResponse response) {
 		String json = "";
 		try {
 			AppLatestNewsQuery newsQuery = new AppLatestNewsQuery();
@@ -2210,6 +2327,19 @@ public class BusinessExpController {
 	        businessExp.setBriefMessage(currTime+"\\r\\n运单号："+businessExp.getExpCode()+"\\r\\n服务驿站 开始上门送件");
 	        businessExp.setLastMessage("服务驿站 开始上门送件");
 	        businessExpService.update(businessExp);
+	        
+	        String state = "已上门";
+			BusinessOpertaion entity = new BusinessOpertaion(
+					getUser().getUserId(), 
+					getUser().getUserName(), 
+					"exp", 
+					"exp_startDistribution", 
+					businessExp.getExpId(), 
+					businessExp.getExpCode(), 
+					state,
+					request.getRemoteAddr());
+			businessOpertaionService.save(entity);
+			
             //todo:调用APP消息推送接口
 	        //向APP用户推送通知
 		    if(businessExp.getReceiverId() != null && businessExp.getReceiverId() != 0) {

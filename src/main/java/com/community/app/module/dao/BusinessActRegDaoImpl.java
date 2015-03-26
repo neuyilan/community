@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.community.app.module.bean.BusinessActReg;
 import com.community.app.module.vo.BusinessActRegQuery;
 import com.community.framework.exception.DaoException;
+import com.community.framework.exception.ServiceException;
 
 @Repository("BusinessActRegDao")
 @Transactional
@@ -69,6 +70,17 @@ public class BusinessActRegDaoImpl implements BusinessActRegDao {
 	 */	
 	public List<BusinessActReg> findByExample(final BusinessActRegQuery query) throws DaoException {
 		List<BusinessActReg> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessActRegDao.findByExample", query);
+		return list;
+	}
+	
+	/**
+	 * 按VO对象条件查询所有BusinessActReg
+	 * @param entity
+	 * @return
+	 * @throws DaoException
+	 */	
+	public List<BusinessActReg> findById_app(final BusinessActRegQuery query) throws DaoException {
+		List<BusinessActReg> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessActRegDao.findById_app", query);
 		return list;
 	}
 	
@@ -150,5 +162,26 @@ public class BusinessActRegDaoImpl implements BusinessActRegDao {
 		this.sqlSessionTemplate.update("com.community.app.module.dao.BusinessActRegDao.updateCode",map);
 
 	}
-	
+
+	/**
+	 * 查询报名排名
+	 * @param map
+	 * @return
+	 */
+	public List<BusinessActReg> findRankPage(BusinessActRegQuery query)
+			throws DaoException {
+		List<BusinessActReg> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessActRegDao.findRankPage",query);
+		return list;
+	}
+	/**
+	 * 获取最新报名
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public List<BusinessActReg> findLatestRegPage(BusinessActRegQuery query)
+			throws DaoException {
+		List<BusinessActReg> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessActRegDao.findLatestRegPage",query);
+		return list;
+	}
 }

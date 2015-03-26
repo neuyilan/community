@@ -47,6 +47,14 @@ public interface BusinessActRegService {
 	 * @return
 	 * @throws ServiceException
 	 */	
+	public List<BusinessActReg> findById_app(final BusinessActRegQuery query) throws ServiceException;	
+	
+	/**
+	 * 按VO对象条件查询所有BusinessActReg
+	 * @param entity
+	 * @return
+	 * @throws ServiceException
+	 */	
 	public List<BusinessActReg> findByExample(final BusinessActRegQuery query) throws ServiceException;	
 
 	/**
@@ -109,5 +117,20 @@ public interface BusinessActRegService {
 	 * @return
 	 */
 	public void updateCode(Map<String, Object> map) throws ServiceException;
+
+	/**
+	 * 查询报名排名
+	 * @param map
+	 * @return
+	 */
+	public BaseBean findRankPage(BusinessActRegQuery query) throws ServiceException;
+	
+	/**
+	 * 获取最新报名
+	 * @param query
+	 * @return
+	 * @throws ServiceException
+	 */
+	public BaseBean findLatestRegPage(BusinessActRegQuery query)  throws ServiceException;
 	
 }

@@ -9,6 +9,7 @@ public class BusinessActRegQuery extends BaseBean {
 	
 
 	private java.lang.Integer regId;
+	private java.lang.Integer ID;
 	private java.lang.Integer userId;
 	private java.lang.Integer estateId;
 	private java.lang.String estateName;
@@ -17,9 +18,26 @@ public class BusinessActRegQuery extends BaseBean {
 	private java.lang.Integer code;
 	private java.lang.String desc;
 	private java.lang.Integer actId;
+	private java.lang.Integer type;
 	private java.lang.Integer votes;
 	private java.sql.Timestamp regTime;
 	private Integer flag;
+	
+	public java.lang.Integer getID() {
+		return ID;
+	}
+
+	public void setID(java.lang.Integer iD) {
+		ID = iD;
+	}
+
+	public java.lang.Integer getType() {
+		return type;
+	}
+
+	public void setType(java.lang.Integer type) {
+		this.type = type;
+	}
 
 	public BusinessActRegQuery(BusinessActReg businessActReg) {
 		this.regId = businessActReg.getRegId();

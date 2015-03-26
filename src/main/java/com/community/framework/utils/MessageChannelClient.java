@@ -20,10 +20,11 @@ public class MessageChannelClient {
 	//	private String serviceURL = "http://sdk105.entinfo.cn:8060/webservice.asmx";
 	//	private String serviceURL = "http://report.zucp.net:8060/reportservice.asmx";
 	private String serviceURL = "http://sdk2.entinfo.cn:8061/webservice.asmx";
-	private String sn = "SDK-BBX-010-21023";// 序列号
-	private String password = "b3d1-37_";
+	private String serviceAudioURL = "http://sdk3.entinfo.cn:8060/webservice.asmx";
+	private static String sn = "SDK-BBX-010-21023";// 序列号
+	private static String password = "b3d1-37_";
 	private String pwd;// 密码
-
+	
 	/*
 	 * 构造函数
 	 */
@@ -253,5 +254,75 @@ public class MessageChannelClient {
 			e.printStackTrace();
 			return "";
 		}
+	}
+	
+	/*
+	 * 方法名称：mdAudioSend
+	 * 功    能：提交彩信基本信息
+	 * 参    数：title 传真标题，mobile 手机号，txt 文本内容, content 传真base64内容，schTime 定时时间，如果不需要置为空间
+	 * 返 回 值：返回一个唯一值rrid
+	 */
+	public String mdAudioSend (String title,String mobile,String txt,String content,String srcnumber,String stime)
+	{
+		String result = "";
+		String soapAction = "http://tempuri.org/mdAudioSend";
+		String xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+		xml += "<soap12:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap12=\"http://www.w3.org/2003/05/soap-envelope\">";
+		xml += "<soap12:Body>";
+		xml += "<mdAudioSend xmlns=\"http://tempuri.org/\">";
+		xml += "<sn>" + sn + "</sn>";
+		xml += "<pwd>" + pwd + "</pwd>";
+		xml += "<title>" + title + "</title>";
+		xml += "<mobile>" + mobile + "</mobile>";
+		xml += "<txt>" + txt + "</txt>";
+		xml += "<content>" + content + "</content>";
+		xml += "<srcnumber>" + srcnumber + "</srcnumber>";
+		xml += "<stime>" + stime + "</stime>";
+		xml += "</mdAudioSend>";
+		xml += "</soap12:Body>";
+		xml += "</soap12:Envelope>";
+		
+		URL url;
+		try {
+			url = new URL(serviceAudioURL);
+
+			URLConnection connection = url.openConnection();
+			HttpURLConnection httpconn = (HttpURLConnection) connection;
+			ByteArrayOutputStream bout = new ByteArrayOutputStream();
+			// bout.write(xml.getBytes());
+			bout.write(xml.getBytes("GBK"));
+			byte[] b = bout.toByteArray();
+			httpconn.setRequestProperty("Content-Length", String.valueOf(b.length));
+			httpconn.setRequestProperty("Content-Type", "text/xml; charset=gb2312");
+			httpconn.setRequestProperty("SOAPAction", soapAction);
+			httpconn.setRequestMethod("POST");
+			httpconn.setDoInput(true);
+			httpconn.setDoOutput(true);
+
+			OutputStream out = httpconn.getOutputStream();
+			out.write(b);
+			out.close();
+
+			InputStreamReader isr = new InputStreamReader(httpconn.getInputStream());
+			BufferedReader in = new BufferedReader(isr);
+			String inputLine;
+			while (null != (inputLine = in.readLine())) {
+				Pattern pattern = Pattern.compile("<mdAudioSendResult>(.*)</mdAudioSendResult>");
+				Matcher matcher = pattern.matcher(inputLine);
+				while (matcher.find()) {
+					result = matcher.group(1);
+				}
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		MessageChannelClient Client = new MessageChannelClient(sn,password);
+		String resultFirst = Client.mdAudioSend("验证码", "18618166710", "818181", "", "", "");
+		System.out.println(resultFirst);	
 	}
 }

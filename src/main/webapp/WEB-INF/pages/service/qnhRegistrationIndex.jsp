@@ -70,7 +70,8 @@
 	        	actId: $("#actId").val(),
 	        	userId: $("#userId").val(),
 	        	realname: $("#realname").val(),
-	        	tel: $("#tel").val()
+	        	tel: $("#tel").val(),
+	        	title:"您的报名已成功，时间为【${time}】,请牢记时间准时参加！"
 	           },
 	           success: function (data) {
 	        	   //eval('data=' + data);

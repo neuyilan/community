@@ -118,7 +118,7 @@ public class QNHActivitySer {
 	        businessActivity.setQNHId(jsn.get("QNHId").toString());
 	        businessActivity.setQNHName(jsn.get("QNHName").toString());
 	        businessActivity.setIsQNH(1);
-	        businessActivity.setTimeslot(jsn.get("actStartTime").toString()+"-"+jsn.get("actEndTime").toString());
+	        businessActivity.setTimeslot(sdf.format(sdf.parse(jsn.get("actStartTime").toString()))+"-"+sdf.format(sdf.parse(jsn.get("actEndTime").toString())));
 			businessActivityService.save(businessActivity);
 			ManageEstateQuery manageEstateQuery = new ManageEstateQuery();
 			manageEstateQuery.setEstateLatitude(new Double(jsn.get("latitude").toString()));

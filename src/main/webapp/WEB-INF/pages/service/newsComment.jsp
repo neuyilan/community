@@ -31,8 +31,8 @@
             </div>
             <c:if test="${download==1 }">
          	<div class="fxdown">
-	            <a href="${ctx }/download/index.html?id=12">
-	                <img src="${ctx }/images/click.png"/>
+	            <a href="${phpIp}/wxokjia/downloadgoin.php">
+	                <img src="${ctx }/images/click_1.png"/>
 	            </a>    
 	        </div>
 	      </c:if>

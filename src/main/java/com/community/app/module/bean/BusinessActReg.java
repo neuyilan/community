@@ -25,6 +25,7 @@ public class BusinessActReg implements java.io.Serializable{
 	private java.lang.Integer actId;
 	private java.lang.Integer votes;
 	private java.sql.Timestamp regTime;
+	private java.lang.Integer rank;
 	private Integer flag;
 
 	public BusinessActReg(){
@@ -121,6 +122,7 @@ public class BusinessActReg implements java.io.Serializable{
 			.append("Votes",getVotes())
 			.append("RegTime",getRegTime())
 			.append("Flag",getFlag())
+			.append("Rank", getRank())
 			.toString();
 	}
 	
@@ -153,6 +155,14 @@ public class BusinessActReg implements java.io.Serializable{
 
 	public void setEstateName(java.lang.String estateName) {
 		this.estateName = estateName;
+	}
+
+	public java.lang.Integer getRank() {
+		return rank;
+	}
+
+	public void setRank(java.lang.Integer rank) {
+		this.rank = rank;
 	}
 }
 

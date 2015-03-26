@@ -14,6 +14,7 @@ public class BusinessActivityQuery extends BaseBean {
 	private String typeName;
 	private String actScope;
 	private String brief;
+	private String title;
 	private String actPic;
 	private String actPicNo;
 	private String actLink;
@@ -95,7 +96,42 @@ public class BusinessActivityQuery extends BaseBean {
 	private String flag;
 	private String scope;
 	private String QNHId;
+	private String timeslot;
+	private String timeslotStartTime;
+	private String timeslotEndTime;
 	
+	public String getTimeslot() {
+		return timeslot;
+	}
+
+	public void setTimeslot(String timeslot) {
+		this.timeslot = timeslot;
+	}
+
+	public String getTimeslotStartTime() {
+		return timeslotStartTime;
+	}
+
+	public void setTimeslotStartTime(String timeslotStartTime) {
+		this.timeslotStartTime = timeslotStartTime;
+	}
+
+	public String getTimeslotEndTime() {
+		return timeslotEndTime;
+	}
+
+	public void setTimeslotEndTime(String timeslotEndTime) {
+		this.timeslotEndTime = timeslotEndTime;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getQNHId() {
 		return QNHId;
 	}
@@ -514,6 +550,7 @@ public class BusinessActivityQuery extends BaseBean {
 		this.importantTime = businessActivity.getImportantTime();
 		this.actRegWords = businessActivity.getActRegWords();
 		this.prizeRules = businessActivity.getPrizeRules();
+		this.timeslot = businessActivity.getTimeslot();
 	}
 
 	public BusinessActivityQuery() {
