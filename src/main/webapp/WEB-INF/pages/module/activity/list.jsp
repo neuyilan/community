@@ -157,6 +157,16 @@
 												</c:otherwise>
 											</c:choose>
 										</c:when>
+										<c:when test="${act.typeId == 5}">
+											<c:choose>
+												<c:when test="${act.particpates != 0 && act.state < 3}">
+													<i class="cyrh" title="参与人数" style="cursor:pointer;" onclick="window.location.href='${ctx}/business/businessActivity/viewQnhInformation.do?actId=${act.actId}' ">${act.particpates }</i>
+												</c:when>
+												<c:otherwise>
+													<i class="cyr" title="参与人数">${act.particpates }</i>
+												</c:otherwise>
+											</c:choose>
+										</c:when>
 									</c:choose>
 									<c:choose>
 										<c:when test="${act.comments != 0 && act.state < 3}">
@@ -523,6 +533,12 @@
                 	} else if(row.typeId == 3) {
                     	if(row.particpates != 0 && row.state < 3){
                     		particpate = '<i class="cyrh" title="参与人数" style="cursor:pointer;" onclick="window.location.href=\'viewVoteTypeParticipates.do?actId='+row.actId+'\' ">'+row.particpates+'</i>';
+                    	} else {
+                    		particpate = '<i class="cyr" title="参与人数">'+row.particpates+'</i>';
+                    	}
+                	} else if(row.typeId == 5) {
+                    	if(row.particpates != 0 && row.state < 3){
+                    		particpate = '<i class="cyrh" title="参与人数" style="cursor:pointer;" onclick="window.location.href=\'viewQnhInformation.do?actId='+row.actId+'\' ">'+row.particpates+'</i>';
                     	} else {
                     		particpate = '<i class="cyr" title="参与人数">'+row.particpates+'</i>';
                     	}

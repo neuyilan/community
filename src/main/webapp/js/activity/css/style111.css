@@ -144,3 +144,49 @@ img{ vertical-align:middle;}
     height: auto !important;
     width: 100% !important;
 }
+
+/*表情*/
+.scrollimg{ margin-bottom:220px;}
+.exbottom{ position:fixed; overflow:hidden; bottom:0; left:0; right:0; background-color:#d9dcdf; opacity:0; height:0;}
+.expression{ height:180px; position:relative; padding:10px 0;}
+.expression a{ display:block; float:left; margin:10px 0; width:14.2857%; text-align:center;}
+.expression img{ width:32px; height:32px;}
+.expression .delete img{ width:34px; height:32px;}
+.expagination{ position:absolute; bottom:10px; width:100%; text-align:center;}
+.expression .swiper-pagination-switch{background-color:#bbbbbb;}
+.expression .swiper-active-switch{ background-color:#6d6d6d; width:6px; height:6px;}
+
+.bl-inpfont i{ position:absolute; left:0; top:0;height:28px; width:28px; border-right:1px solid #b3b3b3;}
+.font-expre{ display:inline-block; background:url(/community/js/activity//arclist/bq.png) center center no-repeat; background-size:16px 16px; -webkit-background-size:16px 16px;}
+.x-inp i{ height:33px; width:33px; display:table-cell; border-radius:3px; background-color:#eeeeee;}
+
+.inpbottom{ position:static;}
+.ex-inp{ padding:0;}
+.ex-inp .tab{ padding:10px;}
+
+.ex-four img{ width:16px !important; height:16px !important; vertical-align:middle;}
+.inpbottom {
+    position: static;
+}
+.swiper-wrapper {
+    height: 100%;
+    overflow: hidden;
+    width: auto;
+}
+.swiper-slide {
+    height: 100%;
+    text-align: center;
+    width: 100%;
+}
+
+.swiper-pagination-switch {
+    background: none repeat scroll 0 0 #e7d4c4;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    height: 5px;
+    margin: 0 3px;
+    width: 5px;
+}
+
+

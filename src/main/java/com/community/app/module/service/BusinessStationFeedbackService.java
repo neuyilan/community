@@ -79,7 +79,7 @@ public interface BusinessStationFeedbackService {
 	 * @param entity
 	 * @throws ServiceException
 	 */
-	public void save(final BusinessStationFeedback entity) throws ServiceException;
+	public int save(final BusinessStationFeedback entity) throws ServiceException;
 	
 	/**
 	 * 修改BusinessStationFeedback数据

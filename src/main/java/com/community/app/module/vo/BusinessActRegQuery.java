@@ -16,13 +16,23 @@ public class BusinessActRegQuery extends BaseBean {
 	private java.lang.String nickName;
 	private java.lang.String avatar;
 	private java.lang.Integer code;
-	private java.lang.String desc;
+	private java.lang.String content;
 	private java.lang.Integer actId;
 	private java.lang.Integer type;
 	private java.lang.Integer votes;
 	private java.sql.Timestamp regTime;
 	private Integer flag;
+	private java.lang.String brief;
 	
+	
+	public java.lang.String getBrief() {
+		return brief;
+	}
+
+	public void setBrief(java.lang.String brief) {
+		this.brief = brief;
+	}
+
 	public java.lang.Integer getID() {
 		return ID;
 	}
@@ -47,7 +57,7 @@ public class BusinessActRegQuery extends BaseBean {
 		this.nickName = businessActReg.getNickName();
 		this.avatar = businessActReg.getAvatar();
 		this.code = businessActReg.getCode();
-		this.desc = businessActReg.getDesc();
+		this.content = businessActReg.getContent();
 		this.actId = businessActReg.getActId();
 		this.votes = businessActReg.getVotes();
 		this.regTime = businessActReg.getRegTime();
@@ -98,12 +108,12 @@ public class BusinessActRegQuery extends BaseBean {
 		this.code = value;
 	}
 		
-	public java.lang.String getDesc() {
-		return this.desc;
+	public java.lang.String getContent() {
+		return this.content;
 	}
 	
-	public void setDesc(java.lang.String value) {
-		this.desc = value;
+	public void setContent(java.lang.String value) {
+		this.content = value;
 	}
 		
 	public java.lang.Integer getActId() {

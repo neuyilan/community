@@ -1,12 +1,9 @@
 package com.community.app.module.controller;
 
-
-
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +17,12 @@ import com.community.app.module.service.BusinessActivityQnhInformationService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityQnhInformationQuery;
 
-
 @Controller
 @RequestMapping("/business/businessActivityQnhInformation")
 public class BusinessActivityQnhInformationController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessActivityQnhInformationController.class);
 	@Autowired
 	private BusinessActivityQnhInformationService businessActivityQnhInformationService;
-	
-	private final String LIST_ACTION = "redirect:/business/businessActivityQnhInformation/list.do";
 	
 	/**
 	 * 进入管理页
@@ -54,8 +48,14 @@ public class BusinessActivityQnhInformationController {
 		String json = "";
 		StringBuilder result = new StringBuilder();
 		try{
+			query.setSort("informationId");
+			query.setOrder("desc");
+			query.setRows(20);
 			BaseBean baseBean = businessActivityQnhInformationService.findAllPage(query);
-			result.append("{\"total\":").append(baseBean.getCount()).append(",")
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"pageSize\":").append(baseBean.getPager().getPageSize()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
 			.append("\"rows\":[");
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessActivityQnhInformation businessActivityQnhInformation = (BusinessActivityQnhInformation) baseBean.getList().get(i);
@@ -64,6 +64,8 @@ public class BusinessActivityQnhInformationController {
 			    .append("\"userId\":\"").append(businessActivityQnhInformation.getUserId()).append("\"").append(",")
 			    .append("\"actId\":\"").append(businessActivityQnhInformation.getActId()).append("\"").append(",")
 			    .append("\"realname\":\"").append(businessActivityQnhInformation.getRealname()).append("\"").append(",")
+			    .append("\"tel\":\"").append(businessActivityQnhInformation.getTel()).append("\"").append(",")
+			    .append("\"state\":\"").append(businessActivityQnhInformation.getState()).append("\"").append(",")
 			    .append("\"createTime\":\"").append(businessActivityQnhInformation.getCreateTime()).append("\"").append(",")
 			    .append("\"editTime\":\"").append(businessActivityQnhInformation.getEditTime()).append("\"").append(",")
 			    .append("\"editor\":\"").append(businessActivityQnhInformation.getEditor()).append("\"")

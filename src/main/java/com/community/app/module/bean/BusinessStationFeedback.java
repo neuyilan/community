@@ -18,6 +18,33 @@ public class BusinessStationFeedback implements java.io.Serializable {
 	private java.lang.String estateName;
 	private java.lang.Integer state;
 	private java.lang.Integer totalPoll;
+	private java.lang.Integer yznh;
+	private java.lang.Integer kdds;
+	private java.lang.Integer yzgg;
+	
+	public java.lang.Integer getYznh() {
+		return yznh;
+	}
+
+	public void setYznh(java.lang.Integer yznh) {
+		this.yznh = yznh;
+	}
+
+	public java.lang.Integer getKdds() {
+		return kdds;
+	}
+
+	public void setKdds(java.lang.Integer kdds) {
+		this.kdds = kdds;
+	}
+
+	public java.lang.Integer getYzgg() {
+		return yzgg;
+	}
+
+	public void setYzgg(java.lang.Integer yzgg) {
+		this.yzgg = yzgg;
+	}
 
 	public BusinessStationFeedback() {
 	}

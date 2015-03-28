@@ -4576,5 +4576,51 @@ public class UserController {
 	}
 	
 	
+	/**
+	 * 用户编辑保存个人头像
+	 * 
+	 * @param userId
+	 *            ,sessionid,avatar
+	 * @return json
+	 */
+	@RequestMapping(value = "whetherCellphone")
+	public void whetherCellphone(HttpServletRequest request,
+			HttpServletResponse response,AppUserQuery query) {
+		String json = "";
+		boolean whetherRepeat = false;
+		try {
+			whetherRepeat = appUserService.whetherRepeat(query.getCellphone());
+		} catch (Exception e) {
+			GSLogger.error("验证tel是否重复", e);
+			e.printStackTrace();
+			json = "";
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"注册失败\"";
+			json += "}";
+		}
+		if (whetherRepeat) {
+			json += "{";
+			json += "\"errorCode\":\"200\",";
+			json += "\"message\":\"未注册\"";
+			json += "}";
+		}else {
+			json += "{";
+			json += "\"errorCode\":\"400\",";
+			json += "\"message\":\"已注册\"";
+			json += "}";
+			
+		}
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 }

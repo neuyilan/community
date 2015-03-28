@@ -180,13 +180,14 @@ public class BusinessStationFeedbackServiceImpl implements BusinessStationFeedba
 	 * @throws ServiceException
 	 */
 	@Transactional("transactionManager")
-	public void save(BusinessStationFeedback entity) throws ServiceException {
+	public int save(BusinessStationFeedback entity) throws ServiceException {
 		try {
-			businessStationFeedbackDao.save(entity);
+			return businessStationFeedbackDao.save(entity);
 		} catch (DaoException e) {
 			logger.debug("BusinessStationFeedbackServiceImpl save()：保存BusinessStationFeedback发生错误！", e);
 			e.printStackTrace();
 		}
+		return 0;
 	}
 
 	/**

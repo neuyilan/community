@@ -111,8 +111,9 @@ public class BusinessStationFeedbackDaoImpl implements BusinessStationFeedbackDa
 	 * @param entity
 	 * @throws DaoException
 	 */
-	public void save(final BusinessStationFeedback entity) throws DaoException {
-		this.sqlSessionTemplate.insert("com.community.app.module.dao.BusinessStationFeedbackDao.save",entity);
+	public int save(final BusinessStationFeedback entity) throws DaoException {
+		int id = this.sqlSessionTemplate.insert("com.community.app.module.dao.BusinessStationFeedbackDao.save",entity);
+		return id;
 	}
 
 	/**

@@ -83,6 +83,7 @@ import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessActivityCommentService;
 import com.community.app.module.service.BusinessActivityCouponService;
 import com.community.app.module.service.BusinessActivityParticipateService;
+import com.community.app.module.service.BusinessActivityQnhInformationService;
 import com.community.app.module.service.BusinessActivityRegistrationInformationService;
 import com.community.app.module.service.BusinessActivityRegistrationTimeslotService;
 import com.community.app.module.service.BusinessActivityScopeService;
@@ -99,6 +100,7 @@ import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessActivityCommentQuery;
 import com.community.app.module.vo.BusinessActivityParticipateQuery;
+import com.community.app.module.vo.BusinessActivityQnhInformationQuery;
 import com.community.app.module.vo.BusinessActivityQuery;
 import com.community.app.module.vo.BusinessActivityRegistrationInformationQuery;
 import com.community.app.module.vo.BusinessActivityRegistrationTimeslotQuery;
@@ -155,6 +157,8 @@ public class BusinessActivityController {
 	private BusinessActivityCouponService businessActivityCouponService;
 	@Autowired
 	private BusinessOpertaionService businessOpertaionService;
+	@Autowired
+	private BusinessActivityQnhInformationService businessActivityQnhInformationService;
 	
 	/**
 	 * 进入管理页
@@ -416,7 +420,16 @@ public class BusinessActivityController {
 	        	businessActivity.setCouponNum(query.getCouponNum());
 	        	businessActivity.setCouponValid(query.getCouponStartDate()+"~"+query.getCouponEndDate());
 	        	businessActivity.setReportExcel(query.getReportExcel());
+	        } else if(query.getTypeId() == 5) {
+	        	String planTime = query.getEndTime();
+	        	businessActivity.setStartTime(query.getStartTime());
+	        	businessActivity.setEndTime(planTime);
+			    String[] timeArr = planTime.split(" ");
+			    businessActivity.setPublishDate(timeArr[0]);
+			    businessActivity.setPublishTime(timeArr[1]);
+	        	businessActivity.setTimeslot(query.getTimeslotStartTime()+ "~" + query.getTimeslotEndTime());
 	        }
+	        
 	        // 活动状态为定时发布时 设置定时发布时间 
 	        if(query.getState() == 6) {
 	        	 if(query.getTimingPublicTime1() != null && !"".equals(query.getTimingPublicTime1())) {
@@ -751,7 +764,11 @@ public class BusinessActivityController {
   			String couponValid[] = businessActivity.getCouponValid().split("~");
   			businessActivity.setCouponStartDate(couponValid[0]);
   			businessActivity.setCouponEndDate(couponValid[1]);
-  		}
+  		} else if(businessActivity.getTypeId() == 5) {
+  			String timeslot[] = businessActivity.getTimeslot().split("~");
+  			businessActivity.setTimeslotStartTime(timeslot[0]);
+  			businessActivity.setTimeslotEndTime(timeslot[1]);
+        }
   		Map map = new HashMap();
 		map.put("actId", query.getActId());
 		List scopeList = businessActivityScopeService.findByMap(map);
@@ -762,7 +779,7 @@ public class BusinessActivityController {
 		}
 		if(scopeStr.length() > 1) {
 			String scope = scopeStr.toString().substring(1);
-			mav.addObject("scope", scope);
+			mav.addObject("scope1", scope);
 		}
         mav.addObject("businessActivity", businessActivity);
         return mav;
@@ -892,6 +909,14 @@ public class BusinessActivityController {
 	        	businessActivity.setCouponNum(query.getCouponNum());
 	        	businessActivity.setCouponValid(query.getCouponStartDate()+"~"+query.getCouponEndDate());
 	        	businessActivity.setReportExcel(query.getReportExcel());
+	        } else if(query.getTypeId() == 5) {
+	        	String planTime = query.getEndTime();
+	        	businessActivity.setStartTime(query.getStartTime());
+	        	businessActivity.setEndTime(planTime);
+			    String[] timeArr = planTime.split(" ");
+			    businessActivity.setPublishDate(timeArr[0]);
+			    businessActivity.setPublishTime(timeArr[1]);
+	        	businessActivity.setTimeslot(query.getTimeslotStartTime()+ "~" + query.getTimeslotEndTime());
 	        }
 	        
 	        // 活动状态为定时发布时 设置定时发布时间 
@@ -2145,6 +2170,35 @@ public class BusinessActivityController {
 		mav.addObject("baseBean", baseBean);
 		mav.addObject("baseBean1", baseBean1);
 		mav.addObject("pager", baseBean1.getPager());
+		return mav;
+	}
+	
+	/**
+	 * 进入青年汇活动参与人员列表页
+	 * @return
+	 */
+	@RequestMapping(value="viewQnhInformation")
+	public ModelAndView viewQnhInformation(BusinessActivityQuery query) {
+		BusinessActivity businessActivity = new BusinessActivity();
+		BaseBean baseBean = new BaseBean();
+		try{
+			businessActivity = businessActivityService.findById(query.getActId());
+			
+			//获取参与列表
+			BusinessActivityQnhInformationQuery qnhInformationQuery = new BusinessActivityQnhInformationQuery();
+			qnhInformationQuery.setSort("informationId");
+			qnhInformationQuery.setOrder("desc");
+			qnhInformationQuery.setRows(20);
+			baseBean = businessActivityQnhInformationService.findAllPage(qnhInformationQuery);
+
+		}catch(Exception e){
+			GSLogger.error("进入参与人员列表页时发生错误：/business/businessActivity/viewQnhInformation", e);
+			e.printStackTrace();
+		}
+		ModelAndView mav = new ModelAndView("/module/activity/viewQnhParticipates");
+		mav.addObject("businessActivity", businessActivity);
+		mav.addObject("baseBean", baseBean);
+		mav.addObject("pager", baseBean.getPager());
 		return mav;
 	}
 	

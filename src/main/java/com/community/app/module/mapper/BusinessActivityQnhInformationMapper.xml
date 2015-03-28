@@ -4,56 +4,59 @@
 <mapper namespace="com.community.app.module.dao.BusinessActivityQnhInformationDao" >
 	<!-- 返回结构集 -->
 	<resultMap id="BusinessActivityQnhInformationResult" type="BusinessActivityQnhInformation">
-			<result column="informationId" property="informationId" />
-			<result column="userId" property="userId" />
-			<result column="actId" property="actId" />
-			<result column="realname" property="realname" />
-			<result column="createTime" property="createTime" />
-			<result column="editTime" property="editTime" />
-			<result column="editor" property="editor" />
+		<result column="informationId" property="informationId" />
+		<result column="userId" property="userId" />
+		<result column="actId" property="actId" />
+		<result column="realname" property="realname" />
+		<result column="createTime" property="createTime" />
+		<result column="editTime" property="editTime" />
+		<result column="editor" property="editor" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
-			informationId,
-			userId,
-			actId,
-			realname,
-			tel,
-			state,
-			createTime,
-			editTime,
-			editor
+		informationId,
+		userId,
+		actId,
+		realname,
+		tel,
+		state,
+		createTime,
+		editTime,
+		editor
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-					<if test="informationId != null and informationId != ''" >
-				   		and informationId = #{informationId}
-					</if>
-					<if test="userId != null and userId != ''" >
-				   		and userId = #{userId}
-					</if>
-					<if test="actId != null and actId != ''" >
-				   		and actId = #{actId}
-					</if>
-					<if test="tel != null and tel != ''" >
-				   		and tel = #{tel}
-					</if>
-					<if test="realname != null and realname != ''" >
-				   		and realname = #{realname}
-					</if>
-					<if test="createTime != null and createTime != ''" >
-				   		and createTime = #{createTime}
-					</if>
-					<if test="editTime != null and editTime != ''" >
-				   		and editTime = #{editTime}
-					</if>
-					<if test="editor != null and editor != ''" >
-				   		and editor = #{editor}
-					</if>
+				<if test="informationId != null and informationId != ''" >
+			   		and informationId = #{informationId}
+				</if>
+				<if test="userId != null and userId != ''" >
+			   		and userId = #{userId}
+				</if>
+				<if test="actId != null and actId != ''" >
+			   		and actId = #{actId}
+				</if>
+				<if test="tel != null and tel != ''" >
+			   		and tel = #{tel}
+				</if>
+				<if test="realname != null and realname != ''" >
+			   		and realname = #{realname}
+				</if>
+				<if test="createTime != null and createTime != ''" >
+			   		and createTime = #{createTime}
+				</if>
+				<if test="editTime != null and editTime != ''" >
+			   		and editTime = #{editTime}
+				</if>
+				<if test="editor != null and editor != ''" >
+			   		and editor = #{editor}
+				</if>
+				<if test="keyWord != null and keyWord != ''" >
+			   		and (realname like '%${keyWord}%' or tel like '%${keyWord}%')
+				</if>
 			</trim>
 		</where>
 	</sql>
@@ -102,7 +105,6 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_activity_qnh_information(
-		
 		userId,
 		actId,
 		realname,
@@ -112,7 +114,7 @@
 		editor,
 		tel
 		) values(
-				#{userId},
+		#{userId},
 		#{actId},
 		#{realname},
 		#{state},
@@ -151,19 +153,11 @@
 		</set> 
 		where 
 		informationId=#{informationId}
-		
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessActivityQnhInformation删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_activity_qnh_information where 
 		informationId=#{informationId}
-													</delete>
-	
+	</delete>
 </mapper>
-	

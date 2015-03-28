@@ -132,5 +132,7 @@ public interface BusinessActRegService {
 	 * @throws ServiceException
 	 */
 	public BaseBean findLatestRegPage(BusinessActRegQuery query)  throws ServiceException;
+
+	public void updateVotes(Map<String, Object> map) throws ServiceException;
 	
 }

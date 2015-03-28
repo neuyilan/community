@@ -62,6 +62,7 @@
 			<result column="isQNH" property="isQNH" />
 			<result column="actRegWords" property="actRegWords" />
 			<result column="prizeRules" property="prizeRules" />
+			<result column="timeslot" property="timeslot" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
@@ -120,7 +121,8 @@
 			a.QNHId,
 			a.isQNH,
 			a.actRegWords,
-			a.prizeRules
+			a.prizeRules,
+			a.timeslot
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
@@ -1020,6 +1022,9 @@
 			<if test="refuseMemo != null and refuseMemo != ''" >
 			refuseMemo=#{refuseMemo}
 			</if>	
+			<if test="timeslot != null and timeslot != ''" >
+			timeslot=#{timeslot}
+			</if>
 		</set> 
 		where 
 		actId=#{actId}

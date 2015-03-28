@@ -134,5 +134,7 @@ public interface BusinessActRegDao {
 	 * @throws ServiceException
 	 */
 	public List<BusinessActReg> findLatestRegPage(BusinessActRegQuery query) throws DaoException;
+
+	public void updateVotes(Map<String, Object> map) throws DaoException;
 	
 }

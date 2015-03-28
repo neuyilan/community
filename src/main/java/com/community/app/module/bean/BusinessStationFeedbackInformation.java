@@ -17,6 +17,33 @@ public class BusinessStationFeedbackInformation implements java.io.Serializable 
 	private java.sql.Timestamp feedTime;
 	private java.lang.Integer source;
 	private java.lang.Integer flag;
+	private String nickName;
+	private String realName;
+	private String tel;
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
 
 	public BusinessStationFeedbackInformation() {
 	}

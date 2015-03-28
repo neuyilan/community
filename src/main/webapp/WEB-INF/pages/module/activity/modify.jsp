@@ -30,7 +30,7 @@
         <div class="header-public"><span class="return" onclick="history.go(-1);"></span>编辑活动</div>
         <div class="cont-l">
         	<input type="hidden" name="actId" id="actId" value="${businessActivity.actId }" />
-            <input type="hidden" name="scope" id="scope" value="${scope }" />
+            <input type="hidden" name="scope" id="scope" value="${scope1}" />
             <h2 class="title">活动名称<label for="actName" class="error success"></label></h2>
             <input class="iptnewtit" type="text" id="actName" name="actName" placeholder='请输入活动名称24字以内' value="${businessActivity.actName }" />
             
@@ -42,7 +42,8 @@
             <label><input class="radiostyle2" type="radio" id="typeId" name="typeId" value="1" <c:if test='${businessActivity.typeId == 1}'> checked </c:if> >&nbsp;定时抢</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="2"  <c:if test='${businessActivity.typeId == 2}'> checked </c:if>>&nbsp;报名活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="3"  <c:if test='${businessActivity.typeId == 3}'> checked </c:if>>&nbsp;投票活动</label>　
-            <label><input class="radiostyle2" type="radio" name="typeId" value="4"  <c:if test='${businessActivity.typeId == 4}'> checked </c:if>>&nbsp;抢优惠券</label>
+            <label><input class="radiostyle2" type="radio" name="typeId" value="4"  <c:if test='${businessActivity.typeId == 4}'> checked </c:if>>&nbsp;抢优惠券</label>　
+            <label><input class="radiostyle2" type="radio" name="typeId" value="5"  <c:if test='${businessActivity.typeId == 5}'> checked </c:if>>&nbsp;青年汇活动</label>
             <input type="hidden" id="typeName" name="typeName" value="${businessActivity.typeName }" >
             
             <!-- 报名活动 -->
@@ -51,6 +52,8 @@
 	        <div id="tphdId"></div>
             <!-- 抢优惠券 -->
             <div id="yhqId"></div>
+            <!-- 青年汇活动-->
+            <div id="qnhId"></div>
             
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动展示范围<label for="actScope" class="error success"></label></h2>
@@ -101,7 +104,7 @@
 	            <h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>
 	            <input class="iptnewtit" type="text" id="rank" name="rank" value="${businessActivity.rank }"/>名以前，可获奖 --%>
 			</div>
-            <h2 class="relstatus">评论开启<label for="isComment" class="error success"></label></h2>
+            <%-- <h2 class="relstatus">评论开启<label for="isComment" class="error success"></label></h2>
             <div class="options">
                 <p>
                     <label>
@@ -113,7 +116,7 @@
                         &nbsp;活动结束后</label>
                     <br>
                 </p>
-            </div>
+            </div> --%>
 
             <%--<h2 class="relstatus">订购/报名开启</h2>
             <div class="options">
@@ -465,6 +468,7 @@
  			$("#yhqId").empty();
  			$("#yhqAvtiveTime").empty();
     		$("#tphdId").empty();
+    		$("#qnhId").empty();
 			$("#typeName").val("定时抢");
     		$("input[name='state']:eq(0)").val("1");
     		
@@ -501,13 +505,14 @@
 	 			+'<label><input id="attributeValues8" type="checkbox" name="attributeValues" value="8" <c:if test="${fn:contains(iscontain, \'8\')}">checked</c:if> /> Email</label>　　　　		　　　'
 	 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9" <c:if test="${fn:contains(iscontain, \'9\')}">checked</c:if> /> 详细地址</label>'
 	            
-	 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
+	 			+'<h2 class="relran" style="font-weight: bold;">报名截止日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" value="${businessActivity.endTime}"/>';
 	 			$("#bmhdId").append(htmlDom);
 	 			$("#rankId").empty("");
 	 			$("#yhqId").empty();
 	 			$("#yhqAvtiveTime").empty();
 	    		$("#tphdId").empty();
+	    		$("#qnhId").empty();
 				$("#typeName").val("报名活动");
 				$("input[name='state']:eq(0)").val("0");
 				
@@ -550,11 +555,12 @@
 	    		+'<h2 class="relran">单个用户可投票数量<label for="votes" class="error success"></label></h2>'
 	    		+'　　　<label>限定每个人可对<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" value="${businessActivity.votes}"/>个项目，进行投票</label>'
 	    		+'<div class="line2"></div>'
-	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
+	    		+'<h2 class="relran" style="font-weight: bold;">投票截止日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" value="${businessActivity.endTime}"/>';
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();
 	 			$("#yhqId").empty();
+	 			$("#qnhId").empty();
 	 			$("#yhqAvtiveTime").empty();
 	    		$("#tphdId").append(htmlDom);
 				$("#typeName").val("投票活动");
@@ -727,7 +733,7 @@
    			+'<input type="hidden" name="reportExcel" id="reportExcel" value="${businessActivity.reportExcel}">'; 
    			
    			var htmlDom1 = ''
-			+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
+			+'<h2 class="relran" style="font-weight: bold;">活动时间<label for="planTime" class="error success"></label></h2>'
     		+'<div style="position:relative;">'
     		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
     		+'<input type="hidden" id="planTime" name="planTime"  value="${businessActivity.publishDate } ${businessActivity.publishTime}"/>'
@@ -738,6 +744,7 @@
    			$("#rankId").empty();
     		$("#bmhdId").empty();
     		$("#tphdId").empty();
+    		$("#qnhId").empty();
     		$("#typeName").val("抢优惠券");
 			$("input[name='state']:eq(0)").val("1");
 			$("#yhqId").append(htmlDom);
@@ -757,7 +764,27 @@
 	            $("#setTimeLayer").css("height",$(document.body).outerHeight(true)+'px');
 	            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
 	        });
-    	}
+    	} else if($("input[name='typeId']:checked").val() == 5){
+			var htmlDom = ''
+			+'<div class="line2"></div>'
+			+'<h2 class="relran">报名开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
+			+'<input class="iptnewtit" type="text" name="startTime" value="${businessActivity.startTime}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择报名开始时间"> 至'
+			+'<input class="iptnewtit" type="text" name="endTime" value="${businessActivity.endTime}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择报名结束时间">'
+           	
+			+'<div class="line2"></div>'
+			+'<h2 class="relran">活动开始截止时间<label for="timeslotStartTime" class="error success"></label><label for="timeslotEndTime" class="error success"></label></h2>'
+			+'<input class="iptnewtit" type="text" name="timeslotStartTime" value="${businessActivity.timeslotStartTime}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择开始时间"> 至'
+			+'<input class="iptnewtit" type="text" name="timeslotEndTime" value="${businessActivity.timeslotEndTime}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择结束时间">'; 
+    		
+			$("#rankId").empty();
+    		$("#bmhdId").empty();
+    		$("#tphdId").empty();
+    		$("#yhqId").empty();
+    		$("#yhqAvtiveTime").empty();
+    		$("#typeName").val("青年汇活动");
+			$("input[name='state']:eq(0)").val("1");
+			$("#qnhId").append(htmlDom);
+		}
 		
 	 	// 活动类型 
 	    $("input[name='typeId']").change(function() {
@@ -775,6 +802,7 @@
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
 	    		$("#yhqId").empty();
+	    		$("#qnhId").empty();
 	    		$("#yhqAvtiveTime").empty();
 	    		$("#rankId").append(htmlDom);
 				$("#typeName").val("定时抢");
@@ -809,13 +837,14 @@
 		 			+'<label><input id="attributeValues8" type="checkbox" name="attributeValues" value="8"/> Email</label>　　　　		　　　'
 		 			+'<label><input id="attributeValues9" type="checkbox" name="attributeValues" value="9"/> 详细地址</label>'
 		            
-		 			+'<h2 class="relran" style="font-weight: bold;">报名截至日期<label for="endTime" class="error success"></label></h2>'
+		 			+'<h2 class="relran" style="font-weight: bold;">报名截止日期<label for="endTime" class="error success"></label></h2>'
 		 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" />';
 		 			$("#bmhdId").append(htmlDom);
 		 			$("#rankId").empty("");
 		 			$("#yhqId").empty();
 		 			$("#yhqAvtiveTime").empty();
 		    		$("#tphdId").empty("");
+		    		$("#qnhId").empty();
 					$("#typeName").val("报名活动");
 					$("input[name='state']:eq(0)").val("0");
 					
@@ -858,12 +887,13 @@
 	    		+'<h2 class="relran">单个用户可投票数量<label for="votes" class="error success"></label></h2>'
 	    		+'　　　<label>限定每个人可对<input class="iptnewtit" type="text" id="votes" name="votes" style="width:80px" />个项目，进行投票</label>'
 	    		+'<div class="line2"></div>'
-	    		+'<h2 class="relran" style="font-weight: bold;">投票截至日期<label for="endTime" class="error success"></label></h2>'
+	    		+'<h2 class="relran" style="font-weight: bold;">投票截止日期<label for="endTime" class="error success"></label></h2>'
 	 			+'<input id="endTime" type="text" class="iptnewtit"  name="endTime" onfocus="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:240px" />';
 	    		$("#bmhdId").empty();
 	    		$("#rankId").empty();
 	 			$("#yhqId").empty();
 	 			$("#yhqAvtiveTime").empty();
+	 			$("#qnhId").empty();
 	    		$("#tphdId").append(htmlDom);
 				$("#typeName").val("投票活动");
 				$("input[name='state']:eq(0)").val("0");
@@ -974,7 +1004,7 @@
 				+'<input type="hidden" name="reportExcel" id="reportExcel" value="">'; 
 				
 				var htmlDom1 = ''
-				+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
+				+'<h2 class="relran" style="font-weight: bold;">活动时间<label for="planTime" class="error success"></label></h2>'
 	    		+'<div style="position:relative;">'
 	    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
 	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
@@ -985,6 +1015,7 @@
 				$("#rankId").empty();
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
+	    		$("#qnhId").empty();
 	    		$("#typeName").val("抢优惠券");
 				$("input[name='state']:eq(0)").val("1");
 				$("#yhqId").append(htmlDom);
@@ -1004,6 +1035,26 @@
 		            $("#setTimeLayer").css("height",$(document.body).outerHeight(true)+'px');
 		            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
 		        });
+			} else if ($typeId == 5) {
+				var htmlDom = ''
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">报名开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" name="startTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择报名开始时间"> 至'
+				+'<input class="iptnewtit" type="text" name="endTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择报名结束时间">'
+            	
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">活动开始截止时间<label for="timeslotStartTime" class="error success"></label><label for="timeslotEndTime" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" name="timeslotStartTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择开始时间"> 至'
+				+'<input class="iptnewtit" type="text" name="timeslotEndTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择结束时间">'; 
+	    		
+				$("#rankId").empty();
+	    		$("#bmhdId").empty();
+	    		$("#tphdId").empty();
+	    		$("#yhqId").empty();
+	    		$("#yhqAvtiveTime").empty();
+	    		$("#typeName").val("青年汇活动");
+				$("input[name='state']:eq(0)").val("1");
+				$("#qnhId").append(htmlDom);
 			}
 		});
 	    
@@ -1290,9 +1341,9 @@
                     required: true,
                     digits: true
                 },
-                isComment: {
+                /* isComment: {
                     required: true
-                },
+                }, */
                 isPush: {
                     required: true
                 },
@@ -1403,9 +1454,9 @@
                     required: '请设定获奖排名量！',
                     digits: '排名必须为数字' 
                 },
-                isComment: {
+                /* isComment: {
                     required: '请选择是否评论开启！'
-                },
+                }, */
                 isPush: {
                     required: '请选择是否推送！'
                 },
@@ -1426,7 +1477,7 @@
                     digits: '人数限定必须为数字' 
                 },
                 endTime: {
-                    required:  '请选择报名截至日期！',
+                    required:  '请选择报名截止日期！',
    					remote: "报名截止时间必须小于报名活动时间"
                 },
                 voteType: {

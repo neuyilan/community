@@ -158,7 +158,6 @@ public class BusinessActRegDaoImpl implements BusinessActRegDao {
 	}
 
 	public void updateCode(Map<String, Object> map) throws DaoException {
-		// TODO Auto-generated method stub
 		this.sqlSessionTemplate.update("com.community.app.module.dao.BusinessActRegDao.updateCode",map);
 
 	}
@@ -183,5 +182,9 @@ public class BusinessActRegDaoImpl implements BusinessActRegDao {
 			throws DaoException {
 		List<BusinessActReg> list = this.sqlSessionTemplate.selectList("com.community.app.module.dao.BusinessActRegDao.findLatestRegPage",query);
 		return list;
+	}
+
+	public void updateVotes(Map<String, Object> map) throws DaoException {
+		this.sqlSessionTemplate.update("com.community.app.module.dao.BusinessActRegDao.updateVotes",map);
 	}
 }

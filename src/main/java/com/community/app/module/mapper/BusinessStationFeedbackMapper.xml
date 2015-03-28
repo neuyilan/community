@@ -4,58 +4,58 @@
 <mapper namespace="com.community.app.module.dao.BusinessStationFeedbackDao" >
 	<!-- 返回结构集 -->
 	<resultMap id="BusinessStationFeedbackResult" type="BusinessStationFeedback">
-			<result column="feedId" property="feedId" />
-			<result column="comId" property="comId" />
-			<result column="comName" property="comName" />
-			<result column="estateId" property="estateId" />
-			<result column="estateName" property="estateName" />
-			<result column="state" property="state" />
-			<result column="totalPoll" property="totalPoll" />
+		<result column="feedId" property="feedId" />
+		<result column="comId" property="comId" />
+		<result column="comName" property="comName" />
+		<result column="estateId" property="estateId" />
+		<result column="estateName" property="estateName" />
+		<result column="state" property="state" />
+		<result column="totalPoll" property="totalPoll" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
-			feedId,
-			comId,
-			comName,
-			estateId,
-			estateName,
-			state,
-			totalPoll
+		bsf.feedId,
+		bsf.comId,
+		bsf.comName,
+		bsf.estateId,
+		bsf.estateName,
+		bsf.state,
+		bsf.totalPoll
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-					<if test="feedId != null and feedId != ''" >
-				   		and feedId = #{feedId}
-					</if>
-					<if test="comId != null and comId != ''" >
-				   		and comId = #{comId}
-					</if>
-					<if test="comName != null and comName != ''" >
-				   		and comName = #{comName}
-					</if>
-					<if test="estateId != null and estateId != ''" >
-				   		and estateId = #{estateId}
-					</if>
-					<if test="estateName != null and estateName != ''" >
-				   		and estateName = #{estateName}
-					</if>
-					<if test="state != null and state != ''" >
-				   		and state = #{state}
-					</if>
-					<if test="totalPoll != null and totalPoll != ''" >
-				   		and totalPoll = #{totalPoll}
-					</if>
+				<if test="feedId != null and feedId != ''" >
+			   		and bsf.feedId = #{feedId}
+				</if>
+				<if test="comId != null and comId != ''" >
+			   		and bsf.comId = #{comId}
+				</if>
+				<if test="comName != null and comName != ''" >
+			   		and bsf.comName = #{comName}
+				</if>
+				<if test="estateId != null and estateId != ''" >
+			   		and bsf.estateId = #{estateId}
+				</if>
+				<if test="estateName != null and estateName != ''" >
+			   		and bsf.estateName = #{estateName}
+				</if>
+				<if test="state != null" >
+			   		and bsf.state = #{state}
+				</if>
+				<if test="totalPoll != null and totalPoll != ''" >
+			   		and bsf.totalPoll = #{totalPoll}
+				</if>
 			</trim>
 		</where>
 	</sql>
 	
 	<!-- 根据id查询 BusinessStationFeedback -->
 	<select id="findById"  resultMap="BusinessStationFeedbackResult" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List" /> from business_station_feedback where feedId = #{id}
+		select <include refid="Base_Column_List" /> from business_station_feedback bsf where bsf.feedId = #{id}
 	</select>
 	
 	<!-- 无条件查询所有BusinessStationFeedback -->
@@ -65,7 +65,7 @@
 	
 	<!-- 按Map对象条件查询所有BusinessStationFeedback -->
 	<select id="findByMap" resultMap="BusinessStationFeedbackResult" parameterType="java.util.Map">
-		select <include refid="Base_Column_List" /> from business_station_feedback <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_station_feedback bsf <include refid="Base_Where_Clause" />
 	</select>
 	
 	<!-- 按VO对象条件查询所有BusinessStationFeedback -->
@@ -75,8 +75,24 @@
 	
 	<!-- BusinessStationFeedback根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessStationFeedbackResult" parameterType="Object">
-		select <include refid="Base_Column_List" /> from business_station_feedback  
+		<!-- select <include refid="Base_Column_List" /> from business_station_feedback  
 		<include refid="Base_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
+      	${pager.orderCondition}
+	    </if>
+	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
+	    ${pager.mysqlQueryCondition}
+	    </if> -->
+	    SELECT <include refid="Base_Column_List" />, yznh, kdds, yzgg 
+	    FROM business_station_feedback bsf
+		INNER JOIN (select feedId,
+       		SUM(CASE source WHEN 1 THEN 1 ELSE 0 END ) yznh,
+			SUM(CASE source WHEN 2 THEN 1 ELSE 0 END ) kdds,
+			SUM(CASE source WHEN 3 THEN 1 ELSE 0 END ) yzgg
+ 		FROM business_station_feedback_information 
+ 		group by feedid ) bsfi 
+ 		ON bsf.feedId=bsfi.feedId
+ 		<include refid="Base_Where_Clause" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
 	    </if>
@@ -87,7 +103,7 @@
 	
 	<!-- BusinessStationFeedback列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_station_feedback 
+		select count(1) from business_station_feedback bsf
 		<include refid="Base_Where_Clause" />
 	</select>
 	
@@ -97,7 +113,6 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_station_feedback(
-		
 		comId,
 		comName,
 		estateId,
@@ -105,7 +120,7 @@
 		state,
 		totalPoll
 		) values(
-				#{comId},
+		#{comId},
 		#{comName},
 		#{estateId},
 		#{estateName},
@@ -139,19 +154,11 @@
 		</set> 
 		where 
 		feedId=#{feedId}
-		
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessStationFeedback删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_station_feedback where 
 		feedId=#{feedId}
-													</delete>
-	
+	</delete>
 </mapper>
-	

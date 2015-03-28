@@ -53,6 +53,8 @@ import com.community.app.module.bean.BusinessActivityVoteOptions;
 import com.community.app.module.bean.BusinessPrize;
 import com.community.app.module.bean.BusinessRegPic;
 import com.community.app.module.bean.BusinessSponsor;
+import com.community.app.module.bean.BusinessUser;
+import com.community.app.module.bean.BusinessVote;
 import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
@@ -73,6 +75,8 @@ import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessPrizeService;
 import com.community.app.module.service.BusinessRegPicService;
 import com.community.app.module.service.BusinessSponsorService;
+import com.community.app.module.service.BusinessUserService;
+import com.community.app.module.service.BusinessVoteService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.service.ManageSendMsgService;
 import com.community.app.module.vo.BaseBean;
@@ -145,6 +149,10 @@ public class activitiesController {
 	private BusinessActRegService businessActRegService;
 	@Autowired
 	private BusinessRegPicService businessRegPicService;
+	@Autowired
+	private BusinessVoteService businessVoteService; 
+	@Autowired
+	private BusinessUserService businessUserService;
 	
 	/**
 	 * 用户查看活动列表
@@ -345,171 +353,182 @@ public class activitiesController {
 			}else if (activity.getTypeId()==5) {
 				mav = new ModelAndView("/service/activityQnhRegistration");
 			}
-			
-			//Integer userId = 1;
-			if(userId!=null && !userId.equals("0") && !userId.equals("")){
-				AppUser appUser = appUserService.findById(new Integer(userId));
-				mav.addObject("protrait", ip+appUser.getPortrait());
-				mav.addObject("nickname", appUser.getNickname());
-			}else {
-				userId = "0";
-			}
-			
-			
-			
-			
-			
-			String path = request.getContextPath();
-			String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
-			mav.addObject("ctx", ctx);
-			mav.addObject("actId", activity.getActId());
-			mav.addObject("title", activity.getActName());
-			mav.addObject("appPic", activity.getAppPic());
-			mav.addObject("particpates", activity.getParticpates());
-			mav.addObject("actContent", activity.getActContent());
-			mav.addObject("isComment", activity.getIsComment());
-			mav.addObject("comments", activity.getComments());
-			mav.addObject("supports", activity.getSupports());
-			mav.addObject("state", activity.getState());//活动状态
-			mav.addObject("protrait", activity.getState());//活动状态
-			mav.addObject("state", activity.getState());//活动状态
-			mav.addObject("ranks", activity.getRank());//活动排位
-			mav.addObject("phpIp", phpIp);
-			mav.addObject("activityIp", activityIp);
-			String startTime = activity.getPublishDate() + " " + activity.getPublishTime() + ":00";
-			//开始结束时间计算
-			if(activity.getTypeId()==1 || activity.getTypeId()==3 || activity.getTypeId()==4){
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Date ts = (Date) sdf.parse(startTime);
-				long time = ts.getTime() + 30*60*1000;
-				//long time = ts.getTime() + 1*60*1000;
-				String endTime = sdf.format(new Date(time));
-				String dateTime = sdf.format(new Date());
-				mav.addObject("startTime", startTime.replace("-", "/"));
-				mav.addObject("endTime", endTime.replace("-", "/"));
-				mav.addObject("dateTime", dateTime.replace("-", "/"));
-			}
-			
-			
-			mav.addObject("ID", ID);
-			mav.addObject("sessionid", sessionid);
-			mav.addObject("userId", userId);
-			
-			//获取用户活动排名
-			Map paramMap = new HashMap();
-			paramMap.put("actId", ID);
-			paramMap.put("userId", userId);
-			int rank = 0;
-			boolean flag=false;
-			
-			//判断活动类型提取参数
-			if(activity.getTypeId()==2){
-				BusinessActivityRegistrationTimeslotQuery BusinessActivityRegistrationTimeslotQuery = new BusinessActivityRegistrationTimeslotQuery();
-				BusinessActivityRegistrationTimeslotQuery.setActId(ID);
-				List<BusinessActivityRegistrationTimeslot> list = businessActivityRegistrationTimeslotService.findByExample(BusinessActivityRegistrationTimeslotQuery);
-				int i =0;
-				for (BusinessActivityRegistrationTimeslot businessActivityRegistrationTimeslot : list) {
+			if (activity.getTypeId()!=6) {
+				//Integer userId = 1;
+				if(userId!=null && !userId.equals("0") && !userId.equals("")){
+					AppUser appUser = appUserService.findById(new Integer(userId));
+					mav.addObject("protrait", ip+appUser.getPortrait());
+					mav.addObject("nickname", appUser.getNickname());
+				}else {
+					userId = "0";
+				}
+				
+				
+				
+				
+				
+				String path = request.getContextPath();
+				String ctx = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path; 
+				mav.addObject("ctx", ctx);
+				mav.addObject("actId", activity.getActId());
+				mav.addObject("title", activity.getActName());
+				mav.addObject("appPic", activity.getAppPic());
+				mav.addObject("particpates", activity.getParticpates());
+				mav.addObject("actContent", activity.getActContent());
+				mav.addObject("isComment", activity.getIsComment());
+				mav.addObject("comments", activity.getComments());
+				mav.addObject("supports", activity.getSupports());
+				mav.addObject("state", activity.getState());//活动状态
+				mav.addObject("protrait", activity.getState());//活动状态
+				mav.addObject("state", activity.getState());//活动状态
+				mav.addObject("ranks", activity.getRank());//活动排位
+				mav.addObject("phpIp", phpIp);
+				mav.addObject("activityIp", activityIp);
+				String startTime = activity.getPublishDate() + " " + activity.getPublishTime() + ":00";
+				//开始结束时间计算
+				if(activity.getTypeId()==1 || activity.getTypeId()==3 || activity.getTypeId()==4){
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date ts = (Date) sdf.parse(startTime);
+					long time = ts.getTime() + 30*60*1000;
+					//long time = ts.getTime() + 1*60*1000;
+					String endTime = sdf.format(new Date(time));
+					String dateTime = sdf.format(new Date());
+					mav.addObject("startTime", startTime.replace("-", "/"));
+					mav.addObject("endTime", endTime.replace("-", "/"));
+					mav.addObject("dateTime", dateTime.replace("-", "/"));
+				}
+				
+				
+				mav.addObject("ID", ID);
+				mav.addObject("sessionid", sessionid);
+				mav.addObject("userId", userId);
+				
+				//获取用户活动排名
+				Map paramMap = new HashMap();
+				paramMap.put("actId", ID);
+				paramMap.put("userId", userId);
+				int rank = 0;
+				boolean flag=false;
+				
+				//判断活动类型提取参数
+				if(activity.getTypeId()==2){
+					BusinessActivityRegistrationTimeslotQuery BusinessActivityRegistrationTimeslotQuery = new BusinessActivityRegistrationTimeslotQuery();
+					BusinessActivityRegistrationTimeslotQuery.setActId(ID);
+					List<BusinessActivityRegistrationTimeslot> list = businessActivityRegistrationTimeslotService.findByExample(BusinessActivityRegistrationTimeslotQuery);
+					int i =0;
+					for (BusinessActivityRegistrationTimeslot businessActivityRegistrationTimeslot : list) {
+						BusinessActivityRegistrationInformationQuery businessActivityRegistrationInformationQuery = new BusinessActivityRegistrationInformationQuery();
+						businessActivityRegistrationInformationQuery.setActId(ID);
+						businessActivityRegistrationInformationQuery.setTimeSlotId(businessActivityRegistrationTimeslot.getTimeSlotId());
+						int count = businessActivityRegistrationInformationService.selectCount(businessActivityRegistrationInformationQuery);
+						businessActivityRegistrationTimeslot.setCount(count);
+						if(count>=businessActivityRegistrationTimeslot.getNumber()){
+							i++;
+						}
+					}
+					if(list.size()==i){
+						flag=true;
+					}
+					
+					mav.addObject("tel", request.getParameter("tel"));
+					mav.addObject("list", list);
+					mav.addObject("timeSlotId", list.get(0).getTimeSlotId());
 					BusinessActivityRegistrationInformationQuery businessActivityRegistrationInformationQuery = new BusinessActivityRegistrationInformationQuery();
 					businessActivityRegistrationInformationQuery.setActId(ID);
-					businessActivityRegistrationInformationQuery.setTimeSlotId(businessActivityRegistrationTimeslot.getTimeSlotId());
-					int count = businessActivityRegistrationInformationService.selectCount(businessActivityRegistrationInformationQuery);
-					businessActivityRegistrationTimeslot.setCount(count);
-					if(count>=businessActivityRegistrationTimeslot.getNumber()){
-						i++;
+					businessActivityRegistrationInformationQuery.setUserId(new Integer(userId));
+					List<BusinessActivityRegistrationInformation> BusinessActivityRegistrationInformationList = businessActivityRegistrationInformationService.findByExample(businessActivityRegistrationInformationQuery);
+					
+					if(BusinessActivityRegistrationInformationList.size()>0) {//已参与活动
+						rank = 1;
+						mav.addObject("partakeTimeSlotId", BusinessActivityRegistrationInformationList.get(0).getTimeSlotId());
+					}
+					
+				}else if (activity.getTypeId()==3) {
+					BusinessActivityVoteOptionsQuery businessActivityVoteOptionsQuery = new BusinessActivityVoteOptionsQuery();
+					businessActivityVoteOptionsQuery.setActId(ID);
+					//获取活动投票项
+					List<BusinessActivityVoteOptions> list = businessActivityVoteOptionsService.findByExample(businessActivityVoteOptionsQuery);
+					BusinessActivityVoteInformationQuery businessActivityVoteInformationQuery = new BusinessActivityVoteInformationQuery();
+					businessActivityVoteInformationQuery.setActId(ID);
+					businessActivityVoteInformationQuery.setUserId(new Integer(userId));
+					//获取用户投票记录
+					int count = businessActivityVoteInformationService.selectCount(businessActivityVoteInformationQuery);
+					//判断是否参与活动
+					if(count>0){
+						rank = 1;
+					}
+					businessActivityVoteInformationQuery.setUserId(null);
+					//获取总票数
+					int numberVotes = businessActivityVoteInformationService.selectCount(businessActivityVoteInformationQuery);
+					//获取活动参与总人数
+					count = businessActivityVoteInformationService.selectCount_userId(businessActivityVoteInformationQuery);
+					//分别统计活动投票项数量
+					for (BusinessActivityVoteOptions businessActivityVoteOptions : list) {
+						businessActivityVoteInformationQuery.setOptionsId(businessActivityVoteOptions.getOptionsId());
+						int optCount = businessActivityVoteInformationService.selectCount(businessActivityVoteInformationQuery);
+						businessActivityVoteOptions.setCount(optCount);
+						businessActivityVoteOptions.setPercentage(weather.percentage(optCount,numberVotes));
+					}
+					mav.addObject("votes", activity.getVotes());
+					mav.addObject("voteType", activity.getVoteType());
+					mav.addObject("list", list);
+					mav.addObject("count", count);
+				}else if (activity.getTypeId()==4) {
+					BusinessActivityCouponQuery businessActivityCouponQuery = new BusinessActivityCouponQuery();
+					businessActivityCouponQuery.setActId(ID);
+					businessActivityCouponQuery.setState(0);
+					//统计剩余数量
+					int  count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
+					mav.addObject("count", count);
+					businessActivityCouponQuery.setUserId(new Integer(userId));
+					businessActivityCouponQuery.setState(null);
+					//是否参与活动
+					count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
+					if(count>0){
+						rank = 1;
+					}
+					
+					mav.addObject("couponDesc", activity.getCouponDesc());
+					mav.addObject("couponValid", activity.getCouponValid());
+				}else if(activity.getTypeId()==5){
+					
+					mav.addObject("tel", request.getParameter("tel"));
+					BusinessActivityQnhInformationQuery businessActivityQnhInformationQuery = new BusinessActivityQnhInformationQuery();
+					businessActivityQnhInformationQuery.setActId(ID);
+					businessActivityQnhInformationQuery.setUserId(new Integer(userId));
+					List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
+					
+					if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
+						rank = 1;
+						if (BusinessActivityQnhInformationList.get(0).getState()==1) {
+							rank=2;
+						}
+					}
+					
+					
+				}else {
+					List<BusinessActivityParticipate> participateList = businessActivityParticipateService.findByMap(paramMap);
+					if(participateList.size() > 0) {//已参与活动
+						BusinessActivityParticipate businessActivityParticipate = participateList.get(0);
+						rank = businessActivityParticipate.getRank();
 					}
 				}
-				if(list.size()==i){
-					flag=true;
+				if (userId.equals("0")) {
+					rank = 0;
 				}
-				
-				mav.addObject("tel", request.getParameter("tel"));
-				mav.addObject("list", list);
-				mav.addObject("timeSlotId", list.get(0).getTimeSlotId());
-				BusinessActivityRegistrationInformationQuery businessActivityRegistrationInformationQuery = new BusinessActivityRegistrationInformationQuery();
-				businessActivityRegistrationInformationQuery.setActId(ID);
-				businessActivityRegistrationInformationQuery.setUserId(new Integer(userId));
-				List<BusinessActivityRegistrationInformation> BusinessActivityRegistrationInformationList = businessActivityRegistrationInformationService.findByExample(businessActivityRegistrationInformationQuery);
-				
-				if(BusinessActivityRegistrationInformationList.size()>0) {//已参与活动
-					rank = 1;
-					mav.addObject("partakeTimeSlotId", BusinessActivityRegistrationInformationList.get(0).getTimeSlotId());
-				}
-				
-			}else if (activity.getTypeId()==3) {
-				BusinessActivityVoteOptionsQuery businessActivityVoteOptionsQuery = new BusinessActivityVoteOptionsQuery();
-				businessActivityVoteOptionsQuery.setActId(ID);
-				//获取活动投票项
-				List<BusinessActivityVoteOptions> list = businessActivityVoteOptionsService.findByExample(businessActivityVoteOptionsQuery);
-				BusinessActivityVoteInformationQuery businessActivityVoteInformationQuery = new BusinessActivityVoteInformationQuery();
-				businessActivityVoteInformationQuery.setActId(ID);
-				businessActivityVoteInformationQuery.setUserId(new Integer(userId));
-				//获取用户投票记录
-				int count = businessActivityVoteInformationService.selectCount(businessActivityVoteInformationQuery);
-				//判断是否参与活动
-				if(count>0){
-					rank = 1;
-				}
-				businessActivityVoteInformationQuery.setUserId(null);
-				//获取总票数
-				int numberVotes = businessActivityVoteInformationService.selectCount(businessActivityVoteInformationQuery);
-				//获取活动参与总人数
-				count = businessActivityVoteInformationService.selectCount_userId(businessActivityVoteInformationQuery);
-				//分别统计活动投票项数量
-				for (BusinessActivityVoteOptions businessActivityVoteOptions : list) {
-					businessActivityVoteInformationQuery.setOptionsId(businessActivityVoteOptions.getOptionsId());
-					int optCount = businessActivityVoteInformationService.selectCount(businessActivityVoteInformationQuery);
-					businessActivityVoteOptions.setCount(optCount);
-					businessActivityVoteOptions.setPercentage(weather.percentage(optCount,numberVotes));
-				}
-				mav.addObject("votes", activity.getVotes());
-				mav.addObject("voteType", activity.getVoteType());
-				mav.addObject("list", list);
-				mav.addObject("count", count);
-			}else if (activity.getTypeId()==4) {
-				BusinessActivityCouponQuery businessActivityCouponQuery = new BusinessActivityCouponQuery();
-				businessActivityCouponQuery.setActId(ID);
-				businessActivityCouponQuery.setState(0);
-				//统计剩余数量
-				int  count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
-				mav.addObject("count", count);
-				businessActivityCouponQuery.setUserId(new Integer(userId));
-				businessActivityCouponQuery.setState(null);
-				//是否参与活动
-				count = businessActivityCouponService.selectCount(businessActivityCouponQuery);
-				if(count>0){
-					rank = 1;
-				}
-				
-				mav.addObject("couponDesc", activity.getCouponDesc());
-				mav.addObject("couponValid", activity.getCouponValid());
-			}else if(activity.getTypeId()==5){
-				
-				mav.addObject("tel", request.getParameter("tel"));
-				BusinessActivityQnhInformationQuery businessActivityQnhInformationQuery = new BusinessActivityQnhInformationQuery();
-				businessActivityQnhInformationQuery.setActId(ID);
-				businessActivityQnhInformationQuery.setUserId(new Integer(userId));
-				List<BusinessActivityQnhInformation> BusinessActivityQnhInformationList = businessActivityQnhInformationService.findByExample(businessActivityQnhInformationQuery);
-				
-				if(BusinessActivityQnhInformationList.size()>0) {//已参与活动
-					rank = 1;
-					if (BusinessActivityQnhInformationList.get(0).getState()==1) {
-						rank=2;
-					}
-				}
-				
+				mav.addObject("flag", flag);
+				mav.addObject("rank", rank);
 				
 			}else {
-				List<BusinessActivityParticipate> participateList = businessActivityParticipateService.findByMap(paramMap);
-				if(participateList.size() > 0) {//已参与活动
-					BusinessActivityParticipate businessActivityParticipate = participateList.get(0);
-					rank = businessActivityParticipate.getRank();
-				}
+				mav = new ModelAndView("redirect:"+phpIp+"/wxokjia/Activities_vote_info.php");
+				mav.addObject("userId", request.getParameter("userId"));
+				mav.addObject("sessionid", request.getParameter("sessionid"));
+				mav.addObject("ID", request.getParameter("ID"));
+				mav.addObject("tel", request.getParameter("tel"));
 			}
-			if (userId.equals("0")) {
-				rank = 0;
-			}
-			mav.addObject("flag", flag);
-			mav.addObject("rank", rank);
+			
+			
+			
 			
 			
 		}catch (Exception e) {
@@ -1738,7 +1757,6 @@ public class activitiesController {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
 		try{
 			Timestamp  ts=new Timestamp(new Date().getTime());
 			AppStatisticsClick appStatisticsClick = new AppStatisticsClick();
@@ -1837,7 +1855,6 @@ public class activitiesController {
 						json += "\"message\":\"参与成功\"";
 						json += "}";
 					}
-					
 				}
 			}catch(Exception e){
 				json = "";
@@ -1848,7 +1865,6 @@ public class activitiesController {
 				e.printStackTrace();
 			}
 		}
-		
 		
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
@@ -1934,7 +1950,6 @@ public class activitiesController {
 		try {
 			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -1947,7 +1962,8 @@ public class activitiesController {
 	 */
 	@RequestMapping(value="getActivitiesPrizeList")
 	public void getActivitiesPrizeList(HttpServletRequest request, HttpServletResponse response) {
-		
+		Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
 		String json = "";
 		String actId = request.getParameter("ID");
 		String psize = request.getParameter("psize");//0 全查  n查n条 (0 取活动 奖品规则)
@@ -1961,6 +1977,7 @@ public class activitiesController {
 				List<BusinessPrize> prizeList = businessPrizeService.findByMap(map);
 				if (CollectionUtils.isNotEmpty(prizeList))
 				{
+					BusinessActivity act = businessActivityService.findById(Integer.valueOf(actId));
 					try{
 						JSONObject jsn = new JSONObject()
 						.element("errorCode", "200")
@@ -1970,43 +1987,14 @@ public class activitiesController {
 							jsnary.element(new JSONObject()
 							.element("prizeId", prize.getPrizeId())
 							.element("awardsName", prize.getAwardName())
-							.element("prizeImg", prize.getPrizeImg())
+							.element("prizeImg", ip+prize.getPrizeImg())
 							.element("prizeQuota", prize.getPrizeQuota())
 							.element("prizeName", prize.getPrizeName())
 							.element("prizeRanking", prize.getRankStart()+"-"+prize.getRankEnd())
 							.element("prizeContent", prize.getPrizeContent()));
 						jsn.element("content",new JSONObject().element("list", jsnary))
-						.element("rule","发放规则 发放规则 发放规则").toString();
+						.element("rule", act.getPrizeRules()).toString();
 						json = jsn.toString();
-						/*json += "{";
-						json += "\"errorCode\":\"200\",";
-						json += "\"message\":\"获取成功\",";
-						json += "\"content\":{";
-						json += "\"list\":[";
-						json += "{\"awardsName\":\"一等奖\",";
-						json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
-						json += "\"prizeQuota\":\"10\",";
-						json += "\"prizeName\":\"大米三袋\",";
-						json += "\"prizeRanking\":\"1-10\",";
-						json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
-						json += "},";
-						json += "{\"awardsName\":\"二等奖\",";
-						json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
-						json += "\"prizeQuota\":\"10\",";
-						json += "\"prizeName\":\"大米俩袋\",";
-						json += "\"prizeRanking\":\"10-20\",";
-						json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
-						json += "},";
-						json += "{\"awardsName\":\"三等奖\",";
-						json += "\"prizeImg\":\"http://src.house.sina.com.cn/imp/imp/deal/91/58/5/35d06bd6ff358d17bb4bb42ef60_p1_mk1.jpg\",";
-						json += "\"prizeQuota\":\"10\",";
-						json += "\"prizeName\":\"大米一袋\",";
-						json += "\"prizeRanking\":\"20-30\",";
-						json += "\"prizeContent\":\"规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介规则简介\"";
-						json += "}";
-						json += "]";
-						json += "}";
-						json += "}";*/
 					}catch(Exception e){
 						json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
 						e.printStackTrace();
@@ -2024,7 +2012,6 @@ public class activitiesController {
 		try {
 			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -2038,7 +2025,8 @@ public class activitiesController {
 	 */
 	@RequestMapping(value="getActivitiesPrizeByPid")
 	public void getActivitiesPrizeByPid(HttpServletRequest request, HttpServletResponse response) {
-		
+		Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp");   
 		String json = "";
 		String prizeId = request.getParameter("ID");
 		if(StringUtils.isNotBlank(prizeId))
@@ -2053,7 +2041,7 @@ public class activitiesController {
 						.element("content", new JSONObject()
 						.element("prizeId", prize.getPrizeId())
 						.element("awardsName", prize.getAwardName())
-						.element("prizeImg", prize.getPrizeImg())
+						.element("prizeImg", ip+prize.getPrizeImg())
 						.element("prizeQuota", prize.getPrizeQuota())
 						.element("prizeName", prize.getPrizeName())
 						.element("prizeRanking", prize.getRankStart()+"-"+prize.getRankEnd())
@@ -2121,36 +2109,46 @@ public class activitiesController {
 	@RequestMapping(value="getActivitiesRanking")
 	public void getActivitiesRanking(HttpServletRequest request, HttpServletResponse response,BusinessActRegQuery query ) {
 		String json = "";
-		List<BusinessActReg> userList = null;
 		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp"); 
 			JSONArray jsnary = new JSONArray();
-			int state = 1;
+			int state = 1;//1没有报名2审核未通过3报名
+			
 			query.setRows(20);
 			query.setActId(query.getID());
-			if (query.getType()==3) {
-				userList= businessActRegService.findById_app(query);
-				if (CollectionUtils.isNotEmpty(userList)){
-					if (userList.get(0).getFlag()==2) {
-						state = 2;
-					}else if (userList.get(0).getFlag()==0) {
+			
+			List<BusinessActReg> userList = businessActRegService.findById_app(query);
+			
+			if (CollectionUtils.isNotEmpty(userList))
+			{
+				if (userList.get(0).getFlag() == 2 || userList.get(0).getFlag() == 1)
+					state = 2;//2审核未通过
+				else if (userList.get(0).getFlag() == 0)
+					state = 3;//3通过报名
+			}
+				
+			if (query.getType()==3 && state == 3  && query.getPage() == 1) {
+//				userList = businessActRegService.findById_app(query);
+//				if (CollectionUtils.isNotEmpty(userList)){
+//					if (userList.get(0).getFlag()==2) {
+//						state = 2;
+//					}else if (userList.get(0).getFlag()==0) {
 						BusinessActReg regobj = userList.get(0);
 						state = 3;
 						jsnary.element(new JSONObject()
+						.element("regId", regobj.getRegId())
 						.element("nickname", regobj.getNickName())
 						.element("estateName", regobj.getEstateName())
 						.element("number", regobj.getVotes())
-						.element("portrait", regobj.getAvatar())
+						.element("portrait", ip+regobj.getAvatar())
 						.element("contestantNo", regobj.getCode() > 10 ? regobj.getCode() + "" : "0"+regobj.getCode()) // 编号 <10 补上0
 						.element("no", regobj.getRank()));
-					}
-				}
-			}
+			}	
+
 			query.setUserId(null);
 			query.setFlag(CommonData.GlobalData.RET_SUCCESS);
-			//	BaseBean baseBean = businessActivityCommentService.findAllPage_app(query);
-			BaseBean baseBean = businessActRegService.findRankPage(query);
-//			List<BusinessActReg> actRegers = businessActRegService.findAll();
-			
+			BaseBean baseBean = businessActRegService.findRankPage(query);			
 			JSONObject jsn = new JSONObject()
 			.element("errorCode", "200")
 			.element("message", "获取成功");
@@ -2158,38 +2156,15 @@ public class activitiesController {
 			
 			for(BusinessActReg actReger :list)
 				jsnary.element(new JSONObject()
+				.element("regId", actReger.getRegId())
 				.element("nickname", actReger.getNickName())
 				.element("estateName", actReger.getEstateName())
 				.element("number", actReger.getVotes())
-				.element("portrait", actReger.getAvatar())
+				.element("portrait", ip+actReger.getAvatar())
 				.element("contestantNo", actReger.getCode() > 10 ? actReger.getCode() + "" : "0"+actReger.getCode()) // 编号 <10 补上0
 				.element("no", actReger.getRank())); //
 			jsn.element("content",new JSONObject().element("state", state).element("PageState", baseBean.getCount()>query.getPage()*query.getRows() ? "true" : "false").element("list", jsnary));
 			json = jsn.toString();
-			
-//			json += "{";
-//			json += "\"errorCode\":\"200\",";
-//			json += "\"message\":\"获取成功\",";
-//			json += "\"content\":{";
-//			json += "\"list\":[";
-//			json += "{\"nickname\":\"美女\",";
-//			json += "\"estateName\":\"罗马嘉员东区\",";
-//			json += "\"number\":\"10012\",";
-//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-//			json += "\"contestantNo\":\"01\",";
-//			json += "\"no\":\"1\"";
-//			json += "},";
-//			json += "{\"nickname\":\"美女\",";
-//			json += "\"estateName\":\"罗马嘉员东区\",";
-//			json += "\"number\":\"10012\",";
-//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-//			json += "\"contestantNo\":\"01\",";
-//			json += "\"no\":\"1\"";
-//			json += "}";
-//			json += "]";
-//			json += "}";
-//			json += "}";
-			
 		}catch(Exception e){
 			json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
 			e.printStackTrace();
@@ -2199,12 +2174,11 @@ public class activitiesController {
 		try {
 			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	/**
-	 * 获取活动排名
+	 * 获取最新报名
 	 * @param userId,sessionid,ID,page,rows
 	 * @return
 	 * json
@@ -2213,15 +2187,13 @@ public class activitiesController {
 	public void getLatestRegistration(HttpServletRequest request, HttpServletResponse response,BusinessActRegQuery query ) {
 		String json = "";
 		try{
-			
-			//	BaseBean baseBean = businessActivityCommentService.findAllPage_app(query);
+			query.setRows(20);
 			BaseBean baseBean = businessActRegService.findLatestRegPage(query);
-//			List<BusinessActReg> actRegers = businessActRegService.findAll();
 			
 			JSONObject jsn = new JSONObject()
 			.element("errorCode", "200")
-			.element("message", "获取成功")
-			.element("PageState", baseBean.getCount()>query.getPage()*query.getRows() ? "true" : "false");
+			.element("message", "获取成功");
+			
 			JSONArray jsnary = new JSONArray();
 			List<BusinessActReg> list = (List<BusinessActReg>)baseBean.getList();
 			for(BusinessActReg actReger :list)
@@ -2233,31 +2205,8 @@ public class activitiesController {
 				.element("contestantNo", actReger.getCode() > 10 ? actReger.getCode() + "" : "0"+actReger.getCode()) // 编号 <10 补上0
 				.element("no", actReger.getRank())); //
 			
-			jsn.element("content",new JSONObject().element("list", jsnary));
+			jsn.element("content",new JSONObject().element("PageState", baseBean.getCount()>query.getPage()*query.getRows() ? "true" : "false").element("list", jsnary));
 			json = jsn.toString();
-			
-//			json += "{";
-//			json += "\"errorCode\":\"200\",";
-//			json += "\"message\":\"获取成功\",";
-//			json += "\"content\":{";
-//			json += "\"list\":[";
-//			json += "{\"nickname\":\"美女\",";
-//			json += "\"estateName\":\"罗马嘉员东区\",";
-//			json += "\"number\":\"10012\",";
-//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-//			json += "\"contestantNo\":\"01\",";
-//			json += "\"no\":\"1\"";
-//			json += "},";
-//			json += "{\"nickname\":\"美女\",";
-//			json += "\"estateName\":\"罗马嘉员东区\",";
-//			json += "\"number\":\"10012\",";
-//			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-//			json += "\"contestantNo\":\"01\",";
-//			json += "\"no\":\"1\"";
-//			json += "}";
-//			json += "]";
-//			json += "}";
-//			json += "}";
 			
 		}catch(Exception e){
 			json=new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
@@ -2272,6 +2221,48 @@ public class activitiesController {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	/**
+	 * 投票
+	 * @param userId,sessionid,ID,page,rows
+	 * @return
+	 * json
+	 */
+	@RequestMapping(value="castAVote")
+	public void castAVote(HttpServletRequest request, HttpServletResponse response,BusinessActRegQuery query ) {
+		String json = "";
+		try{
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("actId", query.getID());
+			map.put("userId", query.getUserId());
+			List<BusinessVote> todayVote =  businessVoteService.findTodayVotesByMap(map);
+			if(CollectionUtils.isEmpty(todayVote))
+			{
+				BusinessVote bv = new BusinessVote();
+				bv.setRegId(query.getRegId());
+				bv.setUserId(query.getUserId());
+				bv.setVateTime(new Timestamp(new Date().getTime()));
+				bv.setActId(query.getID());
+				businessVoteService.save(bv);
+				map.put("regId", query.getRegId());
+				businessActRegService.updateVotes(map);
+				json = new JSONObject().element("errorCode", "200").element("message", "投票成功").toString();
+			}else
+				json = new JSONObject().element("errorCode", "400").element("message", "今天已经投过票啦").toString();
+		}catch(Exception e){
+			json = new JSONObject().element("errorCode", "400").element("message", "投票失败").toString();
+			e.printStackTrace();
+		}	
+		response.setHeader("Cache-Control", "no-cache");
+		response.setCharacterEncoding("utf-8");
+		try {
+			response.getWriter().write(JsonUtils.stringToJson(json));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 	
 	
@@ -2282,29 +2273,42 @@ public class activitiesController {
 	 * json
 	 */
 	@RequestMapping(value="getActivitiesPlayerInfo")
-	public void getActivitiesPlayerInfo(HttpServletRequest request, HttpServletResponse response) {
+	public void getActivitiesPlayerInfo(HttpServletRequest request, HttpServletResponse response, BusinessActRegQuery query ) {
 		String json = "";
+		Properties p = propertiesUtil.getProperties("config.properties");
+		String ip = p.getProperty("imageIp"); 
 		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\",";
-			json += "\"content\":{";
-			json += "\"nickname\":\"美女\",";
-			json += "\"estateName\":\"罗马嘉员东区\",";
-			json += "\"number\":\"10012\",";
-			json += "\"portrait\":\"http://f.hiphotos.baidu.com/image/pic/item/d009b3de9c82d158d160e5b6820a19d8bd3e42d2.jpg\",";
-			json += "\"contestantNo\":\"01\",";
-			json += "\"no\":\"1\",";
-			json += "\"brief\":\"简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介\",";
-			json += "\"Images\":[\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\",\"http://b.hiphotos.baidu.com/image/pic/item/08f790529822720ed571b4bb78cb0a46f21fab30.jpg\"]";
-			json += "}";
-			json += "}";
+			query.setActId(query.getID());
+			query.setUserId(null);
+			List<BusinessActReg> actRegs = businessActRegService.findById_app(query);
+			if (CollectionUtils.isNotEmpty(actRegs))
+			{
+				BusinessActReg actReg = actRegs.get(0);
+				
+				JSONArray imgArry = new JSONArray();
+				Map<String, Object> paramMap = new HashMap<String, Object>();
+				paramMap.put("regId", actReg.getRegId());
+				List<BusinessRegPic> picList = businessRegPicService.findByMap(paramMap);
+				for(BusinessRegPic pic : picList)
+					imgArry.element(new JSONObject().element("pic", ip+pic.getPicUrl()));
+
+				json = new JSONObject().element("errorCode", "200")
+						.element("message", "获取成功").element("content", 
+					     new JSONObject()
+						.element("regId", actReg.getRegId())
+						.element("nickname", actReg.getNickName())
+						.element("estateName", actReg.getEstateName())
+						.element("number", actReg.getVotes())
+						.element("portrait", ip+actReg.getAvatar())
+						.element("contestantNo", actReg.getCode())
+						.element("no", actReg.getRank())
+						.element("brief", actReg.getContent())
+						.element("Images",imgArry
+								)).toString();
+			}else
+				json = new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
 		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"获取失败\"";
-			json += "}";
+			json = new JSONObject().element("errorCode", "400").element("message", "获取失败").toString();
 			e.printStackTrace();
 		}	
 		response.setHeader("Cache-Control", "no-cache");
@@ -2312,7 +2316,6 @@ public class activitiesController {
 		try {
 			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -2333,7 +2336,8 @@ public class activitiesController {
 			.element("errorCode", "200")
 			.element("message", "获取成功")
 			.element("content", new JSONObject()
-			.element("prompt", act.getActRegWords())).toString();  //活动报名话术
+			.element("prompt", 
+					CommonData.GlobalData.DEBUG_MODE ? "活动报名话术" : act.getActRegWords())).toString();  //活动报名话术
 		}catch(Exception e){
 			json = new JSONObject()
 			.element("errorCode", "400")
@@ -2359,16 +2363,22 @@ public class activitiesController {
 	public void saveActivitiesRegistration(HttpServletRequest request, HttpServletResponse response, BusinessActRegQuery query) {
 		String json = "";
 		try{
-			if (businessActRegService.findAllPage(query).getList().size() == 0 )
+			Map<String, Object> parm = new HashMap<String, Object>();
+			
+			parm.put("userId", query.getUserId());
+			parm.put("actId", query.getActId());
+			
+			if ( CollectionUtils.isEmpty(businessActRegService.findByMap(parm)) )
 			{
 				ManageEstate est = manageEstateService.findById(query.getEstateId());
+				AppUser bu =   appUserService.findById(new Integer(query.getUserId()));
 				BusinessActReg actReg = new BusinessActReg();
 				actReg.setUserId(query.getUserId());
 				actReg.setActId(query.getActId());
 				actReg.setEstateId(query.getEstateId());
 				actReg.setEstateName(est.getEstateName());
-				actReg.setDesc(query.getDesc());
-				actReg.setNickName("");
+				actReg.setContent(query.getContent());
+				actReg.setNickName(CommonData.GlobalData.DEBUG_MODE ? "昵称" : bu.getNickname());
 				actReg.setAvatar("");
 				actReg.setRegTime(new Timestamp(new Date().getTime()));
 				actReg.setFlag(CommonData.GlobalData.RET_VERIFY);
@@ -2378,7 +2388,7 @@ public class activitiesController {
 				int regId =businessActRegService.save(actReg);
 				
 				Map<String, Object> map = new HashMap<String, Object>();
-				map.put("regId", regId);  
+				map.put("regId", actReg.getRegId());  
 				map.put("actId", query.getActId());
 				int cnt = businessActRegService.cntFront(map)+1;  // code = cnt+1
 				map.put("code", cnt);
@@ -2386,12 +2396,12 @@ public class activitiesController {
 				businessActRegService.updateCode(map);
 				
 				/**图片数组*/
-				String images = request.getParameter("images");
+				String images = request.getParameter("Images");
 				if (StringUtils.isNotBlank(images))
 				{
 					String[] imgArry = images.split(",");
 					for(String img : imgArry)
-					{
+					{ 
 						BusinessRegPic regPic = new BusinessRegPic();
 						regPic.setRegId(regId);
 						regPic.setPicUrl(img);
@@ -2406,13 +2416,12 @@ public class activitiesController {
 		}catch(Exception e){
 			json = new JSONObject().element("errorCode", "400").element("message", "报名失败").toString();
 			e.printStackTrace();
-		}	
+		}
 		response.setHeader("Cache-Control", "no-cache");
 		response.setCharacterEncoding("utf-8");
 		try {
 			response.getWriter().write(JsonUtils.stringToJson(json));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

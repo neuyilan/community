@@ -9,7 +9,7 @@ public interface CommonData {
 
 	public interface GlobalData {
 		/** DEV DEBUG 模式 */
-		public final static boolean DEBUG_MODE = true;
+		public final static boolean DEBUG_MODE = false;
 		/**返回值 0 成功*/
 		public final static int RET_SUCCESS = 0;
 		/**返回值 1 失败*/

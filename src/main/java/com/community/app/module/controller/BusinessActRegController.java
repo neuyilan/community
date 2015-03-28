@@ -63,7 +63,7 @@ public class BusinessActRegController {
 			    .append("\"nickName\":\"").append(businessActReg.getNickName()).append("\"").append(",")
 			    .append("\"avatar\":\"").append(businessActReg.getAvatar()).append("\"").append(",")
 			    .append("\"code\":\"").append(businessActReg.getCode()).append("\"").append(",")
-			    .append("\"desc\":\"").append(businessActReg.getDesc()).append("\"").append(",")
+			    .append("\"content\":\"").append(businessActReg.getContent()).append("\"").append(",")
 			    .append("\"actId\":\"").append(businessActReg.getActId()).append("\"").append(",")
 			    .append("\"votes\":\"").append(businessActReg.getVotes()).append("\"").append(",")
 			    .append("\"regTime\":\"").append(businessActReg.getRegTime()).append("\"").append(",")
@@ -120,7 +120,7 @@ public class BusinessActRegController {
 		    businessActReg.setNickName(query.getNickName());
 		    businessActReg.setAvatar(query.getAvatar());
 		    businessActReg.setCode(query.getCode());
-		    businessActReg.setDesc(query.getDesc());
+		    businessActReg.setContent(query.getContent());
 		    businessActReg.setActId(query.getActId());
 		    businessActReg.setVotes(query.getVotes());
 		    businessActReg.setRegTime(query.getRegTime());
@@ -178,7 +178,7 @@ public class BusinessActRegController {
 		    businessActReg.setNickName(query.getNickName());
 		    businessActReg.setAvatar(query.getAvatar());
 		    businessActReg.setCode(query.getCode());
-		    businessActReg.setDesc(query.getDesc());
+		    businessActReg.setContent(query.getContent());
 		    businessActReg.setActId(query.getActId());
 		    businessActReg.setVotes(query.getVotes());
 		    businessActReg.setRegTime(query.getRegTime());

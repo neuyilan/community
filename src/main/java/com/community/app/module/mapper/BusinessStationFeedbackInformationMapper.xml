@@ -4,46 +4,49 @@
 <mapper namespace="com.community.app.module.dao.BusinessStationFeedbackInformationDao" >
 	<!-- 返回结构集 -->
 	<resultMap id="BusinessStationFeedbackInformationResult" type="BusinessStationFeedbackInformation">
-			<result column="inforId" property="inforId" />
-			<result column="feedId" property="feedId" />
-			<result column="userId" property="userId" />
-			<result column="feedTime" property="feedTime" />
-			<result column="source" property="source" />
-			<result column="flag" property="flag" />
+		<result column="inforId" property="inforId" />
+		<result column="feedId" property="feedId" />
+		<result column="userId" property="userId" />
+		<result column="feedTime" property="feedTime" />
+		<result column="source" property="source" />
+		<result column="flag" property="flag" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
-			inforId,
-			feedId,
-			userId,
-			feedTime,
-			source,
-			flag
+		bsfi.inforId,
+		bsfi.feedId,
+		bsfi.userId,
+		bsfi.feedTime,
+		bsfi.source,
+		bsfi.flag
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-					<if test="inforId != null and inforId != ''" >
-				   		and inforId = #{inforId}
-					</if>
-					<if test="feedId != null and feedId != ''" >
-				   		and feedId = #{feedId}
-					</if>
-					<if test="userId != null and userId != ''" >
-				   		and userId = #{userId}
-					</if>
-					<if test="feedTime != null and feedTime != ''" >
-				   		and feedTime = #{feedTime}
-					</if>
-					<if test="source != null and source != ''" >
-				   		and source = #{source}
-					</if>
-					<if test="flag != null and flag != ''" >
-				   		and flag = #{flag}
-					</if>
+				<if test="inforId != null and inforId != ''" >
+			   		and bsfi.inforId = #{inforId}
+				</if>
+				<if test="feedId != null and feedId != ''" >
+			   		and bsfi.feedId = #{feedId}
+				</if>
+				<if test="userId != null and userId != ''" >
+			   		and bsfi.userId = #{userId}
+				</if>
+				<if test="feedTime != null and feedTime != ''" >
+			   		and bsfi.feedTime = #{feedTime}
+				</if>
+				<if test="source != null and source != ''" >
+			   		and bsfi.source = #{source}
+				</if>
+				<if test="flag != null and flag != ''" >
+			   		and bsfi.flag = #{flag}
+				</if>
+				<if test="keyWord != null and keyWord != ''" >
+			   		and (u.tel like '%${keyWord}%' or u.nickname like '%${keyWord}%' or u.realname like '%${keyWord}%')
+				</if>
 			</trim>
 		</where>
 	</sql>
@@ -60,17 +63,18 @@
 	
 	<!-- 按Map对象条件查询所有BusinessStationFeedbackInformation -->
 	<select id="findByMap" resultMap="BusinessStationFeedbackInformationResult" parameterType="java.util.Map">
-		select <include refid="Base_Column_List" /> from business_station_feedback_information <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_station_feedback_information bsfi <include refid="Base_Where_Clause" />
 	</select>
 	
 	<!-- 按VO对象条件查询所有BusinessStationFeedbackInformation -->
 	<select id="findByExample" resultMap="BusinessStationFeedbackInformationResult" parameterType="com.community.app.module.vo.BusinessStationFeedbackInformationQuery">
-		select <include refid="Base_Column_List" /> from business_station_feedback_information <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_station_feedback_information bsfi <include refid="Base_Where_Clause" />
 	</select>
 	
 	<!-- BusinessStationFeedbackInformation根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessStationFeedbackInformationResult" parameterType="Object">
-		select <include refid="Base_Column_List" /> from business_station_feedback_information  
+		select <include refid="Base_Column_List" />, u.nickname, u.realname, u.tel from business_station_feedback_information bsfi
+		inner join app_user u on bsfi.userId = u.userId 
 		<include refid="Base_Where_Clause" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
@@ -82,7 +86,8 @@
 	
 	<!-- BusinessStationFeedbackInformation列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_station_feedback_information 
+		select count(1) from business_station_feedback_information bsfi
+		inner join app_user u on bsfi.userId = u.userId 
 		<include refid="Base_Where_Clause" />
 	</select>
 	
@@ -92,14 +97,13 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_station_feedback_information(
-		
 		feedId,
 		userId,
 		feedTime,
 		source,
 		flag
 		) values(
-				#{feedId},
+		#{feedId},
 		#{userId},
 		#{feedTime},
 		#{source},
@@ -129,18 +133,11 @@
 		</set> 
 		where 
 		inforId=#{inforId}
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessStationFeedbackInformation删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_station_feedback_information where 
 		inforId=#{inforId}
-											</delete>
-	
+	</delete>
 </mapper>
-	

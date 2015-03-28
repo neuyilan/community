@@ -65,12 +65,13 @@ height: 19px;
 .more {color: #ababab;display: block;height: 20px;line-height: 20px;text-align: center; font-size:12px;border-top: 1px solid #e2e2e2;padding:10px 0;}
 
 .x-inp{ background:#fff; padding:10px; border-top:1px solid #dedbdb; text-align:center; position:fixed; bottom:0; left:0; right:0;}
-.x-inp .x-inc{ width:100%; height:33px;border-radius: 3px; opacity:0.3; color:#282828; font-size:14px;box-sizing:border-box;  -webkit-box-sizing:border-box;padding:0 0 0 8px;}
-.x-inp div{ width:100%; display:table;}
-.x-inp div span{display:table-cell; height:33px;vertical-align:top;}
-.x-inp div span:nth-child(1){  padding-right:4px;}
-.x-inp div span:nth-child(2){ width:42px;}
-.x-inp input[type=button]{ height:33px; border-radius:3px; width:46px;background:url(../images/sent.png) no-repeat center center #f9c487; background-size:21px 20px; -webkit-background-size:21px 20px; box-sizing:border-box; -webkit-box-sizing:border-box;}
+.x-inp .x-inc{ width:100%; height:33px;border-radius: 3px; opacity:0.3; color:#282828; font-size:14px;box-sizing:border-box;  -webkit-box-sizing:border-box;padding:0 0 0 8px;border:none;}
+.x-inp .tab{ width:100%; display:table;}
+.x-inp .tab span{display:table-cell; height:33px;vertical-align:top;}
+.x-inp .tab span:nth-child(2){  padding: 0 4px;}
+.x-inp .tab span:nth-child(3){ width:42px;}
+.x-inp input[type=button]{ height:33px; border-radius:3px; width:46px;background:url(../images/sent.png) no-repeat center center #f9c487; background-size:21px 20px; -webkit-background-size:21px 20px; box-sizing:border-box; -webkit-box-sizing:border-box;border:none}
+
 .tab{display:table;}
 .tleft{display:table-cell}
 
@@ -264,6 +265,51 @@ padding: 0 15px;
 
 .fxdown{ text-align:center;}
 .fxdown img{ max-width:100%; height:auto;}
+
+/*表情*/
+.scrollimg{ margin-bottom:220px;}
+.exbottom{ position:fixed; overflow:hidden; bottom:0; left:0; right:0; background-color:#d9dcdf; opacity:0; height:0;}
+.expression{ height:180px; position:relative; padding:10px 0;}
+.expression a{ display:block; float:left; margin:10px 0; width:14.2857%; text-align:center;}
+.expression img{ width:32px; height:32px;}
+.expression .delete img{ width:34px; height:32px;}
+.expagination{ position:absolute; bottom:10px; width:100%; text-align:center;}
+.expression .swiper-pagination-switch{background-color:#bbbbbb;}
+.expression .swiper-active-switch{ background-color:#6d6d6d; width:6px; height:6px;}
+
+.bl-inpfont i{ position:absolute; left:0; top:0;height:28px; width:28px; border-right:1px solid #b3b3b3;}
+.font-expre{ display:inline-block; background:url(/community/js/activity/arclist/bq.png) center center no-repeat; background-size:16px 16px; -webkit-background-size:16px 16px;}
+.x-inp i{ height:33px; width:33px; display:table-cell; border-radius:3px; background-color:#eeeeee;}
+
+.inpbottom{ position:static;}
+.ex-inp{ padding:0;}
+.ex-inp .tab{ padding:10px;}
+
+.ex-four img{ width:16px !important; height:16px !important; vertical-align:middle;}
+.inpbottom {
+    position: static;
+}
+.swiper-wrapper {
+    height: 100%;
+    overflow: hidden;
+    width: auto;
+}
+.swiper-slide {
+    height: 100%;
+    text-align: center;
+    width: 100%;
+}
+
+.swiper-pagination-switch {
+    background: none repeat scroll 0 0 #e7d4c4;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    height: 5px;
+    margin: 0 3px;
+    width: 5px;
+}
+
 
 
 

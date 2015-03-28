@@ -1,22 +1,32 @@
 package com.community.app.module.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import com.community.app.module.vo.BaseBean;
+
 
 import com.community.app.module.bean.BusinessVote;
 import com.community.app.module.service.BusinessVoteService;
-import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessVoteQuery;
+
 
 @Controller
 @RequestMapping("/business/businessVote")
@@ -24,6 +34,8 @@ public class BusinessVoteController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessVoteController.class);
 	@Autowired
 	private BusinessVoteService businessVoteService;
+	
+	private final String LIST_ACTION = "redirect:/business/businessVote/list.do";
 	
 	/**
 	 * 进入管理页
@@ -58,7 +70,8 @@ public class BusinessVoteController {
 			    .append("\"voteId\":\"").append(businessVote.getVoteId()).append("\"").append(",")
 			    .append("\"regId\":\"").append(businessVote.getRegId()).append("\"").append(",")
 			    .append("\"userId\":\"").append(businessVote.getUserId()).append("\"").append(",")
-			    .append("\"vateTime\":\"").append(businessVote.getVateTime()).append("\"")
+			    .append("\"vateTime\":\"").append(businessVote.getVateTime()).append("\"").append(",")
+			    .append("\"actId\":\"").append(businessVote.getActId()).append("\"")
 				.append("}").append(",");
 			}
 			json = result.toString();
@@ -110,6 +123,7 @@ public class BusinessVoteController {
 		    businessVote.setRegId(query.getRegId());
 		    businessVote.setUserId(query.getUserId());
 		    businessVote.setVateTime(query.getVateTime());
+		    businessVote.setActId(query.getActId());
 			businessVoteService.save(businessVote);
 			//保存成功
 			json = "{\"success\":\"true\",\"message\":\"保存成功\"}";
@@ -162,6 +176,7 @@ public class BusinessVoteController {
 		    businessVote.setRegId(query.getRegId());
 		    businessVote.setUserId(query.getUserId());
 		    businessVote.setVateTime(query.getVateTime());
+		    businessVote.setActId(query.getActId());
 			businessVoteService.update(businessVote);
 			
 			json = "{\"success\":\"true\",\"message\":\"编辑成功\"}";
@@ -214,4 +229,5 @@ public class BusinessVoteController {
 			e.printStackTrace();
 		}
 	}
+	
 }

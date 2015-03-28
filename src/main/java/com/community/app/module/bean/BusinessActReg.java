@@ -21,7 +21,7 @@ public class BusinessActReg implements java.io.Serializable{
 	private java.lang.String nickName;
 	private java.lang.String avatar;
 	private java.lang.Integer code;
-	private java.lang.String desc;
+	private java.lang.String content;
 	private java.lang.Integer actId;
 	private java.lang.Integer votes;
 	private java.sql.Timestamp regTime;
@@ -72,12 +72,12 @@ public class BusinessActReg implements java.io.Serializable{
 	public java.lang.Integer getCode() {
 		return this.code;
 	}
-	public void setDesc(java.lang.String value) {
-		this.desc = value;
+	public void setContent(java.lang.String value) {
+		this.content = value;
 	}
 	
-	public java.lang.String getDesc() {
-		return this.desc;
+	public java.lang.String getContent() {
+		return this.content;
 	}
 	public void setActId(java.lang.Integer value) {
 		this.actId = value;
@@ -117,7 +117,7 @@ public class BusinessActReg implements java.io.Serializable{
 			.append("NickName",getNickName())
 			.append("Avatar",getAvatar())
 			.append("Code",getCode())
-			.append("Desc",getDesc())
+			.append("Content", getContent())
 			.append("ActId",getActId())
 			.append("Votes",getVotes())
 			.append("RegTime",getRegTime())

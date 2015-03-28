@@ -79,7 +79,7 @@ public interface BusinessStationFeedbackDao {
 	 * @param entity
 	 * @throws DaoException
 	 */
-	public void save(final BusinessStationFeedback entity) throws DaoException;
+	public int save(final BusinessStationFeedback entity) throws DaoException;
 	
 	/**
 	 * 修改BusinessStationFeedback数据

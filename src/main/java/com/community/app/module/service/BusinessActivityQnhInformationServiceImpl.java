@@ -146,14 +146,17 @@ public class BusinessActivityQnhInformationServiceImpl implements BusinessActivi
 		int count=0;
 		BaseBean baseBean = new BaseBean();
 		try {
-			list=businessActivityQnhInformationDao.findAllPage(query);
 			count=businessActivityQnhInformationDao.selectCount(query);
+			query.setCount(count);
+			list=businessActivityQnhInformationDao.findAllPage(query);
 		} catch (DaoException e) {
 			logger.debug("BusinessActivityQnhInformationServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
 			e.printStackTrace();
 		}
 		baseBean.setList(list);
 		baseBean.setCount(count);
+		baseBean.setRows(query.getRows());
+		baseBean.setPage(query.getPage());
 		return baseBean;
 	}
 	

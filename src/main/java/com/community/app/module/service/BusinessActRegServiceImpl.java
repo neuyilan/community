@@ -265,7 +265,6 @@ public class BusinessActRegServiceImpl implements BusinessActRegService {
 	 * @return
 	 */
 	public void updateCode(Map<String, Object> map) throws ServiceException {
-		// TODO Auto-generated method stub
 		try {
 		    businessActRegDao.updateCode(map);
 		} catch (DaoException e) {
@@ -317,6 +316,17 @@ public class BusinessActRegServiceImpl implements BusinessActRegService {
 		baseBean.setList(list);
 		baseBean.setCount(count);
 		return baseBean;
+	}
+
+
+
+	public void updateVotes(Map<String, Object> map) throws ServiceException {
+		try {
+		    businessActRegDao.updateVotes(map);
+		} catch (DaoException e) {
+			logger.debug("BusinessActRegServiceImpl cntFront()：修改当前的选手的code 发生错误！", e);
+			e.printStackTrace();
+		}		
 	}
 	
 }

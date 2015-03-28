@@ -7,7 +7,6 @@ package com.community.framework.utils.testfilter.src.com.gao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;

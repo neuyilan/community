@@ -19,6 +19,15 @@ public class BusinessActivityQnhInformationQuery extends BaseBean {
 	private java.sql.Timestamp editTime;
 	private java.lang.String editor;
 	private java.lang.String ID;
+	private String keyWord;
+
+	public String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
+	}
 
 	public java.lang.String getID() {
 		return ID;

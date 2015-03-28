@@ -24,6 +24,9 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,10 +41,14 @@ import com.community.app.module.bean.AppUserNews;
 import com.community.app.module.bean.BusinessAnno;
 import com.community.app.module.bean.BusinessAnnoComment;
 import com.community.app.module.bean.BusinessAnnoSupport;
+import com.community.app.module.bean.BusinessCommunity;
 import com.community.app.module.bean.BusinessFeedback;
 import com.community.app.module.bean.BusinessStation;
+import com.community.app.module.bean.BusinessStationFeedback;
+import com.community.app.module.bean.BusinessStationFeedbackInformation;
 import com.community.app.module.bean.BusinessStationMessage;
 import com.community.app.module.bean.BusinessUser;
+import com.community.app.module.bean.ManageEstate;
 import com.community.app.module.service.AppLatestNewsService;
 import com.community.app.module.service.AppStatisticsClickService;
 import com.community.app.module.service.AppUserNewsService;
@@ -49,17 +56,22 @@ import com.community.app.module.service.AppUserService;
 import com.community.app.module.service.BusinessAnnoCommentService;
 import com.community.app.module.service.BusinessAnnoService;
 import com.community.app.module.service.BusinessAnnoSupportService;
+import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessFeedbackService;
+import com.community.app.module.service.BusinessStationFeedbackInformationService;
+import com.community.app.module.service.BusinessStationFeedbackService;
 import com.community.app.module.service.BusinessStationMessageService;
 import com.community.app.module.service.BusinessStationService;
 import com.community.app.module.service.BusinessStationServiceService;
 import com.community.app.module.service.BusinessUserService;
+import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.AppLatestNewsQuery;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessAnnoCommentQuery;
 import com.community.app.module.vo.BusinessAnnoQuery;
 import com.community.app.module.vo.BusinessAnnoSupportQuery;
 import com.community.app.module.vo.BusinessFeedbackQuery;
+import com.community.app.module.vo.BusinessStationFeedbackInformationQuery;
 import com.community.app.module.vo.BusinessStationMessageQuery;
 import com.community.app.module.vo.BusinessStationQuery;
 import com.community.app.module.vo.BusinessStationServiceQuery;
@@ -97,7 +109,14 @@ public class StationController {
 	private AppStatisticsClickService appStatisticsClickService;
 	@Autowired
 	private BusinessStationMessageService businessStationMessageService;
-	
+	@Autowired
+	private BusinessStationFeedbackInformationService businessStationFeedbackInformationService; 
+	@Autowired
+	private BusinessStationFeedbackService businessStationFeedbackService; 
+	@Autowired
+	private ManageEstateService manageEstateService;
+	@Autowired
+	private BusinessCommunityService businessCommunityService;
 	
 	/**
 	 * 用户查看所属服务驿站信息
@@ -1534,23 +1553,54 @@ public class StationController {
 	 * json
 	 */
 	@RequestMapping(value="getStationFeedbackCount")
-	public void getStationFeedbackCount(HttpServletRequest request, HttpServletResponse response) {
+	public void getStationFeedbackCount(HttpServletRequest request, HttpServletResponse response,
+			BusinessStationFeedbackInformationQuery query) {
 		String json = "";
 		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"获取成功\",";
-			json += "\"content\":{";
-			json += "\"count\":\"22\",";
-			json += "\"state\":\"1\"";
-			json += "}";
-			json += "}";
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("estateId", request.getParameter("estateId"));
+			
+			Map<String,Object> map2 = new HashMap<String,Object>();
+			map2.put("userId", query.getUserId());
+			
+			List<BusinessStationFeedback> hasf = businessStationFeedbackService.findByMap(paramMap);
+			
+			int feedId = 0;
+			int cnt = 0;		//默认 总数0条
+			String state = "1";	//未投票
+			if (CollectionUtils.isEmpty(hasf))
+			{
+				ManageEstate est = manageEstateService.findById(Integer.valueOf(request.getParameter("estateId")));
+				BusinessCommunity bc = businessCommunityService.findById(est.getComId());
+				BusinessStationFeedback sfb = new BusinessStationFeedback();
+				sfb.setComId(bc.getComId());
+				sfb.setComName(bc.getComName());
+				sfb.setEstateId(est.getEstateId());
+				sfb.setEstateName(est.getEstateName());
+				sfb.setTotalPoll(0);
+				sfb.setState(0);
+				 businessStationFeedbackService.save(sfb);
+				 feedId = sfb.getFeedId();
+			}else
+			{
+				query.setFeedId(hasf.get(0).getFeedId());
+				query.setUserId(null);
+				cnt = businessStationFeedbackInformationService.selectCount(query);
+				map2.put("feedId", hasf.get(0).getFeedId());
+				List<BusinessStationFeedbackInformation> hasfi = businessStationFeedbackInformationService.findByMap(map2);
+				state = CollectionUtils.isNotEmpty(hasfi)? "2" : "1";
+			}
+			json = new JSONObject().element("errorCode", "200")
+					.element("message", "获取成功")
+					.element("content", new JSONObject()
+					.element("count", cnt)
+					.element("state", state)).toString();
+			
 		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"获取失败\"";
-			json += "}";
+			json = new JSONObject()
+			.element("errorCode", "400")
+			
+			.element("message", "获取失败").toString();
 			e.printStackTrace();
 		}	
 		response.setHeader("Cache-Control", "no-cache");
@@ -1570,19 +1620,33 @@ public class StationController {
 	 * json
 	 */
 	@RequestMapping(value="saveFeedbackInformation")
-	public void saveFeedbackInformation(HttpServletRequest request, HttpServletResponse response) {
+	public void saveFeedbackInformation(HttpServletRequest request, HttpServletResponse response
+			,BusinessFeedbackQuery query) {
 		String json = "";
 		try{
-			json += "{";
-			json += "\"errorCode\":\"200\",";
-			json += "\"message\":\"投票成功\"";
-			json += "}";
+			
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("estateId", query.getEstateId());
+			
+			List<BusinessStationFeedback> hasfi = businessStationFeedbackService.findByMap(paramMap);
+			
+			int feedId =  hasfi.get(0).getFeedId();
+			BusinessStationFeedbackInformation  fi = new BusinessStationFeedbackInformation();
+			fi.setFeedId(feedId);
+			fi.setFeedTime(new Timestamp(new Date().getTime()));
+			fi.setSource(query.getType());
+			fi.setUserId(query.getUserId());
+			fi.setFlag(0);
+			businessStationFeedbackInformationService.save(fi);
+			
+			json = new JSONObject()
+			.element("errorCode", "200")
+			.element("message", "投票成功").toString();
+			
 		}catch(Exception e){
-			json = "";
-			json += "{";
-			json += "\"errorCode\":\"400\",";
-			json += "\"message\":\"投票失败\"";
-			json += "}";
+			json = new JSONObject()
+			.element("errorCode", "400")
+			.element("message", "获取失败").toString();
 			e.printStackTrace();
 		}	
 		response.setHeader("Cache-Control", "no-cache");

@@ -13,7 +13,11 @@ public class BusinessStationFeedbackInformationQuery extends BaseBean {
 	private java.sql.Timestamp feedTime;
 	private java.lang.Integer source;
 	private java.lang.Integer flag;
-
+	private String keyWord;
+	private String nickName;
+	private String realName;
+	private String tel;
+	
 	public BusinessStationFeedbackInformationQuery(
 			BusinessStationFeedbackInformation businessStationFeedbackInformation) {
 		this.inforId = businessStationFeedbackInformation.getInforId();
@@ -26,6 +30,38 @@ public class BusinessStationFeedbackInformationQuery extends BaseBean {
 
 	public BusinessStationFeedbackInformationQuery() {
 
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getTel() {
+		return tel;
+	}
+
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+
+	public String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
 	}
 
 	public java.lang.Integer getInforId() {
