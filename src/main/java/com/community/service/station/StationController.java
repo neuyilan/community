@@ -1583,23 +1583,27 @@ public class StationController {
 				 feedId = sfb.getFeedId();
 			}else
 			{
-				query.setFeedId(hasf.get(0).getFeedId());
-				query.setUserId(null);
-				cnt = businessStationFeedbackInformationService.selectCount(query);
-				map2.put("feedId", hasf.get(0).getFeedId());
-				List<BusinessStationFeedbackInformation> hasfi = businessStationFeedbackInformationService.findByMap(map2);
-				state = CollectionUtils.isNotEmpty(hasfi)? "2" : "1";
+//				query.setFeedId(hasf.get(0).getFeedId());
+//				query.setUserId(null);
+//				cnt = businessStationFeedbackInformationService.selectCount(query);
+				cnt = hasf.get(0).getTotalPoll();
+				if (query.getUserId() != 0)
+				{
+					map2.put("feedId", hasf.get(0).getFeedId());
+					List<BusinessStationFeedbackInformation> hasfi = businessStationFeedbackInformationService.findByMap(map2);
+					state = CollectionUtils.isNotEmpty(hasfi)? "2" : "1";
+				}/*else //外有1
+					state = "1";*/
+
 			}
 			json = new JSONObject().element("errorCode", "200")
 					.element("message", "获取成功")
 					.element("content", new JSONObject()
 					.element("count", cnt)
 					.element("state", state)).toString();
-			
 		}catch(Exception e){
 			json = new JSONObject()
 			.element("errorCode", "400")
-			
 			.element("message", "获取失败").toString();
 			e.printStackTrace();
 		}	
@@ -1629,8 +1633,8 @@ public class StationController {
 			paramMap.put("estateId", query.getEstateId());
 			
 			List<BusinessStationFeedback> hasfi = businessStationFeedbackService.findByMap(paramMap);
-			
-			int feedId =  hasfi.get(0).getFeedId();
+			BusinessStationFeedback sf = hasfi.get(0);
+			int feedId =  sf.getFeedId();
 			BusinessStationFeedbackInformation  fi = new BusinessStationFeedbackInformation();
 			fi.setFeedId(feedId);
 			fi.setFeedTime(new Timestamp(new Date().getTime()));
@@ -1638,7 +1642,8 @@ public class StationController {
 			fi.setUserId(query.getUserId());
 			fi.setFlag(0);
 			businessStationFeedbackInformationService.save(fi);
-			
+			sf.setTotalPoll(sf.getTotalPoll()+1);
+			businessStationFeedbackService.update(hasfi.get(0));
 			json = new JSONObject()
 			.element("errorCode", "200")
 			.element("message", "投票成功").toString();

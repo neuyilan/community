@@ -29,10 +29,10 @@
 				<if test="inforId != null and inforId != ''" >
 			   		and bsfi.inforId = #{inforId}
 				</if>
-				<if test="feedId != null and feedId != ''" >
+				<if test="feedId != null" >
 			   		and bsfi.feedId = #{feedId}
 				</if>
-				<if test="userId != null and userId != ''" >
+				<if test="userId != null" >
 			   		and bsfi.userId = #{userId}
 				</if>
 				<if test="feedTime != null and feedTime != ''" >
