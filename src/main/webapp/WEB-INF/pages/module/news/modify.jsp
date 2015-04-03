@@ -223,8 +223,8 @@
                     <p>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="0" <c:if test='${businessNews.isRecommend==0}'>checked="checked"</c:if> >&nbsp;首页焦点图</label>
                         <em style="color:#000;">将推送至焦点图管理列表，在焦点图管理中进行焦点图制作上传，审核通过后发布至焦点图位置</em><br><br>
-                        <label><input class="radiostyle" type="radio" name="isRecommend" value="3" <c:if test='${businessNews.isRecommend==3}'>checked="checked"</c:if> >&nbsp;首页全网焦点图</label>
-                        <em style="color: #000;">　将推送至全网焦点图管理列表，在全网焦点图管理中进行全网焦点图制作上传，审核通过后发布至全网焦点图位置</em><br><br>
+                        <label><input class="radiostyle" type="radio" name="isRecommend" value="3" <c:if test='${businessNews.isRecommend==3}'>checked="checked"</c:if> >&nbsp;首页广告焦点图</label>
+                        <em style="color: #000;">　将推送至广告焦点图管理列表，在广告焦点图管理中进行广告焦点图制作上传，审核通过后发布至广告焦点图位置</em><br><br>
                         <%-- <label><input class="radiostyle" type="radio" name="isRecommend" value="1" <c:if test='${businessNews.isRecommend==1}'>checked="checked"</c:if> >&nbsp;首页新鲜事列表置顶<br><br></label> --%>
                         <label><input class="radiostyle" type="radio" name="isRecommend" value="2" <c:if test='${businessNews.isRecommend==2}'>checked="checked"</c:if> >&nbsp;以上都不选</label><br>
                     </p>

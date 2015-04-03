@@ -5,13 +5,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+public class BusinessActReg implements java.io.Serializable {
 
-public class BusinessActReg implements java.io.Serializable{
-
-	
 	private static final long serialVersionUID = -2876496547488181892L;
 
-	//别名
+	// 别名
 	public static final String TABLE_ALIAS = "BusinessActReg";
 
 	private java.lang.Integer regId;
@@ -27,118 +25,154 @@ public class BusinessActReg implements java.io.Serializable{
 	private java.sql.Timestamp regTime;
 	private java.lang.Integer rank;
 	private Integer flag;
-
-	public BusinessActReg(){
+	private Integer count;
+	private java.lang.String realName;
+	private java.lang.String tel;
+	private java.lang.String picUrl;
+	
+	public java.lang.String getPicUrl() {
+		return picUrl;
 	}
 
-	public BusinessActReg(
-		java.lang.Integer regId
-	){
+	public void setPicUrl(java.lang.String picUrl) {
+		this.picUrl = picUrl;
+	}
+
+	public java.lang.String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(java.lang.String realName) {
+		this.realName = realName;
+	}
+
+	public java.lang.String getTel() {
+		return tel;
+	}
+
+	public void setTel(java.lang.String tel) {
+		this.tel = tel;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+	public BusinessActReg() {
+	}
+
+	public BusinessActReg(java.lang.Integer regId) {
 		this.regId = regId;
 	}
 
 	public void setRegId(java.lang.Integer value) {
 		this.regId = value;
 	}
-	
+
 	public java.lang.Integer getRegId() {
 		return this.regId;
 	}
+
 	public void setUserId(java.lang.Integer value) {
 		this.userId = value;
 	}
-	
+
 	public java.lang.Integer getUserId() {
 		return this.userId;
 	}
+
 	public void setNickName(java.lang.String value) {
 		this.nickName = value;
 	}
-	
+
 	public java.lang.String getNickName() {
 		return this.nickName;
 	}
+
 	public void setAvatar(java.lang.String value) {
 		this.avatar = value;
 	}
-	
+
 	public java.lang.String getAvatar() {
 		return this.avatar;
 	}
+
 	public void setCode(java.lang.Integer value) {
 		this.code = value;
 	}
-	
+
 	public java.lang.Integer getCode() {
 		return this.code;
 	}
+
 	public void setContent(java.lang.String value) {
 		this.content = value;
 	}
-	
+
 	public java.lang.String getContent() {
 		return this.content;
 	}
+
 	public void setActId(java.lang.Integer value) {
 		this.actId = value;
 	}
-	
+
 	public java.lang.Integer getActId() {
 		return this.actId;
 	}
+
 	public void setVotes(java.lang.Integer value) {
 		this.votes = value;
 	}
-	
+
 	public java.lang.Integer getVotes() {
 		return this.votes;
 	}
+
 	public void setRegTime(java.sql.Timestamp value) {
 		this.regTime = value;
 	}
-	
+
 	public java.sql.Timestamp getRegTime() {
 		return this.regTime;
 	}
+
 	public void setFlag(Integer value) {
 		this.flag = value;
 	}
-	
+
 	public Integer getFlag() {
 		return this.flag;
 	}
 
 	public String toString() {
-		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-			.append("RegId",getRegId())
-			.append("UserId",getUserId())
-			.append("EstateId", getEstateId())
-			.append("EstateName", getEstateName())
-			.append("NickName",getNickName())
-			.append("Avatar",getAvatar())
-			.append("Code",getCode())
-			.append("Content", getContent())
-			.append("ActId",getActId())
-			.append("Votes",getVotes())
-			.append("RegTime",getRegTime())
-			.append("Flag",getFlag())
-			.append("Rank", getRank())
-			.toString();
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("RegId", getRegId()).append("UserId", getUserId())
+				.append("EstateId", getEstateId())
+				.append("EstateName", getEstateName())
+				.append("NickName", getNickName())
+				.append("Avatar", getAvatar()).append("Code", getCode())
+				.append("Content", getContent()).append("ActId", getActId())
+				.append("Votes", getVotes()).append("RegTime", getRegTime())
+				.append("Flag", getFlag()).append("Rank", getRank()).toString();
 	}
-	
+
 	public int hashCode() {
-		return new HashCodeBuilder()
-			.append(getRegId())
-			.toHashCode();
+		return new HashCodeBuilder().append(getRegId()).toHashCode();
 	}
-	
+
 	public boolean equals(Object obj) {
-		if(obj instanceof BusinessActReg == false) return false;
-		if(this == obj) return true;
-		BusinessActReg other = (BusinessActReg)obj;
-		return new EqualsBuilder()
-			.append(getRegId(),other.getRegId())
-			.isEquals();
+		if (obj instanceof BusinessActReg == false)
+			return false;
+		if (this == obj)
+			return true;
+		BusinessActReg other = (BusinessActReg) obj;
+		return new EqualsBuilder().append(getRegId(), other.getRegId())
+				.isEquals();
 	}
 
 	public java.lang.Integer getEstateId() {
@@ -165,4 +199,3 @@ public class BusinessActReg implements java.io.Serializable{
 		this.rank = rank;
 	}
 }
-

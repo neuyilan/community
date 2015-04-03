@@ -145,14 +145,18 @@ public class BusinessVoteServiceImpl implements BusinessVoteService {
 		int count=0;
 		BaseBean baseBean = new BaseBean();
 		try {
-			list=businessVoteDao.findAllPage(query);
 			count=businessVoteDao.selectCount(query);
+			query.setCount(count);
+			list=businessVoteDao.findAllPage(query);
 		} catch (DaoException e) {
 			logger.debug("BusinessVoteServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
 			e.printStackTrace();
 		}
 		baseBean.setList(list);
 		baseBean.setCount(count);
+		baseBean.setRows(query.getRows());
+		baseBean.setPage(query.getPage());
+		
 		return baseBean;
 	}
 	
@@ -220,9 +224,7 @@ public class BusinessVoteServiceImpl implements BusinessVoteService {
 		}
 		return false;
 	}
-
-
-
+	
 	public List<BusinessVote> findTodayVotesByMap(Map<String, Object> map)
 			throws ServiceException {
 		List<BusinessVote> list = new ArrayList<BusinessVote>() ;
@@ -233,8 +235,5 @@ public class BusinessVoteServiceImpl implements BusinessVoteService {
 			e.printStackTrace();
 		}
 		return list;
-	
-		
 	}
-	
 }

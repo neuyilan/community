@@ -69,6 +69,7 @@ import com.community.app.module.bean.BusinessActivityVoteOptions;
 import com.community.app.module.bean.BusinessFocus;
 import com.community.app.module.bean.BusinessFocusAd;
 import com.community.app.module.bean.BusinessOpertaion;
+import com.community.app.module.bean.BusinessPrize;
 import com.community.app.module.bean.BusinessUserResource;
 import com.community.app.module.bean.ShiroUser;
 import com.community.app.module.common.CommunityBean;
@@ -80,6 +81,7 @@ import com.community.app.module.service.AppHomepageScopeService;
 import com.community.app.module.service.AppHomepageService;
 import com.community.app.module.service.AppPushLogService;
 import com.community.app.module.service.AppUserService;
+import com.community.app.module.service.BusinessActRegService;
 import com.community.app.module.service.BusinessActivityCommentService;
 import com.community.app.module.service.BusinessActivityCouponService;
 import com.community.app.module.service.BusinessActivityParticipateService;
@@ -95,9 +97,11 @@ import com.community.app.module.service.BusinessCommunityService;
 import com.community.app.module.service.BusinessFocusAdService;
 import com.community.app.module.service.BusinessFocusService;
 import com.community.app.module.service.BusinessOpertaionService;
+import com.community.app.module.service.BusinessPrizeService;
 import com.community.app.module.service.BusinessUserResourceService;
 import com.community.app.module.service.ManageEstateService;
 import com.community.app.module.vo.BaseBean;
+import com.community.app.module.vo.BusinessActRegQuery;
 import com.community.app.module.vo.BusinessActivityCommentQuery;
 import com.community.app.module.vo.BusinessActivityParticipateQuery;
 import com.community.app.module.vo.BusinessActivityQnhInformationQuery;
@@ -159,6 +163,10 @@ public class BusinessActivityController {
 	private BusinessOpertaionService businessOpertaionService;
 	@Autowired
 	private BusinessActivityQnhInformationService businessActivityQnhInformationService;
+	@Autowired
+	private BusinessActRegService businessActRegService;
+	@Autowired
+	private BusinessPrizeService businessPrizeService;
 	
 	/**
 	 * 进入管理页
@@ -361,10 +369,10 @@ public class BusinessActivityController {
 				 Date dt = new Date(date.getTime()-1800000);
 				 businessActivity.setPublishDate(sfDate.format(sfDate.parse(query.getEndTime())));
 				 businessActivity.setPublishTime(sfTime.format(dt));
-	        } else {
-	        	businessActivity.setStartTime(query.getStartTime());
-				 businessActivity.setEndTime(query.getEndTime());
-	        }
+	        } /*else {
+	        	businessActivity.setStartTime(sdf.format(sdf.parse(query.getStartTime())));
+				businessActivity.setEndTime(sdf.format(sdf.parse(query.getEndTime())));
+	        }*/
 		    businessActivity.setEditor(getUser().getUserName());
 	        businessActivity.setIsImportant(0);
 	        businessActivity.setActScope(query.getActScope());
@@ -382,7 +390,7 @@ public class BusinessActivityController {
 			    businessActivity.setPublishTime(timeArr[1]);
 			    businessActivity.setRank(query.getRank());
 			    
-			    businessActivity.setStartTime(planTime);
+			    businessActivity.setStartTime(sdf.format(sdf.parse(planTime)));
 			    Date date = sdf.parse(planTime);
 				Date dt = new Date(date.getTime()+1800000);
 				businessActivity.setEndTime(sdf.format(dt));
@@ -409,7 +417,7 @@ public class BusinessActivityController {
 			    businessActivity.setPublishDate(timeArr[0]);
 			    businessActivity.setPublishTime(timeArr[1]);
 			    
-			    businessActivity.setStartTime(planTime);
+			    businessActivity.setStartTime(sdf.format(sdf.parse(planTime)));
 			    Date date = sdf.parse(planTime);
 				Date dt = new Date(date.getTime()+1800000);
 				businessActivity.setEndTime(sdf.format(dt));
@@ -422,12 +430,34 @@ public class BusinessActivityController {
 	        	businessActivity.setReportExcel(query.getReportExcel());
 	        } else if(query.getTypeId() == 5) {
 	        	String planTime = query.getEndTime();
-	        	businessActivity.setStartTime(query.getStartTime());
-	        	businessActivity.setEndTime(planTime);
-			    String[] timeArr = planTime.split(" ");
+	        	businessActivity.setStartTime(sdf.format(sdf.parse(query.getStartTime())));
+	        	businessActivity.setEndTime(sdf.format(sdf.parse(planTime)));
+			    SimpleDateFormat sfDate = new SimpleDateFormat("yyyy-MM-dd");
+			    SimpleDateFormat sfTime = new SimpleDateFormat("HH:mm");
+			    Date date = sdf.parse(query.getEndTime());
+			    Date dt = new Date(date.getTime()-1800000);
+			    businessActivity.setPublishDate(sfDate.format(sfDate.parse(query.getEndTime())));
+			    businessActivity.setPublishTime(sfTime.format(dt));
+			    /*String[] timeArr = planTime.split(" ");
 			    businessActivity.setPublishDate(timeArr[0]);
-			    businessActivity.setPublishTime(timeArr[1]);
+			    businessActivity.setPublishTime(timeArr[1]);*/
 	        	businessActivity.setTimeslot(query.getTimeslotStartTime()+ "~" + query.getTimeslotEndTime());
+	        } else if(query.getTypeId() == 6) {
+	        	businessActivity.setJptpTimeslotEndTime(sdf.format(sdf.parse(query.getJptpTimeslotEndTime())));
+	        	String planTime = query.getEndTime();
+	        	businessActivity.setStartTime(sdf.format(sdf.parse(query.getStartTime())));
+	        	businessActivity.setEndTime(sdf.format(sdf.parse(planTime)));
+			    SimpleDateFormat sfDate = new SimpleDateFormat("yyyy-MM-dd");
+			    SimpleDateFormat sfTime = new SimpleDateFormat("HH:mm");
+			    Date date = sdf.parse(query.getEndTime());
+			    Date dt = new Date(date.getTime()-1800000);
+			    businessActivity.setPublishDate(sfDate.format(sfDate.parse(query.getEndTime())));
+			    businessActivity.setPublishTime(sfTime.format(dt));
+			    //String[] timeArr = planTime.split(" ");
+			    /*businessActivity.setPublishDate(timeArr[0]);
+			    businessActivity.setPublishTime(timeArr[1]);*/
+			    businessActivity.setPrizeRules(query.getPrizeRules());
+			    businessActivity.setActRegWords(query.getActRegWords());
 	        }
 	        
 	        // 活动状态为定时发布时 设置定时发布时间 
@@ -538,7 +568,27 @@ public class BusinessActivityController {
     	                e.printStackTrace();
     	            }
     	        }
+            } else if(query.getTypeId() == 6) {
+            	if(query.getPrizeConcat() != null) {
+            		String[] prizeConcat = query.getPrizeConcat().substring(2).split("@@");
+            		for(int i=0; i<prizeConcat.length; i++) {
+            			String[] prize = prizeConcat[i].split("##");
+            			BusinessPrize businessPrize = new BusinessPrize();
+            			businessPrize.setActId(businessActivity.getActId());
+            			businessPrize.setPrizeImg(prize[0]);
+            			businessPrize.setAwardName(prize[1]);
+            			businessPrize.setPrizeName(prize[2]);
+            			businessPrize.setPrizeOrder(i+1);
+            			businessPrize.setRankStart(Integer.parseInt(prize[3]));
+            			businessPrize.setRankEnd(Integer.parseInt(prize[4]));
+            			businessPrize.setPrizeQuota((Integer.parseInt(prize[4])-Integer.parseInt(prize[3]))+1);
+            			businessPrize.setPrizeContent(prize[5]);
+            			
+            			businessPrizeService.save(businessPrize);
+            		}
+            	}
             }
+            	
             //活动范围 ： 针对社区和驿站的小区
             String scopeString = query.getActScope();
             String[] estateArr = scopeString.split(",");
@@ -606,7 +656,7 @@ public class BusinessActivityController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
 					for(int i=0;i<estateArr.length;i++) {
@@ -654,11 +704,11 @@ public class BusinessActivityController {
 				}
 				
 				//查询该小区下的userId, baiduId, channelId
-				List appUserList = appUserService.findUserPushIds(ids);
+				List<?> appUserList = appUserService.findUserPushIds(ids);
 				AppPushLog appPushLog = new AppPushLog();
 				String title = "OK家";
 				String description = "【活动】"+businessActivity.getActName();	
-				Map paramMap = new HashMap();
+				Map<String, Object> paramMap = new HashMap<String, Object>();
 				paramMap.put("messageType", 9);
 				paramMap.put("ID", businessActivity.getActId());
 				
@@ -690,7 +740,7 @@ public class BusinessActivityController {
 				if(businessActivity.getRecommend() == 0) {
 					state = "已发布-已推送-推荐到焦点图";
 				} else if(businessActivity.getRecommend() == 3) {
-					state = "已发布-已推送-推荐到全网焦点图";
+					state = "已发布-已推送-推荐到广告焦点图";
 				} else {
 					state = "已发布-已推送";
 				} 
@@ -733,9 +783,9 @@ public class BusinessActivityController {
         ModelAndView mav = new ModelAndView("/module/activity/modify");
         BusinessActivity businessActivity = businessActivityService.findById(query.getActId());
     	//保存公告范围
-  		Map paramMap = new HashMap();
+  		Map<String, Object> paramMap = new HashMap<String, Object>();
   		paramMap.put("actId", businessActivity.getActId());
-  		List list = businessActivityScopeService.findByMap(paramMap);
+  		List<?> list = businessActivityScopeService.findByMap(paramMap);
   		StringBuilder sb = new StringBuilder();
   		if(list.size() > 0){
   			for(int i=0;i<list.size();i++) {
@@ -768,10 +818,21 @@ public class BusinessActivityController {
   			String timeslot[] = businessActivity.getTimeslot().split("~");
   			businessActivity.setTimeslotStartTime(timeslot[0]);
   			businessActivity.setTimeslotEndTime(timeslot[1]);
+        } else if(businessActivity.getTypeId() == 6) {
+  			Map<String, Object> prizeMap = new HashMap<String, Object>();
+  			prizeMap.put("actId", query.getActId());
+  			List<BusinessPrize> prizeList = businessPrizeService.findByMap(prizeMap);
+  			String prizeConcat = "";
+  			for(int i=0; i<prizeList.size(); i++) {
+  				BusinessPrize businessPrize = prizeList.get(i);
+  				String prizeContent = JsonUtils.stringToJson(businessPrize.getPrizeContent().replace("\"", "\\\'").replaceAll("(\r?\n()+)", ""));
+  				prizeConcat += "@@"+businessPrize.getPrizeImg()+"##"+businessPrize.getAwardName()+"##"+businessPrize.getPrizeName()+"##"+businessPrize.getRankStart()+"##"+businessPrize.getRankEnd()+"##"+prizeContent;
+  			}
+  			mav.addObject("prizeConcat", prizeConcat);
         }
-  		Map map = new HashMap();
+  		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("actId", query.getActId());
-		List scopeList = businessActivityScopeService.findByMap(map);
+		List<BusinessActivityScope> scopeList = businessActivityScopeService.findByMap(map);
 		StringBuffer scopeStr = new StringBuffer();
 		for(int i=0; i<scopeList.size(); i++) {
 			BusinessActivityScope scopeBean = (BusinessActivityScope)scopeList.get(i);
@@ -806,13 +867,13 @@ public class BusinessActivityController {
 		    businessActivity.setActPic(query.getActPic());
 		    businessActivity.setActPicNo(query.getActPicNo());
 		    if(query.getActPic() != null && !"".equals(query.getActPic())) {
-		    	File file = new File(businessActivity.getActPic());
-		    	file.delete();
+		    	//File file = new File(businessActivity.getActPic());
+		    	//file.delete();
 		    	businessActivity.setActPic(query.getActPic());
 		    }
 		    if(query.getAppPic() != null && !"".equals(query.getAppPic())) {
-		    	File file = new File(businessActivity.getAppPic());
-		    	file.delete();
+		    	//File file = new File(businessActivity.getAppPic());
+		    	//file.delete();
 		    	businessActivity.setAppPic(query.getAppPic());
 		    }
 		    businessActivity.setUserType(query.getUserType());
@@ -822,8 +883,8 @@ public class BusinessActivityController {
 		    //businessActivity.setPublishDate(timeArr[0]);
 		    //businessActivity.setPublishTime(timeArr[1]);
 		    //businessActivity.setRank(query.getRank());
-		    businessActivity.setStartTime(query.getStartTime());
-		    businessActivity.setEndTime(query.getEndTime());
+		    //businessActivity.setStartTime(sdf.format(sdf.parse(query.getStartTime())));
+		    //businessActivity.setEndTime(sdf.format(sdf.parse(query.getEndTime())));
 		    businessActivity.setState(query.getState());
 		    businessActivity.setVisits(0);
 		    businessActivity.setComments(0);
@@ -845,10 +906,10 @@ public class BusinessActivityController {
 				 Date dt = new Date(date.getTime()-1800000);
 				 businessActivity.setPublishDate(sfDate.format(sfDate.parse(query.getEndTime())));
 				 businessActivity.setPublishTime(sfTime.format(dt));
-	        } else {
-	        	businessActivity.setStartTime(query.getStartTime());
-				 businessActivity.setEndTime(query.getEndTime());
-	        }
+	        } /*else {
+	        	businessActivity.setStartTime(sdf.format(sdf.parse(query.getStartTime())));
+				 businessActivity.setEndTime(sdf.format(sdf.parse(query.getEndTime())));
+	        }*/
 		    
 		    businessActivity.setEditor(getUser().getUserName());
 	        if(query.getActScope() != null && !"".equals(query.getActScope())) {
@@ -870,7 +931,7 @@ public class BusinessActivityController {
 			    businessActivity.setPublishDate(timeArr[0]);
 			    businessActivity.setPublishTime(timeArr[1]);
 			    
-			    businessActivity.setStartTime(planTime);
+			    businessActivity.setStartTime(sdf.format(sdf.parse(planTime)));
 			    Date date = sdf.parse(planTime);
 				Date dt = new Date(date.getTime()+1800000);
 				businessActivity.setEndTime(sdf.format(dt));
@@ -898,7 +959,7 @@ public class BusinessActivityController {
 			    businessActivity.setPublishDate(timeArr[0]);
 			    businessActivity.setPublishTime(timeArr[1]);
 			    
-			    businessActivity.setStartTime(planTime);
+			    businessActivity.setStartTime(sdf.format(sdf.parse(planTime)));
 			    Date date = sdf.parse(planTime);
 				Date dt = new Date(date.getTime()+1800000);
 				businessActivity.setEndTime(sdf.format(dt));
@@ -911,12 +972,34 @@ public class BusinessActivityController {
 	        	businessActivity.setReportExcel(query.getReportExcel());
 	        } else if(query.getTypeId() == 5) {
 	        	String planTime = query.getEndTime();
-	        	businessActivity.setStartTime(query.getStartTime());
-	        	businessActivity.setEndTime(planTime);
-			    String[] timeArr = planTime.split(" ");
+	        	businessActivity.setStartTime(sdf.format(sdf.parse(query.getStartTime())));
+	        	businessActivity.setEndTime(sdf.format(sdf.parse(planTime)));
+			    SimpleDateFormat sfDate = new SimpleDateFormat("yyyy-MM-dd");
+			    SimpleDateFormat sfTime = new SimpleDateFormat("HH:mm");
+			    Date date = sdf.parse(query.getEndTime());
+			    Date dt = new Date(date.getTime()-1800000);
+			    businessActivity.setPublishDate(sfDate.format(sfDate.parse(query.getEndTime())));
+			    businessActivity.setPublishTime(sfTime.format(dt));
+			    /*String[] timeArr = planTime.split(" ");
 			    businessActivity.setPublishDate(timeArr[0]);
-			    businessActivity.setPublishTime(timeArr[1]);
+			    businessActivity.setPublishTime(timeArr[1]);*/
 	        	businessActivity.setTimeslot(query.getTimeslotStartTime()+ "~" + query.getTimeslotEndTime());
+	        } else if(query.getTypeId() == 6) {
+	        	businessActivity.setJptpTimeslotEndTime(sdf.format(sdf.parse(query.getJptpTimeslotEndTime())));
+	        	String planTime = query.getEndTime();
+	        	businessActivity.setStartTime(sdf.format(sdf.parse(query.getStartTime())));
+	        	businessActivity.setEndTime(sdf.format(sdf.parse(planTime)));
+			    SimpleDateFormat sfDate = new SimpleDateFormat("yyyy-MM-dd");
+			    SimpleDateFormat sfTime = new SimpleDateFormat("HH:mm");
+			    Date date = sdf.parse(query.getEndTime());
+			    Date dt = new Date(date.getTime()-1800000);
+			    businessActivity.setPublishDate(sfDate.format(sfDate.parse(query.getEndTime())));
+			    businessActivity.setPublishTime(sfTime.format(dt));
+			    //String[] timeArr = planTime.split(" ");
+			    /*businessActivity.setPublishDate(timeArr[0]);
+			    businessActivity.setPublishTime(timeArr[1]);*/
+			    businessActivity.setPrizeRules(query.getPrizeRules());
+			    businessActivity.setActRegWords(query.getActRegWords());
 	        }
 	        
 	        // 活动状态为定时发布时 设置定时发布时间 
@@ -1032,6 +1115,28 @@ public class BusinessActivityController {
     	                e.printStackTrace();
     	            }
     	        }
+            } else if(query.getTypeId() == 6) {
+            	if(query.getPrizeConcat() != null) {
+            		boolean flag = businessPrizeService.delete(businessActivity.getActId());
+            		if(flag) {
+	            		String[] prizeConcat = query.getPrizeConcat().substring(2).split("@@");
+	            		for(int i=0; i<prizeConcat.length; i++) {
+	            			String[] prize = prizeConcat[i].split("##");
+	            			BusinessPrize businessPrize = new BusinessPrize();
+	            			businessPrize.setActId(businessActivity.getActId());
+	            			businessPrize.setPrizeImg(prize[0]);
+	            			businessPrize.setAwardName(prize[1]);
+	            			businessPrize.setPrizeName(prize[2]);
+	            			businessPrize.setPrizeOrder(i+1);
+	            			businessPrize.setRankStart(Integer.parseInt(prize[3]));
+	            			businessPrize.setRankEnd(Integer.parseInt(prize[4]));
+	            			businessPrize.setPrizeQuota((Integer.parseInt(prize[4])-Integer.parseInt(prize[3]))+1);
+	            			businessPrize.setPrizeContent(prize[5]);
+	            			
+	            			businessPrizeService.save(businessPrize);
+	            		}
+            		}
+            	}
             }
             
             //活动范围 ： 针对社区和驿站的小区
@@ -1039,9 +1144,9 @@ public class BusinessActivityController {
         	String[] estateArr = scopeString.split(",");
             if(query.getActScope() != null && !"".equals(query.getActScope())) {
             	//活动范围 ： 针对社区和驿站的小区 先删除之前的小区范围，然后重新插入
-    			Map paramMap = new HashMap();
+    			Map<String, Object> paramMap = new HashMap<String, Object>();
     			paramMap.put("actId", businessActivity.getActId());
-    			List scopeList = businessActivityScopeService.findByMap(paramMap);
+    			List<?> scopeList = businessActivityScopeService.findByMap(paramMap);
     			for(int i=0;i<scopeList.size();i++) {
     				BusinessActivityScope scope = (BusinessActivityScope) scopeList.get(i);
     				businessActivityScopeService.delete(scope.getActId());
@@ -1111,7 +1216,7 @@ public class BusinessActivityController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
 					for(int i=0;i<estateArr.length;i++) {
@@ -1159,12 +1264,12 @@ public class BusinessActivityController {
 				}
 				
 				//查询该小区下的userId, baiduId, channelId
-				List appUserList = appUserService.findUserPushIds(ids);
+				List<?> appUserList = appUserService.findUserPushIds(ids);
 				AppPushLog appPushLog = new AppPushLog();
 				String title = "OK家";
 				String description = "【活动】"+businessActivity.getActName();	
 				
-				Map paramMap = new HashMap();
+				Map<String, Object> paramMap = new HashMap<String, Object>();
 				paramMap.put("messageType", 9);
 				paramMap.put("ID", businessActivity.getActId());
 				
@@ -1196,7 +1301,7 @@ public class BusinessActivityController {
 				if(businessActivity.getRecommend() == 0) {
 					state = "已发布-已推送-推荐到焦点图";
 				} else if(businessActivity.getRecommend() == 3) {
-					state = "已发布-已推送-推荐到全网焦点图";
+					state = "已发布-已推送-推荐到广告焦点图";
 				} else {
 					state = "已发布-已推送";
 				} 
@@ -1260,7 +1365,7 @@ public class BusinessActivityController {
 						businessOpertaionService.save(entity);
 						
 						businessActivityScopeService.delete(new Integer(id));
-						Map paramMap = new HashMap();
+						Map<String, Object> paramMap = new HashMap<String, Object>();
 						paramMap.put("id", Integer.parseInt(id));
 						paramMap.put("type", 4);
 						List<AppHomepage> list = appHomepageService.findByMap(paramMap);
@@ -1272,7 +1377,7 @@ public class BusinessActivityController {
 						
 						if(businessActivity.getRecommend() != null) {
 							if(businessActivity.getRecommend() == 0) {
-								paramMap = new HashMap();
+								paramMap = new HashMap<String, Object>();
 								paramMap.put("sourceId", Integer.parseInt(id));
 								List<BusinessFocus> focusList = businessFocusService.findByMap(paramMap);
 								if(focusList.size() == 1) {
@@ -1280,16 +1385,16 @@ public class BusinessActivityController {
 									businessFocusService.delete(businessFocus.getFocusId());
 									
 									// 删除展示范围
-									paramMap = new HashMap();
+									paramMap = new HashMap<String, Object>();
 									paramMap.put("focusId", businessFocus.getFocusId());
-									List scopeList = appFocusScopeService.findByMap(paramMap);
+									List<?> scopeList = appFocusScopeService.findByMap(paramMap);
 									for(int i=0;i<scopeList.size();i++){
 										AppFocusScope appFocusScope = (AppFocusScope) scopeList.get(i);
 										appFocusScopeService.delete(appFocusScope.getScopeId());
 									}
 								}
 							} else if(businessActivity.getRecommend() == 3) {
-								paramMap = new HashMap();
+								paramMap = new HashMap<String, Object>();
 								paramMap.put("sourceId", Integer.parseInt(id));
 								List<BusinessFocusAd> focusAdList = businessFocusAdService.findByMap(paramMap);
 								if(focusAdList.size() == 1) {
@@ -1297,9 +1402,9 @@ public class BusinessActivityController {
 									businessFocusAdService.delete(businessFocusAd.getFocusAdId());
 									
 									// 删除展示范围
-									paramMap = new HashMap();
+									paramMap = new HashMap<String, Object>();
 									paramMap.put("focusAdId", businessFocusAd.getFocusAdId());
-									List scopeList = appFocusAdScopeService.findByMap(paramMap);
+									List<?> scopeList = appFocusAdScopeService.findByMap(paramMap);
 									for(int i=0;i<scopeList.size();i++){
 										AppFocusAdScope appFocusAdScope = (AppFocusAdScope) scopeList.get(i);
 										appFocusAdScopeService.delete(appFocusAdScope.getScopeId());
@@ -1341,11 +1446,11 @@ public class BusinessActivityController {
 			allObj.put("id", "allCom");
 			allObj.put("text", "全部社区");
 			JSONArray allArr = new JSONArray();
-			List comList = shiroUser.getComList();
+			List<?> comList = shiroUser.getComList();
 			
 			List<String> tempList = null; 
 			JSONObject comObj = null;
-			Map paramMap = null;
+			Map<String, Object> paramMap = null;
 			if(query.getFlag().equals("update")) {
 				String strArr[] = query.getScope().split(",");
 				tempList = Arrays.asList(strArr);
@@ -1354,11 +1459,10 @@ public class BusinessActivityController {
 			for(int i=0;i<comList.size();i++) {
 				CommunityBean community = (CommunityBean) comList.get(i);
 				comObj = new JSONObject();
-				paramMap = new HashMap();
-				paramMap = new HashMap();
+				paramMap = new HashMap<String, Object>();
 				paramMap.put("comId", community.getComId());
 				paramMap.put("userId", shiroUser.getUserId());
-				List estateList = businessUserResourceService.findByMap(paramMap);
+				List<?> estateList = businessUserResourceService.findByMap(paramMap);
 				if(estateList.size() > 0){
 					comObj.put("id", "com_"+community.getComId());
 					comObj.put("text", community.getComName());
@@ -1484,7 +1588,7 @@ public class BusinessActivityController {
 				businessOpertaionService.save(entity);
 				
 				if(businessActivity.getState() == 5) {
-					Map paramMap = new HashMap();
+					Map<String, Object> paramMap = new HashMap<String, Object>();
 					paramMap.put("id", actId);
 					paramMap.put("type", 4);
 					List<AppHomepage> list = appHomepageService.findByMap(paramMap);
@@ -1496,7 +1600,7 @@ public class BusinessActivityController {
 					
 					if(businessActivity.getRecommend() != null) {
 						if(businessActivity.getRecommend() == 0) {
-							paramMap = new HashMap();
+							paramMap = new HashMap<String, Object>();
 							paramMap.put("sourceId", actId);
 							List<BusinessFocus> focusList = businessFocusService.findByMap(paramMap);
 							if(focusList.size() == 1) {
@@ -1504,16 +1608,16 @@ public class BusinessActivityController {
 								businessFocusService.delete(businessFocus.getFocusId());
 								
 								// 删除展示范围
-								paramMap = new HashMap();
+								paramMap = new HashMap<String, Object>();
 								paramMap.put("focusId", businessFocus.getFocusId());
-								List scopeList = appFocusScopeService.findByMap(paramMap);
+								List<?> scopeList = appFocusScopeService.findByMap(paramMap);
 								for(int i=0;i<scopeList.size();i++){
 									AppFocusScope appFocusScope = (AppFocusScope) scopeList.get(i);
 									appFocusScopeService.delete(appFocusScope.getScopeId());
 								}
 							}
 						} else if(businessActivity.getRecommend() == 3) {
-							paramMap = new HashMap();
+							paramMap = new HashMap<String, Object>();
 							paramMap.put("sourceId", actId);
 							List<BusinessFocusAd> focusAdList = businessFocusAdService.findByMap(paramMap);
 							if(focusAdList.size() == 1) {
@@ -1521,9 +1625,9 @@ public class BusinessActivityController {
 								businessFocusAdService.delete(businessFocusAd.getFocusAdId());
 								
 								// 删除展示范围
-								paramMap = new HashMap();
+								paramMap = new HashMap<String, Object>();
 								paramMap.put("focusAdId", businessFocusAd.getFocusAdId());
-								List scopeList = appFocusAdScopeService.findByMap(paramMap);
+								List<?> scopeList = appFocusAdScopeService.findByMap(paramMap);
 								for(int i=0;i<scopeList.size();i++){
 									AppFocusAdScope appFocusAdScope = (AppFocusAdScope) scopeList.get(i);
 									appFocusAdScopeService.delete(appFocusAdScope.getScopeId());
@@ -1596,9 +1700,9 @@ public class BusinessActivityController {
 					state = "已发布-推荐到焦点图";
 					
 					AppFocusScope appFocusScope = new AppFocusScope();
-	    			Map paramMap = new HashMap();
+	    			Map<String, Object> paramMap = new HashMap<String, Object>();
 	    			paramMap.put("actId", businessActivity.getActId());
-	    			List scopeList = businessActivityScopeService.findByMap(paramMap);
+	    			List<?> scopeList = businessActivityScopeService.findByMap(paramMap);
 	    			for(int i=0;i<scopeList.size();i++) {
 	    				BusinessActivityScope scope = (BusinessActivityScope) scopeList.get(i);
 	    				appFocusScope.setFocusId(businessFocus.getFocusId());
@@ -1625,12 +1729,12 @@ public class BusinessActivityController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
-	    			Map paramMap = new HashMap();
+	    			Map<String, Object> paramMap = new HashMap<String, Object>();
 	    			paramMap.put("actId", businessActivity.getActId());
-	    			List scopeList = businessActivityScopeService.findByMap(paramMap);
+	    			List<?> scopeList = businessActivityScopeService.findByMap(paramMap);
 	    			for(int i=0;i<scopeList.size();i++) {
 	    				BusinessActivityScope scope = (BusinessActivityScope) scopeList.get(i);
 	    				appFocusAdScope.setFocusAdId(businessFocusAd.getFocusAdId());
@@ -1652,7 +1756,7 @@ public class BusinessActivityController {
     		    appHomepage.setTop(businessActivity.getRecommend()==null?0:businessActivity.getRecommend());
     		    appHomepageService.save(appHomepage);
     		    
-    		    Map paramMap = new HashMap();
+    		    Map<String, Object> paramMap = new HashMap<String, Object>();
     		    paramMap.put("actId", businessActivity.getActId());
     		    List<BusinessActivityScope> list =businessActivityScopeService.findByMap(paramMap);
     		    for(int i=0; i<list.size(); i++) {
@@ -1670,7 +1774,7 @@ public class BusinessActivityController {
 			//活动向小区内的所有居民发送通知
 			if(businessActivity.getIsPush() != null && businessActivity.getIsPush() == 1 && (businessActivity.getState() == 0 || businessActivity.getState() == 1)) {//可推送
 
-	            Map paramMap = new HashMap();
+				Map<String, Object> paramMap = new HashMap<String, Object>();
 	            paramMap.put("actId", businessActivity.getActId());
 	            List<BusinessActivityScope> beanList = businessActivityScopeService.findByMap(paramMap);
 	            
@@ -1684,11 +1788,11 @@ public class BusinessActivityController {
 				}
 				
 				//查询该小区下的userId, baiduId, channelId
-				List appUserList = appUserService.findUserPushIds(ids);
+				List<?> appUserList = appUserService.findUserPushIds(ids);
 				AppPushLog appPushLog = new AppPushLog();
 				String title = "OK家";
 				String description = "【活动】"+businessActivity.getActName();	
-				paramMap = new HashMap();
+				paramMap = new HashMap<String, Object>();
 				paramMap.put("messageType", 9);
 				paramMap.put("ID", businessActivity.getActId());
 				
@@ -1720,7 +1824,7 @@ public class BusinessActivityController {
 				if(businessActivity.getRecommend() == 0) {
 					state = "已发布-已推送-推荐到焦点图";
 				} else if(businessActivity.getRecommend() == 3) {
-					state = "已发布-已推送-推荐到全网焦点图";
+					state = "已发布-已推送-推荐到广告焦点图";
 				} else {
 					state = "已发布-已推送";
 				} 
@@ -1833,7 +1937,7 @@ public class BusinessActivityController {
         String json = "";
         try{
         	int size = 2;  //最大置顶数
-        	Map paramMap = new HashMap();
+        	Map<String, Object> paramMap = new HashMap<String, Object>();
         	paramMap.put("isImportant",  1);
         	List<BusinessActivity> list = businessActivityService.findByMap(paramMap);
         	
@@ -1897,9 +2001,9 @@ public class BusinessActivityController {
 					request.getRemoteAddr());
 			businessOpertaionService.save(entity);
 			
-			Map paramMap = new HashMap();
+			Map<String, Object> paramMap = new HashMap<String, Object>();
 			paramMap.put("id", businessActivity.getActId());
-			List list = appHomepageService.findByMap(paramMap);
+			List<?> list = appHomepageService.findByMap(paramMap);
 			
 			if(list != null) {
 				AppHomepage appHomepage = (AppHomepage)list.get(0);
@@ -2015,18 +2119,21 @@ public class BusinessActivityController {
 			participateQuery.setActId(query.getActId());
 			participateQuery.setSort("timeSlotId");
 			participateQuery.setOrder("asc");
-//			participateQuery.setRows(20);
+			participateQuery.setRows(20);
 			BaseBean TimeslotBean = businessActivityRegistrationTimeslotService.findAllPage(participateQuery);
   		  	if (TimeslotBean == null || TimeslotBean.getList().size() <= 0)
   		  		return null;
 			/** 查询报名活动参与人列表 */
-			BusinessActivityRegistrationInformationQuery inforQuery = new BusinessActivityRegistrationInformationQuery();
-			inforQuery.setActId(query.getActId());
+			// BusinessActivityRegistrationInformationQuery inforQuery = new BusinessActivityRegistrationInformationQuery();
+			/*inforQuery.setActId(query.getActId());
 			inforQuery.setSort("informationId");
 			inforQuery.setOrder("desc");
-//			inforQuery.setRows(20);
-			BaseBean RegistrationInfoBean = businessActivityRegistrationInformationService.findAllPage(inforQuery);
-  		  	if (RegistrationInfoBean == null || RegistrationInfoBean.getList().size() <= 0)
+			inforQuery.setRows(20);
+			BaseBean RegistrationInfoBean = businessActivityRegistrationInformationService.findAllPage(inforQuery);*/
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("actId", query.getActId());
+			List<?> RegistrationInfoBean = businessActivityRegistrationInformationService.findByMap(paramMap);
+  		  	if (RegistrationInfoBean == null || RegistrationInfoBean.size() <= 0)
   		  		return null;
 			
   		  	String[] title = {"昵称","真实姓名","联系电话","生日","年龄","职业","身份证号","Email","地址"} ;
@@ -2057,10 +2164,10 @@ public class BusinessActivityController {
 				timeslotMap.put(timeSlot.getTimeSlotId(), timeSlot.getTimeSlotName().replaceAll("[(\\\\):(\\?)*(\\[)(\\])]", ""));
 			}
 			// 构建表体数据
-			if (CollectionUtils.isNotEmpty(RegistrationInfoBean.getList())) {
-				for(int i=0; i<RegistrationInfoBean.getList().size(); i++)
+			if (CollectionUtils.isNotEmpty(RegistrationInfoBean)) {
+				for(int i=0; i<RegistrationInfoBean.size(); i++)
 				{
-					BusinessActivityRegistrationInformation actRegInfoBean = (BusinessActivityRegistrationInformation) RegistrationInfoBean.getList().get(i);
+					BusinessActivityRegistrationInformation actRegInfoBean = (BusinessActivityRegistrationInformation) RegistrationInfoBean.get(i);
 					int timeSlotId = actRegInfoBean.getTimeSlotId();
 
 					if (StringUtils.isNotBlank(timeslotMap.get(timeSlotId)))
@@ -2203,6 +2310,39 @@ public class BusinessActivityController {
 	}
 	
 	/**
+	 * 进入精品投票活动参与人员列表页
+	 * @return
+	 */
+	@RequestMapping(value="viewJPTPInformation")
+	public ModelAndView viewJPTPInformation(BusinessActivityQuery query) {
+		BusinessActivity businessActivity = new BusinessActivity();
+		BaseBean baseBean = new BaseBean();
+		List<?> comList = null;
+		try{
+			businessActivity = businessActivityService.findById(query.getActId());
+			ShiroUser shiroUser = CommonUtils.getUser();
+			comList = shiroUser.getComList();
+			//获取报名人列表
+			BusinessActRegQuery bcRegQuery = new BusinessActRegQuery();
+			bcRegQuery.setSort("regTime");
+			bcRegQuery.setOrder("desc");
+			bcRegQuery.setRows(20);
+			bcRegQuery.setActId(query.getActId());
+			bcRegQuery.setFlag(2);
+			baseBean = businessActRegService.findAllPage(bcRegQuery);
+		}catch(Exception e){
+			GSLogger.error("进入参与人员列表页时发生错误：/business/businessActivity/viewJPTPParticipates", e);
+			e.printStackTrace();
+		}
+		ModelAndView mav = new ModelAndView("/module/activity/viewJPTPParticipates");
+		mav.addObject("businessActivity", businessActivity);
+		mav.addObject("comList", comList);
+		mav.addObject("baseBean", baseBean);
+		mav.addObject("pager", baseBean.getPager());
+		return mav;
+	}
+	
+	/**
 	 * 进入评论列表页
 	 * @return
 	 */
@@ -2330,8 +2470,8 @@ public class BusinessActivityController {
         return "第"+(row+1)+"行,第"+(column+1)+"列，" + msg ;
     }
     
-    public List parse(String path, int sheet0, int rowfrom, int columnfrom, int columnto, String[] columns) throws Exception {
-        List list = new ArrayList();
+    public List<BusinessActivityCoupon> parse(String path, int sheet0, int rowfrom, int columnfrom, int columnto, String[] columns) throws Exception {
+        List<BusinessActivityCoupon> list = new ArrayList<BusinessActivityCoupon>();
         int i = 0;
         int c = 0;
         try {

@@ -17,7 +17,7 @@ import com.community.app.module.bean.BusinessSponsor;
 import com.community.app.module.service.BusinessSponsorService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessSponsorQuery;
-
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessSponsor")
@@ -25,8 +25,6 @@ public class BusinessSponsorController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessSponsorController.class);
 	@Autowired
 	private BusinessSponsorService businessSponsorService;
-	
-	private final String LIST_ACTION = "redirect:/business/businessSponsor/list.do";
 	
 	/**
 	 * 进入管理页
@@ -52,8 +50,14 @@ public class BusinessSponsorController {
 		String json = "";
 		StringBuilder result = new StringBuilder();
 		try{
+			query.setSort("creatTime");
+			query.setOrder("desc");
+			query.setRows(20);
 			BaseBean baseBean = businessSponsorService.findAllPage(query);
-			result.append("{\"total\":").append(baseBean.getCount()).append(",")
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"pageSize\":").append(baseBean.getPager().getPageSize()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
 			.append("\"rows\":[");
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessSponsor businessSponsor = (BusinessSponsor) baseBean.getList().get(i);
@@ -63,7 +67,7 @@ public class BusinessSponsorController {
 			    .append("\"actId\":\"").append(businessSponsor.getActId()).append("\"").append(",")
 			    .append("\"sponsorName\":\"").append(businessSponsor.getSponsorName()).append("\"").append(",")
 			    .append("\"sponsorPhone\":\"").append(businessSponsor.getSponsorPhone()).append("\"").append(",")
-			    .append("\"sponsorContent\":\"").append(businessSponsor.getSponsorContent()).append("\"").append(",")
+			    .append("\"sponsorContent\":\"").append(JsonUtils.stringToJson(businessSponsor.getSponsorContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"creatTime\":\"").append(businessSponsor.getCreatTime()).append("\"").append(",")
 			    .append("\"flag\":\"").append(businessSponsor.getFlag()).append("\"")
 				.append("}").append(",");
@@ -87,6 +91,30 @@ public class BusinessSponsorController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 奖品赞助详情页
+	 * @return
+	 */
+	@RequestMapping(value="getSponsorById")
+    public void getSponsorById(@RequestParam(value="sponsorId") Integer sponsorId, HttpServletResponse response) {
+        BusinessSponsor businessSponsor = businessSponsorService.findById(sponsorId);
+        StringBuilder result = new StringBuilder();
+        result.append("{")
+            .append("\"sponsorId\":\"").append(businessSponsor.getSponsorId()).append("\"").append(",")
+		    .append("\"sponsorName\":\"").append(businessSponsor.getSponsorName()).append("\"").append(",")
+		    .append("\"sponsorPhone\":\"").append(businessSponsor.getSponsorPhone()).append("\"").append(",")
+		    .append("\"sponsorContent\":\"").append(businessSponsor.getSponsorContent()).append("\"")
+            .append("}");
+        	
+            response.setHeader("Cache-Control", "no-cache");
+            response.setCharacterEncoding("utf-8");
+            try {
+                response.getWriter().write(result.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
 	
 	/**
 	 * 进入新增页
@@ -229,5 +257,4 @@ public class BusinessSponsorController {
 			e.printStackTrace();
 		}
 	}
-	
 }

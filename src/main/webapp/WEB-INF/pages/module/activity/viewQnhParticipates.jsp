@@ -35,7 +35,7 @@
       //获取多参数
     	function getParams() {
     		var keyWord = $("input[name='keyWord']").val();
-    		var params = {keyWord: keyWord};
+    		var params = {actId: '${businessActivity.actId}', keyWord: keyWord};
     		return params;
     	}
     	    
@@ -64,7 +64,7 @@
                     	for(var i=0;i<rows.length;i++) {
                         	var row = rows[i];  
                         	var htmlDom = ''
-                        		+'<div id="comment__'+row.informationId+'" class="cominfo">'
+                        		+'<div id="comment_'+row.informationId+'" class="cominfo">'
                         		+'<a class="cominfobox" href="javascript:;"> '
                         		+'<span class="rakin">'+parseInt((pageNo-1)*pagesize +i+1) +'</span>'
                         		+'<div class="textinfo">'

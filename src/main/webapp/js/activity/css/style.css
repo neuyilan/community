@@ -221,7 +221,7 @@ padding: 0 15px;
 .bl-winp{ padding:6px 10px; background-color:#fff;}
 .bl-ninp{ border:1px solid #b3b3b3;}
 .bl-ninp textarea{ border:none; height:124px; font-size:13px;}
-.bl-inpfont{ border-top:1px solid #b3b3b3; line-height:28px; text-align:right; padding-right:10px; background-color:#f9f9f9;}
+.bl-inpfont{ border-top:1px solid #b3b3b3; line-height:28px; text-align:right; padding-right:10px; background-color:#f9f9f9;position: relative;}
 
 /*家政*/
 .jz-info li{ background-color:#fff;}
@@ -278,7 +278,7 @@ padding: 0 15px;
 .expression .swiper-active-switch{ background-color:#6d6d6d; width:6px; height:6px;}
 
 .bl-inpfont i{ position:absolute; left:0; top:0;height:28px; width:28px; border-right:1px solid #b3b3b3;}
-.font-expre{ display:inline-block; background:url(/community/js/activity/arclist/bq.png) center center no-repeat; background-size:16px 16px; -webkit-background-size:16px 16px;}
+.font-expre{ display:inline-block; background:url(/community/js/activity/arclist/bq.png) center center no-repeat; background-size:20px 20px; -webkit-background-size:20px 20px;}
 .x-inp i{ height:33px; width:33px; display:table-cell; border-radius:3px; background-color:#eeeeee;}
 
 .inpbottom{ position:static;}

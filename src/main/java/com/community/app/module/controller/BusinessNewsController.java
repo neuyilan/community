@@ -653,7 +653,7 @@ public class BusinessNewsController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					for(int i=0; i<newsScopeList.size(); i++) {
 						BusinessNewsScope newsScopeBean = newsScopeList.get(i);
@@ -733,7 +733,7 @@ public class BusinessNewsController {
 					if(businessNews.getIsRecommend() == 0) {
 						state = "已发布-已推送-推荐到焦点图";
 					} else if(businessNews.getIsRecommend() == 3) {
-						state = "已发布-已推送-推荐到全网焦点图";
+						state = "已发布-已推送-推荐到广告焦点图";
 					} else {
 						state = "已发布-已推送";
 					} 
@@ -1101,7 +1101,7 @@ public class BusinessNewsController {
 				    businessFocusAd.setSelectorName(shiroUser.getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					for(int i=0; i<newsScopeList.size(); i++) {
 				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
@@ -1155,7 +1155,7 @@ public class BusinessNewsController {
 				if(query.getIsRecommend() == 0) {
 					state = "已发布-已推送-推荐到焦点图";
 				} else if(query.getIsRecommend() == 3) {
-					state = "已发布-已推送-推荐到全网焦点图";
+					state = "已发布-已推送-推荐到广告焦点图";
 				} else {
 					state = "已发布-已推送";
 				} 
@@ -1474,7 +1474,7 @@ public class BusinessNewsController {
 				    businessFocusAd.setSelectorName(getUser().getUserName());
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					 
 					for(int i=0; i<newsScopeList.size(); i++) {
 				    	BusinessNewsScope newsScopeBean = newsScopeList.get(i);
@@ -1587,7 +1587,7 @@ public class BusinessNewsController {
 					if(query.getIsRecommend() == 0) {
 						state = "已发布-已推送-推荐到焦点图";
 					} else if(query.getIsRecommend() == 3) {
-						state = "已发布-已推送-推荐到全网焦点图";
+						state = "已发布-已推送-推荐到广告焦点图";
 					} else {
 						state = "已发布-已推送";
 					} 

@@ -47,7 +47,8 @@ public class GetQnhInfoCli {
 			long start = System.currentTimeMillis();
 			/**添加soapHeader */
 			sender.addHeader(HeaderOMElement.createHeaderOMElement(omNs));
-			sender.getOptions().setTimeOutInMilliSeconds(CommonData.TimeOutData.QHN_WS_TIMEOUT);
+			//180000 
+			sender.getOptions().setTimeOutInMilliSeconds(180000L/*CommonData.TimeOutData.QHN_WS_TIMEOUT*/);
 			OMElement response = sender.sendReceive(callMethod);
 //			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
@@ -76,7 +77,7 @@ public class GetQnhInfoCli {
 //		getQnhInfoCli.getQnhInfo("C027DDC5-2096-4B87-9477-7B79C36E8938");
 //		getQnhInfoCli.getQnhInfo("3AC6C979-7DB7-4F1D-91C8-069C2A70F752");
 		getQnhInfoCli.getQnhInfo("36F79468-8976-4CB7-9EF0-01464DFBDEC7");
-		getQnhInfoCli.getQnhInfo("F1B382F2-7085-4AD1-B715-0171CB2AA448");
+//		getQnhInfoCli.getQnhInfo("F1B382F2-7085-4AD1-B715-0171CB2AA448");
 	}
 
 }

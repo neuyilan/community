@@ -3,8 +3,8 @@ package com.community.framework.utils;
 public interface CommonData {
 
 	public interface TimeOutData {
-		/** 青年汇 ws 请求超时时间 3min */
-		public final static long QHN_WS_TIMEOUT = 180 * 1000;
+		/** 青年汇 ws 请求超时时间 5S */
+		public final static long QHN_WS_TIMEOUT = 5 * 1000;
 	}
 
 	public interface GlobalData {
@@ -17,5 +17,6 @@ public interface CommonData {
 		/**返回值 2 审核*/
 		public final static int RET_VERIFY = 2;
 	}
+	
 
 }

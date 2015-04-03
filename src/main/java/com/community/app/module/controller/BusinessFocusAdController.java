@@ -278,7 +278,7 @@ public class BusinessFocusAdController {
 	}
 	
 	/**
-     * 查询全网焦点图详情信息
+     * 查询广告焦点图详情信息
      * @param query
      * @param response
      */

@@ -122,7 +122,8 @@
 			a.isQNH,
 			a.actRegWords,
 			a.prizeRules,
-			a.timeslot
+			a.timeslot,
+			a.jptpTimeslotEndTime
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
@@ -812,7 +813,10 @@
 		QNHName,
 		QNHId,
 		isQNH,
-		timeslot
+		timeslot,
+		prizeRules,
+		actRegWords,
+		jptpTimeslotEndTime
 		) values(
 		#{typeId},
 		#{actName},
@@ -866,8 +870,10 @@
 		#{QNHName},	
 		#{QNHId},
 		#{isQNH},
-		#{timeslot}
-			
+		#{timeslot},
+		#{prizeRules},
+		#{actRegWords},
+		#{jptpTimeslotEndTime}
 		)
 	</insert>
 	
@@ -1020,10 +1026,19 @@
 			reportExcel=#{reportExcel},
 			</if>
 			<if test="refuseMemo != null and refuseMemo != ''" >
-			refuseMemo=#{refuseMemo}
+			refuseMemo=#{refuseMemo},
 			</if>	
 			<if test="timeslot != null and timeslot != ''" >
-			timeslot=#{timeslot}
+			timeslot=#{timeslot},
+			</if>
+			<if test="prizeRules != null and prizeRules != ''" >
+			prizeRules=#{prizeRules},
+			</if>
+			<if test="actRegWords != null and actRegWords != ''" >
+			actRegWords=#{actRegWords},
+			</if>
+			<if test="jptpTimeslotEndTime != null and jptpTimeslotEndTime != ''" >
+			jptpTimeslotEndTime=#{jptpTimeslotEndTime}
 			</if>
 		</set> 
 		where 

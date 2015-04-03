@@ -88,7 +88,7 @@ public class QNHActivitySer {
 		    businessActivity.setActPicNo("");
 		    businessActivity.setUserType(0);
 		    businessActivity.setPublisherId(0); //发布人ID
-		    businessActivity.setState(0);
+		    businessActivity.setState(5);
 		    businessActivity.setVisits(0);
 		    businessActivity.setComments(0);
 		    businessActivity.setSupports(0);
@@ -118,7 +118,7 @@ public class QNHActivitySer {
 	        businessActivity.setQNHId(jsn.get("QNHId").toString());
 	        businessActivity.setQNHName(jsn.get("QNHName").toString());
 	        businessActivity.setIsQNH(1);
-	        businessActivity.setTimeslot(sdf.format(sdf.parse(jsn.get("actStartTime").toString()))+"-"+sdf.format(sdf.parse(jsn.get("actEndTime").toString())));
+	        businessActivity.setTimeslot(sdf.format(sdf.parse(jsn.get("actStartTime").toString()))+"~"+sdf.format(sdf.parse(jsn.get("actEndTime").toString())));
 			businessActivityService.save(businessActivity);
 			ManageEstateQuery manageEstateQuery = new ManageEstateQuery();
 			manageEstateQuery.setEstateLatitude(new Double(jsn.get("latitude").toString()));

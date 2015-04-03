@@ -82,7 +82,7 @@ height: 19px;
 .x-inp{ position:absolute; bottom:0; left:0; right:0;}
 .x-main .x-pl{padding:0 10px;}
 
-.tab{display:table;}
+.tab{display:table;box-sizing: border-box;}
 .tleft{display:table-cell}
 
 /*排行榜*/
@@ -146,7 +146,7 @@ height: 19px;
 .hdjs{ padding:18px; font-size:16px;}
 .hdjs span{ color:#ff0000;}
 .hdjs p{ line-height:20px; padding-bottom:6px; margin:0;}
-.hdjs .hdtime{ font-size:26px;}
+.hdjs .hdtime{ font-size:22px;}
 .hdinfo{ padding:0 6px; border:1px solid #dcdcdc; background-color:#ffffff;}
 .hdinfo li{ height:48px; border-bottom:1px solid #dcdcdc;}
 .hdinfo li:last-child{ border-bottom:none;}
@@ -260,7 +260,7 @@ input,textarea,select{ outline:none;}
 .expression .swiper-active-switch{ background-color:#6d6d6d; width:6px; height:6px;}
 
 .bl-inpfont i{ position:absolute; left:0; top:0;height:28px; width:28px; border-right:1px solid #b3b3b3;}
-.font-expre{ display:inline-block; background:url(/community/js/activity/arclist/bq.png) center center no-repeat; background-size:16px 16px; -webkit-background-size:16px 16px;}
+.font-expre{ display:inline-block; background:url(/community/js/activity/arclist/bq.png) center center no-repeat; background-size:20px 20px; -webkit-background-size:20px 20px;}
 .x-inp i{ height:33px; width:33px; display:table-cell; border-radius:3px; background-color:#eeeeee;}
 
 .inpbottom{ position:static;}

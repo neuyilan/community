@@ -1,9 +1,6 @@
 package com.community.app.module.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.community.app.module.bean.BusinessStationFeedback;
 import com.community.app.module.bean.BusinessStationFeedbackInformation;
 import com.community.app.module.service.BusinessStationFeedbackInformationService;
+import com.community.app.module.service.BusinessStationFeedbackService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessStationFeedbackInformationQuery;
 
@@ -22,6 +21,8 @@ import com.community.app.module.vo.BusinessStationFeedbackInformationQuery;
 @RequestMapping("/business/businessStationFeedbackInformation")
 public class BusinessStationFeedbackInformationController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessStationFeedbackInformationController.class);
+	@Autowired
+	private BusinessStationFeedbackService businessStationFeedbackService;
 	@Autowired
 	private BusinessStationFeedbackInformationService businessStationFeedbackInformationService;
 	
@@ -34,6 +35,7 @@ public class BusinessStationFeedbackInformationController {
 		String json = "";
 		StringBuilder result = new StringBuilder();
 		try{
+			BusinessStationFeedback businessStationFeedback = businessStationFeedbackService.findById(query.getFeedId());
 			query.setSort("feedTime");
 			query.setOrder("desc");
 			query.setRows(20);
@@ -41,6 +43,7 @@ public class BusinessStationFeedbackInformationController {
 			result.append("{\"total\":").append(baseBean.getCount()).append(",");
 			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
 			result.append("\"pageSize\":").append(baseBean.getPager().getPageSize()).append(",");
+			result.append("\"state\":").append(businessStationFeedback.getState()).append(",");
 			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
 			.append("\"rows\":[");
 			for(int i=0;i<baseBean.getList().size();i++) {

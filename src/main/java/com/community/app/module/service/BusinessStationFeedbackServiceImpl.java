@@ -145,14 +145,17 @@ public class BusinessStationFeedbackServiceImpl implements BusinessStationFeedba
 		int count=0;
 		BaseBean baseBean = new BaseBean();
 		try {
-			list=businessStationFeedbackDao.findAllPage(query);
 			count=businessStationFeedbackDao.selectCount(query);
+			query.setCount(count);
+			list=businessStationFeedbackDao.findAllPage(query);
 		} catch (DaoException e) {
 			logger.debug("BusinessStationFeedbackServiceImpl findAllPage()：根据搜索条件，搜索分页数据发生错误！", e);
 			e.printStackTrace();
 		}
 		baseBean.setList(list);
 		baseBean.setCount(count);
+		baseBean.setPage(query.getPage());
+		baseBean.setRows(20);
 		return baseBean;
 	}
 	

@@ -67,7 +67,7 @@ public class weatherController {
 		json += "\"pm25\":\""+p.getProperty("pm251")+"\",";
 		json += "\"pm25Key\":\""+p.getProperty("pm25")+"\",";
 		json += "\"list\":[";
-		for (int i = 2; i < 6; i++) {
+		for (int i = 1; i < 5; i++) {
 			json += "{";
 			json += "\"day\":\""+p.getProperty("day"+i)+"\",";
 			json += "\"weath\":\""+p.getProperty("weath"+i)+"\",";

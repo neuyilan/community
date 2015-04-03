@@ -1,35 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html>
-
 <head>
-<title>小区投票情况</title>
-
-<style type="text/css">
-    .replayinfo .replaycon {border: 1px solid #e4e4e4;border-radius: 5px;font-size: 12px;margin: 10px 0;padding: 10px;width: 200px;}
-	.replaycon h1 {font-size: 12px;font-weight: bold;margin-bottom: 6px;}
-	.replaycon p {color:#000;}
-	.review .review-b #commentDiv  .cominfo .replayinfo{position:absolute; top:0; left:62%; z-index:49;}
-	.review .review-b #commentDiv  .cominfo .reply{ position:static;}
-	.review .review-b #commentDiv  .cominfo .cominfobox{height:220px;}
-	.review .review-b #commentDiv  .cominfo{ height:220px;}
-	.review .review-b  #commentDiv .cominfo .rakin{ height:220px; line-height:220px;}
-	.review .review-b  #commentDiv .cominfo .opera .arrow{ margin:42px auto 42px;}
-	.review .review-b  #commentDiv .cominfo .opera{ height:220px;}
-	#oneul .navlist .erjnav{ position:absolute; z-index:999; top:30px; left:-16px; width:220px; border-radius:5px; overflow:hidden; display:none;}
-	.review .review-t .serachbox{ height:40px;}
-	.review .review-t .serachbox .scroll-box{float: left;border: 1px solid #dcdcdc;padding: 10px;border-radius: 4px;background-color: #ffffff;}
-	.review .review-t .serachbox .scroll-box .donbut i{width: 0;height: 0;border-top: 11px solid #bebebe;border-right: 6px solid transparent;border-left: 6px solid transparent;display: inline-block; float:right; margin-top:6px;}
-	.review .review-t .serachbox .bodrbox{float: right; width:300px;}
-	.review .review-t .serachbox input#serach{ width:250px;}
-	.review .review-t .serachbox .scroll-box .navlist{ position:relative;}
-</style>
-
-<%@include file="/common/meta.jsp"%>
-<script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
-<link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
-<script src="<%=ctx%>/js/jquery-ui/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
-<script src="<%=ctx%>/js/jquery-ui/jquery.ui.datepicker-zh-CN.js" type="text/javascript"></script>
-<script type="text/javascript">
+	<title>小区投票情况</title>
+	<%@include file="/common/meta.jsp"%>
+	<script src="<%=ctx%>/js/nevwuye.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
+	<script type="text/javascript"  src="${ctx}/js/jquery.min.js"></script>
+	
+	<style type="text/css">
+	    .replayinfo .replaycon {border: 1px solid #e4e4e4;border-radius: 5px;font-size: 12px;margin: 10px 0;padding: 10px;width: 200px;}
+		.replaycon h1 {font-size: 12px;font-weight: bold;margin-bottom: 6px;}
+		.replaycon p {color:#000;}
+		.review .review-b #commentDiv  .cominfo .replayinfo{position:absolute; top:0; left:62%; z-index:49;}
+		.review .review-b #commentDiv  .cominfo .reply{ position:static;}
+		.review .review-b #commentDiv  .cominfo .cominfobox{height:220px;}
+		.review .review-b #commentDiv  .cominfo{ height:220px;}
+		.review .review-b  #commentDiv .cominfo .rakin{ height:220px; line-height:220px;}
+		.review .review-b  #commentDiv .cominfo .opera .arrow{ margin:42px auto 42px;}
+		.review .review-b  #commentDiv .cominfo .opera{ height:220px;}
+		#oneul .navlist .erjnav{ position:absolute; z-index:999; top:30px; left:-16px; width:220px; border-radius:5px; overflow:hidden; display:none;}
+		.review .review-t .serachbox{ height:40px;}
+		.review .review-t .serachbox .scroll-box{float: left;border: 1px solid #dcdcdc;padding: 10px;border-radius: 4px;background-color: #ffffff;}
+		.review .review-t .serachbox .scroll-box .donbut i{width: 0;height: 0;border-top: 11px solid #bebebe;border-right: 6px solid transparent;border-left: 6px solid transparent;display: inline-block; float:right; margin-top:6px;}
+		.review .review-t .serachbox .bodrbox{float: right; width:300px;}
+		.review .review-t .serachbox input#serach{ width:250px;}
+		.review .review-t .serachbox .scroll-box .navlist{ position:relative;}
+	</style>
+	<script type="text/javascript">
 		$(function () {
 			$(document).keyup(function(event){
 				  if(event.keyCode ==13){
@@ -76,24 +73,24 @@
                     	for(var i=0;i<rows.length;i++) {
                         	var row = rows[i];  
                         	var push = "";
-                        	if(i == 0 && $('#state').val() == 1) {
+                        	if(i == 0) {
                         		push += '<div class="tp-message">';
-                        		if($('#flagNew').val() == 0) {
-                        			push += '<textarea placeholder="请输入通知内容，消息将推送给投票人。" class="reptext"></textarea>'
-                        			+ '<a class="green">一键开通告知</a>';
-                        		} else {
+                        		if(data.state == 0) {
+                        			push += '<textarea placeholder="请输入通知内容，消息将推送给投票人。" id="pushMessage" name="pushMessage" class="reptext"></textarea>'
+                        			+ '<a style="cursor:pointer;" class="green" onclick="pushMessage('+row.feedId+')">一键开通告知</a>';
+                        		} else if(data.state == 1) {
                         			push += ' <a class="gray">已通知过</a>';
                         		}
                         		push += '</div>';
                         	}
                         	var source = "";
-                        	if(row.source == 1) {
-                        		source = "驿站女孩";
-                        	} else if(row.source == 2) {
+                        	if(row.source == 0) {
                         		source = "快递代收";
-                        	} else if(row.source == 3) {
+                        	} else if(row.source == 1) {
                         		source = "驿站公告";
-                        	}
+                        	} else if(row.source == 2) {
+                        		source = "驿站女孩";
+                        	} 
                         	var htmlDom = ''
                         		+ '<div class="cominfo">'
                         		+ '<a class="cominfobox tpbox" href="javascript:;">'
@@ -113,7 +110,7 @@
                         	$('#review2-b').append(htmlDom);
                         }
                     }else{
-                    	$('#review2-b').html('很抱歉，没有相关记录。');
+                    	$('#review2-b').html('');
                     }
                     $('#review2-b').append('<div class="no-float"></div>');
                     
@@ -153,7 +150,32 @@
             });
         }
         
-      //上一页
+        function pushMessage(feedId1) {
+    	    var pushMessage = $("#pushMessage").val();
+    	    if(pushMessage != '') {
+    	    	var flag = window.confirm("请慎重选择, 点击确认后将给用户发送系统推送消息！");
+    		    if(flag) {
+	    	    	$.ajax({
+	    	    		type: 'post',
+	                    dataType: 'json',
+	    	            url: '<%=path %>/business/businessStationFeedback/sendMessage.do',
+	    	            cache: false,
+	    	            data: {feedId:feedId1, pushMessage:pushMessage},
+	    	            success: function (data) {
+	                        alert(data.message);
+	                        window.location.href = '${ctx}/business/businessStationFeedback/getFeedDetail.do?feedId='+feedId1;
+	    	            },
+	    	            error: function() {
+	    	            	alert("传递参数错误！");
+	    	            }
+	    	        });
+    		    }
+    	    } else {
+    	    	alert("请输入通知内容，消息将推送给投票人。");
+    	    }
+    	}
+        
+      	//上一页
         function prev(pageSize) {
         	var currNo = $('#curr').first().text();
         	var prevNo = parseInt(currNo) - 1;
@@ -190,9 +212,9 @@
 		                    <li id="source_" class="navlist"><a href="javascript:;"><span style="color:#000000; padding-right:10px;">全部功能</span><b class="donbut"><i></i></b></a>
 		                    	<input type="hidden" name="source" id="source" value="" />
 		                    	<ul class="erjnav">
-		                           <li id="source_1"><a href="javascript:;">驿站女孩</a></li>
-		                           <li id="source_2"><a href="javascript:;">快递代收</a></li>
-		                           <li id="source_3"><a href="javascript:;">驿站公告</a></li>
+		                           <li id="source_0"><a href="javascript:;">快递代收</a></li>
+		                           <li id="source_1"><a href="javascript:;">驿站公告</a></li>
+		                           <li id="source_2"><a href="javascript:;">驿站女孩</a></li>
 		                        </ul>
 		                    </li>
 		                </ul>
@@ -221,19 +243,19 @@
 		                    </div>
 		                    <p class="red">
 								<c:choose>
-									<c:when test="${bean.source==1}">驿站女孩</c:when>
-									<c:when test="${bean.source==2}">快递代收</c:when>
-									<c:when test="${bean.source==3}">驿站公告</c:when>
+									<c:when test="${bean.source==0}">快递代收</c:when>
+									<c:when test="${bean.source==1}">驿站公告</c:when>
+									<c:when test="${bean.source==2}">驿站女孩</c:when>
 								</c:choose>
 							</p>
 		            	</a>
-		            	<c:if test="${status.index == 0 && businessStationFeedback.state == 1}">
+		            	<c:if test="${status.index == 0}">
 		            		<div class="tp-message">
-		            			<c:if test="${flagNew==0}">
-				                    <textarea placeholder="请输入通知内容，消息将推送给投票人。" class="reptext"></textarea>
-				                    <a class="green">一键开通告知</a>
+		            			<c:if test="${businessStationFeedback.state == 0}">
+				                    <textarea placeholder="请输入通知内容，消息将推送给投票人。" id="pushMessage" name="pushMessage" class="reptext"></textarea>
+				                    <a style="cursor:pointer;" class="green" onclick="pushMessage('${bean.feedId}')">一键开通告知</a>
 			                    </c:if>
-			                    <c:if test="${flagNew==1}">
+			                    <c:if test="${businessStationFeedback.state == 1}">
 			                    	<a class="gray">已通知过</a>
 			                    </c:if>
 				                <input type="hidden" name="sbFlagNew" id="sbFlagNew" value="${sbFlagNew}" />

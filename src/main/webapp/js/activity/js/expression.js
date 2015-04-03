@@ -137,7 +137,7 @@ function font(){
 	$("#scrolltotal").toggleClass("scrollimg");
 	$(".scroll").css("bottom","57px");
 	$(".scrollimg").css({"position":"static","bottom":"0"});
-	$('.font-expre').css({"background":"url(/community/js/activity/arclist/bq.png) no-repeat center center #eeeeee","background-size":"16px 16px","-webkit-background-size":"16px 16px"});
+	$('.font-expre').css({"background":"url(/community/js/activity/arclist/bq.png) no-repeat center center #eeeeee","background-size":"20px 20px","-webkit-background-size":"20px 20px"});
 	$('.font-expre').addClass("ex-show");
 }
 //表情

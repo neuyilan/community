@@ -13,8 +13,8 @@
 
 <body>
 	<div class="hdjs">
-		<p>您好，您参加的活动是<span>【<i>${title}</i>活动】</span></p>   
-		<p>您报名的场次入场时间为：</p>
+		<p>您好，您参加的活动是：<span><br/><i>${title}</i></span></p>   
+		<p>您报名的活动参与时间为：</p>
 		<span class="hdtime">${time}</span>
 	</div>
 	<form action="${ctx}/business/businessActivityRegistrationInformation/save.json" method="post" id="ff">
@@ -241,26 +241,40 @@
 	           }
 	       });
 	})
-function msgbox(title,content,btn,fun){
-	 $(".tk").remove();
-	 var tk=$("<div class='tk'></div>");
-	 var tcontent=$("<div class='tcontent'></div>");
-	 tk.append(tcontent);
-	 if(title!=""){
-		 tcontent.append("<p class='title'>"+title+"</p>");
-	 }
-	 tcontent.append("<div class='thead'><p>"+content+"</p></div>");
-	 tcontent.append("<div class='tbtn'></div>");
-	 var tbtn = $("<div class='tbtn'></div>");
-	 tcontent.append(tbtn);
-	 var btnA = $("<a>"+btn+"</a>");
-	 tbtn.append(btnA);
-	 $("body").append(tk);
-	 $(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
-	 btnA.click(function(){
+function msgbox(title,content,btn,fun,btn2){
+	$(".tk").remove();
+	var tk=$("<div class='tk'></div>");
+	var ttotal=$("<div class='ttotal'></div>");
+	var tcontent=$("<div class='tcontent'></div>");
+	tk.append(ttotal);
+	ttotal.append(tcontent)
+	
+	tcontent.append("<div class='thead'><p>"+content+"</p></div>");
+	
+	var tbtn = $("<div class='tbtn'></div>");
+	tcontent.append(tbtn);
+	var btnA = $("<a>"+btn+"</a>");
+	
+	if(btn2!=null && btn2!="" && btn2!=undefined){
+	 var btnB = $("<a class='cancel' style=' background-color:#b7b7b7'>"+btn2+"</a>");
+	 tbtn.append(btnB);
+	 btnB.click(function(){
 		 $(".tk").remove();
 	 });
-	 btnA.click(fun);
+	 
+	 var btnA = $("<a style='margin-left: 20px;'>"+btn+"</a>");
+	}
+	tbtn.append(btnA);
+	
+	tcontent.append("<i class='tkt'></i><i class='tkr'></i>")
+	$(".ttotal").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+	
+	$("body").append(tk);
+	$(".tcontent").css("margin-top","-"+parseInt($(".tcontent").height()/2)+"px");
+	btnA.click(function(){
+	 $(".tk").remove();
+	});
+	btnA.click(fun);
 }
 </script>
 </body>

@@ -87,9 +87,9 @@ public class MemberCheckCli {
 	public static void main(String[] args) {
 		MemberCheckCli memberCheckCli = new MemberCheckCli();
 		memberCheckCli.memberCheck("13718877107");//15945116753
-		memberCheckCli.memberCheck("15945116753");//15945116753
-		memberCheckCli.memberCheck("15040636057");//15945116753
-		memberCheckCli.memberCheck("18911905706");//15945116753
+//		memberCheckCli.memberCheck("15945116753");//15945116753
+//		memberCheckCli.memberCheck("15040636057");//15945116753
+//		memberCheckCli.memberCheck("18911905706");//15945116753
 	}
 
 }

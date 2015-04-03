@@ -37,13 +37,14 @@
             <h2 class="relran">活动简介<label for="brief" class="error success"></label></h2>
             <input class="iptnewtit" type="text" name="brief" id="brief" placeholder='请输入简介28字以内' value="${businessActivity.brief }" />
             
-            <h2 class="relstatus">活动类型<label for="typeId" class="error success"></label></h2>
+            <h2 class="relstatus">活动类型<em style="font-size:15px; color:#e7402f;">（青年汇活动，由青年汇人员进行新建）</em><label for="typeId" class="error success"></label></h2>
             <!-- <span class="ranbut radiusbox" id="typeLayerShow">点击选择类型</span> -->
             <label><input class="radiostyle2" type="radio" id="typeId" name="typeId" value="1" <c:if test='${businessActivity.typeId == 1}'> checked </c:if> >&nbsp;定时抢</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="2"  <c:if test='${businessActivity.typeId == 2}'> checked </c:if>>&nbsp;报名活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="3"  <c:if test='${businessActivity.typeId == 3}'> checked </c:if>>&nbsp;投票活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="4"  <c:if test='${businessActivity.typeId == 4}'> checked </c:if>>&nbsp;抢优惠券</label>　
-            <label><input class="radiostyle2" type="radio" name="typeId" value="5"  <c:if test='${businessActivity.typeId == 5}'> checked </c:if>>&nbsp;青年汇活动</label>
+            <label><input class="radiostyle2" type="radio" name="typeId" value="5"  <c:if test='${businessActivity.typeId == 5}'> checked </c:if>>&nbsp;青年汇活动</label>　
+            <label><input class="radiostyle2" type="radio" name="typeId" value="6"  <c:if test='${businessActivity.typeId == 6}'> checked </c:if>>&nbsp;精品投票活动</label>
             <input type="hidden" id="typeName" name="typeName" value="${businessActivity.typeName }" >
             
             <!-- 报名活动 -->
@@ -54,13 +55,22 @@
             <div id="yhqId"></div>
             <!-- 青年汇活动-->
             <div id="qnhId"></div>
-            
+            <!-- 精品投票活动-->
+            <div id="jptpId"></div>
+               
+            <div id="display">
+	            <div class="line2"></div>
+				<h2 class="title">奖品发放规则<label for="prizeRules" class="error success"></label></h2>
+				<script type="text/plain" id="actEditor1" style="width:840px;height:240px;">${businessActivity.prizeRules}</script>
+			    <input type="hidden" name="prizeRules" id="prizeRules" value='${businessActivity.prizeRules}'>
+			</div>
+			
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动展示范围<label for="actScope" class="error success"></label></h2>
             <div style="position:relative;">
 	            <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span><em>可根据小区进行活动参与范围限定</em>
             	<input type="hidden" id="actScope" name="actScope" value="${scope}" />
-	            <lable style="position: absolute; top: 10px; left: 160px;"  id="actScopeShow">${businessActivity.actScope }</lable>
+	            <label style="position: absolute; top: 10px; left: 160px;"  id="actScopeShow">${businessActivity.actScope }</label>
             </div>
             
             <div class="line2"></div>
@@ -98,7 +108,7 @@
 	            <div style="position:relative;">
 		            <span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>
 	            	<input type="hidden" id="planTime" name="planTime" value="${businessActivity.publishDate } ${businessActivity.publishTime}" />
-		            <lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow">${businessActivity.publishDate } ${businessActivity.publishTime}</lable>
+		            <label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow">${businessActivity.publishDate } ${businessActivity.publishTime}</label>
 	            </div>
 	            
 	            <h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>
@@ -155,8 +165,8 @@
                 <p>
                     <label><input class="radiostyle" type="radio" name="recommend" value="0" <c:if test='${businessActivity.recommend == 0}'> checked </c:if> >&nbsp;首页焦点图</label>
                     　　			<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理中进行焦点图制作上传，审核通过后发布至焦点图位置</em><br><br>
-                    <label><input class="radiostyle" type="radio" name="recommend" value="3" <c:if test='${businessActivity.recommend == 3}'> checked </c:if> >&nbsp;首页全网焦点图</label>
-                    　　			<em style="color:#000;">将推送至全网焦点图管理列表，在全网焦点图管理中进行全网焦点图制作上传，审核通过后发布至全网焦点图位置</em><br><br>
+                    <label><input class="radiostyle" type="radio" name="recommend" value="3" <c:if test='${businessActivity.recommend == 3}'> checked </c:if> >&nbsp;首页广告焦点图</label>
+                    　　			<em style="color:#000;">将推送至广告焦点图管理列表，在广告焦点图管理中进行广告焦点图制作上传，审核通过后发布至广告焦点图位置</em><br><br>
                     <%-- <label><input class="radiostyle" type="radio" name="recommend" value="1" <c:if test='${businessActivity.recommend == 1}'> checked </c:if> >&nbsp;首页新闻列表置顶</label><br><br> --%>
                     <label><input class="radiostyle" type="radio" name="recommend" value="2" <c:if test='${businessActivity.recommend == 2}'> checked </c:if>>&nbsp;以上都不选</label><br>
                 </p>
@@ -329,13 +339,32 @@
 
 <jsp:include page="/common/uploadPicJs.jsp"/>
 <jsp:include page="/common/uploadVoteTypeMultiPicJsUpdate.jsp"/>
+<jsp:include page="jptpActiveJpsz.jsp"/>
 
 </body>
 <%--初始化文本编辑器--%>
 <script type="text/javascript">
     //实例化编辑器
     var ue = UE.getEditor('actEditor');
-    
+  	//简单编辑器实例化
+    var ue1 = UE.getEditor('actEditor1',{
+    	toolbars: [[
+			'undo', 'redo', '|', 'bold', 'underline', 'forecolor', 'backcolor', 'insertimage', 'justifyleft', 'justifycenter', 'justifyright'
+			
+			/* 'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+            'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+            'insertimage', 'map', 'pagebreak', 'template', 'background', '|',
+            'date', 'time', 'spechars', '|',
+            'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+            'preview', 'searchreplace', 'help' */
+    	]]
+    });
+  	
     $(document).ready(function(){
 		var isPush = document.getElementsByName("isPush");
     	$('#isPush1').change(function(){
@@ -396,6 +425,11 @@
 		}
 	}
 	
+	//奖品设置
+	function startActiveJpszinfo() {
+		$('#picUploadLayerJPTP').fadeIn('slow');
+	}
+	
 	$(function() {
 		init2();
 	});
@@ -454,12 +488,13 @@
 		}
 		
 	    if($("input[name='typeId']:checked").val() == 1) {
+			$("#display").hide();
     		var htmlDom = ''
     		+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
     		+'<div style="position:relative;">'
     		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
     		+'<input type="hidden" id="planTime" name="planTime"  value="${businessActivity.publishDate } ${businessActivity.publishTime}"/>'
-    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow">${businessActivity.publishDate } ${businessActivity.publishTime}</lable>'
+    		+'<label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow">${businessActivity.publishDate } ${businessActivity.publishTime}</label>'
     		+'</div>'
     		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
     		+'<input class="iptnewtit" type="text" id="rank" name="rank" value="${businessActivity.rank }"/>名以前，可获奖';
@@ -469,6 +504,7 @@
  			$("#yhqAvtiveTime").empty();
     		$("#tphdId").empty();
     		$("#qnhId").empty();
+    		$("#jptpId").empty();
 			$("#typeName").val("定时抢");
     		$("input[name='state']:eq(0)").val("1");
     		
@@ -480,6 +516,7 @@
             });
     		
     	} else if($("input[name='typeId']:checked").val() == 2){
+			$("#display").hide();
     		var htmlDom=''
 				+'<h2 class="relstatus">活动场次<label for="times" class="error success"></label></h2>'
 				+'<label><input id="times0" class="radiostyle2" type="radio" name="times" value="0" <c:if test='${businessActivity.times == 0}'> checked </c:if> >&nbsp;单次</label>　　'
@@ -513,6 +550,7 @@
 	 			$("#yhqAvtiveTime").empty();
 	    		$("#tphdId").empty();
 	    		$("#qnhId").empty();
+	    		$("#jptpId").empty();
 				$("#typeName").val("报名活动");
 				$("input[name='state']:eq(0)").val("0");
 				
@@ -544,6 +582,7 @@
 			    	$("#timesDiv").append(htmlDom);
 			    });
     	}  else if($("input[name='typeId']:checked").val() == 3){
+    		$("#display").hide();
     		var htmlDom = ''
 				+'<div class="line2"></div>'
 	    		+'<h2 class="relstatus">投票类型<label for="voteType" class="error success"></label></h2>'
@@ -561,6 +600,7 @@
 	    		$("#rankId").empty();
 	 			$("#yhqId").empty();
 	 			$("#qnhId").empty();
+	 			$("#jptpId").empty();
 	 			$("#yhqAvtiveTime").empty();
 	    		$("#tphdId").append(htmlDom);
 				$("#typeName").val("投票活动");
@@ -701,6 +741,7 @@
 					});
 			    });
     	} else if($("input[name='typeId']:checked").val() == 4){
+    		$("#display").hide();
     		var htmlDom = ''
    			+'<div class="line2"></div>'
    			+'<h2 class="title">优惠券名称<label for="couponName" class="error success"></label></h2>'
@@ -728,7 +769,7 @@
    			+'<h2 class="relran">导入优惠券号码<label for="reportExcel" class="error success"></label></h2>'
    			+'<div style="position:relative;">'
    			+'<span class="ranbut radiusbox" onclick="$(\'.busswi4\').fadeIn(\'slow\');">点击选择上传</span>'
-   			+'<lable style="position: absolute; top: 10px; left: 160px;" id="reportExcel2">${businessActivity.reportExcel}</lable>'
+   			+'<label style="position: absolute; top: 10px; left: 160px;" id="reportExcel2">${businessActivity.reportExcel}</label>'
    			+'</div>'
    			+'<input type="hidden" name="reportExcel" id="reportExcel" value="${businessActivity.reportExcel}">'; 
    			
@@ -737,7 +778,7 @@
     		+'<div style="position:relative;">'
     		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
     		+'<input type="hidden" id="planTime" name="planTime"  value="${businessActivity.publishDate } ${businessActivity.publishTime}"/>'
-    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow">${businessActivity.publishDate } ${businessActivity.publishTime}</lable>'
+    		+'<label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow">${businessActivity.publishDate } ${businessActivity.publishTime}</label>'
     		+'</div>'
     		+'<div class="line2"></div>';
     		
@@ -745,6 +786,7 @@
     		$("#bmhdId").empty();
     		$("#tphdId").empty();
     		$("#qnhId").empty();
+    		$("#jptpId").empty();
     		$("#typeName").val("抢优惠券");
 			$("input[name='state']:eq(0)").val("1");
 			$("#yhqId").append(htmlDom);
@@ -765,6 +807,7 @@
 	            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
 	        });
     	} else if($("input[name='typeId']:checked").val() == 5){
+    		$("#display").hide();
 			var htmlDom = ''
 			+'<div class="line2"></div>'
 			+'<h2 class="relran">报名开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
@@ -779,23 +822,70 @@
 			$("#rankId").empty();
     		$("#bmhdId").empty();
     		$("#tphdId").empty();
+    		$("#jptpId").empty();
     		$("#yhqId").empty();
     		$("#yhqAvtiveTime").empty();
     		$("#typeName").val("青年汇活动");
-			$("input[name='state']:eq(0)").val("1");
+			$("input[name='state']:eq(0)").val("0");
 			$("#qnhId").append(htmlDom);
+		} else if ($("input[name='typeId']:checked").val() == 6) {
+			$("#display").show();
+			var htmlDom = ''
+			+'<div class="line2"></div>'
+			+'<h2 class="relran">精品投票报名截止时间<label for="jptpTimeslotEndTime" class="error success"></label></h2>'
+			+'<input class="iptnewtit" type="text" name="jptpTimeslotEndTime" value="${businessActivity.jptpTimeslotEndTime}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择精品投票报名截止时间">'
+			+'<div class="line2"></div>'
+			+'<h2 class="relran">活动开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
+			+'<input class="iptnewtit" type="text" name="startTime" value="${businessActivity.startTime}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择开始时间"> 至'
+			+'<input class="iptnewtit" type="text" name="endTime" value="${businessActivity.endTime}" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择结束时间">' 
+			+'<div class="line2"></div>'
+			+'<h2 class="title">报名提交标准<label for="actRegWords" class="error success"></label></h2>'
+			+'<input class="iptnewtit" type="text" id="actRegWords" name="actRegWords" value="${businessActivity.actRegWords}" placeholder="对报名资料的提交标准进行一句话提示" />'
+			+'<div class="line2"></div>'
+			+'<h2 class="relran" style="font-weight: bold;">奖品设置<span style="font-weight:normal;font-size: 16px;">【请通过下面逐个添加奖品！】</span><label for="prizeConcat" class="error success"></label></h2>'
+			+'<div style=" overflow:hidden;"><img onclick="startActiveJpszinfo()" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;"><label style="font-weight:bold; color:#ff0000;">点击添加奖品</label>  请上传【宽300PX、高300PX】jpg格式图片<br>图片大小不能超过30K!</div></div>'
+			+'<input type="hidden" name="prizeConcat" id="prizeConcat" value="${prizeConcat}">'
+			+'<div class="line2"></div>'
+			+'<div id="prizeConcatDiv"></div>';
+
+			$("#rankId").empty();
+    		$("#bmhdId").empty();
+    		$("#tphdId").empty();
+    		$("#yhqId").empty();
+    		$("#qnhId").empty();
+    		$("#yhqAvtiveTime").empty();
+    		$("#typeName").val("精品投票活动");
+			$("input[name='state']:eq(0)").val("0");
+			$("#jptpId").append(htmlDom);
+			
+			var prizeConcat = $('#prizeConcat').val().substring(2);
+        	var prizeConcatSplit=prizeConcat.split("@@");      
+            for (var i=0; i<prizeConcatSplit.length ;i++ ) {   
+            	var prizeArr = prizeConcatSplit[i].split("##"); 
+               	var htmlDom = ""
+               		+'<div id="prizeArr'+i+'" style="overflow:hidden; margin-bottom:20px;"><img src="<%=ctx %>'+prizeArr[0]+'" width="191" height="191" style="float:left; padding-right:10px;">'
+       				+'<div style="color:#000;">'
+       				+'<p style="height:42px; margin:10px 0;">奖项名称：<span id="awardName'+i+'">'+prizeArr[1]+'</span></p>'
+       				+'<p style="height:42px; margin-bottom:10px;">奖品名称：<span id="prizeName'+i+'">'+prizeArr[2]+'</span></p>'
+       				+'<p style="height:42px; margin-bottom:10px;">获奖名次：排名<span id="rankStart'+i+'">'+prizeArr[3]+'</span>名至<span id="rankEnd'+i+'">'+prizeArr[4]+'</span>名</p>'
+       				+'<a style="color:#0000ff; cursor:pointer;" onclick="editPrizeConcat(\'edit\', \''+i+'\')">编辑</a>'
+       				+'</div>'
+       				+'</div>';
+               	$('#prizeConcatDiv').append(htmlDom);
+            }
 		}
 		
 	 	// 活动类型 
 	    $("input[name='typeId']").change(function() {
 			var $typeId = $("input[name='typeId']:checked").val();
 			if ($typeId == 1) {
+				$("#display").hide();
 				var htmlDom = ''
 	    		+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
 	    		+'<div style="position:relative;">'
 	    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
 	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
-	    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
+	    		+'<label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></label>'
 	    		+'</div>'
 	    		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
 	    		+'<input class="iptnewtit" type="text" id="rank" name="rank"/>名以前，可获奖';
@@ -803,6 +893,7 @@
 	    		$("#tphdId").empty();
 	    		$("#yhqId").empty();
 	    		$("#qnhId").empty();
+	    		$("#jptpId").empty();
 	    		$("#yhqAvtiveTime").empty();
 	    		$("#rankId").append(htmlDom);
 				$("#typeName").val("定时抢");
@@ -815,6 +906,7 @@
 		            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
 		        });
 			} else if ($typeId == 2) {
+				$("#display").hide();
 				var htmlDom=''
 					+'<h2 class="relstatus">活动场次<label for="times" class="error success"></label></h2>'
 					+'<label><input id="times0" class="radiostyle2" type="radio" name="times" value="0" checked >&nbsp;单次</label>　　'　　
@@ -845,6 +937,7 @@
 		 			$("#yhqAvtiveTime").empty();
 		    		$("#tphdId").empty("");
 		    		$("#qnhId").empty();
+		    		$("#jptpId").empty();
 					$("#typeName").val("报名活动");
 					$("input[name='state']:eq(0)").val("0");
 					
@@ -876,6 +969,7 @@
 				    	$("#timesDiv").append(htmlDom);
 				    });
 			} else if ($typeId == 3) {
+				$("#display").hide();
 				var htmlDom = ''
 				+'<div class="line2"></div>'
 	    		+'<h2 class="relstatus">投票类型<label for="voteType" class="error success"></label></h2>'
@@ -893,6 +987,7 @@
 	    		$("#rankId").empty();
 	 			$("#yhqId").empty();
 	 			$("#yhqAvtiveTime").empty();
+	 			$("#jptpId").empty();
 	 			$("#qnhId").empty();
 	    		$("#tphdId").append(htmlDom);
 				$("#typeName").val("投票活动");
@@ -972,6 +1067,7 @@
 					});
 			    });
 			}else if ($typeId == 4) {
+				$("#display").hide();
 				var htmlDom = ''
 				+'<div class="line2"></div>'
 				+'<h2 class="title">优惠券名称<label for="couponName" class="error success"></label></h2>'
@@ -999,7 +1095,7 @@
 				+'<h2 class="relran">导入优惠券号码<label for="reportExcel" class="error success"></label></h2>'
 				+'<div style="position:relative;">'
 				+'<span class="ranbut radiusbox" onclick="$(\'.busswi4\').fadeIn(\'slow\');">点击选择上传</span>'
-				+'<lable style="position: absolute; top: 10px; left: 160px;" id="reportExcel2"></lable>'
+				+'<label style="position: absolute; top: 10px; left: 160px;" id="reportExcel2"></label>'
 				+'</div>'
 				+'<input type="hidden" name="reportExcel" id="reportExcel" value="">'; 
 				
@@ -1008,7 +1104,7 @@
 	    		+'<div style="position:relative;">'
 	    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
 	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
-	    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
+	    		+'<label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></label>'
 	    		+'</div>'
 	    		+'<div class="line2"></div>';
 		    		
@@ -1016,6 +1112,7 @@
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
 	    		$("#qnhId").empty();
+	    		$("#jptpId").empty();
 	    		$("#typeName").val("抢优惠券");
 				$("input[name='state']:eq(0)").val("1");
 				$("#yhqId").append(htmlDom);
@@ -1036,6 +1133,7 @@
 		            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
 		        });
 			} else if ($typeId == 5) {
+				$("#display").hide();
 				var htmlDom = ''
 				+'<div class="line2"></div>'
 				+'<h2 class="relran">报名开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
@@ -1051,10 +1149,40 @@
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
 	    		$("#yhqId").empty();
+	    		$("#jptpId").empty();
 	    		$("#yhqAvtiveTime").empty();
 	    		$("#typeName").val("青年汇活动");
 				$("input[name='state']:eq(0)").val("1");
 				$("#qnhId").append(htmlDom);
+			} else if ($typeId == 6) {
+				$("#display").show();
+				var htmlDom = ''
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">精品投票报名截止时间<label for="jptpTimeslotEndTime" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" name="jptpTimeslotEndTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择精品投票报名截止时间">'
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">活动开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" name="startTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择开始时间"> 至'
+				+'<input class="iptnewtit" type="text" name="endTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择结束时间">' 
+				+'<div class="line2"></div>'
+				+'<h2 class="title">报名提交标准<label for="actRegWords" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" id="actRegWords" name="actRegWords" placeholder="对报名资料的提交标准进行一句话提示" />'
+				+'<div class="line2"></div>'
+				+'<h2 class="relran" style="font-weight: bold;">奖品设置<span style="font-weight:normal;font-size: 16px;">【请通过下面逐个添加奖品！】</span><label for="prizeConcat" class="error success"></label></h2>'
+				+'<div style=" overflow:hidden;"><img onclick="startActiveJpszinfo()" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;"><label style="font-weight:bold; color:#ff0000;">点击添加奖品</label>  请上传【宽300PX、高300PX】jpg格式图片<br>图片大小不能超过30K!</div></div>'
+				+'<input type="hidden" name="prizeConcat" id="prizeConcat" value="">'
+				+'<div class="line2"></div>'
+				+'<div id="prizeConcatDiv"></div>';
+
+				$("#rankId").empty();
+	    		$("#bmhdId").empty();
+	    		$("#tphdId").empty();
+	    		$("#yhqId").empty();
+	    		$("#qnhId").empty();
+	    		$("#yhqAvtiveTime").empty();
+	    		$("#typeName").val("精品投票活动");
+				$("input[name='state']:eq(0)").val("0");
+				$("#jptpId").append(htmlDom);
 			}
 		});
 	    
@@ -1532,6 +1660,7 @@
             //设置内容
             $('#actContent').val(ue.getContent());
         }
+        $('#prizeRules').val(ue1.getContent());
         $('#ff').submit();
     }
     //格式化日期

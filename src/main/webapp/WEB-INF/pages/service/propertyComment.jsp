@@ -53,7 +53,7 @@
     </div>
     <div class="x-inp ex-inp">
         <div class="tab">
-        	<i class="ex-show font-expre"></i>
+        	<span class="tleft" style="width:33px;"><i class="ex-show font-expre"></i></span>
            <span class="tleft">
   			<div style=" position:relative;">
            <input type="text"   name="comment" class="x-inc" id="comment" style=" position:absolute;top:0px; left:0; z-index:2;">
@@ -320,6 +320,9 @@
 		 		    type: 'post',
 		            dataType: 'json',
 		 		    success: function (data) {
+		 		    	$('#commentBtn').click(function(){
+		 					comment();
+		 				 });
 		 		    	//alert('评论成功');
 		 		    	//eval('data=' + data);
 		 		    	//$('#comment').attr('disabled', true);
@@ -347,6 +350,7 @@
 		 		    	newContent+='</dl>';
 		 				$('#comments').prepend(newContent);*/
 		 				if(data.errorCode == 200) {
+		 					font();
 		 					$('#comment').val("");
 			 				$('#replaceinp').val("");
 			 				replyId = 0;//点击回复人id
@@ -362,9 +366,6 @@
 		        	   }else{
 		        		   msgbox('提示',data.message,'确认');
 		        	   }
-		 				$('#commentBtn').click(function(){
-		 					comment();
-		 				 });
 		 		    },
 		 		    error: function () {
 		 		       msgbox('提示','评论失败','确认');

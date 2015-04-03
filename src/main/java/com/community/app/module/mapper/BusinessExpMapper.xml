@@ -722,9 +722,10 @@
 	
     <!-- 按条件查询所有 有快递单的公司  BusinessExp -->
 	<select id="findHasExpCom" resultType="hashmap" parameterType="Object">
-		SELECT DISTINCT e.expcompanyId,e.expCompany FROM business_exp  e
+		select ex.expressId,expressComppay from manage_express_all ex, (SELECT distinct e.expcompanyId FROM business_exp  e
 		inner join business_station s on s.stationId = e.stationId
 		inner join manage_estate es on es.stationId = s.stationId
+		
 		<if test="curUserId != null and curUserId != 0" >
 		inner join (
 				SELECT DISTINCT estateId 
@@ -741,8 +742,8 @@
 				</if>
 			) res on res.estateId = es.estateId
 		</if>
-		<include refid="Base_Where_Clause_Excel" /> 
-		ORDER BY e.expcompanyId
+		<include refid="Base_Where_Clause_Excel" /> ) tmp where ex.expressId = tmp.expcompanyId
+		ORDER BY ex.expressId
 	</select>
 	
 	

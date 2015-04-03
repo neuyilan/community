@@ -17,7 +17,6 @@ public class DefaultConfig {
 		try {
 			is = DefaultConfig.class.getClassLoader().getResourceAsStream("config.properties");
 			prop.load(is);
-			
 			is.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

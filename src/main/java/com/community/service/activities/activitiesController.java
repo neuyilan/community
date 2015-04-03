@@ -219,7 +219,7 @@ public class activitiesController {
 					json +="\"endTime\":\""+businessActivity.getEndTime()+"\",";
 				}
 				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\",";
-				if (businessActivity.getIsQNH()==0) {
+				if (businessActivity.getIsQNH()!=null && businessActivity.getIsQNH()==0) {
 					json +="\"qnh\":\"\",";
 				}else {
 					json +="\"qnh\":\""+businessActivity.getQNHName()+"\",";
@@ -261,7 +261,7 @@ public class activitiesController {
 					json +="\"endTime\":\""+businessActivity.getEndTime()+"\",";
 				}
 				json +="\"publisherId\":\""+businessActivity.getPublisherId()+"\",\"publisherName\":\""+businessActivity.getNickname()+"\",\"avatar\":\""+ip+businessActivity.getPortrait()+"\",\"state\":\""+businessActivity.getState()+"\",";
-				if (businessActivity.getIsQNH()==0) {
+				if (businessActivity.getIsQNH()!=null && businessActivity.getIsQNH()==0) {
 					json +="\"qnh\":\"\",";
 				}else {
 					json +="\"qnh\":\""+businessActivity.getQNHName()+"\",";
@@ -525,6 +525,7 @@ public class activitiesController {
 				mav.addObject("sessionid", request.getParameter("sessionid"));
 				mav.addObject("ID", request.getParameter("ID"));
 				mav.addObject("tel", request.getParameter("tel"));
+				mav.addObject("isphp", request.getParameter("isphp"));
 			}
 			
 			
@@ -1830,6 +1831,9 @@ public class activitiesController {
 						businessActivityQnhInformation.setTel(query.getTel());
 						businessActivityQnhInformationService.save(businessActivityQnhInformation);
 						
+						//参与人增加
+						businessActivityService.addParticipants(query);
+						
 						AppUserNews appUserNews = new AppUserNews();
 						appUserNews.setUserId(query.getUserId());
 						appUserNews.setCreateTime(ts);
@@ -1901,14 +1905,18 @@ public class activitiesController {
 		String actId = request.getParameter("ID");
 		if (StringUtils.isNotBlank(actId))
 		{
-
 			BusinessActivity activity = businessActivityService.findById(Integer.valueOf(request.getParameter("ID")));
 			if (activity != null)
 			{
 				try{
 			        Properties p = propertiesUtil.getProperties("config.properties");
 					String ip = p.getProperty("imageIp");   
-					
+					int state = activity.getState();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+					Date ts = (Date) sdf.parse(activity.getJptpTimeslotEndTime());
+					if (state!=2 && ts.getTime() < new Date().getTime()) {
+						state = 7;
+					}
 					json = new JSONObject().element("errorCode", "200").element("message", "获取成功").element("content", 
 							new JSONObject()							
 					         .element("actPic", ip + activity.getActPic())
@@ -1916,7 +1924,7 @@ public class activitiesController {
 							.element("startTime", activity.getStartTime())
 							.element("endTime", activity.getEndTime())
 							.element("actContent", activity.getActContent())
-							.element("state", activity.getState())
+							.element("state", state)
 							.element("registrationEndTime", activity.getEndTime())
 							).toString();
 //					json += "{";
@@ -2114,8 +2122,8 @@ public class activitiesController {
 			String ip = p.getProperty("imageIp"); 
 			JSONArray jsnary = new JSONArray();
 			int state = 1;//1没有报名2审核未通过3报名
-			
-			query.setRows(20);
+			if (query.getRows() == null || query.getRows() == 0) 
+				query.setRows(20);
 			query.setActId(query.getID());
 			
 			List<BusinessActReg> userList = businessActRegService.findById_app(query);
@@ -2127,14 +2135,14 @@ public class activitiesController {
 				else if (userList.get(0).getFlag() == 0)
 					state = 3;//3通过报名
 			}
-				
+			BusinessActReg regobj = null;
 			if (query.getType()==3 && state == 3  && query.getPage() == 1) {
 //				userList = businessActRegService.findById_app(query);
 //				if (CollectionUtils.isNotEmpty(userList)){
 //					if (userList.get(0).getFlag()==2) {
 //						state = 2;
 //					}else if (userList.get(0).getFlag()==0) {
-						BusinessActReg regobj = userList.get(0);
+						 regobj = userList.get(0);
 						state = 3;
 						jsnary.element(new JSONObject()
 						.element("regId", regobj.getRegId())
@@ -2155,6 +2163,11 @@ public class activitiesController {
 			List<BusinessActReg> list = (List<BusinessActReg>)baseBean.getList();
 			
 			for(BusinessActReg actReger :list)
+			{
+//				if(query.getType()==3 && list.size() == 1)
+//					continue; //break; 没有下次
+				if(query.getType()==3 && state == 3 && regobj !=null && actReger.getRegId() == regobj.getRegId())
+					continue;
 				jsnary.element(new JSONObject()
 				.element("regId", actReger.getRegId())
 				.element("nickname", actReger.getNickName())
@@ -2163,6 +2176,7 @@ public class activitiesController {
 				.element("portrait", ip+actReger.getAvatar())
 				.element("contestantNo", actReger.getCode() > 10 ? actReger.getCode() + "" : "0"+actReger.getCode()) // 编号 <10 补上0
 				.element("no", actReger.getRank())); //
+		}
 			jsn.element("content",new JSONObject().element("state", state).element("PageState", baseBean.getCount()>query.getPage()*query.getRows() ? "true" : "false").element("list", jsnary));
 			json = jsn.toString();
 		}catch(Exception e){
@@ -2234,8 +2248,9 @@ public class activitiesController {
 		String json = "";
 		try{
 			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("actId", query.getID());
+//			map.put("actId", query.getID());
 			map.put("userId", query.getUserId());
+			map.put("regId", query.getRegId());
 			List<BusinessVote> todayVote =  businessVoteService.findTodayVotesByMap(map);
 			if(CollectionUtils.isEmpty(todayVote))
 			{
@@ -2281,6 +2296,7 @@ public class activitiesController {
 			query.setActId(query.getID());
 			query.setUserId(null);
 			List<BusinessActReg> actRegs = businessActRegService.findById_app(query);
+			BusinessActivity activity = businessActivityService.findById_app(query.getID());
 			if (CollectionUtils.isNotEmpty(actRegs))
 			{
 				BusinessActReg actReg = actRegs.get(0);
@@ -2296,6 +2312,7 @@ public class activitiesController {
 						.element("message", "获取成功").element("content", 
 					     new JSONObject()
 						.element("regId", actReg.getRegId())
+						.element("title", activity.getActName())
 						.element("nickname", actReg.getNickName())
 						.element("estateName", actReg.getEstateName())
 						.element("number", actReg.getVotes())
@@ -2332,12 +2349,19 @@ public class activitiesController {
 		String actId = request.getParameter("ID");
 		try{
 			BusinessActivity act = businessActivityService.findById(Integer.valueOf(actId));
+			Map<String, Object> parm = new HashMap<String, Object>();
+			parm.put("userId",request.getParameter("userId"));
+			parm.put("actId", request.getParameter("ID"));
+			int isReg = CommonData.GlobalData.RET_FAILURE; //1 已报名
+			if ( CollectionUtils.isEmpty(businessActRegService.findByMap(parm)) )
+				isReg = CommonData.GlobalData.RET_SUCCESS; //0 未报名
+				
 			json = new JSONObject()
 			.element("errorCode", "200")
 			.element("message", "获取成功")
 			.element("content", new JSONObject()
-			.element("prompt", 
-					CommonData.GlobalData.DEBUG_MODE ? "活动报名话术" : act.getActRegWords())).toString();  //活动报名话术
+			.element("prompt", CommonData.GlobalData.DEBUG_MODE ? "活动报名话术" : act.getActRegWords())
+					.element("isReg", isReg)).toString();  //活动报名话术
 		}catch(Exception e){
 			json = new JSONObject()
 			.element("errorCode", "400")
@@ -2353,6 +2377,8 @@ public class activitiesController {
 		}
 	}
 	
+	
+	
 	/**
 	 * 选手报名
 	 * @param userId,sessionid,ID,page,rows
@@ -2363,6 +2389,9 @@ public class activitiesController {
 	public void saveActivitiesRegistration(HttpServletRequest request, HttpServletResponse response, BusinessActRegQuery query) {
 		String json = "";
 		try{
+			Properties p = propertiesUtil.getProperties("config.properties");
+			String ip = p.getProperty("imageIp");   
+
 			Map<String, Object> parm = new HashMap<String, Object>();
 			
 			parm.put("userId", query.getUserId());
@@ -2370,13 +2399,12 @@ public class activitiesController {
 			
 			if ( CollectionUtils.isEmpty(businessActRegService.findByMap(parm)) )
 			{
-				ManageEstate est = manageEstateService.findById(query.getEstateId());
 				AppUser bu =   appUserService.findById(new Integer(query.getUserId()));
 				BusinessActReg actReg = new BusinessActReg();
 				actReg.setUserId(query.getUserId());
 				actReg.setActId(query.getActId());
-				actReg.setEstateId(query.getEstateId());
-				actReg.setEstateName(est.getEstateName());
+				actReg.setEstateId(bu.getEstateId());
+				actReg.setEstateName(bu.getEstateName());
 				actReg.setContent(query.getContent());
 				actReg.setNickName(CommonData.GlobalData.DEBUG_MODE ? "昵称" : bu.getNickname());
 				actReg.setAvatar("");
@@ -2403,12 +2431,16 @@ public class activitiesController {
 					for(String img : imgArry)
 					{ 
 						BusinessRegPic regPic = new BusinessRegPic();
-						regPic.setRegId(regId);
-						regPic.setPicUrl(img);
+						regPic.setRegId(actReg.getRegId());
+						regPic.setPicUrl(img.replace(ip, ""));
 						businessRegPicService.save(regPic);
 					}
 				}
 				json = new JSONObject().element("errorCode", "200").element("message", "报名成功").toString();
+				BusinessActivityQuery businessActivityQuery = new BusinessActivityQuery();
+				businessActivityQuery.setActId(query.getActId());
+				//参与人增加
+				businessActivityService.addParticipants(businessActivityQuery);
 			}else
 			{
 				json = new JSONObject().element("errorCode", "400").element("message", "您已经参与活动报名！").toString();

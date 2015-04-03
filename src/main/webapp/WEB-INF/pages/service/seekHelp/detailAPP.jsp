@@ -9,6 +9,7 @@
 <title>小区开聊详情</title> 
 <link href="${ctx }/js/activity/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" /> 
+<link href="${ctx }/js/activity/css/idangerous.swiper.css" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 </head>
 
@@ -22,12 +23,14 @@
             <span class="kl-name">${businessHelp.helperName}</span>
             <span class="kl-time"><fmt:formatDate value="${businessHelp.helpTime }" pattern="yyyy-MM-dd HH:mm"/></span> 
         </p>
-        <div id="conents"  style="margin:10px 0 0; line-height:22px;padding-bottom:15px;">
+        <div id="conents"  class="ex-four" style="margin:10px 0 0; line-height:22px;padding-bottom:15px;">
         </div>
     </div>
 </div>
     
 <script src="${ctx}/js/activity/js/jquery-2.1.1.min.js"></script>
+<script src="${ctx }/js/activity/js/idangerous.swiper-2.1.min.js"></script>
+<script src="${ctx }/js/activity/js/expression.js"></script>
 <%-- <script src="${ctx}/js/jquery.showLoading.min.js"></script> --%>
      
 <script>
@@ -61,7 +64,7 @@ $('#supports').text('${businessHelp.supports}');
 	 }
 } 
 
- $('#conents').append(contents);
+ $('#conents').append(replace_em(contents));
 //  alert($("#supTmp").attr("value"));   
  if("${ctx}"==protrait){
 	 protrait = '${ctx}/images/morentouxiang.png';

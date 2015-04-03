@@ -99,7 +99,8 @@
 	
 	<!-- 按Map对象条件查询所有BusinessActivityRegistrationInformation -->
 	<select id="findByMap" resultMap="BusinessActivityRegistrationInformationResult" parameterType="java.util.Map">
-		select <include refid="Base_Column_List" /> from business_activity_registration_information <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_activity_registration_information <include refid="Base_Where_Clause" /> 
+		order by informationId desc
 	</select>
 	
 	<!-- 按VO对象条件查询所有BusinessActivityRegistrationInformation -->
@@ -131,7 +132,6 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_activity_registration_information(
-		
 		userId,
 		actId,
 		timeSlotId,
@@ -147,7 +147,7 @@
 		createTime,
 		editTime
 		) values(
-				#{userId},
+		#{userId},
 		#{actId},
 		#{timeSlotId},
 		#{nickname},
@@ -207,25 +207,11 @@
 		</set> 
 		where 
 		informationId=#{informationId}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessActivityRegistrationInformation删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_activity_registration_information where 
 		informationId=#{informationId}
-																									</delete>
-	
+	</delete>
 </mapper>
-	

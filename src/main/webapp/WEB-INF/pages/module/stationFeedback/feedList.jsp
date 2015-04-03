@@ -29,12 +29,12 @@
 	                    <!-- <li id="source_" class="navlist"><a href="javascript:;"><span>全部来源</span><b class="donbut"><i></i></b></a> 
 							<input type="hidden" name="source" id="source" value="" /> 
 							<ul class="erjnav">
-								<li id="source_1"><a href="javascript:;">驿站女孩</a></li>
-		                        <li id="source_2"><a href="javascript:;">快递代收</a></li>
-		                        <li id="source_3"><a href="javascript:;">驿站公告</a></li>
+		                        <li id="source_0"><a href="javascript:;">快递代收</a></li>
+		                        <li id="source_1"><a href="javascript:;">驿站公告</a></li>
+								<li id="source_2"><a href="javascript:;">驿站女孩</a></li>
 		                    </ul>
 						</li> -->
-	                	<li id="comId_" class="active navlist"><a href="javascript:;"><span>所有社区</span><b class="donbut"><i></i></b></a> 
+	                	<li id="comId_" class="active navlist"><a href="javascript:;"><span>社区排名</span><b class="donbut"><i></i></b></a> 
 	                    	<input type="hidden" name="comId" id="comId" value="" />
 	                    	<ul class="erjnav">
 	                            <c:forEach items="${comList}" var="comBean" varStatus="key">
@@ -42,7 +42,7 @@
 								</c:forEach>
 	                        </ul>
 	                    </li>
-	                    <li id="estateId_" class="navlist"><a href="javascript:;"><span>所有小区</span><b class="donbut"><i></i></b></a> 
+	                    <li id="estateId_" class="navlist"><a href="javascript:;"><span>小区排名</span><b class="donbut"><i></i></b></a> 
 							<input type="hidden" name="estateId" id="estateId" value="" /> 
 							<ul id="estateUL" class="erjnav"></ul>
 						</li>
@@ -58,20 +58,31 @@
 	                    <th>投票名次</th>
 	                    <th>社区</th>
 	                    <th>小区名称</th>
+	                    <th>总票数</th>
 	                    <th>投票比例</th>
 	                    <th>操作</th>
 	                  </tr>
 	                </thead>
 	                <tbody class="column">
 	                	<c:forEach items="${baseBean.list}" var="bean" varStatus="status">
-		                  <tr class="${(status.index+1)%2 == 0?'':'trtwo'}">
+		                  <tr class="${(status.index+1)%2 == 1?'':'trtwo'}">
 		                    <td class="red">${status.index+1}</td>
 		                    <td>${bean.comName}</td>
 		                    <td>${bean.estateName}</td>
+		                    <td style="font-weight:bold;">${bean.totalPoll}<em class="red">&nbsp;票</em></td>
 		                    <td>
-		                    	驿站女孩:<fmt:formatNumber value="${(bean.yznh/bean.totalPoll)*100}" pattern="##" minFractionDigits="0" ></fmt:formatNumber>% 
-		                                                                        快递代收:<fmt:formatNumber value="${(bean.kdds/bean.totalPoll)*100}" pattern="##" minFractionDigits="0" ></fmt:formatNumber>%  
-		                                                                        驿站公告:<fmt:formatNumber value="${(bean.yzgg/bean.totalPoll)*100}" pattern="##" minFractionDigits="0" ></fmt:formatNumber>%  
+		                    	<c:choose>
+		                    		<c:when test="${bean.totalPoll != 0}">
+				                                                                        快递代收:<fmt:formatNumber value="${(bean.kdds/bean.totalPoll)*100}" pattern="##" minFractionDigits="0" ></fmt:formatNumber>%  
+				                                                                        驿站公告:<fmt:formatNumber value="${(bean.yzgg/bean.totalPoll)*100}" pattern="##" minFractionDigits="0" ></fmt:formatNumber>%  
+			                    		驿站女孩:<fmt:formatNumber value="${(bean.yznh/bean.totalPoll)*100}" pattern="##" minFractionDigits="0" ></fmt:formatNumber>% 
+		                    		</c:when>
+		                    		<c:otherwise>
+				                                                                        快递代收:0%  
+				                                                                        驿站公告:0%  
+		                    			驿站女孩:0%  
+		                    		</c:otherwise>
+		                    	</c:choose>
 		                    </td>
 		                    <td><a class="bluea" style="cursor:pointer;" onclick="window.location.href='${ctx}/business/businessStationFeedback/getFeedDetail.do?feedId=${bean.feedId}'">查看</a></td>
 		                  </tr>
@@ -142,16 +153,29 @@
             
             if(rows.length > 0) {
             	for(var i=0;i<rows.length;i++) {
-                	var row = rows[i];   
+                	var row = rows[i]; 
+
+            		var yznh, kdds, yzgg = "";
+            		if(row.totalPoll != 0) {
+            			yznh=Math.round((row.yznh/row.totalPoll)*100);
+            			kdds=Math.round((row.kdds/row.totalPoll)*100);
+            			yzgg=Math.round((row.yzgg/row.totalPoll)*100);
+            		} else {
+            			yznh=0;
+            			kdds=0;
+            			yzgg=0;
+            		}
+            		
                 	var htmlDom = ''
-	              		+ '<tr class="'+((i+1)%2==0?'':'trtwo')+'">'
+	              		+ '<tr class="'+((i+1)%2==1?'':'trtwo')+'">'
 	              		+ '<td class="red">'+(i+1) +'</td>'
 	              		+ '<td>'+row.comName+'</td>'
 	              		+ '<td>'+row.estateName+'</td>'
+	              		+ '<td style="font-weight:bold;">'+row.totalPoll+'<em class="red">&nbsp;票</em></td>'
 	              		+ '<td>'
-	              		+ '驿站女孩:'+Math.round((row.yznh/row.totalPoll)*100)+'%'
-	              		+ '快递代收:'+Math.round((row.kdds/row.totalPoll)*100)+'%' 
-	              		+ '驿站公告:'+Math.round((row.yzgg/row.totalPoll)*100)+'%' 
+	              		+ '快递代收:'+kdds+'%  '
+	              		+ '驿站公告:'+yzgg+'%  '  
+	              		+ '驿站女孩:'+yznh+'%  '  
 						+ '</td>'
 	              		+ '<td><a class="bluea" onclick="window.location.href=\'getFeedDetail.do?feedId='+row.feedId+'\'">查看</a></td>'
 	              		+ '</tr>';

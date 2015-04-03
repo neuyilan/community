@@ -67,7 +67,7 @@ public class BusinessPrizeServiceImpl implements BusinessPrizeService {
 	 * @throws ServiceException
 	 */	
 	@Transactional(readOnly = true)
-	public List<BusinessPrize> findByMap(final Map paramMap) throws ServiceException {
+	public List<BusinessPrize> findByMap(final Map<String, Object> paramMap) throws ServiceException {
 		List<BusinessPrize> list = new ArrayList<BusinessPrize>() ;
 		try {
 			list=businessPrizeDao.findByMap(paramMap);

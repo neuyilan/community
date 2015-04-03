@@ -13,11 +13,11 @@
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
-			voteId,
-			regId,
-			userId,
-			vateTime,
-			actId
+			bv.voteId,
+			bv.regId,
+			bv.userId,
+			bv.vateTime,
+			bv.actId
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
@@ -25,19 +25,19 @@
 		<where>
 			<trim  suffixOverrides="," >
 					<if test="voteId != null and voteId != ''" >
-				   		and voteId = #{voteId}
+				   		and bv.voteId = #{voteId}
 					</if>
 					<if test="regId != null and regId != ''" >
-				   		and regId = #{regId}
+				   		and bv.regId = #{regId}
 					</if>
 					<if test="userId != null and userId != ''" >
-				   		and userId = #{userId}
+				   		and bv.userId = #{userId}
 					</if>
 					<if test="vateTime != null and vateTime != ''" >
-				   		and vateTime = #{vateTime}
+				   		and bv.vateTime = #{vateTime}
 					</if>
 					<if test="actId != null and actId != ''" >
-				   		and actId = #{actId}
+				   		and bv.actId = #{actId}
 					</if>
 			</trim>
 		</where>
@@ -45,31 +45,50 @@
 	
 	<!-- 根据id查询 BusinessVote -->
 	<select id="findById"  resultMap="BusinessVoteResult" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List" /> from business_vote where voteId = #{id}
+		select <include refid="Base_Column_List" />,
+			  bar.votes,
+			  bar.estateName,
+			  bar.avatar,
+			  bar.nickName,
+			  bar.`code`,
+			  bar.content 
+			  from business_vote  bv
+			  INNER JOIN business_act_reg bar
+			 ON bv.regId = bar.regId
+			 where bv.voteId = #{id}
 	</select>
 	
 	<!-- 无条件查询所有BusinessVote -->
 	<select id="findAll" resultMap="BusinessVoteResult">
-		select <include refid="Base_Column_List" /> from business_vote 
+		select <include refid="Base_Column_List" /> from business_vote  bv
 	</select>
 	
 	<!-- 按Map对象条件查询所有BusinessVote -->
 	<select id="findByMap" resultMap="BusinessVoteResult" parameterType="java.util.Map">
-		select <include refid="Base_Column_List" /> from business_vote <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_vote bv <include refid="Base_Where_Clause" />
 	</select>
 	
 		<!-- 查询当天是否参与过该活动 -->
 	<select id="findTodayVotesByMap" resultMap="BusinessVoteResult" parameterType="java.util.Map">
-		select * from business_vote where userid = #{userId} and actId = #{actId} and TO_DAYS(vateTime) = TO_DAYS(NOW())
+		select * from business_vote where userid = #{userId} and regId = #{regId} and TO_DAYS(vateTime) = TO_DAYS(NOW())
 	</select>
 	<!-- 按VO对象条件查询所有BusinessVote -->
 	<select id="findByExample" resultMap="BusinessVoteResult" parameterType="com.community.app.module.vo.BusinessVoteQuery">
-		select <include refid="Base_Column_List" /> from business_vote <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_vote bv <include refid="Base_Where_Clause" />
 	</select>
 	
 	<!-- BusinessVote根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessVoteResult" parameterType="Object">
-		select <include refid="Base_Column_List" /> from business_vote  
+		select <include refid="Base_Column_List" />,
+			  bar.votes,
+			  bar.estateName,
+			  bar.avatar,
+			  bar.nickName,
+			  bar.`code`,
+			  bar.content 
+			  from business_vote  bv
+			  INNER JOIN business_act_reg bar
+			 ON bv.regId = bar.regId
 		<include refid="Base_Where_Clause" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
@@ -81,7 +100,9 @@
 	
 	<!-- BusinessVote列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_vote 
+		select count(1) from business_vote   bv
+			  INNER JOIN business_act_reg bar
+			 ON bv.regId = bar.regId
 		<include refid="Base_Where_Clause" />
 	</select>
 	
@@ -91,13 +112,12 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_vote(
-		
 		regId,
 		userId,
 		vateTime,
 		actId
 		) values(
-				#{regId},
+		#{regId},
 		#{userId},
 		#{vateTime},
 		#{actId}
@@ -123,17 +143,11 @@
 		</set> 
 		where 
 		voteId=#{voteId}
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessVote删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_vote where 
 		voteId=#{voteId}
-									</delete>
-	
+	</delete>
 </mapper>
-	

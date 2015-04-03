@@ -77,11 +77,10 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_reg_pic(
-		
 		regId,
 		picUrl
 		) values(
-				#{regId},
+		#{regId},
 		#{picUrl}
 		)
 	</insert>
@@ -99,15 +98,11 @@
 		</set> 
 		where 
 		picId=#{picId}
-		
-		
 	</update>
 	
 	<!-- BusinessRegPic删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_reg_pic where 
-		picId=#{picId}
-					</delete>
-	
+		regId=#{regId}
+	</delete>
 </mapper>
-	

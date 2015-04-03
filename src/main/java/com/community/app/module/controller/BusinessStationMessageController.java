@@ -48,7 +48,7 @@ public class BusinessStationMessageController {
 	public ModelAndView list(BusinessStationMessageQuery query) {		
 		BaseBean baseBean = new BaseBean();
 		List<BusinessStationMessage> stationList = new ArrayList<BusinessStationMessage>() ;
-		List comList = null;
+		List<?> comList = null;
 		try{
 			ShiroUser shiroUser = CommonUtils.getUser();
 			comList = shiroUser.getComList();
@@ -60,7 +60,7 @@ public class BusinessStationMessageController {
 			query.setOrder("desc");
 			query.setSort("commentTime");
 			baseBean = businessStationMessageService.findAllPage(query);
-			Map paramMap = new HashMap();
+			Map<String, Object> paramMap = new HashMap<String, Object>();
 			paramMap.put("comId", 0);
 			paramMap.put("userId", shiroUser.getUserId());
 			stationList = businessStationMessageService.findByStationId(paramMap);
@@ -88,7 +88,7 @@ public class BusinessStationMessageController {
 		StringBuilder result = new StringBuilder();
 		ShiroUser shiroUser = CommonUtils.getUser();
 		try{
-			Map paramMap = new HashMap();
+			Map<String, Object> paramMap = new HashMap<String, Object>();
 			paramMap.put("comId",  query.getComId());
 			paramMap.put("userId", shiroUser.getUserId());
 			List<BusinessStationMessage> baseBean = businessStationMessageService.findByStationId(paramMap);

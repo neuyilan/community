@@ -99,7 +99,25 @@ public class BusinessActivityQuery extends BaseBean {
 	private String timeslot;
 	private String timeslotStartTime;
 	private String timeslotEndTime;
+	private String jptpTimeslotEndTime;
+	private String prizeConcat;
 	
+	public String getPrizeConcat() {
+		return prizeConcat;
+	}
+
+	public void setPrizeConcat(String prizeConcat) {
+		this.prizeConcat = prizeConcat;
+	}
+
+	public String getJptpTimeslotEndTime() {
+		return jptpTimeslotEndTime;
+	}
+
+	public void setJptpTimeslotEndTime(String jptpTimeslotEndTime) {
+		this.jptpTimeslotEndTime = jptpTimeslotEndTime;
+	}
+
 	public String getTimeslot() {
 		return timeslot;
 	}
@@ -551,6 +569,7 @@ public class BusinessActivityQuery extends BaseBean {
 		this.actRegWords = businessActivity.getActRegWords();
 		this.prizeRules = businessActivity.getPrizeRules();
 		this.timeslot = businessActivity.getTimeslot();
+		this.jptpTimeslotEndTime = businessActivity.getJptpTimeslotEndTime();
 	}
 
 	public BusinessActivityQuery() {

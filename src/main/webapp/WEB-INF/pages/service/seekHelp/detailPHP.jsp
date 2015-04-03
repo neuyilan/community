@@ -10,6 +10,7 @@
 <title>小区开聊详情</title> 
 <link href="${ctx }/js/activity/css/style.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/css/showLoading.css" rel="stylesheet" type="text/css" /> 
+<link href="${ctx }/js/activity/css/idangerous.swiper.css" rel="stylesheet" type="text/css" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 </head>
 
@@ -23,7 +24,7 @@
             <span class="kl-name">${businessHelp.helperName}  </span>
             <span class="kl-time"><fmt:formatDate value="${businessHelp.helpTime}" pattern="yyyy-MM-dd HH:mm"/> </span>  
         </p>
-        <div id="conents" class="kl-con">
+        <div id="conents" class="kl-con ex-four">
            
         </div>
         <p class="kl-zpl">
@@ -64,6 +65,8 @@
 </form>
 <script src="${ctx}/js/activity/js/jquery-2.1.1.min.js"></script>
 <script src="${ctx}/js/jquery.showLoading.min.js"></script>
+<script src="${ctx }/js/activity/js/idangerous.swiper-2.1.min.js"></script>
+<script src="${ctx }/js/activity/js/expression.js"></script>
     <script>
         $(".kl-wyhf").click(function(e) {
         	if(userId==0){
@@ -119,7 +122,7 @@ $("#supTmp").val('${businessHelp.supports}');
 	 }
 } 
 
- $('#conents').append(contents);
+ $('#conents').append(replace_em(contents));
 //  alert($("#supTmp").attr("value"));   
  if("${ctx}"==protrait){
 	 protrait = '${ctx}/images/morentouxiang.png';
@@ -345,13 +348,13 @@ function jump(nextNo) {
                			newContent += '</p>  <div class="kl-user tleft"> <p class="kl-people">'+uname+'</p>';
 
                			if(row.replyId==0){
-                   			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">'+row.content+'</span></span></p></div></div>';
+                   			newContent += ' <p class="kl-hfcon kl-top ex-four"><span class="kl-span">'+replace_em(row.content)+'</span></span></p></div></div>';
             			}else{
             				if(row.replyType==1){
-                       			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">回复  <em>'+row.replyName+'(官方)：</em>'+row.content+'</span></span></p></div></div>';
+                       			newContent += ' <p class="kl-hfcon kl-top ex-four"><span class="kl-span">回复  <em>'+row.replyName+'(官方)：</em>'+replace_em(row.content)+'</span></span></p></div></div>';
 //             					newContent+= '<div class="one">'+ '<span>回复</sapn>' +'<span>'+row.replyName+'(官方):</span>' +row.content+'</div>';
             				}else{
-                       			newContent += ' <p class="kl-hfcon kl-top"><span class="kl-span">回复  <em>'+row.replyName+'：</em>'+row.content+'</span></span></p></div></div>';
+                       			newContent += ' <p class="kl-hfcon kl-top ex-four"><span class="kl-span">回复  <em>'+row.replyName+'：</em>'+replace_em(row.content)+'</span></span></p></div></div>';
             				}
             			}
                				

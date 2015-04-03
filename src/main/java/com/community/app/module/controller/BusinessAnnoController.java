@@ -1261,7 +1261,7 @@ public class BusinessAnnoController {
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 				    
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
 					for(int i=0; i<annoScopes.length; i++) {
@@ -1325,7 +1325,7 @@ public class BusinessAnnoController {
 					if(query.getIsRecommend() == 1) {
 						state = "已发布-已推送-推荐到焦点图";
 					} else if(query.getIsRecommend() == 2) {
-						state = "已发布-已推送-推荐到全网焦点图";
+						state = "已发布-已推送-推荐到广告焦点图";
 					} else {
 						state = "已发布-已推送";
 					} 
@@ -1505,7 +1505,7 @@ public class BusinessAnnoController {
 				    businessFocus.setSelectTime(new Timestamp(System.currentTimeMillis()));
 				    
 					businessFocusService.save(businessFocus);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					AppFocusScope appFocusScope = new AppFocusScope();
 					for(int i=0; i<annoScopes.length; i++) {
@@ -1534,7 +1534,7 @@ public class BusinessAnnoController {
 				    businessFocusAd.setSelectTime(new Timestamp(System.currentTimeMillis()));
 				    
 					businessFocusAdService.save(businessFocusAd);
-					state = "已发布-推荐到全网焦点图";
+					state = "已发布-推荐到广告焦点图";
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
 					for(int i=0; i<annoScopes.length; i++) {
@@ -1625,7 +1625,7 @@ public class BusinessAnnoController {
 					if(query.getIsRecommend() == 1) {
 						state = "已发布-已推送-推荐到焦点图";
 					} else if(query.getIsRecommend() == 2) {
-						state = "已发布-已推送-推荐到全网焦点图";
+						state = "已发布-已推送-推荐到广告焦点图";
 					} else {
 						state = "已发布-已推送";
 					} 
@@ -2955,7 +2955,7 @@ public class BusinessAnnoController {
 				    
 					businessFocusAdService.save(businessFocusAd);
 					if(businessAnno.getAnnoType() == 4) {
-						state = "已发布-推荐到全网焦点图";
+						state = "已发布-推荐到广告焦点图";
 					}
 					
 					AppFocusAdScope appFocusAdScope = new AppFocusAdScope();
@@ -3095,7 +3095,7 @@ public class BusinessAnnoController {
 						if(businessAnno.getIsRecommend() == 1 ) {
 							state = "已发布-已推送-推荐到焦点图";
 						} else if(businessAnno.getIsRecommend() == 2) {
-							state = "已发布-已推送-推荐到全网焦点图";
+							state = "已发布-已推送-推荐到广告焦点图";
 						}
 					} else {
 						state = "已发布-已推送";

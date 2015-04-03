@@ -4,72 +4,72 @@
 <mapper namespace="com.community.app.module.dao.BusinessPrizeDao" >
 	<!-- 返回结构集 -->
 	<resultMap id="BusinessPrizeResult" type="BusinessPrize">
-			<result column="prizeId" property="prizeId" />
-			<result column="awardName" property="awardName" />
-			<result column="prizeName" property="prizeName" />
-			<result column="prizeQuota" property="prizeQuota" />
-			<result column="prizeContent" property="prizeContent" />
-			<result column="actId" property="actId" />
-			<result column="prizeImg" property="prizeImg" />
-			<result column="rankStart" property="rankStart" />
-			<result column="rankEnd" property="rankEnd" />
-			<result column="prizeOrder" property="prizeOrder" />
-			<result column="creatTime" property="creatTime" />
+		<result column="prizeId" property="prizeId" />
+		<result column="awardName" property="awardName" />
+		<result column="prizeName" property="prizeName" />
+		<result column="prizeQuota" property="prizeQuota" />
+		<result column="prizeContent" property="prizeContent" />
+		<result column="actId" property="actId" />
+		<result column="prizeImg" property="prizeImg" />
+		<result column="rankStart" property="rankStart" />
+		<result column="rankEnd" property="rankEnd" />
+		<result column="prizeOrder" property="prizeOrder" />
+		<result column="creatTime" property="creatTime" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
-			prizeId,
-			awardName,
-			prizeName,
-			prizeQuota,
-			prizeContent,
-			actId,
-			prizeImg,
-			rankStart,
-			rankEnd,
-			prizeOrder,
-			creatTime
+		prizeId,
+		awardName,
+		prizeName,
+		prizeQuota,
+		prizeContent,
+		actId,
+		prizeImg,
+		rankStart,
+		rankEnd,
+		prizeOrder,
+		creatTime
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-					<if test="prizeId != null and prizeId != ''" >
-				   		and prizeId = #{prizeId}
-					</if>
-					<if test="awardName != null and awardName != ''" >
-				   		and awardName = #{awardName}
-					</if>
-					<if test="prizeName != null and prizeName != ''" >
-				   		and prizeName = #{prizeName}
-					</if>
-					<if test="prizeQuota != null and prizeQuota != ''" >
-				   		and prizeQuota = #{prizeQuota}
-					</if>
-					<if test="prizeContent != null and prizeContent != ''" >
-				   		and prizeContent = #{prizeContent}
-					</if>
-					<if test="actId != null and actId != ''" >
-				   		and actId = #{actId}
-					</if>
-					<if test="prizeImg != null and prizeImg != ''" >
-				   		and prizeImg = #{prizeImg}
-					</if>
-					<if test="rankStart != null and rankStart != ''" >
-				   		and rankStart = #{rankStart}
-					</if>
-					<if test="rankEnd != null and rankEnd != ''" >
-				   		and rankEnd = #{rankEnd}
-					</if>
+				<if test="prizeId != null and prizeId != ''" >
+			   		and prizeId = #{prizeId}
+				</if>
+				<if test="awardName != null and awardName != ''" >
+			   		and awardName = #{awardName}
+				</if>
+				<if test="prizeName != null and prizeName != ''" >
+			   		and prizeName = #{prizeName}
+				</if>
+				<if test="prizeQuota != null and prizeQuota != ''" >
+			   		and prizeQuota = #{prizeQuota}
+				</if>
+				<if test="prizeContent != null and prizeContent != ''" >
+			   		and prizeContent = #{prizeContent}
+				</if>
+				<if test="actId != null and actId != ''" >
+			   		and actId = #{actId}
+				</if>
+				<if test="prizeImg != null and prizeImg != ''" >
+			   		and prizeImg = #{prizeImg}
+				</if>
+				<if test="rankStart != null and rankStart != ''" >
+			   		and rankStart = #{rankStart}
+				</if>
+				<if test="rankEnd != null and rankEnd != ''" >
+			   		and rankEnd = #{rankEnd}
+				</if>
 
-					<if test="prizeOrder != null and prizeOrder != ''" >
-				   		and prizeOrder = #{prizeOrder}
-					</if>
-					<if test="creatTime != null and creatTime != ''" >
-				   		and creatTime = #{creatTime}
-					</if>
+				<if test="prizeOrder != null and prizeOrder != ''" >
+			   		and prizeOrder = #{prizeOrder}
+				</if>
+				<if test="creatTime != null and creatTime != ''" >
+			   		and creatTime = #{creatTime}
+				</if>
 			</trim>
 		</where>
 	</sql>
@@ -122,7 +122,6 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_prize(
-		
 		awardName,
 		prizeName,
 		prizeQuota,
@@ -134,7 +133,7 @@
 		prizeOrder,
 		creatTime
 		) values(
-				#{awardName},
+		#{awardName},
 		#{prizeName},
 		#{prizeQuota},
 		#{prizeContent},
@@ -184,23 +183,10 @@
 		</set> 
 		where 
 		prizeId=#{prizeId}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessPrize删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
-		delete from business_prize where 
-		prizeId=#{prizeId}
-																					</delete>
-	
+		delete from business_prize where actId=#{actId}
+	</delete>
 </mapper>
-	

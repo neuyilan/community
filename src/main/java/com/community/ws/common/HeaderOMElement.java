@@ -13,11 +13,12 @@ import org.apache.axis2.context.MessageContext;
  * @date 2015-3-16 13:32:16 
  */
 public class HeaderOMElement {
-
+	
 	public static OMElement createHeaderOMElement(OMNamespace SecurityElementNamespace) {
 		OMFactory factory = OMAbstractFactory.getOMFactory();
 //		OMNamespace SecurityElementNamespace = factory.createOMNamespace(
 //				"http://handler.com", "ok");
+		
 		OMElement authenticationOM = factory.createOMElement("MySoapHeader",
 				SecurityElementNamespace);
 		OMElement usernameOM = factory.createOMElement("Uname",

@@ -44,13 +44,13 @@ public class CheckDistanceKmCli {
 			OMElement nameEle = fac.createOMElement("Json", omNs);
 			JSONArray jsonArry = new JSONArray();
 			jsonArry.add(0, new JSONObject().element("longitude", longitude).element("latitude", latitude));
-
+//116.265302，116.265302 [{"longitude":"116.265302","latitude":"116.265302"}]
 			System.out.println(jsonArry);
 
 			nameEle.setText(jsonArry.toString());
 			callMethod.addChild(nameEle);
 			long start = System.currentTimeMillis();
-			sender.getOptions().setTimeOutInMilliSeconds(CommonData.TimeOutData.QHN_WS_TIMEOUT);
+			sender.getOptions().setTimeOutInMilliSeconds(7*1000/*CommonData.TimeOutData.QHN_WS_TIMEOUT*/);
 			/**添加soapHeader */
 			sender.addHeader(HeaderOMElement.createHeaderOMElement(omNs));
 			OMElement response = sender.sendReceive(callMethod);
@@ -85,7 +85,7 @@ public class CheckDistanceKmCli {
 		 */
 		CheckDistanceKmCli checkDistanceKmCli = new CheckDistanceKmCli();
 		String ret = checkDistanceKmCli.getNearbyQNH(116.09,39.95);
-//		System.out.println(JSONObject.fromObject(JsonUtils.stringToJson(ret)));
+		System.out.println(JSONObject.fromObject(JsonUtils.stringToJson(ret)));
 		checkDistanceKmCli.getNearbyQNH(115.96,39.76);
 		checkDistanceKmCli.getNearbyQNH(115.99,39.69);
 		checkDistanceKmCli.getNearbyQNH(116.71,39.72);

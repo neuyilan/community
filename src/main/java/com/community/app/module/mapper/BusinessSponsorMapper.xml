@@ -4,56 +4,59 @@
 <mapper namespace="com.community.app.module.dao.BusinessSponsorDao" >
 	<!-- 返回结构集 -->
 	<resultMap id="BusinessSponsorResult" type="BusinessSponsor">
-			<result column="sponsorId" property="sponsorId" />
-			<result column="userId" property="userId" />
-			<result column="actId" property="actId" />
-			<result column="sponsorName" property="sponsorName" />
-			<result column="sponsorPhone" property="sponsorPhone" />
-			<result column="sponsorContent" property="sponsorContent" />
-			<result column="creatTime" property="creatTime" />
-			<result column="flag" property="flag" />
+		<result column="sponsorId" property="sponsorId" />
+		<result column="userId" property="userId" />
+		<result column="actId" property="actId" />
+		<result column="sponsorName" property="sponsorName" />
+		<result column="sponsorPhone" property="sponsorPhone" />
+		<result column="sponsorContent" property="sponsorContent" />
+		<result column="creatTime" property="creatTime" />
+		<result column="flag" property="flag" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
-			sponsorId,
-			userId,
-			actId,
-			sponsorName,
-			sponsorPhone,
-			sponsorContent,
-			creatTime,
-			flag
+		sponsorId,
+		userId,
+		actId,
+		sponsorName,
+		sponsorPhone,
+		sponsorContent,
+		creatTime,
+		flag
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-					<if test="sponsorId != null and sponsorId != ''" >
-				   		and sponsorId = #{sponsorId}
-					</if>
-					<if test="userId != null and userId != ''" >
-				   		and userId = #{userId}
-					</if>
-					<if test="actId != null and actId != ''" >
-				   		and actId = #{actId}
-					</if>
-					<if test="sponsorName != null and sponsorName != ''" >
-				   		and sponsorName = #{sponsorName}
-					</if>
-					<if test="sponsorPhone != null and sponsorPhone != ''" >
-				   		and sponsorPhone = #{sponsorPhone}
-					</if>
-					<if test="sponsorContent != null and sponsorContent != ''" >
-				   		and sponsorContent = #{sponsorContent}
-					</if>
-					<if test="creatTime != null and creatTime != ''" >
-				   		and creatTime = #{creatTime}
-					</if>
-					<if test="flag != null and flag != ''" >
-				   		and flag = #{flag}
-					</if>
+				<if test="sponsorId != null and sponsorId != ''" >
+			   		and sponsorId = #{sponsorId}
+				</if>
+				<if test="userId != null and userId != ''" >
+			   		and userId = #{userId}
+				</if>
+				<if test="actId != null and actId != ''" >
+			   		and actId = #{actId}
+				</if>
+				<if test="sponsorName != null and sponsorName != ''" >
+			   		and sponsorName = #{sponsorName}
+				</if>
+				<if test="sponsorPhone != null and sponsorPhone != ''" >
+			   		and sponsorPhone = #{sponsorPhone}
+				</if>
+				<if test="sponsorContent != null and sponsorContent != ''" >
+			   		and sponsorContent = #{sponsorContent}
+				</if>
+				<if test="creatTime != null and creatTime != ''" >
+			   		and creatTime = #{creatTime}
+				</if>
+				<if test="flag != null and flag != ''" >
+			   		and flag = #{flag}
+				</if>
+				<if test="keyWord != null and keyWord != ''" >
+					and sponsorName like '%${keyWord}%' or sponsorPhone like '%${keyWord}%' or sponsorContent like '%${keyWord}%' 
+				</if>
 			</trim>
 		</where>
 	</sql>
@@ -102,7 +105,6 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_sponsor(
-		
 		userId,
 		actId,
 		sponsorName,
@@ -111,7 +113,7 @@
 		creatTime,
 		flag
 		) values(
-				#{userId},
+		#{userId},
 		#{actId},
 		#{sponsorName},
 		#{sponsorPhone},
@@ -149,20 +151,11 @@
 		</set> 
 		where 
 		sponsorId=#{sponsorId}
-		
-		
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessSponsor删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_sponsor where 
 		sponsorId=#{sponsorId}
-															</delete>
-	
+	</delete>
 </mapper>
-	

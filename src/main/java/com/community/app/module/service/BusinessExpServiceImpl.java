@@ -519,10 +519,14 @@ public class BusinessExpServiceImpl implements BusinessExpService {
 		XSSFSheet sheet = null;
 		XSSFCellStyle headStyle = null;
 		XSSFCellStyle bodyStyle = null;
+		Map<String,String> tmpMap = new HashMap<String,String>();
 		//根据有快递 的快递公司 循环创建sheet页
 		for(int x=0;x<listCom.size();x++)
 		{
-			sheet = workBook.createSheet(listCom.get(x).get("expCompany").toString()); 
+			sheet = workBook.createSheet(listCom.get(x).get("expressComppay").toString()); 
+			tmpMap.put(listCom.get(x).get("expressId").toString(),
+					listCom.get(x).get("expressComppay").toString()
+					);
 			ExportUtil exportUtil = new ExportUtil(workBook, sheet);
 		    headStyle = exportUtil.getHeadStyle();
 		    bodyStyle = exportUtil.getBodyStyle();
@@ -540,12 +544,18 @@ public class BusinessExpServiceImpl implements BusinessExpService {
 			java.text.DateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");  
 			for (int j = 0; j < list.size(); j++) {
 				BusinessExp exp = list.get(j);
-				String expComName = exp.getExpCompany();
-				
+//				String expComName = exp.getExpCompany();
+//				if(exp.getExpCompanyID()>17){
+//					continue;
+//				}
+				String expComId = String.valueOf(exp.getExpCompanyID());
 				//根据sheet name找到sheet页
-				if (StringUtils.isBlank(expComName))
+				if (StringUtils.isBlank(expComId))
 					continue;
-				sheet = workBook.getSheet(expComName);
+//				if(expComId.equals("3")||expComId.equals("14")||expComId.equals("18")||expComId.equals("16")){
+//					continue;
+//				}
+				sheet = workBook.getSheet(tmpMap.get(expComId));
 				if (sheet == null)
 					continue;
 				//创建行数据

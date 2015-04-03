@@ -78,7 +78,16 @@ public class BusinessActivity implements java.io.Serializable {
 	private Integer isQNH;
 	private String timeslotStartTime;
 	private String timeslotEndTime;
-	
+	private String jptpTimeslotEndTime;
+
+	public String getJptpTimeslotEndTime() {
+		return jptpTimeslotEndTime;
+	}
+
+	public void setJptpTimeslotEndTime(String jptpTimeslotEndTime) {
+		this.jptpTimeslotEndTime = jptpTimeslotEndTime;
+	}
+
 	public String getTimeslotStartTime() {
 		return timeslotStartTime;
 	}

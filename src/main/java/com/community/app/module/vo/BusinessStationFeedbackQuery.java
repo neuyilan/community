@@ -14,6 +14,7 @@ public class BusinessStationFeedbackQuery extends BaseBean {
 	private java.lang.String estateName;
 	private java.lang.Integer state;
 	private java.lang.Integer totalPoll;
+	private java.lang.String pushMessage;
 
 	public BusinessStationFeedbackQuery(BusinessStationFeedback businessStationFeedback) {
 		this.feedId = businessStationFeedback.getFeedId();
@@ -25,6 +26,14 @@ public class BusinessStationFeedbackQuery extends BaseBean {
 		this.totalPoll = businessStationFeedback.getTotalPoll();
 	}
 	
+	public java.lang.String getPushMessage() {
+		return pushMessage;
+	}
+
+	public void setPushMessage(java.lang.String pushMessage) {
+		this.pushMessage = pushMessage;
+	}
+
 	public BusinessStationFeedbackQuery() {
 		
 	}	

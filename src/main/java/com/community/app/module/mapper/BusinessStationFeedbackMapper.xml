@@ -86,9 +86,9 @@
 	    SELECT <include refid="Base_Column_List" />, yznh, kdds, yzgg 
 	    FROM business_station_feedback bsf
 		INNER JOIN (select feedId,
-       		SUM(CASE source WHEN 1 THEN 1 ELSE 0 END ) yznh,
-			SUM(CASE source WHEN 2 THEN 1 ELSE 0 END ) kdds,
-			SUM(CASE source WHEN 3 THEN 1 ELSE 0 END ) yzgg
+			SUM(CASE source WHEN 0 THEN 1 ELSE 0 END ) kdds,
+			SUM(CASE source WHEN 1 THEN 1 ELSE 0 END ) yzgg,
+       		SUM(CASE source WHEN 2 THEN 1 ELSE 0 END ) yznh
  		FROM business_station_feedback_information 
  		group by feedid ) bsfi 
  		ON bsf.feedId=bsfi.feedId

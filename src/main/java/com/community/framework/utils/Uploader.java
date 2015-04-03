@@ -73,7 +73,7 @@ public class Uploader {
 		tmp.put("DIR", "目录创建失败");
 		tmp.put("UNKNOWN", "未知错误");
 	}
-	private final long MAXSize = 4194304*2L;//4*2MB
+	private final long MAXSize = 10485760*2L;//4*2MB
 	
 	public Map uploadForApp() throws Exception{
 		Map all = new HashMap();//最终MAP
@@ -192,10 +192,14 @@ public class Uploader {
 						}
 						String newFileName = new Timestamp(System.currentTimeMillis()).getTime() + this.type;
 						String tmp;
+						String isZip = this.request.getParameter("isZip");
 						if (fileItem.getSize()/1024 > 100)
 							 tmp = "tmp/";
 						else
 							tmp="";
+						if (isZip==null || isZip.equals("2")) {
+							tmp="";
+						}
 						String tmpPicDir = this.url +"/" + tmp;//"/tmp/";
 						File tmpFolder = new File(tmpPicDir);
 						if(!tmpFolder.exists()) {
@@ -203,7 +207,7 @@ public class Uploader {
 						}
 						String tmpPicFile = tmpPicDir  + newFileName;
 						this.url = this.url + "/" + newFileName;
-						System.out.println("文件保存路径为:"+this.url);
+						System.out.println("文件上传成功 文件保存路径为:"+this.url);
 						//File file = new File(this.url);
 						File file = new File(tmpPicFile);
 						InputStream inputSteam=fileItem.getInputStream();
@@ -217,6 +221,7 @@ public class Uploader {
 					    	BufferedImage imagebuff = ImageIO.read(inputSteam);  
 					    	inputSteam = image.rotateImg(imagebuff, rota, null);
 				    	}
+				    	System.out.println("文件旋转成功 文件保存路径为:"+this.url);
 				    	
 				    	BufferedInputStream fis=new BufferedInputStream(inputSteam);
 					    FileOutputStream fos=new FileOutputStream(file);
@@ -241,7 +246,7 @@ public class Uploader {
 								file.delete();
 						}
 						
-						System.out.println("文件："+filename+"上传成功!");
+						System.out.println("文件压缩成功 文件："+filename+"上传成功!");
 					}else{//字段
 						String fieldName = fileItem.getFieldName();//字段名
 						String fieldValue = fileItem.getString("UTF-8");

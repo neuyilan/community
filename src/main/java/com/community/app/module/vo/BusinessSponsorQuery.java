@@ -16,6 +16,24 @@ public class BusinessSponsorQuery extends BaseBean {
 	private java.lang.String sponsorContent;
 	private java.sql.Timestamp creatTime;
 	private Integer flag;
+	private java.lang.Integer ID;
+	private String keyWord;
+	
+	public String getKeyWord() {
+		return keyWord;
+	}
+
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
+	}
+
+	public java.lang.Integer getID() {
+		return ID;
+	}
+
+	public void setID(java.lang.Integer iD) {
+		ID = iD;
+	}
 
 	public BusinessSponsorQuery(BusinessSponsor businessSponsor) {
 		this.sponsorId = businessSponsor.getSponsorId();

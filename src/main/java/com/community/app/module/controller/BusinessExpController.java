@@ -580,7 +580,7 @@ public class BusinessExpController {
 	 * @return
 	 */
 	@RequestMapping(value="saveReceive")
-	public void saveReceive(HttpServletRequest request, HttpServletResponse response, BusinessExpQuery query) {
+	public void saveReceive(HttpServletRequest request, HttpServletResponse response, BusinessExpQuery query,BusinessExpQuery queryCode) {
 		BusinessExp businessExp = new BusinessExp();
 		String json = "";
 		try{
@@ -609,7 +609,8 @@ public class BusinessExpController {
 		    //businessExp.setSenderAddr(query.getSenderAddr());
 		    businessExp.setExpType(0);//收件
 		    //生成6位验证码
-		    String str=StringUtil.createRandom(true, 6);
+		    //String str=StringUtil.createRandom(true, 6);
+		    String str = this.findByCode(queryCode);
 		    businessExp.setCode(str);
             //查询当前所属驿站信息            
             BusinessStation businessStation = new BusinessStation();
@@ -1633,6 +1634,7 @@ public class BusinessExpController {
 			}
 			businessExp.setExpState(6);//已签收
 			businessExp.setIsSigned(1);
+			businessExp.setCode("");//清空验证码
 			businessExp.setSignTime(new Timestamp(System.currentTimeMillis()));
 			businessExp.setSignname(businessExp.getReceiverName());
 			businessExp.setIsSelf(0);
@@ -2175,6 +2177,7 @@ public class BusinessExpController {
 			BusinessExp businessExp = businessExpService.findById(query.getExpId());
 	        businessExp.setExpState(6);//已签收
 	        businessExp.setIsSigned(1);//已签收
+	        businessExp.setCode("");//清空验证码
 	        businessExp.setSignname(query.getSignname());
 	        businessExp.setSignTime(new Timestamp(System.currentTimeMillis()));
 	        businessExp.setReceiveTime(new Timestamp(System.currentTimeMillis()));
@@ -2492,5 +2495,26 @@ public class BusinessExpController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+    /**
+     * @param query
+     * @return
+     */
+    @RequestMapping(value="findByCode")
+    public String findByCode(BusinessExpQuery query) {
+    	    String str=StringUtil.createRandom(true, 6);
+			query.setIsSigned(0);
+			query.setCode(str);
+			query.setExpType(0);
+			List expList = businessExpService.findByExample(query);
+			if(expList != null && expList.size() > 0) {
+				return findByCode(query);
+			}
+			else{
+				return str;
+			}
+				
+			
+	
 	}
 }

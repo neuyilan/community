@@ -26,7 +26,7 @@ import com.community.framework.utils.Uploader;
 public class PicUploadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ServletFileUpload upload;
-	private final long MAXSize = 4194304*2L;//4*2MB
+	private final long MAXSize = 10485760*2L;//4*2MB
 	private String filedir=null;
     
     /**

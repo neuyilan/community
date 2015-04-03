@@ -38,7 +38,7 @@
 				<if test="feedTime != null and feedTime != ''" >
 			   		and bsfi.feedTime = #{feedTime}
 				</if>
-				<if test="source != null and source != ''" >
+				<if test="source != null" >
 			   		and bsfi.source = #{source}
 				</if>
 				<if test="flag != null and flag != ''" >

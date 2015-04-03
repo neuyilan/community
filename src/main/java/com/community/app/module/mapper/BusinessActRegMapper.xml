@@ -4,85 +4,100 @@
 <mapper namespace="com.community.app.module.dao.BusinessActRegDao" >
 	<!-- 返回结构集 -->
 	<resultMap id="BusinessActRegResult" type="BusinessActReg">
-			<result column="regId" property="regId" />
-			<result column="userId" property="userId" />
-			<result column="estateId" property="estateId" />
-			<result column="estateName" property="estateName" />
-			<result column="nickName" property="nickName" />
-			<result column="avatar" property="avatar" />
-			<result column="code" property="code" />
-			<result column="content" property="content" />
-			<result column="actId" property="actId" />
-			<result column="votes" property="votes" />
-			<result column="regTime" property="regTime" />
-			<result column="rank" property="rank" />
-			<result column="flag" property="flag" />
+		<result column="regId" property="regId" />
+		<result column="userId" property="userId" />
+		<result column="estateId" property="estateId" />
+		<result column="estateName" property="estateName" />
+		<result column="nickName" property="nickName" />
+		<result column="avatar" property="avatar" />
+		<result column="code" property="code" />
+		<result column="content" property="content" />
+		<result column="actId" property="actId" />
+		<result column="votes" property="votes" />
+		<result column="regTime" property="regTime" />
+		<result column="rank" property="rank" />
+		<result column="flag" property="flag" />
 	</resultMap>
 	
 	<!-- 所有字段 -->
 	<sql id="Base_Column_List" >
-			regId,
-			userId,
-			estateId,
-			estateName,
-			nickName,
-			avatar,
-			code,
-			content,
-			actId,
-			votes,
-			regTime,
-			flag
+		bar.regId,
+		bar.userId,
+		bar.estateId,
+		bar.estateName,
+		bar.nickName,
+		bar.avatar,
+		bar.code,
+		bar.content,
+		bar.actId,
+		bar.votes,
+		bar.regTime,
+		bar.flag
 	</sql>
 	
 	<!-- 所有字段查询条件 -->
 	<sql id="Base_Where_Clause">
 		<where>
 			<trim  suffixOverrides="," >
-					<if test="regId != null and regId != ''" >
-				   		and regId = #{regId}
-					</if>
-					<if test="userId != null" >
-				   		and userId = #{userId}
-					</if>
-					<if test="estateId != null" >
-				   		and estateId = #{estateId}
-					</if>
-					<if test="estateName != null" >
-				   		and estateName = #{estateName}
-					</if>
-					<if test="nickName != null and nickName != ''" >
-				   		and nickName = #{nickName}
-					</if>
-					<if test="avatar != null and avatar != ''" >
-				   		and avatar = #{avatar}
-					</if>
-					<if test="code != null and code != ''" >
-				   		and code = #{code}
-					</if>
-					<if test="content != null and content != ''" >
-				   		and content = #{content}
-					</if>
-					<if test="actId != null and actId != ''" >
-				   		and actId = #{actId}
-					</if>
-					<if test="votes != null and votes != ''" >
-				   		and votes = #{votes}
-					</if>
-					<if test="regTime != null and regTime != ''" >
-				   		and regTime = #{regTime}
-					</if>
-					<if test="flag != null" >
-				   		and flag = #{flag}
-					</if>
+				<if test="regId != null and regId != ''" >
+			   		and bar.regId = #{regId}
+				</if>
+				<if test="userId != null" >
+			   		and bar.userId = #{userId}
+				</if>
+				<if test="estateId != null" >
+			   		and bar.estateId = #{estateId}
+				</if>
+				<if test="estateName != null" >
+			   		and bar.estateName = #{estateName}
+				</if>
+				<if test="nickName != null and nickName != ''" >
+			   		and bar.nickName = #{nickName}
+				</if>
+				<if test="avatar != null and avatar != ''" >
+			   		and bar.avatar = #{avatar}
+				</if>
+				<if test="code != null and code != ''" >
+			   		and bar.code = #{code}
+				</if>
+				<if test="content != null and content != ''" >
+			   		and bar.content = #{content}
+				</if>
+				<if test="actId != null and actId != ''" >
+			   		and bar.actId = #{actId}
+				</if>
+				<if test="votes != null and votes != ''" >
+			   		and bar.votes = #{votes}
+				</if>
+				<if test="regTime != null and regTime != ''" >
+			   		and bar.regTime = #{regTime}
+				</if>
+				<if test="flag != null" >
+			   		and bar.flag = #{flag}
+				</if>
+				<if test="comId != null" >
+					and bc.comId = #{comId}
+				</if>
+				<if test="estateId != null" >
+					and me.estateId = #{estateId}
+				</if>
+				<if test="keyWord != null and keyWord != ''" >
+					and bar.content like '%${keyWord}%' or bar.nickName like '%${keyWord}%' 
+				</if>
 			</trim>
 		</where>
 	</sql>
 	
-	
 	<!-- 根据id查询 BusinessActReg -->
 	<select id="findById"  resultMap="BusinessActRegResult" parameterType="java.lang.Integer">
-		select <include refid="Base_Column_List" /> from business_act_reg where regId = #{id}
+		<!-- select <include refid="Base_Column_List" /> from business_act_reg where regId = #{id} -->
+		SELECT
+			bar.regId, bar.userId, bar.estateId, bar.estateName, bar.nickName, bar.avatar, bar.CODE, 
+			bar.content, bar.actId, bar.votes, bar.regTime, bar.flag, au.realname, au.tel
+		FROM
+			business_act_reg bar INNER JOIN app_user au ON bar.userId= au.userId
+		WHERE
+			regId = #{id}
 	</select>
 	
 	<!-- 按VO对象条件查询所有BusinessActReg -->
@@ -93,34 +108,37 @@
 		where actId=#{actId}
 		ORDER BY votes DESC ,regId ASC) t
 		) rk
-		
 		<if test="regId != null" >
 			where  regId = #{regId}
 		</if>
-		<if test="regId == null" >
+		<if test="userId == null" >
 			where  userId = #{userId}
 		</if>
-		
 	</select>
 	
 	<!-- 无条件查询所有BusinessActReg -->
 	<select id="findAll" resultMap="BusinessActRegResult">
-		select <include refid="Base_Column_List" /> from business_act_reg 
+		select <include refid="Base_Column_List" /> from business_act_reg bar 
 	</select>
 	
 	<!-- 按Map对象条件查询所有BusinessActReg -->
 	<select id="findByMap" resultMap="BusinessActRegResult" parameterType="java.util.Map">
-		select <include refid="Base_Column_List" /> from business_act_reg <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_act_reg bar <include refid="Base_Where_Clause" />
 	</select>
 	
 	<!-- 按VO对象条件查询所有BusinessActReg -->
 	<select id="findByExample" resultMap="BusinessActRegResult" parameterType="com.community.app.module.vo.BusinessActRegQuery">
-		select <include refid="Base_Column_List" /> from business_act_reg <include refid="Base_Where_Clause" />
+		select <include refid="Base_Column_List" /> from business_act_reg bar <include refid="Base_Where_Clause" />
 	</select>
 	
 	<!-- BusinessActReg根据搜索条件，搜索分页数据 -->
 	<select id="findAllPage" resultMap="BusinessActRegResult" parameterType="Object">
-		select <include refid="Base_Column_List" /> from business_act_reg  
+		select <include refid="Base_Column_List" />,
+		(select count(1) from business_reg_pic a where a.regId= bar.regId) count ,
+		(SELECT picUrl FROM business_reg_pic a WHERE a.regId = bar.regId  limit 1) picUrl
+		from business_act_reg bar 
+		INNER JOIN manage_estate me ON bar.estateId = me.estateId 
+		INNER JOIN business_community bc ON me.comId = bc.comId
 		<include refid="Base_Where_Clause" />
 		<if test="pager.orderCondition != null and pager.orderCondition != ''" >
       	${pager.orderCondition}
@@ -136,27 +154,26 @@
 		SELECT @rank:=@rank+1 rank, t.regId,t.userId,t.estateId,t.estateName,t.nickName,t.avatar,t.code,t.content,t.actId,t.votes,t.regTime,t.flag 
 		FROM (SELECT @rank:=0 rn ,a.* FROM business_act_reg a  
 		<include refid="Base_Where_Clause" />
-		<if test="type == 1 || type == 3" >
 			ORDER BY votes DESC ,regId ASC) t
-		</if>
-		<if test="type == 2" >
-			ORDER BY regTime DESC) t
-		</if>
 		) tmp
+		<if test="type == 2" >
+			ORDER BY regTime DESC
+		</if>
 	    <if test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''" >
-	    ${pager.mysqlQueryCondition}
+	    	${pager.mysqlQueryCondition}
 	    </if>
 	</select>
 	
 	<!-- BusinessActReg列表总数-->
 	<select id="selectCount" resultType="java.lang.Integer"  parameterType="Object">
-		select count(1) from business_act_reg 
+		select count(1) from business_act_reg bar 
+		INNER JOIN manage_estate me ON bar.estateId = me.estateId 
+		INNER JOIN business_community bc ON me.comId = bc.comId
 		<include refid="Base_Where_Clause" />
 	</select>
 	
 		<!-- 计算当前选手前面有多少名 -->
 	<select id="cntFront" resultType="java.lang.Integer"  parameterType="java.util.Map">
-	
 		select count(1) from business_act_reg 
 		where 1 = 1
 		<if test="regId != null" >
@@ -166,11 +183,10 @@
 		</if>
 		<if test="actId != null" >
 	   		and actId = #{actId}
-		</if>		
-		
+		</if>	
 	</select>
 	
-		<!-- 修改当前选手排名 -->
+	<!-- 修改当前选手排名 -->
 	<update id="updateCode" parameterType="java.util.Map">
 		<if test="regId != null and actId != null" >
 		update business_act_reg 
@@ -184,8 +200,7 @@
 		</if>	
 	</update>
 	
-	
-			<!-- 修改当前选手投票数 -->
+	<!-- 修改当前选手投票数 -->
 	<update id="updateVotes" parameterType="java.util.Map">
 		<if test="regId != null" >
 		update business_act_reg set votes=votes+1 where regId = #{regId}
@@ -198,7 +213,6 @@
 			SELECT LAST_INSERT_ID()
   		</selectKey>
 		insert into business_act_reg(
-		
 		userId,
 		estateId,
 		estateName,
@@ -211,7 +225,7 @@
 		regTime,
 		flag
 		) values(
-				#{userId},
+		#{userId},
 		#{estateId},
 		#{estateName},
 		#{nickName},
@@ -259,28 +273,17 @@
 			<if test="regTime != null and regTime != ''" >
 			regTime=#{regTime},
 			</if>
-			<if test="flag != null and flag != ''" >
+			<if test="flag != null" >
 			flag=#{flag}
 			</if>
 		</set> 
 		where 
 		regId=#{regId}
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	</update>
 	
 	<!-- BusinessActReg删除数据 -->
 	<delete id="delete" parameterType="java.lang.Integer">
 		delete from business_act_reg where 
 		regId=#{regId}
-																			</delete>
-	
+	</delete>
 </mapper>
-	

@@ -1,5 +1,7 @@
 package com.community.ws.QNH.QNHIFClient;
 
+import java.net.SocketTimeoutException;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -10,6 +12,7 @@ import org.apache.axiom.om.OMNamespace;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
+import org.apache.commons.httpclient.ConnectionPoolTimeoutException;
 
 import com.community.framework.utils.CommonData;
 import com.community.framework.utils.DefaultConfig;
@@ -49,7 +52,7 @@ public class OnlineCheckInCli {
 			long start = System.currentTimeMillis();
 			/**添加soapHeader */
 			sender.addHeader(HeaderOMElement.createHeaderOMElement(omNs));
-			sender.getOptions().setTimeOutInMilliSeconds(CommonData.TimeOutData.QHN_WS_TIMEOUT);
+			sender.getOptions().setTimeOutInMilliSeconds(5000L/*CommonData.TimeOutData.QHN_WS_TIMEOUT*/);
 			OMElement response = sender.sendReceive(callMethod);
 			System.out.println("response====>" + response);
 			long end = System.currentTimeMillis();
@@ -58,6 +61,8 @@ public class OnlineCheckInCli {
 			System.out.println(retStr);
 		} catch (Exception e) {
 			retStr = "" ;
+			if (e.getCause() instanceof ConnectionPoolTimeoutException || e.getCause() instanceof SocketTimeoutException)
+				System.out.println("访问超时！");
 			e.printStackTrace();
 		} finally {
 			if (sender != null)
@@ -76,7 +81,7 @@ public class OnlineCheckInCli {
 	public static void main(String[] args) {
 		OnlineCheckInCli onlineCheckInCli = new OnlineCheckInCli();
 //		onlineCheckInCli.signOnline("229408", "15945116754");
-		onlineCheckInCli.signOnline("00008A9E-CFFB-4C4D-A36D-5E8C83DD6E94", "15040636057");
+//		onlineCheckInCli.signOnline("00008A9E-CFFB-4C4D-A36D-5E8C83DD6E94", "15040636057");
 //		onlineCheckInCli.signOnline("000A8003-A2CC-4BDC-A3C7-20A1E4179E61", "15945116753");
 //		onlineCheckInCli.signOnline("000B148F-C7DB-4B31-AAF1-7F86BF6D8C1B", "15040636057");
 //		onlineCheckInCli.signOnline("000B86FB-50C4-4E29-B681-EA86D1AF52FC", "18911905706");

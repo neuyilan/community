@@ -1,32 +1,28 @@
 package com.community.app.module.controller;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.community.app.module.vo.BaseBean;
 
-
+import com.community.app.module.bean.BusinessRegPic;
 import com.community.app.module.bean.BusinessVote;
+import com.community.app.module.service.BusinessRegPicService;
 import com.community.app.module.service.BusinessVoteService;
+import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessVoteQuery;
-
+import com.community.framework.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/business/businessVote")
@@ -34,8 +30,8 @@ public class BusinessVoteController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessVoteController.class);
 	@Autowired
 	private BusinessVoteService businessVoteService;
-	
-	private final String LIST_ACTION = "redirect:/business/businessVote/list.do";
+	@Autowired
+	private BusinessRegPicService businessRegPicService;
 	
 	/**
 	 * 进入管理页
@@ -61,8 +57,14 @@ public class BusinessVoteController {
 		String json = "";
 		StringBuilder result = new StringBuilder();
 		try{
+			query.setSort("vateTime");
+			query.setOrder("desc");
+			query.setRows(20);
 			BaseBean baseBean = businessVoteService.findAllPage(query);
-			result.append("{\"total\":").append(baseBean.getCount()).append(",")
+			result.append("{\"total\":").append(baseBean.getCount()).append(",");
+			result.append("\"pageId\":").append(baseBean.getPager().getPageId()).append(",");
+			result.append("\"pageSize\":").append(baseBean.getPager().getPageSize()).append(",");
+			result.append("\"pageCount\":").append(baseBean.getPager().getPageCount()).append(",")
 			.append("\"rows\":[");
 			for(int i=0;i<baseBean.getList().size();i++) {
 				BusinessVote businessVote = (BusinessVote) baseBean.getList().get(i);
@@ -71,6 +73,12 @@ public class BusinessVoteController {
 			    .append("\"regId\":\"").append(businessVote.getRegId()).append("\"").append(",")
 			    .append("\"userId\":\"").append(businessVote.getUserId()).append("\"").append(",")
 			    .append("\"vateTime\":\"").append(businessVote.getVateTime()).append("\"").append(",")
+			    .append("\"votes\":\"").append(businessVote.getVotes()).append("\"").append(",")
+			    .append("\"estateName\":\"").append(businessVote.getEstateName()).append("\"").append(",")
+			    .append("\"avatar\":\"").append(businessVote.getAvatar()).append("\"").append(",")
+			    .append("\"nickName\":\"").append(businessVote.getNickName()).append("\"").append(",")
+			    .append("\"code\":\"").append(businessVote.getCode()).append("\"").append(",")
+			    .append("\"content\":\"").append(JsonUtils.stringToJson(businessVote.getContent().replace("\"", "\\\"").replaceAll("(\r?\n()+)", ""))).append("\"").append(",")
 			    .append("\"actId\":\"").append(businessVote.getActId()).append("\"")
 				.append("}").append(",");
 			}
@@ -93,6 +101,54 @@ public class BusinessVoteController {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 投票中详情页
+	 * @return
+	 */
+	@RequestMapping(value="getVoteById")
+    public void getVoteById(@RequestParam(value="voteId") Integer voteId, HttpServletResponse response) {
+		BusinessVote businessVote = businessVoteService.findById(voteId);
+		StringBuffer sb = new StringBuffer();
+		String picUrlArr = "";
+		if(businessVote != null) {
+			Map<String, Object> paramMap = new HashMap<String, Object>();
+			paramMap.put("regId", businessVote.getRegId());
+			List<BusinessRegPic> regPicList = businessRegPicService.findByMap(paramMap);
+			
+			if(regPicList.size() > 0) {
+				for(int i=0; i< regPicList.size(); i++) {
+					BusinessRegPic regPicBean = regPicList.get(i);
+					sb.append(",").append(regPicBean.getPicUrl());
+				}
+				picUrlArr = sb.toString().substring(1);
+			}
+		}
+		
+        StringBuilder result = new StringBuilder();
+        result.append("{")
+            .append("\"voteId\":\"").append(businessVote.getVoteId()).append("\"").append(",")
+		    .append("\"regId\":\"").append(businessVote.getRegId()).append("\"").append(",")
+		    .append("\"userId\":\"").append(businessVote.getUserId()).append("\"").append(",")
+		    .append("\"vateTime\":\"").append(businessVote.getVateTime()).append("\"").append(",")
+		    .append("\"votes\":\"").append(businessVote.getVotes()).append("\"").append(",")
+		    .append("\"estateName\":\"").append(businessVote.getEstateName()).append("\"").append(",")
+		    .append("\"avatar\":\"").append(businessVote.getAvatar()).append("\"").append(",")
+		    .append("\"nickName\":\"").append(businessVote.getNickName()).append("\"").append(",")
+		    .append("\"code\":\"").append(businessVote.getCode()).append("\"").append(",")
+		    .append("\"content\":\"").append(businessVote.getContent()).append("\"").append(",")
+		    .append("\"picUrlArr\":\"").append(picUrlArr).append("\"").append(",")
+		    .append("\"actId\":\"").append(businessVote.getActId()).append("\"")
+            .append("}");
+        	
+            response.setHeader("Cache-Control", "no-cache");
+            response.setCharacterEncoding("utf-8");
+            try {
+                response.getWriter().write(result.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
 	
 	/**
 	 * 进入新增页
@@ -229,5 +285,4 @@ public class BusinessVoteController {
 			e.printStackTrace();
 		}
 	}
-	
 }

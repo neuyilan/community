@@ -72,7 +72,7 @@
 	<bean id="multipartResolver"  
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
         <property name="maxUploadSize">  
-            <value>2048576</value>  
+            <value>20485760</value>  
         </property>  
     </bean>  
   	<!-- 注册 applicationContext 为 AXIS2 -->

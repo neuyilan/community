@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>编辑全网焦点图</title>
+    <title>编辑广告焦点图</title>
     <%@include file="/common/meta.jsp"%>
     <%@include file="/common/editorJs.jsp"%>
     <link rel="stylesheet" href="<%=ctx%>/js/jquery-ui/themes/base/jquery.ui.all.css">
@@ -77,7 +77,7 @@
 	            },
 	            messages: {
 	                title: {
-	                	required: '请填写全网焦点图名称！'
+	                	required: '请填写广告焦点图名称！'
 	                },
 	                focusAdScope: {
 	                    required: '请选择展示范围！'
@@ -107,10 +107,10 @@
 	<input type="hidden" name="scope" id="scope" value="${scope1 }" />
     <div class="wrapper wranews">
         <div class="newsrel">
-            <div class="header-public"><span class="return" onclick="history.go(-1);"></span>编辑全网焦点图</div>
+            <div class="header-public"><span class="return" onclick="history.go(-1);"></span>编辑广告焦点图</div>
             <div class="cont-l">
-                <h2 class="relran" style="font-weight: bold;">全网焦点图名称<label for="title" class="error success"></label></h2>
-                <input class="iptnewtit" type="text" name="title" placeholder='请输入全网焦点图名称'  value="${businessFocusAd.title}"/>
+                <h2 class="relran" style="font-weight: bold;">广告焦点图名称<label for="title" class="error success"></label></h2>
+                <input class="iptnewtit" type="text" name="title" placeholder='请输入广告焦点图名称'  value="${businessFocusAd.title}"/>
                 
                 <h2 class="relran" style="font-weight: bold;">展示范围<label for="focusAdScope" class="error success"></label></h2>
 	            <div style="position:relative;">
@@ -120,7 +120,7 @@
 		            <lable style="position: absolute; top: 10px; left: 160px;"  id="scopeShow">${businessFocusAd.focusAdScope}</lable>
 	            </div> 
                  
-                <h2 class="relstatus" style="font-weight: bold;">全网焦点图<label for="picUrl" class="error success"></label></h2>
+                <h2 class="relstatus" style="font-weight: bold;">广告焦点图<label for="picUrl" class="error success"></label></h2>
                 <div style=" overflow:hidden;"><img id="picUrlBtn" src="<%=ctx %><c:choose><c:when test="${businessFocusAd.picUrl=='' && businessFocusAd.picUrl=='/images/icon/tp01.jpg'}">/images/icon/tp01.jpg</c:when><c:otherwise>${businessFocusAd.picUrl}</c:otherwise></c:choose>" width="305" height="102" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽640PX、高198PX】jpg格式图片<br>图片大小不能超过100K!</div></div>
                 <input type="hidden" name="picUrl" id="picUrl"  value="${businessFocusAd.picUrl=='/images/icon/tp01.jpg'?'':businessFocusAd.picUrl}">
                 <input type="hidden" name="uploadField" id="uploadField" value="" >

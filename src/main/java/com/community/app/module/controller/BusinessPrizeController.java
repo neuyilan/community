@@ -18,15 +18,12 @@ import com.community.app.module.service.BusinessPrizeService;
 import com.community.app.module.vo.BaseBean;
 import com.community.app.module.vo.BusinessPrizeQuery;
 
-
 @Controller
 @RequestMapping("/business/businessPrize")
 public class BusinessPrizeController {
 	private static Logger GSLogger = LoggerFactory.getLogger(BusinessPrizeController.class);
 	@Autowired
 	private BusinessPrizeService businessPrizeService;
-	
-	private final String LIST_ACTION = "redirect:/business/businessPrize/list.do";
 	
 	/**
 	 * 进入管理页
@@ -238,5 +235,4 @@ public class BusinessPrizeController {
 			e.printStackTrace();
 		}
 	}
-	
 }

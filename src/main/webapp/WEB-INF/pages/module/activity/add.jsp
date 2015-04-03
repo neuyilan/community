@@ -34,12 +34,13 @@
             <h2 class="relran">活动简介<label for="brief" class="error success"></label></h2>
             <input class="iptnewtit" type="text" name="brief" id="brief" placeholder='请输入简介28字以内' />
             
-            <h2 class="relstatus">活动类型<label for="typeId" class="error success"></label></h2>
+            <h2 class="relstatus">活动类型  <em style="font-size:15px; color:#e7402f;">（青年汇活动，由青年汇人员进行新建）</em><label for="typeId" class="error success"></label></h2>
             <label><input class="radiostyle2" type="radio"name="typeId" value="1" checked >&nbsp;定时抢</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="2"  >&nbsp;报名活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="3"  >&nbsp;投票活动</label>　
             <label><input class="radiostyle2" type="radio" name="typeId" value="4"  >&nbsp;抢优惠券</label>　
-            <label><input class="radiostyle2" type="radio" name="typeId" value="5"  >&nbsp;青年汇活动</label>
+            <label><input class="radiostyle2" type="radio" name="typeId" value="5"  >&nbsp;青年汇活动</label>　
+            <label><input class="radiostyle2" type="radio" name="typeId" value="6"  >&nbsp;精品投票活动</label>
             <input type="hidden" id="typeName" name="typeName" value="" >
             
             <!-- 报名活动 -->
@@ -50,13 +51,22 @@
             <div id="yhqId"></div>
             <!-- 青年汇活动-->
             <div id="qnhId"></div>
-            
+            <!-- 精品投票活动-->
+            <div id="jptpId"></div>
+               
+            <div id="display">
+	            <div class="line2"></div>
+				<h2 class="title">奖品发放规则<label for="prizeRules" class="error success"></label></h2>
+				<script type="text/plain" id="actEditor1" style="width:840px;height:240px;">　</script>
+			    <input type="hidden" name="prizeRules" id="prizeRules" value="0">
+			</div>
+			
             <div class="line2"></div>
             <h2 class="relran" style="font-weight: bold;">活动展示范围<label for="actScope" class="error success"></label></h2>
             <div style="position:relative;">
 	            <span class="ranbut radiusbox" id="showScopeLayer">点击选择范围</span> 　　<br><em>可根据小区进行活动参与范围限定</em>
             	<input type="hidden" id="actScope" name="actScope" value=""/>
-	            <lable style="position: absolute; top: 10px; left: 160px;"  id="actScopeShow"></lable>
+	            <label style="position: absolute; top: 10px; left: 160px;"  id="actScopeShow"></label>
             </div>
             
             <div class="line2"></div>
@@ -74,7 +84,7 @@
             <div id="divImg" style=" overflow:hidden;"><img id="appPicBtn" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;">请上传【宽170PX、高125PX】jpg格式图片<br>图片大小不能超过20K!</div></div>
             <input type="hidden" name="appPic" id="appPic" value="">
             <input type="hidden" name="uploadField" id="uploadField" value="">
-            
+                        
             <div class="line2"></div>
             <h2 class="newscont">活动内容<label for="actContent" class="error success"></label></h2>
             <%--文本编辑器--%>
@@ -140,8 +150,8 @@
                 <p>
                     <label><input class="radiostyle" type="radio" name="recommend" value="0">&nbsp;首页焦点图</label>
                     　　			<em style="color:#000;">将推送至焦点图管理列表，在焦点图管理中进行焦点图制作上传，审核通过后发布至焦点图位置</em><br><br>
-                    <label><input class="radiostyle" type="radio" name="recommend" value="3">&nbsp;首页全网焦点图</label> 
-					<em style="color: #000;">　将推送至全网焦点图管理列表，在全网焦点图管理中进行全网焦点图制作上传，审核通过后发布至全网焦点图位置</em><br><br>
+                    <label><input class="radiostyle" type="radio" name="recommend" value="3">&nbsp;首页广告焦点图</label> 
+					<em style="color: #000;">　将推送至广告焦点图管理列表，在广告焦点图管理中进行广告焦点图制作上传，审核通过后发布至广告焦点图位置</em><br><br>
                    	<!--<label><input class="radiostyle" type="radio" name="recommend" value="1">&nbsp;首页新闻列表置顶</label><br><br> -->
                     <label><input class="radiostyle" type="radio" name="recommend" value="2" checked>&nbsp;以上都不选</label><br>
                 </p>
@@ -313,12 +323,32 @@
 
 <jsp:include page="/common/uploadPicJs.jsp"/>
 <jsp:include page="/common/uploadVoteTypeMultiPicJs.jsp"/>
+<jsp:include page="jptpActiveJpsz.jsp"/>
 
 </body>
 <%--初始化文本编辑器--%>
 <script type="text/javascript">
     //实例化编辑器
     var ue = UE.getEditor('actEditor');
+    // var ue1 = UE.getEditor('actEditor1');
+  	//简单编辑器实例化
+    var ue1 = UE.getEditor('actEditor1',{
+    	toolbars: [[
+			'undo', 'redo', '|', 'bold', 'underline', 'forecolor', 'backcolor', 'insertimage', 'justifyleft', 'justifycenter', 'justifyright'
+			
+			/* 'fullscreen', 'source', '|', 'undo', 'redo', '|',
+            'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+            'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+            'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+            'directionalityltr', 'directionalityrtl', 'indent', '|',
+            'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+            'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+            'insertimage', 'map', 'pagebreak', 'template', 'background', '|',
+            'date', 'time', 'spechars', '|',
+            'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+            'preview', 'searchreplace', 'help' */
+    	]]
+    });
     
     $(document).ready(function(){
 		var isPush = document.getElementsByName("isPush");
@@ -372,6 +402,11 @@
 		}
 	}
 	
+	//奖品设置
+	function startActiveJpszinfo() {
+		$('#picUploadLayerJPTP').fadeIn('slow');
+	}
+	
 	$(function() {
 		init2();
 	});
@@ -422,12 +457,13 @@
 		});
 	    
     	if($("input[name='typeId']:checked").val() == 1) {
+ 			$("#display").hide();
     		var htmlDom = ''
     		+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
     		+'<div style="position:relative;">'
     		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
     		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
-    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
+    		+'<label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></label>'
     		+'</div>'
     		+'<div class="line2"></div>'
     		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
@@ -437,7 +473,7 @@
  			$("#yhqAvtiveTime").empty();
     		$("#bmhdId").empty();
     		$("#tphdId").empty();
- 			$("#qnhId").empty();
+ 			$("#jptpId").empty();
     		$("#typeName").val("定时抢");
 			$("input[name='state']:eq(0)").val("1");
 			
@@ -453,6 +489,8 @@
 	    $("input[name='typeId']").change(function() {
 			var $typeId = $("input[name='typeId']:checked").val();
 			if ($typeId == 2) {
+				$("#display").hide();
+				$('#rankStart').val("1");
 				var htmlDom=''
 				+'<div class="line2"></div>'
 				+'<h2 class="relstatus">活动场次<label for="times" class="error success"></label></h2>'
@@ -484,6 +522,7 @@
 	 			$("#yhqAvtiveTime").empty();
 	 			$("#tphdId").empty();
 	 			$("#qnhId").empty();
+	 			$("#jptpId").empty();
 				$("#typeName").val("报名活动");
 				$("input[name='state']:eq(0)").val("0");
 				
@@ -516,12 +555,14 @@
 			    });
 				
 			} else if ($typeId == 1) {
+				$("#display").hide();
+				$('#rankStart').val("1");
 				var htmlDom = ''
 	    		+'<h2 class="relran" style="font-weight: bold;">活动时间(设定抢时间)<label for="planTime" class="error success"></label></h2>'
 	    		+'<div style="position:relative;">'
 	    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
 	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
-	    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
+	    		+'<label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></label>'
 	    		+'</div>'
 	    		+'<div class="line2"></div>'
 	    		+'<h2 class="newscont">获奖排名设定<label for="rank" class="error success"></label></h2>'
@@ -532,6 +573,7 @@
 	    		$("#yhqAvtiveTime").empty();
 	    		$("#rankId").append(htmlDom);
 	    		$("#qnhId").empty();
+	    		$("#jptpId").empty();
 				$("#typeName").val("定时抢");
 				$("input[name='state']:eq(0)").val("1");
 				
@@ -543,6 +585,8 @@
 		        });
 				
 			} else if ($typeId == 3) {
+				$("#display").hide();
+				$('#rankStart').val("1");
 				var htmlDom = ''
 				+'<div class="line2"></div>'
 	    		+'<h2 class="relstatus">投票类型<label for="voteType" class="error success"></label></h2>'
@@ -561,6 +605,7 @@
 	    		$("#yhqId").empty();
 	    		$("#yhqAvtiveTime").empty();
 	    		$("#qnhId").empty();
+	    		$("#jptpId").empty();
 	    		$("#tphdId").append(htmlDom);
 				$("#typeName").val("投票活动");
 				$("input[name='state']:eq(0)").val("0");
@@ -646,6 +691,8 @@
 		            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
 		        });
 			} else if ($typeId == 4) {
+				$("#display").hide();
+				$('#rankStart').val("1");
 				var htmlDom = ''
 				+'<div class="line2"></div>'
 				+'<h2 class="title">优惠券名称<label for="couponName" class="error success"></label></h2>'
@@ -673,7 +720,7 @@
 				+'<h2 class="relran">导入优惠券号码<label for="reportExcel" class="error success"></label></h2>'
 				+'<div style="position:relative;">'
 				+'<span class="ranbut radiusbox" onclick="$(\'.busswi4\').fadeIn(\'slow\');">点击选择上传</span>'
-				+'<lable style="position: absolute; top: 10px; left: 160px;" id="reportExcel2"></lable>'
+				+'<label style="position: absolute; top: 10px; left: 160px;" id="reportExcel2"></label>'
 				+'</div>'
 				+'<input type="hidden" name="reportExcel" id="reportExcel" value="">'; 
 				
@@ -682,7 +729,7 @@
 	    		+'<div style="position:relative;">'
 	    		+'<span class="ranbut radiusbox" id="setTimeBtn">点击设置时间</span>'
 	    		+'<input type="hidden" id="planTime" name="planTime" value=""/>'
-	    		+'<lable style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></lable>'
+	    		+'<label style="position: absolute; top: 10px; left: 160px;"  id="planTimeShow"></label>'
 	    		+'</div>'
 	    		+'<div class="line2"></div>';
 	    		
@@ -690,6 +737,7 @@
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
 	    		$("#qnhId").empty();
+	    		$("#jptpId").empty();
 	    		$("#typeName").val("抢优惠券");
 				$("input[name='state']:eq(0)").val("1");
 				$("#yhqId").append(htmlDom);
@@ -710,6 +758,8 @@
 		            $("#setTimeBar").css("height",$(document.body).outerHeight(true)-40+'px');
 		        });
 			} else if ($typeId == 5) {
+				$("#display").hide();
+				$('#rankStart').val("1");
 				var htmlDom = ''
 				+'<div class="line2"></div>'
 				+'<h2 class="relran">报名开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
@@ -725,10 +775,40 @@
 	    		$("#bmhdId").empty();
 	    		$("#tphdId").empty();
 	    		$("#yhqId").empty();
+	    		$("#jptpId").empty();
 	    		$("#yhqAvtiveTime").empty();
 	    		$("#typeName").val("青年汇活动");
-				$("input[name='state']:eq(0)").val("1");
+				$("input[name='state']:eq(0)").val("0");
 				$("#qnhId").append(htmlDom);
+			} else if ($typeId == 6) {
+				$("#display").show();
+				var htmlDom = ''
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">精品投票报名截止时间<label for="jptpTimeslotEndTime" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" name="jptpTimeslotEndTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择精品投票报名截止时间">'
+				+'<div class="line2"></div>'
+				+'<h2 class="relran">活动开始截止时间<label for="startTime" class="error success"></label><label for="endTime" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" name="startTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择开始时间"> 至'
+				+'<input class="iptnewtit" type="text" name="endTime" onclick="WdatePicker({dateFmt:\'yyyy-MM-dd HH:mm\'})" style="width:200px" placeholder="请选择结束时间">' 
+				+'<div class="line2"></div>'
+				+'<h2 class="title">报名提交标准<label for="actRegWords" class="error success"></label></h2>'
+				+'<input class="iptnewtit" type="text" id="actRegWords" name="actRegWords" placeholder="对报名资料的提交标准进行一句话提示" />'
+				+'<div class="line2"></div>'
+				+'<h2 class="relran" style="font-weight: bold;">奖品设置<span style="font-weight:normal;font-size: 16px;">【请通过下面逐个添加奖品！】</span><label for="prizeConcat" class="error success"></label></h2>'
+				+'<div style=" overflow:hidden;"><img onclick="startActiveJpszinfo()" src="${ctx}/images/icon/add.jpg" width="100" height="100" style="float:left; padding-right:10px;"><div style="color:#000; padding-top:26px;"><label style="font-weight:bold; color:#ff0000;">点击添加奖品</label>  请上传【宽300PX、高300PX】jpg格式图片<br>图片大小不能超过30K!</div></div>'
+				+'<input type="hidden" name="prizeConcat" id="prizeConcat" value="">'
+				+'<div class="line2"></div>'
+				+'<div id="prizeConcatDiv"></div>';
+
+				$("#rankId").empty();
+	    		$("#bmhdId").empty();
+	    		$("#tphdId").empty();
+	    		$("#yhqId").empty();
+	    		$("#qnhId").empty();
+	    		$("#yhqAvtiveTime").empty();
+	    		$("#typeName").val("精品投票活动");
+				$("input[name='state']:eq(0)").val("0");
+				$("#jptpId").append(htmlDom);
 			}
 		});
 	    
@@ -908,7 +988,7 @@
             var scopeInfo = '';
             var scopeNodes = $('#scopeTree').tree('getChecked');
             if(scopeNodes != null && scopeNodes.length > 0) {
-                for(var i=0;i<scopeNodes.length;i++) {
+            	for(var i=0;i<scopeNodes.length;i++) {
                 	var node = scopeNodes[i];
                 	if(node.id.indexOf("com")<0 && node.id.indexOf("allCom")<0){
                 		var idArr = node.id.split('_');
@@ -1059,6 +1139,12 @@
    	                    }
    	                }
                 },
+                jptpTimeslotEndTime: {
+                    required: true
+                },
+                actRegWords: {
+                    required: true
+                },
                 voteType: {
                     required: true
                 },
@@ -1099,6 +1185,12 @@
                 },
                 state: {
                     required: true
+                },
+                prizeRules: {
+                    required: true
+                },
+                prizeConcat: {
+                	required: true
                 }
             },
             messages: {
@@ -1158,11 +1250,17 @@
                     digits: '人数限定必须为数字' 
                 },
                 startTime: {
-                	 required:  '请选择报名开始时间！'
+                	 required:  '请选择开始时间！'
                 },
                 endTime: {
-                    required:  '请选择报名截止时间！',
+                    required:  '请选择截止时间！',
    					remote: "报名截止时间必须小于报名活动时间"
+                },
+                jptpTimeslotEndTime: {
+                    required: '请选择报名截止时间！',
+                },
+                actRegWords: {
+                    required: '请输入报名提交标准',
                 },
                 voteType: {
                     required: '请选择投票类型！'
@@ -1204,6 +1302,12 @@
                 },
                 state: {
                     required: '请选择发布状态！'
+                },
+                prizeRules: {
+                    required: '请输入奖品发放规则！'
+                },
+                prizeConcat: {
+                    required: '请添加奖品 ！'
                 }
             }
         });
@@ -1217,6 +1321,7 @@
             //设置内容
             $('#actContent').val(ue.getContent());
         }
+        $('#prizeRules').val(ue1.getContent());
         $('#ff').submit();
     }
     

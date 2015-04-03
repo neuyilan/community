@@ -167,6 +167,16 @@
 												</c:otherwise>
 											</c:choose>
 										</c:when>
+										<c:when test="${act.typeId == 6}">
+											<c:choose>
+												<c:when test="${act.particpates != 0 && act.state < 3}">
+													<i class="cyrh" title="参与人数" style="cursor:pointer;" onclick="window.location.href='${ctx}/business/businessActivity/viewJPTPInformation.do?actId=${act.actId}' ">${act.particpates }</i>
+												</c:when>
+												<c:otherwise>
+													<i class="cyr" title="参与人数">${act.particpates }</i>
+												</c:otherwise>
+											</c:choose>
+										</c:when>
 									</c:choose>
 									<c:choose>
 										<c:when test="${act.comments != 0 && act.state < 3}">
@@ -253,20 +263,20 @@
         <h2 class="tit5">活动内容<em>【<span id="state1"></span>】</em></h2>
         <div id="wrapper-250">
             <ul class="accordion5">
-                <li id="one5" class="files"><a href="#one"><lable id="actName" style="color: #333;"></lable></a></li>
+                <li id="one5" class="files"><a href="#one"><label id="actName" style="color: #333;"></label></a></li>
                 <div class="link5"></div>
                 <ul class="sub-menu5 s-xw-xx">
-		              <li><span class="xxl">活动类型：<lable id="typeName"></lable></span><span class="xxr">活动范围：<lable id="actScope"></lable></span></li>
-		              <li><span class="xxl">报名截止时间：<lable id="actTime"></lable></span></li>
-		              <li><span class="xxl">发布人：<lable id="editor"></lable></span><span class="xxr">发布时间：<lable id="createTime"></lable></span></li>
-		              <li id="auditLi"><span class="xxl">审核人：<lable id="auditorName"></lable></span><span class="xxr">审核时间：<lable id="auditTime"></lable></span></li>
+		              <li><span class="xxl">活动类型：<label id="typeName"></label></span><span class="xxr">活动范围：<label id="actScope"></label></span></li>
+		              <li><span class="xxl">报名截止时间：<label id="actTime"></label></span></li>
+		              <li><span class="xxl">发布人：<label id="editor"></label></span><span class="xxr">发布时间：<label id="createTime"></label></span></li>
+		              <li id="auditLi"><span class="xxl">审核人：<label id="auditorName"></label></span><span class="xxr">审核时间：<label id="auditTime"></label></span></li>
 		              <li id="viewComponent"></li>
 		              <div class="link5"></div>
 		              <li id="viewInter"></li>
 		              <div class="link5"></div>
-		              <li id="auditInfo1" style="color: #cc2510; margin:17px 0 10px 0; display:none;"><lable id="auditInfo2"></lable></li>
+		              <li id="auditInfo1" style="color: #cc2510; margin:17px 0 10px 0; display:none;"><label id="auditInfo2"></label></li>
 		               <div id="hr1" class="link5" style="display:none;"></div>
-		              <li id="actContentLi"><lable id="actContent"></lable></li>
+		              <li id="actContentLi"><label id="actContent"></label></li>
 		              <li id="rejectMemoLi" style="display: none;">
 							<textarea name="refulseMemo" id="refuseMemo" style="width:440px;height:200px;"></textarea>
 					  </li>
@@ -539,6 +549,12 @@
                 	} else if(row.typeId == 5) {
                     	if(row.particpates != 0 && row.state < 3){
                     		particpate = '<i class="cyrh" title="参与人数" style="cursor:pointer;" onclick="window.location.href=\'viewQnhInformation.do?actId='+row.actId+'\' ">'+row.particpates+'</i>';
+                    	} else {
+                    		particpate = '<i class="cyr" title="参与人数">'+row.particpates+'</i>';
+                    	}
+                	} else if(row.typeId == 6) {
+                    	if(row.particpates != 0 && row.state < 3){
+                    		particpate = '<i class="cyrh" title="参与人数" style="cursor:pointer;" onclick="window.location.href=\'viewJPTPInformation.do?actId='+row.actId+'\' ">'+row.particpates+'</i>';
                     	} else {
                     		particpate = '<i class="cyr" title="参与人数">'+row.particpates+'</i>';
                     	}
